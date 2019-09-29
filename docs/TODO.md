@@ -10,7 +10,7 @@ There is a list of checkboxes of implementing functions in VKBottle
 
 - [x] Patcher for message variables types `(by timoniq)`
 
-- [ ] Message variable types parser
+- [x] Message variable types parser
 
 - [ ] **Execute Wrapper** `(idea by 1)`
 

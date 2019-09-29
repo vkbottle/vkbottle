@@ -4,7 +4,7 @@
 MAIN BOT LONGPOLL CONSTRUCTOR
 """
 
-from ..portable import __version__ as VERSION, API_VERSION
+from ..portable import __version__ as VERSION, API_VERSION, BETA
 from ..utils import Logger, HTTP, path_loader, ErrorHandler
 from ..vk import exceptions
 from ..methods import Method, Api
@@ -75,7 +75,9 @@ class LongPollBot(HTTP, processor.UpdatesProcessor):
         """
         Check newest version of VKBottle and alarm if newer version is available
         """
-        if current_portable['version'] != VERSION:
+        if BETA:
+            await self.logger('You are using BETA Unreleased version of VKBottle!')
+        elif current_portable['version'] != VERSION:
             await self.logger(nf.newer_version.format(current_portable['version']))
         else:
             await self.logger(nf.newest_version)
@@ -93,7 +95,7 @@ class LongPollBot(HTTP, processor.UpdatesProcessor):
             longPollServer = await self.get_server()
 
             await self.logger(nf.module_longpoll.format(API_VERSION),
-                              colored('you use: ' + longPollEnabled['api_version'], 'yellow'))
+                              colored('[you use: ' + longPollEnabled['api_version'] + ']', 'yellow'))
 
             await self._run(longPollServer)
 
