@@ -5,16 +5,10 @@
 
 ### Install
 
-From GitHub:
+From GitHub with git:
 
 ```sh
-pip install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
-```
-
-From PyPI (old release):
-
-```sh
-pip install vkbottle
+git clone git://github.com/timoniq/vkbottler.git vkbottle
 ```
 
 ### Features
@@ -25,6 +19,14 @@ pip install vkbottle
 - You can use simple and minimalistic code to reach a big result
 - Full VK Event Compatible
 - Full Asyncio Support
+
+### Deployment import
+
+After installation into your project use relative import to use vkbottle:
+
+```python
+from .vkbottle.vkbottle import Bot, Message
+```
 
 ### Usage
 
