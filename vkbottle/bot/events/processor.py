@@ -133,26 +133,35 @@ class UpdatesProcessor(object):
 
         for priority in await sorted_dict_keys(self.on.processor_message_chat_regex):
 
-            for key in self.on.processor_message_chat_regex[priority]:
+            for key in self.on.processor_message_regex[priority]:
 
                 if key.match(answer.text) is not None:
+
                     found = True
-                    # [Feature] Async Use
-                    # Added v0.19#master
-                    await self.on.processor_message_chat_regex[priority][key](
-                        answer,
-                        **key.match(answer.text).groupdict()
-                    )
+                    keys = key.match(answer.text).groupdict()
 
-                    await self.logger(
-                        'New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(
-                            self.on.processor_message_chat_regex[priority][key].__name__,
-                            answer.from_id
-                        ),
-                        '>>', round(time.time() - self.a, 5)
-                    )
+                    validators_check = await self.patcher.check_validators(
+                        check_object=self.on.processor_message_chat_regex[priority][key],
+                        keys=keys)
 
-                    break
+                    if validators_check:
+                        # [Feature] Async Use
+                        # Added v0.19#master
+                        await self.on.processor_message_chat_regex[priority][key]['call'](
+                            answer,
+                            **validators_check
+                        )
+
+                        await self.logger(
+                            'New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(
+                                self.on.processor_message_chat_regex[priority][key]['call'].__name__,
+                                answer.from_id
+                            ),
+                            '>>', round(time.time() - self.a, 5)
+                        )
+
+                        break
+                    continue
 
             if found:
                 break
