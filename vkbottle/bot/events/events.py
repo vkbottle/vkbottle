@@ -17,13 +17,13 @@ def regex_message(text, formatted_pattern='{}'):
     """Allow to generate REGEX patterns for message matching"""
 
     escape = {ord(x): '\\' + x for x in r'\.*+?()[]|^$'}
-    typed_patterns = re.findall(r'(<([a-zA-Z0-9_]+)+:.*?>)', text)
+    typed_patterns = re.findall(r'(<([a-zA-Z0-9_]+)+:.*?>)', text.translate(escape))
     validators: dict = {}
 
     for p in typed_patterns:
         validators_of_pattern = re.findall(r':([a-zA-Z0-9_]+)+', p[0])
         validators[p[1]] = validators_of_pattern
-        text = re.sub(':.*?>', '>', text)
+        text = re.sub(':.*?>', '>', text.translate(escape))
 
     pattern = re.sub(r'(<.*?>)',  r'(?P\1.*)', text.translate(escape))
     return re.compile(formatted_pattern.format(pattern)), validators

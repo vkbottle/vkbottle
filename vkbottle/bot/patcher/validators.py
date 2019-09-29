@@ -5,15 +5,13 @@ class RegexValidators:
     def __init__(self):
         pass
 
-    async def int(self, text):
-        if text.isdigit():
-            return int(text)
+    async def int(self, value: str):
+        if value.isdigit():
+            return int(value)
         return
 
-    async def float(self, text):
+    async def float(self, value: str):
         try:
-            a = float(text)
-            return a
+            return float(value)
         except ValueError:
             return
-

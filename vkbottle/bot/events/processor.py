@@ -81,31 +81,29 @@ class UpdatesProcessor(object):
                 if key.match(answer.text) is not None:
 
                     found = True
-                    keys = key.match(answer.text).groupdict()
-
+                    check_object = self.on.processor_message_regex[priority][key]
                     validators_check = await self.patcher.check_validators(
-                        check_object=self.on.processor_message_regex[priority][key],
-                        keys=keys)
+                        check_object=check_object,
+                        keys=key.match(answer.text).groupdict())
 
-                    if validators_check:
+                    if validators_check is not None:
                         # [Feature] Async Use
                         # Added v0.19#master
-                        await self.on.processor_message_regex[priority][key]['call'](
+                        await check_object['call'](
                             answer,
                             **validators_check
                         )
 
                         await self.logger(
-                            'New message compiled with decorator <' +
-                            colored(self.on.processor_message_regex[priority][key]['call'].__name__, 'magenta') +
-                            '> (from: {})'.format(
+                            'New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(
+                                check_object['call'].__name__,
                                 answer.from_id
                             ),
                             '>>', round(time.time() - self.a, 5)
                         )
-
                         break
-                    continue
+
+                    found = False
 
             if found:
                 break
@@ -138,30 +136,30 @@ class UpdatesProcessor(object):
                 if key.match(answer.text) is not None:
 
                     found = True
-                    keys = key.match(answer.text).groupdict()
-
+                    check_object = self.on.processor_message_chat_regex[priority][key]
                     validators_check = await self.patcher.check_validators(
-                        check_object=self.on.processor_message_chat_regex[priority][key],
-                        keys=keys)
+                        check_object=check_object,
+                        keys=key.match(answer.text).groupdict())
 
-                    if validators_check:
+                    if validators_check is not None:
+
                         # [Feature] Async Use
                         # Added v0.19#master
-                        await self.on.processor_message_chat_regex[priority][key]['call'](
+                        await check_object['call'](
                             answer,
                             **validators_check
                         )
 
                         await self.logger(
                             'New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(
-                                self.on.processor_message_chat_regex[priority][key]['call'].__name__,
+                                check_object['call'].__name__,
                                 answer.from_id
                             ),
                             '>>', round(time.time() - self.a, 5)
                         )
-
                         break
-                    continue
+
+                    found = False
 
             if found:
                 break
