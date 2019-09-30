@@ -10,7 +10,7 @@ Welcome to VKBottle! VKBottle is a useful client with useful facilities for work
   
   * :man_technologist:Full Can-Be-Sended objects for advanced usage
     
-    ```
+    ```python
     @bot.on.message.lower('plastify <material:usage>', validators=(validators.SafeMessage)}:
     async def handler(ans: Message, material):
         poll = Poll('Material {} is cool?'.format(material)).add(('yes', 'noh'))
@@ -21,7 +21,7 @@ Welcome to VKBottle! VKBottle is a useful client with useful facilities for work
   
   * For arguments
     
-    ```
+    ```python
     class CustomValidators(RegexValidators):
         async def some_user(self, text):
             matched = re.match(r'\[id([\d]+)\|', text)
@@ -36,7 +36,7 @@ Welcome to VKBottle! VKBottle is a useful client with useful facilities for work
   
   * For messages
     
-    ```
+    ```python
     @bot.on.message.startswith('my opinion: <opinion>', validators=(validators.SafeMessage))
     ```
 
