@@ -4,7 +4,7 @@
 BOT MAIN API WRAPPER
 """
 
-from .vkbottle2 import LongPollBot
+from .vkbottle import LongPollBot
 
 from ..portable import API_VERSION
 
