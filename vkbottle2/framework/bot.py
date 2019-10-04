@@ -43,9 +43,7 @@ class Bot(EventProcessor):
 
             if update['type'] == EventTypes.MESSAGE_NEW:
                 if obj['peer_id'] < 2e9:
-
                     ensure_future(self._private_message_processor(obj=obj))
-
                 else:
                     if 'action' not in obj:
                         ensure_future(self._chat_message_processor(obj=obj))

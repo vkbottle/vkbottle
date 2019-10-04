@@ -4,6 +4,7 @@ from typing import Any
 from termcolor import colored
 from colorama import init as color_opt
 import re
+import time
 
 
 LOG_FILE_PATTERN = r'[a-zA-Z0-9]+\.log'
@@ -16,7 +17,8 @@ class Coloring(object):
         self.prefix = '[' + colored('VKBottle', 'blue') + ']'
 
     def __call__(self, text: str, color: str = 'white') -> colored:
-        return '{prefix} {text}'.format(prefix=self.prefix, text=colored(text, color))
+        return '{prefix} {text}'.format(prefix=self.prefix,
+                                        text=colored(text.replace('#', time.strftime("%m-%d %H:%M:%S", time.gmtime()))))
 
 
 class Logger(object):

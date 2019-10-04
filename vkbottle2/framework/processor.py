@@ -17,9 +17,9 @@ class EventProcessor(object):
         answer = Message(**obj, api=[self.api])
 
         self._logger.debug(
-            '-> MESSAGE FROM CHAT {} TEXT "{}" TIME #'.format(
-                obj['peer_id'],
-                obj['text'].replace('\n', ' ')
+            '-> MESSAGE FROM {} TEXT "{}" TIME #'.format(
+                answer.from_id,
+                answer.text.replace('\n', ' ')
             ))
 
         for key in self.on.message.inner:

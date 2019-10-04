@@ -82,4 +82,4 @@ Make issues if it is needed!
 ## License
 
 Copyright © 2019 [timoniq](https://github.com/timoniq).  
-This project is [MIT](./LICENSE.txt) licensed.
+This project is [GPL-3.0](./LICENSE.txt) licensed.
