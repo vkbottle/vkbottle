@@ -4,9 +4,9 @@ There is a list of checkboxes of implementing functions in VKBottle
 
 ### :tada:0.15:
 
-- [ ] **Callback Support**
+- [x] **Callback Support**
 
-- [ ] Events Queue executor 
+- [x] Events Queue executor 
 
 - [x] Patcher for message variables types `(by timoniq)`
 
@@ -18,10 +18,8 @@ There is a list of checkboxes of implementing functions in VKBottle
 
 ### :mortar_board:Pull your suggests here:
 
-- [ ] HTTP Request maker for callback & longpoll `(idea by 1)`
+- [x] HTTP Request maker for callback & longpoll `(idea by 1)`
 
 ### :heart:Thanks for Idea to
 
-1. `@vasilkovivan`
-
-
+@vasilkovivan`

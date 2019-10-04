@@ -27,7 +27,6 @@ class TaskQueue:
 
             [self.loop.create_task(task()) for task in self.tasks]
 
-            logger.info("Loop started!")
             self.loop.run_forever()
 
         finally:

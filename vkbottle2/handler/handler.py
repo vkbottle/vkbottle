@@ -58,6 +58,10 @@ class Handler(object):
     def undefined_func(self):
         return self.__undefined_message_func
 
+    @property
+    def chat_action_types(self):
+        return self.__chat_action_types
+
 
 class MessageHandler:
     def __init__(self):

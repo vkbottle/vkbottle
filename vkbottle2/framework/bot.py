@@ -46,11 +46,11 @@ class Bot(EventProcessor):
 
                     ensure_future(self._private_message_processor(obj=obj))
 
-                """else:
+                else:
                     if 'action' not in obj:
-                        await self.new_chat_message(obj=obj)
+                        ensure_future(self._chat_message_processor(obj=obj))
                     else:
-                        await self.new_chat_action(obj=obj)"""
+                        ensure_future(self._chat_action_processor(obj=obj))
 
             else:
                 pass

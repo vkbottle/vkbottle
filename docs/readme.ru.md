@@ -16,6 +16,21 @@ from vkbottle import Bot, Message, keyboard_generator, VKError
 `on` - main class for decorators
 `api` - VK Api wrapper
 
+## Callback!
+
+Мы можем создать простой обработчик событий фласком
+
+```
+# app = Flask()
+@app.route('/')
+def route():
+    bot.process(flask.request.args(), confirmation_token='YourConfirm')
+```
+
+Это решение помогает сохранять совместимость с процессом совмещения держания бота и сайта на одном адресе
+
+**:cowboy_hat_face: При Callback'е поллинг запускать не надо..**
+
 ## Декораторы
 
 ### Простой ответ на сообщение:
@@ -39,7 +54,7 @@ async def wrapper(ans: Message):
 ### Message - ans
 
 Message - простой типизационный датакласс, так же с ним доступны методы:  
-  
+
 `__call__` - простой вызов для написания сообщения в уже сохраненный диалог  
 `reply` - ответ на сообщение с уже сохраненным id сообщения
 
@@ -60,6 +75,7 @@ async def wrapper(ans: Message):
 Вы можете использовать startswith и regex:
 
 Startswith:
+
 ```python
 @bot.on.message.startswith(text='привет')
 async def wrapper(ans: Message):
@@ -67,6 +83,7 @@ async def wrapper(ans: Message):
 ```
 
 Regex:
+
 ```python
 @bot.on.message_chat.startswith('.*?')
 async def wrapper(ans: Message):
@@ -78,11 +95,13 @@ async def wrapper(ans: Message):
 Чтобы make кнопки в вашем сообщении just примените генератор или будьте уродами и не используйте его:
 
 1) Составим паттерн:
-Наш список должен состоять из рядов с кнопками:  
-```python
-pattern = [[{'text': 'моя кнопка'}]]
-```
-Вместе с `text` можно передавать все параметры доступные для кнопок из официальной документации
+   Наш список должен состоять из рядов с кнопками:  
+   
+   ```python
+   pattern = [[{'text': 'моя кнопка'}]]
+   ```
+   
+   Вместе с `text` можно передавать все параметры доступные для кнопок из официальной документации
 
 2) Создадим клавиатуру
 
