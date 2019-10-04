@@ -1,3 +1,4 @@
 aiohttp
 pydantic
-pika
+colorama
+termcolor
