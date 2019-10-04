@@ -1,0 +1,2 @@
+class VKError(Exception):
+    pass

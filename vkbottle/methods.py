@@ -108,10 +108,13 @@ class Api(object):
         :param kwargs: all data of the request
         :return: VK Server Response
         """
+
         for k, v in enumerate(kwargs):
             if isinstance(v, (list, tuple)):
                 kwargs[k] = ','.join(str(x) for x in v)
+
         method = self._method.split('.')
+
         if len(method) == 2:
             group = method[0]
             method = method[1]
