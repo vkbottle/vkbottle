@@ -1,9 +1,6 @@
 import asyncio
 from asyncio import iscoroutinefunction
-import logging
 from typing import List, Callable
-
-logger = logging.getLogger(__name__)
 
 
 class TaskQueue:
