@@ -45,6 +45,27 @@ if __name__ == '__main__':
     bot.run()
 ```
 
+### Callback
+
+```python
+from vkbottle import Bot, Message
+from flask import request
+# app = Flask()
+
+bot = Bot('my-token', 123, debug=True)
+confirmation = 'MyConfirmationCode'
+
+
+@app.route('/')
+def route():
+    bot.process(event=request.args(), confirmation_token=confirmation)
+
+
+@bot.on.message('My name is <name>')
+async def wrapper(ans: Message, name):
+    await ans('Hello, {}'.format(name))
+```
+
 More examples positioned in directory [/examples](./examples)
 
 ### Docs
