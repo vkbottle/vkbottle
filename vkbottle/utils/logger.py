@@ -1,56 +1,63 @@
-"""Read LICENSE.txt"""
-
-"""
-FILE WITH LOGGERS AND LOG-FEATURES
-"""
-
+import logging
+from logging import handlers
+from typing import Any
+from termcolor import colored
+from colorama import init as color_opt
 import re
 import time
-from ..collects import colored, ANSIColor
 
 
+LOG_FILE_PATTERN = r'[a-zA-Z0-9]+\.log'
+DEFAULT_LOG_NAME = 'bot.log'
 
-class Logger:
-    """Coloring class, engine of all debug messages and warns
-    """
-    def __init__(self, debug):
-        self.debug = debug
 
-    def __call__(self, *text, separator=' '):
-        if self.debug is True:
-            new = ''
-            for i, el in enumerate(text):
-                new += str(el)
-                if i + 1 != len(text):
-                    new += separator
-            print("[" + colored('VKBottle', 'blue') + "] " + re.sub('#', time.strftime("%m-%d %H:%M:%S", time.gmtime()), new) + ANSIColor.RESET)
+class Coloring(object):
+    def __init__(self):
+        color_opt()
+        self.prefix = '[' + colored('VKBottle', 'blue') + ']'
 
-    def warn(self, *text, separator=' '):
-        if self.debug is True:
-            new = ''
-            for i, el in enumerate(text):
-                new += str(el)
-                if i + 1 != len(text):
-                    new += separator
-            print("[" + colored('VKBottle WARN', 'blue') + "] " + re.sub('#', time.strftime("%m-%d %H:%M:%S", time.gmtime()), new) + ANSIColor.RESET)
+    def __call__(self, text: str, color: str = 'white') -> colored:
+        return '{prefix} {text}'.format(prefix=self.prefix,
+                                        text=colored(text.replace('#', time.strftime("%m-%d %H:%M:%S", time.gmtime()))))
 
-    @staticmethod
-    def error(*text, separator=' '):
-        new = ''
-        for i, el in enumerate(text):
-            new += str(el)
-            if i + 1 != len(text):
-                new += separator
-        print("[" + colored('VKBottle ERROR', 'blue') + "] " + re.sub('#', time.strftime("%m-%d %H:%M:%S", time.gmtime()), new) + ANSIColor.RESET)
 
-    def progress_bar(self, iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
-        if self.debug is True:
-            prefix = "[" + colored('VKBottle ERROR', 'blue') + "] " + prefix
-            percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
-            filledLength = int(length * iteration // total)
-            bar = fill * filledLength + '-' * (length - filledLength)
+class Logger(object):
+    def __init__(self,
+                 debug: bool,
+                 log_file: str,
+                 plugin_folder: str,
+                 level=None,
+                 logger_name: str = None):
 
-            print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end='\r')
-            # Print New Line on Complete
-            if iteration == total:
-                print()
+        self.__debug: bool = debug
+        self.__coloring = Coloring()
+        self.__level = level or logging.DEBUG
+        self.logger = logging.getLogger(logger_name or 'VKBottle')
+
+        log_path = '{path}/{log_file}'.format(
+            path=plugin_folder,
+            log_file=log_file if log_file and re.match(LOG_FILE_PATTERN, log_file) else DEFAULT_LOG_NAME)
+
+        open(log_path, 'w+')
+
+        handler = handlers.WatchedFileHandler(log_path)
+        handler.setLevel(self.__level)
+        self.logger.addHandler(handler)
+
+    def info(self, *some: Any):
+        self.logger.info(*some)
+
+    def debug(self, *some):
+        self.logger.debug(*some)
+        if self.__debug:
+            print(self.__coloring(' '.join([str(i) for i in some])))
+
+    def warning(self, *some):
+        self.logger.debug(*some)
+        if self.__debug:
+            print(self.__coloring(' '.join([str(i) for i in some]), 'magenta'))
+
+    def error(self, *some):
+        self.logger.debug(*some)
+        if self.__debug:
+            print(self.__coloring(' '.join([str(i) for i in some]), 'red'))
