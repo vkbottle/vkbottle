@@ -50,7 +50,7 @@ async def wrapper(ans: Message, name):
 
 
 if __name__ == '__main__':
-    bot.run()
+    bot.run_polling()
 ```
 
 ### Callback

@@ -17,7 +17,7 @@ async def wrapper(ans: Message):
 
 @bot.on.event.group_join()
 async def wrapper(event: events.GroupJoin):
-    bot.api.messages.send(peer_id=event.user_id, random_id=100, message='Welcome to the group!')
+    await bot.api.messages.send(peer_id=event.user_id, random_id=100, message='Welcome to the group!')
 
 
 @bot.error_handler(901, 902)
@@ -26,4 +26,4 @@ async def error(error: list):
 
 
 if __name__ == '__main__':
-    bot.run()
+    bot.run_polling()

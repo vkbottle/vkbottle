@@ -49,6 +49,11 @@ class EventProcessor(object):
 
         if self.on.undefined_func:
             ensure_future(self.on.undefined_func(answer))
+            self._logger.debug(
+                'New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})'.format(
+                    answer.from_id
+                )
+            )
         else:
             self._logger.info('Add on-undefined message handler!')
 
