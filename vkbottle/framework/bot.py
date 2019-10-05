@@ -26,6 +26,7 @@ class Bot(HTTP, EventProcessor):
         self.__loop: AbstractEventLoop = get_event_loop()
         self.__debug = debug
         self.__wait = None
+        self.__dispatched = False
 
         self.api = Api(loop=self.__loop, token=token, group_id=group_id)
         self.patcher = Patcher(plugin_folder or DEFAULT_BOT_FOLDER)
@@ -100,6 +101,10 @@ class Bot(HTTP, EventProcessor):
                     raise VKError(error)
 
     async def process(self, event: dict, confirmation_token: str = None):
+        if not self.__dispatched:
+            self.on.dispatch()
+            self.__dispatched = True
+
         if 'type' in event and event['type'] == 'confirmation':
             if event['group_id'] == self.group_id:
                 return confirmation_token or 'dissatisfied'

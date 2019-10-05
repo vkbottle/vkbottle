@@ -18,7 +18,7 @@ class Handler(object):
 
     def dispatch(self):
         self.message.inner = dict_of_dicts_merge(self.message.inner, self.message_both.inner)
-        self.chat_message = dict_of_dicts_merge(self.chat_message.inner, self.message_both.inner)
+        self.chat_message.inner = dict_of_dicts_merge(self.chat_message.inner, self.message_both.inner)
 
     def chat_action(self, type_: str, rules: dict = None):
         """

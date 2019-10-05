@@ -62,6 +62,13 @@ class EventProcessor(object):
 
         for key in self.on.chat_message.inner:
             if key.match(answer.text) is not None:
+
+                self._logger.debug(
+                    '-> MESSAGE FROM CHAT {} TEXT "{}" TIME #'.format(
+                        answer.peer_id,
+                        answer.text.replace('\n', ' ')
+                    ))
+
                 matching = self.on.chat_message.inner[key]
 
                 validators_check = await self.patcher.check_validators(
