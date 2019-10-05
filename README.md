@@ -1,15 +1,29 @@
-# What is VKBottle
-[![PyPI](https://badge.fury.io/py/vkbottle.svg)](https://pypi.org/project/vkbottle/) 
-[![VK Chat](https://img.shields.io/badge/Vk-Chat-blue)](https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj) 
-[![Build Status](https://travis-ci.com/timoniq/vkbottle.svg?branch=master)](https://travis-ci.com/timoniq/vkbottle)
+# 
+
+<h1 align="center">VKBottle - high quality VK Tool</h1>
+<p align="center"><a href="https://pypi.org/project/vkbottle/"><img alt="downloads" src="https://img.shields.io/static/v1?label=pypi%20package&message=0.13&color=brightgreen"></a> <a href="https://github.com/timoniq/vkbottle"><img src="https://img.shields.io/static/v1?label=version&message=opensource&color=yellow" alt="service-test status"></a> <a href="https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj"><img src="https://img.shields.io/static/v1?message=VK%20Chat&label=&color=blue"></a>
+    <blockquote>VKBottle is high functional tool for creating VK Clients based on python</blockquote>
+</p>
+<hr>
 
 ### Install
 
-From GitHub with git:
+1) From GitHub with git:
+   
+   ```sh
+   git clone git://github.com/timoniq/vkbottler.git vkbottle
+   ```
 
-```sh
-git clone git://github.com/timoniq/vkbottler.git vkbottle
-```
+2) Now, install it to python site-packages if you don't want to use deployment import  
+   You can use deployment import:
+   
+   ```python
+   from .vkbottle.vkbottle import Bot
+   ```
+   You can install VKBottle to site-packages:
+   ```sh
+   cp vkbottler /path/to/python/site-packages
+   ```
 
 ### Features
 
@@ -20,13 +34,7 @@ git clone git://github.com/timoniq/vkbottler.git vkbottle
 - Full VK Event Compatible
 - Full Asyncio Support
 
-### Deployment import
-
-After installation into your project use relative import to use vkbottle:
-
-```python
-from .vkbottle.vkbottle import Bot, Message
-```
+***
 
 ### Usage
 
@@ -39,8 +47,8 @@ bot = Bot('my-token', 123, debug=True)
 @bot.on.message('My name is <name>')
 async def wrapper(ans: Message, name):
     await ans('Hello, {}'.format(name))
-   
-   
+
+
 if __name__ == '__main__':
     bot.run()
 ```
@@ -71,6 +79,7 @@ More examples positioned in directory [/examples](./examples)
 ### Docs
 
 Full docs you can find here:  
+
 * [Russian Version](./docs/readme.ru.md)
 * [English Version](./docs/kriper2005.txt)
 
