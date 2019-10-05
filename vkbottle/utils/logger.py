@@ -9,6 +9,7 @@ import time
 
 LOG_FILE_PATTERN = r'[a-zA-Z0-9]+\.log'
 DEFAULT_LOG_NAME = 'bot.log'
+LOG_FORMAT = '[%(asctime)s %(name)s - %(levelname)s] - %(message)s'
 
 
 class Coloring(object):
@@ -37,11 +38,15 @@ class Logger(object):
         log_path = '{path}/{log_file}'.format(
             path=plugin_folder,
             log_file=log_file if log_file and re.match(LOG_FILE_PATTERN, log_file) else DEFAULT_LOG_NAME)
+        print(log_path)
 
-        open(log_path, 'w+')
+        open(log_path, 'w+').close()
+        self.logger.setLevel(self.__level)
+        formatter = logging.Formatter(LOG_FORMAT)
 
         handler = handlers.WatchedFileHandler(log_path)
         handler.setLevel(self.__level)
+        handler.setFormatter(formatter)
         self.logger.addHandler(handler)
 
     def info(self, *some: Any):
