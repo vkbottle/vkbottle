@@ -1,7 +1,15 @@
-# What is VKBottle
-[![PyPI](https://badge.fury.io/py/vkbottle.svg)](https://pypi.org/project/vkbottle/) 
-[![VK Chat](https://img.shields.io/badge/Vk-Chat-blue)](https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj) 
-[![Build Status](https://travis-ci.com/timoniq/vkbottle.svg?branch=master)](https://travis-ci.com/timoniq/vkbottle)
+# 
+
+<h1 align="center">What is VKBottle</h1>
+<p align="center">
+    <a href="https://pypi.org/project/vkbottle/">
+        <img alt="downloads" src="https://badge.fury.io/py/vkbottle.svg" target="_blank">
+    </a>
+    <a href="https://github.com/timoniq/vkbottle">
+         <img alt="downloads" src="https://img.shields.io/badge/version-opensource-green" target="_blank">
+     </a>
+    <blockquote>VKBottle is high functional tool for creating VK Clients based on python</blockquote>
+</p>
 
 ### Install
 
@@ -39,8 +47,8 @@ bot = Bot('my-token', 123, debug=True)
 @bot.on.message('My name is <name>')
 async def wrapper(ans: Message, name):
     await ans('Hello, {}'.format(name))
-   
-   
+
+
 if __name__ == '__main__':
     bot.run()
 ```
@@ -71,6 +79,7 @@ More examples positioned in directory [/examples](./examples)
 ### Docs
 
 Full docs you can find here:  
+
 * [Russian Version](./docs/readme.ru.md)
 * [English Version](./docs/kriper2005.txt)
 
