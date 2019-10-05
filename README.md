@@ -10,14 +10,19 @@
 
 1) From GitHub with git:
    
-   ```git clone git://github.com/timoniq/vkbottler.git vkbottle```
-   
+   ```sh
+   git clone git://github.com/timoniq/vkbottler.git vkbottle
    ```
 
-2) Now, install it to python site-packages if you don't want to use deployment import
+2) Now, install it to python site-packages if you don't want to use deployment import  
+   You can use deployment import:
    
+   ```python
+   from .vkbottle.vkbottle import Bot
    ```
-   
+   You can install VKBottle to site-packages:
+   ```sh
+   cp vkbottler /path/to/python/site-packages
    ```
 
 ### Features
@@ -29,13 +34,7 @@
 - Full VK Event Compatible
 - Full Asyncio Support
 
-### Deployment import
-
-After installation into your project use relative import to use vkbottle:
-
-```python
-from .vkbottle.vkbottle import Bot, Message
-```
+***
 
 ### Usage
 
