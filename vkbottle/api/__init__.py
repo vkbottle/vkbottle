@@ -1,2 +1,2 @@
 from .api import Api
-from . import exceptions
+from .exceptions import *

@@ -1,1 +1,1 @@
-from .request import HTTPRequest
+from .request import HTTP, HTTPRequest

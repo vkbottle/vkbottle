@@ -21,7 +21,7 @@ class HTTPRequest(object):
     aioHTTP Request Wrapper
     """
     def __init__(self):
-        self.client = ClientSession(json_serialize=json.dumps)
+        pass
 
     @request
     async def post(self,
@@ -41,3 +41,7 @@ class HTTPRequest(object):
                   ):
         async with client.get(url, ssl=ssl.SSLContext()) as response:
             return await response.json(content_type=content_type)
+
+
+class HTTP(object):
+    request = HTTPRequest()
