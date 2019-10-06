@@ -1,5 +1,6 @@
 from urllib import parse
 
+
 class VBMLValidators:
     def __init__(self):
         pass

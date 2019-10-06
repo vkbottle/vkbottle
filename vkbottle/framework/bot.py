@@ -122,10 +122,8 @@ class Bot(HTTP, EventProcessor):
                         ensure_future(self._chat_action_processor(obj=obj))
 
             else:
-                pass
-                # If this is an event of the group
-                # await self.new_event(event_type=update['type'], obj=obj)
+                if obj['from_id'] != -self.group_id:
+                    # If this is an event of the group AND this is not SELF-EVENT
+                    ensure_future(self._event_processor(obj=obj, event_type=update['type']))
 
         return 'ok'
-
-

@@ -32,7 +32,6 @@ class Method(object):
         VK API Method Wrapper
         :param group: method group
         :param method: method name
-        :param data: method options
         :return: VK API Server Response
         """
 

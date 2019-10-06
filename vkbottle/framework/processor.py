@@ -14,6 +14,11 @@ class EventProcessor(object):
     __loop: AbstractEventLoop
 
     async def _private_message_processor(self, obj: dict):
+        """
+        Private message processor. Using regex to process regular expressions in messages
+        :param obj: VK API Event Object
+        """
+
         answer = Message(**obj, api=[self.api])
 
         self._logger.debug(
@@ -58,6 +63,11 @@ class EventProcessor(object):
             self._logger.info('Add on-undefined message handler!')
 
     async def _chat_message_processor(self, obj: dict):
+        """
+        Chat messages processor. Using regex to process regular expressions in messages
+        :param obj: VK API Event Object
+        """
+
         answer = Message(**obj, api=[self.api])
 
         for key in self.on.chat_message.inner:
@@ -98,6 +108,7 @@ class EventProcessor(object):
         :param obj:
         :return: VK Server Event Object
         """
+
         action = obj['action']
 
         self._logger.debug(
@@ -110,7 +121,7 @@ class EventProcessor(object):
             if {**action, **self.on.chat_action_types[action['type']]['rules']} == action:
                 answer = Message(**obj, api=[self.api])
 
-                await self.on.chat_action_types[action['type']]['call'](answer)
+                ensure_future(self.on.chat_action_types[action['type']]['call'](answer))
 
                 self._logger.debug(
                     'New action compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(
@@ -119,3 +130,30 @@ class EventProcessor(object):
                     )
                 )
 
+    async def _event_processor(self, obj: dict, event_type: str):
+        """
+        LongPoll Events Processor
+        :param event_type: VK Server Event Type
+        :param obj: VK Server Event Object
+        """
+
+        self._logger.debug(
+            '-> EVENT FROM {} TYPE "{}" TIME #'.format(
+                obj['from_id'],
+                event_type.upper()
+            )
+        )
+
+        if event_type in self.on.event.events:
+            event_processor = self.on.event.events[event_type]
+            data = event_processor['data'](**obj, api=[self.api])
+
+            ensure_future(event_processor['call'](data))
+
+            self._logger.debug(
+                'New event compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(
+                    event_processor['call'].__name__,
+                    data.from_id
+                )
+            )
+            return True
