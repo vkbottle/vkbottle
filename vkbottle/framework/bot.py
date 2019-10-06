@@ -109,7 +109,9 @@ class Bot(HTTP, EventProcessor):
             if event['group_id'] == self.group_id:
                 return confirmation_token or 'dissatisfied'
 
-        for update in event['updates']:
+        updates = event['updates'] if 'updates' in event else [event]
+
+        for update in updates:
             obj = update['object']
 
             if update['type'] == EventTypes.MESSAGE_NEW:

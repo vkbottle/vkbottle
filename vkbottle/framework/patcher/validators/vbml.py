@@ -23,5 +23,5 @@ class VBMLValidators:
         return
 
     async def validator(self, value: str):
-        print('Value {} was validated by default validator! Hold on.')
+        print('Value {} was validated by default validator! Hold on.'.format(value))
         return value
