@@ -21,3 +21,7 @@ class VBMLValidators:
         if scheme.netloc != '':
             return value
         return
+
+    async def validator(self, value: str):
+        print('Value {} was validated by default validator! Hold on.')
+        return value
