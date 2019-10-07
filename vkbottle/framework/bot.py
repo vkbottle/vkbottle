@@ -20,6 +20,7 @@ class Bot(HTTP, EventProcessor):
                  group_id: int,
                  debug: bool = True,
                  plugin_folder: str = None,
+                 log_to_file: bool = True,
                  log_to: str = None):
         self.__token: str = token
         self.__group_id: int = group_id
@@ -30,7 +31,10 @@ class Bot(HTTP, EventProcessor):
 
         self.api = Api(loop=self.__loop, token=token, group_id=group_id)
         self.patcher = Patcher(plugin_folder or DEFAULT_BOT_FOLDER)
-        self._logger = Logger(debug, log_file=log_to, plugin_folder=self.patcher.plugin_folder)
+        self._logger = Logger(debug,
+                              log_file=log_to,
+                              plugin_folder=self.patcher.plugin_folder,
+                              logger_enabled=log_to_file)
         self.on = Handler(self._logger, group_id)
         self.error_handler = ErrorHandler()
 
