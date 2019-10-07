@@ -14,7 +14,7 @@ async def wrapper(ans: Message):
     await ans('hi')
 
 
-@bot.on.message_chat('banana')
+@bot.on.chat_message('banana')
 async def wrapper(ans: Message):
     # Works if message 'banana' in chat received
     await ans('clean me..')
@@ -26,7 +26,7 @@ async def wrapper(ans: Message):
     await ans('steve jobs..((((')
 
 
-@bot.on.message_chat.startswith('/start')
+@bot.on.chat_message.startswith('/start')
 async def wrapper(ans: Message):
     # Works if message in chat starts with '/start'
     await ans('this message starts with /start, yes?')
