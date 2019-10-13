@@ -80,7 +80,7 @@ More examples positioned in directory [/examples](./examples)
 
 Full docs you can find here:  
 
-* [Russian Version](./docs/readme.ru.md)
+* [Russian Version](docs/README.RU.md)
 
 # Contributing
 

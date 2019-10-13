@@ -38,11 +38,11 @@ class EventProcessor(object):
                 if validators_check is not None:
                     # [Feature] Async Use
                     # Added v0.19#master
-                    ensure_future(
-                        matching['call'](
-                            answer,
-                            **validators_check
-                        ))
+
+                    await matching['call'](
+                        answer,
+                        **validators_check
+                    )
 
                     self._logger.debug(
                         'New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(
@@ -88,11 +88,10 @@ class EventProcessor(object):
                 if validators_check is not None:
                     # [Feature] Async Use
                     # Added v0.19#master
-                    ensure_future(
-                        matching['call'](
-                            answer,
-                            **validators_check
-                        ))
+                    await matching['call'](
+                        answer,
+                        **validators_check
+                    )
 
                     self._logger.debug(
                         'New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(
@@ -121,7 +120,7 @@ class EventProcessor(object):
             if {**action, **self.on.chat_action_types[action['type']]['rules']} == action:
                 answer = Message(**obj, api=[self.api])
 
-                ensure_future(self.on.chat_action_types[action['type']]['call'](answer))
+                await self.on.chat_action_types[action['type']]['call'](answer)
 
                 self._logger.debug(
                     'New action compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(
@@ -148,7 +147,7 @@ class EventProcessor(object):
             event_processor = self.on.event.events[event_type]
             data = event_processor['data'](**obj, api=[self.api])
 
-            ensure_future(event_processor['call'](data))
+            await event_processor['call'](data)
 
             self._logger.debug(
                 'New event compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(

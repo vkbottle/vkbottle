@@ -1,4 +1,4 @@
-import logging
+from typing import Union
 from .regex import vbml_parser, re_parser
 from .events import Event
 from ..utils import dict_of_dicts_merge, Logger
