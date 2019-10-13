@@ -135,5 +135,5 @@ class Bot(HTTP, EventProcessor):
         return 'ok'
 
     def process(self, event: dict, confirmation_token: str = None) -> str:
-        status = ensure_future(self._process(event, confirmation_token))
-        return await status
+        status = self.__loop.run_until_complete(self._process(event, confirmation_token))
+        return status
