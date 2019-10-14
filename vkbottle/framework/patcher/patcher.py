@@ -46,7 +46,7 @@ class Patcher(WhiteList):
             for key in keys:
                 if key in validators:
                     for validator in validators[key]:
-                        k = await self.regex_validators[validator](keys[key])
+                        k = await self.regex_validators[validator](keys[key], *validators[key][validator])
                         if k is None:
                             valid_dict = None
                             break

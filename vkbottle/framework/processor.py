@@ -22,7 +22,7 @@ class EventProcessor(object):
         answer = Message(**obj, api=[self.api])
 
         self._logger.debug(
-            '-> MESSAGE FROM {} TEXT "{}" TIME #'.format(
+            '-> MESSAGE FROM {} TEXT "{}" TIME %#%'.format(
                 answer.from_id,
                 answer.text.replace('\n', ' ')
             ))
@@ -74,7 +74,7 @@ class EventProcessor(object):
             if key.match(answer.text) is not None:
 
                 self._logger.debug(
-                    '-> MESSAGE FROM CHAT {} TEXT "{}" TIME #'.format(
+                    '-> MESSAGE FROM CHAT {} TEXT "{}" TIME %#%'.format(
                         answer.peer_id,
                         answer.text.replace('\n', ' ')
                     ))
@@ -111,7 +111,7 @@ class EventProcessor(object):
         action = obj['action']
 
         self._logger.debug(
-            '-> ACTION FROM CHAT {} TYPE "{}" TIME #'.format(
+            '-> ACTION FROM CHAT {} TYPE "{}" TIME %#%'.format(
                 obj['peer_id'],
                 action['type']
             ))
@@ -137,8 +137,8 @@ class EventProcessor(object):
         """
 
         self._logger.debug(
-            '-> EVENT FROM {} TYPE "{}" TIME #'.format(
-                obj['from_id'],
+            '-> EVENT FROM {} TYPE "{}" TIME %#%'.format(
+                obj['user_id'] if 'user_id' in obj else 'from_id',
                 event_type.upper()
             )
         )
@@ -152,7 +152,7 @@ class EventProcessor(object):
             self._logger.debug(
                 'New event compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})'.format(
                     event_processor['call'].__name__,
-                    data.from_id
+                    '*'
                 )
             )
             return True

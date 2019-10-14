@@ -117,7 +117,8 @@ class Bot(HTTP, EventProcessor):
                     await task
 
                 else:
-                    if obj['from_id'] != -self.group_id:
+                    print(obj)
+                    if -self.group_id not in obj.values():
                         # If this is an event of the group AND this is not SELF-EVENT
                         task = ensure_future(self._event_processor(obj=obj, event_type=update['type']))
                         await task

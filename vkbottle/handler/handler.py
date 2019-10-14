@@ -74,7 +74,7 @@ class MessageHandler:
         """
 
         def decorator(func):
-            pattern, validators = vbml_parser(text)
+            pattern, validators = vbml_parser(text, '{}$')
             self.inner[pattern] = dict(call=func, validators=validators)
             return func
 
@@ -116,7 +116,7 @@ class MessageHandler:
         :return:
         """
         def decorator(func):
-            pattern, validators = vbml_parser(text, '(?i){}')
+            pattern, validators = vbml_parser(text, '(?i){}$')
             self.inner[pattern] = dict(call=func, validators=validators)
             return func
 

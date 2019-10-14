@@ -94,3 +94,25 @@ async def wrapper(ans: Message, some, j):
 ```
 
 Ура!
+
+## Аргументы валидаторов
+
+Создам простой валидатор startswith для аргументов, для этого в класс MyValidators добавлю новый обработчик:  
+
+```python
+async def startswith(value: str, start: str):
+    if value.startswith(start):
+        return value
+```
+
+Теперь я могу использовать этот валидатор:
+
+```python
+@bot.on.message_both.lower('президент <name:startswith[Ким]>')
+async def wrapper(ans: Message, name):
+    await ans(f'Дада! Президент {name}')
+```
+
+* Аргументов может быть много, они перечисляются через запятую без пробелов  
+* Если аргумент цифра - он автоматически в нее конвертируется 
+* Стандартный тип аргумента `int`

@@ -8,17 +8,28 @@ def vbml_parser(text, f_pattern='{}'):
     :param f_pattern:
     :return:
     """
-
+    # Make whole text re-invisible
     escape = {ord(x): '\\' + x for x in r'\.*+?()[]|^$'}
-    typed_arguments = re.findall(r'(<([a-zA-Z0-9_]+)+:.*?>)', text.translate(escape))
-    validators: dict = {}
 
+    # Find all arguments with validators
+    typed_arguments = re.findall(r'(<([a-zA-Z0-9_]+)+:.*?>)', text.translate(escape))
+    validation: dict = {}
+
+    # Save validators of validated arguments
     for p in typed_arguments:
-        validators[p[1]] = re.findall(r':([a-zA-Z0-9_]+)+', p[0])
+        validators = re.findall(r':([a-zA-Z0-9_]+)+', p[0])
+        validation[p[1]] = dict()
+
+        # Get arguments of validators
+        for validator in validators:
+            arguments = re.findall(':' + validator + r'\\\[([a-zA-Z1-9|]+)+\\\]', p[0])
+            validation[p[1]][validator] = arguments
+
+        # Delete arguments from regex
         text = re.sub(':.*?>', '>', text.translate(escape))
 
     pattern = re.sub(r'(<.*?>)',  r'(?P\1.*)', text.translate(escape))
-    return re.compile(f_pattern.format(pattern)), validators
+    return re.compile(f_pattern.format(pattern)), validation
 
 
 def re_parser(pattern):
