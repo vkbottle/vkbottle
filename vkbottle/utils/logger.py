@@ -19,7 +19,7 @@ class Coloring(object):
 
     def __call__(self, text: str, color: str = 'white') -> colored:
         return '{prefix} {text}'.format(prefix=self.prefix,
-                                        text=colored(text.replace('%#%', time.strftime("%m-%d %H:%M:%S", time.gmtime())), color))
+                                        text=colored(text.replace('%#%', time.strftime("%m-%d %H:%M:%S", time.localtime())), color))
 
 
 class Logger(object):

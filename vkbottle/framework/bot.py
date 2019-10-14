@@ -59,13 +59,17 @@ class Bot(HTTP, EventProcessor):
         :param longPollServer:
         :return: VK LongPoll Event
         """
-        url = "{}?act=a_check&key={}&ts={}&wait={}&rps_delay=0".format(
-            longPollServer['server'],
-            longPollServer['key'],
-            longPollServer['ts'],
-            self.__wait or DEFAULT_WAIT
-        )
-        return await self.request.post(url)
+        try:
+            url = "{}?act=a_check&key={}&ts={}&wait={}&rps_delay=0".format(
+                longPollServer['server'],
+                longPollServer['key'],
+                longPollServer['ts'],
+                self.__wait or DEFAULT_WAIT
+            )
+            return await self.request.post(url)
+        except TimeoutError:
+            self._logger.error('TimeoutError of asyncio in longpoll request')
+            return await self.make_long_request(longPollServer)
 
     def run_polling(self):
         loop = self.__loop
@@ -117,7 +121,6 @@ class Bot(HTTP, EventProcessor):
                     await task
 
                 else:
-                    print(obj)
                     if -self.group_id not in obj.values():
                         # If this is an event of the group AND this is not SELF-EVENT
                         task = ensure_future(self._event_processor(obj=obj, event_type=update['type']))

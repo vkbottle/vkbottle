@@ -100,7 +100,7 @@ async def wrapper(ans: Message, some, j):
 Создам простой валидатор startswith для аргументов, для этого в класс MyValidators добавлю новый обработчик:  
 
 ```python
-async def startswith(value: str, start: str):
+async def startswith(self, value: str, start: str):
     if value.startswith(start):
         return value
 ```
