@@ -8,6 +8,14 @@ def vbml_parser(text, f_pattern='{}'):
     :param f_pattern:
     :return:
     """
+
+    def type_convert(variable: str):
+        if variable.isdigit():
+            variable = int(variable)
+        elif variable in ['True', 'False', 'true', 'false']:
+            variable = bool(variable.capitalize())
+        return variable
+
     # Make whole text re-invisible
     escape = {ord(x): '\\' + x for x in r'\.*+?()[]|^$'}
 
@@ -22,7 +30,7 @@ def vbml_parser(text, f_pattern='{}'):
 
         # Get arguments of validators
         for validator in validators:
-            arguments = re.findall(':' + validator + r'\\\[([a-zA-Z1-9|]+)+\\\]', p[0])
+            arguments = [type_convert(a) for a in re.findall(':' + validator + r'\\\[([a-zA-Z1-9|]+)+\\\]', p[0])]
             validation[p[1]][validator] = arguments
 
         # Delete arguments from regex
