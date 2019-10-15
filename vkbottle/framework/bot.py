@@ -46,6 +46,10 @@ class Bot(HTTP, EventProcessor):
     def get_loop(self):
         return self.__loop
 
+    @property
+    def same(self):
+        return self
+
     async def get_server(self) -> dict:
         """
         Get an longPoll server for long request create

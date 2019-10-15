@@ -1,4 +1,5 @@
 from collections import MutableMapping
+from typing import Sequence
 
 
 def dict_of_dicts_merge(d1, d2):
@@ -14,3 +15,11 @@ def dict_of_dicts_merge(d1, d2):
     d3 = d1.copy()
     d3.update(d2)
     return d3
+
+
+def flatten(lis):
+    for item in lis:
+        if isinstance(item, Sequence) and not isinstance(item, str):
+            yield from flatten(item)
+        else:
+            yield item

@@ -36,22 +36,21 @@ class Logger(object):
         self.__level = level or logging.DEBUG
         self.logger = logging.getLogger(logger_name or 'VKBottle')
 
-        log_path = '{path}/{log_file}'.format(
+        self.log_path = '{path}/{log_file}'.format(
             path=plugin_folder,
             log_file=log_file if log_file and re.match(LOG_FILE_PATTERN, log_file) else DEFAULT_LOG_NAME)
 
         if logger_enabled:
 
-            open(log_path, 'w+').close()
+            open(self.log_path, 'w+').close()
             self.logger.setLevel(self.__level)
             formatter = logging.Formatter(LOG_FORMAT)
 
-            handler = handlers.WatchedFileHandler(log_path)
+            handler = handlers.WatchedFileHandler(self.log_path)
             handler.setLevel(self.__level)
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
-
-        self.debug('My logging file path is {}'.format(log_path))
+            self.debug('My logging file path is {}'.format(self.log_path))
 
     def info(self, *some: Any):
         self.logger.info(*some)

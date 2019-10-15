@@ -1,4 +1,5 @@
 import re
+from ..utils import flatten
 
 
 def vbml_parser(text, f_pattern='{}'):
@@ -30,7 +31,7 @@ def vbml_parser(text, f_pattern='{}'):
 
         # Get arguments of validators
         for validator in validators:
-            arguments = [type_convert(a) for a in re.findall(':' + validator + r'\\\[([a-zA-Z1-9|]+)+\\\]', p[0])]
+            arguments = [type_convert(a) for a in flatten([a.split(',') for a in re.findall(':' + validator + r'\\\[(.+)+\\\]', p[0])])]
             validation[p[1]][validator] = arguments
 
         # Delete arguments from regex
