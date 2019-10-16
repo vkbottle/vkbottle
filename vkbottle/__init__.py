@@ -1,4 +1,4 @@
-from .framework import Bot
+from .framework import Bot, Mailing
 from .types.message import Message
 from .utils.task import TaskQueue
 from .api.keyboard import keyboard_gen

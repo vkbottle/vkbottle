@@ -28,18 +28,29 @@ class HTTPRequest(object):
                    url: str,
                    params: dict = None,
                    client: ClientSession = None,
+                   data: dict = None,
+                   json: dict = None,
                    content_type: str = 'application/json'
                    ):
-        async with client.post(url, params=params or {}, ssl=ssl.SSLContext()) as response:
+        async with client.post(url,
+                               params=params or {},
+                               ssl=ssl.SSLContext(),
+                               data=data or None,
+                               json=json or None) as response:
             return await response.json(content_type=content_type)
 
     @request
     async def get(self,
                   url: str,
                   client: ClientSession = None,
+                  data: dict = None,
+                  json: dict = None,
                   content_type: str = 'application/json'
                   ):
-        async with client.get(url, ssl=ssl.SSLContext()) as response:
+        async with client.get(url,
+                              ssl=ssl.SSLContext(),
+                              data=data or None,
+                              json=json or None) as response:
             return await response.json(content_type=content_type)
 
 

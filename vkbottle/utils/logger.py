@@ -13,9 +13,9 @@ LOG_FORMAT = '[%(asctime)s %(name)s - %(levelname)s] - %(message)s'
 
 
 class Coloring(object):
-    def __init__(self):
+    def __init__(self, prefix: str = 'VKBottle', prefix_color: str = 'blue'):
         color_opt()
-        self.prefix = '[' + colored('VKBottle', 'blue') + ']'
+        self.prefix = '[' + colored(prefix, prefix_color) + ']'
 
     def __call__(self, text: str, color: str = 'white') -> colored:
         return '{prefix} {text}'.format(prefix=self.prefix,
@@ -29,11 +29,17 @@ class Logger(object):
                  plugin_folder: str,
                  level=None,
                  logger_name: str = None,
-                 logger_enabled: bool = True):
+                 logger_enabled: bool = True,
+                 prefix: str = 'VKBottle',
+                 prefix_color: str = 'blue'):
 
         self.__debug: bool = debug
-        self.__coloring = Coloring()
+        self.__coloring = Coloring(prefix, prefix_color)
         self.__level = level or logging.DEBUG
+        self.__log_file = log_file
+        self.__plugin_folder = plugin_folder
+        self.__logger_name = logger_name
+        self.__logger_enabled = logger_enabled
         self.logger = logging.getLogger(logger_name or 'VKBottle')
 
         self.log_path = '{path}/{log_file}'.format(
@@ -52,8 +58,19 @@ class Logger(object):
             self.logger.addHandler(handler)
             self.debug('My logging file path is {}'.format(self.log_path))
 
+    @property
+    def logger_params(self):
+        return dict(
+            debug=self.__debug,
+            log_file=self.__log_file,
+            plugin_folder=self.__plugin_folder,
+            level=self.__level,
+            logger_name=self.__logger_name,
+            logger_enabled=self.__logger_enabled
+        )
+
     def info(self, *some: Any):
-        self.logger.info(*some)
+        self.logger.info(' '.join([str(i) for i in some]))
 
     def debug(self, *some):
         self.logger.debug(*some)
@@ -61,16 +78,16 @@ class Logger(object):
             print(self.__coloring(' '.join([str(i) for i in some])))
 
     def mark(self, *some):
-        self.logger.debug(*some)
+        self.logger.debug(' '.join([str(i) for i in some]))
         if self.__debug:
             print(self.__coloring(' '.join([str(i) for i in some]), 'grey'))
 
     def warning(self, *some):
-        self.logger.debug(*some)
+        self.logger.debug(' '.join([str(i) for i in some]))
         if self.__debug:
             print(self.__coloring(' '.join([str(i) for i in some]), 'yellow'))
 
     def error(self, *some):
-        self.logger.debug(*some)
+        self.logger.debug(' '.join([str(i) for i in some]))
         if self.__debug:
             print(self.__coloring(' '.join([str(i) for i in some]), 'red'))

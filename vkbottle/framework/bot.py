@@ -125,10 +125,9 @@ class Bot(HTTP, EventProcessor):
                     await task
 
                 else:
-                    if -self.group_id not in obj.values():
-                        # If this is an event of the group AND this is not SELF-EVENT
-                        task = ensure_future(self._event_processor(obj=obj, event_type=update['type']))
-                        await task
+                    # If this is an event of the group AND this is not SELF-EVENT
+                    task = ensure_future(self._event_processor(obj=obj, event_type=update['type']))
+                    await task
 
         except VKError as e:
             e = list(e.args)[0]

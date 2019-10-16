@@ -4,3 +4,7 @@ class VKError(Exception):
 
 class FetchMethodError(Exception):
     pass
+
+
+class MailingAPIError(Exception):
+    pass
