@@ -20,6 +20,11 @@ class Handler(object):
         self.message.inner = dict_of_dicts_merge(self.message.inner, self.message_both.inner)
         self.chat_message.inner = dict_of_dicts_merge(self.chat_message.inner, self.message_both.inner)
 
+    def change_prefix_for_all(self, prefix: list):
+        self.message.prefix = prefix
+        self.chat_message.prefix = prefix
+        self.message_both.prefix = prefix
+
     def chat_action(self, type_: str, rules: dict = None):
         """
         Special express processor of chat actions (https://vk.com/dev/objects/message - action object)
@@ -66,21 +71,23 @@ class Handler(object):
 class MessageHandler:
     def __init__(self):
         self.inner = dict()
+        self.prefix: list = ['/', '!']
 
-    def __call__(self, text: str):
+    def __call__(self, text: str, command=False):
         """
         Simple on.message(text) decorator. Support regex keys in text
         :param text: text (match case)
+        :param command: Is this is a /command
         """
 
         def decorator(func):
-            pattern, validators = vbml_parser(text, '{}$')
+            pattern, validators = vbml_parser(text, '{}$', prefix=self.prefix if command else None)
             self.inner[pattern] = dict(call=func, validators=validators)
             return func
 
         return decorator
 
-    def startswith(self, text: str):
+    def startswith(self, text: str, command=False):
         """
         Startswith regex message processor
 
@@ -88,10 +95,11 @@ class MessageHandler:
         >>> @bot.on.message.startswith(text)
 
         :param text: text which message should start
+        :param command: Is this is a /command
         """
 
         def decorator(func):
-            pattern, validators = vbml_parser(text, '{}.*?')
+            pattern, validators = vbml_parser(text, '{}.*?', prefix=self.prefix if command else None)
             self.inner[pattern] = dict(call=func, validators=validators)
             return func
 
@@ -109,14 +117,15 @@ class MessageHandler:
 
         return decorator
 
-    def lower(self, text: str):
+    def lower(self, text: str, command=False):
         """
         Ignore-case message compiler
         :param text:
+        :param command: Is this is a /command
         :return:
         """
         def decorator(func):
-            pattern, validators = vbml_parser(text, '(?i){}$')
+            pattern, validators = vbml_parser(text, '(?i){}$', prefix=self.prefix if command else None)
             self.inner[pattern] = dict(call=func, validators=validators)
             return func
 

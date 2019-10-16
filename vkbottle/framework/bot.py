@@ -91,14 +91,14 @@ class Bot(HTTP, EventProcessor):
         while True:
             try:
                 event = await self.make_long_request(longPollServer)
-                ensure_future(self._process(event))
+                ensure_future(self.emulate(event))
                 longPollServer = await self.get_server()
 
             except ClientConnectionError or ServerTimeoutError or TimeoutError:
                 # No internet connection
                 await self._logger.warning('Server Timeout Error!')
 
-    async def _process(self, event: dict, confirmation_token: str = None):
+    async def emulate(self, event: dict, confirmation_token: str = None):
         if not self.__dispatched:
             self.on.dispatch()
             self.__dispatched = True
@@ -143,5 +143,5 @@ class Bot(HTTP, EventProcessor):
         return 'ok'
 
     def process(self, event: dict, confirmation_token: str = None) -> str:
-        status = self.__loop.run_until_complete(self._process(event, confirmation_token))
+        status = self.__loop.run_until_complete(self.emulate(event, confirmation_token))
         return status

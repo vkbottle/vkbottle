@@ -2,7 +2,7 @@ import re
 from ..utils import flatten
 
 
-def vbml_parser(text, f_pattern='{}'):
+def vbml_parser(text, f_pattern: str = '{}', prefix: list = None):
     """
     Allow to generate REGEX patterns for message matching
     :param text: Text in VBML
@@ -19,6 +19,7 @@ def vbml_parser(text, f_pattern='{}'):
 
     # Make whole text re-invisible
     escape = {ord(x): '\\' + x for x in r'\.*+?()[]|^$'}
+    prefix = ('[' + "|".join(prefix) + ']') if prefix else ''
 
     # Find all arguments with validators
     typed_arguments = re.findall(r'(<([a-zA-Z0-9_]+)+:.*?>)', text.translate(escape))
@@ -38,7 +39,7 @@ def vbml_parser(text, f_pattern='{}'):
         text = re.sub(':.*?>', '>', text.translate(escape))
 
     pattern = re.sub(r'(<.*?>)',  r'(?P\1.*)', text.translate(escape))
-    return re.compile(f_pattern.format(pattern)), validation
+    return re.compile(re.compile(prefix).pattern + f_pattern.format(pattern)), validation
 
 
 def re_parser(pattern):
