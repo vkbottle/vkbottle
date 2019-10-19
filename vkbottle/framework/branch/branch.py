@@ -33,7 +33,6 @@ class BranchManager:
         if branch not in self._meet_up:
             raise BranchError('Branch "{}" is undefined'.format(branch))
         self._branch_queue[uid] = branch
-        print(self._branch_queue)
 
     def load(self, uid: int) -> str:
         if uid in self._branch_queue:

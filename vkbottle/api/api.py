@@ -19,15 +19,20 @@ class Method(object):
         self._token = token
         self.request = request or HTTPRequest()
 
-    def generate_method_url(self, group, method):
+    def generate_method_url(self, group, method, execute: bool = False):
         return API_URL + '{group}.{method}/?access_token={token}&v={version}'.format(
+            group=group,
+            method=method,
+            token=self._token,
+            version=API_VERSION
+        ) if not execute else API_URL + 'execute/?access_token={token}&v={version}'.format(
             group=group,
             method=method,
             token=self._token,
             version=API_VERSION
         )
 
-    async def __call__(self, group: str, method: str, params: dict = None):
+    async def __call__(self, group: str, method: str, params: dict = None, execute: bool = False):
         """
         VK API Method Wrapper
         :param group: method group
@@ -35,7 +40,7 @@ class Method(object):
         :return: VK API Server Response
         """
 
-        response = await self.request.post(url=self.generate_method_url(group, method), params=params)
+        response = await self.request.post(url=self.generate_method_url(group, method, execute), params=params)
 
         if 'error' in response:
             raise VKError([
@@ -89,6 +94,10 @@ class Api(object):
     async def request(self, group, method, data: dict = None) -> dict:
         data = {k: v for k, v in data.items() if v is not None} if data else {}
         return await self.method_object(group, method, data)
+
+    async def execute(self, code: str) -> dict:
+        data = {'code': code}
+        return await self.method_object('', '', data, execute=True)
 
     async def __call__(self, **kwargs) -> dict:
         """
