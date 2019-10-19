@@ -2,14 +2,7 @@ from .whitelist import WhiteList
 from .validators import VBMLValidators
 from inspect import getmembers, ismethod
 from typing import Optional, ClassVar
-import os
-
-
-def folder_checkup(path):
-    path = os.path.abspath(path)
-    if not os.path.exists(path):
-        os.mkdir(path)
-    return path
+from ...utils import folder_checkup
 
 
 class Patcher(WhiteList):

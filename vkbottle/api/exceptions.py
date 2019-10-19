@@ -8,3 +8,7 @@ class FetchMethodError(Exception):
 
 class MailingAPIError(Exception):
     pass
+
+
+class BranchError(Exception):
+    pass

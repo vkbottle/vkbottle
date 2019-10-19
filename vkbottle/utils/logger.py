@@ -73,7 +73,7 @@ class Logger(object):
         self.logger.info(' '.join([str(i) for i in some]))
 
     def debug(self, *some):
-        self.logger.debug(*some)
+        self.logger.debug(' '.join([str(i) for i in some]))
         if self.__debug:
             print(self.__coloring(' '.join([str(i) for i in some])))
 

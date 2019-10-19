@@ -9,6 +9,8 @@ from aiohttp.client_exceptions import ClientConnectionError, ServerTimeoutError
 from ._event import EventTypes
 from .processor import EventProcessor
 from .patcher import Patcher
+from .branch import BranchManager
+from .branch.standart_branch import Branch, ExitBranch
 
 
 DEFAULT_WAIT = 20
@@ -31,10 +33,13 @@ class Bot(HTTP, EventProcessor):
 
         self.api = Api(loop=self.__loop, token=token, group_id=group_id)
         self.patcher = Patcher(plugin_folder or DEFAULT_BOT_FOLDER)
+
         self._logger = Logger(debug,
                               log_file=log_to,
                               plugin_folder=self.patcher.plugin_folder,
                               logger_enabled=log_to_file)
+
+        self.branch = BranchManager(plugin_folder or DEFAULT_BOT_FOLDER)
         self.on = Handler(self._logger, group_id)
         self.error_handler = ErrorHandler()
 
@@ -115,14 +120,26 @@ class Bot(HTTP, EventProcessor):
 
                 if update['type'] == EventTypes.MESSAGE_NEW:
                     if obj['peer_id'] < 2e9:
-                        task = ensure_future(self._private_message_processor(obj=obj))
+                        if obj['from_id'] not in self.branch.queue:
+                            task = ensure_future(self._private_message_processor(obj=obj))
+                        else:
+                            task = ensure_future(self._branched_processor(obj=obj))
                     else:
                         if 'action' not in obj:
-                            task = ensure_future(self._chat_message_processor(obj=obj))
+                            if obj['peer_id'] not in self.branch.queue:
+                                task = ensure_future(self._chat_message_processor(obj=obj))
+                            else:
+                                task = ensure_future(self._branched_processor(obj=obj))
                         else:
                             task = ensure_future(self._chat_action_processor(obj=obj))
 
-                    await task
+                    processed = await task
+                    if type(processed) == Branch:
+                        self._logger.mark('[Branch Collected]', processed.branch_name)
+                        self.branch.add(obj['peer_id'], processed.branch_name)
+                    elif type(processed) == ExitBranch:
+                        self._logger.mark('[Branch Exited]')
+                        self.branch.exit(obj['peer_id'])
 
                 else:
                     # If this is an event of the group AND this is not SELF-EVENT

@@ -32,6 +32,10 @@ class PollBackground(BaseModel):
     points: List[PollBackgroundPoint]
 
 
+class PollFriends(BaseModel):
+    id: int = None
+
+
 class Poll(BaseModel):
     id: int = None
     owner_id: int = None
@@ -52,4 +56,4 @@ class Poll(BaseModel):
     author_id: int = None
     photo: Photo = None
     background: PollBackground = None
-    friends: List[int] = None
+    friends: List[PollFriends] = None

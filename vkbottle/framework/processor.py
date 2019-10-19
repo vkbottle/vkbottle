@@ -3,13 +3,17 @@ from ..api import Api
 from ..handler import Handler
 from ..utils import Logger
 from .patcher import Patcher
+from .branch import BranchManager
 from asyncio import AbstractEventLoop, ensure_future
+from re import sub
 
 
 class EventProcessor(object):
     api: Api
     on: Handler
     patcher: Patcher
+    branch: BranchManager
+    group_id: int
     _logger: Logger
     __loop: AbstractEventLoop
 
@@ -39,7 +43,7 @@ class EventProcessor(object):
                     # [Feature] Async Use
                     # Added v0.19#master
 
-                    await matching['call'](
+                    task = await matching['call'](
                         answer,
                         **validators_check
                     )
@@ -50,7 +54,7 @@ class EventProcessor(object):
                             answer.from_id
                         )
                     )
-                    return True
+                    return task
 
         if self.on.undefined_func:
             ensure_future(self.on.undefined_func(answer))
@@ -88,7 +92,7 @@ class EventProcessor(object):
                 if validators_check is not None:
                     # [Feature] Async Use
                     # Added v0.19#master
-                    await matching['call'](
+                    task = await matching['call'](
                         answer,
                         **validators_check
                     )
@@ -99,7 +103,7 @@ class EventProcessor(object):
                             answer.from_id
                         )
                     )
-                    return True
+                    return task
 
     async def _chat_action_processor(self, obj: dict):
         """
@@ -156,3 +160,31 @@ class EventProcessor(object):
                 )
             )
             return True
+
+    async def _branched_processor(self, obj: dict):
+        """
+        Branched messages processor manager
+        :param obj: VK Server Event Object
+        """
+        obj['text'] = sub(r'\[club' + str(self.group_id) + r'\|.*?\] ', '', obj['text'])
+
+        answer = Message(**obj, api=[self.api])
+
+        self._logger.debug(
+            '-> BRANCHED MESSAGE FROM {} TEXT "{}" TIME %#%'.format(
+                answer.peer_id,
+                answer.text.replace('\n', ' ')
+            ))
+
+        branch = self.branch.load(answer.peer_id)
+        task = ensure_future(self.branch.branches[branch](answer))
+
+        task = await task
+
+        self._logger.debug(
+            'New BRANCHED-message compiled with branch <\x1b[35m{}\x1b[0m> (from: {})'.format(
+                branch,
+                answer.from_id
+            )
+        )
+        return task

@@ -34,3 +34,4 @@ class Document(BaseModel):
     date: int = None
     type: DocumentType = None
     preview: DocumentPreview = None
+    access_key: str = None

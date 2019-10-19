@@ -1,5 +1,6 @@
 from collections import MutableMapping
 from typing import Sequence
+import os
 
 
 def dict_of_dicts_merge(d1, d2):
@@ -23,3 +24,10 @@ def flatten(lis):
             yield from flatten(item)
         else:
             yield item
+
+
+def folder_checkup(path):
+    path = os.path.abspath(path)
+    if not os.path.exists(path):
+        os.mkdir(path)
+    return path
