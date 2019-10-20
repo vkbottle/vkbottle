@@ -1,11 +1,12 @@
 from ..types.message import Message
-from ..api import Api
+from ..api import Api, HandlerReturnError
 from ..handler import Handler
 from ..utils import Logger
 from .patcher import Patcher
 from .branch import BranchManager
 from asyncio import AbstractEventLoop, ensure_future
 from re import sub
+from .branch import Branch, ExitBranch
 
 
 class EventProcessor(object):
@@ -44,7 +45,7 @@ class EventProcessor(object):
                     # Added v0.19#master
 
                     task = await matching['call'](
-                        answer,
+                        *([answer] if not matching['ignore_ans'] else []),
                         **validators_check
                     )
 
@@ -93,7 +94,7 @@ class EventProcessor(object):
                     # [Feature] Async Use
                     # Added v0.19#master
                     task = await matching['call'](
-                        answer,
+                        *([answer] if not matching['ignore_ans'] else []),
                         **validators_check
                     )
 
@@ -188,3 +189,17 @@ class EventProcessor(object):
             )
         )
         return task
+
+    async def _handler_return(self, handler_return, obj: dict):
+        return_type = type(handler_return)
+        if return_type in [Branch, ExitBranch]:
+            if return_type == Branch:
+                self._logger.mark('[Branch Collected]', handler_return.branch_name)
+                self.branch.add(obj['peer_id'], handler_return.branch_name)
+            else:
+                self._logger.mark('[Branch Exited]')
+                self.branch.exit(obj['peer_id'])
+        elif return_type in [str, int, dict, list, tuple]:
+            await Message(**obj, api=[self.api])(str(handler_return))
+        elif handler_return is not None:
+            raise HandlerReturnError('Type {} can\'t be returned out of handler'.format(type(handler_return).__name__))

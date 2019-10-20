@@ -12,3 +12,7 @@ class MailingAPIError(Exception):
 
 class BranchError(Exception):
     pass
+
+
+class HandlerReturnError(Exception):
+    pass

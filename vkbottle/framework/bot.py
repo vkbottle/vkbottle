@@ -3,7 +3,7 @@ from ..handler import Handler, ErrorHandler
 from ..const import DEFAULT_BOT_FOLDER
 from ..utils import Logger
 from ..http import HTTP
-from ..api import VKError
+from ..api import VKError, HandlerReturnError
 from asyncio import get_event_loop, AbstractEventLoop, ensure_future, TimeoutError
 from aiohttp.client_exceptions import ClientConnectionError, ServerTimeoutError
 from ._event import EventTypes
@@ -134,12 +134,7 @@ class Bot(HTTP, EventProcessor):
                             task = ensure_future(self._chat_action_processor(obj=obj))
 
                     processed = await task
-                    if type(processed) == Branch:
-                        self._logger.mark('[Branch Collected]', processed.branch_name)
-                        self.branch.add(obj['peer_id'], processed.branch_name)
-                    elif type(processed) == ExitBranch:
-                        self._logger.mark('[Branch Exited]')
-                        self.branch.exit(obj['peer_id'])
+                    ensure_future(self._handler_return(processed, obj))
 
                 else:
                     # If this is an event of the group AND this is not SELF-EVENT

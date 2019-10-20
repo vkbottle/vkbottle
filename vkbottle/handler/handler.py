@@ -2,6 +2,7 @@ from typing import Union
 from .regex import vbml_parser, re_parser
 from .events import Event
 from ..utils import dict_of_dicts_merge, Logger
+from inspect import signature
 
 
 class Handler(object):
@@ -81,8 +82,9 @@ class MessageHandler:
         """
 
         def decorator(func):
+            ignore_ans = len(signature(func).parameters) < 1
             pattern, validators = vbml_parser(text, '{}$', prefix=self.prefix if command else None)
-            self.inner[pattern] = dict(call=func, validators=validators)
+            self.inner[pattern] = dict(call=func, validators=validators, ignore_ans=ignore_ans)
             return func
 
         return decorator
@@ -99,8 +101,9 @@ class MessageHandler:
         """
 
         def decorator(func):
+            ignore_ans = len(signature(func).parameters) < 1
             pattern, validators = vbml_parser(text, '{}.*?', prefix=self.prefix if command else None)
-            self.inner[pattern] = dict(call=func, validators=validators)
+            self.inner[pattern] = dict(call=func, validators=validators, ignore_ans=ignore_ans)
             return func
 
         return decorator
@@ -112,7 +115,8 @@ class MessageHandler:
         """
 
         def decorator(func):
-            self.inner[re_parser(pattern)] = dict(call=func, validators={})
+            ignore_ans = len(signature(func).parameters) < 1
+            self.inner[re_parser(pattern)] = dict(call=func, validators={}, ignore_ans=ignore_ans)
             return func
 
         return decorator
@@ -125,8 +129,9 @@ class MessageHandler:
         :return:
         """
         def decorator(func):
+            ignore_ans = len(signature(func).parameters) < 1
             pattern, validators = vbml_parser(text, '(?i){}$', prefix=self.prefix if command else None)
-            self.inner[pattern] = dict(call=func, validators=validators)
+            self.inner[pattern] = dict(call=func, validators=validators, ignore_ans=ignore_ans)
             return func
 
         return decorator
