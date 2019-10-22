@@ -46,7 +46,7 @@ bot.run_polling()
 ```python
 from vkbottle import Bot, Message
 from flask import request
-# app = Flask()
+# app = Framework()
 
 bot = Bot('my-token', 123, debug=True)
 confirmation = 'MyConfirmationCode'
