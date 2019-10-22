@@ -29,12 +29,12 @@ class BranchManager:
     def branches(self):
         return self._meet_up
 
-    def add(self, uid: int, branch: str) -> None:
+    def add(self, uid: int, branch: str, **kwargs) -> None:
         if branch not in self._meet_up:
             raise BranchError('Branch "{}" is undefined'.format(branch))
-        self._branch_queue[uid] = branch
+        self._branch_queue[uid] = [branch, kwargs]
 
-    def load(self, uid: int) -> str:
+    def load(self, uid: int) -> list:
         if uid in self._branch_queue:
             return self._branch_queue.get(uid, None)
 

@@ -74,22 +74,25 @@ class MessageHandler:
         self.inner = dict()
         self.prefix: list = ['/', '!']
 
-    def __call__(self, text: str, command=False):
+    def __call__(self, text: str, command: bool = False, lower: bool = False):
         """
         Simple on.message(text) decorator. Support regex keys in text
         :param text: text (match case)
         :param command: Is this is a /command
+        :param lower: Should IGNORECASE param for regex be used
         """
 
         def decorator(func):
-            ignore_ans = len(signature(func).parameters) < 1
-            pattern, validators = vbml_parser(text, '{}$', prefix=self.prefix if command else None)
+            pattern, validators, arguments = vbml_parser(text,
+                                              ('(?i)' if lower else '') + '{}$',
+                                              prefix=self.prefix if command else None)
+            ignore_ans = len([a for a in signature(func).parameters if a not in arguments]) < 1
             self.inner[pattern] = dict(call=func, validators=validators, ignore_ans=ignore_ans)
             return func
 
         return decorator
 
-    def startswith(self, text: str, command=False):
+    def startswith(self, text: str, command=False, lower: bool = False):
         """
         Startswith regex message processor
 
@@ -98,11 +101,14 @@ class MessageHandler:
 
         :param text: text which message should start
         :param command: Is this is a /command
+        :param lower: Should IGNORECASE param for regex be used
         """
 
         def decorator(func):
-            ignore_ans = len(signature(func).parameters) < 1
-            pattern, validators = vbml_parser(text, '{}.*?', prefix=self.prefix if command else None)
+            pattern, validators, arguments = vbml_parser(text,
+                                              ('(?i)' if lower else '') + '{}.*?',
+                                              prefix=self.prefix if command else None)
+            ignore_ans = len([a for a in signature(func).parameters if a in arguments]) < 1
             self.inner[pattern] = dict(call=func, validators=validators, ignore_ans=ignore_ans)
             return func
 
@@ -117,21 +123,6 @@ class MessageHandler:
         def decorator(func):
             ignore_ans = len(signature(func).parameters) < 1
             self.inner[re_parser(pattern)] = dict(call=func, validators={}, ignore_ans=ignore_ans)
-            return func
-
-        return decorator
-
-    def lower(self, text: str, command=False):
-        """
-        Ignore-case message compiler
-        :param text:
-        :param command: Is this is a /command
-        :return:
-        """
-        def decorator(func):
-            ignore_ans = len(signature(func).parameters) < 1
-            pattern, validators = vbml_parser(text, '(?i){}$', prefix=self.prefix if command else None)
-            self.inner[pattern] = dict(call=func, validators=validators, ignore_ans=ignore_ans)
             return func
 
         return decorator

@@ -39,8 +39,20 @@ def vbml_parser(text, f_pattern: str = '{}', prefix: list = None):
         text = re.sub(':.*?>', '>', text.translate(escape))
 
     pattern = re.sub(r'(<.*?>)',  r'(?P\1.*)', text.translate(escape))
-    return re.compile(re.compile(prefix).pattern + f_pattern.format(pattern)), validation
+    return re.compile(re.compile(prefix).pattern + f_pattern.format(pattern)), validation, re.findall(r'<(.*?)>', text.translate(escape))
 
 
 def re_parser(pattern):
     return re.compile(pattern)
+
+
+def text_from_args_replace(kwargs: dict, text: str, symbol: list = None):
+    symbol = symbol or ['<', '>']
+    symbol = symbol[0] + '{}' + symbol[1]
+    kwargs = {symbol.format(k): v for k, v in kwargs.items()}
+    # Create a regular expression from all of the dictionary keys
+    regex = re.compile("|".join(map(re.escape, kwargs)))
+    text = re.sub(symbol.format('[ ]*(.*?)[ ]*'), symbol.format('\\1'), text.translate({ord(x): '\\' + x for x in r'\.*+?()[]|^$'}))
+
+    # For each match, look up the corresponding value in the dictionary
+    return regex.sub(lambda match: kwargs[match.group(0)], text)

@@ -1,6 +1,8 @@
 from aiohttp import ClientSession
 import json
 import ssl
+import traceback
+from ..const import VERSION_REST
 from asyncio import Future
 
 
@@ -10,9 +12,12 @@ def request(func):
     :param func: wrapped function
     """
     async def decorator(*args, **kwargs):
-        async with ClientSession(json_serialize=json.dumps) as client:
-            response = await func(*args, **kwargs, client=client)
-        return response
+        try:
+            async with ClientSession(json_serialize=json.dumps) as client:
+                response = await func(*args, **kwargs, client=client)
+            return response
+        except Exception as e:
+            print(e, traceback.format_exc())
     return decorator
 
 
@@ -56,3 +61,9 @@ class HTTPRequest(object):
 
 class HTTP(object):
     request = HTTPRequest()
+
+    async def get_current_rest(self):
+        """
+        Get current actual info about package from GitHub REST page
+        """
+        return await self.request.get(url=VERSION_REST, content_type='text/plain')

@@ -4,6 +4,8 @@ from ..const import DEFAULT_BOT_FOLDER
 from ..utils import Logger
 from ..http import HTTP
 from ..api import VKError, HandlerReturnError
+from ..const import __version__
+from concurrent.futures._base import TimeoutError as ConcurrentTimout
 from asyncio import get_event_loop, AbstractEventLoop, ensure_future, TimeoutError
 from aiohttp.client_exceptions import ClientConnectionError, ServerTimeoutError
 from ._event import EventTypes
@@ -105,6 +107,13 @@ class Bot(HTTP, EventProcessor):
 
     async def emulate(self, event: dict, confirmation_token: str = None):
         if not self.__dispatched:
+
+            # Check updates from timoniq/vkbottle-rest
+            current_rest = await self.get_current_rest()
+            if current_rest['version'] != __version__:
+                self._logger.mark('You are using old version of VKBottle. Update is found: {}'.format(current_rest['version']),
+                                  current_rest['description'])
+
             self.on.dispatch()
             self.__dispatched = True
 

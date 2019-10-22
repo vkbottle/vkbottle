@@ -32,7 +32,7 @@ class Method(object):
             version=API_VERSION
         )
 
-    async def __call__(self, group: str, method: str, params: dict = None, execute: bool = False):
+    async def __call__(self, group: str, method: str, params: dict = None, _execute: bool = False):
         """
         VK API Method Wrapper
         :param group: method group
@@ -40,7 +40,7 @@ class Method(object):
         :return: VK API Server Response
         """
 
-        response = await self.request.post(url=self.generate_method_url(group, method, execute), params=params)
+        response = await self.request.post(url=self.generate_method_url(group, method, _execute), params=params)
 
         if 'error' in response:
             raise VKError([
@@ -97,7 +97,7 @@ class Api(object):
 
     async def execute(self, code: str) -> dict:
         data = {'code': code}
-        return await self.method_object('', '', data, execute=True)
+        return await self.method_object('', '', data, _execute=True)
 
     async def __call__(self, **kwargs) -> dict:
         """

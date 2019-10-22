@@ -178,7 +178,7 @@ class EventProcessor(object):
             ))
 
         branch = self.branch.load(answer.peer_id)
-        task = ensure_future(self.branch.branches[branch](answer))
+        task = ensure_future(self.branch.branches[branch[0]](answer, **branch[1]))
 
         task = await task
 
@@ -191,11 +191,17 @@ class EventProcessor(object):
         return task
 
     async def _handler_return(self, handler_return, obj: dict):
+        """
+        Allows use returns in handlers and operates them
+        :param handler_return:
+        :param obj:
+        :return:
+        """
         return_type = type(handler_return)
         if return_type in [Branch, ExitBranch]:
             if return_type == Branch:
                 self._logger.mark('[Branch Collected]', handler_return.branch_name)
-                self.branch.add(obj['peer_id'], handler_return.branch_name)
+                self.branch.add(obj['peer_id'], handler_return.branch_name, **handler_return.branch_kwargs)
             else:
                 self._logger.mark('[Branch Exited]')
                 self.branch.exit(obj['peer_id'])

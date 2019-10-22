@@ -23,10 +23,9 @@
 """
 
 try:
-    from vkbottle.portable import __version__
+    from vkbottle.const import __version__
 except Exception as e:
-    print(e)
-    __version__ = "0.15"
+    __version__ = "0.2"
 
 from setuptools import setup, find_packages
 
@@ -35,7 +34,7 @@ setup(
   packages=find_packages(),
   version=__version__,
   license='MIT',
-  description='New bot-creating repo with options control like in the famous framework flask!',
+  description='Hm!',
   author='Arseniy Timonik',
   author_email='timonik.bss@gmail.com',
   url='https://github.com/timoniq/vkbottle',
