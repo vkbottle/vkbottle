@@ -6,7 +6,7 @@
 </p>
 <hr>
 
-### Install
+### Установка
 
 1) С помощью установщика pip из GitHub:
    
@@ -14,7 +14,7 @@
    pip install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
    ```
    
-### Features
+### Фишки
 
 - Удобная и быстрая доставка сообщений через regex
 - Быстрый API враппер
@@ -64,7 +64,7 @@ async def wrapper(ans: Message, name):
 
 Больше примеров в папке [/examples](./examples)
 
-### Docs
+### Документация
 
 Полная документация:  
 
@@ -75,7 +75,7 @@ async def wrapper(ans: Message, name):
 ПР поддерживаются! Мне приятно видеть ваш вклад в развитие библиотеки  
 Задавайте вопросы в блоке Issues и в чате VK!
 
-## License
+## Лицензия
 
 Copyright © 2019 [timoniq](https://github.com/timoniq).  
 Этот проект имеет [GPL-3.0](./LICENSE.txt) лицензию.
