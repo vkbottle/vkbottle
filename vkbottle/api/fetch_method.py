@@ -5,7 +5,7 @@ from typing import Callable, Optional
 
 
 async def assign_function(*args, **kwargs):
-    raise FetchMethodError('Please assign FM Function')
+    raise FetchMethodError("Please assign FM Function")
 
 
 def assigned(iterator):
@@ -30,7 +30,7 @@ class Fetching:
 
     def __call__(self, function: Callable = None, *args, IGNORE_CORO=True, **kwargs):
         if not iscoroutinefunction(function) and not IGNORE_CORO:
-            raise FetchMethodError('Function is not awaitable (make it async)')
+            raise FetchMethodError("Function is not awaitable (make it async)")
         self.running_func = function or self.running_func
         if assigned(args):
             self.args = args

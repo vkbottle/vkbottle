@@ -5,8 +5,9 @@ class ErrorHandler(object):
     def __call__(self, *error_numbers):
         def decorator(func):
             for error_number in error_numbers:
-                self._error_processors[error_number] = {'call': func}
+                self._error_processors[error_number] = {"call": func}
             return func
+
         return decorator
 
     def get_processor(self):

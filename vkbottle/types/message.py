@@ -52,29 +52,46 @@ class Message(BaseModel):
     reply_message: "Message" = None
     api: list = None
 
-    async def reply(self, message: str = '&#8230;', attachment: str = None, keyboard: dict = None, **params):
-        return await self.api[0].request('messages', 'send',
-                                         dict(
-                                             message=message,
-                                             peer_id=self.peer_id,
-                                             attachment=attachment,
-                                             reply_to=self.id,
-                                             keyboard=keyboard,
-                                             random_id=random.randint(-2e9, 2e9),
-                                             **params
-                                         )
-                                         )
+    async def reply(
+        self,
+        message: str = "&#8230;",
+        attachment: str = None,
+        keyboard: dict = None,
+        **params
+    ):
+        return await self.api[0].request(
+            "messages",
+            "send",
+            dict(
+                message=message,
+                peer_id=self.peer_id,
+                attachment=attachment,
+                reply_to=self.id,
+                keyboard=keyboard,
+                random_id=random.randint(-2e9, 2e9),
+                **params
+            ),
+        )
 
-    async def __call__(self, message: str = '&#8230;', attachment: str = None, keyboard: dict = None, **params):
-        return await self.api[0].request('messages', 'send',
-                                         dict(
-                                             message=message, peer_id=self.peer_id,
-                                             attachment=attachment,
-                                             keyboard=keyboard,
-                                             random_id=random.randint(-2e9, 2e9),
-                                             **params
-                                         )
-                                         )
+    async def __call__(
+        self,
+        message: str = "&#8230;",
+        attachment: str = None,
+        keyboard: dict = None,
+        **params
+    ):
+        return await self.api[0].request(
+            "messages",
+            "send",
+            dict(
+                message=message,
+                peer_id=self.peer_id,
+                attachment=attachment,
+                keyboard=keyboard,
+                random_id=random.randint(-2e9, 2e9),
+                **params
+            ),
+        )
 
     def get_args(self):
         """

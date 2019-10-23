@@ -18,17 +18,25 @@ class MessageAllow(BaseModel):
     key: typing.Optional[str] = None
     api: list = None
 
-    async def __call__(self, message: str = None, attachment: str = None, keyboard: dict = None, **params):
-        return await self.api[0].request('messages', 'send',
-                                         dict(
-                                             message=message,
-                                             peer_id=self.user_id,
-                                             attachment=attachment,
-                                             keyboard=keyboard,
-                                             random_id=random.randint(-2e9, 2e9),
-                                             **params
-                                         )
-                                         )
+    async def __call__(
+        self,
+        message: str = None,
+        attachment: str = None,
+        keyboard: dict = None,
+        **params
+    ):
+        return await self.api[0].request(
+            "messages",
+            "send",
+            dict(
+                message=message,
+                peer_id=self.user_id,
+                attachment=attachment,
+                keyboard=keyboard,
+                random_id=random.randint(-2e9, 2e9),
+                **params
+            ),
+        )
 
 
 class MessageDeny(BaseModel):

@@ -2,14 +2,15 @@ from ...api.exceptions import BranchError
 from ...utils import folder_checkup
 import typing
 
-BRANCH_DATA = '.BRANCHES.txt'
+BRANCH_DATA = ".BRANCHES.txt"
 
 
 class BranchManager:
     def __init__(self, plugin_folder: str):
         self.plugin_folder: str = folder_checkup(plugin_folder)
-        self.log_path: str = '{path}/{branch_file}'.format(path=self.plugin_folder,
-                                                      branch_file=BRANCH_DATA)
+        self.log_path: str = "{path}/{branch_file}".format(
+            path=self.plugin_folder, branch_file=BRANCH_DATA
+        )
         self._meet_up: dict = {}
         self._branch_queue: dict = {}
 

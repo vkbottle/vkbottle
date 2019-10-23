@@ -10,7 +10,10 @@ class Method(object):
 
     Universal for User and Bot API. Make single async requests to VK API Server
     """
-    def __init__(self, token: str, loop: AbstractEventLoop = None, request: HTTPRequest = None):
+
+    def __init__(
+        self, token: str, loop: AbstractEventLoop = None, request: HTTPRequest = None
+    ):
         """
         :param token: VK API Token (universal for User and Bot API)
         :param request: aioHTTP ClientSession for ordered sessions
@@ -20,19 +23,21 @@ class Method(object):
         self.request = request or HTTPRequest()
 
     def generate_method_url(self, group, method, execute: bool = False):
-        return API_URL + '{group}.{method}/?access_token={token}&v={version}'.format(
-            group=group,
-            method=method,
-            token=self._token,
-            version=API_VERSION
-        ) if not execute else API_URL + 'execute/?access_token={token}&v={version}'.format(
-            group=group,
-            method=method,
-            token=self._token,
-            version=API_VERSION
+        return (
+            API_URL
+            + "{group}.{method}/?access_token={token}&v={version}".format(
+                group=group, method=method, token=self._token, version=API_VERSION
+            )
+            if not execute
+            else API_URL
+            + "execute/?access_token={token}&v={version}".format(
+                group=group, method=method, token=self._token, version=API_VERSION
+            )
         )
 
-    async def __call__(self, group: str, method: str, params: dict = None, _execute: bool = False):
+    async def __call__(
+        self, group: str, method: str, params: dict = None, _execute: bool = False
+    ):
         """
         VK API Method Wrapper
         :param group: method group
@@ -40,14 +45,15 @@ class Method(object):
         :return: VK API Server Response
         """
 
-        response = await self.request.post(url=self.generate_method_url(group, method, _execute), params=params)
+        response = await self.request.post(
+            url=self.generate_method_url(group, method, _execute), params=params
+        )
 
-        if 'error' in response:
-            raise VKError([
-                response['error']['error_code'],
-                response['error']['error_msg']
-            ])
-        return response['response']
+        if "error" in response:
+            raise VKError(
+                [response["error"]["error_code"], response["error"]["error_msg"]]
+            )
+        return response["response"]
 
 
 class Api(object):
@@ -80,15 +86,15 @@ class Api(object):
         :param method: ignore it
         :return:
         """
-        if '_' in method:
-            m = method.split('_')
-            method = m[0] + ''.join(i.title() for i in m[1:])
+        if "_" in method:
+            m = method.split("_")
+            method = m[0] + "".join(i.title() for i in m[1:])
 
         return Api(
             self.loop,
             self._token,
             self.group_id,
-            (self._method + '.' if self._method else '') + method
+            (self._method + "." if self._method else "") + method,
         )
 
     async def request(self, group, method, data: dict = None) -> dict:
@@ -96,8 +102,8 @@ class Api(object):
         return await self.method_object(group, method, data)
 
     async def execute(self, code: str) -> dict:
-        data = {'code': code}
-        return await self.method_object('', '', data, _execute=True)
+        data = {"code": code}
+        return await self.method_object("", "", data, _execute=True)
 
     async def __call__(self, **kwargs) -> dict:
         """
@@ -108,9 +114,9 @@ class Api(object):
 
         for k, v in enumerate(kwargs):
             if isinstance(v, (list, tuple)):
-                kwargs[k] = ','.join(str(x) for x in v)
+                kwargs[k] = ",".join(str(x) for x in v)
 
-        method = self._method.split('.')
+        method = self._method.split(".")
 
         if len(method) == 2:
             group = method[0]
