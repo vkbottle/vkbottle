@@ -87,11 +87,11 @@ class Bot(HTTP, EventProcessor):
         try:
             loop.run_until_complete(self._run_polling())
         except KeyboardInterrupt:
-            self._logger.warning('KB interrupt')
+            self._logger.warning('Keyboard interrupt')
 
     async def _run_polling(self, wait: int = DEFAULT_WAIT):
         self.__wait = wait
-        self._logger.info('LongPoll will be runned. Is it OK?')
+        self._logger.info('LongPoll will run. Is it OK?')
 
         longPollServer = await self.get_server()
 
