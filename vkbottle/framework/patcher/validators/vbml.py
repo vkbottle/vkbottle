@@ -18,10 +18,14 @@ class VBMLValidators:
 
     async def url(self, value: str):
         scheme = parse.urlparse(value)
-        if scheme.netloc != '':
+        if scheme.netloc != "":
             return value
         return
 
     async def validator(self, value: str, *args):
-        print('Value {} was validated by default validator! Hold on.\nReceived args: {}'.format(value, args))
+        print(
+            "Value {} was validated by default validator! Hold on.\nReceived args: {}".format(
+                value, args
+            )
+        )
         return value

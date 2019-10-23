@@ -18,8 +18,12 @@ class Handler(object):
         self.__chat_action_types: dict = dict()
 
     def dispatch(self):
-        self.message.inner = dict_of_dicts_merge(self.message.inner, self.message_both.inner)
-        self.chat_message.inner = dict_of_dicts_merge(self.chat_message.inner, self.message_both.inner)
+        self.message.inner = dict_of_dicts_merge(
+            self.message.inner, self.message_both.inner
+        )
+        self.chat_message.inner = dict_of_dicts_merge(
+            self.chat_message.inner, self.message_both.inner
+        )
 
     def change_prefix_for_all(self, prefix: list):
         self.message.prefix = prefix
@@ -34,30 +38,38 @@ class Handler(object):
         """
 
         def decorator(func):
-            self.__chat_action_types[type_] = {'call': func, 'rules': rules or {}}
+            self.__chat_action_types[type_] = {"call": func, "rules": rules or {}}
             return func
+
         return decorator
 
     def message_undefined(self):
         """
         If private message is not in message processor this single function will be caused
         """
+
         def decorator(func):
             self.__undefined_message_func = func
             return func
+
         return decorator
 
     def chat_mention(self):
         def decorator(func):
-            pattern = re_parser(r'\[(club|public){}\|.*?]'.format(self.__group_id))
+            pattern = re_parser(r"\[(club|public){}\|.*?]".format(self.__group_id))
             self.chat_message.inner[pattern] = dict(call=func, validators={})
             return func
+
         return decorator
 
     def chat_invite(self):
         def decorator(func):
-            self.__chat_action_types['chat_invite_user'] = {'call': func, 'rules': {'member_id': -self.__group_id}}
+            self.__chat_action_types["chat_invite_user"] = {
+                "call": func,
+                "rules": {"member_id": -self.__group_id},
+            }
             return func
+
         return decorator
 
     @property
@@ -72,7 +84,7 @@ class Handler(object):
 class MessageHandler:
     def __init__(self):
         self.inner = dict()
-        self.prefix: list = ['/', '!']
+        self.prefix: list = ["/", "!"]
 
     def __call__(self, text: str, command: bool = False, lower: bool = False):
         """
@@ -83,11 +95,17 @@ class MessageHandler:
         """
 
         def decorator(func):
-            pattern, validators, arguments = vbml_parser(text,
-                                              ('(?i)' if lower else '') + '{}$',
-                                              prefix=self.prefix if command else None)
-            ignore_ans = len([a for a in signature(func).parameters if a not in arguments]) < 1
-            self.inner[pattern] = dict(call=func, validators=validators, ignore_ans=ignore_ans)
+            pattern, validators, arguments = vbml_parser(
+                text,
+                ("(?i)" if lower else "") + "{}$",
+                prefix=self.prefix if command else None,
+            )
+            ignore_ans = (
+                len([a for a in signature(func).parameters if a not in arguments]) < 1
+            )
+            self.inner[pattern] = dict(
+                call=func, validators=validators, ignore_ans=ignore_ans
+            )
             return func
 
         return decorator
@@ -105,11 +123,17 @@ class MessageHandler:
         """
 
         def decorator(func):
-            pattern, validators, arguments = vbml_parser(text,
-                                              ('(?i)' if lower else '') + '{}.*?',
-                                              prefix=self.prefix if command else None)
-            ignore_ans = len([a for a in signature(func).parameters if a in arguments]) < 1
-            self.inner[pattern] = dict(call=func, validators=validators, ignore_ans=ignore_ans)
+            pattern, validators, arguments = vbml_parser(
+                text,
+                ("(?i)" if lower else "") + "{}.*?",
+                prefix=self.prefix if command else None,
+            )
+            ignore_ans = (
+                len([a for a in signature(func).parameters if a in arguments]) < 1
+            )
+            self.inner[pattern] = dict(
+                call=func, validators=validators, ignore_ans=ignore_ans
+            )
             return func
 
         return decorator
@@ -122,7 +146,9 @@ class MessageHandler:
 
         def decorator(func):
             ignore_ans = len(signature(func).parameters) < 1
-            self.inner[re_parser(pattern)] = dict(call=func, validators={}, ignore_ans=ignore_ans)
+            self.inner[re_parser(pattern)] = dict(
+                call=func, validators={}, ignore_ans=ignore_ans
+            )
             return func
 
         return decorator

@@ -33,11 +33,12 @@ class TaskQueue:
         self.tasks: List[Callable] = []
         self.loop: asyncio.AbstractEventLoop = loop
 
-    def run(self,
-            shutdown: Callable = None,
-            startup: Callable = None,
-            asyncio_debug_mode: bool = False,
-            ):
+    def run(
+        self,
+        shutdown: Callable = None,
+        startup: Callable = None,
+        asyncio_debug_mode: bool = False,
+    ):
         """
         Run events
         """

@@ -19,13 +19,15 @@ DEFAULT_WAIT = 20
 
 
 class Bot(HTTP, EventProcessor):
-    def __init__(self,
-                 token: str,
-                 group_id: int,
-                 debug: bool = True,
-                 plugin_folder: str = None,
-                 log_to_file: bool = True,
-                 log_to: str = None):
+    def __init__(
+        self,
+        token: str,
+        group_id: int,
+        debug: bool = True,
+        plugin_folder: str = None,
+        log_to_file: bool = True,
+        log_to: str = None,
+    ):
         self.__token: str = token
         self.__group_id: int = group_id
         self.__loop: AbstractEventLoop = get_event_loop()
@@ -36,10 +38,12 @@ class Bot(HTTP, EventProcessor):
         self.api = Api(loop=self.__loop, token=token, group_id=group_id)
         self.patcher = Patcher(plugin_folder or DEFAULT_BOT_FOLDER)
 
-        self._logger = Logger(debug,
-                              log_file=log_to,
-                              plugin_folder=self.patcher.plugin_folder,
-                              logger_enabled=log_to_file)
+        self._logger = Logger(
+            debug,
+            log_file=log_to,
+            plugin_folder=self.patcher.plugin_folder,
+            logger_enabled=log_to_file,
+        )
 
         self.branch = BranchManager(plugin_folder or DEFAULT_BOT_FOLDER)
         self.on = Handler(self._logger, group_id)
@@ -72,14 +76,14 @@ class Bot(HTTP, EventProcessor):
         """
         try:
             url = "{}?act=a_check&key={}&ts={}&wait={}&rps_delay=0".format(
-                longPollServer['server'],
-                longPollServer['key'],
-                longPollServer['ts'],
-                self.__wait or DEFAULT_WAIT
+                longPollServer["server"],
+                longPollServer["key"],
+                longPollServer["ts"],
+                self.__wait or DEFAULT_WAIT,
             )
             return await self.request.post(url)
         except TimeoutError:
-            self._logger.error('TimeoutError of asyncio in longpoll request')
+            self._logger.error("TimeoutError of asyncio in longpoll request")
             return await self.make_long_request(longPollServer)
 
     def run_polling(self):
@@ -87,11 +91,11 @@ class Bot(HTTP, EventProcessor):
         try:
             loop.run_until_complete(self._run_polling())
         except KeyboardInterrupt:
-            self._logger.warning('KB interrupt')
+            self._logger.warning("Keyboard interrupt")
 
     async def _run_polling(self, wait: int = DEFAULT_WAIT):
         self.__wait = wait
-        self._logger.info('LongPoll will be runned. Is it OK?')
+        self._logger.info("LongPoll will run. Is it OK?")
 
         longPollServer = await self.get_server()
 
@@ -103,40 +107,48 @@ class Bot(HTTP, EventProcessor):
 
             except ClientConnectionError or ServerTimeoutError or TimeoutError:
                 # No internet connection
-                await self._logger.warning('Server Timeout Error!')
+                await self._logger.warning("Server Timeout Error!")
 
     async def emulate(self, event: dict, confirmation_token: str = None):
         if not self.__dispatched:
 
             # Check updates from timoniq/vkbottle-rest
             current_rest = await self.get_current_rest()
-            if current_rest['version'] != __version__:
-                self._logger.mark('You are using old version of VKBottle. Update is found: {}'.format(current_rest['version']),
-                                  current_rest['description'])
+            if current_rest["version"] != __version__:
+                self._logger.mark(
+                    "You are using old version of VKBottle. Update is found: {}".format(
+                        current_rest["version"]
+                    ),
+                    current_rest["description"],
+                )
 
             self.on.dispatch()
             self.__dispatched = True
 
-        if 'type' in event and event['type'] == 'confirmation':
-            if event['group_id'] == self.group_id:
-                return confirmation_token or 'dissatisfied'
+        if "type" in event and event["type"] == "confirmation":
+            if event["group_id"] == self.group_id:
+                return confirmation_token or "dissatisfied"
 
-        updates = event['updates'] if 'updates' in event else [event]
+        updates = event["updates"] if "updates" in event else [event]
         try:
 
             for update in updates:
-                obj = update['object']
+                obj = update["object"]
 
-                if update['type'] == EventTypes.MESSAGE_NEW:
-                    if obj['peer_id'] < 2e9:
-                        if obj['from_id'] not in self.branch.queue:
-                            task = ensure_future(self._private_message_processor(obj=obj))
+                if update["type"] == EventTypes.MESSAGE_NEW:
+                    if obj["peer_id"] < 2e9:
+                        if obj["from_id"] not in self.branch.queue:
+                            task = ensure_future(
+                                self._private_message_processor(obj=obj)
+                            )
                         else:
                             task = ensure_future(self._branched_processor(obj=obj))
                     else:
-                        if 'action' not in obj:
-                            if obj['peer_id'] not in self.branch.queue:
-                                task = ensure_future(self._chat_message_processor(obj=obj))
+                        if "action" not in obj:
+                            if obj["peer_id"] not in self.branch.queue:
+                                task = ensure_future(
+                                    self._chat_message_processor(obj=obj)
+                                )
                             else:
                                 task = ensure_future(self._branched_processor(obj=obj))
                         else:
@@ -147,20 +159,30 @@ class Bot(HTTP, EventProcessor):
 
                 else:
                     # If this is an event of the group AND this is not SELF-EVENT
-                    task = ensure_future(self._event_processor(obj=obj, event_type=update['type']))
+                    task = ensure_future(
+                        self._event_processor(obj=obj, event_type=update["type"])
+                    )
                     await task
 
         except VKError as e:
             e = list(e.args)[0]
             if e[0] in self.error_handler.get_processor():
-                handler = self.error_handler.get_processor()[e[0]]['call']
-                self._logger.debug('VKError ?{}! Processing it with handler <{}>'.format(e, handler.__name__))
+                handler = self.error_handler.get_processor()[e[0]]["call"]
+                self._logger.debug(
+                    "VKError ?{}! Processing it with handler <{}>".format(
+                        e, handler.__name__
+                    )
+                )
                 ensure_future(handler(e))
             else:
-                self._logger.error('VKError! Add @bot.error_handler({}) to process this error!'.format(e))
+                self._logger.error(
+                    "VKError! Add @bot.error_handler({}) to process this error!".format(
+                        e
+                    )
+                )
                 raise VKError(e)
 
-        return 'ok'
+        return "ok"
 
     def process(self, event: dict, confirmation_token: str = None) -> str:
         status = self.__loop.run_until_complete(self.emulate(event, confirmation_token))
