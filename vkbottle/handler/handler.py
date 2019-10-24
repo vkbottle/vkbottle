@@ -132,7 +132,7 @@ class MessageHandler:
                 prefix=self.prefix if command else None,
             )
             ignore_ans = (
-                len([a for a in signature(func).parameters if a in arguments]) < 1
+                len([a for a in signature(func).parameters if a not in arguments]) < 1
             )
             self.inner[pattern] = dict(
                 call=func, validators=validators, ignore_ans=ignore_ans
