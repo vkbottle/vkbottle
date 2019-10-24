@@ -52,12 +52,16 @@ bot = Bot('my-token', 123, debug=True)
 confirmation = 'MyConfirmationCode'
 
 
-@app.route('/')
-def route():
+@app.route('/bot')
+async def route():
+    # Если вы используете НЕ асинхронный фреймворк
     bot.process(event=request.args(), confirmation_token=confirmation)
+    # В наилучшем случае с асинхронным фреймворком
+    asyncio.ensure_future(bot.emulate(event=request.args(), confirmation_token=confirmation))
+    return 'ok'
 
 
-@bot.on.message('My name is <name>')
+@bot.on.message('My name is <name>', lower=True)
 async def wrapper(ans: Message, name):
     await ans('Hello, {}'.format(name))
 ```
