@@ -6,10 +6,11 @@ from .patcher import Patcher
 from .branch import BranchManager
 from asyncio import AbstractEventLoop, ensure_future
 from re import sub
+from .regex import RegexHelper
 from .branch import Branch, ExitBranch
 
 
-class EventProcessor(object):
+class EventProcessor(RegexHelper):
     api: Api
     on: Handler
     patcher: Patcher
@@ -72,7 +73,7 @@ class EventProcessor(object):
         :param obj: VK API Event Object
         """
 
-        answer = Message(**obj, api=[self.api])
+        answer = Message(**{**obj, 'text': self.init_bot_mention(obj['text'])}, api=[self.api])
 
         for key in self.on.chat_message.inner:
             if key.match(answer.text) is not None:
