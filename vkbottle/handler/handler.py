@@ -57,7 +57,10 @@ class Handler(object):
     def chat_mention(self):
         def decorator(func):
             pattern = re_parser(r"\[(club|public){}\|.*?]".format(self.__group_id))
-            self.chat_message.inner[pattern] = dict(call=func, validators={})
+            ignore_ans = (
+                    len(signature(func).parameters) < 1
+            )
+            self.chat_message.inner[pattern] = dict(call=func, validators={}, ignore_ans=ignore_ans)
             return func
 
         return decorator
