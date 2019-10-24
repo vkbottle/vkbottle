@@ -3,7 +3,7 @@
 Валидаторы - штуки, контроллирующие прохождения аргументов под шаблон сообщения. Давайте напишем простую обработку сообщения с простым аргументом
 
 ```python
-@bot.on.message_both.lower('мне <some> лет')
+@bot.on.message_both('мне <some> лет', lower=True)
 async def wrapper(ans: Message, some):
     await ans(f'Все ясно! @id{ans.from_id} (этому человеку) {some} лет')
 ```
@@ -23,7 +23,7 @@ VBML - простой язык разметки на регексах, то чт
 Проверьте работу VBML прямо сейчас. Создайте обработчик с указанным кодом прямо сейчас:
 
 ```python
-@bot.on.message_both.lower('/<some:validator>')
+@bot.on.message_both('<some:validator>', lower=True, command=True)
 async def wrapper(ans: Message, some):
     await ans(f'Введена команда {some}!')
 ```
@@ -72,6 +72,8 @@ bot.patcher(validators=MyValidators)
 
 * Аргумент будет считаться правильным если валидатор вернет все что угодно кроме None
 
+* Не None возвращение валидатора и будет возвращаться в хендлер
+
 Я собираюсь учесть проблему, где, благодаря трудностям славянских языков для указания возраста мы можем использовать и `лет`, и `года`, и `год`
 
 ```python
@@ -85,7 +87,7 @@ class MyValidators(VBMLValidators):
 Теперь напишу конечный обработчик:
 
 ```python
-@bot.on.message_both.lower('мне <some:int> <j:years>')
+@bot.on.message_both('мне <some:int> <j:years>', lower=True)
 async def wrapper(ans: Message, some, j):
     if some >= 18:
         await ans(f'Ого тебе уже {some} {j}')
@@ -108,7 +110,7 @@ async def startswith(self, value: str, start: str):
 Теперь я могу использовать этот валидатор:
 
 ```python
-@bot.on.message_both.lower('президент <name:startswith[Ким]>')
+@bot.on.message_both('президент <name:startswith[Ким]>', lower=True)
 async def wrapper(ans: Message, name):
     await ans(f'Дада! Президент {name}')
 ```
