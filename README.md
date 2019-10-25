@@ -83,10 +83,10 @@ app.run_server("0.0.0.0", 80)
 
 # Contributing
 
-ПР поддерживаются! Мне приятно видеть ваш вклад в развитие библиотеки
+ПР поддерживаются! Мне приятно видеть ваш вклад в развитие библиотеки  
 Задавайте вопросы в блоке Issues и в чате VK!
 
 ## Лицензия
 
-Copyright © 2019 [timoniq](https://github.com/timoniq).
+Copyright © 2019 [timoniq](https://github.com/timoniq).  
 Этот проект имеет [GPL-3.0](./LICENSE.txt) лицензию.

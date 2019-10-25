@@ -5,6 +5,17 @@ from ..utils import dict_of_dicts_merge, Logger
 from inspect import signature
 
 
+def tupled_dict(tupled: list):
+    adict = dict()
+    for t in tupled:
+        if type(t) is tuple:
+            adict[t[0]] = t[1]
+        else:
+            adict[t] = None
+
+    return adict
+
+
 class Handler(object):
     def __init__(self, logger: Logger, group_id: int = 0):
         self.__group_id: int = group_id
