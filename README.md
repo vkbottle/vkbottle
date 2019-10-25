@@ -44,26 +44,33 @@ bot.run_polling()
 ### Callback
 
 ```python
+import asyncio
+
 from vkbottle import Bot, Message
-from your_framework import request
-# app = Framework()
+from your_framework import Request
+from your_framework import Application
+
+app = Application()
 
 bot = Bot('my-token', 123, debug=True)
-confirmation = 'MyConfirmationCode'
+confirmation = '123abcdf789'
 
 
-@app.route('/bot')
-async def route():
+@app.route('/bot', methods=["POST"])
+async def route(request: Request):
     # Если вы используете НЕ асинхронный фреймворк
+    # Но так делать не стоит. вообще.
     bot.process(event=request.args(), confirmation_token=confirmation)
     # В наилучшем случае с асинхронным фреймворком
-    asyncio.ensure_future(bot.emulate(event=request.args(), confirmation_token=confirmation))
+    asyncio.create_task(bot.emulate(event=request.args(), confirmation_token=confirmation))
     return 'ok'
 
 
 @bot.on.message('My name is <name>', lower=True)
 async def wrapper(ans: Message, name):
     await ans('Hello, {}'.format(name))
+    
+app.run_server("0.0.0.0", 80)
 ```
 
 Больше примеров в папке [/examples](./examples)
@@ -76,10 +83,10 @@ async def wrapper(ans: Message, name):
 
 # Contributing
 
-ПР поддерживаются! Мне приятно видеть ваш вклад в развитие библиотеки  
+ПР поддерживаются! Мне приятно видеть ваш вклад в развитие библиотеки
 Задавайте вопросы в блоке Issues и в чате VK!
 
 ## Лицензия
 
-Copyright © 2019 [timoniq](https://github.com/timoniq).  
+Copyright © 2019 [timoniq](https://github.com/timoniq).
 Этот проект имеет [GPL-3.0](./LICENSE.txt) лицензию.
