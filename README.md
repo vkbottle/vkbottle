@@ -57,7 +57,7 @@ async def route():
     # Если вы используете НЕ асинхронный фреймворк
     bot.process(event=request.args(), confirmation_token=confirmation)
     # В наилучшем случае с асинхронным фреймворком
-    asyncio.ensure_future(bot.emulate(event=request.args(), confirmation_token=confirmation))
+    asyncio.create_task(bot.emulate(event=request.args(), confirmation_token=confirmation))
     return 'ok'
 
 
@@ -72,7 +72,8 @@ async def wrapper(ans: Message, name):
 
 Полная документация:  
 
-* [Русская версия документации](docs/README.RU.md)
+* [Русская версия документации](docs/README.RU.md)  
+в ней же можно найти документацию по валидаторам, веткам
 
 # Contributing
 
