@@ -112,17 +112,7 @@ class Bot(HTTP, EventProcessor):
     async def emulate(self, event: dict, confirmation_token: str = None):
         if not self.__dispatched:
 
-            # Check updates from timoniq/vkbottle-rest
-            current_rest = await self.get_current_rest()
-            if current_rest["version"] != __version__:
-                self._logger.mark(
-                    "You are using old version of VKBottle. Update is found: {}".format(
-                        current_rest["version"]
-                    ),
-                    current_rest["description"],
-                )
-
-            self.on.dispatch()
+            await self.on.dispatch(self.get_current_rest)
             self.__dispatched = True
 
         if "type" in event and event["type"] == "confirmation":

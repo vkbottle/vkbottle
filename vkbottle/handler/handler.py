@@ -1,13 +1,15 @@
-from typing import Union
 from .regex import vbml_parser, re_parser
 from .events import Event
 from ..utils import dict_of_dicts_merge, Logger
 from inspect import signature
+from typing import Callable
+from ..const import __version__
 
 
 class Handler(object):
     def __init__(self, logger: Logger, group_id: int = 0):
         self.__group_id: int = group_id
+        self.__logger = logger
 
         self.message: MessageHandler = MessageHandler()
         self.chat_message: MessageHandler = MessageHandler()
@@ -17,13 +19,22 @@ class Handler(object):
         self.event: Event = Event()
         self.__chat_action_types: dict = dict()
 
-    def dispatch(self):
+    async def dispatch(self, get_current_rest: Callable):
         self.message.inner = dict_of_dicts_merge(
             self.message.inner, self.message_both.inner
         )
         self.chat_message.inner = dict_of_dicts_merge(
             self.chat_message.inner, self.message_both.inner
         )
+        # Check updates from timoniq/vkbottle-rest
+        current_rest = await get_current_rest()
+        if current_rest["version"] != __version__:
+            self.__logger.mark(
+                "You are using old version of VKBottle. Update is found: {}".format(
+                    current_rest["version"]
+                ),
+                current_rest["description"],
+            )
 
     def change_prefix_for_all(self, prefix: list):
         self.message.prefix = prefix
