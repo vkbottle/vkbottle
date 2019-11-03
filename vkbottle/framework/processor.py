@@ -212,7 +212,7 @@ class EventProcessor(RegexHelper):
             else:
                 self._logger.mark("[Branch Exited]")
                 self.branch.exit(obj["peer_id"])
-        elif return_type in [str, int, dict, list, tuple]:
+        elif return_type in [str, int, dict, list, tuple, float]:
             await Message(**obj, api=[self.api], client_info=client_info)(str(handler_return))
         elif handler_return is not None:
             raise HandlerReturnError(

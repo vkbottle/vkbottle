@@ -3,6 +3,7 @@ from .validators import VBMLValidators
 from inspect import getmembers, ismethod
 from typing import Optional, ClassVar
 from ...utils import folder_checkup
+from ...api import VBMLError
 
 
 class Patcher(WhiteList):
@@ -27,9 +28,12 @@ class Patcher(WhiteList):
         **validators_kwargs
     ):
         if validators:
-            self.regex_validators = self.__provide_validators(
-                validators, validators_kwargs
-            )
+            if issubclass(validators, VBMLValidators):
+                self.regex_validators = self.__provide_validators(
+                    validators, validators_kwargs
+                )
+            else:
+                raise VBMLError('Custom validators cls should inherit VBMLValidators cls')
         if disable_validators:
             self.disable_validators = True
 
@@ -59,7 +63,7 @@ class Patcher(WhiteList):
                         else:
                             valid_dict[key] = k
                 else:
-                    valid_dict = keys
+                    valid_dict[key] = keys[key]
 
             return valid_dict
 

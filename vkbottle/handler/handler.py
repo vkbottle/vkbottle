@@ -33,7 +33,7 @@ class Handler(object):
 
     async def dispatch(
             self,
-            get_current_rest: Callable
+            get_current_rest: Callable = None
     ) -> None:
         self.message.inner = dict_of_dicts_merge(
             self.message.inner, self.message_both.inner
@@ -41,15 +41,16 @@ class Handler(object):
         self.chat_message.inner = dict_of_dicts_merge(
             self.chat_message.inner, self.message_both.inner
         )
-        # Check updates from timoniq/vkbottle-rest
-        current_rest = await get_current_rest()
-        if current_rest["version"] != __version__:
-            self.__logger.mark(
-                "You are using old version of VKBottle. Update is found: {}".format(
-                    current_rest["version"]
-                ),
-                current_rest["description"],
-            )
+        if get_current_rest:
+            # Check updates from timoniq/vkbottle-rest
+            current_rest = await get_current_rest()
+            if current_rest["version"] != __version__:
+                self.__logger.mark(
+                    "You are using old version of VKBottle. Update is found: {}".format(
+                        current_rest["version"]
+                    ),
+                    current_rest["description"],
+                )
 
     def change_prefix_for_all(
             self,

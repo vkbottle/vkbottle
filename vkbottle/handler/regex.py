@@ -46,7 +46,7 @@ def vbml_parser(text, f_pattern: str = "{}", prefix: list = None):
         # Delete arguments from regex
         text = re.sub(":.*?>", ">", text.translate(escape))
 
-    pattern = re.sub(r"(<.*?>)", r"(?P\1.*)", text.translate(escape))
+    pattern = re.sub(r"(<.*?>)", r"(?P\1.*?)", text.translate(escape))
     return (
         re.compile(re.compile(prefix).pattern + f_pattern.format(pattern)),
         validation,

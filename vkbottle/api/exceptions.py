@@ -20,3 +20,7 @@ class HandlerError(Exception):
 
 class HandlerReturnError(HandlerError):
     pass
+
+
+class VBMLError(Exception):
+    pass
