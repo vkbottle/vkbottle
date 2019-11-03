@@ -36,6 +36,12 @@ class MessageAction(BaseModel):
     photo: MessageActionPhoto = None
 
 
+class ClientInfo(BaseModel):
+    button_actions: list = None
+    keyboard: bool = None
+    lang_id: int = None
+
+
 class Message(BaseModel):
     id: int = None
     date: int = None
@@ -51,6 +57,7 @@ class Message(BaseModel):
     fwd_messages: typing.List["Message"] = []
     reply_message: "Message" = None
     api: list = None
+    client_info: "ClientInfo" = None
 
     async def reply(
         self,

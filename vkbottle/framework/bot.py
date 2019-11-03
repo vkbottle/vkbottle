@@ -111,7 +111,6 @@ class Bot(HTTP, EventProcessor):
 
     async def emulate(self, event: dict, confirmation_token: str = None):
         if not self.__dispatched:
-
             await self.on.dispatch(self.get_current_rest)
             self.__dispatched = True
 
@@ -126,31 +125,36 @@ class Bot(HTTP, EventProcessor):
                 obj = update["object"]
 
                 if update["type"] == EventTypes.MESSAGE_NEW:
+
+                    # VK API v5.103
+                    client_info = obj['client_info']
+                    obj = obj['message']
+
                     if obj["peer_id"] < 2e9:
                         if obj["from_id"] not in self.branch.queue:
                             task = await (
-                                self._private_message_processor(obj=obj)
+                                self._private_message_processor(obj=obj, client_info=client_info)
                             )
                         else:
                             task = await (
-                                self._branched_processor(obj=obj)
+                                self._branched_processor(obj=obj, client_info=client_info)
                             )
                     else:
                         if "action" not in obj:
                             if obj["peer_id"] not in self.branch.queue:
                                 task = await (
-                                    self._chat_message_processor(obj=obj)
+                                    self._chat_message_processor(obj=obj, client_info=client_info)
                                 )
                             else:
                                 task = await (
-                                    self._branched_processor(obj=obj)
+                                    self._branched_processor(obj=obj, client_info=client_info)
                                 )
                         else:
                             task = await (
                                 self._chat_action_processor(obj=obj)
                             )
 
-                    await self._handler_return(task, obj)
+                    await self._handler_return(task, obj, client_info=client_info)
 
                 else:
                     # If this is an event of the group AND this is not SELF-EVENT

@@ -19,13 +19,13 @@ class EventProcessor(RegexHelper):
     _logger: Logger
     __loop: AbstractEventLoop
 
-    async def _private_message_processor(self, obj: dict):
+    async def _private_message_processor(self, obj: dict, client_info: dict):
         """
         Private message processor. Using regex to process regular expressions in messages
         :param obj: VK API Event Object
         """
 
-        answer = Message(**obj, api=[self.api])
+        answer = Message(**obj, api=[self.api], client_info=client_info)
 
         self._logger.debug(
             '-> MESSAGE FROM {} TEXT "{}" TIME %#%'.format(
@@ -58,7 +58,7 @@ class EventProcessor(RegexHelper):
                     return task
 
         if self.on.undefined_func:
-            ensure_future(self.on.undefined_func(answer))
+            await (self.on.undefined_func(answer))
             self._logger.debug(
                 "New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
                     answer.from_id
@@ -67,13 +67,17 @@ class EventProcessor(RegexHelper):
         else:
             self._logger.info("Add on-undefined message handler!")
 
-    async def _chat_message_processor(self, obj: dict):
+    async def _chat_message_processor(self, obj: dict, client_info: dict):
         """
         Chat messages processor. Using regex to process regular expressions in messages
         :param obj: VK API Event Object
         """
 
-        answer = Message(**{**obj, 'text': self.init_bot_mention(obj['text'])}, api=[self.api])
+        answer = Message(
+            **{**obj, 'text': self.init_bot_mention(obj['text'])},
+            api=[self.api],
+            client_info=client_info
+        )
 
         for key in self.on.chat_message.inner:
             if key.match(answer.text) is not None:
@@ -162,14 +166,14 @@ class EventProcessor(RegexHelper):
             )
             return True
 
-    async def _branched_processor(self, obj: dict):
+    async def _branched_processor(self, obj: dict, client_info: dict):
         """
         Branched messages processor manager
         :param obj: VK Server Event Object
         """
         obj["text"] = sub(r"\[club" + str(self.group_id) + r"\|.*?\] ", "", obj["text"])
 
-        answer = Message(**obj, api=[self.api])
+        answer = Message(**obj, api=[self.api], client_info=client_info)
 
         self._logger.debug(
             '-> BRANCHED MESSAGE FROM {} TEXT "{}" TIME %#%'.format(
@@ -189,7 +193,7 @@ class EventProcessor(RegexHelper):
         )
         return task
 
-    async def _handler_return(self, handler_return, obj: dict):
+    async def _handler_return(self, handler_return, obj: dict, client_info: dict):
         """
         Allows use returns in handlers and operates them
         :param handler_return:
@@ -209,7 +213,7 @@ class EventProcessor(RegexHelper):
                 self._logger.mark("[Branch Exited]")
                 self.branch.exit(obj["peer_id"])
         elif return_type in [str, int, dict, list, tuple]:
-            await Message(**obj, api=[self.api])(str(handler_return))
+            await Message(**obj, api=[self.api], client_info=client_info)(str(handler_return))
         elif handler_return is not None:
             raise HandlerReturnError(
                 "Type {} can't be returned out of handler".format(

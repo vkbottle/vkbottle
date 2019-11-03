@@ -4,10 +4,22 @@ from ..utils import dict_of_dicts_merge, Logger
 from inspect import signature
 from typing import Callable
 from ..const import __version__
+from inspect import iscoroutinefunction
+from ..api import HandlerError
+
+
+def should_ignore_ans(func: Callable, arguments: list) -> bool:
+    if not iscoroutinefunction(func):
+        raise HandlerError('Handling function must be async')
+    return len([a for a in signature(func).parameters if a not in arguments]) < 1
 
 
 class Handler(object):
-    def __init__(self, logger: Logger, group_id: int = 0):
+    def __init__(
+            self,
+            logger: Logger,
+            group_id: int = 0
+    ):
         self.__group_id: int = group_id
         self.__logger = logger
 
@@ -19,7 +31,10 @@ class Handler(object):
         self.event: Event = Event()
         self.__chat_action_types: dict = dict()
 
-    async def dispatch(self, get_current_rest: Callable):
+    async def dispatch(
+            self,
+            get_current_rest: Callable
+    ) -> None:
         self.message.inner = dict_of_dicts_merge(
             self.message.inner, self.message_both.inner
         )
@@ -36,12 +51,18 @@ class Handler(object):
                 current_rest["description"],
             )
 
-    def change_prefix_for_all(self, prefix: list):
+    def change_prefix_for_all(
+            self,
+            prefix: list
+    ) -> None:
         self.message.prefix = prefix
         self.chat_message.prefix = prefix
         self.message_both.prefix = prefix
 
-    def chat_action(self, type_: str, rules: dict = None):
+    def chat_action(
+            self, type_: str,
+            rules: dict = None
+    ):
         """
         Special express processor of chat actions (https://vk.com/dev/objects/message - action object)
         :param type_: action name
@@ -100,7 +121,41 @@ class MessageHandler:
         self.inner = dict()
         self.prefix: list = ["/", "!"]
 
-    def __call__(self, text: str, command: bool = False, lower: bool = False):
+    def add_handler(
+            self,
+            text: str,
+            func: Callable,
+            command: bool = False,
+            lower: bool = False,
+            pattern: str = None
+    ):
+        """
+        Add handler to dispatcher without decorators
+        :param text: text (match case)
+        :param func: function responsible for event
+        :param command: Is this is a /command
+        :param lower: Should IGNORECASE param for regex be used
+        :param pattern: any regex pattern pattern. {} means text which will be formatted
+        :return: True
+        """
+
+        pattern, validators, arguments = vbml_parser(
+            text,
+            pattern or ("(?i)" if lower else "") + "{}$",
+            prefix=self.prefix if command else None,
+        )
+        self.inner[pattern] = dict(
+            call=func,
+            validators=validators,
+            ignore_ans=should_ignore_ans(func, arguments)
+        )
+
+    def __call__(
+            self,
+            text: str,
+            command: bool = False,
+            lower: bool = False
+    ):
         """
         Simple on.message(text) decorator. Support regex keys in text
         :param text: text (match case)
@@ -114,17 +169,21 @@ class MessageHandler:
                 ("(?i)" if lower else "") + "{}$",
                 prefix=self.prefix if command else None,
             )
-            ignore_ans = (
-                len([a for a in signature(func).parameters if a not in arguments]) < 1
-            )
             self.inner[pattern] = dict(
-                call=func, validators=validators, ignore_ans=ignore_ans
+                call=func,
+                validators=validators,
+                ignore_ans=should_ignore_ans(func, arguments)
             )
             return func
 
         return decorator
 
-    def startswith(self, text: str, command=False, lower: bool = False):
+    def startswith(
+            self,
+            text: str,
+            command: bool = False,
+            lower: bool = False
+    ):
         """
         Startswith regex message processor
 
@@ -142,26 +201,29 @@ class MessageHandler:
                 ("(?i)" if lower else "") + "{}.*?",
                 prefix=self.prefix if command else None,
             )
-            ignore_ans = (
-                len([a for a in signature(func).parameters if a not in arguments]) < 1
-            )
             self.inner[pattern] = dict(
-                call=func, validators=validators, ignore_ans=ignore_ans
+                call=func,
+                validators=validators,
+                ignore_ans=should_ignore_ans(func, arguments)
             )
             return func
 
         return decorator
 
-    def regex(self, pattern: str):
+    def regex(
+            self,
+            pattern: str
+    ):
         """
         Regex message compiler
         :param pattern: Regex string
         """
 
         def decorator(func):
-            ignore_ans = len(signature(func).parameters) < 1
             self.inner[re_parser(pattern)] = dict(
-                call=func, validators={}, ignore_ans=ignore_ans
+                call=func,
+                validators={},
+                ignore_ans=should_ignore_ans(func, [])
             )
             return func
 

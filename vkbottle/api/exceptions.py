@@ -14,5 +14,9 @@ class BranchError(Exception):
     pass
 
 
-class HandlerReturnError(Exception):
+class HandlerError(Exception):
+    pass
+
+
+class HandlerReturnError(HandlerError):
     pass
