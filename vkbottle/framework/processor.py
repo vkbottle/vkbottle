@@ -93,7 +93,6 @@ class EventProcessor(RegexHelper):
                 if validators_check is not None:
                     # [Feature] Async Use
                     # Added v0.19#master
-                    print(matching)
                     task = await matching["call"](
                         *([answer] if not matching["ignore_ans"] else []),
                         **validators_check

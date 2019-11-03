@@ -102,7 +102,7 @@ class Bot(HTTP, EventProcessor):
         while True:
             try:
                 event = await self.make_long_request(longPollServer)
-                ensure_future(self.emulate(event))
+                await self.emulate(event)
                 longPollServer = await self.get_server()
 
             except ClientConnectionError or ServerTimeoutError or TimeoutError:
@@ -138,31 +138,35 @@ class Bot(HTTP, EventProcessor):
                 if update["type"] == EventTypes.MESSAGE_NEW:
                     if obj["peer_id"] < 2e9:
                         if obj["from_id"] not in self.branch.queue:
-                            task = ensure_future(
+                            task = await (
                                 self._private_message_processor(obj=obj)
                             )
                         else:
-                            task = ensure_future(self._branched_processor(obj=obj))
+                            task = await (
+                                self._branched_processor(obj=obj)
+                            )
                     else:
                         if "action" not in obj:
                             if obj["peer_id"] not in self.branch.queue:
-                                task = ensure_future(
+                                task = await (
                                     self._chat_message_processor(obj=obj)
                                 )
                             else:
-                                task = ensure_future(self._branched_processor(obj=obj))
+                                task = await (
+                                    self._branched_processor(obj=obj)
+                                )
                         else:
-                            task = ensure_future(self._chat_action_processor(obj=obj))
+                            task = await (
+                                self._chat_action_processor(obj=obj)
+                            )
 
-                    processed = await task
-                    ensure_future(self._handler_return(processed, obj))
+                    await self._handler_return(task, obj)
 
                 else:
                     # If this is an event of the group AND this is not SELF-EVENT
                     task = ensure_future(
                         self._event_processor(obj=obj, event_type=update["type"])
                     )
-                    await task
 
         except VKError as e:
             e = list(e.args)[0]
