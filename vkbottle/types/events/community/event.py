@@ -1,6 +1,6 @@
 from enum import Enum
 from ...base import BaseModel
-from .events_list import Event as events
+from .events_list import EventList as events
 from . import events_objects as EventsObjects
 
 from ...message import Message

@@ -52,23 +52,24 @@ class Method(object):
         response = await self.request.post(
             url=self.generate_method_url(group, method, _execute), params=params
         )
-        try:
 
-            if "error" in response:
-                raise VKError(
-                    [response["error"]["error_code"], response["error"]["error_msg"]]
-                )
-            return response["response"]
+        if type(response) is not dict:
 
-        except Exception as e:
             cprint(f"""
 --- {time.strftime("%m-%d %H:%M:%S", time.localtime())} - DELAY {self.__delay*5} sec
 Check your internet connection. Maybe VK died, request returned: {e}
 Error appeared after request: {group}.{method} (execute: {_execute})
 Sent params: {params}""", 'yellow')
+
             await asyncio.sleep(5*self.__delay)
             self.__delay += 1
             return await self(group, method, params, _execute)
+
+        if "error" in response:
+            raise VKError(
+                [response["error"]["error_code"], response["error"]["error_msg"]]
+            )
+        return response["response"]
 
 
 class Api(object):
