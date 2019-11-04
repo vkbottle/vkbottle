@@ -98,6 +98,7 @@ class Bot(HTTP, EventProcessor):
         self._logger.info("LongPoll will run. Is it OK?")
 
         longPollServer = await self.get_server()
+        self._logger.debug('Polling successfully started')
 
         while True:
             try:

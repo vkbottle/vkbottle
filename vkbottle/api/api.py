@@ -7,6 +7,10 @@ import asyncio
 from termcolor import cprint
 
 
+def exception_handler(loop, context):
+    pass
+
+
 class Method(object):
     """
     VK API Method
@@ -22,6 +26,7 @@ class Method(object):
         :param request: aioHTTP ClientSession for ordered sessions
         """
         self.loop = loop
+        self.loop.set_exception_handler(exception_handler)
         self.__delay = 1
         self._token = token
         self.request = request or HTTPRequest()
@@ -74,7 +79,7 @@ Sent params: {params}""", 'yellow')
 
             cprint(f"""
 --- {time.strftime("%m-%d %H:%M:%S", time.localtime())} - METHOD SUCCESS after {5*sum(range(1, self.__delay))} sec
-RESPONSE: {response}""", color='green')
+RESPONSE: {response}\n""", color='green')
             self.__delay = 1
 
         return response["response"]

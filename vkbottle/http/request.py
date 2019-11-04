@@ -5,6 +5,8 @@ import traceback
 from ..const import VERSION_REST
 from asyncio import Future
 
+TRACEBACK = []
+
 
 def request(func):
     """
@@ -18,7 +20,7 @@ def request(func):
                 response = await func(*args, **kwargs, client=client)
             return response
         except Exception as e:
-            print(e, traceback.format_exc())
+            TRACEBACK.append(traceback.format_exc())
 
     return decorator
 
