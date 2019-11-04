@@ -2,6 +2,9 @@ from ..const import API_VERSION, API_URL
 from .exceptions import VKError
 from ..http import HTTPRequest
 from asyncio import AbstractEventLoop, get_event_loop
+import time
+import asyncio
+from termcolor import cprint
 
 
 class Method(object):
@@ -19,6 +22,7 @@ class Method(object):
         :param request: aioHTTP ClientSession for ordered sessions
         """
         self.loop = loop
+        self.__delay = 1
         self._token = token
         self.request = request or HTTPRequest()
 
@@ -48,12 +52,23 @@ class Method(object):
         response = await self.request.post(
             url=self.generate_method_url(group, method, _execute), params=params
         )
+        try:
 
-        if "error" in response:
-            raise VKError(
-                [response["error"]["error_code"], response["error"]["error_msg"]]
-            )
-        return response["response"]
+            if "error" in response:
+                raise VKError(
+                    [response["error"]["error_code"], response["error"]["error_msg"]]
+                )
+            return response["response"]
+
+        except Exception as e:
+            cprint(f"""
+--- {time.strftime("%m-%d %H:%M:%S", time.localtime())} - DELAY {self.__delay*5} sec
+Check your internet connection. Maybe VK died, request returned: {e}
+Error appeared after request: {group}.{method} (execute: {_execute})
+Sent params: {params}""", 'yellow')
+            await asyncio.sleep(5*self.__delay)
+            self.__delay += 1
+            return await self(group, method, params, _execute)
 
 
 class Api(object):
