@@ -57,7 +57,7 @@ class Method(object):
 
             cprint(f"""
 --- {time.strftime("%m-%d %H:%M:%S", time.localtime())} - DELAY {self.__delay*5} sec
-Check your internet connection. Maybe VK died, request returned: {e}
+Check your internet connection. Maybe VK died, request returned: {response}
 Error appeared after request: {group}.{method} (execute: {_execute})
 Sent params: {params}""", 'yellow')
 
@@ -69,6 +69,14 @@ Sent params: {params}""", 'yellow')
             raise VKError(
                 [response["error"]["error_code"], response["error"]["error_msg"]]
             )
+
+        if self.__delay > 1:
+
+            cprint(f"""
+--- {time.strftime("%m-%d %H:%M:%S", time.localtime())} - METHOD SUCCESS after {5*sum(range(1, self.__delay))} sec
+RESPONSE: {response}""", color='green')
+            self.__delay = 1
+
         return response["response"]
 
 
