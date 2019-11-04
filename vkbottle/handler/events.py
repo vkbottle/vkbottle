@@ -31,6 +31,13 @@ class Event(object):
 
         return decorator
 
+    def message_typing_state(self):
+        def decorator(func):
+            self.events[EventList.MESSAGE_TYPING_STATE] = {"call": func, "data": MessageTypingState}
+            return func
+
+        return decorator
+
     def photo_new(self):
         def decorator(func):
             self.events[EventList.PHOTO_NEW] = {"call": func, "data": Photo}
@@ -269,7 +276,7 @@ class Event(object):
 
     def group_leave(self):
         def decorator(func):
-            self.events[EventList.GROUP_JOIN] = {"call": func, "data": GroupLeave}
+            self.events[EventList.GROUP_LEAVE] = {"call": func, "data": GroupLeave}
             return func
 
         return decorator

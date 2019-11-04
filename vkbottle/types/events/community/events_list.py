@@ -6,6 +6,7 @@ class EventList(str, Enum):
     MESSAGE_REPLY = "message_reply"
     MESSAGE_ALLOW = "message_allow"
     MESSAGE_DENY = "message_deny"
+    MESSAGE_TYPING_STATE = "message_typing_state"
 
     PHOTO_NEW = "photo_new"
     PHOTO_COMMENT_NEW = "photo_comment_new"
