@@ -121,24 +121,21 @@ class EventProcessor(RegexHelper):
         self._logger.debug(
             '-> ACTION FROM CHAT {} TYPE "{}" TIME %#%'.format(
                 obj["peer_id"], action["type"]
-            )
-        )
+            ))
 
-        if action["type"] in self.on.chat_action_types:
-            if {
-                **action,
-                **self.on.chat_action_types[action["type"]]["rules"],
-            } == action:
+        for key in self.on.chat_action_types:
+            rules = {**action, **key["rules"]}
+            if action["type"] == key["name"] and rules == action:
                 answer = Message(**obj, api=[self.api])
 
-                await self.on.chat_action_types[action["type"]]["call"](answer)
+                await key["call"](answer)
 
                 self._logger.debug(
                     "New action compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        self.on.chat_action_types[action["type"]]["call"].__name__,
+                        key["call"].__name__,
                         answer.from_id,
-                    )
-                )
+                    ))
+                break
 
     async def _event_processor(self, obj: dict, event_type: str):
         """

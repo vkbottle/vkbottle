@@ -29,12 +29,13 @@ class Handler(object):
         self.__undefined_message_func = None
 
         self.event: Event = Event()
-        self.__chat_action_types: dict = dict()
+        self.__chat_action_types: list = list()
 
     async def dispatch(
             self,
             get_current_rest: Callable = None
     ) -> None:
+
         self.message.inner = dict_of_dicts_merge(
             self.message.inner, self.message_both.inner
         )
@@ -42,6 +43,7 @@ class Handler(object):
             self.chat_message.inner, self.message_both.inner
         )
         if get_current_rest:
+
             # Check updates from timoniq/vkbottle-rest
             current_rest = await get_current_rest()
             if current_rest["version"] != __version__:
@@ -71,7 +73,7 @@ class Handler(object):
         """
 
         def decorator(func):
-            self.__chat_action_types[type_] = {"call": func, "rules": rules or {}}
+            self.__chat_action_types.append({'name': type_, "call": func, "rules": rules or {}})
             return func
 
         return decorator
@@ -100,10 +102,11 @@ class Handler(object):
 
     def chat_invite(self):
         def decorator(func):
-            self.__chat_action_types["chat_invite_user"] = {
+            self.__chat_action_types.append({
+                "name": "chat_invite_user",
                 "call": func,
                 "rules": {"member_id": -self.__group_id},
-            }
+            })
             return func
 
         return decorator
