@@ -1,4 +1,4 @@
-from vkbottler.vkbottle import Bot, Message, validators
+from vkbottle import Bot, Message, validators
 import re
 
 bot = Bot('token', 1, debug=True, plugin_folder='examplebot')
@@ -12,7 +12,7 @@ class BottleValidators(validators.VBMLValidators):
 
 
 # Answer <Никнейм NICKNAME прошел проверку||Никнейм не прошел проверку...> to <!никнейм НИКНЕЙМ>
-@bot.on.message.lower('!никнейм <nickname:nickname>')
+@bot.on.message('!никнейм <nickname:nickname>', lower=True)
 async def wrapper(ans: Message, nickname):
     if nickname:
         await ans(f'Никнейм <<{nickname}>> прошел проверку!')

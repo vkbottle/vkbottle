@@ -1,4 +1,4 @@
-from vkbottler.vkbottle import Bot, Message, validators
+from vkbottle import Bot, Message, validators
 
 bot = Bot('token', 1, debug=True, plugin_folder='examplebot')
 
@@ -10,7 +10,7 @@ class BottleValidators(validators.VBMLValidators):
 
 
 # Answer <Президент😎😎> to <!никнейм Ким-..>
-@bot.on.message.lower('!президент <name:startswith[Ким]>')
+@bot.on.message('!президент <name:startswith[Ким]>', lower=True)
 async def wrapper(ans: Message, name):
     await ans(f'{name}😎😎')
 

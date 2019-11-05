@@ -103,7 +103,8 @@ class Bot(HTTP, EventProcessor):
         while True:
             try:
                 event = await self.make_long_request(longPollServer)
-                await self.emulate(event)
+                if type(event) is dict:
+                    await self.emulate(event)
                 longPollServer = await self.get_server()
 
             except ClientConnectionError or ServerTimeoutError or TimeoutError:
