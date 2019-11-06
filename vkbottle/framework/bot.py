@@ -54,12 +54,8 @@ class Bot(HTTP, EventProcessor):
         return self.__group_id
 
     @property
-    def get_loop(self):
+    def loop(self):
         return self.__loop
-
-    @property
-    def same(self):
-        return self
 
     async def get_server(self) -> dict:
         """
@@ -95,7 +91,7 @@ class Bot(HTTP, EventProcessor):
 
     async def _run_polling(self, wait: int = DEFAULT_WAIT):
         self.__wait = wait
-        self._logger.info("LongPoll will run. Is it OK?")
+        self._logger.info("Polling will be started. Is it OK?")
 
         longPollServer = await self.get_server()
         self._logger.debug('Polling successfully started')
@@ -103,7 +99,7 @@ class Bot(HTTP, EventProcessor):
         while True:
             try:
                 event = await self.make_long_request(longPollServer)
-                if type(event) is dict:
+                if isinstance(event, dict):
                     await self.emulate(event)
                 longPollServer = await self.get_server()
 
@@ -111,16 +107,24 @@ class Bot(HTTP, EventProcessor):
                 # No internet connection
                 await self._logger.warning("Server Timeout Error!")
 
-    async def emulate(self, event: dict, confirmation_token: str = None):
+    async def emulate(self, event: dict, confirmation_token: str = None) -> str:
+        """
+        Process all types of events
+        :param event: VK Event (LP or CB)
+        :param confirmation_token: code which confirm VK callback
+        :return: "ok"
+        """
+
         if not self.__dispatched:
             await self.on.dispatch(self.get_current_rest)
             self.__dispatched = True
 
-        if "type" in event and event["type"] == "confirmation":
+        if event.get("type"):
             if event["group_id"] == self.group_id:
                 return confirmation_token or "dissatisfied"
 
-        updates = event["updates"] if "updates" in event else [event]
+        updates = event.get("updates", [event])
+
         try:
 
             for update in updates:
@@ -153,14 +157,14 @@ class Bot(HTTP, EventProcessor):
                                 )
                         else:
                             task = await (
-                                self._chat_action_processor(obj=obj)
+                                self._chat_action_processor(obj=obj, client_info=client_info)
                             )
 
                     await self._handler_return(task, obj, client_info=client_info)
 
                 else:
                     # If this is an event of the group AND this is not SELF-EVENT
-                    task = ensure_future(
+                    task = await (
                         self._event_processor(obj=obj, event_type=update["type"])
                     )
 
@@ -169,21 +173,23 @@ class Bot(HTTP, EventProcessor):
             if e[0] in self.error_handler.get_processor():
                 handler = self.error_handler.get_processor()[e[0]]["call"]
                 self._logger.debug(
-                    "VKError ?{}! Processing it with handler <{}>".format(
-                        e, handler.__name__
-                    )
+                    "VKError ?{}! Processing it with handler <{}>".format(e, handler.__name__)
                 )
-                ensure_future(handler(e))
+                await handler(e)
             else:
                 self._logger.error(
-                    "VKError! Add @bot.error_handler({}) to process this error!".format(
-                        e
-                    )
+                    "VKError! Add @bot.error_handler({}) to process this error!".format(e)
                 )
                 raise VKError(e)
 
         return "ok"
 
     def process(self, event: dict, confirmation_token: str = None) -> str:
+        """
+        WHAT THE SHIT I MADE OH MY GODNESS!!!!
+        :param event: VK Event
+        :param confirmation_token: code which confirms VK callback
+        :return: "ok"
+        """
         status = self.__loop.run_until_complete(self.emulate(event, confirmation_token))
         return status

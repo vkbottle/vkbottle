@@ -109,7 +109,7 @@ class EventProcessor(RegexHelper):
                     )
                     return task
 
-    async def _chat_action_processor(self, obj: dict):
+    async def _chat_action_processor(self, obj: dict, client_info: dict):
         """
         Chat Action Processor
         :param obj:
@@ -126,7 +126,7 @@ class EventProcessor(RegexHelper):
         for key in self.on.chat_action_types:
             rules = {**action, **key["rules"]}
             if action["type"] == key["name"] and rules == action:
-                answer = Message(**obj, api=[self.api])
+                answer = Message(**obj, api=[self.api], client_info=client_info)
 
                 await key["call"](answer)
 
