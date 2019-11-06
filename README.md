@@ -11,7 +11,7 @@
 1) С помощью установщика pip из GitHub:
    
    ```sh
-   pip3 install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
+   pip install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
    ```
    
 ### Фишки
