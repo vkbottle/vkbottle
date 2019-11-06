@@ -55,7 +55,7 @@ class Method(object):
         """
 
         response = await self.request.post(
-            url=self.generate_method_url(group, method, _execute), params=params
+            url=self.generate_method_url(group, method, _execute), data=params
         )
 
         if type(response) is not dict:

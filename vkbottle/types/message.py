@@ -9,6 +9,11 @@ import random
 
 # https://vk.com/dev/objects/message
 
+def sep_bytes(text: str, max_bytes: int = 4096) -> list:
+    text = text.encode('utf-8')
+    separation = [text[i:i + max_bytes] for i in range(0, len(text), max_bytes)]
+    return list(map(bytes.decode, separation)) if len(separation) else ['']
+
 
 class Action(Enum):
     chat_photo_update = "chat_photo_update"
@@ -87,18 +92,20 @@ class Message(BaseModel):
         keyboard: dict = None,
         **params
     ):
-        return await self.api[0].request(
-            "messages",
-            "send",
-            dict(
-                message=message,
-                peer_id=self.peer_id,
-                attachment=attachment,
-                keyboard=keyboard,
-                random_id=random.randint(-2e9, 2e9),
-                **params
-            ),
-        )
+        for message in sep_bytes(message):
+            m = await self.api[0].request(
+                "messages",
+                "send",
+                dict(
+                    message=message,
+                    peer_id=self.peer_id,
+                    attachment=attachment,
+                    keyboard=keyboard,
+                    random_id=random.randint(-2e9, 2e9),
+                    **params
+                ),
+            )
+        return m
 
     def get_args(self):
         """
