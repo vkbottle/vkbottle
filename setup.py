@@ -18,5 +18,6 @@ setuptools.setup(
         "Programming Language :: Python :: 3.7",
         "Operating System :: OS Independent",
     ],
-    install_requires=["aiohttp", "pydantic", "colorama", "termcolor"],
+    install_requires=["aiohttp", "pydantic", "colorama", "termcolor",
+                      "vbml @ https://github.com/timoniq/vbml"],
 )
