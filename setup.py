@@ -19,5 +19,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=["aiohttp", "pydantic", "colorama", "termcolor",
-                      "vbml @ https://github.com/timoniq/vbml"],
+                      "vbml @ https://github.com/timoniq/vbml/archive/master.zip"],
 )
