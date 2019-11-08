@@ -36,32 +36,22 @@ async def wrapper(ans: Message, some: typing.Any):
 
 `<some:validator:validator2>`
 
-### Встроенные валидаторы
-
-Класс со встроенными валидаторами вы можете увидеть [здесь](../vkbottle/framework/patcher/validators/vbml.py).
-
-На данный момент встроенными работающими валидаторами для аргументов являются:
-
-| Название | Применение     | Описание                                                                                              |
-|:--------:|:--------------:|:-----------------------------------------------------------------------------------------------------:|
-| int      | `<some:int>`   | Проверяет аргумент на то, что он является целым числом и в данном варианте возвращает его в этом типе |
-| float    | `<some:float>` | Принимает числа и целые, и с плавающей точкой. Возвращает в типе float                                |
-| url      | `<some:url>`   | Проверяет аргумент на прибывание ссылкой с протоколом (http или http(s)). Использует urllib.urlparse для проверки        |
-
 ### Создание собственных валидаторов
 
 Главной фишкой валидаторов является не использование трех стандартных, а создание собственных. Я хочу учесть кое-какую особенность, пользуясь этим свойством патчера.
 
-Давайте создадим кастомный класс собственных валидаторов, наследуя стандартный класс `VBMLValidators`:
+Давайте создадим кастомный класс собственных валидаторов, наследуя стандартный класс `PatchedValidators`:
 
 ```python
-from vkbottle.validators import VBMLValidators
+from vbml import PatchedValidators
+from vbml.validators import ValidatorManager
 # bot = Bot(...)
 
-class MyValidators(VBMLValidators):
+class MyValidators(PatchedValidators):
     pass
 
-bot.patcher(validators=MyValidators)
+manager = ValidatorManager(MyValidators)
+bot.patcher.add_manager(manager)
 ```
 
 Теперь мы можем создавать собственные валидаторы. При создании валидаторов вам нужно придеживаться нескольких правил оформления:
@@ -77,7 +67,7 @@ bot.patcher(validators=MyValidators)
 Я собираюсь учесть проблему, где, благодаря трудностям славянских языков для указания возраста мы можем использовать и `лет`, и `года`, и `год`
 
 ```python
-class MyValidators(VBMLValidators):
+class MyValidators(PatchedValidators):
     async def years(self, text: str):
         if text in ['лет', 'года', 'год']:
             return text
@@ -89,8 +79,6 @@ class MyValidators(VBMLValidators):
 ```python
 @bot.on.message_both('мне <years:int> <y_rep:years>', lower=True)
 async def wrapper(ans: Message, years: int, y_rep: str):
-    assert isinstance(years, int)
-    assert isinstance(y_rep, str)
     if years >= 18:
         await ans(f'Ого тебе уже {years} {y_rep}')
     else: 

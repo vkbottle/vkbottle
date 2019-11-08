@@ -2,12 +2,12 @@ from ..types.message import Message
 from ..api import Api, HandlerReturnError
 from ..handler import Handler
 from ..utils import Logger
-from .patcher import Patcher
 from .branch import BranchManager
 from asyncio import AbstractEventLoop, ensure_future
 from re import sub
 from .regex import RegexHelper
 from .branch import Branch, ExitBranch
+from vbml import Pattern, Patcher
 
 
 class EventProcessor(RegexHelper):
@@ -34,31 +34,29 @@ class EventProcessor(RegexHelper):
         )
 
         for key in self.on.message.inner:
-            if key.match(answer.text) is not None:
+            key: Pattern
+            if await self.patcher.check_async(answer.text, key) is not None:
                 matching = self.on.message.inner[key]
 
-                validators_check = await self.patcher.check_validators(
-                    check_object=matching, keys=key.match(answer.text).groupdict()
+                # [Feature] Async Use
+                # Added v0.19#master
+
+                task = await matching["call"](
+                    *([answer] if not matching["ignore_ans"] else []),
+                    **key.dict()
                 )
 
-                if validators_check is not None:
-                    # [Feature] Async Use
-                    # Added v0.19#master
-
-                    task = await matching["call"](
-                        *([answer] if not matching["ignore_ans"] else []),
-                        **validators_check
+                self._logger.debug(
+                    "New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
+                        matching["call"].__name__, answer.from_id
                     )
-
-                    self._logger.debug(
-                        "New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                            matching["call"].__name__, answer.from_id
-                        )
-                    )
-                    return task
+                )
+                return task
 
         if self.on.undefined_func:
-            await (self.on.undefined_func(answer))
+            await (
+                self.on.undefined_func(answer)
+            )
             self._logger.debug(
                 "New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
                     answer.from_id
@@ -80,7 +78,8 @@ class EventProcessor(RegexHelper):
         )
 
         for key in self.on.chat_message.inner:
-            if key.match(answer.text) is not None:
+            key: Pattern
+            if await self.patcher.check_async(answer.text, key) is not None:
 
                 self._logger.debug(
                     '-> MESSAGE FROM CHAT {} TEXT "{}" TIME %#%'.format(
@@ -90,24 +89,19 @@ class EventProcessor(RegexHelper):
 
                 matching = self.on.chat_message.inner[key]
 
-                validators_check = await self.patcher.check_validators(
-                    check_object=matching, keys=key.match(answer.text).groupdict()
+                # [Feature] Async Use
+                # Added v0.19#master
+                task = await matching["call"](
+                    *([answer] if not matching["ignore_ans"] else []),
+                    **key.dict()
                 )
 
-                if validators_check is not None:
-                    # [Feature] Async Use
-                    # Added v0.19#master
-                    task = await matching["call"](
-                        *([answer] if not matching["ignore_ans"] else []),
-                        **validators_check
+                self._logger.debug(
+                    "New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
+                        matching["call"].__name__, answer.from_id
                     )
-
-                    self._logger.debug(
-                        "New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                            matching["call"].__name__, answer.from_id
-                        )
-                    )
-                    return task
+                )
+                return task
 
     async def _chat_action_processor(self, obj: dict, client_info: dict):
         """
@@ -146,7 +140,7 @@ class EventProcessor(RegexHelper):
 
         self._logger.debug(
             '-> EVENT FROM {} TYPE "{}" TIME %#%'.format(
-                obj["user_id"] if "user_id" in obj else "from_id", event_type.upper()
+                obj["user_id"] if "user_id" in obj else obj["from_id"], event_type.upper()
             )
         )
 
@@ -179,7 +173,9 @@ class EventProcessor(RegexHelper):
         )
 
         branch = self.branch.load(answer.peer_id)
-        task = ensure_future(self.branch.branches[branch[0]](answer, **branch[1]))
+        task = await (
+            self.branch.branches[branch[0]](answer, **branch[1])
+        )
 
         task = await task
 

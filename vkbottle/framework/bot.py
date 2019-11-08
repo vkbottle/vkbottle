@@ -3,16 +3,15 @@ from ..handler import Handler, ErrorHandler
 from ..const import DEFAULT_BOT_FOLDER
 from ..utils import Logger
 from ..http import HTTP
-from ..api import VKError, HandlerReturnError
-from ..const import __version__
-from concurrent.futures._base import TimeoutError as ConcurrentTimout
-from asyncio import get_event_loop, AbstractEventLoop, ensure_future, TimeoutError
+from ..api import VKError
+from asyncio import get_event_loop, AbstractEventLoop, TimeoutError
+from vbml import Patcher
+from vbml.validators import ValidatorManager
 from aiohttp.client_exceptions import ClientConnectionError, ServerTimeoutError
 from ._event import EventTypes
 from .processor import EventProcessor
-from .patcher import Patcher
 from .branch import BranchManager
-from .branch.standart_branch import Branch, ExitBranch
+from ..utils import folder_checkup
 
 
 DEFAULT_WAIT = 20
@@ -24,6 +23,7 @@ class Bot(HTTP, EventProcessor):
         token: str,
         group_id: int,
         debug: bool = True,
+        validators: bool = True,
         plugin_folder: str = None,
         log_to_file: bool = True,
         log_to: str = None,
@@ -36,12 +36,12 @@ class Bot(HTTP, EventProcessor):
         self.__dispatched = False
 
         self.api = Api(loop=self.__loop, token=token, group_id=group_id)
-        self.patcher = Patcher(plugin_folder or DEFAULT_BOT_FOLDER)
+        self.patcher = Patcher()
 
         self._logger = Logger(
             debug,
             log_file=log_to,
-            plugin_folder=self.patcher.plugin_folder,
+            plugin_folder=folder_checkup(plugin_folder),
             logger_enabled=log_to_file,
         )
 

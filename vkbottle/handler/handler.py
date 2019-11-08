@@ -1,4 +1,3 @@
-from .regex import vbml_parser, re_parser
 from .events import Event
 from ..utils import dict_of_dicts_merge, Logger
 from inspect import signature
@@ -6,6 +5,7 @@ from typing import Callable
 from ..const import __version__
 from inspect import iscoroutinefunction
 from ..api import HandlerError
+from vbml import Patcher, Pattern
 
 
 def should_ignore_ans(func: Callable, arguments: list) -> bool:
@@ -26,9 +26,9 @@ class Handler(object):
         self.message: MessageHandler = MessageHandler()
         self.chat_message: MessageHandler = MessageHandler()
         self.message_both: MessageHandler = MessageHandler()
-        self.__undefined_message_func = None
-
         self.event: Event = Event()
+
+        self.__undefined_message_func = None
         self.__chat_action_types: list = list()
 
     async def dispatch(
@@ -91,7 +91,7 @@ class Handler(object):
 
     def chat_mention(self):
         def decorator(func):
-            pattern = re_parser(r"\[(club|public){}\|.*?]".format(self.__group_id))
+            pattern = Pattern(text="", pattern=r"\[(club|public){}\|.*?]".format(self.__group_id))
             ignore_ans = (
                     len(signature(func).parameters) < 1
             )
@@ -143,15 +143,14 @@ class MessageHandler:
         :return: True
         """
 
-        pattern, validators, arguments = vbml_parser(
+        pattern = Pattern(
             text,
-            pattern or ("(?i)" if lower else "") + "{}$",
             prefix=self.prefix if command else None,
+            pattern=pattern or ("(?i)" if lower else "") + "{}$",
         )
         self.inner[pattern] = dict(
             call=func,
-            validators=validators,
-            ignore_ans=should_ignore_ans(func, arguments)
+            ignore_ans=should_ignore_ans(func, pattern.arguments)
         )
 
     def __call__(
@@ -168,15 +167,14 @@ class MessageHandler:
         """
 
         def decorator(func):
-            pattern, validators, arguments = vbml_parser(
+            pattern = Pattern(
                 text,
-                ("(?i)" if lower else "") + "{}$",
                 prefix=self.prefix if command else None,
+                pattern=("(?i)" if lower else "") + "{}$",
             )
             self.inner[pattern] = dict(
                 call=func,
-                validators=validators,
-                ignore_ans=should_ignore_ans(func, arguments)
+                ignore_ans=should_ignore_ans(func, pattern.arguments)
             )
             return func
 
@@ -200,15 +198,14 @@ class MessageHandler:
         """
 
         def decorator(func):
-            pattern, validators, arguments = vbml_parser(
+            pattern = Pattern(
                 text,
-                ("(?i)" if lower else "") + "{}.*?",
                 prefix=self.prefix if command else None,
+                pattern=("(?i)" if lower else "") + "{}.*?",
             )
             self.inner[pattern] = dict(
                 call=func,
-                validators=validators,
-                ignore_ans=should_ignore_ans(func, arguments)
+                ignore_ans=should_ignore_ans(func, pattern.arguments)
             )
             return func
 
@@ -224,9 +221,8 @@ class MessageHandler:
         """
 
         def decorator(func):
-            self.inner[re_parser(pattern)] = dict(
+            self.inner[Pattern(text="", pattern=pattern)] = dict(
                 call=func,
-                validators={},
                 ignore_ans=should_ignore_ans(func, [])
             )
             return func
