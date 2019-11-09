@@ -5,7 +5,7 @@ from ..utils import Logger
 from ..http import HTTP
 from ..api import VKError
 from asyncio import get_event_loop, AbstractEventLoop, TimeoutError
-from vbml import Patcher
+from vbml import Patcher, PatchedValidators
 from vbml.validators import ValidatorManager
 from aiohttp.client_exceptions import ClientConnectionError, ServerTimeoutError
 from ._event import EventTypes
@@ -15,6 +15,10 @@ from ..utils import folder_checkup
 
 
 DEFAULT_WAIT = 20
+
+
+class Vals(PatchedValidators):
+    pass
 
 
 class Bot(HTTP, EventProcessor):
@@ -37,6 +41,8 @@ class Bot(HTTP, EventProcessor):
 
         self.api = Api(loop=self.__loop, token=token, group_id=group_id)
         self.patcher = Patcher()
+        if not self.patcher.manager:
+            self.patcher.add_manager(ValidatorManager(Vals))
 
         self._logger = Logger(
             debug,

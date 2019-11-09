@@ -28,7 +28,7 @@ SOFTWARE.
 """
 
 
-class TaskQueue:
+class TaskManager:
     def __init__(self, loop: asyncio.AbstractEventLoop):
         self.tasks: List[Callable] = []
         self.loop: asyncio.AbstractEventLoop = loop
