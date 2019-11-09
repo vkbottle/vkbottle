@@ -2,4 +2,4 @@ aiohttp
 pydantic
 colorama
 termcolor
--e https://github.com/timoniq/vbml/archive/master.zip
+vbml

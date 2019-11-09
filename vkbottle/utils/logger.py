@@ -47,6 +47,7 @@ class Logger(object):
         self.__plugin_folder = plugin_folder
         self.__logger_name = logger_name
         self.__logger_enabled = logger_enabled
+        self.colored = colored
         self.logger = logging.getLogger(logger_name or "VKBottle")
 
         self.log_path = "{path}/{log_file}".format(

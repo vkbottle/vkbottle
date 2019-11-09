@@ -1,6 +1,12 @@
+from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
+
+try:
+    import vbml
+except ImportError:
+    print('Please install vbml to use VKBottle. Use command: {}'.format(VBML_INSTALL))
+
 from ..api import Api
 from ..handler import Handler, ErrorHandler
-from ..const import DEFAULT_BOT_FOLDER
 from ..utils import Logger
 from ..http import HTTP
 from ..api import VKError
