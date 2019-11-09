@@ -41,7 +41,7 @@ class Bot(HTTP, EventProcessor):
         self._logger = Logger(
             debug,
             log_file=log_to,
-            plugin_folder=folder_checkup(plugin_folder),
+            plugin_folder=folder_checkup(plugin_folder or 'vkbottle_bot'),
             logger_enabled=log_to_file,
         )
 
