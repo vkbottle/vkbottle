@@ -32,6 +32,7 @@ class EventProcessor(RegexHelper):
                 answer.from_id, answer.text.replace("\n", " ")
             )
         )
+        found: bool = False
 
         for key in self.on.message.inner:
             key: Pattern
@@ -51,19 +52,21 @@ class EventProcessor(RegexHelper):
                         matching["call"].__name__, answer.from_id
                     )
                 )
+                found = True
                 return task
 
-        if self.on.undefined_func:
-            await (
-                self.on.undefined_func(answer)
-            )
-            self._logger.debug(
-                "New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
-                    answer.from_id
+        if not found:
+            if self.on.undefined_func:
+                await (
+                    self.on.undefined_func(answer)
                 )
-            )
-        else:
-            self._logger.info("Add on-undefined message handler!")
+                self._logger.debug(
+                    "New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
+                        answer.from_id
+                    )
+                )
+            else:
+                self._logger.info("Add on-undefined message handler!")
 
     async def _chat_message_processor(self, obj: dict, client_info: dict):
         """
