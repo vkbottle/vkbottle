@@ -12,4 +12,4 @@ VERSION_REST = (
     "https://raw.githubusercontent.com/timoniq/vkbottle-rest/master/version.json"
 )
 
-VBML_INSTALL = 'pip install https://github.com/timoniq/vbml/archive/master.zip --upgrade'
+VBML_INSTALL = 'pip install vbml'

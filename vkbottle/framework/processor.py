@@ -180,11 +180,11 @@ class EventProcessor(RegexHelper):
             self.branch.branches[branch[0]](answer, **branch[1])
         )
 
-        task = await task
+        task = await self._handler_return(task, obj, client_info)
 
         self._logger.debug(
             "New BRANCHED-message compiled with branch <\x1b[35m{}\x1b[0m> (from: {})".format(
-                branch, answer.from_id
+                '"{}" with {} kwargs'.format(branch[0], branch[1]), answer.from_id
             )
         )
         return task
