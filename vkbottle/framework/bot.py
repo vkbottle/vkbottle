@@ -42,25 +42,25 @@ class Bot(HTTP, EventProcessor):
         self.__token: str = token
         self.__group_id: int = group_id
         self.__loop: AbstractEventLoop = get_event_loop()
-        self.__debug = debug
+        self.__debug: bool = debug
         self.__wait = None
-        self.__dispatched = False
+        self.__dispatched: bool = False
 
-        self.api = Api(loop=self.__loop, token=token, group_id=group_id)
-        self.patcher = Patcher()
-        if not self.patcher.manager:
-            self.patcher.add_manager(ValidatorManager(Vals))
+        self.__api: Api = Api(loop=self.__loop, token=token, group_id=group_id)
+        self._patcher: Patcher = Patcher()
+        if not self._patcher.manager:
+            self._patcher.add_manager(ValidatorManager(Vals))
 
-        self._logger = Logger(
+        self._logger: Logger = Logger(
             debug,
             log_file=log_to,
             plugin_folder=folder_checkup(plugin_folder or 'vkbottle_bot'),
             logger_enabled=log_to_file,
         )
 
-        self.branch = BranchManager(plugin_folder or DEFAULT_BOT_FOLDER)
-        self.on = Handler(self._logger, group_id)
-        self.error_handler = ErrorHandler()
+        self.branch: BranchManager = BranchManager(plugin_folder or DEFAULT_BOT_FOLDER)
+        self.on: Handler = Handler(self._logger, group_id)
+        self.error_handler: ErrorHandler = ErrorHandler()
 
     @property
     def group_id(self):
@@ -69,6 +69,14 @@ class Bot(HTTP, EventProcessor):
     @property
     def loop(self):
         return self.__loop
+
+    @property
+    def api(self):
+        return self.__api
+
+    @property
+    def patcher(self):
+        return self._patcher
 
     async def get_server(self) -> dict:
         """
