@@ -3,12 +3,13 @@ from logging import handlers
 from typing import Any
 from termcolor import colored
 from colorama import init as color_opt
+import os
 import re
 import time
 
 
 LOG_FILE_PATTERN = r"[a-zA-Z0-9]+\.log"
-DEFAULT_LOG_NAME = "bot.log"
+DEFAULT_LOG_NAME = "bot"
 LOG_FORMAT = "[%(asctime)s %(name)s - %(levelname)s] - %(message)s"
 
 
@@ -50,12 +51,17 @@ class Logger(object):
         self.colored = colored
         self.logger = logging.getLogger(logger_name or "VKBottle")
 
-        self.log_path = "{path}/{log_file}".format(
-            path=plugin_folder,
+        path = '{path}/logs'.format(path=plugin_folder)
+
+        self.log_path = "{path}/{log_file}_{time}.log".format(
+            path=path,
             log_file=log_file
             if log_file and re.match(LOG_FILE_PATTERN, log_file)
             else DEFAULT_LOG_NAME,
+            time=time.strftime("%m-%d_%H:%M:%S", time.localtime())
         )
+        if not os.path.isdir(path):
+            os.makedirs('{path}/logs'.format(path=plugin_folder))
 
         if logger_enabled:
 

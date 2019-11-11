@@ -156,32 +156,33 @@ class Bot(HTTP, EventProcessor):
                     # VK API v5.103
                     client_info = obj['client_info']
                     obj = obj['message']
+                    processor = dict(obj=obj, client_info=client_info)
 
                     if obj["peer_id"] < 2e9:
                         if obj["from_id"] not in self.branch.queue:
                             task = await (
-                                self._private_message_processor(obj=obj, client_info=client_info)
+                                self._private_message_processor(**processor)
                             )
                         else:
                             task = await (
-                                self._branched_processor(obj=obj, client_info=client_info)
+                                self._branched_processor(**processor)
                             )
                     else:
                         if "action" not in obj:
                             if obj["peer_id"] not in self.branch.queue:
                                 task = await (
-                                    self._chat_message_processor(obj=obj, client_info=client_info)
+                                    self._chat_message_processor(**processor)
                                 )
                             else:
                                 task = await (
-                                    self._branched_processor(obj=obj, client_info=client_info)
+                                    self._branched_processor(**processor)
                                 )
                         else:
                             task = await (
-                                self._chat_action_processor(obj=obj, client_info=client_info)
+                                self._chat_action_processor(**processor)
                             )
 
-                    await self._handler_return(task, obj, client_info=client_info)
+                    await self._handler_return(task, **processor)
 
                 else:
                     # If this is an event of the group AND this is not SELF-EVENT

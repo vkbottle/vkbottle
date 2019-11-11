@@ -33,7 +33,7 @@ from vkbottle import Bot, Message
 bot = Bot('my-token', 123, debug=True)
 
 
-@bot.on.message('My name is <name>')
+@bot.on.message('My name is <name>', lower=True)
 async def wrapper(ans: Message, name):
     await ans('Hello, {}'.format(name))
 
