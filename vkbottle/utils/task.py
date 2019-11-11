@@ -1,6 +1,7 @@
 import asyncio
-from asyncio import iscoroutinefunction
-from typing import List, Callable
+from asyncio import coroutine
+from types import CoroutineType
+from typing import List, Callable, Coroutine
 
 
 """
@@ -30,7 +31,7 @@ SOFTWARE.
 
 class TaskManager:
     def __init__(self, loop: asyncio.AbstractEventLoop):
-        self.tasks: List[Callable] = []
+        self.tasks: List[Coroutine] = []
         self.loop: asyncio.AbstractEventLoop = loop
 
     def run(
@@ -51,7 +52,7 @@ class TaskManager:
             if asyncio_debug_mode:
                 self.loop.set_debug(True)
 
-            [self.loop.create_task(task()) for task in self.tasks]
+            [self.loop.create_task(task) for task in self.tasks]
 
             self.loop.run_forever()
 
@@ -66,13 +67,13 @@ class TaskManager:
         """
         self.loop.close()
 
-    def add_task(self, task: Callable):
+    def add_task(self, task: CoroutineType):
         """
         Add task to loop when loop don`t started.
         :param task: coroutine for run in loop
         :return:
         """
-        if iscoroutinefunction(task):
+        if isinstance(task, CoroutineType):
             self.tasks.append(task)
         else:
             raise RuntimeError("Unexpected task. Tasks may be only coroutine functions")

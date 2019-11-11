@@ -94,7 +94,7 @@ class Api(object):
     Receive only kwargs, no positional arguments. Kwargs can be skipped
     """
 
-    def __init__(self, loop: AbstractEventLoop, token: str, group_id: int, method=None):
+    def __init__(self, loop: AbstractEventLoop, token: str, group_id: int = None, method=None):
         """
         VK Api Wrapper
         :param loop: asyncio event loop
