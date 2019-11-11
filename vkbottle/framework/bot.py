@@ -18,6 +18,7 @@ from ._event import EventTypes
 from .processor import EventProcessor
 from .branch import BranchManager
 from ..utils import folder_checkup
+import traceback
 
 
 DEFAULT_WAIT = 20
@@ -132,7 +133,7 @@ class Bot(HTTP, EventProcessor):
             self.__dispatched = True
 
         if event.get("type"):
-            if event["group_id"] == self.group_id:
+            if event.get("group_id") == self.group_id:
                 return confirmation_token or "dissatisfied"
 
         updates = event.get("updates", [event])
@@ -193,6 +194,9 @@ class Bot(HTTP, EventProcessor):
                     "VKError! Add @bot.error_handler({}) to process this error!".format(e)
                 )
                 raise VKError(e)
+
+        except Exception as e:
+            self._logger.error('While bot worked error occurred TIME %#%\n\n{}'.format(traceback.format_exc()))
 
         return "ok"
 
