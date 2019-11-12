@@ -8,6 +8,14 @@ from re import sub
 from .regex import RegexHelper
 from .branch import Branch, ExitBranch
 from vbml import Pattern, Patcher
+import typing
+
+
+def get_attr(adict: dict, attrs: typing.List[str]):
+    attrs = set(attrs)
+    for attr in attrs:
+        if attr in adict:
+            return adict[attr]
 
 
 class EventProcessor(RegexHelper):
@@ -114,10 +122,11 @@ class EventProcessor(RegexHelper):
         """
 
         action = obj["action"]
+        print(obj)
 
         self._logger.debug(
             '-> ACTION FROM CHAT {} TYPE "{}" TIME %#%'.format(
-                obj["peer_id"], action["type"]
+                get_attr(obj, ['peer_id', 'from_id']), action["type"]
             ))
 
         for key in self.on.chat_action_types:
@@ -143,7 +152,7 @@ class EventProcessor(RegexHelper):
 
         self._logger.debug(
             '-> EVENT FROM {} TYPE "{}" TIME %#%'.format(
-                obj["user_id"] if "user_id" in obj else obj["from_id"], event_type.upper()
+                get_attr(obj, ['user_id', 'from_id']), event_type.upper()
             )
         )
 
