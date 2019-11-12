@@ -1,14 +1,15 @@
 from .events import Event
 from ..utils import dict_of_dicts_merge, Logger
 from inspect import signature
-from typing import Callable
+import typing
 from ..const import __version__
 from inspect import iscoroutinefunction
 from ..api import HandlerError
 from vbml import Patcher, Pattern
+import json
 
 
-def should_ignore_ans(func: Callable, arguments: list) -> bool:
+def should_ignore_ans(func: typing.Callable, arguments: list) -> bool:
     if not iscoroutinefunction(func):
         raise HandlerError('Handling function must be async')
     return len([a for a in signature(func).parameters if a not in arguments]) < 1
@@ -33,7 +34,7 @@ class Handler(object):
 
     async def dispatch(
             self,
-            get_current_rest: Callable = None
+            get_current_rest: typing.Callable = None
     ) -> None:
 
         self.message.inner = dict_of_dicts_merge(
@@ -128,7 +129,7 @@ class MessageHandler:
     def add_handler(
             self,
             text: str,
-            func: Callable,
+            func: typing.Callable,
             command: bool = False,
             lower: bool = False,
             pattern: str = None
@@ -228,3 +229,16 @@ class MessageHandler:
             return func
 
         return decorator
+
+    def payload(
+            self,
+            payload: typing.Union[dict, str] = None
+    ):
+        assert payload, 'Please pass payload to the decorator'
+
+        def decorator(func):
+            if isinstance(payload, dict):
+                payloadn = json.dumps(payload)
+
+        return decorator
+
