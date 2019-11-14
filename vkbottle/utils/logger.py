@@ -55,9 +55,6 @@ class Logger(object):
         path = Path(plugin_folder)
         logs_path = path.joinpath('logs')
 
-        if not logs_path.exists():
-            logs_path.mkdir(parents=True)
-
         self.log_path = logs_path.joinpath("{log_file}_{time}.log".format(
             log_file=log_file or DEFAULT_LOG_NAME,
             time=time.strftime("%m-%d_%H:%M:%S", time.localtime())
