@@ -122,6 +122,7 @@ class EventProcessor(RegexHelper):
         """
 
         action = obj["action"]
+        print(obj)
 
         self._logger.debug(
             '-> ACTION FROM CHAT {} TYPE "{}" TIME %#%'.format(
