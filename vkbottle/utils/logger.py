@@ -6,7 +6,6 @@ from colorama import init as color_opt
 import os
 import re
 import time
-from pathlib import Path
 
 
 LOG_FILE_PATTERN = r"[a-zA-Z0-9]+\.log"
@@ -52,13 +51,17 @@ class Logger(object):
         self.colored = colored
         self.logger = logging.getLogger(logger_name or "VKBottle")
 
-        path = Path(plugin_folder)
-        logs_path = path.joinpath('logs')
+        path = '{path}/logs'.format(path=plugin_folder)
 
-        self.log_path = logs_path.joinpath("{log_file}_{time}.log".format(
-            log_file=log_file or DEFAULT_LOG_NAME,
+        self.log_path = "{path}/{log_file}_{time}.log".format(
+            path=path,
+            log_file=log_file
+            if log_file and re.match(LOG_FILE_PATTERN, log_file)
+            else DEFAULT_LOG_NAME,
             time=time.strftime("%m-%d_%H:%M:%S", time.localtime())
-        ))
+        )
+        if not os.path.isdir(path):
+            os.makedirs('{path}/logs'.format(path=plugin_folder))
 
         if logger_enabled:
 
