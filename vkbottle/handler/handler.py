@@ -1,7 +1,7 @@
 from .events import Event
 from ..utils import dict_of_dicts_merge, Logger
 from inspect import signature
-from typing import Callable
+from typing import Callable, Optional
 from ..const import __version__
 from inspect import iscoroutinefunction
 from ..api import HandlerError
@@ -27,6 +27,7 @@ class Handler(object):
         self.chat_message: MessageHandler = MessageHandler()
         self.message_both: MessageHandler = MessageHandler()
         self.event: Event = Event()
+        self._pre_p: Optional[Callable] = None
 
         self.__undefined_message_func = None
         self.__chat_action_types: list = list()
@@ -118,6 +119,16 @@ class Handler(object):
     @property
     def chat_action_types(self):
         return self.__chat_action_types
+
+    @property
+    def pre(self):
+        return self._pre_p
+
+    def any_pre_process(self):
+        def decorator(func):
+            self._pre_p = func
+            return func
+        return decorator
 
 
 class MessageHandler:
