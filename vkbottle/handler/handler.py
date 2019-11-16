@@ -6,6 +6,7 @@ from ..const import __version__
 from inspect import iscoroutinefunction
 from ..api import HandlerError
 from vbml import Patcher, Pattern
+import json
 
 
 def should_ignore_ans(func: Callable, arguments: list) -> bool:
@@ -134,6 +135,7 @@ class Handler(object):
 class MessageHandler:
     def __init__(self):
         self.inner = dict()
+        self.payloads = dict()
         self.prefix: list = ["/", "!"]
 
     def add_handler(
@@ -233,6 +235,17 @@ class MessageHandler:
 
         def decorator(func):
             self.inner[Pattern(text="", pattern=pattern)] = dict(
+                call=func,
+                ignore_ans=should_ignore_ans(func, [])
+            )
+            return func
+
+        return decorator
+
+    def payload(self, payload: dict = None):
+        def decorator(func):
+            assert payload, "Assign payload!"
+            self.payloads[json.dumps(payload)] = dict(
                 call=func,
                 ignore_ans=should_ignore_ans(func, [])
             )

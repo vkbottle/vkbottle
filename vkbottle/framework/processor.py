@@ -9,6 +9,7 @@ from .regex import RegexHelper
 from .branch import Branch, ExitBranch
 from vbml import Pattern, Patcher
 import typing
+import json
 
 
 def get_attr(adict: dict, attrs: typing.List[str]):
@@ -16,6 +17,11 @@ def get_attr(adict: dict, attrs: typing.List[str]):
     for attr in attrs:
         if attr in adict:
             return adict[attr]
+
+
+def redump_payload(payload: typing.Optional[str]) -> str:
+    if payload:
+        return json.dumps(json.loads(payload))
 
 
 class EventProcessor(RegexHelper):
@@ -44,6 +50,21 @@ class EventProcessor(RegexHelper):
             )
         )
         found: bool = False
+
+        # Payload alpha2
+        redump = redump_payload(answer.payload)
+        if redump in self.on.message.payloads:
+            matching = self.on.message.payloads[redump]
+            await matching["call"](
+                *([answer] if not matching["ignore_ans"] else [])
+            )
+
+            self._logger.debug(
+                "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
+                    matching["call"].__name__, answer.from_id
+                )
+            )
+            return
 
         for key in self.on.message.inner:
             key: Pattern
@@ -93,6 +114,21 @@ class EventProcessor(RegexHelper):
 
         if self.on.pre:
             ensure_future(self.on.pre(answer))
+
+        # Payload alpha2
+        redump = redump_payload(answer.payload)
+        if redump in self.on.message.payloads:
+            matching = self.on.message.payloads[redump]
+            await matching["call"](
+                *([answer] if not matching["ignore_ans"] else [])
+            )
+
+            self._logger.debug(
+                "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
+                    matching["call"].__name__, answer.from_id
+                )
+            )
+            return
 
         for key in self.on.chat_message.inner:
             key: Pattern
