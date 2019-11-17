@@ -155,11 +155,10 @@ class MessageHandler:
         :param pattern: any regex pattern pattern. {} means text which will be formatted
         :return: True
         """
-
+        prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
         pattern = Pattern(
             text,
-            prefix=self.prefix if command else None,
-            pattern=pattern or ("(?i)" if lower else "") + "{}$",
+            pattern=pattern or ("(?i)" if lower else "") + prefix + "{}$",
         )
         self.inner[pattern] = dict(
             call=func,
@@ -180,10 +179,10 @@ class MessageHandler:
         """
 
         def decorator(func):
+            prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
             pattern = Pattern(
                 text,
-                prefix=self.prefix if command else None,
-                pattern=("(?i)" if lower else "") + "{}$",
+                pattern=("(?i)" if lower else "") + prefix + "{}$",
             )
             self.inner[pattern] = dict(
                 call=func,
@@ -211,10 +210,10 @@ class MessageHandler:
         """
 
         def decorator(func):
+            prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
             pattern = Pattern(
                 text,
-                prefix=self.prefix if command else None,
-                pattern=("(?i)" if lower else "") + "{}.*?",
+                pattern=("(?i)" if lower else "") + prefix + "{}.*?",
             )
             self.inner[pattern] = dict(
                 call=func,

@@ -42,7 +42,7 @@ class EventProcessor(RegexHelper):
         answer = Message(**obj, api=[self.api], client_info=client_info)
 
         if self.on.pre:
-            ensure_future(self.on.pre(answer))
+            await (self.on.pre(answer))
 
         self._logger.debug(
             '-> MESSAGE FROM {} TEXT "{}" TIME %#%'.format(

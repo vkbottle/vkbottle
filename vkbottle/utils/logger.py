@@ -60,7 +60,7 @@ class Logger(object):
             else DEFAULT_LOG_NAME,
             time=time.strftime("%m-%d_%H:%M:%S", time.localtime())
         )
-        if not os.path.isdir(path):
+        if not os.path.isdir(path) and logger_enabled:
             os.makedirs('{path}/logs'.format(path=plugin_folder))
 
         if logger_enabled:

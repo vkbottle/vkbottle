@@ -34,9 +34,8 @@ class Bot(HTTP, EventProcessor):
         token: str,
         group_id: int,
         debug: bool = True,
-        validators: bool = True,
         plugin_folder: str = None,
-        log_to_file: bool = True,
+        log_to_file: bool = False,
         log_to: str = None,
     ):
         self.__token: str = token
