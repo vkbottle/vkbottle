@@ -1,7 +1,7 @@
 from .events import Event
 from ..utils import dict_of_dicts_merge, Logger
 from inspect import signature
-from typing import Callable, Optional
+from typing import Callable, Optional, Dict, Union
 from ..const import __version__
 from inspect import iscoroutinefunction
 from ..api import HandlerError
@@ -251,3 +251,33 @@ class MessageHandler:
             return func
 
         return decorator
+
+
+class DescribedHandler:
+    described_handlers_by_func: Dict[Callable, Dict] = {}
+    described_handlers_by_name: Dict[Callable, Dict] = {}
+
+    def __init__(self):
+        pass
+
+    def __call__(self, name: str = None, description: str = None):
+        def decorator(func):
+            print("o")
+
+            self.described_handlers_by_func[func] = dict(
+                name=name or "",
+                description=description or ""
+            )
+            if name:
+                self.described_handlers_by_name[name] = dict(
+                    name=name or "",
+                    description=description or ""
+                )
+            return func
+
+        return decorator
+
+    def get(self, name: Union[Callable, str], default=None):
+        if isinstance(name, Callable):
+            return self.described_handlers_by_func.get(name, default)
+        return self.described_handlers_by_name.get(name, default)

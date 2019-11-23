@@ -6,7 +6,7 @@ except ImportError:
     print('Please install vbml to use VKBottle. Use command: {}'.format(VBML_INSTALL))
 
 from ..api import Api
-from ..handler import Handler, ErrorHandler
+from ..handler import Handler, ErrorHandler, DescribedHandler
 from ..utils import Logger
 from ..http import HTTP
 from ..api import VKError
@@ -19,6 +19,7 @@ from .processor import EventProcessor
 from .branch import BranchManager
 from ..utils import folder_checkup
 import traceback
+import typing
 
 
 DEFAULT_WAIT = 20
@@ -44,6 +45,7 @@ class Bot(HTTP, EventProcessor):
         self.__debug: bool = debug
         self.__wait = None
         self.__dispatched: bool = False
+        self.described_handler = DescribedHandler()
 
         self.__api: Api = Api(loop=self.__loop, token=token, group_id=group_id)
         self._patcher: Patcher = Patcher()

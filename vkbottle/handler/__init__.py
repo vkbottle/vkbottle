@@ -1,2 +1,2 @@
-from .handler import Handler
+from .handler import Handler, DescribedHandler
 from .error import ErrorHandler
