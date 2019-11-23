@@ -262,7 +262,6 @@ class DescribedHandler:
 
     def __call__(self, name: str = None, description: str = None):
         def decorator(func):
-            print("o")
 
             self.described_handlers_by_func[func] = dict(
                 name=name or "",
