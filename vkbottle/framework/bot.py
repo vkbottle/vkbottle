@@ -3,7 +3,7 @@ from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 try:
     import vbml
 except ImportError:
-    print('Please install vbml to use VKBottle. Use command: {}'.format(VBML_INSTALL))
+    print("Please install vbml to use VKBottle. Use command: {}".format(VBML_INSTALL))
 
 from ..api import Api
 from ..handler import Handler, ErrorHandler, DescribedHandler
@@ -55,7 +55,7 @@ class Bot(HTTP, EventProcessor):
         self._logger: Logger = Logger(
             debug,
             log_file=log_to,
-            plugin_folder=folder_checkup(plugin_folder or 'vkbottle_bot'),
+            plugin_folder=folder_checkup(plugin_folder or "vkbottle_bot"),
             logger_enabled=log_to_file,
         )
 
@@ -116,7 +116,7 @@ class Bot(HTTP, EventProcessor):
         self._logger.info("Polling will be started. Is it OK?")
 
         longPollServer = await self.get_server()
-        self._logger.debug('Polling successfully started')
+        self._logger.debug("Polling successfully started")
 
         while True:
             try:
@@ -155,33 +155,23 @@ class Bot(HTTP, EventProcessor):
                 if update["type"] == EventTypes.MESSAGE_NEW:
 
                     # VK API v5.103
-                    client_info = obj['client_info']
-                    obj = obj['message']
+                    client_info = obj["client_info"]
+                    obj = obj["message"]
                     processor = dict(obj=obj, client_info=client_info)
 
                     if obj["peer_id"] < 2e9:
                         if obj["from_id"] not in self.branch.queue:
-                            task = await (
-                                self._private_message_processor(**processor)
-                            )
+                            task = await (self._private_message_processor(**processor))
                         else:
-                            task = await (
-                                self._branched_processor(**processor)
-                            )
+                            task = await (self._branched_processor(**processor))
                     else:
                         if "action" not in obj:
                             if obj["peer_id"] not in self.branch.queue:
-                                task = await (
-                                    self._chat_message_processor(**processor)
-                                )
+                                task = await (self._chat_message_processor(**processor))
                             else:
-                                task = await (
-                                    self._branched_processor(**processor)
-                                )
+                                task = await (self._branched_processor(**processor))
                         else:
-                            task = await (
-                                self._chat_action_processor(**processor)
-                            )
+                            task = await (self._chat_action_processor(**processor))
 
                     await self._handler_return(task, **processor)
 
@@ -196,17 +186,25 @@ class Bot(HTTP, EventProcessor):
             if e[0] in self.error_handler.get_processor():
                 handler = self.error_handler.get_processor()[e[0]]["call"]
                 self._logger.debug(
-                    "VKError ?{}! Processing it with handler <{}>".format(e, handler.__name__)
+                    "VKError ?{}! Processing it with handler <{}>".format(
+                        e, handler.__name__
+                    )
                 )
                 await handler(e)
             else:
                 self._logger.error(
-                    "VKError! Add @bot.error_handler({}) to process this error!".format(e)
+                    "VKError! Add @bot.error_handler({}) to process this error!".format(
+                        e
+                    )
                 )
                 raise VKError(e)
 
         except Exception as e:
-            self._logger.error('While bot worked error occurred TIME %#%\n\n{}'.format(traceback.format_exc()))
+            self._logger.error(
+                "While bot worked error occurred TIME %#%\n\n{}".format(
+                    traceback.format_exc()
+                )
+            )
 
         return "ok"
 

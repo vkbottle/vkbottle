@@ -60,13 +60,16 @@ class Method(object):
 
         if type(response) is not dict:
 
-            cprint(f"""
+            cprint(
+                f"""
 --- {time.strftime("%m-%d %H:%M:%S", time.localtime())} - DELAY {self.__delay*5} sec
 Check your internet connection. Maybe VK died, request returned: {response}
 Error appeared after request: {group}.{method} (execute: {_execute})
-Sent params: {params}""", 'yellow')
+Sent params: {params}""",
+                "yellow",
+            )
 
-            await asyncio.sleep(5*self.__delay)
+            await asyncio.sleep(5 * self.__delay)
             self.__delay += 1
             return await self(group, method, params, _execute)
 
@@ -77,9 +80,12 @@ Sent params: {params}""", 'yellow')
 
         if self.__delay > 1:
 
-            cprint(f"""
+            cprint(
+                f"""
 --- {time.strftime("%m-%d %H:%M:%S", time.localtime())} - METHOD SUCCESS after {5*sum(range(1, self.__delay))} sec
-RESPONSE: {response}\n""", color='green')
+RESPONSE: {response}\n""",
+                color="green",
+            )
             self.__delay = 1
 
         return response["response"]
@@ -94,7 +100,9 @@ class Api(object):
     Receive only kwargs, no positional arguments. Kwargs can be skipped
     """
 
-    def __init__(self, loop: AbstractEventLoop, token: str, group_id: int = None, method=None):
+    def __init__(
+        self, loop: AbstractEventLoop, token: str, group_id: int = None, method=None
+    ):
         """
         VK Api Wrapper
         :param loop: asyncio event loop

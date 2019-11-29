@@ -51,17 +51,17 @@ class Logger(object):
         self.colored = colored
         self.logger = logging.getLogger(logger_name or "VKBottle")
 
-        path = '{path}/logs'.format(path=plugin_folder)
+        path = "{path}/logs".format(path=plugin_folder)
 
         self.log_path = "{path}/{log_file}_{time}.log".format(
             path=path,
             log_file=log_file
             if log_file and re.match(LOG_FILE_PATTERN, log_file)
             else DEFAULT_LOG_NAME,
-            time=time.strftime("%m-%d_%H:%M:%S", time.localtime())
+            time=time.strftime("%m-%d_%H:%M:%S", time.localtime()),
         )
         if not os.path.isdir(path) and logger_enabled:
-            os.makedirs('{path}/logs'.format(path=plugin_folder))
+            os.makedirs("{path}/logs".format(path=plugin_folder))
 
         if logger_enabled:
 

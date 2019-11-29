@@ -7,7 +7,7 @@ setuptools.setup(
     name="vkbottle",
     version="1.32",
     author="timoniq",
-    description="Description..",
+    description="Working with VK by this homogenetic way and it's awesome!",
     long_description=long_description,
     long_description_content_type="text/markdown",
     license='GPL-3.0',

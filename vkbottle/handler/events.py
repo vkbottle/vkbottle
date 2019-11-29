@@ -33,7 +33,10 @@ class Event(object):
 
     def message_typing_state(self):
         def decorator(func):
-            self.events[EventList.MESSAGE_TYPING_STATE] = {"call": func, "data": MessageTypingState}
+            self.events[EventList.MESSAGE_TYPING_STATE] = {
+                "call": func,
+                "data": MessageTypingState,
+            }
             return func
 
         return decorator

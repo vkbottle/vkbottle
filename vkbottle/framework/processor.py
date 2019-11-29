@@ -20,8 +20,11 @@ def get_attr(adict: dict, attrs: typing.List[str]):
 
 
 def redump_payload(payload: typing.Optional[str]) -> str:
-    if payload:
-        return json.dumps(json.loads(payload))
+    try:
+        if payload:
+            return json.dumps(json.loads(payload))
+    except json.decoder.JSONDecodeError:
+        return payload
 
 
 class EventProcessor(RegexHelper):
@@ -55,9 +58,7 @@ class EventProcessor(RegexHelper):
         redump = redump_payload(answer.payload)
         if redump in self.on.message.payloads:
             matching = self.on.message.payloads[redump]
-            await matching["call"](
-                *([answer] if not matching["ignore_ans"] else [])
-            )
+            await matching["call"](*([answer] if not matching["ignore_ans"] else []))
 
             self._logger.debug(
                 "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
@@ -75,8 +76,7 @@ class EventProcessor(RegexHelper):
                 # Added v0.19#master
 
                 task = await matching["call"](
-                    *([answer] if not matching["ignore_ans"] else []),
-                    **key.dict()
+                    *([answer] if not matching["ignore_ans"] else []), **key.dict()
                 )
 
                 self._logger.debug(
@@ -89,9 +89,7 @@ class EventProcessor(RegexHelper):
 
         if not found:
             if self.on.undefined_func:
-                await (
-                    self.on.undefined_func(answer)
-                )
+                await (self.on.undefined_func(answer))
                 self._logger.debug(
                     "New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
                         answer.from_id
@@ -107,7 +105,7 @@ class EventProcessor(RegexHelper):
         """
 
         answer = Message(
-            **{**obj, 'text': self.init_bot_mention(obj['text'])},
+            **{**obj, "text": self.init_bot_mention(obj["text"])},
             api=[self.api],
             client_info=client_info
         )
@@ -119,9 +117,7 @@ class EventProcessor(RegexHelper):
         redump = redump_payload(answer.payload)
         if redump in self.on.message.payloads:
             matching = self.on.message.payloads[redump]
-            await matching["call"](
-                *([answer] if not matching["ignore_ans"] else [])
-            )
+            await matching["call"](*([answer] if not matching["ignore_ans"] else []))
 
             self._logger.debug(
                 "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
@@ -145,8 +141,7 @@ class EventProcessor(RegexHelper):
                 # [Feature] Async Use
                 # Added v0.19#master
                 task = await matching["call"](
-                    *([answer] if not matching["ignore_ans"] else []),
-                    **key.dict()
+                    *([answer] if not matching["ignore_ans"] else []), **key.dict()
                 )
 
                 self._logger.debug(
@@ -168,8 +163,9 @@ class EventProcessor(RegexHelper):
 
         self._logger.debug(
             '-> ACTION FROM CHAT {} TYPE "{}" TIME %#%'.format(
-                get_attr(obj, ['peer_id', 'from_id']), action["type"]
-            ))
+                get_attr(obj, ["peer_id", "from_id"]), action["type"]
+            )
+        )
 
         for key in self.on.chat_action_types:
             rules = {**action, **key["rules"]}
@@ -180,9 +176,9 @@ class EventProcessor(RegexHelper):
 
                 self._logger.debug(
                     "New action compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        key["call"].__name__,
-                        answer.from_id,
-                    ))
+                        key["call"].__name__, answer.from_id,
+                    )
+                )
                 break
 
     async def _event_processor(self, obj: dict, event_type: str):
@@ -194,7 +190,7 @@ class EventProcessor(RegexHelper):
 
         self._logger.debug(
             '-> EVENT FROM {} TYPE "{}" TIME %#%'.format(
-                get_attr(obj, ['user_id', 'from_id']), event_type.upper()
+                get_attr(obj, ["user_id", "from_id"]), event_type.upper()
             )
         )
 
@@ -227,9 +223,7 @@ class EventProcessor(RegexHelper):
         )
 
         branch = self.branch.load(answer.peer_id)
-        task = await (
-            self.branch.branches[branch[0]](answer, **branch[1])
-        )
+        task = await (self.branch.branches[branch[0]](answer, **branch[1]))
 
         task = await self._handler_return(task, obj, client_info)
 
@@ -260,7 +254,9 @@ class EventProcessor(RegexHelper):
                 self._logger.mark("[Branch Exited]")
                 self.branch.exit(obj["peer_id"])
         elif return_type in [str, int, dict, list, tuple, float]:
-            await Message(**obj, api=[self.api], client_info=client_info)(str(handler_return))
+            await Message(**obj, api=[self.api], client_info=client_info)(
+                str(handler_return)
+            )
         elif handler_return is not None:
             raise HandlerReturnError(
                 "Type {} can't be returned out of handler".format(

@@ -9,10 +9,11 @@ import random
 
 # https://vk.com/dev/objects/message
 
+
 def sep_bytes(text: str, max_bytes: int = 4096) -> list:
-    text = text.encode('utf-8')
-    separation = [text[i:i + max_bytes] for i in range(0, len(text), max_bytes)]
-    return list(map(bytes.decode, separation)) if len(separation) else ['']
+    text = text.encode("utf-8")
+    separation = [text[i : i + max_bytes] for i in range(0, len(text), max_bytes)]
+    return list(map(bytes.decode, separation)) if len(separation) else [""]
 
 
 class Action(Enum):
@@ -106,5 +107,6 @@ class Message(BaseModel):
                 ),
             )
         return m
+
 
 Message.update_forward_refs()

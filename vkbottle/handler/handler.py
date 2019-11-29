@@ -11,16 +11,12 @@ import json
 
 def should_ignore_ans(func: Callable, arguments: list) -> bool:
     if not iscoroutinefunction(func):
-        raise HandlerError('Handling function must be async')
+        raise HandlerError("Handling function must be async")
     return len([a for a in signature(func).parameters if a not in arguments]) < 1
 
 
 class Handler(object):
-    def __init__(
-            self,
-            logger: Logger,
-            group_id: int = 0
-    ):
+    def __init__(self, logger: Logger, group_id: int = 0):
         self.__group_id: int = group_id
         self.__logger = logger
 
@@ -33,10 +29,7 @@ class Handler(object):
         self.__undefined_message_func = None
         self.__chat_action_types: list = list()
 
-    async def dispatch(
-            self,
-            get_current_rest: Callable = None
-    ) -> None:
+    async def dispatch(self, get_current_rest: Callable = None) -> None:
 
         self.message.inner = dict_of_dicts_merge(
             self.message.inner, self.message_both.inner
@@ -56,18 +49,12 @@ class Handler(object):
                     current_rest["description"],
                 )
 
-    def change_prefix_for_all(
-            self,
-            prefix: list
-    ) -> None:
+    def change_prefix_for_all(self, prefix: list) -> None:
         self.message.prefix = prefix
         self.chat_message.prefix = prefix
         self.message_both.prefix = prefix
 
-    def chat_action(
-            self, type_: str,
-            rules: dict = None
-    ):
+    def chat_action(self, type_: str, rules: dict = None):
         """
         Special express processor of chat actions (https://vk.com/dev/objects/message - action object)
         :param type_: action name
@@ -75,7 +62,9 @@ class Handler(object):
         """
 
         def decorator(func):
-            self.__chat_action_types.append({'name': type_, "call": func, "rules": rules or {}})
+            self.__chat_action_types.append(
+                {"name": type_, "call": func, "rules": rules or {}}
+            )
             return func
 
         return decorator
@@ -93,22 +82,26 @@ class Handler(object):
 
     def chat_mention(self):
         def decorator(func):
-            pattern = Pattern(text="", pattern=r"\[(club|public){}\|.*?]".format(self.__group_id))
-            ignore_ans = (
-                    len(signature(func).parameters) < 1
+            pattern = Pattern(
+                text="", pattern=r"\[(club|public){}\|.*?]".format(self.__group_id)
             )
-            self.chat_message.inner[pattern] = dict(call=func, validators={}, ignore_ans=ignore_ans)
+            ignore_ans = len(signature(func).parameters) < 1
+            self.chat_message.inner[pattern] = dict(
+                call=func, validators={}, ignore_ans=ignore_ans
+            )
             return func
 
         return decorator
 
     def chat_invite(self):
         def decorator(func):
-            self.__chat_action_types.append({
-                "name": "chat_invite_user",
-                "call": func,
-                "rules": {"member_id": -self.__group_id},
-            })
+            self.__chat_action_types.append(
+                {
+                    "name": "chat_invite_user",
+                    "call": func,
+                    "rules": {"member_id": -self.__group_id},
+                }
+            )
             return func
 
         return decorator
@@ -129,6 +122,7 @@ class Handler(object):
         def decorator(func):
             self._pre_p = func
             return func
+
         return decorator
 
 
@@ -139,12 +133,12 @@ class MessageHandler:
         self.prefix: list = ["/", "!"]
 
     def add_handler(
-            self,
-            text: str,
-            func: Callable,
-            command: bool = False,
-            lower: bool = False,
-            pattern: str = None
+        self,
+        text: str,
+        func: Callable,
+        command: bool = False,
+        lower: bool = False,
+        pattern: str = None,
     ):
         """
         Add handler to dispatcher without decorators
@@ -157,20 +151,13 @@ class MessageHandler:
         """
         prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
         pattern = Pattern(
-            text,
-            pattern=pattern or ("(?i)" if lower else "") + prefix + "{}$",
+            text, pattern=pattern or ("(?i)" if lower else "") + prefix + "{}$",
         )
         self.inner[pattern] = dict(
-            call=func,
-            ignore_ans=should_ignore_ans(func, pattern.arguments)
+            call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
         )
 
-    def __call__(
-            self,
-            text: str,
-            command: bool = False,
-            lower: bool = False
-    ):
+    def __call__(self, text: str, command: bool = False, lower: bool = False):
         """
         Simple on.message(text) decorator. Support regex keys in text
         :param text: text (match case)
@@ -180,24 +167,15 @@ class MessageHandler:
 
         def decorator(func):
             prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-            pattern = Pattern(
-                text,
-                pattern=("(?i)" if lower else "") + prefix + "{}$",
-            )
+            pattern = Pattern(text, pattern=("(?i)" if lower else "") + prefix + "{}$",)
             self.inner[pattern] = dict(
-                call=func,
-                ignore_ans=should_ignore_ans(func, pattern.arguments)
+                call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
             )
             return func
 
         return decorator
 
-    def startswith(
-            self,
-            text: str,
-            command: bool = False,
-            lower: bool = False
-    ):
+    def startswith(self, text: str, command: bool = False, lower: bool = False):
         """
         Startswith regex message processor
 
@@ -212,21 +190,16 @@ class MessageHandler:
         def decorator(func):
             prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
             pattern = Pattern(
-                text,
-                pattern=("(?i)" if lower else "") + prefix + "{}.*?",
+                text, pattern=("(?i)" if lower else "") + prefix + "{}.*?",
             )
             self.inner[pattern] = dict(
-                call=func,
-                ignore_ans=should_ignore_ans(func, pattern.arguments)
+                call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
             )
             return func
 
         return decorator
 
-    def regex(
-            self,
-            pattern: str
-    ):
+    def regex(self, pattern: str):
         """
         Regex message compiler
         :param pattern: Regex string
@@ -234,8 +207,7 @@ class MessageHandler:
 
         def decorator(func):
             self.inner[Pattern(text="", pattern=pattern)] = dict(
-                call=func,
-                ignore_ans=should_ignore_ans(func, [])
+                call=func, ignore_ans=should_ignore_ans(func, [])
             )
             return func
 
@@ -245,8 +217,7 @@ class MessageHandler:
         def decorator(func):
             assert payload, "Assign payload!"
             self.payloads[json.dumps(payload)] = dict(
-                call=func,
-                ignore_ans=should_ignore_ans(func, [])
+                call=func, ignore_ans=should_ignore_ans(func, [])
             )
             return func
 
@@ -264,13 +235,11 @@ class DescribedHandler:
         def decorator(func):
 
             self.described_handlers_by_func[func] = dict(
-                name=name or "",
-                description=description or ""
+                name=name or "", description=description or ""
             )
             if name:
                 self.described_handlers_by_name[name] = dict(
-                    name=name or "",
-                    description=description or ""
+                    name=name or "", description=description or ""
                 )
             return func
 

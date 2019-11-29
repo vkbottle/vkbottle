@@ -6,7 +6,9 @@ except ImportError:
     import json
 
 
-def keyboard_gen(pattern: List[List[Dict]], one_time: bool = False, inline: bool = False):
+def keyboard_gen(
+    pattern: List[List[Dict]], one_time: bool = False, inline: bool = False
+):
     """Simple keyboard constructor
     :param pattern: Keyboard simple pattern, check github readme
     :param one_time: Should keyboard be hidden after first use?
@@ -32,7 +34,9 @@ def keyboard_gen(pattern: List[List[Dict]], one_time: bool = False, inline: bool
         buttons.append(row_buttons)
 
     keyboard = str(
-        json.dumps(dict(one_time=one_time, buttons=buttons, inline=inline), ensure_ascii=False)
+        json.dumps(
+            dict(one_time=one_time, buttons=buttons, inline=inline), ensure_ascii=False
+        )
         .encode("utf-8")
         .decode("utf-8")
     )
