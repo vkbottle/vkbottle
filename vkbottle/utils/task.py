@@ -54,6 +54,8 @@ class TaskManager:
 
             [self.loop.create_task(task) for task in self.tasks]
 
+            self.loop.run_forever()
+
         finally:
             if shutdown is not None:
                 self.loop.run_until_complete(shutdown())
