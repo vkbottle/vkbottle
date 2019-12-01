@@ -7,7 +7,7 @@ except ImportError:
 
 from ..api import Api
 from ..handler import Handler, ErrorHandler, DescribedHandler
-from ..utils import Logger
+from ..utils.logger import Logger, keyboard_interrupt
 from ..http import HTTP
 from ..api import VKError
 from asyncio import get_event_loop, AbstractEventLoop, TimeoutError
@@ -17,7 +17,7 @@ from aiohttp.client_exceptions import ClientConnectionError, ServerTimeoutError
 from ._event import EventTypes
 from .processor import EventProcessor
 from .branch import BranchManager
-from ..utils import folder_checkup
+from ..utils.tools import folder_checkup
 import traceback
 import typing
 
@@ -27,6 +27,15 @@ DEFAULT_WAIT = 20
 
 class Vals(PatchedValidators):
     pass
+
+
+class BotStatus:
+    polling_started: bool = False
+    dispatched: bool = False
+
+    @property
+    def readable(self) -> dict:
+        return {"polling_started": self.polling_started, "dispatched": self.dispatched}
 
 
 class Bot(HTTP, EventProcessor):
@@ -44,8 +53,8 @@ class Bot(HTTP, EventProcessor):
         self.__loop: AbstractEventLoop = get_event_loop()
         self.__debug: bool = debug
         self.__wait = None
-        self.__dispatched: bool = False
         self.described_handler = DescribedHandler()
+        self._status: BotStatus = BotStatus()
 
         self.__api: Api = Api(loop=self.__loop, token=token, group_id=group_id)
         self._patcher: Patcher = Patcher()
@@ -66,6 +75,10 @@ class Bot(HTTP, EventProcessor):
     @property
     def group_id(self):
         return self.__group_id
+
+    @property
+    def status(self) -> BotStatus:
+        return self._status
 
     @property
     def loop(self):
@@ -109,7 +122,7 @@ class Bot(HTTP, EventProcessor):
         try:
             loop.run_until_complete(self.run())
         except KeyboardInterrupt:
-            self._logger.warning("Keyboard interrupt")
+            keyboard_interrupt()
 
     async def run(self, wait: int = DEFAULT_WAIT):
         self.__wait = wait
@@ -137,9 +150,9 @@ class Bot(HTTP, EventProcessor):
         :return: "ok"
         """
 
-        if not self.__dispatched:
+        if not self.status.dispatched:
             await self.on.dispatch(self.get_current_rest)
-            self.__dispatched = True
+            self.status.dispatched = True
 
         if event.get("type"):
             if event.get("group_id") == self.group_id:
@@ -217,3 +230,19 @@ class Bot(HTTP, EventProcessor):
         """
         status = self.__loop.run_until_complete(self.emulate(event, confirmation_token))
         return status
+
+    def __repr__(self) -> str:
+        return "<Bot {}>".format(self.status.readable)
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.loop.close()
+
+    @property
+    def __dict__(self) -> dict:
+        return self.status.readable

@@ -1,6 +1,6 @@
 import logging
 from logging import handlers
-from typing import Any
+import typing
 from termcolor import colored
 from colorama import init as color_opt
 import os
@@ -86,7 +86,7 @@ class Logger(object):
             logger_enabled=self.__logger_enabled,
         )
 
-    def info(self, *some: Any):
+    def info(self, *some: typing.Any):
         self.logger.info(" ".join([str(i) for i in some]))
 
     def debug(self, *some):
@@ -108,3 +108,8 @@ class Logger(object):
         self.logger.debug(" ".join([str(i) for i in some]))
         if self.__debug:
             print(self.__coloring(" ".join([str(i) for i in some]), "red"))
+
+
+def keyboard_interrupt() -> typing.NoReturn:
+    print(Coloring("VKBottle")("Keyboard Interrupt", color="yellow"))
+    exit(0)

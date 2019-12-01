@@ -1,4 +1,5 @@
 import asyncio
+from .logger import keyboard_interrupt
 from asyncio import coroutine
 from types import CoroutineType
 from typing import List, Callable, Coroutine
@@ -56,6 +57,8 @@ class TaskManager:
 
             self.loop.run_forever()
 
+        except KeyboardInterrupt:
+            keyboard_interrupt()
         finally:
             if shutdown is not None:
                 self.loop.run_until_complete(shutdown())
