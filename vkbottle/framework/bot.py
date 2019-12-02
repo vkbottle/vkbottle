@@ -47,6 +47,7 @@ class Bot(HTTP, EventProcessor):
         plugin_folder: str = None,
         log_to_file: bool = False,
         log_to: str = None,
+        vbml_patcher: Patcher = None
     ):
         self.__token: str = token
         self.__group_id: int = group_id
@@ -57,7 +58,7 @@ class Bot(HTTP, EventProcessor):
         self._status: BotStatus = BotStatus()
 
         self.__api: Api = Api(loop=self.__loop, token=token, group_id=group_id)
-        self._patcher: Patcher = Patcher()
+        self._patcher: Patcher = vbml_patcher or Patcher()
         if not self._patcher.manager:
             self._patcher.add_manager(ValidatorManager(Vals))
 
