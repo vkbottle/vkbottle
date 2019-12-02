@@ -5,8 +5,8 @@ from typing import Callable, Optional, Dict, Union
 from ..const import __version__
 from inspect import iscoroutinefunction
 from ..api import HandlerError
-from vbml import Patcher, Pattern
 import json
+from vbml import Patcher
 
 
 def should_ignore_ans(func: Callable, arguments: list) -> bool:
@@ -28,6 +28,8 @@ class Handler(object):
 
         self.__undefined_message_func = None
         self.__chat_action_types: list = list()
+
+        self._patcher = Patcher.get_current()
 
     async def dispatch(self, get_current_rest: Callable = None) -> None:
 
@@ -82,7 +84,7 @@ class Handler(object):
 
     def chat_mention(self):
         def decorator(func):
-            pattern = Pattern(
+            pattern = self._patcher.pattern(
                 text="", pattern=r"\[(club|public){}\|.*?]".format(self.__group_id)
             )
             ignore_ans = len(signature(func).parameters) < 1
@@ -131,6 +133,7 @@ class MessageHandler:
         self.inner = dict()
         self.payloads = dict()
         self.prefix: list = ["/", "!"]
+        self._patcher = Patcher.get_current()
 
     def add_handler(
         self,
@@ -141,7 +144,7 @@ class MessageHandler:
         pattern: str = None,
     ):
         """
-        Add handler to dispatcher without decorators
+        Add handler to disself._patcher without decorators
         :param text: text (match case)
         :param func: function responsible for event
         :param command: Is this is a /command
@@ -150,7 +153,7 @@ class MessageHandler:
         :return: True
         """
         prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-        pattern = Pattern(
+        pattern = self._patcher.pattern(
             text, pattern=pattern or ("(?i)" if lower else "") + prefix + "{}$",
         )
         self.inner[pattern] = dict(
@@ -167,7 +170,7 @@ class MessageHandler:
 
         def decorator(func):
             prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-            pattern = Pattern(text, pattern=("(?i)" if lower else "") + prefix + "{}$",)
+            pattern = self._patcher.pattern(text, pattern=("(?i)" if lower else "") + prefix + "{}$",)
             self.inner[pattern] = dict(
                 call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
             )
@@ -189,7 +192,7 @@ class MessageHandler:
 
         def decorator(func):
             prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-            pattern = Pattern(
+            pattern = self._patcher.pattern(
                 text, pattern=("(?i)" if lower else "") + prefix + "{}.*?",
             )
             self.inner[pattern] = dict(
@@ -206,7 +209,7 @@ class MessageHandler:
         """
 
         def decorator(func):
-            self.inner[Pattern(text="", pattern=pattern)] = dict(
+            self.inner[self._patcher.pattern(text="", pattern=pattern)] = dict(
                 call=func, ignore_ans=should_ignore_ans(func, [])
             )
             return func
