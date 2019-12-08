@@ -175,17 +175,17 @@ class Bot(HTTP, EventProcessor):
 
                     if obj["peer_id"] < 2e9:
                         if obj["from_id"] not in self.branch.queue:
-                            task = await (self._private_message_processor(**processor))
+                            task = await self._private_message_processor(**processor)
                         else:
-                            task = await (self._branched_processor(**processor))
+                            task = await self._branched_processor(**processor)
                     else:
                         if "action" not in obj:
                             if obj["peer_id"] not in self.branch.queue:
-                                task = await (self._chat_message_processor(**processor))
+                                task = await self._chat_message_processor(**processor)
                             else:
-                                task = await (self._branched_processor(**processor))
+                                task = await self._branched_processor(**processor)
                         else:
-                            task = await (self._chat_action_processor(**processor))
+                            task = await self._chat_action_processor(**processor)
 
                     await self._handler_return(task, **processor)
 

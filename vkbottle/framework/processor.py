@@ -58,14 +58,14 @@ class EventProcessor(RegexHelper):
         redump = redump_payload(answer.payload)
         if redump in self.on.message.payloads:
             matching = self.on.message.payloads[redump]
-            await matching["call"](*([answer] if not matching["ignore_ans"] else []))
+            task = await matching["call"](*([answer] if not matching["ignore_ans"] else []))
 
             self._logger.debug(
                 "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
                     matching["call"].__name__, answer.from_id
                 )
             )
-            return
+            return task
 
         for key in self.on.message.inner:
             key: Pattern
@@ -89,12 +89,13 @@ class EventProcessor(RegexHelper):
 
         if not found:
             if self.on.undefined_func:
-                await (self.on.undefined_func(answer))
+                task = await (self.on.undefined_func(answer))
                 self._logger.debug(
                     "New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
                         answer.from_id
                     )
                 )
+                return task
             else:
                 self._logger.info("Add on-undefined message handler!")
 
@@ -117,14 +118,14 @@ class EventProcessor(RegexHelper):
         redump = redump_payload(answer.payload)
         if redump in self.on.message.payloads:
             matching = self.on.message.payloads[redump]
-            await matching["call"](*([answer] if not matching["ignore_ans"] else []))
+            task = await matching["call"](*([answer] if not matching["ignore_ans"] else []))
 
             self._logger.debug(
                 "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
                     matching["call"].__name__, answer.from_id
                 )
             )
-            return
+            return task
 
         for key in self.on.chat_message.inner:
             key: Pattern
@@ -159,7 +160,6 @@ class EventProcessor(RegexHelper):
         """
 
         action = obj["action"]
-        print(obj)
 
         self._logger.debug(
             '-> ACTION FROM CHAT {} TYPE "{}" TIME %#%'.format(
