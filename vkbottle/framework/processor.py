@@ -19,12 +19,12 @@ def get_attr(adict: dict, attrs: typing.List[str]):
             return adict[attr]
 
 
-def redump_payload(payload: typing.Optional[str]) -> str:
+def redump_payload(payload: typing.Optional[str]) -> typing.Union[str, dict]:
     try:
         if payload:
-            return json.dumps(json.loads(payload))
+            return json.loads(payload)
     except json.decoder.JSONDecodeError:
-        return payload
+        return dict()
 
 
 class EventProcessor(RegexHelper):
@@ -56,16 +56,18 @@ class EventProcessor(RegexHelper):
 
         # Payload alpha2
         redump = redump_payload(answer.payload)
-        if redump in self.on.message.payloads:
-            matching = self.on.message.payloads[redump]
-            task = await matching["call"](*([answer] if not matching["ignore_ans"] else []))
+        for pc in self.on.message.payload.inner:
+            if pc(redump):
+                matching = self.on.message.payload.inner[pc]
+                task = await matching["call"](
+                    *([answer] if not matching["ignore_ans"] else []))
 
-            self._logger.debug(
-                "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                    matching["call"].__name__, answer.from_id
+                self._logger.debug(
+                    "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
+                        matching["call"].__name__, answer.from_id
+                    )
                 )
-            )
-            return task
+                return task
 
         for key in self.on.message.inner:
             key: Pattern
@@ -116,16 +118,18 @@ class EventProcessor(RegexHelper):
 
         # Payload alpha2
         redump = redump_payload(answer.payload)
-        if redump in self.on.message.payloads:
-            matching = self.on.message.payloads[redump]
-            task = await matching["call"](*([answer] if not matching["ignore_ans"] else []))
+        for pc in self.on.chat_message.payload.inner:
+            if pc(redump):
+                matching = self.on.chat_message.payload.inner[pc]
+                task = await matching["call"](
+                    *([answer] if not matching["ignore_ans"] else []))
 
-            self._logger.debug(
-                "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                    matching["call"].__name__, answer.from_id
+                self._logger.debug(
+                    "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
+                        matching["call"].__name__, answer.from_id
+                    )
                 )
-            )
-            return task
+                return task
 
         for key in self.on.chat_message.inner:
             key: Pattern

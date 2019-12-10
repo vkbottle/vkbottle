@@ -39,6 +39,14 @@ class Handler(object):
         self.chat_message.inner = dict_of_dicts_merge(
             self.chat_message.inner, self.message_both.inner
         )
+
+        self.message.payload.inner = dict_of_dicts_merge(
+            self.message.payload.inner, self.message_both.payload.inner
+        )
+        self.chat_message.payload.inner = dict_of_dicts_merge(
+            self.chat_message.payload.inner, self.message_both.payload.inner
+        )
+
         if get_current_rest:
 
             # Check updates from timoniq/vkbottle-rest
@@ -131,7 +139,7 @@ class Handler(object):
 class MessageHandler:
     def __init__(self):
         self.inner = dict()
-        self.payloads = dict()
+        self.payload = PayloadHandler()
         self.prefix: list = ["/", "!"]
         self._patcher = Patcher.get_current()
 
@@ -216,12 +224,44 @@ class MessageHandler:
 
         return decorator
 
-    def payload(self, payload: dict = None):
+
+class Payload:
+    def __init__(self, payload: dict, mode=1):
+        self.payload = payload
+        self.mode = mode
+
+    def __call__(self, check: dict):
+        if self.mode == 1:
+            # EQUAL
+            if check == self.payload:
+                return True
+        elif self.mode == 2:
+            # CONTAINS
+            if {**check, **self.payload} == check:
+                return True
+
+
+class PayloadHandler:
+    def __init__(self):
+        self.inner: Dict[Payload] = dict()
+
+    def __call__(self, payload: dict):
         def decorator(func):
-            assert payload, "Assign payload!"
-            self.payloads[json.dumps(payload)] = dict(
+
+            self.inner[Payload(payload)] = dict(
                 call=func, ignore_ans=should_ignore_ans(func, [])
             )
+
+            return func
+        return decorator
+
+    def contains(self, payload: dict):
+        def decorator(func):
+
+            self.inner[Payload(payload, 2)] = dict(
+                call=func, ignore_ans=should_ignore_ans(func, [])
+            )
+
             return func
 
         return decorator
