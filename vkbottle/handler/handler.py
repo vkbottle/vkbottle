@@ -231,6 +231,8 @@ class Payload:
         self.mode = mode
 
     def __call__(self, check: dict):
+        if check is None:
+            return
         if self.mode == 1:
             # EQUAL
             if check == self.payload:
