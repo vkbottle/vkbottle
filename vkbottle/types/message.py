@@ -45,6 +45,8 @@ class MessageAction(BaseModel):
 class ClientInfo(BaseModel):
     button_actions: list = None
     keyboard: bool = None
+    inline_keyboard: bool = None
+    carousel: bool = None
     lang_id: int = None
 
 
