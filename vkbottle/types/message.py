@@ -76,13 +76,10 @@ class Message(BaseModel):
             "messages",
             "send",
             dict(
-                message=message,
                 peer_id=self.peer_id,
-                attachment=attachment,
                 reply_to=self.id,
-                keyboard=keyboard,
                 random_id=random.randint(-2e9, 2e9),
-                **params
+                **{k: v for k, v in locals().items() if v}
             ),
         )
 
@@ -91,6 +88,7 @@ class Message(BaseModel):
         message: str = "&#8230;",
         attachment: str = None,
         keyboard: dict = None,
+        template: dict = None,
         **params
     ):
         for message in sep_bytes(message):
@@ -98,13 +96,11 @@ class Message(BaseModel):
                 "messages",
                 "send",
                 dict(
-                    message=message,
                     peer_id=self.peer_id,
-                    attachment=attachment,
                     keyboard=keyboard,
                     random_id=random.randint(-2e9, 2e9),
-                    **params
-                ),
+                    **{k: v for k, v in locals().items() if v}
+                )
             )
         return m
 
