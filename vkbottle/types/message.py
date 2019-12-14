@@ -72,6 +72,7 @@ class Message(BaseModel):
         keyboard: dict = None,
         **params
     ):
+        locals().update(params)
         return await self.api[0].request(
             "messages",
             "send",
@@ -79,7 +80,7 @@ class Message(BaseModel):
                 peer_id=self.peer_id,
                 reply_to=self.id,
                 random_id=random.randint(-2e9, 2e9),
-                **{k: v for k, v in locals().items() if v}
+                **{k: v for k, v in locals().items() if v is not None and k not in ["self", "params"]}
             ),
         )
 
@@ -91,14 +92,15 @@ class Message(BaseModel):
         template: dict = None,
         **params
     ):
-        for message in sep_bytes(message):
+        locals().update(params)
+        for message in sep_bytes(message or ""):
             m = await self.api[0].request(
                 "messages",
                 "send",
                 dict(
                     peer_id=self.peer_id,
                     random_id=random.randint(-2e9, 2e9),
-                    **{k: v for k, v in locals().items() if v}
+                    **{k: v for k, v in locals().items() if v is not None and k not in ["self", "params"]}
                 )
             )
         return m
