@@ -1,5 +1,5 @@
 import typing
-from vkbottler.vkbottle.api import VKError
+from .api import VKError
 import json
 
 
