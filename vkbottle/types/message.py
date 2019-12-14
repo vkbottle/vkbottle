@@ -97,7 +97,6 @@ class Message(BaseModel):
                 "send",
                 dict(
                     peer_id=self.peer_id,
-                    keyboard=keyboard,
                     random_id=random.randint(-2e9, 2e9),
                     **{k: v for k, v in locals().items() if v}
                 )
