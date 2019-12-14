@@ -67,7 +67,7 @@ class Message(BaseModel):
 
     async def reply(
         self,
-        message: str = "&#8230;",
+        message: str = None,
         attachment: str = None,
         keyboard: dict = None,
         **params
@@ -85,7 +85,7 @@ class Message(BaseModel):
 
     async def __call__(
         self,
-        message: str = "&#8230;",
+        message: str = None,
         attachment: str = None,
         keyboard: dict = None,
         template: dict = None,
