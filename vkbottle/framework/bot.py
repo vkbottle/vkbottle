@@ -82,7 +82,7 @@ class Bot(HTTP, EventProcessor):
         self._logger: Logger = Logger(
             debug,
             **params,
-            **{k: v for k, v in self._logger.logger_params.items() if k not in params}
+            **{k: v for k, v in self._logger.logger_params.items() if k not in {**params, "debug": None}}
         )
 
     @property
