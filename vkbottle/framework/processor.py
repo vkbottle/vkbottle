@@ -234,7 +234,7 @@ class EventProcessor(RegexHelper):
 
         self._logger.debug(
             "New BRANCHED-message compiled with branch <\x1b[35m{}\x1b[0m> (from: {})".format(
-                '"{}" with {} kwargs'.format(branch[0], _kw if len(_kw) < 100 else _kw[1:99]), answer.from_id
+                '"{}" with {} kwargs'.format(branch[0], _kw if len(_kw) < 100 else _kw[1:99] + "..."), answer.from_id
             )
         )
         return task

@@ -19,16 +19,15 @@ def keyboard_gen(
     for row in rows:
         row_buttons = list()
         for button in row:
+            button = {k: v for k, v in button.items()}
             row_buttons.append(
                 dict(
                     action=dict(
-                        type="text" if "type" not in button else button["type"],
-                        label=button["text"],
-                        payload=json.dumps(
-                            "" if "payload" not in button else button["payload"]
-                        ),
+                        type=button.get("type", "text"),
+                        label=button.get("text", button.get("label")),
+                        **{k: v for k, v in button.items() if k not in ["type", "label"]}
                     ),
-                    color="default" if "color" not in button else button["color"],
+                    color=button.get("color", "default"),
                 )
             )
         buttons.append(row_buttons)
