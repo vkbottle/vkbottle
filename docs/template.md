@@ -2,13 +2,13 @@
 ## Carousel
 Import elements:
 ```python
-from vkbottler.vkbottle import template_gen, TemplateElement
+from vkbottle import template_gen, TemplateElement
 ```
 `template_gen` - create template json by the template elements
 
 Example:
 ```python
-from vkbottler.vkbottle import template_gen, TemplateElement, keyboard_gen
+from vkbottle import template_gen, TemplateElement, keyboard_gen
 template = template_gen(
     TemplateElement(
         "A title",
