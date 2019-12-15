@@ -77,6 +77,14 @@ class Bot(HTTP, EventProcessor):
     def group_id(self):
         return self.__group_id
 
+    def set_debug(self, debug: bool, **params):
+        self.__debug = debug
+        self._logger: Logger = Logger(
+            debug,
+            **params,
+            **{k: v for k, v in self._logger.logger_params.items() if k not in params}
+        )
+
     @property
     def status(self) -> BotStatus:
         return self._status
