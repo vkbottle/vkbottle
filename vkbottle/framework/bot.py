@@ -87,7 +87,11 @@ class Bot(HTTP, EventProcessor):
             **{k: v for k, v in self._logger.logger_params.items() if k not in {**params, "debug": None}}
         )
 
-    def empty_copy(self) -> super():
+    def loop_update(self, loop: AbstractEventLoop = None):
+        self.__loop = loop or get_event_loop()
+        return self.__loop
+
+    def empty_copy(self) -> "Bot":
         copy = Bot(
             self.__token,
             self.__group_id,
@@ -96,6 +100,15 @@ class Bot(HTTP, EventProcessor):
             self.__vbml_patcher
         )
         return copy
+
+    def copy(self) -> "Bot":
+        bot = self.empty_copy()
+        bot.loop_update()
+        bot.on = self.on
+        bot.branch = self.branch
+        bot.error_handler = self.error_handler
+        return bot
+
 
     @property
     def status(self) -> BotStatus:
@@ -267,3 +280,7 @@ class Bot(HTTP, EventProcessor):
     @property
     def __dict__(self) -> dict:
         return self.status.readable
+
+    @property
+    def eee(self):
+        return "We love you <3"
