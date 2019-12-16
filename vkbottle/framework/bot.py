@@ -54,6 +54,8 @@ class Bot(HTTP, EventProcessor):
         self.__loop: AbstractEventLoop = get_event_loop()
         self.__debug: bool = debug
         self.__wait = None
+        self.__logger_opt = (plugin_folder, log_to_file, log_to)
+        self.__vbml_patcher = vbml_patcher
         self.described_handler = DescribedHandler()
         self._status: BotStatus = BotStatus()
 
@@ -84,6 +86,16 @@ class Bot(HTTP, EventProcessor):
             **params,
             **{k: v for k, v in self._logger.logger_params.items() if k not in {**params, "debug": None}}
         )
+
+    def empty_copy(self) -> super():
+        copy = Bot(
+            self.__token,
+            self.__group_id,
+            self.__debug,
+            *self.__logger_opt,
+            self.__vbml_patcher
+        )
+        return copy
 
     @property
     def status(self) -> BotStatus:
