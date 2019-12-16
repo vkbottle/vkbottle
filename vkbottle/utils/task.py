@@ -1,8 +1,6 @@
 import asyncio
 from .logger import keyboard_interrupt
-from asyncio import coroutine
-from types import CoroutineType
-from typing import List, Callable, Coroutine
+import typing
 
 
 """
@@ -31,24 +29,34 @@ SOFTWARE.
 
 
 class TaskManager:
+    """
+    Task manager represent to user high-level API of asyncio interface (Less part :))
+    """
+
     def __init__(self, loop: asyncio.AbstractEventLoop):
-        self.tasks: List[Coroutine] = []
+        self.tasks: typing.List[typing.Callable] = []
         self.loop: asyncio.AbstractEventLoop = loop
 
     def run(
         self,
-        shutdown: Callable = None,
-        startup: Callable = None,
+        *,
+        on_shutdown: typing.Callable = None,
+        on_startup: typing.Callable = None,
         asyncio_debug_mode: bool = False,
     ):
         """
-        Run events
+        Method which run event loop
+        :param auto_reload: auto reload code when changes
+        :param on_shutdown: coroutine which runned after complete tasks
+        :param on_startup: coroutine which runned before start main tasks
+        :param asyncio_debug_mode: asyncio debug mode state
+        :return:
         """
         if len(self.tasks) < 1:
             raise RuntimeError("Count of tasks - 0. Add tasks.")
         try:
-            if startup is not None:
-                self.loop.run_until_complete(startup())
+            if on_startup is not None:
+                self.loop.run_until_complete(on_startup())
 
             if asyncio_debug_mode:
                 self.loop.set_debug(True)
@@ -57,11 +65,12 @@ class TaskManager:
 
             self.loop.run_forever()
 
-        except KeyboardInterrupt:
+        except:
             keyboard_interrupt()
+
         finally:
-            if shutdown is not None:
-                self.loop.run_until_complete(shutdown())
+            if on_shutdown is not None:
+                self.loop.run_until_complete(on_shutdown())
 
     def close(self):
         """
@@ -70,18 +79,22 @@ class TaskManager:
         """
         self.loop.close()
 
-    def add_task(self, task: CoroutineType):
+    def add_task(self, task: typing.Union[typing.Coroutine, typing.Callable]):
         """
         Add task to loop when loop don`t started.
         :param task: coroutine for run in loop
         :return:
         """
-        if isinstance(task, CoroutineType):
+        if asyncio.iscoroutinefunction(task):
+            self.tasks.append(task())
+        elif asyncio.iscoroutine(task):
             self.tasks.append(task)
         else:
-            raise RuntimeError("Unexpected task. Tasks may be only coroutine functions")
+            raise RuntimeError(
+                "Unexpected task. Tasks may be only coroutine functions"
+            )
 
-    def run_task(self, task: Callable):
+    def run_task(self, task: typing.Callable):
         """
         Create task in loop
         :param task:
