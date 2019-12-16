@@ -138,7 +138,7 @@ class Handler(object):
 
 class MessageHandler:
     def __init__(self):
-        self.inner = dict()
+        self.inner: Dict[Payload, Dict[Callable, str, bool]] = dict()
         self.payload = PayloadHandler()
         self.prefix: list = ["/", "!"]
         self._patcher = Patcher.get_current()
