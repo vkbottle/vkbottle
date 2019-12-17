@@ -142,12 +142,14 @@ class Api(object):
         data = {"code": code}
         return await self.method_object("", "", data, _execute=True)
 
-    async def __call__(self, **kwargs) -> dict:
+    async def __call__(self, *abandoned, **kwargs) -> dict:
         """
         API Method Maker
         :param kwargs: all data of the request
         :return: VK Server Response
         """
+        if len(abandoned):
+            raise ValueError("Send args with KWARGS! bot.api.a.b(a=\"b\")")
 
         for k, v in enumerate(kwargs):
             if isinstance(v, (list, tuple)):
