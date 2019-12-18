@@ -2,11 +2,12 @@ from .events import Event
 from ..utils import dict_of_dicts_merge, Logger
 from inspect import signature
 from typing import Callable, Optional, Dict, Union
+import typing
 from ..const import __version__
 from inspect import iscoroutinefunction
 from ..api import HandlerError
 import json
-from vbml import Patcher
+from vbml import Patcher, Pattern
 
 
 def should_ignore_ans(func: Callable, arguments: list) -> bool:
@@ -30,6 +31,11 @@ class Handler(object):
         self.__chat_action_types: list = list()
 
         self._patcher = Patcher.get_current()
+
+        if not hasattr(Pattern, "context_copy"):
+            raise RuntimeError("\n\n\tNow! Update vbml with command:\n"
+                               "\tpip install https://github.com/timoniq/vbml/archive/master.zip --upgrade\n"
+                               "\ttnx <3")
 
     async def dispatch(self, get_current_rest: Callable = None) -> None:
 
@@ -138,14 +144,14 @@ class Handler(object):
 
 class MessageHandler:
     def __init__(self):
-        self.inner: Dict[Payload, Dict[Callable, str, bool]] = dict()
+        self.inner: Dict[Pattern, Dict[dict]] = dict()
         self.payload = PayloadHandler()
         self.prefix: list = ["/", "!"]
         self._patcher = Patcher.get_current()
 
     def add_handler(
         self,
-        text: str,
+        text: typing.Union[str, Pattern],
         func: Callable,
         command: bool = False,
         lower: bool = False,
@@ -160,15 +166,20 @@ class MessageHandler:
         :param pattern: any regex pattern pattern. {} means text which will be formatted
         :return: True
         """
-        prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-        pattern = self._patcher.pattern(
-            text, pattern=pattern or ("(?i)" if lower else "") + prefix + "{}$",
-        )
-        self.inner[pattern] = dict(
-            call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
-        )
+        if not isinstance(text, Pattern):
+            prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
+            pattern = self._patcher.pattern(
+                text, pattern=pattern or ("(?i)" if lower else "") + prefix + "{}$",
+            )
+            self.inner[pattern] = dict(
+                call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
+            )
+        else:
+            self.inner[self._patcher.pattern(text)] = dict(
+                call=func, ignore_ans=should_ignore_ans(func, text.arguments)
+            )
 
-    def __call__(self, text: str, command: bool = False, lower: bool = False):
+    def __call__(self, text: typing.Union[str, Pattern], command: bool = False, lower: bool = False):
         """
         Simple on.message(text) decorator. Support regex keys in text
         :param text: text (match case)
@@ -177,16 +188,22 @@ class MessageHandler:
         """
 
         def decorator(func):
-            prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-            pattern = self._patcher.pattern(text, pattern=("(?i)" if lower else "") + prefix + "{}$",)
-            self.inner[pattern] = dict(
-                call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
-            )
+            if not isinstance(text, Pattern):
+                prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
+                pattern = self._patcher.pattern(text, pattern=("(?i)" if lower else "") + prefix + "{}$")
+                self.inner[pattern] = dict(
+                    call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
+                )
+            else:
+                self.inner[self._patcher.pattern(text)] = dict(
+                    call=func,
+                    ignore_ans=should_ignore_ans(func, text.arguments)
+                )
             return func
 
         return decorator
 
-    def startswith(self, text: str, command: bool = False, lower: bool = False):
+    def startswith(self, text: typing.Union[str, Pattern], command: bool = False, lower: bool = False):
         """
         Startswith regex message processor
 
@@ -199,13 +216,19 @@ class MessageHandler:
         """
 
         def decorator(func):
-            prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-            pattern = self._patcher.pattern(
-                text, pattern=("(?i)" if lower else "") + prefix + "{}.*?",
-            )
-            self.inner[pattern] = dict(
-                call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
-            )
+            if not isinstance(text, Pattern):
+                prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
+                pattern = self._patcher.pattern(
+                    text, pattern=("(?i)" if lower else "") + prefix + "{}.*?",
+                )
+                self.inner[pattern] = dict(
+                    call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
+                )
+            else:
+                self.inner[self._patcher.pattern(text)] = dict(
+                    call=func,
+                    ignore_ans=should_ignore_ans(func, text.arguments)
+                )
             return func
 
         return decorator

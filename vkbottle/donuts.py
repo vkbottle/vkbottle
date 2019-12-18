@@ -4,11 +4,18 @@ import typing
 import asyncio
 
 
+async def with_timeout(timeout: int, coro):
+    await asyncio.sleep(timeout)
+    await coro
+
+
 class DonutError(Exception):
     pass
 
 
 class Donuts:
+    def __init__(self, bot: Bot):
+        self.bot: Bot = bot
     @staticmethod
     def typing_state(close=False):
         """
@@ -33,3 +40,21 @@ class Donuts:
                 return await func(*args, **kwargs)
             return wrapper
         return decorator
+
+    def with_timeout(self, timeout: int):
+        """
+        Set timeout before handler performing
+        :param timeout: timeout in seconds
+        :return:
+        """
+
+        def decorator(func):
+            async def wrapper(*args, **kwargs):
+                self.bot.loop.create_task(
+                    with_timeout(timeout, func(*args, **kwargs))
+                )
+                return
+            return wrapper
+        return decorator
+
+
