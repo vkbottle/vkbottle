@@ -66,6 +66,7 @@ class Message(BaseModel):
     reply_message: "Message" = None
     api: list = None
     client_info: "ClientInfo" = None
+    conversation_message_id: int = None
 
     async def reply(
         self,
@@ -80,7 +81,7 @@ class Message(BaseModel):
             "send",
             dict(
                 peer_id=self.peer_id,
-                reply_to=self.id,
+                reply_to=self.id or self.conversation_message_id,
                 random_id=random.randint(-2e9, 2e9),
                 **{k: v for k, v in locals().items() if v is not None and k not in ["self", "params"]}
             ),
