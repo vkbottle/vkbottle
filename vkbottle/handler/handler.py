@@ -8,7 +8,6 @@ from inspect import iscoroutinefunction
 from ..api import HandlerError
 import json
 from vbml import Patcher, Pattern
-from ..framework.dispatcher import Dispatcher
 
 
 def should_ignore_ans(func: Callable, arguments: list) -> bool:
