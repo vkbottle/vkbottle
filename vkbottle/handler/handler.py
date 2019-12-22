@@ -8,6 +8,7 @@ from inspect import iscoroutinefunction
 from ..api import HandlerError
 import json
 from vbml import Patcher, Pattern
+from ..framework.dispatcher import Dispatcher
 
 
 def should_ignore_ans(func: Callable, arguments: list) -> bool:
@@ -99,7 +100,7 @@ class Handler(object):
     def chat_mention(self):
         def decorator(func):
             pattern = self._patcher.pattern(
-                text="", pattern=r"\[(club|public){}\|.*?]".format(self.__group_id)
+                pattern="", _pattern=r"\[(club|public){}\|.*?]".format(self.__group_id)
             )
             ignore_ans = len(signature(func).parameters) < 1
             self.chat_message.inner[pattern] = dict(
@@ -240,7 +241,7 @@ class MessageHandler:
         """
 
         def decorator(func):
-            self.inner[self._patcher.pattern(text="", pattern=pattern)] = dict(
+            self.inner[self._patcher.pattern("", pattern=pattern)] = dict(
                 call=func, ignore_ans=should_ignore_ans(func, [])
             )
             return func

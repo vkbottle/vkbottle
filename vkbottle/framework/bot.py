@@ -59,7 +59,7 @@ class Bot(HTTP, EventProcessor):
         self._status: BotStatus = BotStatus()
 
         self.__api: Api = Api(loop=self.__loop, token=token, group_id=group_id)
-        self._patcher: Patcher = vbml_patcher or Patcher()
+        self._patcher: Patcher = vbml_patcher or Patcher(pattern="^{}$")
 
         self._logger: Logger = Logger(
             debug,
@@ -192,7 +192,6 @@ class Bot(HTTP, EventProcessor):
         updates = event.get("updates", [event])
 
         try:
-
             for update in updates:
                 obj = update["object"]
 

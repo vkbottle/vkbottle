@@ -45,11 +45,11 @@ To recognise types, import events object from vkbottle
 You can make type-hints to work with it easier
 Like this:
 """
-from vkbottle.vkbottle import events
+from vkbottle.types import GroupJoin
 
 
 @bot.on.event.group_join()
-async def wrapper(event: events.GroupJoin):
+async def wrapper(event: GroupJoin):
     print('User id{} just joined the group'.format(event.user_id))
 
 
@@ -102,4 +102,4 @@ async def wrapper(ans: Message):
 
 
 if __name__ == '__main__':
-    bot.run()
+    bot.run_polling()
