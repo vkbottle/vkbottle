@@ -71,7 +71,7 @@ class EventProcessor(RegexHelper):
 
         for key in self.on.message.inner:
             key: Pattern
-            if await self.patcher.check_async(answer.text, key) is not None:
+            if self.patcher.check(answer.text, key) is not None:
                 matching = self.on.message.inner[key]
 
                 # [Feature] Async Use
@@ -133,7 +133,7 @@ class EventProcessor(RegexHelper):
 
         for key in self.on.chat_message.inner:
             key: Pattern
-            if await self.patcher.check_async(answer.text, key) is not None:
+            if self.patcher.check(answer.text, key) is not None:
 
                 self._logger.debug(
                     '-> MESSAGE FROM CHAT {} TEXT "{}" TIME %#%'.format(
