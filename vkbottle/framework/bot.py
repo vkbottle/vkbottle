@@ -18,7 +18,6 @@ from .processor import EventProcessor
 from .branch import BranchManager
 from ..utils.tools import folder_checkup
 import traceback
-import typing
 
 
 DEFAULT_WAIT = 20
@@ -198,7 +197,9 @@ class Bot(HTTP, EventProcessor):
                 if update["type"] == EventTypes.MESSAGE_NEW:
 
                     # VK API v5.103
-                    client_info = obj["client_info"]
+                    client_info = obj.get("client_info")
+                    if not client_info:
+                        raise VKError("Change API version to 5.103 or later") from None
                     obj = obj["message"]
                     processor = dict(obj=obj, client_info=client_info)
 
