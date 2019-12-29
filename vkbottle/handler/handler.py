@@ -7,6 +7,7 @@ from ..const import __version__
 from inspect import iscoroutinefunction
 from ..api import HandlerError
 import json
+import re
 from vbml import Patcher, Pattern
 
 
@@ -169,7 +170,9 @@ class MessageHandler:
         if not isinstance(text, Pattern):
             prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
             pattern = self._patcher.pattern(
-                text, pattern=pattern or ("(?i)" if lower else "") + prefix + "{}$",
+                text,
+                pattern=(prefix + "{}$") if prefix else pattern,
+                flags=re.IGNORECASE if lower else None
             )
             self.inner[pattern] = dict(
                 call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
@@ -190,7 +193,12 @@ class MessageHandler:
         def decorator(func):
             if not isinstance(text, Pattern):
                 prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-                pattern = self._patcher.pattern(text, pattern=("(?i)" if lower else "") + prefix + "{}$")
+                print(prefix)
+                pattern = self._patcher.pattern(
+                    text,
+                    pattern=prefix + "{}$",
+                    flags=re.IGNORECASE if lower else None
+                )
                 self.inner[pattern] = dict(
                     call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
                 )
@@ -219,7 +227,9 @@ class MessageHandler:
             if not isinstance(text, Pattern):
                 prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
                 pattern = self._patcher.pattern(
-                    text, pattern=("(?i)" if lower else "") + prefix + "{}.*?",
+                    text,
+                    pattern=prefix + "{}$",
+                    flags=re.IGNORECASE if lower else None
                 )
                 self.inner[pattern] = dict(
                     call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
