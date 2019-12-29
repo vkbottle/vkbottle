@@ -1,10 +1,12 @@
-from vkbottle import Bot, Message, validators
+from vkbottle import Bot, Message
+from vkbottle.framework.bot import Vals
+from vbml import Patcher
 
 bot = Bot('token', 1, debug=True, plugin_folder='examplebot')
 
 
-class BottleValidators(validators.VBMLValidators):
-    async def startswith(self, value: str, start: str):
+class BottleValidators(Vals):
+    def startswith(self, value: str, start: str):
         if value.startswith(start):
             return value
 
@@ -14,5 +16,5 @@ class BottleValidators(validators.VBMLValidators):
 async def wrapper(ans: Message, name):
     await ans(f'{name}😎😎')
 
-bot.patcher(BottleValidators)
+bot.patcher.set_current(Patcher(validators=BottleValidators))
 bot.run_polling()

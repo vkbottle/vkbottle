@@ -1,11 +1,13 @@
-from vkbottle import Bot, Message, validators
+from vkbottle import Bot, Message
+from vkbottle.framework.bot import Vals
+from vbml import Patcher
 import re
 
 bot = Bot('token', 1, debug=True, plugin_folder='examplebot')
 
 
-class BottleValidators(validators.VBMLValidators):
-    async def nickname(self, value: str):
+class BottleValidators(Vals):
+    def nickname(self, value: str):
         if re.match(r'[a-z0-9_]{5,16}$', value):
             return value
         return False
@@ -21,5 +23,5 @@ async def wrapper(ans: Message, nickname):
                   'В нем должны быть только незаглавные символы латинского алфавита и цифры. '
                   'Длина ника - от 5 до 16 символов!')
 
-bot.patcher(BottleValidators)
+bot.patcher.set_current(Patcher(validators=BottleValidators))
 bot.run_polling()
