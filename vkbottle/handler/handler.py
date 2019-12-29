@@ -193,7 +193,6 @@ class MessageHandler:
         def decorator(func):
             if not isinstance(text, Pattern):
                 prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-                print(prefix)
                 pattern = self._patcher.pattern(
                     text,
                     pattern=prefix + "{}$",
