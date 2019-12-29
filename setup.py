@@ -1,7 +1,12 @@
 import setuptools
 
-with open('README.md', 'r') as f:
-    long_description = f.read()
+try:
+    with open('README.md', 'r', encoding="utf-8") as f:
+        long_description = f.read()
+except:
+    with open('README.md', 'r') as f:
+        long_description = f.read()
+
 
 setuptools.setup(
     name="vkbottle",

@@ -16,8 +16,25 @@ class DonutError(Exception):
 class Donuts:
     def __init__(self, bot: Bot):
         self.bot: Bot = bot
-    @staticmethod
-    def typing_state(close=False):
+
+    def in_loop(self, loop: int):
+        """
+        Make loops..
+        :param loop:
+        :return:
+        """
+        def decorator(func):
+            async def wrapper(*args, **kwargs):
+                print(args, kwargs)
+                for iteration in range(0, loop):
+                    self.bot.loop.create_task(
+                        func(*args, **kwargs)
+                    )
+                return
+            return wrapper
+        return decorator
+
+    def typing_state(self):
         """
         Set typing state during the function is performing
         :param close:
@@ -25,13 +42,8 @@ class Donuts:
         """
         def decorator(func):
             async def wrapper(*args, **kwargs):
-                args: typing.List[Message] = [
-                    ans for ans in args if type(ans) is Message
-                ]
-                if not len(args):
-                    raise DonutError("Function should contain Message argument")
 
-                await args[0].api[0].request(
+                await self.bot.api.request(
                     "messages",
                     "setActivity",
                     {"user_id": args[0].peer_id, "type": "typing"},
@@ -57,4 +69,23 @@ class Donuts:
             return wrapper
         return decorator
 
+    def mark_as_read(self):
+        """
+        Mark message as read
+        :return:
+        """
+        def decorator(func):
+            async def wrapper(*args, **kwargs):
 
+                await self.bot.api.request(
+                    "messages",
+                    "markAsRead",
+                    {
+                        "start_message_id": args[0].id,
+                        "peer_id": args[0].peer_id
+                    },
+                )
+
+                return await func(*args, **kwargs)
+            return wrapper
+        return decorator
