@@ -64,7 +64,7 @@ class Message(BaseModel):
     important: bool = None
     geo: Geo = None
     payload: str = None
-    keyboard = None
+    keyboard: typing.Union[str, dict] = None
     action: MessageAction = None
     fwd_messages: typing.List["Message"] = []
     reply_message: "Message" = None
@@ -111,7 +111,7 @@ class Message(BaseModel):
                 )
             )
         return m
-    
+
     @property
     def date_time(self) -> datetime:
         return datetime.fromtimestamp(self.date)
