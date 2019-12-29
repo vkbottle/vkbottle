@@ -5,6 +5,7 @@ from .attachments import Attachment
 from .attachments import Geo
 from .base import BaseModel
 import random
+from datetime import datetime
 
 
 # https://vk.com/dev/objects/message
@@ -57,10 +58,13 @@ class Message(BaseModel):
     from_id: int = None
     text: str = None
     random_id: int = None
+    ref: str = None
+    ref_source: str = None
     attachments: typing.List[Attachment] = None
     important: bool = None
     geo: Geo = None
     payload: str = None
+    keyboard = None
     action: MessageAction = None
     fwd_messages: typing.List["Message"] = []
     reply_message: "Message" = None
@@ -107,6 +111,10 @@ class Message(BaseModel):
                 )
             )
         return m
+    
+    @property
+    def date_time(self) -> datetime:
+        return datetime.fromtimestamp(self.date)
 
 
 Message.update_forward_refs()
