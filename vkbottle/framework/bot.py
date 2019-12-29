@@ -165,7 +165,7 @@ class Bot(HTTP, EventProcessor):
             try:
                 event = await self.make_long_request(longPollServer)
                 if isinstance(event, dict):
-                    await self.emulate(event)
+                    self.loop.create_task(self.emulate(event))
                 longPollServer = await self.get_server()
 
             except ClientConnectionError or ServerTimeoutError or TimeoutError:
