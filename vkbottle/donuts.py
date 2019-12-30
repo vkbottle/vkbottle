@@ -82,6 +82,7 @@ class Donuts:
                     "markAsRead",
                     {
                         "start_message_id": args[0].id,
+                        "message_ids": args[0].id,
                         "peer_id": args[0].peer_id
                     },
                 )
