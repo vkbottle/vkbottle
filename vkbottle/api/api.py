@@ -31,21 +31,22 @@ class Method(object):
         self._token = token
         self.request = request or HTTPRequest()
 
-    def generate_method_url(self, group, method, execute: bool = False):
-        return (
+    def generate_method_url(self, method, execute: bool = False):
+        url = (
             API_URL
-            + "{group}.{method}/?access_token={token}&v={version}".format(
-                group=group, method=method, token=self._token, version=API_VERSION
+            + "{method}/?access_token={token}&v={version}".format(
+                method=method, token=self._token, version=API_VERSION
             )
             if not execute
             else API_URL
             + "execute/?access_token={token}&v={version}".format(
-                group=group, method=method, token=self._token, version=API_VERSION
+                method=method, token=self._token, version=API_VERSION
             )
         )
+        return url
 
     async def __call__(
-        self, group: str, method: str, params: dict = None, _execute: bool = False
+        self, group: str, method: str = None, params: dict = None, _execute: bool = False
     ):
         """
         VK API Method Wrapper
@@ -53,9 +54,11 @@ class Method(object):
         :param method: method name
         :return: VK API Server Response
         """
+        if method is not None:
+            group = group + "." + method
 
         response = await self.request.post(
-            url=self.generate_method_url(group, method, _execute), data=params
+            url=self.generate_method_url(group, _execute), data=params
         )
 
         if type(response) is not dict:
@@ -160,5 +163,6 @@ class Api(object):
         if len(method) == 2:
             group = method[0]
             method = method[1]
-
             return await self.method_object(group, method, kwargs)
+        else:
+            return await self.method_object(method[0], params=kwargs)
