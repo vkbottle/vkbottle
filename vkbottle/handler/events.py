@@ -1,6 +1,7 @@
 from ..types.events.community.events_objects import *
 from ..types.events.community.events_list import EventList
 from ..types.message import Message
+from ..types.vkpay import VKPayTransaction, AppPayload
 from ..types.attachments.photo import Photo
 from ..types.attachments.audio import Audio
 from ..types.attachments.video import Video
@@ -13,6 +14,13 @@ class Event(object):
     def message_reply(self):
         def decorator(func):
             self.events[EventList.MESSAGE_REPLY] = {"call": func, "data": Message}
+            return func
+
+        return decorator
+
+    def message_edit(self):
+        def decorator(func):
+            self.events[EventList.MESSAGE_EDIT] = {"call": func, "data": Message}
             return func
 
         return decorator
@@ -330,6 +338,26 @@ class Event(object):
             self.events[EventList.GROUP_CHANGE_PHOTO] = {
                 "call": func,
                 "data": GroupLeave,
+            }
+            return func
+
+        return decorator
+
+    def vkpay_transaction(self):
+        def decorator(func):
+            self.events[EventList.VKPAY_TRANSACTION] = {
+                "call": func,
+                "data": VKPayTransaction,
+            }
+            return func
+
+        return decorator
+
+    def app_payload(self):
+        def decorator(func):
+            self.events[EventList.APP_PAYLOAD] = {
+                "call": func,
+                "data": AppPayload,
             }
             return func
 

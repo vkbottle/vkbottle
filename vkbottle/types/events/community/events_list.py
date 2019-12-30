@@ -4,6 +4,7 @@ from enum import Enum
 class EventList(str, Enum):
     MESSAGE_NEW = "message_new"
     MESSAGE_REPLY = "message_reply"
+    MESSAGE_EDIT = "message_edit"
     MESSAGE_ALLOW = "message_allow"
     MESSAGE_DENY = "message_deny"
     MESSAGE_TYPING_STATE = "message_typing_state"
@@ -48,3 +49,6 @@ class EventList(str, Enum):
     GROUP_OFFICERS_EDIT = "group_officers_edit"
     GROUP_CHANGE_SETTINGS = "group_change_settings"
     GROUP_CHANGE_PHOTO = "group_change_photo"
+
+    VKPAY_TRANSACTION = "vkpay_transaction"
+    APP_PAYLOAD = "app_payload"
