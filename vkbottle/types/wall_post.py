@@ -1,5 +1,5 @@
 from .base import BaseModel
-from .attachments import Like, Repost, Attachments, Geo
+from .attachments import Like, Repost, Geo, Attachment
 
 from .additional import PostSource
 import typing
@@ -28,7 +28,7 @@ class WallPost(BaseModel):
     reposts: Repost = None
     post_type: str = None
     post_source: PostSource = None
-    attachments: Attachments = None
+    attachments: typing.List[Attachment] = None
     geo: Geo = None
     signer_id: int = None
     copy_history: typing.Any = None
