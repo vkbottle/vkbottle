@@ -10,6 +10,7 @@ from .branch import Branch, ExitBranch
 from vbml import Pattern, Patcher
 import typing
 import json
+from ._status import BotStatus
 
 
 def get_attr(adict: dict, attrs: typing.List[str]):
@@ -32,6 +33,7 @@ class EventProcessor(RegexHelper):
     on: Handler
     patcher: Patcher
     branch: BranchManager
+    status: BotStatus
     group_id: int
     _logger: Logger
     __loop: AbstractEventLoop
@@ -260,7 +262,8 @@ class EventProcessor(RegexHelper):
                 self.branch.exit(obj["peer_id"])
         elif return_type in [str, int, dict, list, tuple, float]:
             await Message(**obj, api=[self.api], client_info=client_info)(
-                str(handler_return)
+                str(handler_return),
+                **self.status.handler_return_context
             )
         elif handler_return is not None:
             raise HandlerReturnError(

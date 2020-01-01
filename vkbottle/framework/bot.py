@@ -18,6 +18,7 @@ from .processor import EventProcessor
 from .branch import BranchManager
 from ..utils.tools import folder_checkup
 import traceback
+from ._status import BotStatus
 
 
 DEFAULT_WAIT = 20
@@ -25,15 +26,6 @@ DEFAULT_WAIT = 20
 
 class Vals(PatchedValidators):
     pass
-
-
-class BotStatus:
-    polling_started: bool = False
-    dispatched: bool = False
-
-    @property
-    def readable(self) -> dict:
-        return {"polling_started": self.polling_started, "dispatched": self.dispatched}
 
 
 class Bot(HTTP, EventProcessor):
@@ -104,7 +96,6 @@ class Bot(HTTP, EventProcessor):
         bot.branch = self.branch
         bot.error_handler = self.error_handler
         return bot
-
 
     @property
     def status(self) -> BotStatus:
