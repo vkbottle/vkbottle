@@ -37,7 +37,8 @@ class Bot(HTTP, EventProcessor):
         plugin_folder: str = None,
         log_to_file: bool = False,
         log_to: str = None,
-        vbml_patcher: Patcher = None
+        vbml_patcher: Patcher = None,
+        secret: str = None
     ):
         self.__token: str = token
         self.__group_id: int = group_id
@@ -46,6 +47,7 @@ class Bot(HTTP, EventProcessor):
         self.__wait = None
         self.__logger_opt = (plugin_folder, log_to_file, log_to)
         self.__vbml_patcher = vbml_patcher
+        self.__secret = secret
         self.described_handler = DescribedHandler()
         self._status: BotStatus = BotStatus()
 
@@ -66,6 +68,10 @@ class Bot(HTTP, EventProcessor):
     @property
     def group_id(self):
         return self.__group_id
+    
+    def _check_secret(self, secret: str):
+        if self.__secret:
+            return secret == self.__secret
 
     def set_debug(self, debug: bool, **params):
         self.__debug = debug
@@ -180,6 +186,9 @@ class Bot(HTTP, EventProcessor):
                 return confirmation_token or "dissatisfied"
 
         updates = event.get("updates", [event])
+        if "secret" in event:
+            if not self._check_secret(event["secret"]):
+                return "access denied"
 
         try:
             for update in updates:
