@@ -181,7 +181,7 @@ class Bot(HTTP, EventProcessor):
             await self.on.dispatch(self.get_current_rest)
             self.status.dispatched = True
 
-        if event.get("type"):
+        if event.get("type") == "confirmation":
             if event.get("group_id") == self.group_id:
                 return confirmation_token or "dissatisfied"
 
