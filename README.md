@@ -7,8 +7,13 @@
 <hr>
 
 ### Установка
+1) С помощью установщика pip из PyPi:
 
-1) С помощью установщика pip из GitHub:
+   ```sh
+   pip install vkbottle
+   ```
+
+2) С помощью установщика pip из GitHub: 
    
    ```sh
    pip install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
