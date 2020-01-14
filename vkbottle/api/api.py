@@ -74,7 +74,7 @@ Sent params: {params}""",
 
             await asyncio.sleep(5 * self.__delay)
             self.__delay += 1
-            return await self(group, method, params, _execute)
+            return await self(group, params=params, _execute=_execute)
 
         if "error" in response:
             raise VKError(
