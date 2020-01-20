@@ -110,6 +110,6 @@ class Logger(object):
             print(self.__coloring(" ".join([str(i) for i in some]), "red"))
 
 
-def keyboard_interrupt() -> typing.NoReturn:
+def keyboard_interrupt() -> None:
     print(Coloring("VKBottle")("Keyboard Interrupt", color="yellow"))
     exit(0)
