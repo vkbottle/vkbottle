@@ -20,14 +20,6 @@ def get_attr(adict: dict, attrs: typing.List[str]):
             return adict[attr]
 
 
-def redump_payload(payload: typing.Optional[str]) -> typing.Union[str, dict]:
-    try:
-        if payload:
-            return json.loads(payload)
-    except json.decoder.JSONDecodeError:
-        return dict()
-
-
 class EventProcessor(RegexHelper):
     api: Api
     on: Handler
@@ -44,64 +36,41 @@ class EventProcessor(RegexHelper):
         :param obj: VK API Event Object
         """
 
-        answer = Message(**obj, api=[self.api], client_info=client_info)
+        message = Message(**obj, api=[self.api], client_info=client_info)
 
         if self.on.pre:
-            await (self.on.pre(answer))
+            await (self.on.pre(message))
 
         self._logger.debug(
             '-> MESSAGE FROM {} TEXT "{}" TIME %#%'.format(
-                answer.from_id, answer.text.replace("\n", " ")
+                message.from_id, message.text.replace("\n", " ")
             )
         )
-        found: bool = False
 
-        # Payload alpha2
-        redump = redump_payload(answer.payload)
-        for pc in self.on.message.payload.inner:
-            if pc(redump):
-                matching = self.on.message.payload.inner[pc]
-                task = await matching["call"](
-                    *([answer] if not matching["ignore_ans"] else []))
+        for rule in self.on.message.rules:
+            if rule.check(message):
+                rule.context.args.extend([message] if rule.data.get("ignore_ans") is False else [])
+                args = rule.context.args
+                kwargs = rule.context.kwargs
 
-                self._logger.debug(
-                    "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        matching["call"].__name__, answer.from_id
-                    )
-                )
-                return task
-
-        for key in self.on.message.inner:
-            key: Pattern
-            if self.patcher.check(answer.text, key) is not None:
-                matching = self.on.message.inner[key]
-
-                # [Feature] Async Use
-                # Added v0.19#master
-
-                task = await matching["call"](
-                    *([answer] if not matching["ignore_ans"] else []), **key.dict()
-                )
+                task = await rule.call(*args, **kwargs)
 
                 self._logger.debug(
                     "New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        matching["call"].__name__, answer.from_id
-                    )
-                )
-                found = True
+                        rule.call.__name__, message.from_id
+                    ))
+
                 return task
 
-        if not found:
-            if self.on.undefined_func:
-                task = await (self.on.undefined_func(answer))
-                self._logger.debug(
-                    "New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
-                        answer.from_id
-                    )
-                )
-                return task
-            else:
-                self._logger.info("Add on-undefined message handler!")
+        if self.on.undefined_func:
+            task = await (self.on.undefined_func(message))
+            self._logger.debug(
+                "New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
+                    message.from_id
+                ))
+            return task
+        else:
+            self._logger.info("Add on-undefined message handler to persue group online!")
 
     async def _chat_message_processor(self, obj: dict, client_info: dict):
         """
@@ -109,83 +78,34 @@ class EventProcessor(RegexHelper):
         :param obj: VK API Event Object
         """
 
-        answer = Message(
+        message = Message(
             **{**obj, "text": self.init_bot_mention(obj["text"])},
             api=[self.api],
             client_info=client_info
         )
 
         if self.on.pre:
-            ensure_future(self.on.pre(answer))
+            await (self.on.pre(message))
 
-        # Payload alpha2
-        redump = redump_payload(answer.payload)
-        for pc in self.on.chat_message.payload.inner:
-            if pc(redump):
-                matching = self.on.chat_message.payload.inner[pc]
-                task = await matching["call"](
-                    *([answer] if not matching["ignore_ans"] else []))
-
-                self._logger.debug(
-                    "New message compiled with PAYLOAD decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        matching["call"].__name__, answer.from_id
-                    )
-                )
-                return task
-
-        for key in self.on.chat_message.inner:
-            key: Pattern
-            if self.patcher.check(answer.text, key) is not None:
+        for rule in self.on.message.rules:
+            if rule.check(message):
 
                 self._logger.debug(
                     '-> MESSAGE FROM CHAT {} TEXT "{}" TIME %#%'.format(
-                        answer.peer_id, answer.text.replace("\n", " ")
-                    )
-                )
+                        message.peer_id, message.text.replace("\n", " ")
+                    ))
 
-                matching = self.on.chat_message.inner[key]
+                args = rule.context.args.extend([message] if rule.data.get("ignore_ans") is False else [])
+                kwargs = rule.context.kwargs
 
-                # [Feature] Async Use
-                # Added v0.19#master
-                task = await matching["call"](
-                    *([answer] if not matching["ignore_ans"] else []), **key.dict()
-                )
+                task = await rule.call(*args, **kwargs)
 
                 self._logger.debug(
                     "New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        matching["call"].__name__, answer.from_id
-                    )
-                )
+                        rule.call.__name__, message.from_id
+                    ))
+
                 return task
-
-    async def _chat_action_processor(self, obj: dict, client_info: dict):
-        """
-        Chat Action Processor
-        :param obj:
-        :return: VK Server Event Object
-        """
-
-        action = obj["action"]
-
-        self._logger.debug(
-            '-> ACTION FROM CHAT {} TYPE "{}" TIME %#%'.format(
-                get_attr(obj, ["peer_id", "from_id"]), action["type"]
-            )
-        )
-
-        for key in self.on.chat_action_types:
-            rules = {**action, **key["rules"]}
-            if action["type"] == key["name"] and rules == action:
-                answer = Message(**obj, api=[self.api], client_info=client_info)
-
-                await key["call"](answer)
-
-                self._logger.debug(
-                    "New action compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        key["call"].__name__, answer.from_id,
-                    )
-                )
-                break
 
     async def _event_processor(self, obj: dict, event_type: str):
         """
@@ -200,18 +120,17 @@ class EventProcessor(RegexHelper):
             )
         )
 
-        if event_type in self.on.event.events:
-            event_processor = self.on.event.events[event_type]
-            data = event_processor["data"](**obj, api=[self.api])
+        for rule in self.on.event.rules:
+            if rule.check(event_type):
+                event = rule.data["data"](**obj, api=[self.api])
+                await rule.call(event, *rule.context.args, **rule.context.kwargs)
 
-            await event_processor["call"](data)
-
-            self._logger.debug(
-                "New event compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                    event_processor["call"].__name__, "*"
+                self._logger.debug(
+                    "New event compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
+                        rule.call.__name__, "*"
+                    )
                 )
-            )
-            return True
+                return True
 
     async def _branched_processor(self, obj: dict, client_info: dict):
         """

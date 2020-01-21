@@ -1,19 +1,20 @@
 from .events import Event
 from ..utils import dict_of_dicts_merge, Logger
 from inspect import signature
-from typing import Callable, Optional, Dict, Union
 import typing
 from ..const import __version__
 from inspect import iscoroutinefunction
 from ..api import HandlerError
-import json
 import re
+
+
+from ..framework.rule import AbstractRule, VBMLRule, ChatActionRule, PayloadRule
 from vbml import Patcher, Pattern
 
 
-def should_ignore_ans(func: Callable, arguments: list) -> bool:
+def should_ignore_ans(func: typing.Callable, arguments: list) -> bool:
     if not iscoroutinefunction(func):
-        raise HandlerError("Handling function must be async")
+        raise HandlerError("Handling functions must be async")
     return len([a for a in signature(func).parameters if a not in arguments]) < 1
 
 
@@ -26,11 +27,10 @@ class Handler(object):
         self.chat_message: MessageHandler = MessageHandler()
         self.message_both: MessageHandler = MessageHandler()
         self.event: Event = Event()
-        self._pre_p: Optional[Callable] = None
 
+        self._pre_p: typing.Optional[typing.Callable] = None
         self.__undefined_message_func = None
         self.__chat_action_types: list = list()
-
         self._patcher = Patcher.get_current()
 
         if not hasattr(Pattern, "context_copy"):
@@ -38,21 +38,13 @@ class Handler(object):
                                "\tpip install https://github.com/timoniq/vbml/archive/master.zip --upgrade\n"
                                "\ttnx <3")
 
-    async def dispatch(self, get_current_rest: Callable = None) -> None:
+    async def dispatch(self, get_current_rest: typing.Callable = None) -> None:
 
-        self.message.inner = dict_of_dicts_merge(
-            self.message.inner, self.message_both.inner
-        )
-        self.chat_message.inner = dict_of_dicts_merge(
-            self.chat_message.inner, self.message_both.inner
-        )
+        self.message.rules = self.message.rules + self.message_both.rules
+        self.chat_message.rules = self.chat_message.rules + self.message_both.rules
 
-        self.message.payload.inner = dict_of_dicts_merge(
-            self.message.payload.inner, self.message_both.payload.inner
-        )
-        self.chat_message.payload.inner = dict_of_dicts_merge(
-            self.chat_message.payload.inner, self.message_both.payload.inner
-        )
+        self.message.payload.rules = self.message.payload.rules + self.message_both.payload.rules
+        self.chat_message.payload.rules = self.chat_message.payload.rules + self.message_both.payload.rules
 
         if get_current_rest:
 
@@ -71,7 +63,11 @@ class Handler(object):
         self.chat_message.prefix = prefix
         self.message_both.prefix = prefix
 
-    def chat_action(self, type_: str, rules: dict = None):
+    def chat_action(
+            self,
+            type_: typing.Union[str, typing.List[str]],
+            rules: dict = None
+    ):
         """
         Special express processor of chat actions (https://vk.com/dev/objects/message - action object)
         :param type_: action name
@@ -79,9 +75,9 @@ class Handler(object):
         """
 
         def decorator(func):
-            self.__chat_action_types.append(
-                {"name": type_, "call": func, "rules": rules or {}}
-            )
+            rule = ChatActionRule(type_, rules=rules)
+            rule.create(func)
+            self.chat_message.rules.append(rule)
             return func
 
         return decorator
@@ -103,22 +99,19 @@ class Handler(object):
                 pattern="", _pattern=r"\[(club|public){}\|.*?]".format(self.__group_id)
             )
             ignore_ans = len(signature(func).parameters) < 1
-            self.chat_message.inner[pattern] = dict(
-                call=func, validators={}, ignore_ans=ignore_ans
-            )
+
+            rule = VBMLRule(pattern)
+            rule.create(func, {"ignore_ans": ignore_ans})
+            self.chat_message.rules.append(rule)
             return func
 
         return decorator
 
     def chat_invite(self):
         def decorator(func):
-            self.__chat_action_types.append(
-                {
-                    "name": "chat_invite_user",
-                    "call": func,
-                    "rules": {"member_id": -self.__group_id},
-                }
-            )
+            rule = ChatActionRule("chat_invite_user", {"member_id": -self.__group_id})
+            rule.create(func)
+            self.chat_message.rules.append(rule)
             return func
 
         return decorator
@@ -135,7 +128,7 @@ class Handler(object):
     def pre(self):
         return self._pre_p
 
-    def any_pre_process(self):
+    def pre_process(self):
         def decorator(func):
             self._pre_p = func
             return func
@@ -145,18 +138,19 @@ class Handler(object):
 
 class MessageHandler:
     def __init__(self):
-        self.inner: Dict[Pattern, Dict[dict]] = dict()
-        self.payload = PayloadHandler()
+        self.payload: PayloadHandler = PayloadHandler()
+        self.rules: typing.List[AbstractRule] = list()
         self.prefix: list = ["/", "!"]
         self._patcher = Patcher.get_current()
 
     def add_handler(
         self,
-        text: typing.Union[str, Pattern],
-        func: Callable,
-        command: bool = False,
+        func: typing.Callable,
+        text: typing.Union[str, Pattern] = None,
         lower: bool = False,
+        command: bool = False,
         pattern: str = None,
+        *rules
     ):
         """
         Add handler to disself._patcher without decorators
@@ -167,22 +161,44 @@ class MessageHandler:
         :param pattern: any regex pattern pattern. {} means text which will be formatted
         :return: True
         """
-        if not isinstance(text, Pattern):
-            prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-            pattern = self._patcher.pattern(
-                text,
-                pattern=(prefix + "{}$") if prefix else pattern,
-                flags=re.IGNORECASE if lower else None
-            )
-            self.inner[pattern] = dict(
-                call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
-            )
-        else:
-            self.inner[self._patcher.pattern(text)] = dict(
-                call=func, ignore_ans=should_ignore_ans(func, text.arguments)
-            )
+        if text:
+            if not isinstance(text, Pattern):
+                prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
+                pattern = self._patcher.pattern(
+                    text,
+                    pattern=(prefix + "{}$") if prefix else pattern,
+                    flags=re.IGNORECASE if lower else None
+                )
+                rule = VBMLRule(pattern)
+                rule.create(func)
+                rule.data["ignore_ans"] = should_ignore_ans(func, pattern.arguments)
+                self.rules.append(rule)
+            else:
+                rule = VBMLRule(self._patcher.pattern(text))
+                rule.create(func)
+                rule.data["ignore_ans"] = should_ignore_ans(func, text.arguments)
+                self.rules.append(rule)
 
-    def __call__(self, text: typing.Union[str, Pattern], command: bool = False, lower: bool = False):
+        for rule in rules:
+            rule.create(func)
+            self.rules.append(rule)
+
+    def rule(self, *rules):
+        def decorator(func):
+            for rule in rules:
+                rule = rule.create(func)
+                self.rules.append(rule)
+            return func
+
+        return decorator
+
+    def __call__(
+            self,
+            text: typing.Union[str, Pattern] = None,
+            command: bool = False,
+            lower: bool = False,
+            *rules
+    ):
         """
         Simple on.message(text) decorator. Support regex keys in text
         :param text: text (match case)
@@ -191,21 +207,27 @@ class MessageHandler:
         """
 
         def decorator(func):
-            if not isinstance(text, Pattern):
-                prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-                pattern = self._patcher.pattern(
-                    text,
-                    pattern=prefix + "{}$",
-                    flags=re.IGNORECASE if lower else None
-                )
-                self.inner[pattern] = dict(
-                    call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
-                )
-            else:
-                self.inner[self._patcher.pattern(text)] = dict(
-                    call=func,
-                    ignore_ans=should_ignore_ans(func, text.arguments)
-                )
+            if text:
+                if not isinstance(text, Pattern):
+                    prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
+                    pattern = self._patcher.pattern(
+                        text,
+                        pattern=prefix + "{}$",
+                        flags=re.IGNORECASE if lower else None
+                    )
+                    rule = VBMLRule(pattern)
+                    rule.create(func)
+                    rule.data["ignore_ans"] = should_ignore_ans(func, pattern.arguments)
+                    self.rules.append(rule)
+                else:
+                    rule = VBMLRule(self._patcher.pattern(text))
+                    rule.create(func)
+                    rule.data["ignore_ans"] = should_ignore_ans(func, text.arguments)
+                    self.rules.append(rule)
+
+            for rule in rules:
+                rule.create(func)
+                self.rules.append(rule)
             return func
 
         return decorator
@@ -227,17 +249,19 @@ class MessageHandler:
                 prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
                 pattern = self._patcher.pattern(
                     text,
-                    pattern=prefix + "{}$",
+                    pattern=prefix + "{}",
                     flags=re.IGNORECASE if lower else None
                 )
-                self.inner[pattern] = dict(
-                    call=func, ignore_ans=should_ignore_ans(func, pattern.arguments)
-                )
+                rule = VBMLRule(pattern)
+                rule.create(func)
+                rule.data["ignore_ans"] = should_ignore_ans(func, pattern.arguments)
+                self.rules.append(rule)
             else:
-                self.inner[self._patcher.pattern(text)] = dict(
-                    call=func,
-                    ignore_ans=should_ignore_ans(func, text.arguments)
-                )
+                rule = VBMLRule(self._patcher.pattern(self._patcher.pattern(text)))
+                rule.create(func)
+                rule.data["ignore_ans"] = should_ignore_ans(func, text.arguments)
+                self.rules.append(rule)
+
             return func
 
         return decorator
@@ -249,42 +273,26 @@ class MessageHandler:
         """
 
         def decorator(func):
-            self.inner[self._patcher.pattern("", pattern=pattern)] = dict(
-                call=func, ignore_ans=should_ignore_ans(func, [])
-            )
+            rule = VBMLRule(self._patcher.pattern("", pattern=pattern))
+            rule.create(func)
+            rule.data["ignore_ans"] = False
+            self.rules.append(rule)
             return func
 
         return decorator
 
 
-class Payload:
-    def __init__(self, payload: dict, mode=1):
-        self.payload = payload
-        self.mode = mode
-
-    def __call__(self, check: dict):
-        if check is None:
-            return
-        if self.mode == 1:
-            # EQUAL
-            if check == self.payload:
-                return True
-        elif self.mode == 2:
-            # CONTAINS
-            if {**check, **self.payload} == check:
-                return True
-
-
 class PayloadHandler:
     def __init__(self):
-        self.inner: Dict[Payload] = dict()
+        self.rules: typing.List[AbstractRule] = list()
 
     def __call__(self, payload: dict):
         def decorator(func):
 
-            self.inner[Payload(payload)] = dict(
-                call=func, ignore_ans=should_ignore_ans(func, [])
-            )
+            rule = PayloadRule(payload, mode=1)
+            rule.create(func)
+            rule.data["ignore_ans"] = False
+            self.rules.append(rule)
 
             return func
         return decorator
@@ -292,37 +300,11 @@ class PayloadHandler:
     def contains(self, payload: dict):
         def decorator(func):
 
-            self.inner[Payload(payload, 2)] = dict(
-                call=func, ignore_ans=should_ignore_ans(func, [])
-            )
+            rule = PayloadRule(payload, mode=2)
+            rule.create(func)
+            rule.data["ignore_ans"] = False
+            self.rules.append(rule)
 
             return func
 
         return decorator
-
-
-class DescribedHandler:
-    described_handlers_by_func: Dict[Callable, Dict] = {}
-    described_handlers_by_name: Dict[Callable, Dict] = {}
-
-    def __init__(self):
-        pass
-
-    def __call__(self, name: str = None, description: str = None):
-        def decorator(func):
-
-            self.described_handlers_by_func[func] = dict(
-                name=name or "", description=description or ""
-            )
-            if name:
-                self.described_handlers_by_name[name] = dict(
-                    name=name or "", description=description or ""
-                )
-            return func
-
-        return decorator
-
-    def get(self, name: Union[Callable, str], default=None):
-        if isinstance(name, Callable):
-            return self.described_handlers_by_func.get(name, default)
-        return self.described_handlers_by_name.get(name, default)

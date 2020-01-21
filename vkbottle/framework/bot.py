@@ -6,7 +6,7 @@ except ImportError:
     print("Please install vbml to use VKBottle. Use command: {}".format(VBML_INSTALL))
 
 from ..api import Api
-from ..handler import Handler, ErrorHandler, DescribedHandler
+from ..handler import Handler, ErrorHandler
 from ..utils.logger import Logger, keyboard_interrupt
 from ..http import HTTP
 from ..api import VKError
@@ -48,7 +48,6 @@ class Bot(HTTP, EventProcessor):
         self.__logger_opt = (plugin_folder, log_to_file, log_to)
         self.__vbml_patcher = vbml_patcher
         self.__secret = secret
-        self.described_handler = DescribedHandler()
         self._status: BotStatus = BotStatus()
 
         self.__api: Api = Api(loop=self.__loop, token=token, group_id=group_id)
@@ -209,13 +208,10 @@ class Bot(HTTP, EventProcessor):
                         else:
                             task = await self._branched_processor(**processor)
                     else:
-                        if "action" not in obj:
-                            if obj["peer_id"] not in self.branch.queue:
-                                task = await self._chat_message_processor(**processor)
-                            else:
-                                task = await self._branched_processor(**processor)
+                        if obj["peer_id"] not in self.branch.queue:
+                            task = await self._chat_message_processor(**processor)
                         else:
-                            task = await self._chat_action_processor(**processor)
+                            task = await self._branched_processor(**processor)
 
                     await self._handler_return(task, **processor)
 
