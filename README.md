@@ -50,25 +50,23 @@ bot.run_polling()
 
 ```python
 from vkbottle import Bot, Message
-from your_framework import request
-# app = Framework()
-
-bot = Bot('my-token', 123, debug=True)
-confirmation = 'MyConfirmationCode'
+from aiohttp.web import RouteTableDef, Application, Request, run_app
 
 
-@app.route('/bot')
-async def route():
-    # Если вы используете НЕ асинхронный фреймворк
-    bot.process(event=request.args(), confirmation_token=confirmation)
-    # В наилучшем случае с асинхронным фреймворком
-    asyncio.create_task(bot.emulate(event=request.args(), confirmation_token=confirmation))
-    return 'ok'
+app = Application()
+routes = RouteTableDef()
+bot = Bot('my-token', 123, debug=True, secret="SecretKey")
 
+@routes.get('/bot')
+async def executor(request: Request):
+    return await bot.emulate(event=dict(request.query), confirmation_token="ConfirmationToken")
 
-@bot.on.message('My name is <name>', lower=True)
-async def wrapper(ans: Message, name):
-    await ans('Hello, {}'.format(name))
+@bot.on.message('test', lower=True)
+async def wrapper():
+    return "test"
+
+app.add_routes(routes)
+run_app(app)
 ```
 
 Больше примеров в папке [/examples](./examples)
