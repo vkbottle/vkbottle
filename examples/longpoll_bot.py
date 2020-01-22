@@ -1,6 +1,6 @@
 from vkbottle import Bot, Message, keyboard_gen, types
 
-bot = Bot(token='token', group_id=1, debug=True)
+bot = Bot(token="token", group_id=1, debug=True)
 
 """Bot functions
 When bot receive message «hi» in private chat it answers «hi, my lil friend« and sends a keyboard
@@ -9,21 +9,23 @@ If bot can't do it and VKError with codes 901 or 902 appeared, bot uses logger t
 """
 
 
-@bot.on.message('hi')
+@bot.on.message("hi")
 async def wrapper(ans: Message):
-    keyboard = [[{'text': 'fantastic button'}]]
-    await ans('hi, my lil friend', keyboard=keyboard_gen(keyboard))
+    keyboard = [[{"text": "fantastic button"}]]
+    await ans("hi, my lil friend", keyboard=keyboard_gen(keyboard))
 
 
 @bot.on.event.group_join()
 async def wrapper(event: types.GroupJoin):
-    await bot.api.messages.send(peer_id=event.user_id, random_id=100, message='Welcome to the group!')
+    await bot.api.messages.send(
+        peer_id=event.user_id, random_id=100, message="Welcome to the group!"
+    )
 
 
 @bot.error_handler(901, 902)
 async def error(error: list):
-    print('Cant send message to this user :(, error code:', error[0])
+    print("Cant send message to this user :(, error code:", error[0])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     bot.run_polling()

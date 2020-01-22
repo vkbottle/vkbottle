@@ -25,10 +25,19 @@ def keyboard_gen(
                     action=dict(
                         type=button.get("type", "text"),
                         label=button.get("text", button.get("label")),
-                        **{k: v for k, v in button.items() if k not in ["type", "text", "label", "color"]}
+                        **{
+                            k: v
+                            for k, v in button.items()
+                            if k not in ["type", "text", "label", "color"]
+                        }
                     ),
-                    **({"color": button.get("color", "default")} if button.get("type", "text") == "text" else {})
-                ))
+                    **(
+                        {"color": button.get("color", "default")}
+                        if button.get("type", "text") == "text"
+                        else {}
+                    )
+                )
+            )
         buttons.append(row_buttons)
 
     keyboard = str(

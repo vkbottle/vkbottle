@@ -29,6 +29,8 @@ class Vals(PatchedValidators):
 
 
 class Bot(HTTP, EventProcessor):
+    longPollServer: dict
+
     def __init__(
         self,
         token: str,
@@ -38,7 +40,7 @@ class Bot(HTTP, EventProcessor):
         log_to_file: bool = False,
         log_to: str = None,
         vbml_patcher: Patcher = None,
-        secret: str = None
+        secret: str = None,
     ):
         self.__token: str = token
         self.__group_id: int = group_id
@@ -67,7 +69,7 @@ class Bot(HTTP, EventProcessor):
     @property
     def group_id(self):
         return self.__group_id
-    
+
     def _check_secret(self, secret: str):
         if self.__secret:
             return secret == self.__secret
@@ -77,7 +79,11 @@ class Bot(HTTP, EventProcessor):
         self._logger: Logger = Logger(
             debug,
             **params,
-            **{k: v for k, v in self._logger.logger_params.items() if k not in {**params, "debug": None}}
+            **{
+                k: v
+                for k, v in self._logger.logger_params.items()
+                if k not in {**params, "debug": None}
+            }
         )
 
     def loop_update(self, loop: AbstractEventLoop = None):
@@ -123,7 +129,10 @@ class Bot(HTTP, EventProcessor):
         Get an longPoll server for long request create
         :return: LongPoll Server
         """
-        return await self.api.groups.getLongPollServer(group_id=self.group_id)
+        self.longPollServer = await self.api.groups.getLongPollServer(
+            group_id=self.group_id
+        )
+        return self.longPollServer
 
     async def make_long_request(self, longPollServer: dict) -> dict:
         """
@@ -154,15 +163,15 @@ class Bot(HTTP, EventProcessor):
         self.__wait = wait
         self._logger.info("Polling will be started. Is it OK?")
 
-        longPollServer = await self.get_server()
+        await self.get_server()
         self._logger.debug("Polling successfully started")
 
         while True:
             try:
-                event = await self.make_long_request(longPollServer)
+                event = await self.make_long_request(self.longPollServer)
                 if isinstance(event, dict):
                     self.loop.create_task(self.emulate(event))
-                longPollServer = await self.get_server()
+                await self.get_server()
 
             except ClientConnectionError or ServerTimeoutError or TimeoutError:
                 # No internet connection

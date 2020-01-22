@@ -46,7 +46,11 @@ class Method(object):
         return url
 
     async def __call__(
-        self, group: str, method: str = None, params: dict = None, _execute: bool = False
+        self,
+        group: str,
+        method: str = None,
+        params: dict = None,
+        _execute: bool = False,
     ):
         """
         VK API Method Wrapper
@@ -152,7 +156,7 @@ class Api(object):
         :return: VK Server Response
         """
         if len(abandoned):
-            raise ValueError("Send args with KWARGS! bot.api.a.b(a=\"b\")")
+            raise ValueError('Send args with KWARGS! bot.api.a.b(a="b")')
 
         for k, v in enumerate(kwargs):
             if isinstance(v, (list, tuple)):

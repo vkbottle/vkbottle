@@ -5,18 +5,16 @@ class BotStatus:
 
     @property
     def readable(self) -> dict:
-        return {"polling_started": self.polling_started,
-                "dispatched": self.dispatched}
+        return {"polling_started": self.polling_started, "dispatched": self.dispatched}
 
     def change_handler_return_context(
-            self,
-            attachment: str = None,
-            keyboard: dict = None,
-            template: dict = None,
-            **params
+        self,
+        attachment: str = None,
+        keyboard: dict = None,
+        template: dict = None,
+        **params
     ):
         local = locals()
         local.pop("self")
-        self.handler_return_context = {k: v for k, v in local.items() if
-                                       v is not None}
+        self.handler_return_context = {k: v for k, v in local.items() if v is not None}
         return self.handler_return_context

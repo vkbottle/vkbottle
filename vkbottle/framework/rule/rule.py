@@ -5,12 +5,12 @@ import json
 
 
 class RuleExecute:
-    args = []
-    kwargs = {}
+    def __init__(self):
+        self.args = []
+        self.kwargs = {}
 
 
 class AbstractRule:
-
     def __init_subclass__(cls, **kwargs):
         cls.data: dict = {}
         cls.call: typing.Optional[typing.Callable] = None
@@ -46,7 +46,10 @@ class EventRule(AbstractRule):
 
 
 class VBMLRule(AbstractMessageRule):
-    def __init__(self, pattern: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]]):
+    def __init__(
+        self,
+        pattern: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
+    ):
         patterns: typing.List[Pattern] = []
         if isinstance(pattern, Pattern):
             patterns = [pattern]
@@ -71,22 +74,28 @@ class VBMLRule(AbstractMessageRule):
 
 
 class AttachmentRule(AbstractMessageRule):
-    def __init__(self, attachment: typing.Union[str, typing.List[str]]):
+    def __init__(self, attachment: typing.Union[str, typing.List[str]] = None):
         if isinstance(attachment, str):
             attachment = [attachment]
-        self.data["type"] = attachment
+        self.data["type"] = attachment or []
 
     def check(self, message: Message):
         attachments = [
-            list(attachment.dict(skip_defaults=True).keys())[0] for attachment in message.attachments
+            list(attachment.dict(skip_defaults=True).keys())[0]
+            for attachment in message.attachments
         ]
+        if len(attachments) and not len(self.data["type"]):
+            # ANY ATTACHMENTS
+            return True
         for attachment_type in self.data.get("type", []):
             if attachment_type in attachments:
                 return True
 
 
 class ChatActionRule(AbstractMessageRule):
-    def __init__(self, chat_action: typing.Union[str, typing.List[str]], rules: dict = None):
+    def __init__(
+        self, chat_action: typing.Union[str, typing.List[str]], rules: dict = None
+    ):
         if isinstance(chat_action, str):
             chat_action = [chat_action]
         self.data["chat_action"] = chat_action
@@ -97,13 +106,13 @@ class ChatActionRule(AbstractMessageRule):
             if message.action.type in self.data["chat_action"]:
                 if {
                     **message.action.dict(skip_defaults=True),
-                    **self.data["rules"]
+                    **self.data["rules"],
                 } == message.action.dict(skip_defaults=True):
                     return True
 
 
 class PayloadRule(AbstractMessageRule):
-    def __init__(self, payload: dict, mode = 1):
+    def __init__(self, payload: dict, mode=1):
         self.data["payload"] = payload
         self.data["mode"] = mode
 

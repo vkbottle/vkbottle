@@ -5,12 +5,12 @@ import json
 
 class TemplateElement:
     def __init__(
-            self,
-            title: str = None,
-            description: str = None,
-            photo_id: str = None,
-            buttons: typing.List[dict] = None,
-            action: dict = None
+        self,
+        title: str = None,
+        description: str = None,
+        photo_id: str = None,
+        buttons: typing.List[dict] = None,
+        action: dict = None,
     ):
         if not buttons:
             raise VKError("Buttons are required")
@@ -22,11 +22,10 @@ class TemplateElement:
 
         buttons = buttons.get("buttons")[0]
 
-        self.locals: typing.Dict = {k: v for k, v in locals().items() if v is not None and k != "self"}
+        self.locals: typing.Dict = {
+            k: v for k, v in locals().items() if v is not None and k != "self"
+        }
 
 
 def template_gen(*element: TemplateElement):
-    return json.dumps({
-        "type": "carousel",
-        "elements": [e.locals for e in element]
-    })
+    return json.dumps({"type": "carousel", "elements": [e.locals for e in element]})

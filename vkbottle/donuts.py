@@ -23,15 +23,16 @@ class Donuts:
         :param loop:
         :return:
         """
+
         def decorator(func):
             async def wrapper(*args, **kwargs):
                 print(args, kwargs)
                 for iteration in range(0, loop):
-                    self.bot.loop.create_task(
-                        func(*args, **kwargs)
-                    )
+                    self.bot.loop.create_task(func(*args, **kwargs))
                 return
+
             return wrapper
+
         return decorator
 
     def typing_state(self):
@@ -40,6 +41,7 @@ class Donuts:
         :param close:
         :return:
         """
+
         def decorator(func):
             async def wrapper(*args, **kwargs):
 
@@ -50,7 +52,9 @@ class Donuts:
                 )
 
                 return await func(*args, **kwargs)
+
             return wrapper
+
         return decorator
 
     def with_timeout(self, timeout: int):
@@ -62,11 +66,11 @@ class Donuts:
 
         def decorator(func):
             async def wrapper(*args, **kwargs):
-                self.bot.loop.create_task(
-                    with_timeout(timeout, func(*args, **kwargs))
-                )
+                self.bot.loop.create_task(with_timeout(timeout, func(*args, **kwargs)))
                 return
+
             return wrapper
+
         return decorator
 
     def mark_as_read(self):
@@ -74,6 +78,7 @@ class Donuts:
         Mark message as read
         :return:
         """
+
         def decorator(func):
             async def wrapper(*args, **kwargs):
 
@@ -83,10 +88,12 @@ class Donuts:
                     {
                         "start_message_id": args[0].id,
                         "message_ids": args[0].id,
-                        "peer_id": args[0].peer_id
+                        "peer_id": args[0].peer_id,
                     },
                 )
 
                 return await func(*args, **kwargs)
+
             return wrapper
+
         return decorator

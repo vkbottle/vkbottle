@@ -47,18 +47,20 @@ class EventProcessor(RegexHelper):
             )
         )
 
-        for rule in self.on.message.rules:
-            if rule.check(message):
-                rule.context.args.extend([message] if rule.data.get("ignore_ans") is False else [])
-                args = rule.context.args
-                kwargs = rule.context.kwargs
+        for rules in [*self.on.message.payload.rules, *self.on.message.rules]:
+            if all([rule.check(message) for rule in rules]):
+                args = [a for rule in rules for a in rule.context.args]
+                kwargs = {k: v for rule in rules for k, v in rule.context.kwargs.items()}
+                if rules[0].data.get("ignore_ans") is False:
+                    args = [message, *args]
 
-                task = await rule.call(*args, **kwargs)
+                task = await rules[0].call(*args, **kwargs)
 
                 self._logger.debug(
                     "New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        rule.call.__name__, message.from_id
-                    ))
+                        rules[0].call.__name__, message.from_id
+                    )
+                )
 
                 return task
 
@@ -67,10 +69,13 @@ class EventProcessor(RegexHelper):
             self._logger.debug(
                 "New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
                     message.from_id
-                ))
+                )
+            )
             return task
         else:
-            self._logger.info("Add on-undefined message handler to persue group online!")
+            self._logger.info(
+                "Add on-undefined message handler to persue group online!"
+            )
 
     async def _chat_message_processor(self, obj: dict, client_info: dict):
         """
@@ -87,23 +92,27 @@ class EventProcessor(RegexHelper):
         if self.on.pre:
             await (self.on.pre(message))
 
-        for rule in self.on.message.rules:
-            if rule.check(message):
+        for rules in [*self.on.chat_message.payload.rules, *self.on.chat_message.rules]:
+            if all([rule.check(message) for rule in rules]):
+                args = [a for rule in rules for a in rule.context.args]
+                kwargs = {k: v for rule in rules for k, v in
+                          rule.context.kwargs.items()}
+                if rules[0].data.get("ignore_ans") is False:
+                    args = [message, *args]
 
                 self._logger.debug(
                     '-> MESSAGE FROM CHAT {} TEXT "{}" TIME %#%'.format(
                         message.peer_id, message.text.replace("\n", " ")
-                    ))
+                    )
+                )
 
-                args = rule.context.args.extend([message] if rule.data.get("ignore_ans") is False else [])
-                kwargs = rule.context.kwargs
-
-                task = await rule.call(*args, **kwargs)
+                task = await rules[0].call(*args, **kwargs)
 
                 self._logger.debug(
                     "New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        rule.call.__name__, message.from_id
-                    ))
+                        rules[0].call.__name__, message.from_id
+                    )
+                )
 
                 return task
 
@@ -155,7 +164,10 @@ class EventProcessor(RegexHelper):
 
         self._logger.debug(
             "New BRANCHED-message compiled with branch <\x1b[35m{}\x1b[0m> (from: {})".format(
-                '"{}" with {} kwargs'.format(branch[0], _kw if len(_kw) < 100 else _kw[1:99] + "..."), answer.from_id
+                '"{}" with {} kwargs'.format(
+                    branch[0], _kw if len(_kw) < 100 else _kw[1:99] + "..."
+                ),
+                answer.from_id,
             )
         )
         return task
@@ -181,8 +193,7 @@ class EventProcessor(RegexHelper):
                 self.branch.exit(obj["peer_id"])
         elif return_type in [str, int, dict, list, tuple, float]:
             await Message(**obj, api=[self.api], client_info=client_info)(
-                str(handler_return),
-                **self.status.handler_return_context
+                str(handler_return), **self.status.handler_return_context
             )
         elif handler_return is not None:
             raise HandlerReturnError(

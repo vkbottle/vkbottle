@@ -87,7 +87,11 @@ class Message(BaseModel):
                 peer_id=self.peer_id,
                 reply_to=self.id or self.conversation_message_id,
                 random_id=random.randint(-2e9, 2e9),
-                **{k: v for k, v in locals().items() if v is not None and k not in ["self", "params"]}
+                **{
+                    k: v
+                    for k, v in locals().items()
+                    if v is not None and k not in ["self", "params"]
+                }
             ),
         )
 
@@ -107,8 +111,12 @@ class Message(BaseModel):
                 dict(
                     peer_id=self.peer_id,
                     random_id=random.randint(-2e9, 2e9),
-                    **{k: v for k, v in locals().items() if v is not None and k not in ["self", "params"]}
-                )
+                    **{
+                        k: v
+                        for k, v in locals().items()
+                        if v is not None and k not in ["self", "params"]
+                    }
+                ),
             )
         return m
 

@@ -90,9 +90,7 @@ class TaskManager:
         elif asyncio.iscoroutine(task):
             self.tasks.append(task)
         else:
-            raise RuntimeError(
-                "Unexpected task. Tasks may be only coroutine functions"
-            )
+            raise RuntimeError("Unexpected task. Tasks may be only coroutine functions")
 
     def run_task(self, task: typing.Callable):
         """

@@ -100,6 +100,7 @@ bot.on.change_prefix_for_all(['!', '/'])
 
 Теперь обработчик считает за префикс команды сообщения начинающиеся с `!` и `/`.
 
+
 ### Кнопки
 
 Чтобы make кнопки в вашем сообщении just примените генератор или будьте уродами и не используйте его:
@@ -140,7 +141,7 @@ async def wrapper(ans: Message):
 ### :heartpulse: Аргументы хендлеров
 
 ```python
-@bot.on.message('меня зовут <name>')
+@bot.on.message(text='меня зовут <name>')
 async def wrapper(ans: Message, name):
     await ans(f'Ну привет, {name}!')
 ```
@@ -156,6 +157,41 @@ async def wrapper(ans: Message, name):
 
 Ветки, так называемые short-term ветки событий, с помощью них вы можете построить систему тестов, ввод какого-то значения пользователем или даже ~~игрового бота~~
 Документацию по веткам вы сможете найти [перейдя сюда](/docs/branches.ru.md)
+
+### Правила (англ. - Rules)
+
+Правила обработки сообщений по стандарту обрабатываются с помощью правила VBMLRule (`vkbottle.rule.VBMLRule`), но что если в задачу хендлера входит прием например сообщений с каким-то вложением. Для начала давайте разберемся как работают правила:  
+```python
+from vkbottle.rule import ChatActionRule
+# Импортировали стандартное правило на событие в чате
+
+@bot.on.message(ChatActionRule("chat_invite_user", "chat_invite_user_by_link"))
+async def wrapper(ans: Message):
+    await ans(f'Ура! Новый участник в нашей беседе')
+```
+
+Стандартные правила: `AttachmentRule(attachment_type)`, `ChatActioRule(chat_action_type, required)`, `VBMLRule(pattern/str/list[pattern/str])`, `PayloadRule(payload as dict)`, `EventRule(events)`  
+Для создания собственных правил могут понадобиться абстрактные классы: AbstractRule, AbstractMessageRule  
+
+```python
+from vkbottle.rule import AbstractMessageRule
+
+# Создаем класс для правила
+class OnlyMe(AbstractMessageRule):
+    def check(self, message: Message):
+        # Функция check вызывается при проверке правила
+        if message.from_id == 1: # Если пользователь, написавший сообщение имеет id = 1
+            return True # Проверка пройдена
+
+@bot.on.message(OnlyMe(), text="/admincommand")
+async def wrapper(ans: Message):
+    await ans("Команда доступна только одному человеку :)")
+```
+
+**Советы**
+
+Так же можно использовать функцию `__init__`, которую предусматривает абстрактный класс, с помощью нее можно кастомизировать собственные правила  
+Класс в `context` имеет два поля: `args` и `kwargs`, изменяя одно - вы добавляете позиционные аргументы которые будут возвращены в хендлер, другое - непозиционные
 
 ### Ошибки
 

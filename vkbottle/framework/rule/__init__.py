@@ -1,1 +1,9 @@
-from .rule import AbstractRule, AbstractMessageRule, VBMLRule, AttachmentRule, ChatActionRule, PayloadRule, EventRule
+from .rule import (
+    AbstractRule,
+    AbstractMessageRule,
+    VBMLRule,
+    AttachmentRule,
+    ChatActionRule,
+    PayloadRule,
+    EventRule,
+)

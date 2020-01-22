@@ -27,6 +27,7 @@
 - Маленький объем кода для достижения сложных конструкций
 - Полностью асинхронно
 - Множество встроенных помощников: Branches для цепей событий, VBML для разметки сообщений и так далее
+- Правила - Rules
 
 ***
 
@@ -38,7 +39,7 @@ from vkbottle import Bot, Message
 bot = Bot('my-token', 123, debug=True)
 
 
-@bot.on.message('My name is <name>', lower=True)
+@bot.on.message(text='My name is <name>', lower=True)
 async def wrapper(ans: Message, name):
     await ans('Hello, {}'.format(name))
 
@@ -61,12 +62,28 @@ bot = Bot('my-token', 123, debug=True, secret="SecretKey")
 async def executor(request: Request):
     return await bot.emulate(event=dict(request.query), confirmation_token="ConfirmationToken")
 
-@bot.on.message('test', lower=True)
+@bot.on.message(text='test', lower=True)
 async def wrapper():
     return "test"
 
 app.add_routes(routes)
 run_app(app)
+```
+
+### Rules
+
+```python
+from vkbottle import Bot, Message
+from vkbottle.rule import AttachmentRule
+
+bot = Bot("my-token", 123, debug=True)
+
+@bot.on.message(AttachmentRule("photo"))
+async def wrapper():
+    return "What a beautiful photo!"
+    
+bot.run_polling()
+
 ```
 
 Больше примеров в папке [/examples](./examples)
