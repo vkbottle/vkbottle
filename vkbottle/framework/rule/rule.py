@@ -31,6 +31,34 @@ class AbstractMessageRule(AbstractRule):
         ...
 
 
+class UnionMixin(AbstractMessageRule):
+    def __init__(self, mixin=None):
+        mixin = mixin if mixin is not None else []
+        if not isinstance(mixin, list):
+            mixin = [mixin]
+        self.data["mixin"] = mixin
+
+
+class StickerRule(UnionMixin):
+    def check(self, message: Message):
+        if len(message.attachments) and message.attachments[0].sticker:
+            if not len(self.data["mixin"]):
+                return True
+            if message.attachments[0].sticker.sticker_id in self.data["mixin"]:
+                return True
+
+
+class MessageRule(AbstractMessageRule):
+    def __init__(self, message: typing.Union[str, typing.List[str]]):
+        if isinstance(message, str):
+            message = [message]
+        self.data["message"] = message
+
+    def check(self, message: Message):
+        if message.text in self.data["message"]:
+            return True
+
+
 class EventRule(AbstractRule):
     def __init__(self, event: typing.Union[str, typing.List[str]]):
         if isinstance(event, str):
@@ -73,21 +101,16 @@ class VBMLRule(AbstractMessageRule):
                 return True
 
 
-class AttachmentRule(AbstractMessageRule):
-    def __init__(self, attachment: typing.Union[str, typing.List[str]] = None):
-        if isinstance(attachment, str):
-            attachment = [attachment]
-        self.data["type"] = attachment or []
-
+class AttachmentRule(UnionMixin):
     def check(self, message: Message):
         attachments = [
             list(attachment.dict(skip_defaults=True).keys())[0]
             for attachment in message.attachments
         ]
-        if len(attachments) and not len(self.data["type"]):
+        if len(attachments) and not len(self.data["mixin"]):
             # ANY ATTACHMENTS
             return True
-        for attachment_type in self.data.get("type", []):
+        for attachment_type in self.data.get("mixin", []):
             if attachment_type in attachments:
                 return True
 

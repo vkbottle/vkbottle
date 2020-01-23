@@ -9,14 +9,6 @@ import typing
 from vkbottle import Bot, Message, keyboard_gen, VKError
 ```
 
-## Переменные первой ступени:
-
-`session` - Сессия HTTP-клиента для обращения к API.
-`plugin_folder` - Строка, название папки бота для хранения логов.
-`patcher` -  Bot patching class, нужен для валидаторов, whitelistа и пр.
-`on` - Обработчики сообщений.
-`api` - Обёртка над методами API.
-
 ## Callback!
 
 Мы можем создать простой обработчик событий любым веб-фреймворком (настоятельно рекомендуется использовать асинхронные решения).
@@ -170,7 +162,7 @@ async def wrapper(ans: Message):
     await ans(f'Ура! Новый участник в нашей беседе')
 ```
 
-Стандартные правила: `AttachmentRule(attachment_type)`, `ChatActioRule(chat_action_type, required)`, `VBMLRule(pattern/str/list[pattern/str])`, `PayloadRule(payload as dict)`, `EventRule(events)`  
+Стандартные правила: `AttachmentRule(attachment_type)`, `ChatActionRule(chat_action_type, required)`, `VBMLRule(pattern/str/list[pattern/str])`, `PayloadRule(payload as dict)`, `EventRule(events)`  
 Для создания собственных правил могут понадобиться абстрактные классы: AbstractRule, AbstractMessageRule  
 
 ```python
@@ -193,6 +185,8 @@ async def wrapper(ans: Message):
 Так же можно использовать функцию `__init__`, которую предусматривает абстрактный класс, с помощью нее можно кастомизировать собственные правила  
 Класс в `context` имеет два поля: `args` и `kwargs`, изменяя одно - вы добавляете позиционные аргументы которые будут возвращены в хендлер, другое - непозиционные
 
+Полная документация по правилам ожидает вас [по этой ссылке](/docs/RulesExecutor.md)
+
 ### Ошибки
 
 | Название ошибки    | Причина возникновения                           | Способ устранения                                                                 |
@@ -206,3 +200,7 @@ async def wrapper(ans: Message):
 | VBMLError          | Ошибка в создании паттернов VBML                | Прочитать документацию VBML и исправить ошибку                                    |
 
 Если вы уверены, что в возникновении ошибки нет вашей вини - пишите Issue, в ближайшее время поступит :heart: fix
+
+### Дополнительная документация
+
+Дополнительную документацию по этому и другим разделам можно [найти здесь](/docs/FrameworkAPI.md)

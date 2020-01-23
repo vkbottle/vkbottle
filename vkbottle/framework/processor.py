@@ -51,7 +51,7 @@ class EventProcessor(RegexHelper):
             if all([rule.check(message) for rule in rules]):
                 args = [a for rule in rules for a in rule.context.args]
                 kwargs = {k: v for rule in rules for k, v in rule.context.kwargs.items()}
-                if rules[0].data.get("ignore_ans") is False:
+                if not rules[0].data.get("ignore_ans"):
                     args = [message, *args]
 
                 task = await rules[0].call(*args, **kwargs)
@@ -97,7 +97,7 @@ class EventProcessor(RegexHelper):
                 args = [a for rule in rules for a in rule.context.args]
                 kwargs = {k: v for rule in rules for k, v in
                           rule.context.kwargs.items()}
-                if rules[0].data.get("ignore_ans") is False:
+                if not rules[0].data.get("ignore_ans"):
                     args = [message, *args]
 
                 self._logger.debug(

@@ -22,6 +22,14 @@ class Event(object):
 
         return decorator
 
+    def rule(self, rule):
+        def decorator(func):
+            rule.create(func)
+            self.rules.append(rule)
+            return func
+
+        return decorator
+
     def message_reply(self):
         def decorator(func):
             rule = EventRule(EventList.MESSAGE_REPLY)
