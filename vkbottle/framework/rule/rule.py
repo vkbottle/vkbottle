@@ -12,14 +12,14 @@ class RuleExecute:
 
 class AbstractRule:
     def __init_subclass__(cls, **kwargs):
-        cls.data: dict = {}
         cls.call: typing.Optional[typing.Callable] = None
         cls.context: RuleExecute = RuleExecute()
 
     def create(self, func: typing.Callable, data: dict = None):
         self.call: typing.Callable = func
         self.context = RuleExecute()
-        self.data.update(data or {})
+        if data is not None:
+            setattr(self, "data", {**getattr(self, "data", {}), **data})
         ...
 
     def check(self, event):
@@ -36,7 +36,7 @@ class UnionMixin(AbstractMessageRule):
         mixin = mixin if mixin is not None else []
         if not isinstance(mixin, list):
             mixin = [mixin]
-        self.data["mixin"] = mixin
+        self.data = {"mixin": mixin}
 
 
 class StickerRule(UnionMixin):
@@ -52,7 +52,7 @@ class MessageRule(AbstractMessageRule):
     def __init__(self, message: typing.Union[str, typing.List[str]]):
         if isinstance(message, str):
             message = [message]
-        self.data["message"] = message
+        self.data = {"message": message}
 
     def check(self, message: Message):
         if message.text in self.data["message"]:
@@ -63,12 +63,12 @@ class EventRule(AbstractRule):
     def __init__(self, event: typing.Union[str, typing.List[str]]):
         if isinstance(event, str):
             event = [event]
-        self.data["event"] = event
+        self.data = {"event": event}
 
     def check(self, event):
         for e in self.data["event"]:
             if "data" not in self.data:
-                self.data["data"] = dict
+                self.data = {"data": dict}
             if e == event:
                 return True
 
@@ -90,7 +90,7 @@ class VBMLRule(AbstractMessageRule):
         elif isinstance(pattern, str):
             patterns = [Patcher.get_current().pattern(pattern)]
 
-        self.data["pattern"] = patterns
+        self.data = {"pattern": patterns}
 
     def check(self, message: Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
@@ -121,6 +121,7 @@ class ChatActionRule(AbstractMessageRule):
     ):
         if isinstance(chat_action, str):
             chat_action = [chat_action]
+        self.data = dict()
         self.data["chat_action"] = chat_action
         self.data["rules"] = rules or {}
 
@@ -136,6 +137,7 @@ class ChatActionRule(AbstractMessageRule):
 
 class PayloadRule(AbstractMessageRule):
     def __init__(self, payload: dict, mode=1):
+        self.data = dict()
         self.data["payload"] = payload
         self.data["mode"] = mode
 
