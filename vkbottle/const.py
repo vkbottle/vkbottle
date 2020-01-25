@@ -1,4 +1,4 @@
-__version__ = "0.34"  # Package VKBottle version
+__version__ = "1.0"  # Package VKBottle version
 
 __author__ = "Arseniy Timonik"
 
@@ -12,4 +12,4 @@ VERSION_REST = (
     "https://raw.githubusercontent.com/timoniq/vkbottle-rest/master/version.json"
 )
 
-VBML_INSTALL = "pip install vbml"
+VBML_INSTALL = "pip install vbml -U"
