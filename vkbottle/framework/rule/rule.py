@@ -97,7 +97,7 @@ class VBMLRule(AbstractMessageRule):
 
         for pattern in patterns:
             if pattern(message.text):
-                self.context.kwargs = pattern.dict()
+                self.context.kwargs = Patcher.get_current().check(message.text, pattern)
                 return True
 
 
