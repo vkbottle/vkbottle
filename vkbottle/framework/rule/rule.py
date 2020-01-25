@@ -97,7 +97,7 @@ class VBMLRule(AbstractMessageRule):
         patterns: typing.List[Pattern] = self.data["pattern"]
 
         for pattern in patterns:
-            if self._patcher.check(message.text, pattern):
+            if self._patcher.check(message.text, pattern) is not None:
                 self.context.kwargs = pattern.dict()
                 return True
 
