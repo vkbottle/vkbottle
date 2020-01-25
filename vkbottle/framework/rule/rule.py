@@ -78,17 +78,18 @@ class VBMLRule(AbstractMessageRule):
         self,
         pattern: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
     ):
+        self._patcher = Patcher.get_current()
         patterns: typing.List[Pattern] = []
         if isinstance(pattern, Pattern):
             patterns = [pattern]
         elif isinstance(pattern, list):
             for p in pattern:
                 if isinstance(p, str):
-                    patterns.append(Patcher.get_current().pattern(p))
+                    patterns.append(self._patcher.pattern(p))
                 else:
                     patterns.append(p)
         elif isinstance(pattern, str):
-            patterns = [Patcher.get_current().pattern(pattern)]
+            patterns = [self._patcher.pattern(pattern)]
 
         self.data = {"pattern": patterns}
 
@@ -96,7 +97,7 @@ class VBMLRule(AbstractMessageRule):
         patterns: typing.List[Pattern] = self.data["pattern"]
 
         for pattern in patterns:
-            if pattern(message.text):
+            if self._patcher.check(message.text, pattern):
                 self.context.kwargs = pattern.dict()
                 return True
 
