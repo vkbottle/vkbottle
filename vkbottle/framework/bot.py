@@ -66,6 +66,10 @@ class Bot(HTTP, EventProcessor):
         self.on: Handler = Handler(self._logger, group_id)
         self.error_handler: ErrorHandler = ErrorHandler()
 
+    def dispatch(self, ext: "Bot"):
+        self.on.concatenate(ext.on)
+        self.error_handler.update(ext.error_handler.processors)
+
     @property
     def group_id(self):
         return self.__group_id
@@ -232,8 +236,8 @@ class Bot(HTTP, EventProcessor):
 
         except VKError as e:
             e = list(e.args)[0]
-            if e[0] in self.error_handler.get_processor():
-                handler = self.error_handler.get_processor()[e[0]]["call"]
+            if e[0] in self.error_handler.processors:
+                handler = self.error_handler.processors[e[0]]["call"]
                 self._logger.debug(
                     "VKError ?{}! Processing it with handler <{}>".format(
                         e, handler.__name__

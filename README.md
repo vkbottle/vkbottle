@@ -103,5 +103,5 @@ bot.run_polling()
 
 ## Лицензия
 
-Copyright © 2019 [timoniq](https://github.com/timoniq).  
+Copyright © 2019-2020 [timoniq](https://github.com/timoniq).  
 Этот проект имеет [GPL-3.0](./LICENSE.txt) лицензию.

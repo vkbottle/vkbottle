@@ -1,13 +1,11 @@
 from .events import Event
-from ..utils import dict_of_dicts_merge, Logger
+from ..utils import Logger
 from inspect import signature
 import typing
 from ..const import __version__
 from inspect import iscoroutinefunction
 from ..api import HandlerError
 import re
-
-
 from ..framework.rule import AbstractRule, VBMLRule, ChatActionRule, PayloadRule
 from vbml import Patcher, Pattern
 
@@ -30,7 +28,6 @@ class Handler(object):
 
         self._pre_p: typing.Optional[typing.Callable] = None
         self.__undefined_message_func = None
-        self.__chat_action_types: list = list()
         self._patcher = Patcher.get_current()
 
         if not hasattr(Pattern, "context_copy"):
@@ -40,17 +37,32 @@ class Handler(object):
                 "\ttnx <3"
             )
 
+    def concatenate(self, handler: "Handler"):
+        """
+        Concatenate handlers from current handler and another handler
+        :param handler: another handler
+        :return:
+        """
+        self.message.concatenate(handler.message)
+        self.chat_message.concatenate(handler.chat_message)
+        self.message_both.concatenate(handler.message_both)
+        self.event.rules += handler.event.rules
+
+        if self.pre is None:
+            self._pre_p = handler.pre
+
     async def dispatch(self, get_current_rest: typing.Callable = None) -> None:
+        """
+        Dispatch handlers from only-handlers and both-handlers
+        :param get_current_rest: REST from vkbottle-rest
+        :return:
+        """
 
-        self.message.rules = self.message.rules + self.message_both.rules
-        self.chat_message.rules = self.chat_message.rules + self.message_both.rules
+        self.message.rules += self.message_both.rules
+        self.chat_message.rules += self.message_both.rules
 
-        self.message.payload.rules = (
-            self.message.payload.rules + self.message_both.payload.rules
-        )
-        self.chat_message.payload.rules = (
-            self.chat_message.payload.rules + self.message_both.payload.rules
-        )
+        self.message.payload.rules += self.message_both.payload.rules
+        self.chat_message.payload.rules += self.message_both.payload.rules
 
         if get_current_rest:
 
@@ -125,10 +137,6 @@ class Handler(object):
         return self.__undefined_message_func
 
     @property
-    def chat_action_types(self):
-        return self.__chat_action_types
-
-    @property
     def pre(self):
         return self._pre_p
 
@@ -146,6 +154,11 @@ class MessageHandler:
         self.rules: typing.List[typing.List[AbstractRule]] = list()
         self.prefix: list = ["/", "!"]
         self._patcher = Patcher.get_current()
+
+    def concatenate(self, message_handler: "MessageHandler"):
+        self.rules += message_handler.rules
+        self.prefix += [p for p in message_handler.prefix if p not in self.prefix]
+        self.payload.rules += message_handler.payload.rules
 
     def add_handler(
         self,

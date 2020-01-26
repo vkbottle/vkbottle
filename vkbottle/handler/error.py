@@ -10,5 +10,9 @@ class ErrorHandler(object):
 
         return decorator
 
-    def get_processor(self):
+    @property
+    def processors(self):
         return self._error_processors
+
+    def update(self, processors: dict):
+        self._error_processors.update(processors)
