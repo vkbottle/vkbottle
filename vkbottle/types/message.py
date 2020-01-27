@@ -4,11 +4,12 @@ from enum import Enum
 from .attachments import Attachment
 from .attachments import Geo
 from .base import BaseModel
+from ..api import Api
 import random
 from datetime import datetime
 
-
 # https://vk.com/dev/objects/message
+API = Api.get_current
 
 
 def sep_bytes(text: str, max_bytes: int = 4096) -> list:
@@ -68,21 +69,18 @@ class Message(BaseModel):
     action: MessageAction = None
     fwd_messages: typing.List["Message"] = []
     reply_message: "Message" = None
-    api: list = None
     client_info: "ClientInfo" = None
     conversation_message_id: int = None
 
     async def reply(
-        self,
-        message: str = None,
-        attachment: str = None,
-        keyboard: dict = None,
-        **params
+            self,
+            message: str = None,
+            attachment: str = None,
+            **params
     ):
         locals().update(params)
-        return await self.api[0].request(
-            "messages",
-            "send",
+        return await API().request(
+            "messages.send",
             dict(
                 peer_id=self.peer_id,
                 reply_to=self.id or self.conversation_message_id,
@@ -96,18 +94,15 @@ class Message(BaseModel):
         )
 
     async def __call__(
-        self,
-        message: str = None,
-        attachment: str = None,
-        keyboard: dict = None,
-        template: dict = None,
-        **params
+            self,
+            message: str = None,
+            attachment: str = None,
+            **params
     ):
         locals().update(params)
         for message in sep_bytes(message or ""):
-            m = await self.api[0].request(
-                "messages",
-                "send",
+            m = await API().request(
+                "messages.send",
                 dict(
                     peer_id=self.peer_id,
                     random_id=random.randint(-2e9, 2e9),

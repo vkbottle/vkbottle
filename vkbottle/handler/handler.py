@@ -147,6 +147,15 @@ class Handler(object):
 
         return decorator
 
+    def __repr__(self):
+        return (
+            f"MESSAGE HANDLERS:              {len(self.message.rules)}\n"
+            f"CHAT-MESSAGE HANDLERS:         {len(self.chat_message.rules)}\n"
+            f"EVENT HANDLERS:                {len(self.event.rules)}\n"
+            f"MESSAGE-PAYLOAD HANDLERS:      {len(self.message.payload.rules)}\n"
+            f"CHAT-MESSAGE-PAYLOAD HANDLERS: {len(self.chat_message.payload.rules)}"
+        )
+
 
 class MessageHandler:
     def __init__(self):
@@ -326,6 +335,10 @@ class MessageHandler:
             return func
 
         return decorator
+
+    def __repr__(self):
+        for rules in self.rules:
+            print(rules[0].call.__name__ + ":", ", ".join([rule.__class__.__name__ for rule in rules]))
 
 
 class PayloadHandler:

@@ -32,8 +32,8 @@ class Logger(object):
     def __init__(
         self,
         debug: bool,
-        log_file: str,
-        plugin_folder: str,
+        log_file: str = None,
+        plugin_folder: str = "vkbottle_project",
         level=None,
         logger_name: str = None,
         logger_enabled: bool = True,

@@ -52,7 +52,8 @@ class Bot(HTTP, EventProcessor):
         self.__secret = secret
         self._status: BotStatus = BotStatus()
 
-        self.__api: Api = Api(loop=self.__loop, token=token, group_id=group_id)
+        self.__api: Api = Api(token)
+        Api.set_current(self.__api)
         self._patcher: Patcher = vbml_patcher or Patcher(pattern="^{}$")
 
         self._logger: Logger = Logger(
@@ -130,7 +131,7 @@ class Bot(HTTP, EventProcessor):
 
     async def get_server(self) -> dict:
         """
-        Get an longPoll server for long request create
+        Get longPoll server for long request create
         :return: LongPoll Server
         """
         self.longPollServer = await self.api.groups.getLongPollServer(
@@ -140,7 +141,7 @@ class Bot(HTTP, EventProcessor):
 
     async def make_long_request(self, longPollServer: dict) -> dict:
         """
-        Make longPoll request to the VK Server. Comes off after wait time
+        Make longPoll request to the VK Server
         :param longPollServer:
         :return: VK LongPoll Event
         """

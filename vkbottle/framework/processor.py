@@ -36,7 +36,7 @@ class EventProcessor(RegexHelper):
         :param obj: VK API Event Object
         """
 
-        message = Message(**obj, api=[self.api], client_info=client_info)
+        message = Message(**obj, client_info=client_info)
 
         if self.on.pre:
             await (self.on.pre(message))
@@ -85,7 +85,6 @@ class EventProcessor(RegexHelper):
 
         message = Message(
             **{**obj, "text": self.init_bot_mention(obj["text"])},
-            api=[self.api],
             client_info=client_info
         )
 
@@ -131,7 +130,7 @@ class EventProcessor(RegexHelper):
 
         for rule in self.on.event.rules:
             if rule.check(event_type):
-                event = rule.data["data"](**obj, api=[self.api])
+                event = rule.data["data"](**obj)
                 await rule.call(event, *rule.context.args, **rule.context.kwargs)
 
                 self._logger.debug(
@@ -148,7 +147,7 @@ class EventProcessor(RegexHelper):
         """
         obj["text"] = sub(r"\[club" + str(self.group_id) + r"\|.*?\] ", "", obj["text"])
 
-        answer = Message(**obj, api=[self.api], client_info=client_info)
+        answer = Message(**obj, client_info=client_info)
 
         self._logger.debug(
             '-> BRANCHED MESSAGE FROM {} TEXT "{}" TIME %#%'.format(
@@ -192,7 +191,7 @@ class EventProcessor(RegexHelper):
                 self._logger.mark("[Branch Exited]")
                 self.branch.exit(obj["peer_id"])
         elif return_type in [str, int, dict, list, tuple, float]:
-            await Message(**obj, api=[self.api], client_info=client_info)(
+            await Message(**obj, client_info=client_info)(
                 str(handler_return), **self.status.handler_return_context
             )
         elif handler_return is not None:

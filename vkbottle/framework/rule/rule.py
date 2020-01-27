@@ -73,6 +73,23 @@ class EventRule(AbstractRule):
                 return True
 
 
+class UserLongPollEventRule(AbstractRule):
+    def __init__(self, event: typing.Union[int, typing.List[int]], *rules):
+        if isinstance(event, int):
+            event = [event]
+        self.data = {"event": event, "rules": rules}
+
+    def check(self, update):
+        for e in self.data["event"]:
+            if e == update[0]:
+                if not len(self.data["rules"]):
+                    return True
+                for rule in self.data["rules"]:
+                    if rule.check(update):
+                        self.context = rule.context
+                        return True
+
+
 class VBMLRule(AbstractMessageRule):
     def __init__(
         self,
