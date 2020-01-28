@@ -215,7 +215,13 @@ class MessageHandler:
 
     def rule(self, *rules):
         def decorator(func):
-            self.rules.append([rule.create(func) for rule in rules])
+            current: typing.List[AbstractRule] = list()
+
+            for rule in rules:
+                rule.create(func)
+                current.append(rule)
+
+            self.rules.append(current)
             return func
 
         return decorator
