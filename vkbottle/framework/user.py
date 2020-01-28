@@ -96,7 +96,7 @@ class User(HTTP):
         for update in event.get("updates", []):
             update_fields = update[1:]
             for rule in self.on.rules:
-                if rule.check(update):
+                if await rule.check(update):
                     fields, name = rule.data["data"], rule.data["name"]
                     data = dict(zip(fields, update_fields))
                     if rule.data.get("dataclass"):

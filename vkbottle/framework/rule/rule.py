@@ -85,7 +85,7 @@ class UserLongPollEventRule(AbstractRule):
                 if not len(self.data["rules"]):
                     return True
                 for rule in self.data["rules"]:
-                    if rule.check(update):
+                    if await rule.check(update):
                         self.context = rule.context
                         return True
 
