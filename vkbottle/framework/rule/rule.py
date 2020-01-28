@@ -22,12 +22,12 @@ class AbstractRule:
             setattr(self, "data", {**getattr(self, "data", {}), **data})
         ...
 
-    def check(self, event):
+    async def check(self, event):
         ...
 
 
 class AbstractMessageRule(AbstractRule):
-    def check(self, message: Message):
+    async def check(self, message: Message):
         ...
 
 
@@ -40,7 +40,7 @@ class UnionMixin(AbstractMessageRule):
 
 
 class StickerRule(UnionMixin):
-    def check(self, message: Message):
+    async def check(self, message: Message):
         if len(message.attachments) and message.attachments[0].sticker:
             if not len(self.data["mixin"]):
                 return True
@@ -54,7 +54,7 @@ class MessageRule(AbstractMessageRule):
             message = [message]
         self.data = {"message": message}
 
-    def check(self, message: Message):
+    async def check(self, message: Message):
         if message.text in self.data["message"]:
             return True
 
@@ -65,7 +65,7 @@ class EventRule(AbstractRule):
             event = [event]
         self.data = {"event": event}
 
-    def check(self, event):
+    async def check(self, event):
         for e in self.data["event"]:
             if "data" not in self.data:
                 self.data = {"data": dict}
@@ -79,13 +79,13 @@ class UserLongPollEventRule(AbstractRule):
             event = [event]
         self.data = {"event": event, "rules": rules}
 
-    def check(self, update):
+    async def check(self, update):
         for e in self.data["event"]:
             if e == update[0]:
                 if not len(self.data["rules"]):
                     return True
                 for rule in self.data["rules"]:
-                    if rule.check(update):
+                    if await rule.check(update):
                         self.context = rule.context
                         return True
 
@@ -110,7 +110,7 @@ class VBMLRule(AbstractMessageRule):
 
         self.data = {"pattern": patterns}
 
-    def check(self, message: Message):
+    async def check(self, message: Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
 
         for pattern in patterns:
@@ -120,7 +120,7 @@ class VBMLRule(AbstractMessageRule):
 
 
 class AttachmentRule(UnionMixin):
-    def check(self, message: Message):
+    async def check(self, message: Message):
         attachments = [
             list(attachment.dict(skip_defaults=True).keys())[0]
             for attachment in message.attachments
@@ -143,7 +143,7 @@ class ChatActionRule(AbstractMessageRule):
         self.data["chat_action"] = chat_action
         self.data["rules"] = rules or {}
 
-    def check(self, message: Message):
+    async def check(self, message: Message):
         if message.action:
             if message.action.type in self.data["chat_action"]:
                 if {
@@ -166,7 +166,7 @@ class PayloadRule(AbstractMessageRule):
         except json.decoder.JSONDecodeError:
             return dict()
 
-    def check(self, message: Message):
+    async def check(self, message: Message):
         if message.payload is not None:
             payload = self.dispatch(message.payload)
             if self.data["mode"] == 1:
