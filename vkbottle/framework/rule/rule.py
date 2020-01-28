@@ -1,4 +1,5 @@
-from ...types import Message
+from ...types import Message, BaseModel
+from ...types import user_longpoll
 from vbml import Pattern, Patcher
 import typing
 import json
@@ -8,6 +9,9 @@ class RuleExecute:
     def __init__(self):
         self.args = []
         self.kwargs = {}
+
+    def __call__(self):
+        return self.args, self.kwargs
 
 
 class AbstractRule:
@@ -23,6 +27,11 @@ class AbstractRule:
         ...
 
     async def check(self, event):
+        ...
+
+
+class AbstractUserRule(AbstractRule):
+    async def check(self, update: typing.Tuple[dict, BaseModel]):
         ...
 
 
@@ -84,13 +93,16 @@ class UserLongPollEventRule(AbstractRule):
             if e == update[0]:
                 if not len(self.data["rules"]):
                     return True
-                for rule in self.data["rules"]:
-                    if await rule.check(update):
-                        self.context = rule.context
-                        return True
+                return tuple(self.data["rules"])
 
 
-class VBMLRule(AbstractMessageRule):
+class UserMessageRule(AbstractUserRule, UnionMixin):
+    async def check(self, message: user_longpoll.Message):
+        if message.text in self.data["mixin"]:
+            return True
+
+
+class VBML:
     def __init__(
         self,
         pattern: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
@@ -110,7 +122,19 @@ class VBMLRule(AbstractMessageRule):
 
         self.data = {"pattern": patterns}
 
+
+class VBMLRule(AbstractMessageRule, VBML):
     async def check(self, message: Message):
+        patterns: typing.List[Pattern] = self.data["pattern"]
+
+        for pattern in patterns:
+            if self._patcher.check(message.text, pattern) is not None:
+                self.context.kwargs = pattern.dict()
+                return True
+
+
+class VBMLUserRule(AbstractUserRule, VBML):
+    async def check(self, message: user_longpoll.Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
 
         for pattern in patterns:

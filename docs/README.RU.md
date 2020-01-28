@@ -170,7 +170,7 @@ from vkbottle.rule import AbstractMessageRule
 
 # Создаем класс для правила
 class OnlyMe(AbstractMessageRule):
-    def check(self, message: Message):
+    async def check(self, message: Message):
         # Функция check вызывается при проверке правила
         if message.from_id == 1: # Если пользователь, написавший сообщение имеет id = 1
             return True # Проверка пройдена

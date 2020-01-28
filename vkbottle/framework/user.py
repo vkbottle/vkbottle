@@ -96,12 +96,25 @@ class User(HTTP):
         for update in event.get("updates", []):
             update_fields = update[1:]
             for rule in self.on.rules:
-                if await rule.check(update):
+                check = await rule.check(update)
+                if check is not None:
                     fields, name = rule.data["data"], rule.data["name"]
                     data = dict(zip(fields, update_fields))
+                    args, kwargs = [], {}
                     if rule.data.get("dataclass"):
                         data = rule.data.get("dataclass")(**data)
-                    await rule.call(data, *rule.context.args, **rule.context.kwargs)
+                    if isinstance(check, tuple):
+                        if all([await s_rule.check(data) for s_rule in check]):
+                            args = (
+                                [a for rule in check for a in rule.context.args]
+                            )
+                            kwargs = (
+                                {k: v for rule in check for k, v in rule.context.kwargs.items()}
+                            )
+                        else:
+                            continue
+
+                    await rule.call(data, *args, **kwargs)
 
     def run_polling(self):
         loop = self.__loop

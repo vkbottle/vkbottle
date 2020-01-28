@@ -63,7 +63,7 @@ class MyFirstRule(AbstractRule):
     def __init__(self, count: int):
         self.data["c"] = count
     
-    def check(self, message: Message):
+    async def check(self, message: Message):
         if len(message.text.split()) == self.data["c"]:
             return True
 ```
