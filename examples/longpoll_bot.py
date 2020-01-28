@@ -2,14 +2,15 @@ from vkbottle import Bot, Message, keyboard_gen, types
 
 bot = Bot(token="token", group_id=1, debug=True)
 
-"""Bot functions
+"""
+Bot functions
 When bot receive message «hi» in private chat it answers «hi, my lil friend« and sends a keyboard
 If user joins, bot will try to send a message «Welcome to the group!»
 If bot can't do it and VKError with codes 901 or 902 appeared, bot uses logger to send a log about it
 """
 
 
-@bot.on.message("hi")
+@bot.on.message(text="hi")
 async def wrapper(ans: Message):
     keyboard = [[{"text": "fantastic button"}]]
     await ans("hi, my lil friend", keyboard=keyboard_gen(keyboard))
@@ -23,7 +24,7 @@ async def wrapper(event: types.GroupJoin):
 
 
 @bot.error_handler(901, 902)
-async def error(error: list):
+async def error(error):
     print("Cant send message to this user :(, error code:", error[0])
 
 

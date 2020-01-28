@@ -2,32 +2,33 @@ from vkbottle import Bot, Message
 
 bot = Bot(token="token", group_id=1, debug=True)
 
-"""Bot functions
+"""
+Bot functions
 Described in code comments
 """
 
 # STANDART HANDLERS
 
 
-@bot.on.message("hi")
+@bot.on.message(text="hi")
 async def wrapper(ans: Message):
     # Works if message 'hi' in private dialog is received
     await ans("hi")
 
 
-@bot.on.chat_message("banana")
+@bot.on.chat_message(text="banana")
 async def wrapper(ans: Message):
     # Works if message 'banana' in chat received
     await ans("clean me..")
 
 
-@bot.on.message_both("apple")
+@bot.on.message_both(text="apple")
 async def wrapper(ans: Message):
     # Works if message 'apple' in both (chat or private) dialog received
     await ans("steve jobs..((((")
 
 
-@bot.on.chat_message.startswith("/start")
+@bot.on.chat_message.startswith(text="/start")
 async def wrapper(ans: Message):
     # Works if message in chat starts with '/start'
     await ans("this message starts with /start, yes?")
@@ -36,7 +37,7 @@ async def wrapper(ans: Message):
 @bot.on.message_both.regex(".*?sad.*?")
 async def wrapper(ans: Message):
     # Works if regex match r'.*?sad.*?' is True
-    await ans("sadness, im sad, sadistic. its all in my own!")
+    await ans("sadness, im sad, sadistic. its all on my own!")
 
 
 # EVENT HANDLER
@@ -74,13 +75,13 @@ Arguments in these instances are not separable!
 """
 
 
-@bot.on.message("+<country_code>(<state_code>)<number>")
+@bot.on.message(text="+<country_code>(<state_code>)<number>")
 async def wrapper(ans: Message, country_code, state_code, number):
     # +0(123)456
     if country_code.isdigit() and state_code.isdigit() and number.isdigit():
-        await ans("Number inputted correctly!")
+        await ans("Well done!")
     else:
-        await ans("Number has been inputted incorrectly!")
+        await ans("Number is incorrect!")
 
 
 # OPTIONAL HANDLERS

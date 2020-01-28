@@ -1,26 +1,20 @@
-from vkbottle import Message, Bot, keyboard_gen
-from flask import request, Flask
-import sys
-
-app = Flask(__name__)
-bot = Bot(token=open("token").readline(), group_id=1, debug=True,)
-confirmation = "MyConfirmation"
-
-keyboard = keyboard_gen(
-    [
-        [{"text": "do $ex"}, {"text": "make me con", "color": "negative"}],
-        [{"text": "cry.."}],
-    ],
-    one_time=True,
-)
+from vkbottle import Bot, Message
+from aiohttp.web import RouteTableDef, Application, Request, run_app
 
 
-@app.route("/bot")
-def route():
-    event = request.get_json(force=True, silent=True)
-    return bot.process(event, confirmation_token=confirmation)
+app = Application()
+routes = RouteTableDef()
+bot = Bot('my-token', 123, debug=True, secret="SecretKey")
 
 
-@bot.on.message_both.lower("hi <name>")
-async def wrapper(ans: Message, name):
-    await ans(f"i'm not a {name}", keyboard=keyboard)
+@routes.get('/bot')
+async def executor(request: Request):
+    return await bot.emulate(event=dict(request.query), confirmation_token="ConfirmationToken")
+
+
+@bot.on.message(text='test', lower=True)
+async def wrapper():
+    return "test"
+
+app.add_routes(routes)
+run_app(app)

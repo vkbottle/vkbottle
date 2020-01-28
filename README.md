@@ -26,6 +26,7 @@
 - Полностью асинхронно
 - Множество встроенных помощников: Branches для цепей событий, VBML для разметки сообщений и так далее
 - Правила - Rules
+- User LongPoll API
 
 ***
 
@@ -97,7 +98,7 @@ user.mode(2)
 @user.on.message_new(VBMLUserRule("can i ask you about <theme>?",))
 async def wrapper(ans: Message, theme):
     if theme in ["examples", "how to do smt", "depression", "insomnia"]:
-        await ans("You can ask me about it in telegram @timoniq or make an issue in github!")
+        await ans("You can ask me about it in telegram @timoniq or make an issue on github!")
     else:
         await ans("Ok, sooner or later i ll respond you")
 
