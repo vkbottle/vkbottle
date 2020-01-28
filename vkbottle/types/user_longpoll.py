@@ -12,7 +12,7 @@ class Message(BaseModel):
     peer_id: int = None
     timestamp: int = None
     text: str = None
-    attachments: list = None
+    attachments: dict = None
     random_id: int = None
 
     async def reply(
