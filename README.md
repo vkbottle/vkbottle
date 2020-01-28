@@ -84,6 +84,26 @@ bot.run_polling()
 
 ```
 
+### User LongPoll
+
+```python
+from vkbottle.user import User
+from vkbottle.user.types import Message
+from vkbottle.rule import VBMLUserRule
+
+user = User("user-token", 123)
+user.mode(2)
+
+@user.on.message_new(VBMLUserRule("can i ask you about <theme>?",))
+async def wrapper(ans: Message, theme):
+    if theme in ["examples", "how to do smt", "depression", "insomnia"]:
+        await ans("You can ask me about it in telegram @timoniq or make an issue in github!")
+    else:
+        await ans("Ok, sooner or later i ll respond you")
+
+user.run_polling()
+```
+
 Больше примеров в папке [/examples](./examples)
 
 ### Документация
