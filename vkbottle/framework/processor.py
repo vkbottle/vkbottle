@@ -48,7 +48,7 @@ class EventProcessor(RegexHelper):
         )
 
         for rules in [*self.on.message.payload.rules, *self.on.message.rules]:
-            if all([rule.check(message) for rule in rules]):
+            if all([await rule.check(message) for rule in rules]):
                 args = [a for rule in rules for a in rule.context.args]
                 kwargs = {k: v for rule in rules for k, v in rule.context.kwargs.items()}
                 if not rules[0].data.get("ignore_ans"):
@@ -92,7 +92,7 @@ class EventProcessor(RegexHelper):
             await (self.on.pre(message))
 
         for rules in [*self.on.chat_message.payload.rules, *self.on.chat_message.rules]:
-            if all([rule.check(message) for rule in rules]):
+            if all([await rule.check(message) for rule in rules]):
                 args = [a for rule in rules for a in rule.context.args]
                 kwargs = {k: v for rule in rules for k, v in
                           rule.context.kwargs.items()}
@@ -129,7 +129,7 @@ class EventProcessor(RegexHelper):
         )
 
         for rule in self.on.event.rules:
-            if rule.check(event_type):
+            if await rule.check(event_type):
                 event = rule.data["data"](**obj)
                 await rule.call(event, *rule.context.args, **rule.context.kwargs)
 
