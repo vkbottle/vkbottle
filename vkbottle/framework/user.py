@@ -113,3 +113,7 @@ class User(HTTP):
     def mode(self, mode: int):
         self._mode = mode
         self.on.mode = mode
+
+    @property
+    def loop(self):
+        return self.__loop

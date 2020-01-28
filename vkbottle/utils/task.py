@@ -33,9 +33,9 @@ class TaskManager:
     Task manager represent to user high-level API of asyncio interface (Less part :))
     """
 
-    def __init__(self, loop: asyncio.AbstractEventLoop):
+    def __init__(self, loop: asyncio.AbstractEventLoop = None):
         self.tasks: typing.List[typing.Callable] = []
-        self.loop: asyncio.AbstractEventLoop = loop
+        self.loop: asyncio.AbstractEventLoop = loop or asyncio.get_event_loop()
 
     def run(
         self,
@@ -92,11 +92,17 @@ class TaskManager:
         else:
             raise RuntimeError("Unexpected task. Tasks may be only coroutine functions")
 
-    def run_task(self, task: typing.Callable):
+    def run_task(self, task: typing.Union[typing.Coroutine, typing.Callable]):
         """
         Create task in loop
         :param task:
         :return:
         """
 
-        self.loop.create_task(task())
+        if asyncio.iscoroutinefunction(task):
+            self.loop.create_task(task())
+        elif asyncio.iscoroutine(task):
+            self.loop.create_task(task)
+        else:
+            raise RuntimeError(
+                "Unexpected task. Tasks may be only coroutine functions")
