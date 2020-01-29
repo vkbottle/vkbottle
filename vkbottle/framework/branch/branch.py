@@ -1,6 +1,7 @@
+import typing
+
 from ...api.exceptions import BranchError
 from ...utils import folder_checkup
-import typing
 
 BRANCH_DATA = ".BRANCHES.txt"
 
@@ -37,7 +38,9 @@ class BranchManager:
     def load(self, uid: int) -> typing.Optional[typing.List]:
         if uid in self._branch_queue:
             return self._branch_queue.get(uid, None)
+        return None
 
     def exit(self, uid: int) -> typing.Optional[typing.List]:
         if uid in self._branch_queue:
             return self._branch_queue.pop(uid, None)
+        return None

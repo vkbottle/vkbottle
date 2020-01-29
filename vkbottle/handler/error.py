@@ -1,4 +1,4 @@
-class ErrorHandler(object):
+class ErrorHandler:
     def __init__(self):
         self._error_processors = dict()
 

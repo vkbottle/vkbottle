@@ -1,24 +1,25 @@
+import traceback
+from asyncio import get_event_loop, AbstractEventLoop
+from asyncio import TimeoutError as AsyncioTimeoutError
+from aiohttp.client_exceptions import ClientConnectionError, ServerTimeoutError
+
 from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
-
-try:
-    import vbml
-except ImportError:
-    print("Please install vbml to use VKBottle. Use command: {}".format(VBML_INSTALL))
-
 from ..api import Api
 from ..handler import Handler, ErrorHandler
 from ..utils.logger import Logger, keyboard_interrupt
 from ..http import HTTP
 from ..api import VKError
-from asyncio import get_event_loop, AbstractEventLoop, TimeoutError
 from vbml import Patcher, PatchedValidators
-from aiohttp.client_exceptions import ClientConnectionError, ServerTimeoutError
 from ._event import EventTypes
 from .processor import EventProcessor
 from .branch import BranchManager
 from ..utils.tools import folder_checkup
-import traceback
 from ._status import BotStatus
+
+try:
+    import vbml
+except ImportError:
+    print("Please install vbml to use VKBottle. Use command: {}".format(VBML_INSTALL))
 
 
 DEFAULT_WAIT = 20
@@ -78,6 +79,7 @@ class Bot(HTTP, EventProcessor):
     def _check_secret(self, secret: str):
         if self.__secret:
             return secret == self.__secret
+        return None
 
     def set_debug(self, debug: bool, **params):
         self.__debug = debug
@@ -153,7 +155,7 @@ class Bot(HTTP, EventProcessor):
                 self.__wait or DEFAULT_WAIT,
             )
             return await self.request.post(url)
-        except TimeoutError:
+        except AsyncioTimeoutError:
             self._logger.error("TimeoutError of asyncio in longpoll request")
             return await self.make_long_request(longPollServer)
 
@@ -178,7 +180,7 @@ class Bot(HTTP, EventProcessor):
                     self.loop.create_task(self.emulate(event))
                 await self.get_server()
 
-            except ClientConnectionError or ServerTimeoutError or TimeoutError:
+            except (ClientConnectionError, ServerTimeoutError, AsyncioTimeoutError):
                 # No internet connection
                 await self._logger.warning("Server Timeout Error!")
 
@@ -253,7 +255,7 @@ class Bot(HTTP, EventProcessor):
                 )
                 raise VKError(e)
 
-        except Exception as e:
+        except Exception:
             self._logger.error(
                 "While bot worked error occurred TIME %#%\n\n{}".format(
                     traceback.format_exc()

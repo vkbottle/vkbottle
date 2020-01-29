@@ -1,7 +1,9 @@
+from typing import Callable
+from asyncio import iscoroutinefunction
+
+from ..api import Api
 from ..framework import Bot
 from .exceptions import FetchMethodError
-from asyncio import iscoroutinefunction
-from typing import Callable, Optional
 
 
 async def assign_function(*args, **kwargs):
@@ -9,13 +11,12 @@ async def assign_function(*args, **kwargs):
 
 
 def assigned(iterator):
-    if len(iterator) > 0:
-        return True
+    return len(iterator) > 0
 
 
-class FetchMethod(object):
+class FetchMethod:
     def __init__(self, bot: Bot):
-        self.api: Bot.api = bot.api
+        self.api: Api = bot.api
 
     def __call__(self, desc: str = None):
         return Fetching(self.api)

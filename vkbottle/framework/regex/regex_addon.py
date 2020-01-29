@@ -1,7 +1,7 @@
 import re
 
 
-class RegexHelper(object):
+class RegexHelper:
     group_id: int
 
     def init_bot_mention(self, text):

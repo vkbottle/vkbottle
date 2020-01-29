@@ -1,19 +1,20 @@
-import logging
-from logging import handlers
-import typing
-from termcolor import colored
-from colorama import init as color_opt
 import os
 import re
 import time
+import logging
+from logging import handlers
+import typing
+import sys
 
+from termcolor import colored
+from colorama import init as color_opt
 
 LOG_FILE_PATTERN = r"[a-zA-Z0-9]+\.log"
 DEFAULT_LOG_NAME = "bot"
 LOG_FORMAT = "[%(asctime)s %(name)s - %(levelname)s] - %(message)s"
 
 
-class Coloring(object):
+class Coloring:
     def __init__(self, prefix: str = "VKBottle", prefix_color: str = "blue"):
         color_opt()
         self.prefix = "[" + colored(prefix, prefix_color) + "]"
@@ -28,7 +29,7 @@ class Coloring(object):
         )
 
 
-class Logger(object):
+class Logger:
     def __init__(
         self,
         debug: bool,
@@ -112,4 +113,4 @@ class Logger(object):
 
 def keyboard_interrupt() -> None:
     print(Coloring("VKBottle")("Keyboard Interrupt", color="yellow"))
-    exit(0)
+    sys.exit(0)

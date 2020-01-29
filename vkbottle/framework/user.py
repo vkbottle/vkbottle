@@ -1,11 +1,13 @@
+import typing
+from asyncio import get_event_loop, AbstractEventLoop
+
+import aiohttp
+
 from ..http import HTTP
 from ..api import UserApi
 from ..handler import UserHandler
-from asyncio import get_event_loop, AbstractEventLoop
 from ..utils import Logger, keyboard_interrupt
 from ..utils.tools import folder_checkup
-import typing
-import aiohttp
 
 
 DEFAULT_WAIT = 20
@@ -88,7 +90,7 @@ class User(HTTP):
                     self.__loop.create_task(self.emulate(event))
                 await self.get_server()
 
-            except aiohttp.ClientConnectionError or aiohttp.ServerTimeoutError or TimeoutError:
+            except (aiohttp.ClientConnectionError, aiohttp.ServerTimeoutError, TimeoutError):
                 # No internet connection
                 await self._logger.warning("Server Timeout Error!")
 
@@ -98,7 +100,7 @@ class User(HTTP):
             for rule in self.on.rules:
                 check = await rule.check(update)
                 if check is not None:
-                    fields, name = rule.data["data"], rule.data["name"]
+                    fields, _ = rule.data["data"], rule.data["name"]
                     data = dict(zip(fields, update_fields))
                     args, kwargs = [], {}
                     if rule.data.get("dataclass"):

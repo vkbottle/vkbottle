@@ -1,13 +1,14 @@
+import typing
+import re
+from inspect import iscoroutinefunction, signature
+
+from vbml import Patcher, Pattern
+
 from .events import Event
 from ..utils import Logger
-from inspect import signature
-import typing
 from ..const import __version__
-from inspect import iscoroutinefunction
 from ..api import HandlerError
-import re
 from ..framework.rule import AbstractRule, VBMLRule, ChatActionRule, PayloadRule
-from vbml import Patcher, Pattern
 
 
 def should_ignore_ans(func: typing.Callable, arguments: list) -> bool:
@@ -16,7 +17,7 @@ def should_ignore_ans(func: typing.Callable, arguments: list) -> bool:
     return len([a for a in signature(func).parameters if a not in arguments]) < 1
 
 
-class Handler(object):
+class Handler:
     def __init__(self, logger: Logger, group_id: int = 0):
         self.__group_id: int = group_id
         self.__logger = logger

@@ -1,8 +1,10 @@
-from ...types import Message, BaseModel
-from ...types import user_longpoll
-from vbml import Pattern, Patcher
 import typing
 import json
+
+from vbml import Pattern, Patcher
+
+from ...types import Message, BaseModel
+from ...types import user_longpoll
 
 
 class RuleExecute:
@@ -50,8 +52,8 @@ class UnionMixin(AbstractMessageRule):
 
 class StickerRule(UnionMixin):
     async def check(self, message: Message):
-        if len(message.attachments) and message.attachments[0].sticker:
-            if not len(self.data["mixin"]):
+        if message.attachments and message.attachments[0].sticker:
+            if not self.data["mixin"]:
                 return True
             if message.attachments[0].sticker.sticker_id in self.data["mixin"]:
                 return True
@@ -91,7 +93,7 @@ class UserLongPollEventRule(AbstractRule):
     async def check(self, update):
         for e in self.data["event"]:
             if e == update[0]:
-                if not len(self.data["rules"]):
+                if not self.data["rules"]:
                     return True
                 return tuple(self.data["rules"])
 
@@ -149,7 +151,7 @@ class AttachmentRule(UnionMixin):
             list(attachment.dict(skip_defaults=True).keys())[0]
             for attachment in message.attachments
         ]
-        if len(attachments) and not len(self.data["mixin"]):
+        if attachments and not self.data["mixin"]:
             # ANY ATTACHMENTS
             return True
         for attachment_type in self.data.get("mixin", []):

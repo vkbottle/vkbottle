@@ -1,15 +1,40 @@
-from ..types.events.community.events_objects import *
+import typing
+
+# you can create __all__ in events_objects
+from ..types.events.community.events_objects import (
+    PhotoComment,
+    VideoComment,
+    MessageDeny,
+    MessageAllow,
+    MessageTypingState,
+    PhotoCommentDelete,
+    WallReplyNew,
+    VideoCommentDelete,
+    WallPostNew,
+    BoardPostNew,
+    WallReplyDelete,
+    MarketCommentNew,
+    BoardPostDelete,
+    GroupLeave,
+    MarketCommentDelete,
+    GroupJoin,
+    PollVoteNew,
+    UserBlock,
+    UserUnblock,
+    GroupChangePhoto,
+    GroupOfficersEdit,
+    GroupChangeSettings,
+)
 from ..types.events.community.events_list import EventList
 from ..types.message import Message
 from ..types.vkpay import VKPayTransaction, AppPayload
 from ..types.attachments.photo import Photo
 from ..types.attachments.audio import Audio
 from ..types.attachments.video import Video
-import typing
 from ..framework.rule import EventRule
 
 
-class Event(object):
+class Event:
     def __init__(self):
         self.rules: typing.List[EventRule] = list()
 
