@@ -27,7 +27,7 @@
 Рассмотрим для примера простой хендлер который вводит пользователя в бранч:
 
 ```python
-@bot.on.message('хочу в бранч', lower=True)
+@bot.on.message(text='хочу в бранч', lower=True)
 async def wrapper(ans: Message):
     await ans('Теперь ты в бранче')
     return Branch('my_branch')
@@ -62,7 +62,7 @@ bot.branch.exit(ans.peer_id, "branch_name") # Для удаления источ
 При инициации бранча можно так же передать некоторые необходимые значения, которые позже будут переданы и в хендлер бранча
 
 ```python
-@bot.on.message('ставлю боту <mark:int>', lower=True)
+@bot.on.message(text='ставлю боту <mark:int>', lower=True)
 async def wrapper(ans: Message, mark):
     await ans('Теперь расскажи что ты думаешь о нем')
     return Branch('my_branch', mark=mark)

@@ -9,6 +9,7 @@ from vkbottle import template_gen, TemplateElement
 Example:
 ```python
 from vkbottle import template_gen, TemplateElement, keyboard_gen
+
 template = template_gen(
     TemplateElement(
         "A title",
@@ -37,5 +38,5 @@ template = template_gen(
 To send a carousel:
 ```python
 # I your message handler
-ans("Hurray!", template=template)
+await ans("Hurray!", template=template)
 ```
