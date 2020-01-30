@@ -1,6 +1,7 @@
 import typing
-from .api import VKError
 import json
+
+from .api import VKError
 
 
 class TemplateElement:
@@ -17,7 +18,7 @@ class TemplateElement:
         if not photo_id and not (title or description):
             raise VKError("photo_id or title is required")
 
-        if type(buttons) is str:
+        if isinstance(buttons, str):
             buttons = json.loads(buttons)
 
         buttons = buttons.get("buttons")[0]

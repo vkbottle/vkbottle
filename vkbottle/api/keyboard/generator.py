@@ -19,7 +19,6 @@ def keyboard_gen(
     for row in rows:
         row_buttons = list()
         for button in row:
-            button = {k: v for k, v in button.items()}
             row_buttons.append(
                 dict(
                     action=dict(

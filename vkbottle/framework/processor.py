@@ -1,15 +1,16 @@
+import typing
+from asyncio import AbstractEventLoop
+from re import sub
+
+from vbml import Patcher
+
 from ..types.message import Message
 from ..api import Api, HandlerReturnError
 from ..handler import Handler
 from ..utils import Logger
 from .branch import BranchManager
-from asyncio import AbstractEventLoop, ensure_future
-from re import sub
 from .regex import RegexHelper
 from .branch import Branch, ExitBranch
-from vbml import Pattern, Patcher
-import typing
-import json
 from ._status import BotStatus
 
 
@@ -18,6 +19,7 @@ def get_attr(adict: dict, attrs: typing.List[str]):
     for attr in attrs:
         if attr in adict:
             return adict[attr]
+    return None
 
 
 class EventProcessor(RegexHelper):
@@ -50,7 +52,9 @@ class EventProcessor(RegexHelper):
         for rules in [*self.on.message.payload.rules, *self.on.message.rules]:
             if all([await rule.check(message) for rule in rules]):
                 args = [a for rule in rules for a in rule.context.args]
-                kwargs = {k: v for rule in rules for k, v in rule.context.kwargs.items()}
+                kwargs = {
+                    k: v for rule in rules for k, v in rule.context.kwargs.items()
+                }
                 if not rules[0].data.get("ignore_ans"):
                     args = [message, *args]
 
@@ -67,15 +71,13 @@ class EventProcessor(RegexHelper):
         if self.on.undefined_func:
             task = await (self.on.undefined_func(message))
             self._logger.debug(
-                "New message compiled with decorator <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
+                "New message compiled with decorator"
+                " <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
                     message.from_id
                 )
             )
             return task
-        else:
-            self._logger.info(
-                "Add on-undefined message handler to persue group online!"
-            )
+        self._logger.info("Add on-undefined message handler to persue group online!")
 
     async def _chat_message_processor(self, obj: dict, client_info: dict):
         """
@@ -94,8 +96,9 @@ class EventProcessor(RegexHelper):
         for rules in [*self.on.chat_message.payload.rules, *self.on.chat_message.rules]:
             if all([await rule.check(message) for rule in rules]):
                 args = [a for rule in rules for a in rule.context.args]
-                kwargs = {k: v for rule in rules for k, v in
-                          rule.context.kwargs.items()}
+                kwargs = {
+                    k: v for rule in rules for k, v in rule.context.kwargs.items()
+                }
                 if not rules[0].data.get("ignore_ans"):
                     args = [message, *args]
 

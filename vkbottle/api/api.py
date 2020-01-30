@@ -1,11 +1,13 @@
+import time
+import asyncio
+import typing
+
+from termcolor import cprint
+
 from ..const import API_VERSION, API_URL
 from .exceptions import VKError
 from ..http import HTTPRequest
-from asyncio import AbstractEventLoop, get_event_loop
-import time
-import asyncio, typing
 from ..utils import ContextInstanceMixin
-from termcolor import cprint
 
 
 def exception_handler(loop, context):
@@ -32,8 +34,8 @@ async def request(
 async def request_instance(method: str, req: typing.Coroutine):
     response = await req
 
-    if type(response) is not dict:
-        while type(response) is not dict:
+    if not isinstance(response, dict):
+        while not isinstance(response, dict):
             delay = 1
             cprint(f"\n--- {time.strftime('%m-%d %H:%M:%S')}"
                    f"{time.localtime()} - DELAY {delay * 5} sec\n"
@@ -57,7 +59,7 @@ async def request_instance(method: str, req: typing.Coroutine):
         )
 
     return response["response"]
-    
+
 
 class Method:
     def __init__(self, token: str, method: str):
@@ -74,12 +76,12 @@ class Method:
         return Method(self._token, self._method)
 
     async def __call__(self, *abandoned, **kwargs):
-        if len(abandoned):
+        if abandoned:
             raise ValueError('Send args with KWARGS! bot.api.a.b(a="b")')
 
         for k, v in enumerate(kwargs):
             if isinstance(v, (list, tuple)):
-                kwargs[k] = ",".join(str(x) for x in v)
+                kwargs[str(k)] = ",".join(str(x) for x in v)
 
         req = request(self._token, self._method, kwargs)
         return await request_instance(self._method, req)
@@ -114,4 +116,3 @@ class UserApi(ApiInstance, ContextInstanceMixin):
 
 class Api(ApiInstance, ContextInstanceMixin):
     pass
-

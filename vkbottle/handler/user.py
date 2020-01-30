@@ -19,11 +19,10 @@ class Handler:
     def additional_fields(self, event: int):
         if event in [1, 2, 3, 4]:
             return MESSAGE_FIELDS[self.mode]
-        elif event == 5:
+        if event == 5:
             if self.mode == 2:
                 return ["attachments", "null"]
-            else:
-                return ["null"]
+            return ["null"]
         return []
 
     def message_flag_change(self, *rules):

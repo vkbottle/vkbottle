@@ -1,6 +1,7 @@
 import asyncio
-from .logger import keyboard_interrupt
 import typing
+
+from .logger import keyboard_interrupt
 
 
 """
@@ -65,7 +66,7 @@ class TaskManager:
 
             self.loop.run_forever()
 
-        except:
+        except KeyboardInterrupt:
             keyboard_interrupt()
 
         finally:
