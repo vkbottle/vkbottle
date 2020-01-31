@@ -1,7 +1,7 @@
 import typing
 from asyncio import get_event_loop, AbstractEventLoop
 
-import aiohttp
+import aiohttp, vbml
 
 from ..http import HTTP
 from ..api import UserApi
@@ -29,12 +29,14 @@ class User(HTTP):
             plugin_folder: str = None,
             mode: int = None,
             log_to_file: bool = False,
+            vbml_patcher: vbml.Patcher = None,
     ):
         self.__loop: AbstractEventLoop = get_event_loop()
         self.__debug: bool = debug
         self.__api: UserApi = UserApi(token)
         UserApi.set_current(self.__api)
         self._mode = mode
+        self._patcher: vbml.Patcher = vbml_patcher or vbml.Patcher(pattern="^{}$")
 
         self.user_id: typing.Optional[int] = user_id
         self.on: UserHandler = UserHandler(self._mode)
