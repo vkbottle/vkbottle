@@ -4,7 +4,7 @@ from asyncio import TimeoutError as AsyncioTimeoutError
 from aiohttp.client_exceptions import ClientConnectionError, ServerTimeoutError
 
 from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
-from ..api import Api
+from ..api import Api, request
 from ..handler import Handler, ErrorHandler
 from ..utils.logger import Logger, keyboard_interrupt
 from ..http import HTTP
@@ -25,7 +25,7 @@ except ImportError:
 DEFAULT_WAIT = 20
 
 
-class Vals(PatchedValidators):
+class DefaultValidators(PatchedValidators):
     pass
 
 
@@ -35,53 +35,93 @@ class Bot(HTTP, EventProcessor):
     def __init__(
         self,
         token: str,
-        group_id: int,
+        *,
+        group_id: int = None,
         debug: bool = True,
         plugin_folder: str = None,
         log_to_file: bool = False,
         log_to: str = None,
-        vbml_patcher: Patcher = None,
         secret: str = None,
     ):
+        """
+        Init bot
+        :param token: bot token
+        :param group_id: [auto]
+        :param debug: should bot debug messages for emulating
+        :param plugin_folder: folder for logs
+        :param log_to_file: make logs
+        :param log_to: log path
+        :param secret: secret vk code for callback
+        """
+        # Base bot classifiers
         self.__token: str = token
-        self.__group_id: int = group_id
         self.__loop: AbstractEventLoop = get_event_loop()
         self.__debug: bool = debug
         self.__wait = None
-        self.__logger_opt = (plugin_folder, log_to_file, log_to)
-        self.__vbml_patcher = vbml_patcher
         self.__secret = secret
         self._status: BotStatus = BotStatus()
 
+        # Sign assets
         self.__api: Api = Api(token)
         Api.set_current(self.__api)
-        self._patcher: Patcher = vbml_patcher or Patcher(pattern="^{}$")
+
+        if not Patcher.get_current():
+            Patcher.set_current(Patcher(pattern="^{}$", validators=DefaultValidators))
 
         self._logger: Logger = Logger(
-            debug,
+            debug=debug,
             log_file=log_to,
             plugin_folder=folder_checkup(plugin_folder or "vkbottle_bot"),
             logger_enabled=log_to_file,
         )
+        self.group_id = group_id or self.get_id_by_token(token)
 
+        # Main workers
         self.branch: BranchManager = BranchManager(plugin_folder or DEFAULT_BOT_FOLDER)
         self.on: Handler = Handler(self._logger, group_id)
         self.error_handler: ErrorHandler = ErrorHandler()
 
     def dispatch(self, ext: "Bot"):
+        """
+        Concatenate handlers to current bot object
+        :param ext:
+        :return:
+        """
         self.on.concatenate(ext.on)
         self.error_handler.update(ext.error_handler.processors)
 
-    @property
-    def group_id(self):
-        return self.__group_id
+    @staticmethod
+    def get_id_by_token(token: str):
+        """
+        Get group id from token
+        :param token:
+        :return:
+        """
+        response = get_event_loop().run_until_complete(
+            request(token, "groups.getById")
+        )
+        if "error" in response:
+            raise VKError("Token is invalid")
+        return response["response"][0]["id"]
 
     def _check_secret(self, secret: str):
+        """
+        Match secret code with current secret
+        :param secret:
+        :return:
+        """
         if self.__secret:
             return secret == self.__secret
         return None
 
     def set_debug(self, debug: bool, **params):
+        """
+        DEPRECATED
+        Set debug regime
+        :param debug: debug mode
+        :param params: logging params
+        :return:
+        """
         self.__debug = debug
         self._logger: Logger = Logger(
             debug,
@@ -94,20 +134,31 @@ class Bot(HTTP, EventProcessor):
         )
 
     def loop_update(self, loop: AbstractEventLoop = None):
+        """
+        Update event loop
+        :param loop:
+        :return:
+        """
         self.__loop = loop or get_event_loop()
         return self.__loop
 
     def empty_copy(self) -> "Bot":
+        """
+        Create an empty copy of Bot
+        :return: Bot
+        """
         copy = Bot(
             self.__token,
-            self.__group_id,
-            self.__debug,
-            *self.__logger_opt,
-            self.__vbml_patcher
+            group_id=self.group_id,
+            debug=self.__debug,
         )
         return copy
 
     def copy(self) -> "Bot":
+        """
+        Create copy of Bot
+        :return: Bot
+        """
         bot = self.empty_copy()
         bot.loop_update()
         bot.on = self.on
@@ -129,7 +180,7 @@ class Bot(HTTP, EventProcessor):
 
     @property
     def patcher(self):
-        return self._patcher
+        return Patcher.get_current()
 
     async def get_server(self) -> dict:
         """
@@ -160,6 +211,9 @@ class Bot(HTTP, EventProcessor):
             return await self.make_long_request(longPollServer)
 
     def run_polling(self):
+        """
+        :return:
+        """
         loop = self.__loop
         try:
             loop.run_until_complete(self.run())
@@ -171,7 +225,7 @@ class Bot(HTTP, EventProcessor):
         self._logger.info("Polling will be started. Is it OK?")
 
         await self.get_server()
-        self._logger.debug("Polling successfully started")
+        self._logger.debug("Polling successfully started. Press Ctrl+C to stop it")
 
         while True:
             try:
@@ -216,20 +270,8 @@ class Bot(HTTP, EventProcessor):
                     if not client_info:
                         raise VKError("Change API version to 5.103 or later") from None
                     obj = obj["message"]
-                    processor = dict(obj=obj, client_info=client_info)
 
-                    if obj["peer_id"] < 2e9:
-                        if obj["from_id"] not in self.branch.queue:
-                            task = await self._private_message_processor(**processor)
-                        else:
-                            task = await self._branched_processor(**processor)
-                    else:
-                        if obj["peer_id"] not in self.branch.queue:
-                            task = await self._chat_message_processor(**processor)
-                        else:
-                            task = await self._branched_processor(**processor)
-
-                    await self._handler_return(task, **processor)
+                    await self._processor(obj, client_info)
 
                 else:
                     # If this is an event of the group AND this is not SELF-EVENT
@@ -238,6 +280,7 @@ class Bot(HTTP, EventProcessor):
                     )
 
         except VKError as e:
+
             e = list(e.args)[0]
             if e[0] in self.error_handler.processors:
                 handler = self.error_handler.processors[e[0]]["call"]

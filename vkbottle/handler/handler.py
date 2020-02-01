@@ -8,7 +8,15 @@ from .events import Event
 from ..utils import Logger
 from ..const import __version__
 from ..api import HandlerError
-from ..framework.rule import AbstractRule, VBMLRule, ChatActionRule, PayloadRule
+from ..framework.rule import (
+    AbstractRule,
+    VBMLRule,
+    ChatActionRule,
+    PayloadRule,
+    ChatMessage,
+    PrivateMessage,
+    Any,
+)
 
 
 def should_ignore_ans(func: typing.Callable, arguments: list) -> bool:
@@ -21,14 +29,14 @@ class Handler:
     def __init__(self, logger: Logger, group_id: int = 0):
         self.__group_id: int = group_id
         self.__logger = logger
+        self.rules: typing.List[typing.List[AbstractRule]] = list()
 
-        self.message: MessageHandler = MessageHandler()
-        self.chat_message: MessageHandler = MessageHandler()
-        self.message_both: MessageHandler = MessageHandler()
+        self.message: MessageHandler = MessageHandler(default_rules=[PrivateMessage()])
+        self.chat_message: MessageHandler = MessageHandler(default_rules=[ChatMessage()])
+        self.message_handler: MessageHandler = MessageHandler(default_rules=[Any()])
         self.event: Event = Event()
 
         self._pre_p: typing.Optional[typing.Callable] = None
-        self.__undefined_message_func = None
         self._patcher = Patcher.get_current()
 
         if not hasattr(Pattern, "context_copy"):
@@ -46,7 +54,7 @@ class Handler:
         """
         self.message.concatenate(handler.message)
         self.chat_message.concatenate(handler.chat_message)
-        self.message_both.concatenate(handler.message_both)
+        self.message_handler.concatenate(handler.message_handler)
         self.event.rules += handler.event.rules
 
         if self.pre is None:
@@ -59,11 +67,12 @@ class Handler:
         :return:
         """
 
-        self.message.rules += self.message_both.rules
-        self.chat_message.rules += self.message_both.rules
+        self.message_handler.rules += self.message.rules + self.chat_message.rules
+        self.message_handler.payload.rules += self.message.payload.rules + self.chat_message.payload.rules
 
-        self.message.payload.rules += self.message_both.payload.rules
-        self.chat_message.payload.rules += self.message_both.payload.rules
+        self.rules = (
+            self.message_handler.rules + self.message_handler.payload.rules
+        )
 
         if get_current_rest:
 
@@ -80,7 +89,7 @@ class Handler:
     def change_prefix_for_all(self, prefix: list) -> None:
         self.message.prefix = prefix
         self.chat_message.prefix = prefix
-        self.message_both.prefix = prefix
+        self.message_handler.prefix = prefix
 
     def chat_action(
         self, type_: typing.Union[str, typing.List[str]], rules: dict = None
@@ -95,17 +104,6 @@ class Handler:
             rule = ChatActionRule(type_, rules=rules)
             rule.create(func)
             self.chat_message.rules.append([rule])
-            return func
-
-        return decorator
-
-    def message_undefined(self):
-        """
-        If private message is not in message processor this single function will be caused
-        """
-
-        def decorator(func):
-            self.__undefined_message_func = func
             return func
 
         return decorator
@@ -134,10 +132,6 @@ class Handler:
         return decorator
 
     @property
-    def undefined_func(self):
-        return self.__undefined_message_func
-
-    @property
     def pre(self):
         return self._pre_p
 
@@ -159,11 +153,43 @@ class Handler:
 
 
 class MessageHandler:
-    def __init__(self):
+    def __init__(self, default_rules: typing.List = None):
         self.payload: PayloadHandler = PayloadHandler()
         self.rules: typing.List[typing.List[AbstractRule]] = list()
+        self._default_rules = default_rules or []
         self.prefix: list = ["/", "!"]
         self._patcher = Patcher.get_current()
+
+    def add_rules(self, rules: typing.List[AbstractRule], func: typing.Callable):
+        current = list()
+        for rule in rules + self.default_rules:
+            rule.create(func)
+            current.append(rule)
+
+        self.rules.append(current)
+
+    def _text_rule(
+        self,
+        func: typing.Callable,
+        text: typing.Union[str, Pattern],
+        lower: bool,
+        command: bool,
+        pattern: str,
+    ):
+        if not isinstance(text, Pattern):
+            prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
+            pattern = self._patcher.pattern(
+                text,
+                pattern=(prefix + pattern) if prefix else pattern,
+                flags=re.IGNORECASE if lower else None,
+            )
+            rule = VBMLRule(pattern)
+            rule.data["ignore_ans"] = should_ignore_ans(func, pattern.arguments)
+        else:
+            rule = VBMLRule(self._patcher.pattern(text))
+            rule.data["ignore_ans"] = should_ignore_ans(func, text.arguments)
+
+        return rule
 
     def concatenate(self, message_handler: "MessageHandler"):
         self.rules += message_handler.rules
@@ -188,31 +214,12 @@ class MessageHandler:
         :param pattern: any regex pattern pattern. {} means text which will be formatted
         :return: True
         """
-        current: typing.List[AbstractRule] = list()
+        current: typing.List[AbstractRule] = list(rules)
 
         if text:
-            if not isinstance(text, Pattern):
-                prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-                pattern = self._patcher.pattern(
-                    text,
-                    pattern=(prefix + "{}$") if prefix else pattern,
-                    flags=re.IGNORECASE if lower else None,
-                )
-                rule = VBMLRule(pattern)
-                rule.create(func)
-                rule.data["ignore_ans"] = should_ignore_ans(func, pattern.arguments)
-                current.append(rule)
-            else:
-                rule = VBMLRule(self._patcher.pattern(text))
-                rule.create(func)
-                rule.data["ignore_ans"] = should_ignore_ans(func, text.arguments)
-                current.append(rule)
+            current.append(self._text_rule(func, text, lower, command, pattern or "{}$"))
 
-        for rule in rules:
-            rule.create(func)
-            current.append(rule)
-
-        self.rules.append(current)
+        self.add_rules(current, func)
 
     def rule(self, *rules):
         def decorator(func):
@@ -222,7 +229,7 @@ class MessageHandler:
                 rule.create(func)
                 current.append(rule)
 
-            self.rules.append(current)
+            self.add_rules(current, func)
             return func
 
         return decorator
@@ -242,31 +249,12 @@ class MessageHandler:
         """
 
         def decorator(func):
-            current: typing.List[AbstractRule] = list()
+            current: typing.List[AbstractRule] = list(rules)
 
             if text:
-                if not isinstance(text, Pattern):
-                    prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-                    pattern = self._patcher.pattern(
-                        text,
-                        pattern=(prefix + "{}$") if prefix else "{}$",
-                        flags=re.IGNORECASE if lower else None,
-                    )
-                    rule = VBMLRule(pattern)
-                    rule.create(func)
-                    rule.data["ignore_ans"] = should_ignore_ans(func, pattern.arguments)
-                    current.append(rule)
-                else:
-                    rule = VBMLRule(self._patcher.pattern(text))
-                    rule.create(func)
-                    rule.data["ignore_ans"] = should_ignore_ans(func, text.arguments)
-                    current.append(rule)
+                current.append(self._text_rule(func, text, lower, command, "{}$"))
 
-            for rule in rules:
-                rule.create(func)
-                current.append(rule)
-
-            self.rules.append(current)
+            self.add_rules(current, func)
             return func
 
         return decorator
@@ -290,32 +278,13 @@ class MessageHandler:
         """
 
         def decorator(func):
-            current: typing.List[AbstractRule] = list()
+            current: typing.List[AbstractRule] = list(rules)
 
             if text:
-                if not isinstance(text, Pattern):
-                    prefix = ("[" + "|".join(
-                        self.prefix) + "]") if command else ""
-                    pattern = self._patcher.pattern(
-                        text,
-                        pattern=(prefix + "{}") if prefix else "{}",
-                        flags=re.IGNORECASE if lower else None,
-                    )
-                    rule = VBMLRule(pattern)
-                    rule.create(func)
-                    rule.data["ignore_ans"] = should_ignore_ans(func, pattern.arguments)
-                    current.append(rule)
-                else:
-                    rule = VBMLRule(self._patcher.pattern(text))
-                    rule.create(func)
-                    rule.data["ignore_ans"] = should_ignore_ans(func, text.arguments)
-                    current.append(rule)
+                current.append(
+                    self._text_rule(func, text, lower, command, "{}"))
 
-            for rule in rules:
-                rule.create(func)
-                current.append(rule)
-
-            self.rules.append(current)
+            self.add_rules(current, func)
             return func
 
         return decorator
@@ -345,7 +314,12 @@ class MessageHandler:
 
     def __repr__(self):
         for rules in self.rules:
-            print(rules[0].call.__name__ + ":", ", ".join([rule.__class__.__name__ for rule in rules]))
+            print(rules[0].call.__name__ + ": " + ", ".join([rule.__class__.__name__ for rule in rules]))
+        return str()
+
+    @property
+    def default_rules(self):
+        return [r.copy() for r in self._default_rules]
 
 
 class PayloadHandler:

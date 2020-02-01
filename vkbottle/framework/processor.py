@@ -32,13 +32,16 @@ class EventProcessor(RegexHelper):
     _logger: Logger
     __loop: AbstractEventLoop
 
-    async def _private_message_processor(self, obj: dict, client_info: dict):
-        """
-        Private message processor. Using regex to process regular expressions in messages
-        :param obj: VK API Event Object
-        """
+    async def _processor(self, obj: dict, client_info: dict):
+        processor = dict(obj=obj, client_info=client_info)
 
-        message = Message(**obj, client_info=client_info)
+        message = Message(
+            **{**obj, "text": self.init_bot_mention(obj["text"])},
+            client_info=client_info
+        )
+
+        if message.from_id in self.branch.queue or message.peer_id in self.branch.queue:
+            return self._branched_processor(obj, client_info)
 
         if self.on.pre:
             await (self.on.pre(message))
@@ -49,13 +52,16 @@ class EventProcessor(RegexHelper):
             )
         )
 
-        for rules in [*self.on.message.payload.rules, *self.on.message.rules]:
+        task = None
+        for rules in self.on.rules:
             if all([await rule.check(message) for rule in rules]):
+
                 args = [a for rule in rules for a in rule.context.args]
                 kwargs = {
-                    k: v for rule in rules for k, v in rule.context.kwargs.items()
+                    k: v for rule in rules for k, v in
+                    rule.context.kwargs.items()
                 }
-                if not rules[0].data.get("ignore_ans"):
+                if not getattr(rules[0], "data", {}).get("ignore_ans"):
                     args = [message, *args]
 
                 task = await rules[0].call(*args, **kwargs)
@@ -65,58 +71,9 @@ class EventProcessor(RegexHelper):
                         rules[0].call.__name__, message.from_id
                     )
                 )
+                break
 
-                return task
-
-        if self.on.undefined_func:
-            task = await (self.on.undefined_func(message))
-            self._logger.debug(
-                "New message compiled with decorator"
-                " <\x1b[35mon-message-undefined\x1b[0m> (from: {})".format(
-                    message.from_id
-                )
-            )
-            return task
-        self._logger.info("Add on-undefined message handler to persue group online!")
-
-    async def _chat_message_processor(self, obj: dict, client_info: dict):
-        """
-        Chat messages processor. Using regex to process regular expressions in messages
-        :param obj: VK API Event Object
-        """
-
-        message = Message(
-            **{**obj, "text": self.init_bot_mention(obj["text"])},
-            client_info=client_info
-        )
-
-        if self.on.pre:
-            await (self.on.pre(message))
-
-        for rules in [*self.on.chat_message.payload.rules, *self.on.chat_message.rules]:
-            if all([await rule.check(message) for rule in rules]):
-                args = [a for rule in rules for a in rule.context.args]
-                kwargs = {
-                    k: v for rule in rules for k, v in rule.context.kwargs.items()
-                }
-                if not rules[0].data.get("ignore_ans"):
-                    args = [message, *args]
-
-                self._logger.debug(
-                    '-> MESSAGE FROM CHAT {} TEXT "{}" TIME %#%'.format(
-                        message.peer_id, message.text.replace("\n", " ")
-                    )
-                )
-
-                task = await rules[0].call(*args, **kwargs)
-
-                self._logger.debug(
-                    "New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        rules[0].call.__name__, message.from_id
-                    )
-                )
-
-                return task
+        await self._handler_return(task, **processor)
 
     async def _event_processor(self, obj: dict, event_type: str):
         """
