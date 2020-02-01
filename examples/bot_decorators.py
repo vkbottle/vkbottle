@@ -22,7 +22,7 @@ async def wrapper(ans: Message):
     await ans("clean me..")
 
 
-@bot.on.message_both(text="apple")
+@bot.on.message_handler(text="apple")
 async def wrapper(ans: Message):
     # Works if message 'apple' in both (chat or private) dialog received
     await ans("steve jobs..((((")
@@ -34,7 +34,7 @@ async def wrapper(ans: Message):
     await ans("this message starts with /start, yes?")
 
 
-@bot.on.message_both.regex(".*?sad.*?")
+@bot.on.message_handler.regex(".*?sad.*?")
 async def wrapper(ans: Message):
     # Works if regex match r'.*?sad.*?' is True
     await ans("sadness, im sad, sadistic. its all on my own!")

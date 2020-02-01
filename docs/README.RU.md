@@ -39,7 +39,7 @@ async def wrapper(ans: Message):
 :star: В чат:
 
 ```python
-@bot.on.message_chat(text='привет')
+@bot.on.chat_message(text='привет')
 async def wrapper(ans: Message):
     await ans('Ну привет (всем)!')
 ```
@@ -77,7 +77,7 @@ async def wrapper(ans: Message):
 Regex:
 
 ```python
-@bot.on.message_chat.regex('.*?')
+@bot.on.chat_message.regex('.*?')
 async def wrapper(ans: Message):
     await ans('Этот декоратор сработает при каждом сообщении из чата (зачем?).')
 ```
@@ -117,7 +117,7 @@ my_keyboard = keyboard_gen(pattern, one_time=False)
 ```python
 @bot.on.message(text='клавиатуру пожалуйста', lower=True)
 async def wrapper(ans: Message):
-    await ans('Держите.', keyboard=keyboard)
+    await ans('Держите.', keyboard=my_keyboard)
 ```
 
 ### Другие декораторы
