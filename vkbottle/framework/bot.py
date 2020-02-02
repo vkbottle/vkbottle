@@ -97,9 +97,7 @@ class Bot(HTTP, EventProcessor):
         :param token:
         :return:
         """
-        response = get_event_loop().run_until_complete(
-            request(token, "groups.getById")
-        )
+        response = get_event_loop().run_until_complete(request(token, "groups.getById"))
         if "error" in response:
             raise VKError("Token is invalid")
         return response["response"][0]["id"]
@@ -130,7 +128,7 @@ class Bot(HTTP, EventProcessor):
                 k: v
                 for k, v in self._logger.logger_params.items()
                 if k not in {**params, "debug": None}
-            }
+            },
         )
 
     def loop_update(self, loop: AbstractEventLoop = None):
@@ -147,11 +145,7 @@ class Bot(HTTP, EventProcessor):
         Create an empty copy of Bot
         :return: Bot
         """
-        copy = Bot(
-            self.__token,
-            group_id=self.group_id,
-            debug=self.__debug,
-        )
+        copy = Bot(self.__token, group_id=self.group_id, debug=self.__debug,)
         return copy
 
     def copy(self) -> "Bot":
@@ -192,23 +186,23 @@ class Bot(HTTP, EventProcessor):
         )
         return self.longPollServer
 
-    async def make_long_request(self, longPollServer: dict) -> dict:
+    async def make_long_request(self, long_poll_server: dict) -> dict:
         """
         Make longPoll request to the VK Server
-        :param longPollServer:
+        :param long_poll_server:
         :return: VK LongPoll Event
         """
         try:
             url = "{}?act=a_check&key={}&ts={}&wait={}&rps_delay=0".format(
-                longPollServer["server"],
-                longPollServer["key"],
-                longPollServer["ts"],
+                long_poll_server["server"],
+                long_poll_server["key"],
+                long_poll_server["ts"],
                 self.__wait or DEFAULT_WAIT,
             )
             return await self.request.post(url)
         except AsyncioTimeoutError:
             self._logger.error("TimeoutError of asyncio in longpoll request")
-            return await self.make_long_request(longPollServer)
+            return await self.make_long_request(long_poll_server)
 
     def run_polling(self):
         """
@@ -275,9 +269,9 @@ class Bot(HTTP, EventProcessor):
 
                 else:
                     # If this is an event of the group AND this is not SELF-EVENT
-                    task = await (
+                    await (
                         self._event_processor(obj=obj, event_type=update["type"])
-                    )
+                    )  # noqa
 
         except VKError as e:
 
@@ -298,7 +292,7 @@ class Bot(HTTP, EventProcessor):
                 )
                 raise VKError(e)
 
-        except Exception:
+        except:
             self._logger.error(
                 "While bot worked error occurred TIME %#%\n\n{}".format(
                     traceback.format_exc()

@@ -13,9 +13,14 @@ async def wrapper(ans: Message, name):
 
 @user.on.message_read_out()
 async def call(event: dict):
-    await user.api.request("messages.send",
-                           {"message": "Ye! You finally read it!",
-                            "peer_id": event["peer_id"],
-                            "random_id": 0})
+    await user.api.request(
+        "messages.send",
+        {
+            "message": "Ye! You finally read it!",
+            "peer_id": event["peer_id"],
+            "random_id": 0,
+        },
+    )
+
 
 user.run_polling()

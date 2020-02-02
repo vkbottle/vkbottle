@@ -21,10 +21,7 @@ def dict_of_dicts_merge(d1, d2):
 def except_none_self(adict: dict) -> dict:
     ndict = {}
     for k, v in adict.items():
-        if (
-                k not in ["self", "cls"]
-                and v is not None and not k.startswith("__")
-        ):
+        if k not in ["self", "cls"] and v is not None and not k.startswith("__"):
             ndict.update({k: v})
     return ndict
 

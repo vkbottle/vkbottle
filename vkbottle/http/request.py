@@ -45,11 +45,7 @@ class HTTPRequest:
         content_type: str = "application/json",
     ):
         async with client.post(
-            url,
-            params=params or {},
-            ssl=ssl.SSLContext(),
-            data=data,
-            json=json_,
+            url, params=params or {}, ssl=ssl.SSLContext(), data=data, json=json_,
         ) as response:
             return await response.json(content_type=content_type)
 

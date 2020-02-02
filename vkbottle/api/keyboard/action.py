@@ -4,18 +4,19 @@ from ..exceptions import KeyboardError
 
 class Action:
     def __init__(
-            cls,
-            label: str = None,
-            payload: str = None,
-            link: str = None,
-            hash: str = None,
-            app_id: int = None,
-            owner_id: int = None,
+        cls,
+        label: str = None,
+        payload: str = None,
+        link: str = None,
+        hash: str = None,
+        app_id: int = None,
+        owner_id: int = None,
     ):
         for k, v in except_none_self(locals()).items():
             if not hasattr(cls, k):
-                raise KeyboardError("Action {} cannot assign {}".format(
-                    cls.__class__.__name__, k))
+                raise KeyboardError(
+                    "Action {} cannot assign {}".format(cls.__class__.__name__, k)
+                )
             setattr(cls, k, v)
             cls.type = getattr(cls, "type")
 
@@ -54,4 +55,3 @@ class VKApps(Action):
     payload: str = None
     label: str = None
     hash: str = None
-

@@ -1,4 +1,4 @@
-import typing
+import typing, traceback
 from asyncio import get_event_loop, AbstractEventLoop
 
 import aiohttp, vbml
@@ -22,14 +22,14 @@ class User(HTTP):
     version: int = None
 
     def __init__(
-            self,
-            token: str,
-            user_id: int = None,
-            debug: bool = True,
-            plugin_folder: str = None,
-            mode: int = None,
-            log_to_file: bool = False,
-            vbml_patcher: vbml.Patcher = None,
+        self,
+        token: str,
+        user_id: int = None,
+        debug: bool = True,
+        plugin_folder: str = None,
+        mode: int = None,
+        log_to_file: bool = False,
+        vbml_patcher: vbml.Patcher = None,
     ):
         self.__loop: AbstractEventLoop = get_event_loop()
         self.__debug: bool = debug
@@ -44,7 +44,7 @@ class User(HTTP):
             debug,
             plugin_folder=folder_checkup(plugin_folder or "vkbottle_user_lp"),
             logger_enabled=log_to_file,
-            prefix="User LP VKBottle"
+            prefix="User LP VKBottle",
         )
 
     @property
@@ -92,33 +92,44 @@ class User(HTTP):
                     self.__loop.create_task(self.emulate(event))
                 await self.get_server()
 
-            except (aiohttp.ClientConnectionError, aiohttp.ServerTimeoutError, TimeoutError):
+            except (
+                aiohttp.ClientConnectionError,
+                aiohttp.ServerTimeoutError,
+                TimeoutError,
+            ):
                 # No internet connection
                 await self._logger.warning("Server Timeout Error!")
 
     async def emulate(self, event: dict):
-        for update in event.get("updates", []):
-            update_fields = update[1:]
-            for rule in self.on.rules:
-                check = await rule.check(update)
-                if check is not None:
-                    fields, _ = rule.data["data"], rule.data["name"]
-                    data = dict(zip(fields, update_fields))
-                    args, kwargs = [], {}
-                    if rule.data.get("dataclass"):
-                        data = rule.data.get("dataclass")(**data)
-                    if isinstance(check, tuple):
-                        if all([await s_rule.check(data) for s_rule in check]):
-                            args = (
-                                [a for rule in check for a in rule.context.args]
-                            )
-                            kwargs = (
-                                {k: v for rule in check for k, v in rule.context.kwargs.items()}
-                            )
-                        else:
-                            continue
+        try:
+            for update in event.get("updates", []):
+                update_fields = update[1:]
+                for rule in self.on.rules:
+                    check = await rule.check(update)
+                    if check is not None:
+                        fields, _ = rule.data["data"], rule.data["name"]
+                        data = dict(zip(fields, update_fields))
+                        args, kwargs = [], {}
+                        if rule.data.get("dataclass"):
+                            data = rule.data.get("dataclass")(**data)
+                        if isinstance(check, tuple):
+                            if all([await s_rule.check(data) for s_rule in check]):
+                                args = [a for rule in check for a in rule.context.args]
+                                kwargs = {
+                                    k: v
+                                    for rule in check
+                                    for k, v in rule.context.kwargs.items()
+                                }
+                            else:
+                                continue
 
-                    await rule.call(data, *args, **kwargs)
+                        await rule.call(data, *args, **kwargs)
+        except:
+            self._logger.error(
+                "While user lp worked error occurred TIME %#%\n\n{}".format(
+                    traceback.format_exc()
+                )
+            )
 
     def run_polling(self):
         loop = self.__loop

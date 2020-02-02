@@ -4,17 +4,20 @@ from aiohttp.web import RouteTableDef, Application, Request, run_app
 
 app = Application()
 routes = RouteTableDef()
-bot = Bot('my-token', 123, debug=True, secret="SecretKey")
+bot = Bot("my-token", 123, debug=True, secret="SecretKey")
 
 
-@routes.get('/bot')
+@routes.get("/bot")
 async def executor(request: Request):
-    return await bot.emulate(event=dict(request.query), confirmation_token="ConfirmationToken")
+    return await bot.emulate(
+        event=dict(request.query), confirmation_token="ConfirmationToken"
+    )
 
 
-@bot.on.message(text='test', lower=True)
+@bot.on.message(text="test", lower=True)
 async def wrapper():
     return "test"
+
 
 app.add_routes(routes)
 run_app(app)

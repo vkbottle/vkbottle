@@ -5,22 +5,18 @@ import typing, json
 
 
 class KeyboardButton:
-    def __init__(
-            self,
-            action: typing.Union[Text],
-            color: str = None
-    ):
-        self.action = (action or Text)
+    def __init__(self, action: typing.Union[Text], color: str = None):
+        self.action = action or Text
         self.color = color or "default"
 
     def create(
-            self,
-            label: str = None,
-            payload: str = None,
-            link: str = None,
-            hash: str = None,
-            app_id: int = None,
-            owner_id: int = None,
+        self,
+        label: str = None,
+        payload: str = None,
+        link: str = None,
+        hash: str = None,
+        app_id: int = None,
+        owner_id: int = None,
     ):
         self.action.__call__(**except_none_self(locals()))
 
@@ -30,10 +26,7 @@ class KeyboardButton:
 
     @property
     def button(self):
-        return {
-            "action": except_none_self(self.action.dict()),
-            "color": self.color
-        }
+        return {"action": except_none_self(self.action.dict()), "color": self.color}
 
 
 class Keyboard:
@@ -56,9 +49,6 @@ class Keyboard:
     def generate(self):
         keyboard = {
             "one_time": self.one_time,
-            "buttons": [
-                [b.button for b in row]
-                for row in self.buttons
-            ]
+            "buttons": [[b.button for b in row] for row in self.buttons],
         }
         return json.dumps(keyboard)

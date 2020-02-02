@@ -15,16 +15,10 @@ def exception_handler(loop, context):
 
 
 async def request(
-        token: str,
-        method: str,
-        params: dict = None,
-        session: HTTPRequest = None
+    token: str, method: str, params: dict = None, session: HTTPRequest = None
 ):
     url = "{}{method}/?access_token={token}&v={version}".format(
-        API_URL,
-        method=method,
-        token=token,
-        version=API_VERSION,
+        API_URL, method=method, token=token, version=API_VERSION,
     )
 
     session = session or HTTPRequest()
@@ -37,26 +31,27 @@ async def request_instance(method: str, req: typing.Coroutine):
     if not isinstance(response, dict):
         while not isinstance(response, dict):
             delay = 1
-            cprint(f"\n--- {time.strftime('%m-%d %H:%M:%S')}"
-                   f"{time.localtime()} - DELAY {delay * 5} sec\n"
-                   f"Check your internet connection. Maybe VK died, request returned: {response}"
-                   f"Error appeared after request: {method}",
-                   color="yellow",
-                   )
+            cprint(
+                f"\n--- {time.strftime('%m-%d %H:%M:%S')}"
+                f"{time.localtime()} - DELAY {delay * 5} sec\n"
+                f"Check your internet connection. Maybe VK died, request returned: {response}"
+                f"Error appeared after request: {method}",
+                color="yellow",
+            )
             await asyncio.sleep(delay * 5)
             delay += 1
             response = await req
 
-            cprint(f"--- {time.strftime('%m-%d %H:%M:%S', time.localtime())}\n"
-                   f"- METHOD SUCCESS after {5 * sum(range(1, delay))} sec\n"
                    f"RESPONSE: {response}\n",
-                   color="green"
-                   )
+            cprint(
+                f"--- {time.strftime('%m-%d %H:%M:%S', time.localtime())}\n"
+                f"- METHOD SUCCESS after {5 * sum(range(1, delay))} sec\n"
+                f"RESPONSE: {response}\n",
+                color="green",
+            )
 
     if "error" in response:
-        raise VKError(
-            [response["error"]["error_code"], response["error"]["error_msg"]]
-        )
+        raise VKError([response["error"]["error_code"], response["error"]["error_msg"]])
 
     return response["response"]
 

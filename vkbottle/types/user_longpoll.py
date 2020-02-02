@@ -15,12 +15,7 @@ class Message(BaseModel):
     attachments: dict = None
     random_id: int = None
 
-    async def reply(
-        self,
-        message: str = None,
-        attachment: str = None,
-        **params
-    ):
+    async def reply(self, message: str = None, attachment: str = None, **params):
 
         locals().update(params)
         return await API().request(
@@ -37,12 +32,7 @@ class Message(BaseModel):
             ),
         )
 
-    async def __call__(
-        self,
-        message: str = None,
-        attachment: str = None,
-        **params
-    ):
+    async def __call__(self, message: str = None, attachment: str = None, **params):
 
         locals().update(params)
         for message in sep_bytes(message or ""):

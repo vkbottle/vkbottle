@@ -58,8 +58,7 @@ class EventProcessor(RegexHelper):
 
                 args = [a for rule in rules for a in rule.context.args]
                 kwargs = {
-                    k: v for rule in rules for k, v in
-                    rule.context.kwargs.items()
+                    k: v for rule in rules for k, v in rule.context.kwargs.items()
                 }
                 if not getattr(rules[0], "data", {}).get("ignore_ans"):
                     args = [message, *args]

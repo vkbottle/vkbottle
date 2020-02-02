@@ -32,7 +32,9 @@ class Handler:
         self.rules: typing.List[typing.List[AbstractRule]] = list()
 
         self.message: MessageHandler = MessageHandler(default_rules=[PrivateMessage()])
-        self.chat_message: MessageHandler = MessageHandler(default_rules=[ChatMessage()])
+        self.chat_message: MessageHandler = MessageHandler(
+            default_rules=[ChatMessage()]
+        )
         self.message_handler: MessageHandler = MessageHandler(default_rules=[Any()])
         self.event: Event = Event()
 
@@ -68,11 +70,11 @@ class Handler:
         """
 
         self.message_handler.rules += self.message.rules + self.chat_message.rules
-        self.message_handler.payload.rules += self.message.payload.rules + self.chat_message.payload.rules
-
-        self.rules = (
-            self.message_handler.rules + self.message_handler.payload.rules
+        self.message_handler.payload.rules += (
+            self.message.payload.rules + self.chat_message.payload.rules
         )
+
+        self.rules = self.message_handler.rules + self.message_handler.payload.rules
 
         if get_current_rest:
 
@@ -222,7 +224,9 @@ class MessageHandler:
         current: typing.List[AbstractRule] = list(rules)
 
         if text:
-            current.append(self._text_rule(func, text, lower, command, pattern or "{}$"))
+            current.append(
+                self._text_rule(func, text, lower, command, pattern or "{}$")
+            )
 
         self.add_rules(current, func)
 
@@ -286,8 +290,7 @@ class MessageHandler:
             current: typing.List[AbstractRule] = list(rules)
 
             if text:
-                current.append(
-                    self._text_rule(func, text, lower, command, "{}"))
+                current.append(self._text_rule(func, text, lower, command, "{}"))
 
             self.add_rules(current, func)
             return func
@@ -319,7 +322,11 @@ class MessageHandler:
 
     def __repr__(self):
         for rules in self.rules:
-            print(rules[0].call.__name__ + ": " + ", ".join([rule.__class__.__name__ for rule in rules]))
+            print(
+                rules[0].call.__name__
+                + ": "
+                + ", ".join([rule.__class__.__name__ for rule in rules])
+            )
         return str()
 
     @property

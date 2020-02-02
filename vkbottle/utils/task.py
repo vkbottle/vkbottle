@@ -105,5 +105,4 @@ class TaskManager:
         elif asyncio.iscoroutine(task):
             self.loop.create_task(task)
         else:
-            raise RuntimeError(
-                "Unexpected task. Tasks may be only coroutine functions")
+            raise RuntimeError("Unexpected task. Tasks may be only coroutine functions")
