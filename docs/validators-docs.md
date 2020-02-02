@@ -43,15 +43,13 @@ async def wrapper(ans: Message, some: typing.Any):
 Давайте создадим кастомный класс собственных валидаторов, наследуя стандартный класс `PatchedValidators`:
 
 ```python
-from vbml import PatchedValidators
-from vbml.validators import ValidatorManager
-# bot = Bot(...)
+from vbml import PatchedValidators, Patcher
 
 class MyValidators(PatchedValidators):
     pass
 
-manager = ValidatorManager(MyValidators)
-bot.patcher.add_manager(manager)
+patcher = Patcher(validators=MyValidators)
+# bot = Bot(...)
 ```
 
 Теперь мы можем создавать собственные валидаторы. При создании валидаторов вам нужно придеживаться нескольких правил оформления:

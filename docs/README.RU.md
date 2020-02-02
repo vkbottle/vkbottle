@@ -95,6 +95,24 @@ bot.on.change_prefix_for_all(['!', '/'])
 
 ### Кнопки
 
+### Новый способ
+
+```python
+from vkbottle.keyboard import Keyboard, Text
+
+keyboard = Keyboard(one_time=True)
+keyboard.add_row()
+keyboard.add_button(Text(label="моя кнопка"), color="primary")
+```
+
+```python
+@bot.on.message(text='клавиатуру пожалуйста', lower=True)
+async def wrapper(ans: Message):
+    await ans('Держите.', keyboard=keyboard)
+```
+
+### Старый способ
+
 Чтобы make кнопки в вашем сообщении just примените генератор или будьте уродами и не используйте его:
 
 1) Составим паттерн:
