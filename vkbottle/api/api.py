@@ -42,13 +42,11 @@ async def request_instance(method: str, req: typing.Coroutine):
             delay += 1
             response = await req
 
+            cprint(f"--- {time.strftime('%m-%d %H:%M:%S', time.localtime())}\n"
+                   f"- METHOD SUCCESS after {5 * sum(range(1, delay))} sec\n"
                    f"RESPONSE: {response}\n",
-            cprint(
-                f"--- {time.strftime('%m-%d %H:%M:%S', time.localtime())}\n"
-                f"- METHOD SUCCESS after {5 * sum(range(1, delay))} sec\n"
-                f"RESPONSE: {response}\n",
-                color="green",
-            )
+                   color="green",
+                   )
 
     if "error" in response:
         raise VKError([response["error"]["error_code"], response["error"]["error_msg"]])
