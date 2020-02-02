@@ -6,6 +6,10 @@ class FetchMethodError(Exception):
     pass
 
 
+class KeyboardError(VKError):
+    pass
+
+
 class MailingAPIError(Exception):
     pass
 

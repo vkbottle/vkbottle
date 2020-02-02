@@ -41,7 +41,7 @@ class EventProcessor(RegexHelper):
         )
 
         if message.from_id in self.branch.queue or message.peer_id in self.branch.queue:
-            return self._branched_processor(obj, client_info)
+            return await self._branched_processor(obj, client_info)
 
         if self.on.pre:
             await (self.on.pre(message))

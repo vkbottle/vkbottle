@@ -3,7 +3,7 @@
 Валидаторы - штуки, контроллирующие прохождения аргументов под шаблон сообщения. Давайте напишем простую обработку сообщения с простым аргументом
 
 ```python
-@bot.on.message_both('мне <some> лет', lower=True)
+@bot.on.message_handler(text='мне <some> лет', lower=True)
 async def wrapper(ans: Message, some: typing.Any):
     await ans(f'Все ясно! @id{ans.from_id} (этому человеку) {some} лет')
 ```
@@ -23,7 +23,7 @@ VBML - простой язык разметки на regex, то что нам �
 Проверьте работу VBML прямо сейчас. Создайте обработчик с указанным кодом прямо сейчас:
 
 ```python
-@bot.on.message_both('<some:validator>', lower=True, command=True)
+@bot.on.message_handler(text='<some:validator>', lower=True, command=True)
 async def wrapper(ans: Message, some: typing.Any):
     await ans(f'Введена команда {some}!')
 ```
@@ -56,8 +56,6 @@ bot.patcher.add_manager(manager)
 
 Теперь мы можем создавать собственные валидаторы. При создании валидаторов вам нужно придеживаться нескольких правил оформления:
 
-* Функции валидаторов должны быть асинхронными
-
 * Фунции должны быть методами класса (не staticmethod) и содержать один аргумент, который будет принимать валидируемый аргумент
 
 * Аргумент будет считаться правильным если валидатор вернет все что угодно кроме `None`.
@@ -68,7 +66,7 @@ bot.patcher.add_manager(manager)
 
 ```python
 class MyValidators(PatchedValidators):
-    async def years(self, text: str):
+    def years(self, text: str):
         if text in ['лет', 'года', 'год']:
             return text
         return  # https://docs.python.org/3.7/reference/simple_stmts.html#the-return-statement
@@ -77,7 +75,7 @@ class MyValidators(PatchedValidators):
 Теперь напишу конечный обработчик:
 
 ```python
-@bot.on.message_both('мне <years:int> <y_rep:years>', lower=True)
+@bot.on.message_handler(text='мне <years:int> <y_rep:years>', lower=True)
 async def wrapper(ans: Message, years: int, y_rep: str):
     if years >= 18:
         await ans(f'Ого тебе уже {years} {y_rep}')
@@ -92,7 +90,7 @@ async def wrapper(ans: Message, years: int, y_rep: str):
 Создам простой валидатор startswith для аргументов, для этого в класс MyValidators добавлю новый обработчик:  
 
 ```python
-async def startswith(self, value: str, start: str):
+def startswith(self, value: str, start: str):
     if value.startswith(start):
         return value
 ```
@@ -100,7 +98,7 @@ async def startswith(self, value: str, start: str):
 Теперь я могу использовать этот валидатор:
 
 ```python
-@bot.on.message_both('президент <name:startswith[Ким]>', lower=True)
+@bot.on.message_handler(text='президент <name:startswith[Ким]>', lower=True)
 async def wrapper(ans: Message, name: str):
     assert name.startswith("Ким")
     await ans(f'Да да! Президент {name}.')

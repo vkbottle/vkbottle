@@ -151,6 +151,9 @@ class Handler:
             f"CHAT-MESSAGE-PAYLOAD HANDLERS: {len(self.chat_message.payload.rules)}"
         )
 
+    def __str__(self):
+        return self.__repr__()
+
 
 class MessageHandler:
     def __init__(self, default_rules: typing.List = None):
@@ -163,6 +166,8 @@ class MessageHandler:
     def add_rules(self, rules: typing.List[AbstractRule], func: typing.Callable):
         current = list()
         for rule in rules + self.default_rules:
+            if isinstance(rule, str):
+                rule = VBMLRule(rule)
             rule.create(func)
             current.append(rule)
 
