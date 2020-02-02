@@ -4,7 +4,7 @@ from aiohttp.web import RouteTableDef, Application, Request, run_app
 
 app = Application()
 routes = RouteTableDef()
-bot = Bot("my-token", 123, debug=True, secret="SecretKey")
+bot = Bot("my-token", secret="SecretKey")
 
 
 @routes.get("/bot")

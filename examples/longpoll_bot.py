@@ -1,6 +1,6 @@
 from vkbottle import Bot, Message, keyboard_gen, types
 
-bot = Bot(token="token", group_id=1, debug=True)
+bot = Bot("token")
 
 """
 Bot functions
