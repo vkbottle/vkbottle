@@ -16,7 +16,17 @@ from ..framework.rule import (
     ChatMessage,
     PrivateMessage,
     Any,
+    CommandRule,
+    StickerRule,
+    LevenshteinDisRule,
 )
+
+COL_RULES = {
+    "commands": CommandRule,
+    "sticker": StickerRule,
+    "levenstein": LevenshteinDisRule,
+    "lev": LevenshteinDisRule,
+}
 
 
 def should_ignore_ans(func: typing.Callable, arguments: list) -> bool:
@@ -175,6 +185,14 @@ class MessageHandler:
 
         self.rules.append(current)
 
+    def _col_rules(self, **col) -> typing.List[AbstractRule]:
+        current = list()
+        for k, v in col.items():
+            if k not in COL_RULES:
+                raise HandlerError("Col Rule {} is undefined".format(k))
+            current.append(COL_RULES[k](v))
+        return current
+
     def _text_rule(
         self,
         func: typing.Callable,
@@ -182,7 +200,7 @@ class MessageHandler:
         lower: bool,
         command: bool,
         pattern: str,
-    ):
+    ) -> AbstractRule:
         if not isinstance(text, Pattern):
             prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
             pattern = self._patcher.pattern(
@@ -211,6 +229,7 @@ class MessageHandler:
         lower: bool = False,
         command: bool = False,
         pattern: str = None,
+        **col_rules
     ):
         """
         Add handler to disself._patcher without decorators
@@ -222,6 +241,7 @@ class MessageHandler:
         :return: True
         """
         current: typing.List[AbstractRule] = list(rules)
+        current.extend(self._col_rules(**col_rules))
 
         if text:
             current.append(
@@ -249,6 +269,7 @@ class MessageHandler:
         text: typing.Union[str, Pattern] = None,
         command: bool = False,
         lower: bool = False,
+        **col_rules
     ):
         """
         Simple on.message(text) decorator. Support regex keys in text
@@ -259,6 +280,7 @@ class MessageHandler:
 
         def decorator(func):
             current: typing.List[AbstractRule] = list(rules)
+            current.extend(self._col_rules(**col_rules))
 
             if text:
                 current.append(self._text_rule(func, text, lower, command, "{}$"))
@@ -274,6 +296,7 @@ class MessageHandler:
         *rules,
         command: bool = False,
         lower: bool = False,
+        **col_rules
     ):
         """
         Startswith regex message processor
@@ -288,6 +311,7 @@ class MessageHandler:
 
         def decorator(func):
             current: typing.List[AbstractRule] = list(rules)
+            current.extend(self._col_rules(**col_rules))
 
             if text:
                 current.append(self._text_rule(func, text, lower, command, "{}"))
@@ -328,6 +352,9 @@ class MessageHandler:
                 + ", ".join([rule.__class__.__name__ for rule in rules])
             )
         return str()
+
+    def __str__(self):
+        return self.__repr__()
 
     @property
     def default_rules(self):

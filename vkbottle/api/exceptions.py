@@ -10,10 +10,6 @@ class KeyboardError(VKError):
     pass
 
 
-class MailingAPIError(Exception):
-    pass
-
-
 class BranchError(Exception):
     pass
 

@@ -80,6 +80,49 @@ class MessageRule(AbstractMessageRule):
             return True
 
 
+class LevenshteinDisRule(AbstractMessageRule):
+    def __init__(self, mixin: typing.Union[str, typing.List[str]], lev_d: float = 1):
+        if not isinstance(mixin, list):
+            mixin = [mixin]
+        self.data = {"samples": mixin}
+        self.lev = lev_d
+
+    @staticmethod
+    def distance(a, b):
+        n, m = len(a), len(b)
+        if n > m:
+            a, b = b, a
+            n, m = m, n
+
+        current_row = range(n + 1)
+        for i in range(1, m + 1):
+            previous_row, current_row = current_row, [i] + [0] * n
+            for j in range(1, n + 1):
+                add, delete, change = previous_row[j] + 1, current_row[
+                    j - 1] + 1, previous_row[j - 1]
+                if a[j - 1] != b[i - 1]:
+                    change += 1
+                current_row[j] = min(add, delete, change)
+
+        return current_row[n]
+
+    async def check(self, message: Message):
+        for sample in self.data["samples"]:
+            if self.distance(message.text, sample) <= self.lev:
+                return True
+
+
+class CommandRule(AbstractMessageRule):
+    def __init__(self, message: typing.Union[str, typing.List[str]]):
+        if isinstance(message, str):
+            message = [message]
+        self.data = {"message": ["/" + c for c in message]}
+
+    async def check(self, message: Message):
+        if message.text in self.data["message"]:
+            return True
+
+
 class EventRule(AbstractRule):
     def __init__(self, event: typing.Union[str, typing.List[str]]):
         if isinstance(event, str):
