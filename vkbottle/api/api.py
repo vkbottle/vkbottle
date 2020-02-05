@@ -72,9 +72,9 @@ class Method:
         if abandoned:
             raise ValueError('Send args with KWARGS! bot.api.a.b(a="b")')
 
-        for k, v in enumerate(kwargs):
+        for k, v in kwargs.items():
             if isinstance(v, (list, tuple)):
-                kwargs[str(k)] = ",".join(str(x) for x in v)
+                kwargs[k] = ",".join(str(x) for x in v)
 
         req = request(self._token, self._method, kwargs)
         return await request_instance(self._method, req)
