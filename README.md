@@ -35,12 +35,12 @@
 ```python
 from vkbottle import Bot, Message
 
-bot = Bot('my-token', 123, debug=True)
+bot = Bot("my-token")
 
 
-@bot.on.message(text='My name is <name>', lower=True)
+@bot.on.message(text="My name is <name>", lower=True)
 async def wrapper(ans: Message, name):
-    await ans('Hello, {}'.format(name))
+    await ans("Hello, {}".format(name))
 
 
 bot.run_polling()
@@ -55,13 +55,13 @@ from aiohttp.web import RouteTableDef, Application, Request, run_app
 
 app = Application()
 routes = RouteTableDef()
-bot = Bot('my-token', 123, debug=True, secret="SecretKey")
+bot = Bot("my-token", secret="SecretKey")
 
-@routes.get('/bot')
+@routes.get("/bot")
 async def executor(request: Request):
     return await bot.emulate(event=dict(request.query), confirmation_token="ConfirmationToken")
 
-@bot.on.message(text='test', lower=True)
+@bot.on.message(text="test", lower=True)
 async def wrapper():
     return "test"
 
@@ -75,7 +75,7 @@ run_app(app)
 from vkbottle import Bot, Message
 from vkbottle.rule import AttachmentRule
 
-bot = Bot("my-token", 123, debug=True)
+bot = Bot("my-token")
 
 @bot.on.message(AttachmentRule("photo"))
 async def wrapper():

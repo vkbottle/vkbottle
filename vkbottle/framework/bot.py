@@ -102,15 +102,15 @@ class Bot(HTTP, EventProcessor):
             raise VKError("Token is invalid")
         return response["response"][0]["id"]
 
-    def _check_secret(self, secret: str):
+    def _check_secret(self, event: dict):
         """
         Match secret code with current secret
         :param secret:
         :return:
         """
         if self.__secret:
-            return secret == self.__secret
-        return None
+            return event.get("secret") == self.__secret
+        return True
 
     def set_debug(self, debug: bool, **params):
         """
@@ -249,9 +249,8 @@ class Bot(HTTP, EventProcessor):
                 return confirmation_token or "dissatisfied"
 
         updates = event.get("updates", [event])
-        if "secret" in event:
-            if not self._check_secret(event["secret"]):
-                return "access denied"
+        if not self._check_secret(event):
+            return "access denied"
 
         try:
             for update in updates:
