@@ -6,6 +6,7 @@ from vbml import Pattern, Patcher
 
 from ...types import Message, BaseModel
 from ...types import user_longpoll
+from ...utils import flatten
 
 
 class Copy:
@@ -98,8 +99,11 @@ class LevenshteinDisRule(AbstractMessageRule):
         for i in range(1, m + 1):
             previous_row, current_row = current_row, [i] + [0] * n
             for j in range(1, n + 1):
-                add, delete, change = previous_row[j] + 1, current_row[
-                    j - 1] + 1, previous_row[j - 1]
+                add, delete, change = (
+                    previous_row[j] + 1,
+                    current_row[j - 1] + 1,
+                    previous_row[j - 1],
+                )
                 if a[j - 1] != b[i - 1]:
                     change += 1
                 current_row[j] = min(add, delete, change)
@@ -212,10 +216,10 @@ class VBMLUserRule(AbstractUserRule, VBML):
 
 class AttachmentRule(UnionMixin):
     async def check(self, message: Message):
-        attachments = [
-            list(attachment.dict(skip_defaults=True).keys())[0]
+        attachments = flatten([
+            list(attachment.dict(skip_defaults=True).keys())
             for attachment in message.attachments
-        ]
+        ])
         if attachments and not self.data["mixin"]:
             # ANY ATTACHMENTS
             return True

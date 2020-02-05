@@ -16,7 +16,7 @@ MODE = 2
 
 
 class User(HTTP):
-    longPollServer: dict
+    long_poll_server: dict
     __wait: int
     _mode: int = None
     version: int = None
@@ -56,27 +56,27 @@ class User(HTTP):
         Get longPoll server for long request creation
         :return:
         """
-        self.longPollServer = await self.api.messages.getLongPollServer()
-        return self.longPollServer
+        self.long_poll_server = await self.api.messages.getLongPollServer()
+        return self.long_poll_server
 
-    async def make_long_request(self, longPollServer: dict) -> dict:
+    async def make_long_request(self, long_poll_server: dict) -> dict:
         """
         Make longPoll request to the VK Server
-        :param longPollServer:
+        :param long_poll_server:
         :return: VK LongPoll Event
         """
         try:
             url = "https://{}?act=a_check&key={}&ts={}&wait={}&mode={}&version={}".format(
-                longPollServer["server"],
-                longPollServer["key"],
-                longPollServer["ts"],
+                long_poll_server["server"],
+                long_poll_server["key"],
+                long_poll_server["ts"],
                 self.__wait or DEFAULT_WAIT,
                 self.mode or MODE,
                 self.version or VERSION,
             )
             return await self.request.post(url)
         except TimeoutError:
-            return await self.make_long_request(longPollServer)
+            return await self.make_long_request(long_poll_server)
 
     async def run(self, wait: int = DEFAULT_WAIT):
         self.__wait = wait
@@ -87,7 +87,7 @@ class User(HTTP):
 
         while True:
             try:
-                event = await self.make_long_request(self.longPollServer)
+                event = await self.make_long_request(self.long_poll_server)
                 if isinstance(event, dict):
                     self.__loop.create_task(self.emulate(event))
                 await self.get_server()
@@ -100,36 +100,36 @@ class User(HTTP):
                 # No internet connection
                 await self._logger.warning("Server Timeout Error!")
 
-    async def emulate(self, event: dict):
-        try:
-            for update in event.get("updates", []):
-                update_fields = update[1:]
-                for rule in self.on.rules:
-                    check = await rule.check(update)
-                    if check is not None:
-                        fields, _ = rule.data["data"], rule.data["name"]
-                        data = dict(zip(fields, update_fields))
-                        args, kwargs = [], {}
-                        if rule.data.get("dataclass"):
-                            data = rule.data.get("dataclass")(**data)
-                        if isinstance(check, tuple):
-                            if all([await s_rule.check(data) for s_rule in check]):
-                                args = [a for rule in check for a in rule.context.args]
-                                kwargs = {
-                                    k: v
-                                    for rule in check
-                                    for k, v in rule.context.kwargs.items()
-                                }
-                            else:
-                                continue
-
-                        await rule.call(data, *args, **kwargs)
-        except:
-            self._logger.error(
-                "While user lp worked error occurred TIME %#%\n\n{}".format(
-                    traceback.format_exc()
+            except:
+                self._logger.error(
+                    "While user lp worked error occurred TIME %#%\n\n{}".format(
+                        traceback.format_exc()
+                    )
                 )
-            )
+
+    async def emulate(self, event: dict):
+        for update in event.get("updates", []):
+            update_fields = update[1:]
+            for rule in self.on.rules:
+                check = await rule.check(update)
+                if check is not None:
+                    fields, _ = rule.data["data"], rule.data["name"]
+                    data = dict(zip(fields, update_fields))
+                    args, kwargs = [], {}
+                    if rule.data.get("dataclass"):
+                        data = rule.data.get("dataclass")(**data)
+                    if isinstance(check, tuple):
+                        if all([await s_rule.check(data) for s_rule in check]):
+                            args = [a for rule in check for a in rule.context.args]
+                            kwargs = {
+                                k: v
+                                for rule in check
+                                for k, v in rule.context.kwargs.items()
+                            }
+                        else:
+                            continue
+
+                    await rule.call(data, *args, **kwargs)
 
     def run_polling(self):
         loop = self.__loop
