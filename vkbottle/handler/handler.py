@@ -198,23 +198,29 @@ class MessageHandler:
     def _text_rule(
         self,
         func: typing.Callable,
-        text: typing.Union[str, Pattern],
+        text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
         lower: bool,
         command: bool,
         pattern: str,
     ) -> AbstractRule:
         if not isinstance(text, Pattern):
             prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-            pattern = self._patcher.pattern(
-                text,
-                pattern=(prefix + pattern) if prefix else pattern,
-                flags=re.IGNORECASE if lower else None,
-            )
-            rule = VBMLRule(pattern)
-            rule.data["ignore_ans"] = should_ignore_ans(func, pattern.arguments)
+            texts: typing.List[str] = text if isinstance(text, list) else [text]
+            patterns: typing.List[Pattern] = []
+            for text in texts:
+                patterns.append(self._patcher.pattern(
+                    text,
+                    pattern=(prefix + pattern) if prefix else pattern,
+                    flags=re.IGNORECASE if lower else None
+                ))
+            rule = VBMLRule(patterns)
+            arguments = [arguments for pattern in patterns for arguments in pattern.arguments]
+            rule.data["ignore_ans"] = should_ignore_ans(func, arguments)
         else:
-            rule = VBMLRule(self._patcher.pattern(text))
-            rule.data["ignore_ans"] = should_ignore_ans(func, text.arguments)
+            patterns: typing.List[Pattern] = text if isinstance(text, list) else [text]
+            rule = VBMLRule(patterns)
+            arguments = [arguments for pattern in patterns for arguments in pattern.arguments]
+            rule.data["ignore_ans"] = should_ignore_ans(func, arguments)
 
         return rule
 
@@ -268,7 +274,7 @@ class MessageHandler:
     def __call__(
         self,
         *rules,
-        text: typing.Union[str, Pattern] = None,
+        text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]] = None,
         command: bool = False,
         lower: bool = False,
         **col_rules,
