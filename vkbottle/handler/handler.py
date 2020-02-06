@@ -233,7 +233,7 @@ class MessageHandler:
         self,
         func: typing.Callable,
         *rules,
-        text: typing.Union[str, Pattern] = None,
+        text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]] = None,
         lower: bool = False,
         command: bool = False,
         pattern: str = None,
@@ -300,7 +300,7 @@ class MessageHandler:
 
     def startswith(
         self,
-        text: typing.Union[str, Pattern],
+        text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
         *rules,
         command: bool = False,
         lower: bool = False,
