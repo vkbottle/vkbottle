@@ -30,7 +30,7 @@ class DefaultValidators(PatchedValidators):
 
 
 class Bot(HTTP, EventProcessor):
-    longPollServer: dict
+    long_poll_server: dict
 
     def __init__(
         self,
@@ -78,7 +78,7 @@ class Bot(HTTP, EventProcessor):
 
         # Main workers
         self.branch: BranchManager = BranchManager(plugin_folder or DEFAULT_BOT_FOLDER)
-        self.on: Handler = Handler(self._logger, group_id)
+        self.on: Handler = Handler(self._logger, self.group_id)
         self.error_handler: ErrorHandler = ErrorHandler()
 
     def dispatch(self, ext: "Bot"):
@@ -102,15 +102,15 @@ class Bot(HTTP, EventProcessor):
             raise VKError("Token is invalid")
         return response["response"][0]["id"]
 
-    def _check_secret(self, secret: str):
+    def _check_secret(self, event: dict):
         """
         Match secret code with current secret
-        :param secret:
+        :param event:
         :return:
         """
         if self.__secret:
-            return secret == self.__secret
-        return None
+            return event.get("secret") == self.__secret
+        return True
 
     def set_debug(self, debug: bool, **params):
         """
@@ -181,10 +181,10 @@ class Bot(HTTP, EventProcessor):
         Get longPoll server for long request create
         :return: LongPoll Server
         """
-        self.longPollServer = await self.api.groups.getLongPollServer(
+        self.long_poll_server = await self.api.groups.getLongPollServer(
             group_id=self.group_id
         )
-        return self.longPollServer
+        return self.long_poll_server
 
     async def make_long_request(self, long_poll_server: dict) -> dict:
         """
@@ -223,7 +223,7 @@ class Bot(HTTP, EventProcessor):
 
         while True:
             try:
-                event = await self.make_long_request(self.longPollServer)
+                event = await self.make_long_request(self.long_poll_server)
                 if isinstance(event, dict):
                     self.loop.create_task(self.emulate(event))
                 await self.get_server()
@@ -249,9 +249,8 @@ class Bot(HTTP, EventProcessor):
                 return confirmation_token or "dissatisfied"
 
         updates = event.get("updates", [event])
-        if "secret" in event:
-            if not self._check_secret(event["secret"]):
-                return "access denied"
+        if not self._check_secret(event):
+            return "access denied"
 
         try:
             for update in updates:

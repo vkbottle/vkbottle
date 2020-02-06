@@ -37,11 +37,13 @@ def should_ignore_ans(func: typing.Callable, arguments: list) -> bool:
 
 class Handler:
     def __init__(self, logger: Logger, group_id: int = 0):
-        self.__group_id: int = group_id
+        self.group_id: int = group_id
         self.__logger = logger
         self.rules: typing.List[typing.List[AbstractRule]] = list()
 
-        self.message: MessageHandler = MessageHandler(default_rules=[PrivateMessage()])
+        self.message: MessageHandler = MessageHandler(
+            default_rules=[PrivateMessage()]
+        )
         self.chat_message: MessageHandler = MessageHandler(
             default_rules=[ChatMessage()]
         )
@@ -115,7 +117,7 @@ class Handler:
         def decorator(func):
             rule = ChatActionRule(type_, rules=rules)
             rule.create(func)
-            self.chat_message.rules.append([rule])
+            self.chat_message.add_rules([rule], func)
             return func
 
         return decorator
@@ -123,22 +125,22 @@ class Handler:
     def chat_mention(self):
         def decorator(func):
             pattern = self._patcher.pattern(
-                pattern="", _pattern=r"\[(club|public){}\|.*?]".format(self.__group_id)
+                pattern="", _pattern=r"\[(club|public){}\|.*?]".format(self.group_id)
             )
             ignore_ans = len(signature(func).parameters) < 1
 
             rule = VBMLRule(pattern)
             rule.create(func, {"ignore_ans": ignore_ans})
-            self.chat_message.rules.append([rule])
+            self.chat_message.add_rules([rule], func)
             return func
 
         return decorator
 
     def chat_invite(self):
         def decorator(func):
-            rule = ChatActionRule("chat_invite_user", {"member_id": -self.__group_id})
+            rule = ChatActionRule("chat_invite_user", {"member_id": -self.group_id})
             rule.create(func)
-            self.chat_message.rules.append([rule])
+            self.chat_message.add_rules([rule], func)
             return func
 
         return decorator
@@ -229,7 +231,7 @@ class MessageHandler:
         lower: bool = False,
         command: bool = False,
         pattern: str = None,
-        **col_rules
+        **col_rules,
     ):
         """
         Add handler to disself._patcher without decorators
@@ -269,7 +271,7 @@ class MessageHandler:
         text: typing.Union[str, Pattern] = None,
         command: bool = False,
         lower: bool = False,
-        **col_rules
+        **col_rules,
     ):
         """
         Simple on.message(text) decorator. Support regex keys in text
@@ -296,7 +298,7 @@ class MessageHandler:
         *rules,
         command: bool = False,
         lower: bool = False,
-        **col_rules
+        **col_rules,
     ):
         """
         Startswith regex message processor
