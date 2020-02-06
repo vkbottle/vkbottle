@@ -203,24 +203,23 @@ class MessageHandler:
         command: bool,
         pattern: str,
     ) -> AbstractRule:
-        if not isinstance(text, Pattern):
-            prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-            texts: typing.List[str] = text if isinstance(text, list) else [text]
-            patterns: typing.List[Pattern] = []
-            for text in texts:
+        texts: typing.List[typing.Union[str, Pattern]] = text if isinstance(text, list) else [text]
+        patterns: typing.List[Pattern] = []
+        
+        for text in texts:
+            if not isinstance(text, Pattern):
+                prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
                 patterns.append(self._patcher.pattern(
                     text,
                     pattern=(prefix + pattern) if prefix else pattern,
                     flags=re.IGNORECASE if lower else None
                 ))
-            rule = VBMLRule(patterns)
-            arguments = [arguments for pattern in patterns for arguments in pattern.arguments]
-            rule.data["ignore_ans"] = should_ignore_ans(func, arguments)
-        else:
-            patterns: typing.List[Pattern] = text if isinstance(text, list) else [text]
-            rule = VBMLRule(patterns)
-            arguments = [arguments for pattern in patterns for arguments in pattern.arguments]
-            rule.data["ignore_ans"] = should_ignore_ans(func, arguments)
+            else:
+                patterns.append(text)
+        
+        rule = VBMLRule(patterns)
+        arguments = [arguments for pattern in patterns for arguments in pattern.arguments]
+        rule.data["ignore_ans"] = should_ignore_ans(func, arguments)
 
         return rule
 
