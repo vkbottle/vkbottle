@@ -74,6 +74,7 @@ class Bot(HTTP, EventProcessor):
             plugin_folder=folder_checkup(plugin_folder or "vkbottle_bot"),
             logger_enabled=log_to_file,
         )
+        Logger.set_current(self._logger)
         self.group_id = group_id or self.get_id_by_token(token)
 
         # Main workers
@@ -192,17 +193,13 @@ class Bot(HTTP, EventProcessor):
         :param long_poll_server:
         :return: VK LongPoll Event
         """
-        try:
-            url = "{}?act=a_check&key={}&ts={}&wait={}&rps_delay=0".format(
-                long_poll_server["server"],
-                long_poll_server["key"],
-                long_poll_server["ts"],
-                self.__wait or DEFAULT_WAIT,
-            )
-            return await self.request.post(url)
-        except AsyncioTimeoutError:
-            self._logger.error("TimeoutError of asyncio in longpoll request")
-            return await self.make_long_request(long_poll_server)
+        url = "{}?act=a_check&key={}&ts={}&wait={}&rps_delay=0".format(
+            long_poll_server["server"],
+            long_poll_server["key"],
+            long_poll_server["ts"],
+            self.__wait,
+        )
+        return await self.request.post(url)
 
     def run_polling(self):
         """
@@ -218,19 +215,17 @@ class Bot(HTTP, EventProcessor):
         self.__wait = wait
         self._logger.info("Polling will be started. Is it OK?")
 
+        if not self.status.dispatched:
+            await self.on.dispatch(self.get_current_rest)
+            self.status.dispatched = True
+
         await self.get_server()
         self._logger.debug("Polling successfully started. Press Ctrl+C to stop it")
 
         while True:
-            try:
-                event = await self.make_long_request(self.long_poll_server)
-                if isinstance(event, dict):
-                    self.loop.create_task(self.emulate(event))
-                await self.get_server()
-
-            except (ClientConnectionError, ServerTimeoutError, AsyncioTimeoutError):
-                # No internet connection
-                await self._logger.warning("Server Timeout Error!")
+            event = await self.make_long_request(self.long_poll_server)
+            await self.get_server()
+            self.loop.create_task(self.emulate(event))
 
     async def emulate(self, event: dict, confirmation_token: str = None) -> str:
         """
@@ -239,10 +234,6 @@ class Bot(HTTP, EventProcessor):
         :param confirmation_token: code which confirm VK callback
         :return: "ok"
         """
-
-        if not self.status.dispatched:
-            await self.on.dispatch(self.get_current_rest)
-            self.status.dispatched = True
 
         if event.get("type") == "confirmation":
             if event.get("group_id") == self.group_id:

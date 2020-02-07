@@ -7,6 +7,8 @@ except:
     with open("README.md", "r") as f:
         long_description = f.read()
 
+with open("requirements.txt", "r") as f:
+    requirements = f.read().splitlines()
 
 setuptools.setup(
     name="vkbottle",
@@ -24,5 +26,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3.7",
         "Operating System :: OS Independent",
     ],
-    install_requires=["aiohttp", "pydantic", "colorama", "termcolor", "vbml"],
+    install_requires=requirements,
 )

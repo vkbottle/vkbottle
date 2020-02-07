@@ -30,7 +30,7 @@ class EventProcessor(RegexHelper):
     status: BotStatus
     group_id: int
     _logger: Logger
-    __loop: AbstractEventLoop
+    loop: AbstractEventLoop
 
     async def _processor(self, obj: dict, client_info: dict):
         processor = dict(obj=obj, client_info=client_info)
@@ -41,7 +41,8 @@ class EventProcessor(RegexHelper):
         )
 
         if message.from_id in self.branch.queue or message.peer_id in self.branch.queue:
-            return await self._branched_processor(obj, client_info)
+            self.loop.create_task(self._branched_processor(obj, client_info))
+            return
 
         if self.on.pre:
             await (self.on.pre(message))
@@ -115,19 +116,21 @@ class EventProcessor(RegexHelper):
         )
 
         branch = self.branch.load(answer.peer_id)
-        task = await (self.branch.branches[branch[0]](answer, **branch[1]))
+
+        await branch.enter(answer)
+        task = await branch.branch(answer)
 
         task = await self._handler_return(task, obj, client_info)
-        _kw = str(branch[1])
 
         self._logger.debug(
             "New BRANCHED-message compiled with branch <\x1b[35m{}\x1b[0m> (from: {})".format(
                 '"{}" with {} kwargs'.format(
-                    branch[0], _kw if len(_kw) < 100 else _kw[1:99] + "..."
+                    branch.key, branch.context if len(branch.context) < 100 else branch.context[1:99] + "..."
                 ),
                 answer.from_id,
             )
         )
+        await branch.exit(answer)
         return task
 
     async def _handler_return(self, handler_return, obj: dict, client_info: dict):

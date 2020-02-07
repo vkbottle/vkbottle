@@ -8,6 +8,7 @@ import sys
 
 from termcolor import colored
 from colorama import init as color_opt
+from .util import ContextInstanceMixin
 
 LOG_FILE_PATTERN = r"[a-zA-Z0-9]+\.log"
 DEFAULT_LOG_NAME = "bot"
@@ -29,7 +30,7 @@ class Coloring:
         )
 
 
-class Logger:
+class Logger(ContextInstanceMixin):
     def __init__(
         self,
         debug: bool,

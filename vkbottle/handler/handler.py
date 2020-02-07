@@ -124,9 +124,8 @@ class Handler:
 
     def chat_mention(self):
         def decorator(func):
-            pattern = self._patcher.pattern(
-                pattern="", _pattern=r"\[(club|public){}\|.*?]".format(self.group_id)
-            )
+            pattern = Pattern(pattern=r"\[(club|public){}\|.*?]".format(self.group_id))
+            print(pattern.pattern)
             ignore_ans = len(signature(func).parameters) < 1
 
             rule = VBMLRule(pattern)

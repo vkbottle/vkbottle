@@ -1,4 +1,5 @@
 aiohttp
+contextvars
 pydantic
 colorama
 termcolor

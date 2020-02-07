@@ -52,7 +52,7 @@ async def branch(ans: Message):
 
 ```python
 bot.branch.add(ans.peer_id, "branch_name") # Для добавления источника в бранч
-bot.branch.exit(ans.peer_id, "branch_name") # Для удаления источника из бранча
+bot.branch.exit(ans.peer_id) # Для удаления источника из бранча
 ```
 
 Этот способ проще и функциональнее
