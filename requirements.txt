@@ -1,6 +1,5 @@
 aiohttp
 contextvars
 pydantic
-colorama
-termcolor
+loguru
 vbml

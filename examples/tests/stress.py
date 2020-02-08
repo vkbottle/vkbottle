@@ -15,13 +15,13 @@ def random_string(length=10):
 
 
 async def stress(ans: Message):
-    for s in STRINGS:
+    for s in STRINGS.copy():
         await ans(f"/r {s}")
-        await sleep(0.4)
+        await sleep(0.3)
     await ans("/re - to see results")
 
 
-@bot.on.message_handler(text=["/s", "/stress <t:int>"])
+@bot.on.message_handler(text=["/s", "/s <t:int>"])
 async def pronounce(ans: Message, t=100):
     globals()["STRINGS"] = [random_string() for i in range(t)]
     globals()["TIMES"] = t

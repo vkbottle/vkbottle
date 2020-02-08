@@ -9,7 +9,7 @@ bot = Bot("token")
 async def raid(ans: Message, text: str, times: int):
     for i in range(times):
         await ans(text)
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.2)
 
 
 bot.run_polling()

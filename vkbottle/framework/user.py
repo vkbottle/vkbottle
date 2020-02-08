@@ -1,13 +1,13 @@
-import typing, traceback
+import typing, traceback, sys
 from asyncio import get_event_loop, AbstractEventLoop
+from loguru import logger
 
 import aiohttp, vbml
 
 from ..http import HTTP
 from ..api import UserApi
 from ..handler import UserHandler
-from ..utils import Logger, keyboard_interrupt
-from ..utils.tools import folder_checkup
+from ._status import LoggerLevel
 
 
 DEFAULT_WAIT = 20
@@ -26,9 +26,8 @@ class User(HTTP):
         token: str,
         user_id: int = None,
         debug: bool = True,
-        plugin_folder: str = None,
         mode: int = None,
-        log_to_file: bool = False,
+        log_to_path: typing.Union[str, bool] = None,
         vbml_patcher: vbml.Patcher = None,
     ):
         self.__loop: AbstractEventLoop = get_event_loop()
@@ -40,12 +39,17 @@ class User(HTTP):
 
         self.user_id: typing.Optional[int] = user_id
         self.on: UserHandler = UserHandler(self._mode)
-        self._logger: Logger = Logger(
-            debug,
-            plugin_folder=folder_checkup(plugin_folder or "vkbottle_user_lp"),
-            logger_enabled=log_to_file,
-            prefix="User LP VKBottle",
-        )
+
+        self.logger = LoggerLevel("INFO" if debug else "ERROR")
+        logger.remove()
+        logger.add(sys.stderr,
+                   colorize=True,
+                   format="<level>[<blue>User LP</blue>] {message}</level>",
+                   filter=self.logger,
+                   level=0,
+                   enqueue=True)
+        if log_to_path:
+            logger.add("log_user_{time}.log" if log_to_path is True else log_to_path, rotation="100 MB")
 
     @property
     def api(self):
@@ -80,10 +84,10 @@ class User(HTTP):
 
     async def run(self, wait: int = DEFAULT_WAIT):
         self.__wait = wait
-        self._logger.info("Polling will be started. Is it OK?")
+        logger.info("Polling will be started. Is it OK?")
 
         await self.get_server()
-        self._logger.debug("Polling successfully started")
+        logger.debug("Polling successfully started")
 
         while True:
             try:
@@ -136,7 +140,8 @@ class User(HTTP):
         try:
             loop.run_until_complete(self.run())
         except KeyboardInterrupt:
-            keyboard_interrupt()
+            logger.error("Keyboard Interrupt")
+            exit(0)
 
     def mode(self, mode: int):
         self._mode = mode

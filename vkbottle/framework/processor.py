@@ -1,13 +1,13 @@
 import typing
 from asyncio import AbstractEventLoop
 from re import sub
+from loguru import logger
 
 from vbml import Patcher
 
 from ..types.message import Message
 from ..api import Api, HandlerReturnError
 from ..handler import Handler
-from ..utils import Logger
 from .branch import BranchManager
 from .regex import RegexHelper
 from .branch import Branch, ExitBranch
@@ -29,7 +29,6 @@ class EventProcessor(RegexHelper):
     branch: BranchManager
     status: BotStatus
     group_id: int
-    _logger: Logger
     loop: AbstractEventLoop
 
     async def _processor(self, obj: dict, client_info: dict):
@@ -47,10 +46,9 @@ class EventProcessor(RegexHelper):
         if self.on.pre:
             await (self.on.pre(message))
 
-        self._logger.debug(
-            '-> MESSAGE FROM {} TEXT "{}" TIME %#%'.format(
-                message.from_id, message.text.replace("\n", " ")
-            )
+        logger.debug(
+            '-> MESSAGE FROM {} TEXT "{}"',
+            message.from_id, message.text.replace("\n", " ")
         )
 
         task = None
@@ -66,9 +64,12 @@ class EventProcessor(RegexHelper):
 
                 task = await rules[0].call(*args, **kwargs)
 
-                self._logger.debug(
-                    "New message compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        rules[0].call.__name__, message.from_id
+                logger.info(
+                    "New message \"{}\" compiled with decorator <{}> (from: {}/{})".format(
+                        message.text.replace("\n", " "),
+                        rules[0].call.__name__,
+                        message.peer_id,
+                        message.from_id,
                     )
                 )
                 break
@@ -82,10 +83,9 @@ class EventProcessor(RegexHelper):
         :param obj: VK Server Event Object
         """
 
-        self._logger.debug(
-            '-> EVENT FROM {} TYPE "{}" TIME %#%'.format(
-                get_attr(obj, ["user_id", "from_id"]), event_type.upper()
-            )
+        logger.debug(
+            '-> EVENT FROM {} TYPE "{}"',
+            get_attr(obj, ["user_id", "from_id"]), event_type.upper()
         )
 
         for rule in self.on.event.rules:
@@ -93,9 +93,11 @@ class EventProcessor(RegexHelper):
                 event = rule.data["data"](**obj)
                 await rule.call(event, *rule.context.args, **rule.context.kwargs)
 
-                self._logger.debug(
-                    "New event compiled with decorator <\x1b[35m{}\x1b[0m> (from: {})".format(
-                        rule.call.__name__, "*"
+                logger.info(
+                    "New event \"{}\" compiled with decorator <{}> (from: {})".format(
+                        event_type.upper(),
+                        rule.call.__name__,
+                        get_attr(obj, ["user_id", "from_id"]),
                     )
                 )
                 return True
@@ -109,10 +111,9 @@ class EventProcessor(RegexHelper):
 
         answer = Message(**obj, client_info=client_info)
 
-        self._logger.debug(
-            '-> BRANCHED MESSAGE FROM {} TEXT "{}" TIME %#%'.format(
-                answer.peer_id, answer.text.replace("\n", " ")
-            )
+        logger.debug(
+            '-> BRANCHED MESSAGE FROM {} TEXT "{}"',
+            answer.peer_id, answer.text.replace("\n", " ")
         )
 
         branch = self.branch.load(answer.peer_id)
@@ -122,12 +123,14 @@ class EventProcessor(RegexHelper):
 
         task = await self._handler_return(task, obj, client_info)
 
-        self._logger.debug(
-            "New BRANCHED-message compiled with branch <\x1b[35m{}\x1b[0m> (from: {})".format(
-                '"{}" with {} kwargs'.format(
-                    branch.key, branch.context if len(branch.context) < 100 else branch.context[1:99] + "..."
-                ),
+        logger.info(
+            "New BRANCHED \"{0}\" compiled with branch <{2}> (from: {1})".format(
+                answer.text.replace("\n", " "),
                 answer.from_id,
+                '"{}" with {} kwargs'.format(
+                    branch.key,
+                    branch.context if len(branch.context) < 100 else branch.context[1:99] + "..."
+                ),
             )
         )
         await branch.exit(answer)
@@ -143,14 +146,14 @@ class EventProcessor(RegexHelper):
         return_type = type(handler_return)
         if return_type in [Branch, ExitBranch]:
             if return_type == Branch:
-                self._logger.mark("[Branch Collected]", handler_return.branch_name)
+                logger.debug("[Branch Collected]", handler_return.branch_name)
                 self.branch.add(
                     obj["peer_id"],
                     handler_return.branch_name,
                     **handler_return.branch_kwargs
                 )
             else:
-                self._logger.mark("[Branch Exited]")
+                logger.debug("[Branch Exited]")
                 self.branch.exit(obj["peer_id"])
         elif return_type in [str, int, dict, list, tuple, float]:
             await Message(**obj, client_info=client_info)(

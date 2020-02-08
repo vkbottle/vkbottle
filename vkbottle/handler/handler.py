@@ -1,11 +1,11 @@
 import typing
 import re
 from inspect import iscoroutinefunction, signature
+from loguru import logger
 
 from vbml import Patcher, Pattern
 
 from .events import Event
-from ..utils import Logger
 from ..const import __version__
 from ..api import HandlerError
 from ..framework.rule import (
@@ -36,9 +36,8 @@ def should_ignore_ans(func: typing.Callable, arguments: list) -> bool:
 
 
 class Handler:
-    def __init__(self, logger: Logger, group_id: int = 0):
+    def __init__(self, group_id: int = 0):
         self.group_id: int = group_id
-        self.__logger = logger
         self.rules: typing.List[typing.List[AbstractRule]] = list()
 
         self.message: MessageHandler = MessageHandler(
@@ -74,6 +73,8 @@ class Handler:
         if self.pre is None:
             self._pre_p = handler.pre
 
+        logger.debug("Bot Handler was concatenated with {handler}", handler=handler.__name__)
+
     async def dispatch(self, get_current_rest: typing.Callable = None) -> None:
         """
         Dispatch handlers from only-handlers and both-handlers
@@ -93,12 +94,13 @@ class Handler:
             # Check updates from timoniq/vkbottle-rest
             current_rest = await get_current_rest()
             if current_rest["version"] != __version__:
-                self.__logger.mark(
+                logger.info(
                     "You are using old version of VKBottle. Update is found: {}".format(
                         current_rest["version"]
                     ),
                     current_rest["description"],
                 )
+        logger.debug("Bot successfully dispatched")
 
     def change_prefix_for_all(self, prefix: list) -> None:
         self.message.prefix = prefix

@@ -2,7 +2,7 @@ from vkbottle import Bot, Message
 import os
 
 # Add variable TOKEN to your env variables
-bot = Bot(os.environ["TOKEN"], debug=False)
+bot = Bot(os.environ["TOKEN"])
 
 
 @bot.on.message_handler(text="/r <s>")

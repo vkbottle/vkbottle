@@ -1,7 +1,7 @@
 import asyncio
 import typing
 
-from .logger import keyboard_interrupt
+from loguru import logger
 
 
 """
@@ -67,7 +67,8 @@ class TaskManager:
             self.loop.run_forever()
 
         except KeyboardInterrupt:
-            keyboard_interrupt()
+            logger.error("Keyboard Interrupt")
+            exit(0)
 
         finally:
             if on_shutdown is not None:

@@ -2,7 +2,7 @@ import time
 import asyncio
 import typing
 
-from termcolor import cprint
+from loguru import logger
 
 from ..const import API_VERSION, API_URL
 from .exceptions import VKError
@@ -30,25 +30,26 @@ async def request_instance(method: str, req: typing.Coroutine):
 
     if not isinstance(response, dict):
         while not isinstance(response, dict):
+            # Works only on python 3.6+
             delay = 1
-            cprint(
-                f"\n--- {time.strftime('%m-%d %H:%M:%S')}"
+            logger.critical(
+                "\n---"
                 f"{time.localtime()} - DELAY {delay * 5} sec\n"
                 f"Check your internet connection. Maybe VK died, request returned: {response}"
                 f"Error appeared after request: {method}",
-                color="yellow",
             )
             await asyncio.sleep(delay * 5)
             delay += 1
             response = await req
 
-            cprint(f"--- {time.strftime('%m-%d %H:%M:%S', time.localtime())}\n"
-                   f"- METHOD SUCCESS after {5 * sum(range(1, delay))} sec\n"
-                   f"RESPONSE: {response}\n",
-                   color="green",
-                   )
+            logger.critical(
+                f"--- {time.strftime('%m-%d %H:%M:%S', time.localtime())}\n"
+                f"- METHOD SUCCESS after {5 * sum(range(1, delay))} sec\n"
+                f"RESPONSE: {response}\n",
+            )
 
     if "error" in response:
+        logger.debug("Error after request {method}, response: {r}", method=method, r=response)
         raise VKError([response["error"]["error_code"], response["error"]["error_msg"]])
 
     return response["response"]

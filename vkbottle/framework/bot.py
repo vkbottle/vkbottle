@@ -1,20 +1,16 @@
-import traceback
+import traceback, sys, typing
+from loguru import logger
 from asyncio import get_event_loop, AbstractEventLoop
-from asyncio import TimeoutError as AsyncioTimeoutError
-from aiohttp.client_exceptions import ClientConnectionError, ServerTimeoutError
-
 from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 from ..api import Api, request
 from ..handler import Handler, ErrorHandler
-from ..utils.logger import Logger, keyboard_interrupt
 from ..http import HTTP
 from ..api import VKError
 from vbml import Patcher, PatchedValidators
 from ._event import EventTypes
 from .processor import EventProcessor
 from .branch import BranchManager
-from ..utils.tools import folder_checkup
-from ._status import BotStatus
+from ._status import BotStatus, LoggerLevel
 
 try:
     import vbml
@@ -37,10 +33,8 @@ class Bot(HTTP, EventProcessor):
         token: str,
         *,
         group_id: int = None,
-        debug: bool = True,
-        plugin_folder: str = None,
-        log_to_file: bool = False,
-        log_to: str = None,
+        debug: typing.Union[str, bool] = True,
+        log_to_path: typing.Union[str, bool] = None,
         secret: str = None,
     ):
         """
@@ -48,9 +42,7 @@ class Bot(HTTP, EventProcessor):
         :param token: bot token
         :param group_id: [auto]
         :param debug: should bot debug messages for emulating
-        :param plugin_folder: folder for logs
-        :param log_to_file: make logs
-        :param log_to: log path
+        :param log_to_path: make logs
         :param secret: secret vk code for callback
         """
         # Base bot classifiers
@@ -65,21 +57,30 @@ class Bot(HTTP, EventProcessor):
         self.__api: Api = Api(token)
         Api.set_current(self.__api)
 
+        if isinstance(debug, bool):
+            debug = "INFO" if debug else "ERROR"
+
+        self.logger = LoggerLevel(debug)
+
         if not Patcher.get_current():
             Patcher.set_current(Patcher(pattern="^{}$", validators=DefaultValidators))
 
-        self._logger: Logger = Logger(
-            debug=debug,
-            log_file=log_to,
-            plugin_folder=folder_checkup(plugin_folder or "vkbottle_bot"),
-            logger_enabled=log_to_file,
-        )
-        Logger.set_current(self._logger)
+        logger.remove()
+        logger.add(sys.stderr,
+                   colorize=True,
+                   format="<level>[<blue>VKBottle</blue>] {message}</level> <white>[TIME {time:HH:MM:ss}]</white>",
+                   filter=self.logger,
+                   level=0,
+                   enqueue=True)
+        logger.level("INFO", color="<white>")
+        logger.level("ERROR", color="<red>")
+        if log_to_path:
+            logger.add("log_{time}.log" if log_to_path is True else log_to_path, rotation="100 MB")
         self.group_id = group_id or self.get_id_by_token(token)
 
         # Main workers
-        self.branch: BranchManager = BranchManager(plugin_folder or DEFAULT_BOT_FOLDER)
-        self.on: Handler = Handler(self._logger, self.group_id)
+        self.branch: BranchManager = BranchManager(DEFAULT_BOT_FOLDER)
+        self.on: Handler = Handler(self.group_id)
         self.error_handler: ErrorHandler = ErrorHandler()
 
     def dispatch(self, ext: "Bot"):
@@ -90,6 +91,7 @@ class Bot(HTTP, EventProcessor):
         """
         self.on.concatenate(ext.on)
         self.error_handler.update(ext.error_handler.processors)
+        logger.debug("Bot has been successfully dispatched")
 
     @staticmethod
     def get_id_by_token(token: str):
@@ -98,6 +100,7 @@ class Bot(HTTP, EventProcessor):
         :param token:
         :return:
         """
+        logger.debug("Making API request groups.getById to get group_id")
         response = get_event_loop().run_until_complete(request(token, "groups.getById"))
         if "error" in response:
             raise VKError("Token is invalid")
@@ -110,27 +113,9 @@ class Bot(HTTP, EventProcessor):
         :return:
         """
         if self.__secret:
+            logger.debug("Checking secret for event ({secret})", secret=event.get("secret"))
             return event.get("secret") == self.__secret
         return True
-
-    def set_debug(self, debug: bool, **params):
-        """
-        DEPRECATED
-        Set debug regime
-        :param debug: debug mode
-        :param params: logging params
-        :return:
-        """
-        self.__debug = debug
-        self._logger: Logger = Logger(
-            debug,
-            **params,
-            **{
-                k: v
-                for k, v in self._logger.logger_params.items()
-                if k not in {**params, "debug": None}
-            },
-        )
 
     def loop_update(self, loop: AbstractEventLoop = None):
         """
@@ -207,20 +192,22 @@ class Bot(HTTP, EventProcessor):
         """
         loop = self.__loop
         try:
-            loop.run_until_complete(self.run())
+            loop.create_task(self.run())
+            loop.run_forever()
         except KeyboardInterrupt:
-            keyboard_interrupt()
+            logger.error("Keyboard Interrupt")
+            exit(0)
 
     async def run(self, wait: int = DEFAULT_WAIT):
         self.__wait = wait
-        self._logger.info("Polling will be started. Is it OK?")
+        logger.debug("Polling will be started. Is it OK?")
 
         if not self.status.dispatched:
             await self.on.dispatch(self.get_current_rest)
             self.status.dispatched = True
 
         await self.get_server()
-        self._logger.debug("Polling successfully started. Press Ctrl+C to stop it")
+        logger.info("Polling successfully started. Press Ctrl+C to stop it")
 
         while True:
             event = await self.make_long_request(self.long_poll_server)
@@ -234,6 +221,11 @@ class Bot(HTTP, EventProcessor):
         :param confirmation_token: code which confirm VK callback
         :return: "ok"
         """
+        if not self.status.dispatched:
+            await self.on.dispatch(self.get_current_rest)
+            self.status.dispatched = True
+
+        logger.debug("Event: {event}", event=event)
 
         if event.get("type") == "confirmation":
             if event.get("group_id") == self.group_id:
@@ -241,6 +233,7 @@ class Bot(HTTP, EventProcessor):
 
         updates = event.get("updates", [event])
         if not self._check_secret(event):
+            logger.debug("Aborted. Secret is invalid")
             return "access denied"
 
         try:
@@ -268,14 +261,14 @@ class Bot(HTTP, EventProcessor):
             e = list(e.args)[0]
             if e[0] in self.error_handler.processors:
                 handler = self.error_handler.processors[e[0]]["call"]
-                self._logger.debug(
+                logger.debug(
                     "VKError ?{}! Processing it with handler <{}>".format(
                         e, handler.__name__
                     )
                 )
                 await handler(e)
             else:
-                self._logger.error(
+                logger.error(
                     "VKError! Add @bot.error_handler({}) to process this error!".format(
                         e
                     )
@@ -283,10 +276,8 @@ class Bot(HTTP, EventProcessor):
                 raise VKError(e)
 
         except:
-            self._logger.error(
-                "While bot worked error occurred TIME %#%\n\n{}".format(
-                    traceback.format_exc()
-                )
+            logger.error(
+                "While bot worked error occurred TIME {time}\n\n{traceback}", traceback=traceback.format_exc()
             )
 
         return "ok"

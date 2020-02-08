@@ -1,9 +1,7 @@
 from copy import copy
+from loguru import logger
 
 from ...types import Message
-from ...utils import Logger
-
-logger = Logger.get_current
 
 
 class Copy:
@@ -33,10 +31,10 @@ class AbstractBranch(Copy):
 
 class ClsBranch(AbstractBranch):
     async def enter(self, ans: Message):
-        logger().info("Branch \"{}\" entered at %#%")
+        logger.info("Branch \"{}\" entered at %#%")
 
     async def exit(self, ans: Message):
-        logger().info("Branch \"{}\" exit at %#%")
+        logger.info("Branch \"{}\" exit at %#%")
 
 
 class FunctionBranch(ClsBranch):
