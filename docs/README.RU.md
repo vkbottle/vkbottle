@@ -9,6 +9,18 @@ import typing
 from vkbottle import Bot, Message, keyboard_gen, VKError
 ```
 
+## API
+
+Вызывать встроенное API можно двумя способами:
+
+```python
+# ...
+await bot.api.request("users.get", {"users_id": 1})
+await bot.api.users.get(users_id=1)
+```
+
+В обоих случаях методы вызываются асинхронно, для синхронного вызова потребуется воспользоваться `TaskManager` (читать [фреймворк документацию](/docs/FrameworkAPI.md))
+
 ## Callback!
 
 Мы можем создать простой обработчик событий любым веб-фреймворком (настоятельно рекомендуется использовать асинхронные решения).
