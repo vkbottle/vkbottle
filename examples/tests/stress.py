@@ -3,7 +3,7 @@ import os, random, string, asyncio
 from asyncio import sleep
 
 # Add variable TOKEN to your env variables
-bot = Bot(os.environ["TOKEN"], debug=False)
+bot = Bot(os.environ["TOKEN"], debug="ERROR")
 STRINGS = []
 TIMES = 0
 
@@ -11,7 +11,7 @@ TIMES = 0
 def random_string(length=10):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(length))
+    return "".join(random.choice(letters) for i in range(length))
 
 
 async def stress(ans: Message):

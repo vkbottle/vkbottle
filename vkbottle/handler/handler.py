@@ -40,9 +40,7 @@ class Handler:
         self.group_id: int = group_id
         self.rules: typing.List[typing.List[AbstractRule]] = list()
 
-        self.message: MessageHandler = MessageHandler(
-            default_rules=[PrivateMessage()]
-        )
+        self.message: MessageHandler = MessageHandler(default_rules=[PrivateMessage()])
         self.chat_message: MessageHandler = MessageHandler(
             default_rules=[ChatMessage()]
         )
@@ -73,7 +71,9 @@ class Handler:
         if self.pre is None:
             self._pre_p = handler.pre
 
-        logger.debug("Bot Handler was concatenated with {handler}", handler=handler.__name__)
+        logger.debug(
+            "Bot Handler was concatenated with {handler}", handler=handler.__name__
+        )
 
     async def dispatch(self, get_current_rest: typing.Callable = None) -> None:
         """
@@ -204,22 +204,28 @@ class MessageHandler:
         command: bool,
         pattern: str,
     ) -> AbstractRule:
-        texts: typing.List[typing.Union[str, Pattern]] = text if isinstance(text, list) else [text]
+        texts: typing.List[typing.Union[str, Pattern]] = text if isinstance(
+            text, list
+        ) else [text]
         patterns: typing.List[Pattern] = []
-        
+
         for text in texts:
             if not isinstance(text, Pattern):
                 prefix = ("[" + "|".join(self.prefix) + "]") if command else ""
-                patterns.append(self._patcher.pattern(
-                    text,
-                    pattern=(prefix + pattern) if prefix else pattern,
-                    flags=re.IGNORECASE if lower else None
-                ))
+                patterns.append(
+                    self._patcher.pattern(
+                        text,
+                        pattern=(prefix + pattern) if prefix else pattern,
+                        flags=re.IGNORECASE if lower else None,
+                    )
+                )
             else:
                 patterns.append(text)
-        
+
         rule = VBMLRule(patterns)
-        arguments = [arguments for pattern in patterns for arguments in pattern.arguments]
+        arguments = [
+            arguments for pattern in patterns for arguments in pattern.arguments
+        ]
         rule.data["ignore_ans"] = should_ignore_ans(func, arguments)
 
         return rule
@@ -233,7 +239,9 @@ class MessageHandler:
         self,
         func: typing.Callable,
         *rules,
-        text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]] = None,
+        text: typing.Union[
+            str, Pattern, typing.List[typing.Union[str, Pattern]]
+        ] = None,
         lower: bool = False,
         command: bool = False,
         pattern: str = None,
@@ -274,7 +282,9 @@ class MessageHandler:
     def __call__(
         self,
         *rules,
-        text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]] = None,
+        text: typing.Union[
+            str, Pattern, typing.List[typing.Union[str, Pattern]]
+        ] = None,
         command: bool = False,
         lower: bool = False,
         **col_rules,

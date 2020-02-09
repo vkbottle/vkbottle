@@ -49,7 +49,9 @@ async def request_instance(method: str, req: typing.Coroutine):
             )
 
     if "error" in response:
-        logger.debug("Error after request {method}, response: {r}", method=method, r=response)
+        logger.debug(
+            "Error after request {method}, response: {r}", method=method, r=response
+        )
         raise VKError([response["error"]["error_code"], response["error"]["error_msg"]])
 
     return response["response"]

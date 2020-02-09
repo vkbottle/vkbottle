@@ -10,7 +10,7 @@ If bot can't do it and VKError with codes 901 or 902 appeared, bot uses logger t
 """
 
 
-@bot.on.message(text="hi")
+@bot.on.message(text=["hi", "hello"])
 async def wrapper(ans: Message):
     keyboard = [[{"text": "fantastic button"}]]
     await ans("hi, my lil friend", keyboard=keyboard_gen(keyboard))
@@ -25,7 +25,7 @@ async def wrapper(event: types.GroupJoin):
 
 @bot.error_handler(901, 902)
 async def error(error):
-    print("Cant send message to this user :(, error code:", error[0])
+    print("Cant send message to the user :(, error code:", error[0])
 
 
 if __name__ == "__main__":
