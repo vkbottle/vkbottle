@@ -44,7 +44,7 @@ class User(HTTP):
         logger.remove()
         logger.add(sys.stderr,
                    colorize=True,
-                   format="<level>[<blue>User LP</blue>] {message}</level>",
+                   format="<level>[<blue>VKBottle</blue>] {message}</level>",
                    filter=self.logger,
                    level=0,
                    enqueue=True)
@@ -87,7 +87,7 @@ class User(HTTP):
         logger.info("Polling will be started. Is it OK?")
 
         await self.get_server()
-        logger.debug("Polling successfully started")
+        logger.debug("User Polling successfully started")
 
         while True:
             try:
@@ -102,11 +102,11 @@ class User(HTTP):
                 TimeoutError,
             ):
                 # No internet connection
-                await self._logger.warning("Server Timeout Error!")
+                logger.warning("Server Timeout Error!")
 
             except:
-                self._logger.error(
-                    "While user lp worked error occurred TIME %#%\n\n{}".format(
+                logger.error(
+                    "While user lp worked error occurred \n\n{}".format(
                         traceback.format_exc()
                     )
                 )
