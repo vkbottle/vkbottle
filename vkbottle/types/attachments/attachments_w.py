@@ -43,6 +43,7 @@ class AttachmentsW(str, Enum):
     market_album = MarketAlbum
     sticker = Sticker
     pretty_cards = PrettyCards
+    event = Event
 
 
 class AttachmentW(BaseModel):
