@@ -7,8 +7,7 @@ except:
     with open("README.md", "r") as f:
         long_description = f.read()
 
-with open("requirements.txt", "r") as f:
-    requirements = f.read().splitlines()
+requirements = ["aiohttp", "pydantic", "contextvars", "vbml", "loguru"]
 
 setuptools.setup(
     name="vkbottle",
