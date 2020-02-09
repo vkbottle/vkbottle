@@ -6,6 +6,7 @@ from ..api import Api, request
 from ..handler import Handler, ErrorHandler
 from ..http import HTTP
 from ..api import VKError
+from ..utils import flatten
 from vbml import Patcher, PatchedValidators
 from ._event import EventTypes
 from .processor import EventProcessor
@@ -66,16 +67,21 @@ class Bot(HTTP, EventProcessor):
             Patcher.set_current(Patcher(pattern="^{}$", validators=DefaultValidators))
 
         logger.remove()
-        logger.add(sys.stderr,
-                   colorize=True,
-                   format="<level>[<blue>VKBottle</blue>] {message}</level> <white>[TIME {time:HH:MM:ss}]</white>",
-                   filter=self.logger,
-                   level=0,
-                   enqueue=True)
+        logger.add(
+            sys.stderr,
+            colorize=True,
+            format="<level>[<blue>VKBottle</blue>] {message}</level> <white>[TIME {time:HH:MM:ss}]</white>",
+            filter=self.logger,
+            level=0,
+            enqueue=True,
+        )
         logger.level("INFO", color="<white>")
         logger.level("ERROR", color="<red>")
         if log_to_path:
-            logger.add("log_{time}.log" if log_to_path is True else log_to_path, rotation="100 MB")
+            logger.add(
+                "log_{time}.log" if log_to_path is True else log_to_path,
+                rotation="100 MB",
+            )
         self.group_id = group_id or self.get_id_by_token(token)
 
         # Main workers
@@ -113,7 +119,9 @@ class Bot(HTTP, EventProcessor):
         :return:
         """
         if self.__secret:
-            logger.debug("Checking secret for event ({secret})", secret=event.get("secret"))
+            logger.debug(
+                "Checking secret for event ({secret})", secret=event.get("secret")
+            )
             return event.get("secret") == self.__secret
         return True
 
@@ -214,7 +222,9 @@ class Bot(HTTP, EventProcessor):
             await self.get_server()
             self.loop.create_task(self.emulate(event))
 
-    async def emulate(self, event: dict, confirmation_token: str = None) -> str:
+    async def emulate(
+        self, event: dict, confirmation_token: str = None
+    ) -> typing.Union[str, None]:
         """
         Process all types of events
         :param event: VK Event (LP or CB)
@@ -227,6 +237,9 @@ class Bot(HTTP, EventProcessor):
 
         logger.debug("Event: {event}", event=event)
 
+        if event is None:
+            return
+
         if event.get("type") == "confirmation":
             if event.get("group_id") == self.group_id:
                 return confirmation_token or "dissatisfied"
@@ -236,8 +249,10 @@ class Bot(HTTP, EventProcessor):
             logger.debug("Aborted. Secret is invalid")
             return "access denied"
 
-        try:
-            for update in updates:
+        for update in updates:
+            if not update:
+                continue
+            try:
                 obj = update["object"]
 
                 if update["type"] == EventTypes.MESSAGE_NEW:
@@ -256,29 +271,34 @@ class Bot(HTTP, EventProcessor):
                         self._event_processor(obj=obj, event_type=update["type"])
                     )  # noqa
 
-        except VKError as e:
-
-            e = list(e.args)[0]
-            if e[0] in self.error_handler.processors:
-                handler = self.error_handler.processors[e[0]]["call"]
+            except VKError as e:
+                e = list(e.args)[0]
                 logger.debug(
-                    "VKError ?{}! Processing it with handler <{}>".format(
-                        e, handler.__name__
-                    )
+                    "Error {error}, invented by update: {update}",
+                    error=e,
+                    update=update,
                 )
-                await handler(e)
-            else:
-                logger.error(
-                    "VKError! Add @bot.error_handler({}) to process this error!".format(
-                        e
+                if e[0] in self.error_handler.processors:
+                    handler = self.error_handler.processors[e[0]]["call"]
+                    logger.debug(
+                        "VKError ?{}! Processing it with handler <{}>".format(
+                            e, handler.__name__
+                        )
                     )
-                )
-                raise VKError(e)
+                    await handler(e)
+                else:
+                    logger.error(
+                        "VKError! Add @bot.error_handler({}) to process this error!".format(
+                            e
+                        )
+                    )
+                    raise VKError(e)
 
-        except:
-            logger.error(
-                "While bot worked error occurred TIME {time}\n\n{traceback}", traceback=traceback.format_exc()
-            )
+            except:
+                logger.error(
+                    "While bot worked error occurred \n\n{traceback}",
+                    traceback=traceback.format_exc(),
+                )
 
         return "ok"
 
