@@ -1,6 +1,6 @@
 from enum import Enum
 from ..base import BaseModel
-from .photo import Photo, PostedPhoto
+from .photo import Photo
 from .video import Video
 from .audio import Audio
 from .document import Document
@@ -13,21 +13,22 @@ from .page import Page
 from .album import Album
 from .market import Market
 from .market_album import MarketAlbum
+from ..wall_post import WallPost
+from ..wall_comment import WallComment
 from .sticker import Sticker
-from .pretty_cards import PrettyCards
 from .audio_msg import AudioMsg
+from .gift import Gift
 
 import typing
 from typing import Optional
 
 
-# https://vk.com/dev/objects/attachments_w
+# https://vk.com/dev/objects/attachments_m
 
 
 class Attachments(str, Enum):
     not_attachments = []
     photo = Photo
-    posted_photo = PostedPhoto
     video = Video
     audio = Audio
     document = Document
@@ -41,14 +42,15 @@ class Attachments(str, Enum):
     photos_list = typing.List[int]
     market = Market
     market_album = MarketAlbum
+    wall = WallPost
+    wall_reply = WallComment
     sticker = Sticker
-    pretty_cards = PrettyCards
+    gift = Gift
 
 
 class Attachment(BaseModel):
     type: str = None
     photo: Optional[Photo]
-    posted_photo: Optional[PostedPhoto]
     video: Optional[Video]
     audio: Optional[Audio]
     doc: Optional[Document]
@@ -62,6 +64,8 @@ class Attachment(BaseModel):
     photos_list: Optional[typing.List[Photo]]
     market: Optional[Market]
     market_album: Optional[MarketAlbum]
+    wall: Optional[WallPost]
+    wall_reply: Optional[WallComment]
     sticker: Optional[Sticker]
-    pretty_cards: Optional[PrettyCards]
     audio_message: Optional[AudioMsg]
+    gift: Optional[Gift]

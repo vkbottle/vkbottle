@@ -1,5 +1,6 @@
 from .base import BaseModel
-from .attachments import Like, Repost, Geo, Attachment
+from .attachments import Like, Repost, Geo
+from .attachments.attachments_w import AttachmentW
 
 from .additional import PostSource
 import typing
@@ -11,7 +12,8 @@ class WallPostComments(BaseModel):
     count: int = None
     can_post: int = None
     groups_can_post: int = None
-
+    can_close: bool = None
+    can_open: bool = None
 
 class WallPost(BaseModel):
     id: int = None
@@ -28,7 +30,7 @@ class WallPost(BaseModel):
     reposts: Repost = None
     post_type: str = None
     post_source: PostSource = None
-    attachments: typing.List[Attachment] = None
+    attachments: typing.List[AttachmentW] = None
     geo: Geo = None
     signer_id: int = None
     copy_history: typing.Any = None
@@ -38,3 +40,4 @@ class WallPost(BaseModel):
     is_pinned: int = None
     marked_as_ads: int = None
     is_favorite: bool = None
+    postponed_id: int = None
