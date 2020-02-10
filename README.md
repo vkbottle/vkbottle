@@ -6,9 +6,15 @@
 
 ### Установка
 1) С помощью установщика pip из PyPi:
-
+   
+   Возможна нестабильность:
    ```sh
    pip install vkbottle
+   ```
+   
+   Последняя стабильная версия:
+   ```sh
+   pip install vkbottle==1.35
    ```
 
 2) С помощью установщика pip из GitHub: 
@@ -62,8 +68,8 @@ async def executor(request: Request):
     return await bot.emulate(event=dict(request.query), confirmation_token="ConfirmationToken")
 
 @bot.on.message(text="test", lower=True)
-async def wrapper():
-    return "test"
+async def wrapper(ans: Message):
+    await ans("test!")
 
 app.add_routes(routes)
 run_app(app)
