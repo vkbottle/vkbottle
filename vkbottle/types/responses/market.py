@@ -13,7 +13,7 @@ from ..attachments import Attachments
 from ..attachments import Photo
 
 
-import typing
+from typing import List, Dict, Any
 
 
 class AddResponse(BaseModel):
@@ -66,7 +66,7 @@ class EditComment(SimpleResponse):
 
 class GetResponse(BaseModel):
     count: int = None
-    items: typing.List[Market] = None
+    items: List[Market] = []
 
 
 class Get(BaseModel):
@@ -75,7 +75,7 @@ class Get(BaseModel):
 
 class GetAlbumByIdResponse(BaseModel):
     count: int = None
-    items: typing.List[MarketAlbum] = None
+    items: List[MarketAlbum] = []
 
 
 class GetAlbumById(BaseModel):
@@ -98,14 +98,14 @@ class GetCategoriesResponseItem(BaseModel):
 
 class GetCategoriesResponse(BaseModel):
     count: int = None
-    items: typing.List[GetCategoriesResponseItem] = None
+    items: List[GetCategoriesResponseItem] = []
 
 
 class GetCommentsResponse(BaseModel):
     count: int = None
-    items: typing.List[typing.Dict] = None
-    attachment: typing.List[Attachments] = None
-    profiles: typing.List[User] = None
+    items: List[Dict] = []
+    attachment: List[Attachments] = []
+    profiles: List[User] = []
 
 
 class GetComments(BaseModel):
@@ -142,7 +142,7 @@ class RestoreComment(SimpleResponse):
 
 class SearchResponse(BaseModel):
     count: int = None
-    items: typing.List[typing.Any] = None
+    items: List[Any] = []
     date: int = None
     description: str = None
     external_id: str = None
@@ -151,12 +151,12 @@ class SearchResponse(BaseModel):
     price: MarketPrice = None
     thumb_photo: str = None
     title: str = None
-    albums_ids: typing.List[int] = None
-    photos: typing.List[Photo] = None
+    albums_ids: List[int] = []
+    photos: List[Photo] = None
     can_comment: int = None
     can_repost: int = None
-    likes: dict = None
-    reposts: dict = None
+    likes: dict = {}
+    reposts: dict = {}
     views_count: int = None
 
 

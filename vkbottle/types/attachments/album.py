@@ -11,4 +11,4 @@ class Album(BaseModel):
     description: str = None
     created: int = None
     updated: int = None
-    size: int
+    size: int = None

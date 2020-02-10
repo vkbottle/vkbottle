@@ -1,8 +1,7 @@
 from .others import SimpleResponse
 from ..base import BaseModel
 
-
-import typing
+from typing import List
 
 
 class AddResponse(BaseModel):
@@ -19,7 +18,7 @@ class Delete(BaseModel):
 
 class GetListResponse(BaseModel):
     count: int = None
-    items: typing.List[int] = None
+    items: List[int] = []
 
 
 class GetList(BaseModel):

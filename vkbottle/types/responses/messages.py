@@ -8,7 +8,7 @@ from ..user import User
 from ..attachments import Photo
 from ..conversation import Conversation
 
-import typing
+from typing import List, Any
 
 
 class AddChatUser(SimpleResponse):
@@ -54,7 +54,7 @@ class EditChat(SimpleResponse):
 
 class GetByConversationMessageIdResponse(BaseModel):
     count: int = None
-    items: typing.List[Message] = None
+    items: List[Message] = []
 
 
 class GetByConversationMessageId(BaseModel):
@@ -70,9 +70,9 @@ class GetChat(BaseModel):
 
 
 class ChatMembers(BaseModel):
-    profiles: typing.List[User] = None
-    groups: typing.List[Community] = None
-    email: typing.List[Email] = None
+    profiles: List[User] = []
+    groups: List[Community] = []
+    email: List[Email] = []
 
 
 class GetChatPreviewResponse(BaseModel):
@@ -95,9 +95,9 @@ class GetConversationMembersResponseItem(BaseModel):
 
 class GetConversationMembersResponse(BaseModel):
     count: int = None
-    items: typing.List[GetConversationMembersResponseItem] = None
-    profiles: typing.List[User] = None
-    groups: typing.List[Community] = None
+    items: List[GetConversationMembersResponseItem] = []
+    profiles: List[User] = []
+    groups: List[Community] = []
 
 
 class GetConverationMembers(BaseModel):
@@ -106,10 +106,10 @@ class GetConverationMembers(BaseModel):
 
 class GetConversationsResponse(BaseModel):
     count: int = None
-    items: typing.Any = None
+    items: Any = None
     unread_count: int = None
-    profiles: typing.List[User] = None
-    groups: typing.List[Community] = None
+    profiles: List[User] = []
+    groups: List[Community] = []
 
 
 class GetConversations(BaseModel):
@@ -118,7 +118,7 @@ class GetConversations(BaseModel):
 
 class GetConversationsByIdResponse(BaseModel):
     count: int = None
-    items: typing.List[Conversation] = None
+    items: List[Conversation] = []
 
 
 class GetConversationsById(BaseModel):
@@ -127,7 +127,7 @@ class GetConversationsById(BaseModel):
 
 class GetHistoryResponse(BaseModel):
     count: int = None
-    items: typing.List[Message] = None
+    items: List[Message] = []
 
 
 class GetHistory(BaseModel):
@@ -135,12 +135,12 @@ class GetHistory(BaseModel):
 
 
 class GetHistoryAttachments(BaseModel):
-    response: typing.Any = None
+    response: Any = []
 
 
 class GetImportantMessagesResponseMessages(BaseModel):
     count: int = None
-    items: typing.List[Message] = None
+    items: List[Message] = []
 
 
 class GetImportantMessagesResponse(BaseModel):
@@ -169,9 +169,9 @@ class GetLastActivity(BaseModel):
 
 
 class GetLongPollHistoryResponse(BaseModel):
-    history: typing.List[typing.List[int]] = None
+    history: List[List[int]] = []
     messages: GetImportantMessagesResponseMessages = None
-    profiles: typing.List[User] = None
+    profiles: List[User] = []
     new_pts: int = None
 
 
@@ -210,7 +210,7 @@ class MarkAsAnsweredConversation(SimpleResponse):
 
 
 class MarkAsImportant(BaseModel):
-    response: typing.List[int] = None
+    response: List[int] = []
 
 
 class MarkAsImportantConversation(SimpleResponse):
@@ -235,7 +235,7 @@ class Restore(SimpleResponse):
 
 class SearchResponse(BaseModel):
     count: int = None
-    items: typing.List[Message] = None
+    items: List[Message] = []
 
 
 class Search(BaseModel):
@@ -244,7 +244,7 @@ class Search(BaseModel):
 
 class SeacrhConversationsResponse(BaseModel):
     count: int = None
-    items: typing.List[Conversation] = None
+    items: List[Conversation] = []
 
 
 class SearchConversations(BaseModel):

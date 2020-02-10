@@ -1,7 +1,7 @@
 from .base import BaseModel
 from .attachments.attachments_w import AttachmentsW
 
-import typing
+from typing import List
 
 
 # https://vk.com/dev/objects/comment
@@ -9,7 +9,7 @@ import typing
 
 class WallCommentThread(BaseModel):
     count: int = None
-    items: typing.List["WallComment"] = None
+    items: List["WallComment"] = []
     can_post: bool = None
     show_reply_button: bool = None
     groups_can_post: bool = None
@@ -22,8 +22,8 @@ class WallComment(BaseModel):
     text: str = None
     reply_to_user: int = None
     reply_to_comment: int = None
-    attachments: AttachmentsW = None
-    parents_stack: typing.List[int] = None
+    attachments: List[AttachmentsW] = []
+    parents_stack: List[int] = []
     thread: WallCommentThread = None
     post_id: int = None
     owner_id: int = None

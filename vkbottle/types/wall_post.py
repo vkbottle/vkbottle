@@ -3,7 +3,7 @@ from .attachments import Like, Repost, Geo
 from .attachments.attachments_w import AttachmentW
 
 from .additional import PostSource
-import typing
+from typing import List, Any
 
 # https://vk.com/dev/objects/post
 
@@ -30,10 +30,10 @@ class WallPost(BaseModel):
     reposts: Repost = None
     post_type: str = None
     post_source: PostSource = None
-    attachments: typing.List[AttachmentW] = None
+    attachments: List[AttachmentW] = []
     geo: Geo = None
     signer_id: int = None
-    copy_history: typing.Any = None
+    copy_history: Any = None
     can_pin: int = None
     can_delete: int = None
     can_edit: int = None

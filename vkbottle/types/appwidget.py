@@ -1,5 +1,6 @@
 from .base import BaseModel
-import typing
+
+from typing import List
 
 
 class Image(BaseModel):
@@ -11,4 +12,4 @@ class Image(BaseModel):
 class AppWidgetImage(BaseModel):
     id: str = None
     type: str = None
-    images: typing.List[Image] = None
+    images: List[Image] = []

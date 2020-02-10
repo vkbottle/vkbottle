@@ -1,4 +1,4 @@
-import typing
+from typing import List, Union
 from enum import Enum
 
 from .attachments import Attachment
@@ -61,15 +61,15 @@ class Message(BaseModel):
     random_id: int = None
     ref: str = None
     ref_source: str = None
-    attachments: typing.List[Attachment] = None
+    attachments: List[Attachment] = []
     important: bool = None
     geo: Geo = None
     payload: str = None
-    keyboard: typing.Union[str, dict] = None
+    keyboard: Union[str, dict] = None
     action: MessageAction = None
-    fwd_messages: typing.List["Message"] = []
+    fwd_messages: List["Message"] = []
     reply_message: "Message" = None
-    client_info: "ClientInfo" = None
+    client_info: ClientInfo = None
     conversation_message_id: int = None
 
     async def reply(self, message: str = None, attachment: str = None, **params):

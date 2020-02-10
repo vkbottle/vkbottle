@@ -1,7 +1,7 @@
 from .others import SimpleResponse
 from ..base import BaseModel
 
-import typing
+from typing import List, Any
 
 
 class AddArticle(SimpleResponse):
@@ -42,16 +42,16 @@ class EditTag(SimpleResponse):
 
 
 class Get(BaseModel):
-    response: typing.Any = None
+    response: Any = None
 
 
 class GetPages(BaseModel):
-    response: typing.Any = None
+    response: Any = None
 
 
 class GetTagsResponse(BaseModel):
     count: int = None
-    items: typing.List[AddTagResponse] = None
+    items: List[AddTagResponse] = []
 
 
 class GetTags(BaseModel):

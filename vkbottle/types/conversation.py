@@ -4,7 +4,7 @@ from enum import Enum
 from .chat import ChatPushSettings
 from .attachments import Photo
 
-import typing
+from typing import List
 
 
 class ConversationCanWrite(BaseModel):
@@ -24,7 +24,7 @@ class ConversationChatSettings(BaseModel):
     pinned_message: typing.Any = None
     state: str = None
     photo: Photo = None
-    active_ids: typing.List[int] = None
+    active_ids: List[int] = []
 
 
 class Conversation(BaseModel):

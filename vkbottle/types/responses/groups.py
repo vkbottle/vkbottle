@@ -5,7 +5,7 @@ from ..additional import Place
 from ..community import Community
 from ..user import User
 
-import typing
+from typing import Any, List, Dict
 
 
 class AddAddress(BaseModel):
@@ -87,7 +87,7 @@ class EnableOnline(SimpleResponse):
 
 class GetResponse(BaseModel):
     count: int = None
-    items: typing.List[Community] = None
+    items: List[Community] = []
 
 
 class Get(BaseModel):
@@ -96,7 +96,7 @@ class Get(BaseModel):
 
 class GetAddressesResponse(BaseModel):
     count: int = None
-    items: typing.List[Place] = None
+    items: List[Place] = []
 
 
 class GetAdresses(BaseModel):
@@ -105,7 +105,7 @@ class GetAdresses(BaseModel):
 
 class GetBannedResponse(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: List = []
 
 
 class GetBanned(BaseModel):
@@ -113,7 +113,7 @@ class GetBanned(BaseModel):
 
 
 class GetById(BaseModel):
-    response: typing.List[Community] = None
+    response: List[Community] = []
 
 
 class GetCallbackConfirmationCodeResponse(BaseModel):
@@ -135,7 +135,7 @@ class GetCallbackServersItem(BaseModel):
 
 class GetCallbackServersResponse(BaseModel):
     count: int = None
-    items: typing.List[GetCallbackServersItem] = None
+    items: List[GetCallbackServersItem] = []
 
 
 class GetCallbackServers(BaseModel):
@@ -144,7 +144,7 @@ class GetCallbackServers(BaseModel):
 
 class GetCallbackSettingsResponse(BaseModel):
     api_version: str = None
-    events: typing.Dict[str, int] = None
+    events: Dict[str, int] = {}
 
 
 class GetCallbackSettings(BaseModel):
@@ -153,7 +153,7 @@ class GetCallbackSettings(BaseModel):
 
 class GetCatalogResponse(BaseModel):
     count: int = None
-    items: typing.List[Community] = None
+    items: List[Community] = []
 
 
 class GetCatalog(BaseModel):
@@ -164,9 +164,9 @@ class GetCatalogInfoResponse(BaseModel):
     enabled: int = None
     id: int = None
     name: str = None
-    subcategories: list = None
+    subcategories: list = []
     page_count: int = None
-    page_privews: list = None
+    page_privews: list = []
 
 
 class GetCatalogInfo(BaseModel):
@@ -175,7 +175,7 @@ class GetCatalogInfo(BaseModel):
 
 class GetInvitedUsersResponse(BaseModel):
     count: int = None
-    items: typing.List[User] = None
+    items: List[User] = []
 
 
 class GetInvitedUsers(BaseModel):
@@ -184,7 +184,7 @@ class GetInvitedUsers(BaseModel):
 
 class GetInvitesResponse(BaseModel):
     count: int = None
-    items: typing.List[Community] = None
+    items: List[Community] = []
 
 
 class GetInvites(BaseModel):
@@ -202,7 +202,7 @@ class GetLongPollServer(BaseModel):
 
 
 class GetLongPollSettingsResponse(BaseModel):
-    events: typing.Dict[str, int] = None
+    events: Dict[str, int] = {}
     is_enabled: bool = None
     api_version: str = None
 
@@ -213,7 +213,7 @@ class GetLongPollSettings(BaseModel):
 
 class GetMembersResponse(BaseModel):
     count: int = None
-    items: typing.List[int] = None
+    items: List[int] = []
 
 
 class GetMembers(BaseModel):
@@ -231,7 +231,7 @@ class GetOnlineStatus(BaseModel):
 
 class GetRequestsResponse(BaseModel):
     count: int = None
-    items: typing.List[User] = None
+    items: List[User] = []
 
 
 class GetRequests(BaseModel):
@@ -239,7 +239,7 @@ class GetRequests(BaseModel):
 
 
 class GetSettings(BaseModel):
-    response: typing.Any = None
+    response: Any = None
 
 
 class GetTokenPermissionsSetting(BaseModel):
@@ -249,7 +249,7 @@ class GetTokenPermissionsSetting(BaseModel):
 
 class GetTokenPermissionsResponse(BaseModel):
     mask: int = None
-    settings: typing.List[GetTokenPermissionsSetting] = None
+    settings: List[GetTokenPermissionsSetting] = []
 
 
 class Invite(SimpleResponse):
@@ -283,7 +283,7 @@ class ReorderLink(SimpleResponse):
 
 class SearchResponse(BaseModel):
     count: int = None
-    items: typing.List[Community] = None
+    items: List[Community] = []
 
 
 class Search(BaseModel):

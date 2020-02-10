@@ -3,7 +3,7 @@ from ..base import BaseModel
 
 from ..appwidget import AppWidgetImage
 
-import typing
+from typing import List
 
 
 class GetAppImageUploadServerResponse(BaseModel):
@@ -16,7 +16,7 @@ class GetAppImageUploadServer(BaseModel):
 
 class GetAppImagesResponse(BaseModel):
     count: int = None
-    items: typing.List[AppWidgetImage] = None
+    items: List[AppWidgetImage] = []
 
 
 class GetAppImages(BaseModel):

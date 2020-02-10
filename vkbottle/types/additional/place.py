@@ -1,13 +1,13 @@
 from ..base import BaseModel
 
-import typing
+from typing import Union
 
 
 class Place(BaseModel):
     id: int = None
     title: str = None
-    latitude: typing.Union[int, float] = None
-    longitude: typing.Union[int, float] = None
+    latitude: Union[int, float] = None
+    longitude: Union[int, float] = None
     type: str = None
     country: int = None
     city: int = None

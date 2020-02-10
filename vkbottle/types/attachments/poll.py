@@ -2,8 +2,7 @@ from ..base import BaseModel
 from ..attachments import Photo
 from ..additional import PhotoSizes
 
-from typing import List
-import typing
+from typing import List, Union
 
 
 # https://vk.com/dev/objects/poll
@@ -13,11 +12,11 @@ class PollAnswer(BaseModel):
     id: int = None
     text: str = None
     votes: int = None
-    rate: typing.Union[int, float] = None
+    rate: Union[int, float] = None
 
 
 class PollBackgroundPoint(BaseModel):
-    position: typing.Union[int, float] = None
+    position: Union[int, float] = None
     color: str = None
 
 
@@ -28,8 +27,8 @@ class PollBackground(BaseModel):
     color: str = None
     width: int = None
     height: int = None
-    images: List[PhotoSizes] = None
-    points: List[PollBackgroundPoint]
+    images: List[PhotoSizes] = []
+    points: List[PollBackgroundPoint] = []
 
 
 class PollFriends(BaseModel):
@@ -42,7 +41,7 @@ class Poll(BaseModel):
     created: int = None
     question: str = None
     votes: int = None
-    answers: List[PollAnswer] = None
+    answers: List[PollAnswer] = []
     anonymous: bool = None
     multiple: bool = None
     answer_ids: List[int] = None
@@ -56,4 +55,4 @@ class Poll(BaseModel):
     author_id: int = None
     photo: Photo = None
     background: PollBackground = None
-    friends: List[PollFriends] = None
+    friends: List[PollFriends] = []
