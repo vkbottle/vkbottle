@@ -1,7 +1,7 @@
 from ..base import BaseModel
 from ..additional import PhotoSizes
 
-import typing
+from typing import List
 
 # https://vk.com/dev/objects/photo
 
@@ -13,7 +13,7 @@ class Photo(BaseModel):
     user_id: int = None
     text: str = None
     date: int = None
-    sizes: typing.List[PhotoSizes] = []
+    sizes: List[PhotoSizes] = []
     width: int = None
     height: int = None
 

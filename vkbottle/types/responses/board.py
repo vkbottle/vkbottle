@@ -4,7 +4,7 @@ from ..base import BaseModel
 from ..attachments.topic import TopicComment, Topic
 from ..user import User
 
-import typing
+from typing import List
 
 
 class AddTopic(SimpleResponse):
@@ -41,8 +41,8 @@ class FixTopic(SimpleResponse):
 
 class GetCommentsResponse(BaseModel):
     count: int = None
-    items: typing.List[TopicComment] = None
-    profiles: typing.List[User] = None
+    items: List[TopicComment] = []
+    profiles: List[User] = []
 
 
 class GetComments(BaseModel):
@@ -51,10 +51,10 @@ class GetComments(BaseModel):
 
 class GetTopicsResponse(BaseModel):
     count: int = None
-    items: typing.List[Topic] = None
+    items: List[Topic] = []
     default_order: int = None
     can_add_topics: int = None
-    profiles: typing.List[User] = None
+    profiles: List[User] = []
 
 
 class GetTopics(BaseModel):

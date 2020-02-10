@@ -1,5 +1,5 @@
 from ..base import BaseModel
-import typing
+from typing import List
 
 class Event(BaseModel):
     id: int = None
@@ -9,4 +9,4 @@ class Event(BaseModel):
     address: str = None
     text: str = None
     button_text: str = None
-    friends: typing.List[int] = []
+    friends: List[int] = []

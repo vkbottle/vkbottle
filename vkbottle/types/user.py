@@ -4,7 +4,7 @@ from .additional import City, Country
 from .attachments import CropPhoto
 from enum import IntEnum
 
-import typing
+from typing import List
 
 # https://vk.com/dev/objects/user
 
@@ -141,7 +141,7 @@ class Alcohol(BaseModel):
 
 class UserPersonal(BaseModel):
     political: Political = None
-    langs: typing.List[str] = None
+    langs: List[str] = None
     religion: str = None
     inspired_by: str = None
     people_main: PeopleMain = None
@@ -245,7 +245,7 @@ class User(BaseModel):
     is_friend: int = None
     is_hidden_from_feed: int = None
     last_seen: UserLastSeen = None
-    lists: typing.List[int] = None
+    lists: List[int] = []
     maiden_name: str = None
     military: UserMilitary = None
     movies: str = None
@@ -263,9 +263,9 @@ class User(BaseModel):
     photo_max: str = None
     photo_max_orig: str = None
     quotes: str = None
-    relatives: typing.List = None
+    relatives: List = []
     relation: UserRelation = None
-    schools: typing.List[School] = None
+    schools: List[School] = []
     screen_name: str = None
     sex: int = None
     site: str = None
@@ -273,6 +273,6 @@ class User(BaseModel):
     timezone: int = None
     trending: int = None
     tv: str = None
-    universities: typing.List[Universitiy] = None
+    universities: List[Universitiy] = []
     verified: int = None
     wall_comments: int = None

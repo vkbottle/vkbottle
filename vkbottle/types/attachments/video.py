@@ -1,8 +1,5 @@
 from ..base import BaseModel
 
-import typing
-
-
 # https://vk.com/dev/objects/video
 
 

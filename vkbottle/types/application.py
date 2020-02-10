@@ -3,8 +3,7 @@ from .attachments import Photo
 
 from enum import Enum, IntEnum
 
-import typing
-
+from typing import List
 
 # https://vk.com/dev/objects/app
 
@@ -48,4 +47,4 @@ class Application(BaseModel):
     description: str = None
     screen_name: str = None
     icon_16: str = None
-    screenshots: typing.List[Photo] = None
+    screenshots: List[Photo] = []

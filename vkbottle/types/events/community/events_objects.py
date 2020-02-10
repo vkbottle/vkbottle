@@ -7,7 +7,7 @@ from ...attachments.topic import TopicComment
 from ...additional import JoinType, BlockReason, AdminLevel
 from ...attachments import Photo
 
-import typing
+from typing import Any
 import random
 
 from enum import Enum
@@ -15,7 +15,7 @@ from enum import Enum
 
 class MessageAllow(BaseModel):
     user_id: int = None
-    key: typing.Optional[str] = None
+    key: str = None
     api: list = None
 
     async def __call__(
@@ -203,8 +203,8 @@ class GroupChangeSettingsChangesSectionName(Enum):
 
 class GroupChangeSettingsChanges(BaseModel):
     section_name: GroupChangeSettingsChangesSectionName = None
-    old_value: typing.Any = None
-    new_value: typing.Any = None
+    old_value: Any = None
+    new_value: Any = None
 
 
 class GroupChangeSettings(BaseModel):

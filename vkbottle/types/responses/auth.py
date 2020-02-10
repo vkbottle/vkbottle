@@ -1,8 +1,7 @@
 from .others import SimpleResponse
 from ..base import BaseModel
 
-
-import typing
+from typing import Any
 
 
 class CheckPhone(SimpleResponse):
@@ -11,4 +10,4 @@ class CheckPhone(SimpleResponse):
 
 class RestoreResponse(BaseModel):
     success: int = None
-    sid: typing.Any = None
+    sid: Any = None

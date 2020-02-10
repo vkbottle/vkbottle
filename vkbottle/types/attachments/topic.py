@@ -1,7 +1,8 @@
 from ..base import BaseModel
 from .like import Like
-from typing import List
 from .attachments import Attachment, Attachments
+
+from typing import List
 
 # https://vk.com/dev/objects/topic
 # https://vk.com/dev/objects/comment_board
@@ -12,7 +13,7 @@ class TopicComment(BaseModel):
     from_id: int = None
     date: int = None
     text: str = None
-    attachments: List[Attachment] = None
+    attachments: List[Attachment] = []
     likes: Like = None
 
 

@@ -20,7 +20,7 @@ from .audio_msg import AudioMsg
 from .gift import Gift
 
 import typing
-from typing import Optional
+from typing import List
 
 
 # https://vk.com/dev/objects/attachments_m
@@ -39,7 +39,7 @@ class Attachments(str, Enum):
     poll = Poll
     page = Page
     album = Album
-    photos_list = typing.List[int]
+    photos_list = List[int]
     market = Market
     market_album = MarketAlbum
     wall = WallPost
@@ -50,22 +50,22 @@ class Attachments(str, Enum):
 
 class Attachment(BaseModel):
     type: str = None
-    photo: Optional[Photo]
-    video: Optional[Video]
-    audio: Optional[Audio]
-    doc: Optional[Document]
-    graffiti: Optional[Graffiti]
-    link: Optional[Link]
-    note: Optional[Note]
-    app: Optional[App]
-    poll: Optional[Poll]
-    page: Optional[Page]
-    album: Optional[Album]
-    photos_list: Optional[typing.List[Photo]]
-    market: Optional[Market]
-    market_album: Optional[MarketAlbum]
-    wall: Optional[WallPost]
-    wall_reply: Optional[WallComment]
-    sticker: Optional[Sticker]
-    audio_message: Optional[AudioMsg]
-    gift: Optional[Gift]
+    photo: Photo = None
+    video: Video = None
+    audio: Audio = None
+    doc: Document = None
+    graffiti: Graffiti = None
+    link: Link = None
+    note: Note = None
+    app: App = None
+    poll: Poll = None
+    page: Page = None
+    album: Album = None
+    photos_list: List[Photo] = []
+    market: Market = None
+    market_album: MarketAlbum = None
+    wall: WallPost = None
+    wall_reply: WallComment = None
+    sticker: Sticker = None
+    audio_message: AudioMsg = None
+    gift: Gift = None

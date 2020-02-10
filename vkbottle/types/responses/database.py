@@ -4,12 +4,12 @@ from ..base import BaseModel
 from ..additional import MetroStation
 
 
-import typing
+from typing import List
 
 
 class GetChairsResponse(BaseModel):
     count: int = None
-    items: typing.List[dict] = None
+    items: List[dict] = []
 
 
 class GetChairs(BaseModel):
@@ -18,7 +18,7 @@ class GetChairs(BaseModel):
 
 class GetCitiesResponse(BaseModel):
     count: int = None
-    items: typing.List[dict]
+    items: List[dict] = []
 
 
 class GetCities(BaseModel):
@@ -31,12 +31,12 @@ class GetCitiesByIdResponse(BaseModel):
 
 
 class GetCitiesById(BaseModel):
-    response: typing.List[GetCitiesByIdResponse] = None
+    response: List[GetCitiesByIdResponse] = []
 
 
 class GetCountriesResponse(BaseModel):
     count: int = None
-    items: typing.List[GetCitiesByIdResponse] = None
+    items: List[GetCitiesByIdResponse] = []
 
 
 class GetCountries(BaseModel):
@@ -44,7 +44,7 @@ class GetCountries(BaseModel):
 
 
 class GetCountriesById(BaseModel):
-    response: typing.List[GetCitiesByIdResponse] = None
+    response: List[GetCitiesByIdResponse] = []
 
 
 class GetFaculties(GetCountries):
@@ -53,7 +53,7 @@ class GetFaculties(GetCountries):
 
 class GetMetroStationsResponse(BaseModel):
     count: int = None
-    items: typing.List[MetroStation] = None
+    items: List[MetroStation] = []
 
 
 class GetMetroStations(BaseModel):
@@ -61,7 +61,7 @@ class GetMetroStations(BaseModel):
 
 
 class GetMetroStationsById(BaseModel):
-    response: typing.List[MetroStation] = None
+    response: List[MetroStation] = []
 
 
 class GetRegions(BaseModel):
@@ -69,12 +69,12 @@ class GetRegions(BaseModel):
 
 
 class GetSchoolClasses(BaseModel):
-    response: typing.List = None
+    response: List = []
 
 
 class GetSchools(BaseModel):
-    response: typing.List[GetCountriesResponse] = None
+    response: List[GetCountriesResponse] = []
 
 
 class GetUniversities(BaseModel):
-    response: typing.List[GetCountriesResponse] = None
+    response: List[GetCountriesResponse] = []

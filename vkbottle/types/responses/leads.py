@@ -2,14 +2,14 @@ from .others import SimpleResponse
 from ..base import BaseModel
 
 
-import typing
+from typing import Any, List
 
 
 class CheckUserResponse(BaseModel):
     result: bool = None
     reason: str = None
     start_link: str = None
-    sid: typing.Any = None
+    sid: Any = None
 
 
 class CheckUser(BaseModel):
@@ -43,7 +43,7 @@ class GetStatsResponse(BaseModel):
     impressions: int = None
     started: int = None
     completed: int = None
-    days: typing.List[GetStatsResponseDays] = None
+    days: List[GetStatsResponseDays] = []
 
 
 class GetStats(BaseModel):
@@ -62,7 +62,7 @@ class GetUsersResponse(BaseModel):
 
 
 class GetUsers(BaseModel):
-    response: typing.List[GetUsersResponse] = None
+    response: List[GetUsersResponse] = []
 
 
 class MetricHitResponse(BaseModel):
@@ -76,7 +76,7 @@ class MetricHit(BaseModel):
 
 class StartResponse(BaseModel):
     test_mode: int = None
-    vk_sid: typing.Any = None
+    vk_sid: Any = None
 
 
 class Start(BaseModel):

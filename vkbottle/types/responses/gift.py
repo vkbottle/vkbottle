@@ -2,8 +2,7 @@ from .others import SimpleResponse
 from ..base import BaseModel
 from ..attachments.gift import Gift
 
-
-import typing
+from typing import List
 
 
 class GetResponseItem(BaseModel):
@@ -18,7 +17,7 @@ class GetResponseItem(BaseModel):
 
 class GetResponse(BaseModel):
     count: int = None
-    items: typing.List[GetResponseItem] = None
+    items: List[GetResponseItem] = []
 
 
 class Get(BaseModel):
