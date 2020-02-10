@@ -36,6 +36,7 @@ class Bot(HTTP, EventProcessor):
         group_id: int = None,
         debug: typing.Union[str, bool] = True,
         log_to_path: typing.Union[str, bool] = None,
+        mobile: bool = False,
         secret: str = None,
     ):
         """
@@ -73,7 +74,7 @@ class Bot(HTTP, EventProcessor):
             format="<level>[<blue>VKBottle</blue>] {message}</level> <white>[TIME {time:HH:MM:ss}]</white>",
             filter=self.logger,
             level=0,
-            enqueue=True,
+            enqueue=mobile is False,
         )
         logger.level("INFO", color="<white>")
         logger.level("ERROR", color="<red>")
