@@ -2,7 +2,7 @@ import time
 import asyncio
 import typing
 
-from loguru import logger
+from ..utils import logger
 
 from ..const import API_VERSION, API_URL
 from .exceptions import VKError

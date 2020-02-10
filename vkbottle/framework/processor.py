@@ -1,7 +1,7 @@
 import typing
 from asyncio import AbstractEventLoop
 from re import sub
-from loguru import logger
+from ..utils import logger
 
 from vbml import Patcher
 

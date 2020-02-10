@@ -1,7 +1,7 @@
 import asyncio
 import typing
 
-from loguru import logger
+from ..utils import logger
 
 
 """

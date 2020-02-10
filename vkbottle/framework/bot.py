@@ -1,12 +1,11 @@
 import traceback, sys, typing
-from loguru import logger
 from asyncio import get_event_loop, AbstractEventLoop
 from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 from ..api import Api, request
 from ..handler import Handler, ErrorHandler
 from ..http import HTTP
 from ..api import VKError
-from ..utils import flatten
+from ..utils import logger
 from vbml import Patcher, PatchedValidators
 from ._event import EventTypes
 from .processor import EventProcessor

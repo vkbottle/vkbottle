@@ -1,5 +1,4 @@
 aiohttp
 contextvars
 pydantic
-loguru
 vbml

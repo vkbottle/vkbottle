@@ -1,5 +1,5 @@
 from copy import copy
-from loguru import logger
+from ...utils import logger
 
 from ...types import Message
 

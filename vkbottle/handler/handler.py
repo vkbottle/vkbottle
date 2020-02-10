@@ -1,7 +1,7 @@
 import typing
 import re
 from inspect import iscoroutinefunction, signature
-from loguru import logger
+from ..utils import logger
 
 from vbml import Patcher, Pattern
 

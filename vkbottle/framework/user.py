@@ -1,6 +1,6 @@
 import typing, traceback, sys
 from asyncio import get_event_loop, AbstractEventLoop
-from loguru import logger
+from ..utils import logger
 
 import aiohttp, vbml
 

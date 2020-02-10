@@ -1,4 +1,4 @@
-from loguru import logger
+from ..utils import logger
 
 
 class LoggerLevel:

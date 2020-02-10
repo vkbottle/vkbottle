@@ -1,6 +1,17 @@
 from collections import MutableMapping
 from typing import Sequence
-import os
+import os, sys, time
+
+
+class Logger:
+    def __getattr__(self, item):
+        if item in ["remove", "add", "level"]:
+            return lambda *args, **kwargs: None
+        return Logger()
+
+    def __call__(self, message: str, **kwargs):
+        t = time.strftime("%m-%d %H:%M:%S", time.localtime())
+        sys.stdout.write("\n[VKBottle] " + message.format(**kwargs) + " [TIME {}]".format(t))
 
 
 def dict_of_dicts_merge(d1, d2):

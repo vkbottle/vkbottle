@@ -9,7 +9,7 @@ except:
 
 setuptools.setup(
     name="vkbottle",
-    version="2.01",
+    version="2.02",
     author="timoniq",
     description="Working with VK by this homogenetic way and it's awesome!",
     long_description=long_description,
@@ -23,5 +23,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3.7",
         "Operating System :: OS Independent",
     ],
-    install_requires=["aiohttp", "pydantic", "contextvars", "vbml", "loguru"],
+    install_requires=["aiohttp", "pydantic", "contextvars", "vbml"],
 )
