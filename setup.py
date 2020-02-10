@@ -7,11 +7,9 @@ except:
     with open("README.md", "r") as f:
         long_description = f.read()
 
-requirements = ["aiohttp", "pydantic", "contextvars", "vbml", "loguru"]
-
 setuptools.setup(
     name="vkbottle",
-    version="2.00",
+    version="2.01",
     author="timoniq",
     description="Working with VK by this homogenetic way and it's awesome!",
     long_description=long_description,
@@ -25,5 +23,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3.7",
         "Operating System :: OS Independent",
     ],
-    install_requires=requirements,
+    install_requires=["aiohttp", "pydantic", "contextvars", "vbml", "loguru"],
 )
