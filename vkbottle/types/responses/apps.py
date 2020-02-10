@@ -5,7 +5,7 @@ from ..application import Application
 from ..user import User
 
 
-import typing
+from typing import List, Any
 
 
 class DeleteAppRequests(SimpleResponse):
@@ -14,7 +14,7 @@ class DeleteAppRequests(SimpleResponse):
 
 class GetResponse(BaseModel):
     count: int = None
-    items: typing.List[Application] = None
+    items: List[Application] = []
 
 
 class Get(BaseModel):
@@ -27,7 +27,7 @@ class GetCatalog(Get):
 
 class GetFriendsListResponse(BaseModel):
     count: int = None
-    items: typing.List[User] = None
+    items: List[User] = []
 
 
 class GetFriendsList(BaseModel):
@@ -35,12 +35,12 @@ class GetFriendsList(BaseModel):
 
 
 class GetLeaderboard(BaseModel):
-    response: typing.List[User] = None
+    response: List[User] = []
 
 
 class GetScopesResponse(BaseModel):
     count: int = None
-    items: typing.List[dict] = None
+    items: List[dict] = []
 
 
 class GetScopes(BaseModel):
@@ -48,7 +48,7 @@ class GetScopes(BaseModel):
 
 
 class GetScore(BaseModel):
-    response: typing.Any = None
+    response: Any = None
 
 
 class SendRequest(SimpleResponse):

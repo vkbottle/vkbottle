@@ -1,7 +1,7 @@
 from ..base import BaseModel
 from ..attachments import Photo, Like
 
-import typing
+from typing import List
 
 
 # https://vk.com/dev/objects/market_item
@@ -40,7 +40,7 @@ class Market(BaseModel):
     date: int = None
     availability: int = None
     is_favorite: bool = None
-    photos: typing.List[Photo] = None
+    photos: List[Photo] = []
     can_comment: int = None
     can_repost: int = None
     likes: Like = None

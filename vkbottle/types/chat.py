@@ -1,6 +1,6 @@
 from .base import BaseModel
 
-import typing
+from typing import List
 
 # https://vk.com/dev/objects/chat
 
@@ -17,7 +17,7 @@ class Chat(BaseModel):
     type: str = None
     title: str = None
     admin_id: int = None
-    users: typing.List[int] = None
+    users: List[int] = []
     push_settings: ChatPushSettings = None
     photo_50: str = None
     photo_100: str = None

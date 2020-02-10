@@ -3,7 +3,7 @@ from .additional import City, Country, Place
 from .attachments import MarketPriceCurrency
 from enum import IntEnum
 
-import typing
+from typing import List
 
 # https://vk.com/dev/objects/group
 
@@ -37,7 +37,7 @@ class CommunityCoverImage(BaseModel):
 
 class CommunityCover(BaseModel):
     enabled: int = None
-    images: typing.List[CommunityCoverImage] = None
+    images: List[CommunityCoverImage] = []
 
 
 class CommunityLink(BaseModel):
@@ -111,7 +111,7 @@ class Community(BaseModel):
     is_favorite: int = None
     is_hidden_from_feed: int = None
     is_messages_blocked: int = None
-    links: typing.List[CommunityLink] = None
+    links: List[CommunityLink] = []
     main_album_id: int = None
     main_section: CommunityMainSection = None
     market: CommunityMarket = None

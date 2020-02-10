@@ -1,8 +1,7 @@
 from .others import SimpleResponse
 from ..base import BaseModel
 
-
-import typing
+from typing import Any, List
 
 
 class CreateResponse(BaseModel):
@@ -23,7 +22,7 @@ class Get(SimpleResponse):
 
 
 class GetLeads(BaseModel):
-    response: typing.Any = None
+    response: Any = None
 
 
 class GetUploadURL(BaseModel):
@@ -31,7 +30,7 @@ class GetUploadURL(BaseModel):
 
 
 class List(BaseModel):
-    response: typing.List = None
+    response: List = []
 
 
 class Update(SimpleResponse):

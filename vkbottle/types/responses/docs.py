@@ -3,7 +3,7 @@ from ..base import BaseModel
 
 from ..attachments import Document
 
-import typing
+from typing import List
 
 
 class Add(SimpleResponse):
@@ -20,7 +20,7 @@ class Edit(SimpleResponse):
 
 class GetResponse(BaseModel):
     count: int = None
-    items: typing.List[Document] = None
+    items: List[Document] = []
 
 
 class Get(BaseModel):
@@ -28,7 +28,7 @@ class Get(BaseModel):
 
 
 class GetById(BaseModel):
-    response: typing.List[Document] = None
+    response: List[Document] = []
 
 
 class GetMessagesUploadServerResponse(BaseModel):
@@ -47,7 +47,7 @@ class GetTypesItems(BaseModel):
 
 class GetTypesResponse(BaseModel):
     count: int = None
-    items: typing.List[GetTypesItems] = None
+    items: List[GetTypesItems] = []
 
 
 class GetTypes(BaseModel):
@@ -63,12 +63,12 @@ class GetWallUploadServer(BaseModel):
 
 
 class Save(BaseModel):
-    response: typing.List[Document] = None
+    response: List[Document] = []
 
 
 class SearchResponse(BaseModel):
     count: int = None
-    items: typing.List[Document] = None
+    items: List[Document] = []
 
 
 class Search(BaseModel):

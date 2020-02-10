@@ -18,7 +18,7 @@ from .pretty_cards import PrettyCards
 from .event import Event
 
 import typing
-from typing import Optional
+from typing import List
 
 
 # https://vk.com/dev/objects/attachments_w
@@ -38,7 +38,7 @@ class AttachmentsW(str, Enum):
     poll = Poll
     page = Page
     album = Album
-    photos_list = typing.List[int]
+    photos_list = List[int]
     market = Market
     market_album = MarketAlbum
     sticker = Sticker
@@ -48,21 +48,21 @@ class AttachmentsW(str, Enum):
 
 class AttachmentW(BaseModel):
     type: str = None
-    photo: Optional[Photo]
-    posted_photo: Optional[PostedPhoto]
-    video: Optional[Video]
-    audio: Optional[Audio]
-    doc: Optional[Document]
-    graffiti: Optional[Graffiti]
-    link: Optional[Link]
-    note: Optional[Note]
-    app: Optional[App]
-    poll: Optional[Poll]
-    page: Optional[Page]
-    album: Optional[Album]
-    photos_list: Optional[typing.List[Photo]]
-    market: Optional[Market]
-    market_album: Optional[MarketAlbum]
-    sticker: Optional[Sticker]
-    pretty_cards: Optional[PrettyCards]
-    event: Optional[Event]
+    photo: Photo = None
+    posted_photo: PostedPhoto = None
+    video: Video = None
+    audio: Audio = None
+    doc: Document = None
+    graffiti: Graffiti = None
+    link: Link = None
+    note: Note = None
+    app: App = None
+    poll: Poll = None
+    page: Page = None
+    album: Album = None
+    photos_list: List[Photo] = []
+    market: Market = None
+    market_album: MarketAlbum = None
+    sticker: Sticker = None
+    pretty_cards: PrettyCards = None
+    event: Event = None

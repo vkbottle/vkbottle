@@ -3,7 +3,7 @@ from ..base import BaseModel
 
 from ..user import User
 
-import typing
+from typing import List, Any
 
 
 class Add(SimpleResponse):
@@ -58,7 +58,7 @@ class EditList(SimpleResponse):
 
 class GetResponse(BaseModel):
     count: int = None
-    items: typing.List[User] = None
+    items: List[User] = []
 
 
 class Get(BaseModel):
@@ -66,11 +66,11 @@ class Get(BaseModel):
 
 
 class GetAppUsers(BaseModel):
-    response: typing.List[int] = None
+    response: List[int] = []
 
 
 class GetByPhones(BaseModel):
-    response: typing.List[User] = None
+    response: List[User] = []
 
 
 class GetListsResponseItem(BaseModel):
@@ -80,7 +80,7 @@ class GetListsResponseItem(BaseModel):
 
 class GetListsResponse(BaseModel):
     count: int = None
-    items: typing.List[GetListsResponseItem] = None
+    items: List[GetListsResponseItem] = []
 
 
 class GetLists(BaseModel):
@@ -88,25 +88,25 @@ class GetLists(BaseModel):
 
 
 class GetMutual(BaseModel):
-    response: typing.List[int] = None
+    response: List[int] = []
 
 
 class GetOnline(BaseModel):
-    response: typing.List[int] = None
+    response: List[int] = []
 
 
 class GetRecent(BaseModel):
-    response: typing.List[int] = None
+    response: List[int] = []
 
 
 class GetRequestsItem(User):
-    mutual: typing.Any = None
+    mutual: Any = None
     track_code: str = None
 
 
 class GetRequestsResponse(BaseModel):
     count: int = None
-    items: typing.List[GetRequestsItem] = None
+    items: List[GetRequestsItem] = []
 
 
 class GetRequests(BaseModel):
@@ -115,7 +115,7 @@ class GetRequests(BaseModel):
 
 class GetSuggestionsResponse(BaseModel):
     count: int = None
-    items: typing.List[User] = None
+    items: List[User] = []
 
 
 class GetSuggestions(BaseModel):
