@@ -209,6 +209,9 @@ class Bot(HTTP, EventProcessor):
     async def run(self, wait: int = DEFAULT_WAIT):
         self.__wait = wait
         logger.debug("Polling will be started. Is it OK?")
+        if self.__secret is not None:
+            logger.warning("You set up secret and started polling. Removing secret")
+            self.__secret = None
 
         if not self.status.dispatched:
             await self.on.dispatch(self.get_current_rest)
@@ -250,8 +253,6 @@ class Bot(HTTP, EventProcessor):
             return "access denied"
 
         for update in updates:
-            if not update:
-                continue
             try:
                 obj = update["object"]
 
