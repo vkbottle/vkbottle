@@ -53,8 +53,13 @@ class EventProcessor(RegexHelper):
 
         task = None
         for rules in self.on.rules:
-            if all([await rule.check(message) for rule in rules]):
-
+            
+            for rule in rules:
+                if not await rule.check(message):
+                    break
+            
+            else:
+            
                 args = [a for rule in rules for a in rule.context.args]
                 kwargs = {
                     k: v for rule in rules for k, v in rule.context.kwargs.items()
