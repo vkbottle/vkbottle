@@ -180,7 +180,7 @@ class MessageHandler:
 
     def add_rules(self, rules: typing.List[AbstractRule], func: typing.Callable):
         current = list()
-        for rule in rules + self.default_rules:
+        for rule in self.default_rules + rules:
             if isinstance(rule, str):
                 rule = VBMLRule(rule)
             rule.create(func)
