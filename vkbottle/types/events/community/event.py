@@ -40,6 +40,7 @@ class MessageNew(BaseEvent):
 class MessageEdit(MessageNew):
     ...
 
+
 @SetEventDict(events.MESSAGE_REPLY)
 class MessageReply(MessageNew):
     ...
@@ -129,6 +130,7 @@ class WallReplyNew(BaseEvent):
 class WallReplyEdit(WallReplyNew):
     ...
 
+
 @SetEventDict(events.WALL_REPLY_RESTORE)
 class WallReplyRestore(WallReplyNew):
     ...
@@ -152,6 +154,7 @@ class BoardPostEdit(BoardPostNew):
 @SetEventDict(events.BOARD_POST_RESTORE)
 class BoardPostRestore(BoardPostNew):
     ...
+
 
 @SetEventDict(events.BOARD_POST_DELETE)
 class BoardPostDelete(BaseEvent):
