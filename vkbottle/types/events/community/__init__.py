@@ -44,7 +44,7 @@ EVENT_DICT = {
     EventList.USER_BLOCK: event.UserBlock,
     EventList.USER_UNBLOCK: event.UserUnblock,
 
-    EEventList.POLL_VOTE_NEW: event.PollVoteNew,
+    EventList.POLL_VOTE_NEW: event.PollVoteNew,
     EventList.GROUP_OFFICERS_EDIT: event.GroupOfficersEdit,
     EventList.GROUP_CHANGE_SETTINGS: event.GroupChangeSettings,
     EventList.GROUP_CHANGE_PHOTO: event.GroupChangePhoto
