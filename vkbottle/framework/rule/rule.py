@@ -135,8 +135,6 @@ class EventRule(AbstractRule):
 
     async def check(self, event):
         for e in self.data["event"]:
-            if "data" not in self.data:
-                self.data = {"data": dict}
             if e == event:
                 return True
 
