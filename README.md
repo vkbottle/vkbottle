@@ -1,18 +1,18 @@
 <h1 align="center">VKBottle - high quality VK Tool</h1>
-<p align="center"><a href="https://pypi.org/project/vkbottle/"><img alt="downloads" src="https://img.shields.io/static/v1?label=pypi%20package&message=0.13&color=brightgreen"></a> <a href="https://github.com/timoniq/vkbottle"><img src="https://img.shields.io/static/v1?label=version&message=opensource&color=yellow" alt="service-test status"></a> <a href="https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj"><img src="https://img.shields.io/static/v1?message=VK%20Chat&label=&color=blue"></a>
+<p align="center"><a href="https://pypi.org/project/vkbottle/"><img alt="downloads" src="https://img.shields.io/static/v1?label=pypi%20package&message=2.01&color=brightgreen"></a> <a href="https://github.com/timoniq/vkbottle"><img src="https://img.shields.io/static/v1?label=version&message=opensource&color=green" alt="service-test status"></a> <a href="https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj"><img src="https://img.shields.io/static/v1?message=VK%20Chat&label=&color=blue"></a>
     <blockquote>VKBottle - это многофункциональный модуль для работы с VK Api и создания ботов</blockquote>
 </p>
 <hr>
 
-### Установка
+## Установка
 1) С помощью установщика pip из PyPi:
    
-   Возможна нестабильность:
+   Новейшая версия:
    ```sh
    pip install vkbottle
    ```
    
-   Последняя стабильная версия:
+   Последний стабильный релиз:
    ```sh
    pip install vkbottle==1.35
    ```
@@ -23,6 +23,20 @@
    pip install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
    ```
    
+### Кастомизация
+
+<a href="https://github.com/Delgan/loguru"><img alt="downloads" src="https://img.shields.io/static/v1?label=powered%20by&message=loguru&color=orange"></a>
+<a href="https://github.com/Delgan/loguru"><img alt="downloads" src="https://img.shields.io/static/v1?label=powered%20by&message=uvloop&color=purple"></a>
+
+После установки `vkbottle` рекомендуется сразу же установить дополнительные модули `uvloop` и `loguru`, без них фреймворк работает медленне и логи не настраиваемы. О возможностях этих модулей можно прочитать в их документации
+
+Установите `uvloop` и `loguru` с помощью команд:
+
+```sh
+pip install uvloop
+pip install loguru
+```
+
 ### Фишки
 
 - Удобная и быстрая доставка сообщений через regex

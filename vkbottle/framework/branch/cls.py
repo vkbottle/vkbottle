@@ -31,10 +31,10 @@ class AbstractBranch(Copy):
 
 class ClsBranch(AbstractBranch):
     async def enter(self, ans: Message):
-        logger.info('Branch "{}" entered at %#%')
+        logger.info("Branch {} entered at", self.key)
 
     async def exit(self, ans: Message):
-        logger.info('Branch "{}" exit at %#%')
+        logger.info("Branch {} exit at", self.key)
 
 
 class FunctionBranch(ClsBranch):

@@ -1,5 +1,5 @@
 import traceback, sys, typing
-from asyncio import get_event_loop, AbstractEventLoop
+import asyncio
 from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 from ..api import Api, request
 from ..handler import Handler, ErrorHandler
@@ -16,6 +16,13 @@ try:
     import vbml
 except ImportError:
     print("Please install vbml to use VKBottle. Use command: {}".format(VBML_INSTALL))
+
+
+try:
+    import uvloop
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+except ImportError:
+    pass
 
 
 DEFAULT_WAIT = 20
@@ -48,15 +55,10 @@ class Bot(HTTP, EventProcessor):
         """
         # Base bot classifiers
         self.__token: str = token
-        self.__loop: AbstractEventLoop = get_event_loop()
         self.__debug: bool = debug
         self.__wait = None
         self.__secret = secret
         self._status: BotStatus = BotStatus()
-
-        # Sign assets
-        self.__api: Api = Api(token)
-        Api.set_current(self.__api)
 
         if isinstance(debug, bool):
             debug = "INFO" if debug else "ERROR"
@@ -82,7 +84,13 @@ class Bot(HTTP, EventProcessor):
                 "log_{time}.log" if log_to_path is True else log_to_path,
                 rotation="100 MB",
             )
+
+        # Sign assets
+        self.__api: Api = Api(token)
+        Api.set_current(self.__api)
+
         self.group_id = group_id or self.get_id_by_token(token)
+        self.__loop = asyncio.get_event_loop()
 
         # Main workers
         self.branch: BranchManager = BranchManager(DEFAULT_BOT_FOLDER)
@@ -107,7 +115,7 @@ class Bot(HTTP, EventProcessor):
         :return:
         """
         logger.debug("Making API request groups.getById to get group_id")
-        response = get_event_loop().run_until_complete(request(token, "groups.getById"))
+        response = asyncio.get_event_loop().run_until_complete(request(token, "groups.getById"))
         if "error" in response:
             raise VKError("Token is invalid")
         return response["response"][0]["id"]
@@ -125,13 +133,13 @@ class Bot(HTTP, EventProcessor):
             return event.get("secret") == self.__secret
         return True
 
-    def loop_update(self, loop: AbstractEventLoop = None):
+    def loop_update(self, loop: asyncio.AbstractEventLoop = None):
         """
         Update event loop
         :param loop:
         :return:
         """
-        self.__loop = loop or get_event_loop()
+        self.__loop = loop or asyncio.get_event_loop()
         return self.__loop
 
     def empty_copy(self) -> "Bot":
@@ -222,8 +230,8 @@ class Bot(HTTP, EventProcessor):
 
         while True:
             event = await self.make_long_request(self.long_poll_server)
-            await self.get_server()
             self.loop.create_task(self.emulate(event))
+            await self.get_server()
 
     async def emulate(
         self, event: dict, confirmation_token: str = None
