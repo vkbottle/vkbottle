@@ -87,7 +87,7 @@ class Handler:
             self.message.payload.rules + self.chat_message.payload.rules
         )
 
-        self.rules = self.message_handler.rules + self.message_handler.payload.rules
+        self.rules = self.message_handler.payload.rules + self.message_handler.rules
 
         if get_current_rest:
 

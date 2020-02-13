@@ -3,7 +3,7 @@ import os, random, string, asyncio
 from asyncio import sleep
 
 # Add variable TOKEN to your env variables
-bot = Bot(os.environ["TOKEN"], debug="ERROR")
+bot = Bot(os.environ["TOKEN"])
 STRINGS = []
 TIMES = 0
 
