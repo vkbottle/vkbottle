@@ -230,7 +230,11 @@ class MessageHandler:
 
         return rule
 
+    def concatenate_payload(self):
+        self.rules = self.payload.rules + self.rules
+
     def concatenate(self, message_handler: "MessageHandler"):
+        self.concatenate_payload()
         self.rules += message_handler.rules
         self.prefix += [p for p in message_handler.prefix if p not in self.prefix]
         self.payload.rules += message_handler.payload.rules
