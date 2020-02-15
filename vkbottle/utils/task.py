@@ -2,6 +2,7 @@ import asyncio
 import typing
 
 from ..utils import logger
+from .auto_reload import _auto_reload
 
 
 """
@@ -43,6 +44,7 @@ class TaskManager:
         *,
         on_shutdown: typing.Callable = None,
         on_startup: typing.Callable = None,
+        auto_reload: bool = False,
         asyncio_debug_mode: bool = False,
     ):
         """
@@ -62,6 +64,9 @@ class TaskManager:
             if asyncio_debug_mode:
                 self.loop.set_debug(True)
 
+            if auto_reload:
+                self.loop.create_task(_auto_reload())
+
             [self.loop.create_task(task) for task in self.tasks]
 
             self.loop.run_forever()
@@ -73,6 +78,7 @@ class TaskManager:
         finally:
             if on_shutdown is not None:
                 self.loop.run_until_complete(on_shutdown())
+            self.close()
 
     def close(self):
         """
