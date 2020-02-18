@@ -234,9 +234,11 @@ class Bot(HTTP, EventProcessor):
 
         while True:
             event = await self.make_long_request(self.long_poll_server)
-            self.loop.create_task(self.emulate(event))
-            if "ts" in event:
+            if isinstance(event, dict):
+                self.loop.create_task(self.emulate(event))
                 self.long_poll_server["ts"] = event["ts"]
+            else:
+                await self.get_server()
 
     async def emulate(
         self, event: dict, confirmation_token: str = None
