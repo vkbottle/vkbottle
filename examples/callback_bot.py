@@ -1,6 +1,6 @@
-from vkbottle import Bot, Message
 from aiohttp.web import RouteTableDef, Application, Request, run_app
 
+from vkbottle import Bot
 
 app = Application()
 routes = RouteTableDef()

@@ -1,16 +1,20 @@
-import traceback, sys, typing
 import asyncio
-from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
+import sys
+import traceback
+import typing
+
+from vbml import Patcher, PatchedValidators
+
+from ._event import EventTypes
+from ._status import BotStatus, LoggerLevel
+from .branch import BranchManager
+from .processor import EventProcessor
 from ..api import Api, request
+from ..api import VKError
+from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 from ..handler import Handler, ErrorHandler
 from ..http import HTTP
-from ..api import VKError
 from ..utils import logger
-from vbml import Patcher, PatchedValidators
-from ._event import EventTypes
-from .processor import EventProcessor
-from .branch import BranchManager
-from ._status import BotStatus, LoggerLevel
 
 try:
     import vbml
@@ -231,7 +235,7 @@ class Bot(HTTP, EventProcessor):
         while True:
             event = await self.make_long_request(self.long_poll_server)
             self.loop.create_task(self.emulate(event))
-            await self.get_server()
+            self.long_poll_server["ts"] = event["ts"]
 
     async def emulate(
         self, event: dict, confirmation_token: str = None

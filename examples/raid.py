@@ -1,6 +1,8 @@
+import asyncio
+import vbml
+
 from vkbottle import Bot, Message
 from vkbottle.rule import VBMLRule
-import vbml, asyncio
 
 bot = Bot("token")
 

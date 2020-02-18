@@ -6,7 +6,7 @@ bot = Bot(os.environ["TOKEN"], debug="ERROR")
 
 
 @bot.on.message_handler(text="/r <s>")
-async def pronounce(s):
+async def pronounce(ans: Message, s):
     return f"/r {s}"
 
 

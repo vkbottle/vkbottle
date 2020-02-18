@@ -1,14 +1,16 @@
-import typing, traceback, sys
+import sys
+import traceback
+import typing
 from asyncio import get_event_loop, AbstractEventLoop
-from ..utils import logger
 
-import aiohttp, vbml
+import aiohttp
+import vbml
 
-from ..http import HTTP
+from ._status import LoggerLevel
 from ..api import UserApi
 from ..handler import UserHandler
-from ._status import LoggerLevel
-
+from ..http import HTTP
+from ..utils import logger
 
 DEFAULT_WAIT = 20
 VERSION = 3
