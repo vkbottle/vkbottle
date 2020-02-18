@@ -235,7 +235,8 @@ class Bot(HTTP, EventProcessor):
         while True:
             event = await self.make_long_request(self.long_poll_server)
             self.loop.create_task(self.emulate(event))
-            self.long_poll_server["ts"] = event["ts"]
+            if "ts" in event:
+                self.long_poll_server["ts"] = event["ts"]
 
     async def emulate(
         self, event: dict, confirmation_token: str = None
