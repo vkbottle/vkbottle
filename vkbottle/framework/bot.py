@@ -14,7 +14,7 @@ from ..api import VKError
 from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 from ..handler import Handler, ErrorHandler
 from ..http import HTTP
-from ..utils import logger
+from ..utils import logger, TaskManager
 
 try:
     import vbml
@@ -206,17 +206,20 @@ class Bot(HTTP, EventProcessor):
         )
         return await self.request.post(url)
 
-    def run_polling(self):
+    def run_polling(
+            self,
+            auto_reload: bool = False,
+            on_shutdown: typing.Callable = None,
+            on_startup: typing.Callable = None,
+    ):
         """
         :return:
         """
-        loop = self.__loop
-        try:
-            loop.create_task(self.run())
-            loop.run_forever()
-        except KeyboardInterrupt:
-            logger.error("Keyboard Interrupt")
-            exit(0)
+        task = TaskManager(self.__loop)
+        task.add_task(self.run())
+        task.run(auto_reload=auto_reload,
+                 on_shutdown=on_shutdown,
+                 on_startup=on_startup)
 
     async def run(self, wait: int = DEFAULT_WAIT):
         self.__wait = wait
@@ -234,7 +237,7 @@ class Bot(HTTP, EventProcessor):
 
         while True:
             event = await self.make_long_request(self.long_poll_server)
-            if isinstance(event, dict):
+            if isinstance(event, dict) and event.get("ts"):
                 self.loop.create_task(self.emulate(event))
                 self.long_poll_server["ts"] = event["ts"]
             else:
@@ -269,6 +272,9 @@ class Bot(HTTP, EventProcessor):
 
         for update in updates:
             try:
+                if not update.get("object"):
+                    continue
+
                 obj = update["object"]
 
                 if update["type"] == EventTypes.MESSAGE_NEW:
