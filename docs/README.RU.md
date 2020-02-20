@@ -120,7 +120,7 @@ keyboard.add_button(Text(label="моя кнопка"), color="primary")
 ```python
 @bot.on.message(text='клавиатуру пожалуйста', lower=True)
 async def wrapper(ans: Message):
-    await ans('Держите.', keyboard=keyboard)
+    await ans('Держите.', keyboard=keyboard.generate())
 ```
 
 ### Старый способ

@@ -137,6 +137,10 @@ class Bot(HTTP, EventProcessor):
             return event.get("secret") == self.__secret
         return True
 
+    def executor_api(self, api):
+        self.__api = api
+        Api.set_current(api)
+
     def loop_update(self, loop: asyncio.AbstractEventLoop = None):
         """
         Update event loop
