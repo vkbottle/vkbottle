@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Union
 from ...base import BaseModel
 from .events_list import EventList as events
 from . import events_objects as EventsObjects
@@ -9,213 +8,188 @@ from ...attachments import Photo, Audio, Video
 
 from ...wall_post import WallPost
 
+import pydantic
 
 # https://vk.com/dev/groups_events
 
 
-EVENT_DICT = {}
-
-
-class SetEventDict:
-    def __init__(self, name):
-        self.name = name
-
-    def __call__(self, cls):
-        if self.name not in EVENT_DICT:
-            EVENT_DICT[self.name] = cls
-        return cls
-
-
 class BaseEvent(BaseModel):
     group_id: int = None
-    type: Union[Enum, str] = None
+    type: Enum = None
 
 
-@SetEventDict(events.MESSAGE_NEW)
 class MessageNew(BaseEvent):
+    type: str = None
     object: Message = None
 
 
-@SetEventDict(events.MESSAGE_EDIT)
 class MessageEdit(MessageNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.MESSAGE_REPLY)
 class MessageReply(MessageNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.MESSAGE_ALLOW)
 class MessageAllow(BaseEvent):
+    type: str = None
     object: EventsObjects.MessageAllow = None
 
 
-@SetEventDict(events.MESSAGE_DENY)
 class MessageDeny(BaseEvent):
+    type: str = None
     object: EventsObjects.MessageAllow = None
 
 
-@SetEventDict(events.PHOTO_NEW)
 class PhotoNew(BaseEvent):
+    type: str = None
     object: Photo = None
 
 
-@SetEventDict(events.PHOTO_COMMENT_NEW)
 class PhotoCommentNew(BaseEvent):
+    type: str = None
     object: EventsObjects.PhotoComment = None
 
 
-@SetEventDict(events.PHOTO_COMMENT_EDIT)
 class PhotoCommentEdit(PhotoCommentNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.PHOTO_COMMENT_RESTORE)
 class PhotoCommentRestore(PhotoCommentNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.PHOTO_COMMENT_DELETE)
 class PhotoCommentDelete(BaseEvent):
+    type: str = None
     object: EventsObjects.PhotoCommentDelete = None
 
 
-@SetEventDict(events.AUDIO_NEW)
 class AudioNew(BaseEvent):
+    type: str = None
     object: Audio = None
 
 
-@SetEventDict(events.VIDEO_NEW)
 class VideoNew(BaseEvent):
+    type: str = None
     object: Video = None
 
 
-@SetEventDict(events.VIDEO_COMMENT_NEW)
 class VideoCommentNew(BaseEvent):
+    type: str = None
     object: EventsObjects.VideoComment = None
 
 
-@SetEventDict(events.VIDEO_COMMENT_EDIT)
 class VideoCommentEdit(VideoCommentNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.VIDEO_COMMENT_RESTORE)
 class VideoCommentRestore(VideoCommentNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.VIDEO_COMMENT_DELETE)
 class VideoCommentDelete(BaseEvent):
+    type: str = None
     object: EventsObjects.VideoCommentDelete = None
 
 
-@SetEventDict(events.WALL_POST_NEW)
 class WallPostNew(BaseEvent):
+    type: str = None
     object: WallPost = None
 
 
-@SetEventDict(events.WALL_REPOST)
 class WallRepost(WallPostNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.WALL_REPLY_NEW)
 class WallReplyNew(BaseEvent):
+    type: str = None
     object: EventsObjects.WallReplyNew = None
 
 
-@SetEventDict(events.WALL_REPLY_EDIT)
 class WallReplyEdit(WallReplyNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.WALL_REPLY_RESTORE)
 class WallReplyRestore(WallReplyNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.WALL_REPLY_DELETE)
 class WallReplyDelete(BaseEvent):
+    type: str = None
     object: EventsObjects.WallReplyDelete = None
 
 
-@SetEventDict(events.BOARD_POST_NEW)
 class BoardPostNew(BaseEvent):
+    type: str = None
     object: EventsObjects.BoardPostNew = None
 
 
-@SetEventDict(events.BOARD_POST_EDIT)
 class BoardPostEdit(BoardPostNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.BOARD_POST_RESTORE)
 class BoardPostRestore(BoardPostNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.BOARD_POST_DELETE)
 class BoardPostDelete(BaseEvent):
+    type: str = None
     object: EventsObjects.BoardPostDelete = None
 
 
-@SetEventDict(events.MARKET_COMMENT_NEW)
 class MarketCommentNew(BaseEvent):
+    type: str = None
     object: EventsObjects.MarketCommentNew = None
 
 
-@SetEventDict(events.MARKET_COMMENT_EDIT)
 class MarketCommentEdit(MarketCommentNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.MARKET_COMMENT_RESTORE)
 class MarketCommentRestore(MarketCommentNew):
-    ...
+    type: str = None
 
 
-@SetEventDict(events.MARKET_COMMENT_DELETE)
 class MarketCommentDelete(BaseEvent):
+    type: str = None
     object: EventsObjects.MarketCommentDelete = None
 
 
-@SetEventDict(events.GROUP_LEAVE)
 class GroupLeave(BaseEvent):
+    type: str = None
     object: EventsObjects.GroupLeave = None
 
 
-@SetEventDict(events.GROUP_JOIN)
 class GroupJoin(BaseEvent):
+    type: str = None
     object: EventsObjects.GroupJoin = None
 
 
-@SetEventDict(events.USER_BLOCK)
 class UserBlock(BaseEvent):
+    type: str = None
     object: EventsObjects.UserBlock = None
 
 
-@SetEventDict(events.USER_UNBLOCK)
 class UserUnblock(BaseEvent):
+    type: str = None
     object: EventsObjects.UserUnblock = None
 
 
-@SetEventDict(events.POLL_VOTE_NEW)
 class PollVoteNew(BaseEvent):
+    type: str = None
     object: EventsObjects.PollVoteNew = None
 
 
-@SetEventDict(events.GROUP_OFFICERS_EDIT)
 class GroupOfficersEdit(BaseEvent):
+    type: str = None
     object: EventsObjects.GroupOfficersEdit = None
 
 
-@SetEventDict(events.GROUP_CHANGE_SETTINGS)
 class GroupChangeSettings(BaseEvent):
+    type: str = None
     object: EventsObjects.GroupChangeSettings = None
 
 
-@SetEventDict(events.GROUP_CHANGE_PHOTO)
 class GroupChangePhoto(BaseEvent):
+    type: str = None
     object: EventsObjects.GroupChangePhoto = None
