@@ -11,4 +11,9 @@ async def pronounce(ans: Message):
     return f"Пинг от вк: {round(time() - ans.date, 2)} сек"
 
 
+@bot.on.event.group_join()
+async def join(event):
+    print(event.user_id)
+
+
 bot.run_polling()

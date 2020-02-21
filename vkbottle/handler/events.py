@@ -339,7 +339,6 @@ class Event:
             rule = EventRule(EventList.GROUP_LEAVE)
             rule.create(func, {"data": GroupLeave})
             self.rules.append(rule)
-            self.events[EventList.GROUP_LEAVE] = {"call": func, "data": GroupLeave}
             return func
 
         return decorator
