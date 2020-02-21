@@ -15,6 +15,25 @@ class Message(BaseModel):
     attachments: dict = None
     random_id: int = None
 
+    async def get(self) -> dict:
+        return (await API().request("messages.getById", {"message_ids": self.message_id}))["items"][0]
+
+    @property
+    async def from_id(self) -> int:
+        return (await self.get())["from_id"]
+
+    @property
+    async def date(self) -> int:
+        return (await self.get())["date"]
+
+    @property
+    async def out(self) -> int:
+        return (await self.get())["out"]
+
+    @property
+    async def read_state(self) -> int:
+        return (await self.get())["read_state"]
+
     async def reply(self, message: str = None, attachment: str = None, **params):
 
         locals().update(params)

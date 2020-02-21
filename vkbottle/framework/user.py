@@ -1,13 +1,14 @@
 import sys
 import traceback
 import typing
+import asyncio
 from asyncio import get_event_loop, AbstractEventLoop
 
 import aiohttp
 import vbml
 
 from ._status import LoggerLevel
-from ..api import UserApi
+from ..api import UserApi, VKError, request
 from ..handler import UserHandler
 from ..http import HTTP
 from ..utils import logger
@@ -39,7 +40,7 @@ class User(HTTP):
         self._mode = mode
         self._patcher: vbml.Patcher = vbml_patcher or vbml.Patcher(pattern="^{}$")
 
-        self.user_id: typing.Optional[int] = user_id
+        self.user_id: typing.Optional[int] = user_id or self.get_id_by_token(token)
         self.on: UserHandler = UserHandler(self._mode)
 
         self.logger = LoggerLevel("INFO" if debug else "ERROR")
@@ -56,6 +57,19 @@ class User(HTTP):
     @property
     def api(self):
         return self.__api
+
+    @staticmethod
+    def get_id_by_token(token: str):
+        """
+        Get group id from token
+        :param token:
+        :return:
+        """
+        logger.debug("Making API request users.get to get user_id")
+        response = asyncio.get_event_loop().run_until_complete(request(token, "users.get"))
+        if "error" in response:
+            raise VKError("Token is invalid")
+        return response["response"][0]["id"]
 
     async def get_server(self):
         """

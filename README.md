@@ -109,14 +109,14 @@ bot.run_polling()
 
 ```python
 from vkbottle.user import User
-from vkbottle.user.types import Message
+from vkbottle.user import types
 from vkbottle.rule import VBMLUserRule
 
 user = User("user-token", 123)
 user.mode(2)
 
 @user.on.message_new(VBMLUserRule("can i ask you about <theme>?",))
-async def wrapper(ans: Message, theme):
+async def wrapper(ans: types.Message, theme):
     if theme in ["examples", "how to do smt", "depression", "insomnia"]:
         await ans("You can ask me about it in telegram @timoniq or make an issue on github!")
     else:
