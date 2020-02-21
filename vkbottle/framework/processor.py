@@ -6,7 +6,6 @@ from ..utils import logger
 from vbml import Patcher
 
 from ..types.message import Message
-from ..types.events import EVENT_DICT
 from ..api import Api, HandlerReturnError
 from ..handler import Handler
 from .branch import BranchManager
@@ -96,7 +95,7 @@ class EventProcessor(RegexHelper):
 
         for rule in self.on.event.rules:
             if await rule.check(event_type):
-                event = EVENT_DICT.get(event_type, dict)(type=event_type, object=obj)
+                event = rule.data["data"](**obj)
                 await rule.call(event, *rule.context.args, **rule.context.kwargs)
 
                 logger.info(

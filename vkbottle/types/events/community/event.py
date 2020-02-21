@@ -23,10 +23,6 @@ class MessageNew(BaseEvent):
     object: Message = None
 
 
-class MessageEdit(MessageNew):
-    type: str = None
-
-
 class MessageReply(MessageNew):
     type: str = None
 
@@ -48,7 +44,7 @@ class PhotoNew(BaseEvent):
 
 class PhotoCommentNew(BaseEvent):
     type: str = None
-    object: EventsObjects.PhotoComment = None
+    object: EventsObjects.PhotoCommentNew = None
 
 
 class PhotoCommentEdit(PhotoCommentNew):
@@ -76,7 +72,7 @@ class VideoNew(BaseEvent):
 
 class VideoCommentNew(BaseEvent):
     type: str = None
-    object: EventsObjects.VideoComment = None
+    object: EventsObjects.VideoCommentNew = None
 
 
 class VideoCommentEdit(VideoCommentNew):
