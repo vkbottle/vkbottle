@@ -96,7 +96,9 @@ class User(HTTP):
                 event = await self.make_long_request(self.long_poll_server)
                 if isinstance(event, dict):
                     self.__loop.create_task(self.emulate(event))
-                await self.get_server()
+                    self.long_poll_server["ts"] = event["ts"]
+                else:
+                    await self.get_server()
 
             except (
                 aiohttp.ClientConnectionError,
