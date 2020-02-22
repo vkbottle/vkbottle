@@ -108,7 +108,7 @@ class User(HTTP):
         while True:
             try:
                 event = await self.make_long_request(self.long_poll_server)
-                if isinstance(event, dict):
+                if isinstance(event, dict) and event.get("ts"):
                     self.__loop.create_task(self.emulate(event))
                     self.long_poll_server["ts"] = event["ts"]
                 else:
