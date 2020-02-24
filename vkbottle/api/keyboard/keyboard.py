@@ -30,9 +30,10 @@ class KeyboardButton:
 
 
 class Keyboard:
-    def __init__(self, one_time: bool = False):
+    def __init__(self, one_time: bool = False, inline: bool = False):
         self.buttons: typing.List[typing.List[KeyboardButton]] = []
         self.one_time: bool = one_time
+        self.inline: bool = inline
 
     def add_row(self):
         if len(self.buttons) and not len(self.buttons[-1]):
@@ -49,6 +50,7 @@ class Keyboard:
     def generate(self):
         keyboard = {
             "one_time": self.one_time,
+            "inline": self.inline,
             "buttons": [[b.button for b in row] for row in self.buttons],
         }
         return json.dumps(keyboard)
