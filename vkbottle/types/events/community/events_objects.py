@@ -117,7 +117,7 @@ class WallReplyNew(WallComment):
 class WallReplyDelete(BaseModel):
     owner_id: int = None
     id: int = None
-    user_id: int = None
+    deleter_id: int = None
     post_id: int = None
 
 
