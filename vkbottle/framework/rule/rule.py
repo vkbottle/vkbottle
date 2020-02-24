@@ -7,6 +7,7 @@ from vbml import Pattern, Patcher
 from ...types import Message, BaseModel
 from ...types import user_longpoll
 from ...utils import flatten
+from ...user import types
 
 
 class Copy:
@@ -50,6 +51,10 @@ class AbstractUserRule(AbstractRule):
 
 class AbstractMessageRule(AbstractRule):
     async def check(self, message: Message):
+        ...
+
+class MessageUserRule(AbstractMessageRule):
+    async def check(self, message: types.Message):
         ...
 
 
@@ -135,8 +140,6 @@ class EventRule(AbstractRule):
 
     async def check(self, event):
         for e in self.data["event"]:
-            if "data" not in self.data:
-                self.data = {"data": dict}
             if e == event:
                 return True
 
