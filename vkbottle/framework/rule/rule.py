@@ -1,5 +1,6 @@
 import typing
 import json
+import inspect
 
 from copy import copy
 from vbml import Pattern, Patcher
@@ -28,12 +29,14 @@ class AbstractRule(Copy):
     def __init_subclass__(cls, **kwargs):
         cls.call: typing.Optional[typing.Callable] = None
         cls.context: RuleExecute = RuleExecute()
+        cls.getfullargspec = None
 
     def create(self, func: typing.Callable, data: dict = None):
         self.call: typing.Callable = func
         self.context = RuleExecute()
         if data is not None:
             setattr(self, "data", {**getattr(self, "data", {}), **data})
+        self.getfullargspec = inspect.getfullargspec(self.call)
 
     async def check(self, event):
         ...
@@ -139,6 +142,7 @@ class EventRule(AbstractRule):
         self.data = {"event": event}
 
     async def check(self, event):
+        self.data["data"] = self.getfullargspec.annotations.get(self.getfullargspec.args[0], dict)
         for e in self.data["event"]:
             if e == event:
                 return True
