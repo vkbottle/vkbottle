@@ -142,7 +142,8 @@ class EventRule(AbstractRule):
         self.data = {"event": event}
 
     async def check(self, event):
-        self.data["data"] = self.getfullargspec.annotations.get(self.getfullargspec.args[0], dict)
+        if "data" not in self.data:
+            self.data["data"] = self.getfullargspec.annotations.get(self.getfullargspec.args[0], dict)
         for e in self.data["event"]:
             if e == event:
                 return True
