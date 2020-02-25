@@ -2,7 +2,6 @@ import sys
 import traceback
 import typing
 import asyncio
-from asyncio import get_event_loop, AbstractEventLoop
 
 import aiohttp
 import vbml
@@ -33,7 +32,7 @@ class User(HTTP):
         log_to_path: typing.Union[str, bool] = None,
         vbml_patcher: vbml.Patcher = None,
     ):
-        self.__loop: AbstractEventLoop = get_event_loop()
+        self.__loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
         self.__debug: bool = debug
         self.__api: UserApi = UserApi(token)
         UserApi.set_current(self.__api)

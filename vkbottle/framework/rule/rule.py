@@ -7,7 +7,6 @@ from vbml import Pattern, Patcher
 from ...types import Message, BaseModel
 from ...types import user_longpoll
 from ...utils import flatten
-from ...user import types
 
 
 class Copy:
@@ -53,8 +52,9 @@ class AbstractMessageRule(AbstractRule):
     async def check(self, message: Message):
         ...
 
+
 class MessageUserRule(AbstractMessageRule):
-    async def check(self, message: types.Message):
+    async def check(self, message: user_longpoll.Message):
         ...
 
 
