@@ -88,8 +88,7 @@ class ApiInstance(ContextInstanceMixin):
         self._request = HTTPRequest()
 
     async def request(self, method: str, params: dict):
-        req = request(self._token, method, params)
-        return await request_instance(method, req)
+        return await request_instance(method, (self._token, method, params))
 
     def __getattr__(self, method):
         """
