@@ -16,6 +16,9 @@ class Handler:
         self.rules: typing.List[UserLongPollEventRule] = list()
         self.mode = mode
 
+    def concatenate(self, other: "Handler"):
+        self.rules += other.rules
+
     def additional_fields(self, event: int):
         if event in [1, 2, 3, 4]:
             return MESSAGE_FIELDS[self.mode]
