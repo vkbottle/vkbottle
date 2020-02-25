@@ -25,8 +25,8 @@ async def request(
     return await session.post(url, data=params or {})
 
 
-async def request_instance(method: str, req: typing.Coroutine):
-    response = await req
+async def request_instance(method: str, req: tuple):
+    response = await request(*req)
 
     if not isinstance(response, dict):
         while not isinstance(response, dict):
@@ -40,7 +40,7 @@ async def request_instance(method: str, req: typing.Coroutine):
             )
             await asyncio.sleep(delay * 5)
             delay += 1
-            response = await req
+            response = await request(*req)
 
             logger.critical(
                 f"--- {time.strftime('%m-%d %H:%M:%S', time.localtime())}\n"
@@ -79,8 +79,7 @@ class Method:
             if isinstance(v, (list, tuple)):
                 kwargs[k] = ",".join(str(x) for x in v)
 
-        req = request(self._token, self._method, kwargs)
-        return await request_instance(self._method, req)
+        return await request_instance(self._method, (self._token, self._method, kwargs))
 
 
 class ApiInstance(ContextInstanceMixin):

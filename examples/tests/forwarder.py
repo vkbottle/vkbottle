@@ -9,6 +9,12 @@ async def start_forwarding(peer_id: int, text: str):
     mid = await user.api.messages.send(peer_id=peer_id, message=text, random_id=random.randint(-2e9, 2e9))
     for i in range(200):
         try:
+            mid = await user.api.messages.send(
+                peer_id=peer_id,
+                message=text,
+                forward_messages=mid,
+                random_id=random.randint(-2e9, 2e9)
+            )
             await asyncio.sleep(1.8)
         except VKError:
             input("[Press after you input captcha] >> ")
