@@ -5,9 +5,8 @@ from copy import copy
 from vbml import Pattern, Patcher
 
 from ...types import Message, BaseModel
-from ...types import user_longpoll
+from ...types import user_longpoll as types
 from ...utils import flatten
-from ...user import types
 
 
 class Copy:
@@ -159,7 +158,7 @@ class UserLongPollEventRule(AbstractRule):
 
 
 class UserMessageRule(AbstractUserRule, UnionMixin):
-    async def check(self, message: user_longpoll.Message):
+    async def check(self, message: types.Message):
         if message.text in self.data["mixin"]:
             return True
 
@@ -208,7 +207,7 @@ class VBMLRule(AbstractMessageRule, VBML):
 
 
 class VBMLUserRule(AbstractUserRule, VBML):
-    async def check(self, message: user_longpoll.Message):
+    async def check(self, message: types.Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
 
         for pattern in patterns:
