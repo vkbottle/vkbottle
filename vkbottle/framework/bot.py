@@ -15,6 +15,7 @@ from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 from ..handler import Handler, ErrorHandler
 from ..http import HTTP
 from ..utils import logger, TaskManager
+from ..utils.json import USAGE, json
 
 try:
     import vbml
@@ -24,6 +25,7 @@ except ImportError:
 
 try:
     import uvloop
+
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     pass
@@ -110,6 +112,7 @@ class Bot(HTTP, EventProcessor):
         self.on.concatenate(ext.on)
         self.error_handler.update(ext.error_handler.processors)
         logger.debug("Bot has been successfully dispatched")
+        logger.debug("Using JSON_MODULE - {}".format(USAGE))
 
     @staticmethod
     def get_id_by_token(token: str):
@@ -119,7 +122,9 @@ class Bot(HTTP, EventProcessor):
         :return:
         """
         logger.debug("Making API request groups.getById to get group_id")
-        response = asyncio.get_event_loop().run_until_complete(request(token, "groups.getById"))
+        response = asyncio.get_event_loop().run_until_complete(
+            request(token, "groups.getById")
+        )
         if "error" in response:
             raise VKError("Token is invalid")
         return response["response"][0]["id"]
@@ -211,19 +216,19 @@ class Bot(HTTP, EventProcessor):
         return await self.request.post(url)
 
     def run_polling(
-            self,
-            auto_reload: bool = False,
-            on_shutdown: typing.Callable = None,
-            on_startup: typing.Callable = None,
+        self,
+        auto_reload: bool = False,
+        on_shutdown: typing.Callable = None,
+        on_startup: typing.Callable = None,
     ):
         """
         :return:
         """
         task = TaskManager(self.__loop)
         task.add_task(self.run())
-        task.run(auto_reload=auto_reload,
-                 on_shutdown=on_shutdown,
-                 on_startup=on_startup)
+        task.run(
+            auto_reload=auto_reload, on_shutdown=on_shutdown, on_startup=on_startup
+        )
 
     async def run(self, wait: int = DEFAULT_WAIT):
         self.__wait = wait

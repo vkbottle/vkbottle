@@ -1,9 +1,5 @@
 from typing import List, Dict
-
-try:
-    import ujson as json
-except ImportError:
-    import json
+from ...utils import json
 
 
 def keyboard_gen(

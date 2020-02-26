@@ -143,7 +143,9 @@ class EventRule(AbstractRule):
 
     async def check(self, event):
         if "data" not in self.data:
-            self.data["data"] = self.getfullargspec.annotations.get(self.getfullargspec.args[0], dict)
+            self.data["data"] = self.getfullargspec.annotations.get(
+                self.getfullargspec.args[0], dict
+            )
         for e in self.data["event"]:
             if e == event:
                 return True
@@ -224,10 +226,12 @@ class VBMLUserRule(AbstractUserRule, VBML):
 
 class AttachmentRule(UnionMixin):
     async def check(self, message: Message):
-        attachments = flatten([
-            list(attachment.dict(skip_defaults=True).keys())
-            for attachment in message.attachments
-        ])
+        attachments = flatten(
+            [
+                list(attachment.dict(skip_defaults=True).keys())
+                for attachment in message.attachments
+            ]
+        )
         if attachments and not self.data["mixin"]:
             # ANY ATTACHMENTS
             return True

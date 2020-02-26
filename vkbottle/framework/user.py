@@ -44,14 +44,19 @@ class User(HTTP):
 
         self.logger = LoggerLevel("INFO" if debug else "ERROR")
         logger.remove()
-        logger.add(sys.stderr,
-                   colorize=True,
-                   format="<level>[<blue>VKBottle</blue>] {message}</level>",
-                   filter=self.logger,
-                   level=0,
-                   enqueue=True)
+        logger.add(
+            sys.stderr,
+            colorize=True,
+            format="<level>[<blue>VKBottle</blue>] {message}</level>",
+            filter=self.logger,
+            level=0,
+            enqueue=True,
+        )
         if log_to_path:
-            logger.add("log_user_{time}.log" if log_to_path is True else log_to_path, rotation="100 MB")
+            logger.add(
+                "log_user_{time}.log" if log_to_path is True else log_to_path,
+                rotation="100 MB",
+            )
 
     @property
     def api(self):
@@ -65,7 +70,9 @@ class User(HTTP):
         :return:
         """
         logger.debug("Making API request users.get to get user_id")
-        response = asyncio.get_event_loop().run_until_complete(request(token, "users.get"))
+        response = asyncio.get_event_loop().run_until_complete(
+            request(token, "users.get")
+        )
         if "error" in response:
             raise VKError("Token is invalid")
         return response["response"][0]["id"]
@@ -131,14 +138,18 @@ class User(HTTP):
     async def emulate(self, event: dict):
         for update in event.get("updates", []):
             update_fields = update[1:]
+
             for rule in self.on.rules:
                 check = await rule.check(update)
+
                 if check is not None:
                     fields, _ = rule.data["data"], rule.data["name"]
                     data = dict(zip(fields, update_fields))
                     args, kwargs = [], {}
+
                     if rule.data.get("dataclass"):
                         data = rule.data.get("dataclass")(**data)
+
                     if isinstance(check, tuple):
                         if all([await s_rule.check(data) for s_rule in check]):
                             args = [a for rule in check for a in rule.context.args]
@@ -150,7 +161,10 @@ class User(HTTP):
                         else:
                             continue
 
-                    await rule.call(data, *args, **kwargs)
+                    task = await rule.call(data, *args, **kwargs)
+
+                    if task is not None:
+                        await data(str(task))
 
     def run_polling(self):
         loop = self.__loop

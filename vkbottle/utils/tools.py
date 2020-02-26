@@ -11,7 +11,9 @@ class Logger:
 
     def __call__(self, message: str, *args, **kwargs):
         t = time.strftime("%m-%d %H:%M:%S", time.localtime())
-        sys.stdout.write("\n[VKBottle] " + message.format(*args, **kwargs) + " [TIME {}]".format(t))
+        sys.stdout.write(
+            "\n[VKBottle] " + message.format(*args, **kwargs) + " [TIME {}]".format(t)
+        )
 
 
 def dict_of_dicts_merge(d1, d2):

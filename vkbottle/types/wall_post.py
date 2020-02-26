@@ -15,6 +15,7 @@ class WallPostComments(BaseModel):
     can_close: bool = None
     can_open: bool = None
 
+
 class WallPost(BaseModel):
     id: int = None
     owner_id: int = None

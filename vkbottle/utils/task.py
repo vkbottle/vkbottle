@@ -72,7 +72,7 @@ class TaskManager:
             self.loop.run_forever()
 
         except KeyboardInterrupt:
-            logger.error("Keyboard Interrupt")
+            logger.info("Keyboard Interrupt")
             exit(0)
 
         finally:

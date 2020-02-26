@@ -48,18 +48,19 @@ class EventProcessor(RegexHelper):
 
         logger.debug(
             '-> MESSAGE FROM {} TEXT "{}"',
-            message.from_id, message.text.replace("\n", " ")
+            message.from_id,
+            message.text.replace("\n", " "),
         )
 
         task = None
         for rules in self.on.rules:
-            
+
             for rule in rules:
                 if not await rule.check(message):
                     break
-            
+
             else:
-            
+
                 args = [a for rule in rules for a in rule.context.args]
                 kwargs = {
                     k: v for rule in rules for k, v in rule.context.kwargs.items()
@@ -70,7 +71,7 @@ class EventProcessor(RegexHelper):
                 task = await rules[0].call(*args, **kwargs)
 
                 logger.info(
-                    "New message \"{}\" compiled with decorator <{}> (from: {}/{})".format(
+                    'New message "{}" compiled with decorator <{}> (from: {}/{})'.format(
                         message.text.replace("\n", " "),
                         rules[0].call.__name__,
                         message.peer_id,
@@ -90,7 +91,8 @@ class EventProcessor(RegexHelper):
 
         logger.debug(
             '-> EVENT FROM {} TYPE "{}"',
-            get_attr(obj, ["user_id", "from_id"]), event_type.upper()
+            get_attr(obj, ["user_id", "from_id"]),
+            event_type.upper(),
         )
 
         for rule in self.on.event.rules:
@@ -99,7 +101,7 @@ class EventProcessor(RegexHelper):
                 await rule.call(event, *rule.context.args, **rule.context.kwargs)
 
                 logger.info(
-                    "New event \"{}\" compiled with decorator <{}> (from: {})".format(
+                    'New event "{}" compiled with decorator <{}> (from: {})'.format(
                         event_type.upper(),
                         rule.call.__name__,
                         get_attr(obj, ["user_id", "from_id"]),
@@ -118,7 +120,8 @@ class EventProcessor(RegexHelper):
 
         logger.debug(
             '-> BRANCHED MESSAGE FROM {} TEXT "{}"',
-            answer.peer_id, answer.text.replace("\n", " ")
+            answer.peer_id,
+            answer.text.replace("\n", " "),
         )
 
         branch = self.branch.load(answer.peer_id)
@@ -129,12 +132,14 @@ class EventProcessor(RegexHelper):
         task = await self._handler_return(task, obj, client_info)
 
         logger.info(
-            "New BRANCHED \"{0}\" compiled with branch <{2}> (from: {1})".format(
+            'New BRANCHED "{0}" compiled with branch <{2}> (from: {1})'.format(
                 answer.text.replace("\n", " "),
                 answer.from_id,
                 '"{}" with {} kwargs'.format(
                     branch.key,
-                    branch.context if len(branch.context) < 100 else branch.context[1:99] + "..."
+                    branch.context
+                    if len(branch.context) < 100
+                    else branch.context[1:99] + "...",
                 ),
             )
         )

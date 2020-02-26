@@ -72,6 +72,10 @@ class Message(BaseModel):
     client_info: ClientInfo = None
     conversation_message_id: int = None
 
+    @property
+    def chat_id(self) -> int:
+        return self.peer_id - 2000000000
+
     async def reply(self, message: str = None, attachment: str = None, **params):
         locals().update(params)
         return await API().request(

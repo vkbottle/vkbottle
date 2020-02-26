@@ -1,7 +1,7 @@
 from .action import Text
 from ..exceptions import KeyboardError
-from ...utils import except_none_self
-import typing, json
+from ...utils import except_none_self, json
+import typing
 
 
 class KeyboardButton:

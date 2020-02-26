@@ -1,6 +1,5 @@
 import time
 import asyncio
-import typing
 
 from ..utils import logger
 

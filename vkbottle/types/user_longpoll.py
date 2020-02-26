@@ -16,7 +16,13 @@ class Message(BaseModel):
     random_id: int = None
 
     async def get(self) -> dict:
-        return (await API().request("messages.getById", {"message_ids": self.message_id}))["items"][0]
+        return (
+            await API().request("messages.getById", {"message_ids": self.message_id})
+        )["items"][0]
+
+    @property
+    def chat_id(self) -> int:
+        return self.peer_id - 2000000000
 
     @property
     async def from_id(self) -> int:

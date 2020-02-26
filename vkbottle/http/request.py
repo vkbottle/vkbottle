@@ -1,10 +1,10 @@
-import json
 import ssl
 import traceback
 
 from aiohttp import ClientSession
 
 from ..const import VERSION_REST
+from ..utils import json
 
 TRACEBACK = []
 

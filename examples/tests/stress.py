@@ -38,4 +38,5 @@ async def response(s):
     if s in STRINGS:
         STRINGS.pop(STRINGS.index(s))
 
+
 bot.run_polling()

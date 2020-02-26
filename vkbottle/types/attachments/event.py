@@ -1,6 +1,7 @@
 from ..base import BaseModel
 from typing import List
 
+
 class Event(BaseModel):
     id: int = None
     time: int = None
