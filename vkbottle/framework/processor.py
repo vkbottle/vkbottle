@@ -148,19 +148,7 @@ class EventProcessor(RegexHelper):
         :param obj:
         :return:
         """
-        return_type = type(handler_return)
-        if return_type in [Branch, ExitBranch]:
-            if return_type == Branch:
-                logger.debug("[Branch Collected]", handler_return.branch_name)
-                self.branch.add(
-                    obj["peer_id"],
-                    handler_return.branch_name,
-                    **handler_return.branch_kwargs
-                )
-            else:
-                logger.debug("[Branch Exited]")
-                self.branch.exit(obj["peer_id"])
-        elif return_type in [str, int, dict, list, tuple, float]:
+        if isinstance(handler_return, (str, int, dict, list, tuple, float)):
             await Message(**obj, client_info=client_info)(
                 str(handler_return), **self.status.handler_return_context
             )
