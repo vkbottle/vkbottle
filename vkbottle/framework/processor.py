@@ -148,13 +148,7 @@ class EventProcessor(RegexHelper):
         :param obj:
         :return:
         """
-        if isinstance(handler_return, (str, int, dict, list, tuple, float)):
+        if handler_return is not None:
             await Message(**obj, client_info=client_info)(
                 str(handler_return), **self.status.handler_return_context
-            )
-        elif handler_return is not None:
-            raise HandlerReturnError(
-                "Type {} can't be returned out of handler".format(
-                    type(handler_return).__name__
-                )
             )
