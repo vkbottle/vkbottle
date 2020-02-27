@@ -7,7 +7,7 @@ import aiohttp
 import vbml
 
 from ._status import LoggerLevel
-from ..api import UserApi, VKError, request
+from ..api import UserApi, VKError, request, TokenQueue
 from ..handler import UserHandler
 from ..http import HTTP
 from ..utils import logger
@@ -34,7 +34,9 @@ class User(HTTP):
     ):
         self.__loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
         self.__debug: bool = debug
-        self.__api: UserApi = UserApi(token=token)
+        self.__token_queue = TokenQueue(token)
+        TokenQueue.set_current(self.__token_queue)
+        self.__api: UserApi = UserApi()
         UserApi.set_current(self.__api)
         self._mode = mode
         self._patcher: vbml.Patcher = vbml_patcher or vbml.Patcher(pattern="^{}$")

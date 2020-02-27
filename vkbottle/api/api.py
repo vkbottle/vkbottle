@@ -14,17 +14,6 @@ def exception_handler(loop, context):
     pass
 
 
-class NonTokenQueue:
-    def __init__(self, token: str):
-        self.token = token
-
-    def __call__(self):
-        return self
-
-    def get(self):
-        return self.token
-
-
 async def request(
     token: str, method: str, params: dict = None, session: HTTPRequest = None
 ):
@@ -94,11 +83,8 @@ class Method:
 
 
 class ApiInstance(ContextInstanceMixin):
-    def __init__(self, use_token_queue: bool = False, token: str = None):
-        if use_token_queue:
-            self._token_queue = TokenQueue.get_current
-        else:
-            self._token_queue = NonTokenQueue(token)
+    def __init__(self):
+        self._token_queue = TokenQueue.get_current
         self._request = HTTPRequest()
 
     @property
