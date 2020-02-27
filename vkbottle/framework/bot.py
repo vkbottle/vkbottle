@@ -44,6 +44,7 @@ class Bot(HTTP, EventProcessor):
         token: str,
         *,
         group_id: int = None,
+        use_token_queue: bool = False,
         debug: typing.Union[str, bool] = True,
         log_to_path: typing.Union[str, bool] = None,
         mobile: bool = False,
@@ -62,6 +63,7 @@ class Bot(HTTP, EventProcessor):
         self.__debug: bool = debug
         self.__wait = None
         self.__secret = secret
+        self.__use_token_queue = use_token_queue
         self._status: BotStatus = BotStatus()
 
         if isinstance(debug, bool):
@@ -90,11 +92,15 @@ class Bot(HTTP, EventProcessor):
             )
 
         # Sign assets
-        self.__token_queue = TokenQueue(token)
-        TokenQueue.set_current(self.__token_queue)
+        if use_token_queue:
+            self.__token_queue = TokenQueue(token)
+            TokenQueue.set_current(self.__token_queue)
 
-        self.__api: Api = Api()
-        Api.set_current(self.__api)
+            self.__api: Api = Api(use_token_queue)
+            Api.set_current(self.__api)
+        else:
+            self.__api: Api = Api(token=token)
+            Api.set_current(self.__api)
 
         self.group_id = group_id or self.get_id_by_token(token)
         self.__loop = asyncio.get_event_loop()

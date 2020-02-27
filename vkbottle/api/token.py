@@ -16,3 +16,7 @@ class TokenQueue(ContextInstanceMixin):
         token = self.tokens[self.index]
         self.index = self.index + 1 if self.index + 1 < len(self.tokens) else 0
         return token
+
+
+class UserTokenQueue(TokenQueue):
+    pass
