@@ -103,6 +103,8 @@ class Bot(HTTP, EventProcessor):
         self.on: Handler = Handler(self.group_id)
         self.error_handler: ErrorHandler = ErrorHandler()
 
+        logger.info("Using JSON_MODULE - {}".format(USAGE))
+
     def dispatch(self, ext: "Bot"):
         """
         Concatenate handlers to current bot object
@@ -112,7 +114,6 @@ class Bot(HTTP, EventProcessor):
         self.on.concatenate(ext.on)
         self.error_handler.update(ext.error_handler.processors)
         logger.debug("Bot has been successfully dispatched")
-        logger.debug("Using JSON_MODULE - {}".format(USAGE))
 
     @staticmethod
     def get_id_by_token(token: str):

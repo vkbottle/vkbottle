@@ -1,7 +1,7 @@
-import sys
+import pkg_resources
 
 SUPPORTED_MODULES = ["json", "ujson", "hyperjson", "orjson"]
-DOWNLOADED = [module for module in SUPPORTED_MODULES if module in sys.modules]
+DOWNLOADED = [pkg.key for pkg in pkg_resources.working_set if pkg.key in SUPPORTED_MODULES]
 USAGE = DOWNLOADED[-1]
 
 json = __import__(USAGE)
