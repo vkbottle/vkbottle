@@ -1,7 +1,7 @@
 import asyncio
 import typing
 
-from ..utils import logger
+from ..utils.logger import logger
 from .auto_reload import _auto_reload
 
 
