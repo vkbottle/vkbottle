@@ -134,15 +134,12 @@ class Bot(HTTP, EventProcessor):
             )
             for m in messages["items"]:
                 if m["from_id"] != -self.group_id:
-                    try:
-                        await self.emulate(
-                            {
-                                "type": "message_new",
-                                "object": {"message": m, "client_info": {}},
-                            }
-                        )
-                    except VKError:
-                        pass  # noqa
+                    await self.emulate(
+                        {
+                            "type": "message_new",
+                            "object": {"message": m, "client_info": {}},
+                        }
+                    )
 
     def add_tokens(self, *tokens):
         self.__token_queue.extend(*tokens)
