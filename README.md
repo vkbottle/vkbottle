@@ -70,23 +70,28 @@ bot.run_polling()
 
 ```python
 from vkbottle import Bot, Message
-from aiohttp.web import RouteTableDef, Application, Request, run_app
+from aiohttp import web
 
+bot = Bot(token="my-token", secret="my-secret")
+app = web.Application()
 
-app = Application()
-routes = RouteTableDef()
-bot = Bot("my-token", secret="SecretKey")
 
 @routes.get("/bot")
-async def executor(request: Request):
-    return await bot.emulate(event=dict(request.query), confirmation_token="ConfirmationToken")
+async def executor(request: web.Request):
+    event = await request.json()
+    return await bot.emulate(event=event, confirmation_token="ConfirmationToken")
 
 @bot.on.message(text="test", lower=True)
 async def wrapper(ans: Message):
     await ans("test!")
 
-app.add_routes(routes)
-run_app(app)
+
+app.router.add_route(
+        path='/',
+        method='POST',
+        handler=executor
+    )
+web.run_app(app=app, host=host, port=port)
 ```
 
 ### Rules
