@@ -116,6 +116,8 @@ class Bot(HTTP, EventProcessor):
             )
             if offset == 0:
                 logger.info(f"Conversation count - {conversations['count']}")
+                if conversations['count'] == 0:
+                    return
             offset += 200
 
             updates.extend([item["conversation"]["out_read"] for item in conversations["items"]])
@@ -252,7 +254,7 @@ class Bot(HTTP, EventProcessor):
     def run_polling(
         self,
         *,
-        skip_updates: bool = False,
+        skip_updates: bool = True,
         auto_reload: bool = False,
         on_shutdown: typing.Callable = None,
         on_startup: typing.Callable = None,
