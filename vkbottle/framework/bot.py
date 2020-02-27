@@ -273,7 +273,7 @@ class Bot(HTTP, EventProcessor):
             auto_reload=auto_reload, on_shutdown=on_shutdown, on_startup=on_startup
         )
 
-    async def run(self, skip_updates: bool, wait: int = DEFAULT_WAIT):
+    async def run(self, skip_updates: bool = False, wait: int = DEFAULT_WAIT):
         self.__wait = wait
         logger.debug("Polling will be started. Is it OK?")
         if self.__secret is not None:
