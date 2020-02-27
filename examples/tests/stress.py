@@ -29,12 +29,12 @@ async def pronounce(ans: Message, t=100):
 
 
 @bot.on.message_handler(text=["/results", "/re"])
-async def res():
+async def res(ans: Message):
     return f"{TIMES - len(STRINGS)}/{TIMES}. I haven't seen {STRINGS}"
 
 
 @bot.on.message_handler(text="/r <s>")
-async def response(s):
+async def response(ans: Message, s):
     if s in STRINGS:
         STRINGS.pop(STRINGS.index(s))
 

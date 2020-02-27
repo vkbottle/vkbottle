@@ -9,7 +9,7 @@ from ._event import EventTypes
 from ._status import BotStatus, LoggerLevel
 from .branch import BranchManager
 from .processor import EventProcessor
-from ..api import Api, request
+from ..api import Api, request, TokenQueue
 from ..api import VKError
 from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 from ..handler import Handler, ErrorHandler
@@ -90,7 +90,10 @@ class Bot(HTTP, EventProcessor):
             )
 
         # Sign assets
-        self.__api: Api = Api(token)
+        self.__token_queue = TokenQueue(token)
+        TokenQueue.set_current(self.__token_queue)
+
+        self.__api: Api = Api()
         Api.set_current(self.__api)
 
         self.group_id = group_id or self.get_id_by_token(token)
@@ -137,6 +140,10 @@ class Bot(HTTP, EventProcessor):
                             "object": {"message": m, "client_info": {}},
                         }
                     )
+
+    def add_tokens(self, *tokens):
+        self.__token_queue.extend(*tokens)
+        TokenQueue.set_current(self.__token_queue)
 
     def dispatch(self, ext: "Bot"):
         """

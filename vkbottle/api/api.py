@@ -7,6 +7,7 @@ from ..const import API_VERSION, API_URL
 from .exceptions import VKError
 from ..http import HTTPRequest
 from ..utils import ContextInstanceMixin
+from .token import TokenQueue
 
 
 def exception_handler(loop, context):
@@ -82,12 +83,16 @@ class Method:
 
 
 class ApiInstance(ContextInstanceMixin):
-    def __init__(self, token: str):
-        self._token = token
+    def __init__(self):
+        self._token_queue = TokenQueue.get_current
         self._request = HTTPRequest()
 
+    @property
+    def token(self):
+        return self._token_queue().get()
+
     async def request(self, method: str, params: dict):
-        return await request_instance(method, (self._token, method, params))
+        return await request_instance(method, (self.token, method, params))
 
     def __getattr__(self, method):
         """
@@ -100,7 +105,7 @@ class ApiInstance(ContextInstanceMixin):
             m = method.split("_")
             method = m[0] + "".join(i.title() for i in m[1:])
 
-        return Method(self._token, method)
+        return Method(self.token, method)
 
 
 class UserApi(ApiInstance, ContextInstanceMixin):
