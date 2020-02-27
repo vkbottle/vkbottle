@@ -16,6 +16,12 @@ class Logger:
         )
 
 
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i : i + n]
+
+
 def dict_of_dicts_merge(d1, d2):
     """
     Update two dicts of dicts recursively,

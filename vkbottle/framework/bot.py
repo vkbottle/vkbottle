@@ -4,6 +4,7 @@ import traceback
 import typing
 
 from vbml import Patcher, PatchedValidators
+from json import dumps
 
 from ._event import EventTypes
 from ._status import BotStatus, LoggerLevel
@@ -14,14 +15,13 @@ from ..api import VKError
 from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 from ..handler import Handler, ErrorHandler
 from ..http import HTTP
-from ..utils import logger, TaskManager
+from ..utils import logger, TaskManager, chunks
 from ..utils.json import USAGE, json
 
 try:
     import vbml
 except ImportError:
     print("Please install vbml to use VKBottle. Use command: {}".format(VBML_INSTALL))
-
 
 try:
     import uvloop
@@ -104,6 +104,41 @@ class Bot(HTTP, EventProcessor):
         self.error_handler: ErrorHandler = ErrorHandler()
 
         logger.info("Using JSON_MODULE - {}".format(USAGE))
+
+    async def get_updates(self):
+        logger.info("Receiving  updates from conversations")
+        updates = []
+        close, offset = False, 0
+        while not close:
+            conversations = await self.api.request(
+                "messages.getConversations",
+                {"count": 200, "offset": offset, "filter": "unanswered"},
+            )
+            if offset == 0:
+                logger.info(f"Conversation count - {conversations['count']}")
+            offset += 200
+
+            items = [item for item in conversations["items"]]
+
+            updates.extend([item["conversation"]["out_read"] for item in items])
+            if len(conversations["items"]) < 200:
+                close = True
+
+        logger.warning("Answering...")
+
+        chunk = list(chunks(updates, 100))
+        for mid in chunk:
+            messages = await self.api.request(
+                "messages.getById", {"message_ids": ",".join(map(str, mid))}
+            )
+            for m in messages["items"]:
+                if m["from_id"] != -self.group_id:
+                    await self.emulate(
+                        {
+                            "type": "message_new",
+                            "object": {"message": m, "client_info": {}},
+                        }
+                    )
 
     def dispatch(self, ext: "Bot"):
         """
@@ -218,6 +253,8 @@ class Bot(HTTP, EventProcessor):
 
     def run_polling(
         self,
+        *,
+        skip_updates: bool = False,
         auto_reload: bool = False,
         on_shutdown: typing.Callable = None,
         on_startup: typing.Callable = None,
@@ -226,12 +263,12 @@ class Bot(HTTP, EventProcessor):
         :return:
         """
         task = TaskManager(self.__loop)
-        task.add_task(self.run())
+        task.add_task(self.run(skip_updates))
         task.run(
             auto_reload=auto_reload, on_shutdown=on_shutdown, on_startup=on_startup
         )
 
-    async def run(self, wait: int = DEFAULT_WAIT):
+    async def run(self, skip_updates: bool, wait: int = DEFAULT_WAIT):
         self.__wait = wait
         logger.debug("Polling will be started. Is it OK?")
         if self.__secret is not None:
@@ -241,6 +278,9 @@ class Bot(HTTP, EventProcessor):
         if not self.status.dispatched:
             await self.on.dispatch(self.get_current_rest)
             self.status.dispatched = True
+
+        if not skip_updates:
+            await self.get_updates()
 
         await self.get_server()
         logger.info("Polling successfully started. Press Ctrl+C to stop it")
@@ -291,10 +331,9 @@ class Bot(HTTP, EventProcessor):
 
                     # VK API v5.103
                     client_info = obj.get("client_info")
-                    if not client_info:
+                    if client_info is None:
                         raise VKError("Change API version to 5.103 or later") from None
                     obj = obj["message"]
-
                     await self._processor(obj, client_info)
 
                 else:
