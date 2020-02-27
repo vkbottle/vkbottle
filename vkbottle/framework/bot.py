@@ -4,7 +4,6 @@ import traceback
 import typing
 
 from vbml import Patcher, PatchedValidators
-from json import dumps
 
 from ._event import EventTypes
 from ._status import BotStatus, LoggerLevel
@@ -16,7 +15,7 @@ from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 from ..handler import Handler, ErrorHandler
 from ..http import HTTP
 from ..utils import logger, TaskManager, chunks
-from ..utils.json import USAGE, json
+from ..utils.json import USAGE
 
 try:
     import vbml
@@ -25,7 +24,6 @@ except ImportError:
 
 try:
     import uvloop
-
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     pass
@@ -106,9 +104,11 @@ class Bot(HTTP, EventProcessor):
         logger.info("Using JSON_MODULE - {}".format(USAGE))
 
     async def get_updates(self):
+        # noqa
         logger.info("Receiving  updates from conversations")
         updates = []
         close, offset = False, 0
+
         while not close:
             conversations = await self.api.request(
                 "messages.getConversations",
@@ -118,9 +118,7 @@ class Bot(HTTP, EventProcessor):
                 logger.info(f"Conversation count - {conversations['count']}")
             offset += 200
 
-            items = [item for item in conversations["items"]]
-
-            updates.extend([item["conversation"]["out_read"] for item in items])
+            updates.extend([item["conversation"]["out_read"] for item in conversations["items"]])
             if len(conversations["items"]) < 200:
                 close = True
 
