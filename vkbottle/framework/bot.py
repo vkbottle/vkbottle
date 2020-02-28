@@ -46,6 +46,7 @@ class Bot(HTTP, EventProcessor):
         group_id: int = None,
         debug: typing.Union[str, bool] = True,
         log_to_path: typing.Union[str, bool] = None,
+        patcher: Patcher = None,
         mobile: bool = False,
         secret: str = None,
     ):
@@ -70,7 +71,7 @@ class Bot(HTTP, EventProcessor):
         self.logger = LoggerLevel(debug)
 
         if not Patcher.get_current():
-            Patcher.set_current(Patcher(pattern="^{}$", validators=DefaultValidators))
+            Patcher.set_current(patcher or Patcher(pattern="^{}$", validators=DefaultValidators))
 
         logger.remove()
         logger.add(
