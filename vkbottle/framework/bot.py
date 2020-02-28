@@ -131,14 +131,7 @@ class Bot(HTTP, EventProcessor):
             messages = await self.api.request(
                 "messages.getById", {"message_ids": ",".join(map(str, mid))}
             )
-            for m in messages["items"]:
-                if m["from_id"] != -self.group_id:
-                    await self.emulate(
-                        {
-                            "type": "message_new",
-                            "object": {"message": m, "client_info": {}},
-                        }
-                    )
+            await self.emulate({"updates": [{"type": "message_new", "object": m} for m in messages["items"]]})
 
     def dispatch(self, ext: "Bot"):
         """
