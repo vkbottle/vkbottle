@@ -61,7 +61,7 @@ from vkbottle import Message
 
 class MyFirstRule(AbstractRule):
     def __init__(self, count: int):
-        self.data["c"] = count
+        self.data = {"c": count}
     
     async def check(self, message: Message):
         if len(message.text.split()) == self.data["c"]:

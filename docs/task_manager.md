@@ -1,5 +1,30 @@
 # TaskManager
 
+С помощью `TaskManager` можно запустить мультисессию и бекграунд таски  
+
+```python
+from vkbottle import Bot, User, TaskManager
+import asyncio
+
+bot = Bot("token")
+user = User("user-token")
+
+async def startup_action():
+    print("Oo! Raised before bot has started")
+    # do stuff
+
+async def background_task():
+    await asyncio.sleep(100)
+    print("Oo! Background task. Here you can update smt for instance")
+    # do stuff
+
+tm = TaskManager()
+tm.add_task(bot.run(skip_updates=False))
+tm.add_task(user.run)
+tm.add_task(background_task())
+tm.run(on_startup=startup_action())
+```
+
 Import:
 
 ```python

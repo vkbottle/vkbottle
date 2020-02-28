@@ -100,7 +100,7 @@ await bot.on.dispatch()
 
 ## Прямые хендлеры
 
-### any_pre_process
+### pre_process
 
 Всегда вызывается до поиска реакции на хендлеры личного и сообщения из беседы. Не используется return-handler синтаксис, то есть, например для бранчей, следует использовать рекомендованный альтернативный синтаксис
 
@@ -132,6 +132,7 @@ await bot.on.dispatch()
 
 ### run (async)
 
+(PARAM) - skip_updates
 Запускает лонгполл, используется для запуска в TaskManager
 
 ### emulate (async)
@@ -141,10 +142,6 @@ await bot.on.dispatch()
 **confirmation_token** - код конфирмации, нужный для подтверждения CallBack
 
 Эмулирует событие, используется для внутренней, ложной и эмуляции событий в callback
-
-### process
-
-Запускает emulate синхронно
 
 ## Дополнительные
 
@@ -167,6 +164,10 @@ await bot.on.dispatch()
 ### loop_update
 
 Обновляет loop модуля asyncio
+
+### get_updates (async)
+
+Отвечает непрочитанным сообщениям, если они накоплены
 
 # BotStatus
 

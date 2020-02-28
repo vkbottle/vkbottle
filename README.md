@@ -63,7 +63,7 @@ async def wrapper(ans: Message, name):
     await ans("Hello, {}".format(name))
 
 
-bot.run_polling()
+bot.run_polling(skip_updates=False)
 ```
 
 ### Callback
