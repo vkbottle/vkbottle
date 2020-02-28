@@ -157,7 +157,7 @@ class EventProcessor(RegexHelper):
             self.branch.add(obj["peer_id"], handler_return.branch_name, **handler_return.branch_kwargs)
         elif isinstance(handler_return, ExitBranch):
             self.branch.exit(obj["peer_id"])
-        if handler_return is not None:
+        elif handler_return is not None:
             await Message(**obj, client_info=client_info)(
                 str(handler_return), **self.status.handler_return_context
             )
