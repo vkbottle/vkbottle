@@ -24,6 +24,7 @@ except ImportError:
 
 try:
     import uvloop
+
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     pass
@@ -71,7 +72,11 @@ class Bot(HTTP, EventProcessor):
         self.logger = LoggerLevel(debug)
 
         if not Patcher.get_current():
-            Patcher.set_current(patcher or Patcher(pattern="^{}$", validators=DefaultValidators))
+            Patcher.set_current(
+                patcher
+                if patcher is not None
+                else Patcher(pattern="^{}$", validators=DefaultValidators)
+            )
 
         logger.remove()
         logger.add(
@@ -117,11 +122,13 @@ class Bot(HTTP, EventProcessor):
             )
             if offset == 0:
                 logger.info(f"Conversation count - {conversations['count']}")
-                if conversations['count'] == 0:
+                if conversations["count"] == 0:
                     return
             offset += 200
 
-            updates.extend([item["conversation"]["out_read"] for item in conversations["items"]])
+            updates.extend(
+                [item["conversation"]["out_read"] for item in conversations["items"]]
+            )
             if len(conversations["items"]) < 200:
                 close = True
 
@@ -132,7 +139,13 @@ class Bot(HTTP, EventProcessor):
             messages = await self.api.request(
                 "messages.getById", {"message_ids": ",".join(map(str, mid))}
             )
-            await self.emulate({"updates": [{"type": "message_new", "object": m} for m in messages["items"]]})
+            await self.emulate(
+                {
+                    "updates": [
+                        {"type": "message_new", "object": m} for m in messages["items"]
+                    ]
+                }
+            )
 
     def dispatch(self, ext: "Bot"):
         """

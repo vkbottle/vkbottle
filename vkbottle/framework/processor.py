@@ -154,7 +154,11 @@ class EventProcessor(RegexHelper):
         :return:
         """
         if isinstance(handler_return, Branch):
-            self.branch.add(obj["peer_id"], handler_return.branch_name, **handler_return.branch_kwargs)
+            self.branch.add(
+                obj["peer_id"],
+                handler_return.branch_name,
+                **handler_return.branch_kwargs
+            )
         elif isinstance(handler_return, ExitBranch):
             self.branch.exit(obj["peer_id"])
         elif handler_return is not None:
