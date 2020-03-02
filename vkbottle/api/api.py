@@ -24,7 +24,7 @@ async def request(
     return await session.post(url, data=params or {})
 
 
-async def request_instance(method: str, req: tuple):
+async def request_instance(method: str, req: tuple, throw_errors: bool = True):
     response = await request(*req)
 
     if not isinstance(response, dict):
@@ -51,15 +51,18 @@ async def request_instance(method: str, req: tuple):
         logger.debug(
             "Error after request {method}, response: {r}", method=method, r=response
         )
-        raise VKError([response["error"]["error_code"], response["error"]["error_msg"]])
+        if throw_errors:
+            raise VKError([response["error"]["error_code"], response["error"]["error_msg"]])
+        return response
 
     return response["response"]
 
 
 class Method:
-    def __init__(self, token: str, method: str):
+    def __init__(self, token: str, method: str, throw_errors: bool = True):
         self._token = token
         self._method = method
+        self._throw_errors = throw_errors
 
     def __getattr__(self, method):
         if "_" in method:
@@ -78,16 +81,17 @@ class Method:
             if isinstance(v, (list, tuple)):
                 kwargs[k] = ",".join(str(x) for x in v)
 
-        return await request_instance(self._method, (self._token, self._method, kwargs))
+        return await request_instance(self._method, (self._token, self._method, kwargs), self._throw_errors)
 
 
 class ApiInstance(ContextInstanceMixin):
-    def __init__(self, token: str):
+    def __init__(self, token: str, throw_errors: bool = True):
         self._token = token
         self._request = HTTPRequest()
+        self.throw_errors: bool = throw_errors
 
     async def request(self, method: str, params: dict):
-        return await request_instance(method, (self._token, method, params))
+        return await request_instance(method, (self._token, method, params), self.throw_errors)
 
     def __getattr__(self, method):
         """
@@ -100,7 +104,7 @@ class ApiInstance(ContextInstanceMixin):
             m = method.split("_")
             method = m[0] + "".join(i.title() for i in m[1:])
 
-        return Method(self._token, method)
+        return Method(self._token, method, self.throw_errors)
 
 
 class UserApi(ApiInstance, ContextInstanceMixin):

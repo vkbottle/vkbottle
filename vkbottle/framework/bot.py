@@ -46,6 +46,7 @@ class Bot(HTTP, EventProcessor):
         *,
         group_id: int = None,
         debug: typing.Union[str, bool] = True,
+        throw_errors: bool = True,
         log_to_path: typing.Union[str, bool] = None,
         patcher: Patcher = None,
         mobile: bool = False,
@@ -96,7 +97,7 @@ class Bot(HTTP, EventProcessor):
             )
 
         # Sign assets
-        self.__api: Api = Api(token)
+        self.__api: Api = Api(token, throw_errors=throw_errors)
         Api.set_current(self.__api)
 
         self.group_id = group_id or self.get_id_by_token(token)
