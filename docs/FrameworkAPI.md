@@ -186,3 +186,26 @@ bot.status.change_handler_return_context(attachment="wall-1_1")
 Возвращает информацию о том, запущен ли лонгполл и распакованы ли хендлеры
 
 
+# Нестандартные условия работы и проблемы
+
+## C++ Build tools
+
+```text
+Microsoft Visual C++ 14.0 is required. Get it with "Build Tools for Visual Studio"
+```
+
+Решение на эту проблему можно найти в issue #47
+
+## sem_open implementation
+
+```text
+ImportError: This platform lacks a functioning sem_open implementation, therefore,
+the required synchronization primitives needed will not function, see issue 3770
+```
+
+Проблема возникает при попытке использования `VKBottle` через такие вещи как Termux, Pydroid...  
+Решение: пропишите флаг mobile при инициализации бота:
+
+```python
+bot = Bot(..., mobile=True)
+```
