@@ -142,7 +142,11 @@ class Bot(HTTP, EventProcessor):
             await self.emulate(
                 {
                     "updates": [
-                        {"type": "message_new", "object": m} for m in messages["items"]
+                        {
+                            "type": "message_new",
+                            "object": {"message": m, "client_info": {}},
+                        }
+                        for m in messages["items"]
                     ]
                 }
             )

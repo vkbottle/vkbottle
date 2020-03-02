@@ -33,7 +33,10 @@ async def wrapper(ans: Message, user: User):
 
 
 async def init_db():
-    await Tortoise.init(db_url="sqlite://users.db", modules={"models": ["tortoise_models"]})
+    await Tortoise.init(
+        db_url="sqlite://users.db", modules={"models": ["tortoise_models"]}
+    )
     await Tortoise.generate_schemas()
+
 
 bot.run_polling(skip_updates=False)
