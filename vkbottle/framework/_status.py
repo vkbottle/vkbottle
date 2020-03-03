@@ -14,6 +14,7 @@ class BotStatus:
     polling_started: bool = False
     dispatched: bool = False
     handler_return_context: dict = {}
+    middleware_expressions: bool = True
 
     @property
     def readable(self) -> dict:

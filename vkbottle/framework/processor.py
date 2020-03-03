@@ -6,8 +6,9 @@ from ..utils import logger
 from vbml import Patcher
 
 from ..types.message import Message
-from ..api import Api, HandlerReturnError
+from ..api import Api
 from ..handler import Handler
+from ..handler.middleware import MiddlewareExecutor
 from .branch import BranchManager
 from .regex import RegexHelper
 from .branch import Branch, ExitBranch
@@ -25,6 +26,7 @@ def get_attr(adict: dict, attrs: typing.List[str]):
 class EventProcessor(RegexHelper):
     api: Api
     on: Handler
+    middleware: MiddlewareExecutor
     patcher: Patcher
     branch: BranchManager
     status: BotStatus
@@ -39,12 +41,14 @@ class EventProcessor(RegexHelper):
             client_info=client_info
         )
 
+        async for mr in self.middleware.run_middleware(message):
+            if self.status.middleware_expressions:
+                if mr is False:
+                    return
+
         if message.from_id in self.branch.queue or message.peer_id in self.branch.queue:
             await self._branched_processor(obj, client_info)
             return
-
-        if self.on.pre:
-            await (self.on.pre(message))
 
         logger.debug(
             '-> MESSAGE FROM {} TEXT "{}"',
@@ -56,7 +60,7 @@ class EventProcessor(RegexHelper):
         for rules in self.on.rules:
 
             for rule in rules:
-                if not await rule.check(message):
+                if not await rule(message):
                     break
 
             else:

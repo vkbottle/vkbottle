@@ -154,7 +154,6 @@ class Handler:
         def decorator(func):
             self._pre_p = func
             return func
-
         return decorator
 
     def __repr__(self):
@@ -204,9 +203,16 @@ class MessageHandler:
         command: bool,
         pattern: str,
     ) -> AbstractRule:
-        texts: typing.List[typing.Union[str, Pattern]] = text if isinstance(
-            text, list
-        ) else [text]
+        source = None
+
+        if not isinstance(text, dict):
+            texts: typing.List[typing.Union[str, Pattern]] = text if isinstance(
+                text, list
+            ) else [text]
+        else:
+            source = list(text.values())
+            texts = list(text.keys())
+
         patterns: typing.List[Pattern] = []
 
         for text in texts:
@@ -223,6 +229,8 @@ class MessageHandler:
                 patterns.append(text)
 
         rule = VBMLRule(patterns)
+        if source:
+            rule.watch_context = dict(zip(patterns, source))
         arguments = [
             arguments for pattern in patterns for arguments in pattern.arguments
         ]

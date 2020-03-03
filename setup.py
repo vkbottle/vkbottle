@@ -9,7 +9,7 @@ except:
 
 setuptools.setup(
     name="vkbottle",
-    version="2.4",
+    version="2.5",
     author="timoniq",
     description="Working with VK by this homogenetic way and it's awesome!",
     long_description=long_description,

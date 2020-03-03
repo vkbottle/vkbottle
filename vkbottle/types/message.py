@@ -77,7 +77,9 @@ class Message(BaseModel):
         return self.peer_id - 2000000000
 
     async def reply(self, message: str = None, attachment: str = None, **params):
+        message = str(message)
         locals().update(params)
+
         return await API().request(
             "messages.send",
             dict(
@@ -94,7 +96,8 @@ class Message(BaseModel):
 
     async def __call__(self, message: str = None, attachment: str = None, **params):
         locals().update(params)
-        for message in sep_bytes(message or ""):
+
+        for message in sep_bytes(str(message or "")):
             m = await API().request(
                 "messages.send",
                 dict(

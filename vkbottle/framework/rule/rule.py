@@ -1,5 +1,4 @@
 import typing
-import json
 import inspect
 
 from copy import copy
@@ -7,7 +6,7 @@ from vbml import Pattern, Patcher
 
 from ...types import Message, BaseModel
 from ...types import user_longpoll
-from ...utils import flatten
+from ...utils import flatten, json
 
 
 class Copy:
@@ -20,22 +19,40 @@ class RuleExecute:
         self.args = []
         self.kwargs = {}
 
+    def update(self, args: list, kwargs: dict):
+        self.args.extend(args)
+        self.kwargs.update(kwargs)
+
     def __call__(self):
         return self.args, self.kwargs
 
 
 class AbstractRule(Copy):
     def __init_subclass__(cls, **kwargs):
-        cls.call: typing.Optional[typing.Callable] = None
         cls.context: RuleExecute = RuleExecute()
-        cls.getfullargspec = None
+        cls.watch_context = None
 
     def create(self, func: typing.Callable, data: dict = None):
         self.call: typing.Callable = func
-        self.context = RuleExecute()
         if data is not None:
             setattr(self, "data", {**getattr(self, "data", {}), **data})
         self.getfullargspec = inspect.getfullargspec(self.call)
+
+    def resolve(self, value):
+        if self.watch_context:
+            context = self.watch_context.get(value)
+
+            if isinstance(context, (list, tuple)):
+                self.context.args.extend(context)
+            elif isinstance(context, dict):
+                self.context.kwargs.update(context)
+            else:
+                self.context.args.append(context)
+
+
+    async def __call__(self, event):
+        self.__init_subclass__()
+        return await self.check(event)
 
     async def check(self, event):
         ...
@@ -91,7 +108,10 @@ class MessageRule(AbstractMessageRule):
 
 class LevenshteinDisRule(AbstractMessageRule):
     def __init__(self, mixin: typing.Union[str, typing.List[str]], lev_d: float = 1):
-        if not isinstance(mixin, list):
+        if isinstance(mixin, dict):
+            self.watch_context = mixin
+            mixin = list(mixin.keys())
+        elif not isinstance(mixin, list):
             mixin = [mixin]
         self.data = {"samples": mixin}
         self.lev = lev_d
@@ -121,12 +141,16 @@ class LevenshteinDisRule(AbstractMessageRule):
     async def check(self, message: Message):
         for sample in self.data["samples"]:
             if self.distance(message.text, sample) <= self.lev:
+                self.resolve(sample)
                 return True
 
 
 class CommandRule(AbstractMessageRule):
     def __init__(self, message: typing.Union[str, typing.List[str]]):
-        if isinstance(message, str):
+        if isinstance(message, dict):
+            self.watch_context = message
+            message = list(message.keys())
+        elif not isinstance(message, list):
             message = [message]
         self.data = {"message": ["/" + c for c in message]}
 
@@ -183,11 +207,20 @@ class PrivateMessage(AbstractMessageRule):
             return True
 
 
-class VBML:
+class VBML(AbstractMessageRule):
     def __init__(
         self,
-        pattern: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
+        pattern: typing.Union[
+            str,
+            Pattern,
+            typing.List[typing.Union[str, Pattern]],
+            typing.Dict[typing.Union[str, Pattern], typing.Union[list, dict]]
+        ],
     ):
+        if isinstance(pattern, dict):
+            self.watch_context = pattern
+            pattern = list(pattern.keys())
+            print(pattern)
         self._patcher = Patcher.get_current()
         patterns: typing.List[Pattern] = []
         if isinstance(pattern, Pattern):
@@ -204,17 +237,18 @@ class VBML:
         self.data = {"pattern": patterns}
 
 
-class VBMLRule(AbstractMessageRule, VBML):
+class VBMLRule(VBML):
     async def check(self, message: Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
 
         for pattern in patterns:
             if self._patcher.check(message.text, pattern) is not None:
                 self.context.kwargs = pattern.dict()
+                self.resolve(pattern)
                 return True
 
 
-class VBMLUserRule(AbstractUserRule, VBML):
+class VBMLUserRule(VBML):
     async def check(self, message: user_longpoll.Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
 

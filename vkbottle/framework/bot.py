@@ -13,6 +13,7 @@ from ..api import Api, request
 from ..api import VKError
 from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
 from ..handler import Handler, ErrorHandler
+from ..handler.middleware import MiddlewareExecutor
 from ..http import HTTP
 from ..utils import logger, TaskManager, chunks
 from ..utils.json import USAGE
@@ -105,6 +106,7 @@ class Bot(HTTP, EventProcessor):
 
         # Main workers
         self.branch: BranchManager = BranchManager(DEFAULT_BOT_FOLDER)
+        self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.on: Handler = Handler(self.group_id)
         self.error_handler: ErrorHandler = ErrorHandler()
 
