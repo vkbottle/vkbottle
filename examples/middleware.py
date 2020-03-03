@@ -4,6 +4,7 @@ from tortoise import Tortoise
 
 from vkbottle import Bot, Message
 from vkbottle.rule import AbstractMessageRule
+from vkbottle.ext import Middleware
 from .tortoise_models import User
 
 bot = Bot("token")
@@ -20,11 +21,12 @@ class Registered(AbstractMessageRule):
         return True
 
 
-@bot.on.pre_process()
-async def middleware(ans: Message):
-    if not await User.get_or_none(uid=ans.from_id):
-        await User.create(uid=ans.from_id, time=current())
-        await ans("You are now registered")
+@bot.middleware.middleware_handler()
+class Register(Middleware):
+    async def middleware(self, message: Message):
+        if not await User.get_or_none(uid=message.from_id):
+            await User.create(uid=message.from_id, time=current())
+            await message("You are now registered")
 
 
 @bot.on.message(Registered(), lev=["hi", "hello"])
