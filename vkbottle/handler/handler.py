@@ -72,7 +72,8 @@ class Handler:
             self._pre_p = handler.pre
 
         logger.debug(
-            "Bot Handler was concatenated with {handler}", handler=handler.__class__.__name__
+            "Bot Handler was concatenated with {handler}",
+            handler=handler.__class__.__name__,
         )
 
     async def dispatch(self, get_current_rest: typing.Callable = None) -> None:
@@ -154,6 +155,7 @@ class Handler:
         def decorator(func):
             self._pre_p = func
             return func
+
         return decorator
 
     def __repr__(self):
@@ -316,60 +318,6 @@ class MessageHandler:
                 current.append(self._text_rule(func, text, lower, command, "{}$"))
 
             self.add_rules(current, func)
-            return func
-
-        return decorator
-
-    def startswith(
-        self,
-        text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
-        *rules,
-        command: bool = False,
-        lower: bool = False,
-        **col_rules,
-    ):
-        """
-        Startswith regex message processor
-
-        For example:
-        >>> # @bot.on.message.startswith(text)
-
-        :param text: text which message should start
-        :param command: Is this is a /command
-        :param lower: Should IGNORECASE param for regex be used
-        """
-
-        def decorator(func):
-            current: typing.List[AbstractRule] = list(rules)
-            current.extend(self._col_rules(**col_rules))
-
-            if text:
-                current.append(self._text_rule(func, text, lower, command, "{}"))
-
-            self.add_rules(current, func)
-            return func
-
-        return decorator
-
-    def regex(self, pattern: str, *rules):
-        """
-        Regex message compiler
-        :param pattern: Regex string
-        """
-
-        def decorator(func):
-            current = list()
-
-            rule = VBMLRule(self._patcher.pattern("", pattern=pattern))
-            rule.create(func)
-            rule.data["ignore_ans"] = False
-            current.append(rule)
-
-            for rule in rules:
-                rule.create(func)
-                current.append(rule)
-
-            self.rules.append(current)
             return func
 
         return decorator

@@ -13,7 +13,9 @@ class UserCheck(Middleware):
         return message.from_id > 0
 
 
-@bot.on.message_handler(lev={"hello": ["reaction to hello"], "hi": {"source": "reaction to hi"}})
+@bot.on.message_handler(
+    lev={"hello": ["reaction to hello"], "hi": {"source": "reaction to hi"}}
+)
 async def pronounce(ans: Message, source):
     return f"Hello! {source}"
 

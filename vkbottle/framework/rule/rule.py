@@ -49,7 +49,6 @@ class AbstractRule(Copy):
             else:
                 self.context.args.append(context)
 
-
     async def __call__(self, event):
         self.__init_subclass__()
         return await self.check(event)
@@ -214,7 +213,7 @@ class VBML(AbstractMessageRule):
             str,
             Pattern,
             typing.List[typing.Union[str, Pattern]],
-            typing.Dict[typing.Union[str, Pattern], typing.Union[list, dict]]
+            typing.Dict[typing.Union[str, Pattern], typing.Union[list, dict]],
         ],
     ):
         if isinstance(pattern, dict):

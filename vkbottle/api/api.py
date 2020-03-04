@@ -53,7 +53,9 @@ async def request_instance(method: str, req: tuple, throw_errors: bool = True):
             "Error after request {method}, response: {r}", method=method, r=response
         )
         if throw_errors:
-            raise VKError([response["error"]["error_code"], response["error"]["error_msg"]])
+            raise VKError(
+                [response["error"]["error_code"], response["error"]["error_msg"]]
+            )
         return response
 
     return response["response"]
@@ -82,7 +84,9 @@ class Method:
             if isinstance(v, (list, tuple)):
                 kwargs[k] = ",".join(str(x) for x in v)
 
-        return await request_instance(self._method, (self._token, self._method, kwargs), self._throw_errors)
+        return await request_instance(
+            self._method, (self._token, self._method, kwargs), self._throw_errors
+        )
 
 
 class ApiInstance(ContextInstanceMixin):
@@ -91,11 +95,13 @@ class ApiInstance(ContextInstanceMixin):
         self._request = HTTPRequest()
         self.throw_errors: bool = throw_errors
 
-    async def request(self, method: str, params: dict, throw_errors: typing.Optional[bool] = None):
+    async def request(
+        self, method: str, params: dict, throw_errors: typing.Optional[bool] = None
+    ):
         return await request_instance(
             method,
             (self._token, method, params),
-            (throw_errors if throw_errors is not None else self.throw_errors)
+            (throw_errors if throw_errors is not None else self.throw_errors),
         )
 
     def __getattr__(self, method):

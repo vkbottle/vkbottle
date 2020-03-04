@@ -19,6 +19,7 @@ class MiddlewareExecutor:
             else:
                 self.middleware.append(cls)
             return cls
+
         return wrapper
 
     def export_middleware(self, middleware_list: typing.List[Middleware]):
