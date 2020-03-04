@@ -1,5 +1,6 @@
 import time
 import asyncio
+import typing
 
 from ..utils import logger
 
@@ -90,8 +91,12 @@ class ApiInstance(ContextInstanceMixin):
         self._request = HTTPRequest()
         self.throw_errors: bool = throw_errors
 
-    async def request(self, method: str, params: dict):
-        return await request_instance(method, (self._token, method, params), self.throw_errors)
+    async def request(self, method: str, params: dict, throw_errors: typing.Optional[bool] = None):
+        return await request_instance(
+            method,
+            (self._token, method, params),
+            (throw_errors if throw_errors is not None else self.throw_errors)
+        )
 
     def __getattr__(self, method):
         """
