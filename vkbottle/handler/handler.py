@@ -72,7 +72,7 @@ class Handler:
             self._pre_p = handler.pre
 
         logger.debug(
-            "Bot Handler was concatenated with {handler}", handler=handler.__name__
+            "Bot Handler was concatenated with {handler}", handler=handler.__class__.__name__
         )
 
     async def dispatch(self, get_current_rest: typing.Callable = None) -> None:
