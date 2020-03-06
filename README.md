@@ -14,7 +14,7 @@
    
    Последний стабильный релиз:
    ```sh
-   pip install vkbottle==1.35
+   pip install vkbottle==2.3
    ```
 
 2) С помощью установщика pip из GitHub: 

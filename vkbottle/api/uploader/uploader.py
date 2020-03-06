@@ -63,7 +63,7 @@ class PhotoUploader(Uploader):
         for i, file in enumerate(pathlike):
             files["file{}".format(i + 1)] = self.open_pathlike(file)
 
-        uploader = self.upload(server, files, params)
+        uploader = await self.upload(server, files, params)
 
         photos = await self.vk.api.request(
             "photos.save",
@@ -78,7 +78,7 @@ class PhotoUploader(Uploader):
 
     async def upload_wall_photo(self, pathlike, **params) -> typing.Union[str, dict]:
         server = await self.vk.api.request("photos.getWallUploadServer", {})
-        uploader = self.upload(server, {"photo": self.open_pathlike(pathlike)}, params)
+        uploader = await self.upload(server, {"photo": self.open_pathlike(pathlike)}, params)
 
         params = {**uploader, **params}
         photo = await self.vk.api.request("photos.saveWallPhoto", params)
