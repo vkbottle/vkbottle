@@ -52,9 +52,3 @@ def flatten(lis):
         else:
             yield item
 
-
-def folder_checkup(path, create: bool = True):
-    path = os.path.abspath(path)
-    if not os.path.exists(path) and create:
-        os.mkdir(path)
-    return path
