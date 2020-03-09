@@ -6,6 +6,11 @@
 
 ## Установка
 1) С помощью установщика pip из PyPi:
+
+   Для Termux:
+   ```bash
+   pkg install clang && pip install vkbottle
+   ```
    
    Новейшая версия:
    ```sh
