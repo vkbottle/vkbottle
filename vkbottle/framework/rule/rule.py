@@ -1,5 +1,6 @@
 import typing
 import inspect
+import re
 
 from copy import copy
 from vbml import Pattern, Patcher
@@ -215,6 +216,7 @@ class VBML(AbstractMessageRule):
             typing.List[typing.Union[str, Pattern]],
             typing.Dict[typing.Union[str, Pattern], typing.Union[list, dict]],
         ],
+        lower: bool = None
     ):
         if isinstance(pattern, dict):
             self.watch_context = pattern
@@ -227,7 +229,7 @@ class VBML(AbstractMessageRule):
         elif isinstance(pattern, list):
             for p in pattern:
                 if isinstance(p, str):
-                    patterns.append(self._patcher.pattern(p))
+                    patterns.append(self._patcher.pattern(p, flags=re.IGNORECASE if lower else None))
                 else:
                     patterns.append(p)
         elif isinstance(pattern, str):
