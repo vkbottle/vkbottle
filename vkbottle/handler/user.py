@@ -2,13 +2,7 @@ import typing
 from ..framework.rule import UserLongPollEventRule
 from ..types.user_longpoll import Message
 
-MESSAGE_FIELDS = {
-    2: ("peer_id", "timestamp", "text", "info", "attachments"),
-    8: ("peer_id", "timestamp", "text"),
-    32: ("peer_id", "timestamp", "text"),
-    64: ("peer_id", "timestamp", "text"),
-    128: ("peer_id", "timestamp", "text", "random_id"),
-}
+ADDITIONAL_FIELDS = ("peer_id", "timestamp", "text", "info", "attachments", "random_id")
 
 
 class Handler:
@@ -19,15 +13,6 @@ class Handler:
     def concatenate(self, other: "Handler"):
         self.rules += other.rules
 
-    def additional_fields(self, event: int):
-        if event in [1, 2, 3, 4]:
-            return MESSAGE_FIELDS[self.mode]
-        if event == 5:
-            if self.mode == 2:
-                return ["attachments", "null"]
-            return ["null"]
-        return []
-
     def message_flag_change(self, *rules):
         def decorator(func):
             rule = UserLongPollEventRule(1, *rules)
@@ -35,7 +20,7 @@ class Handler:
                 func,
                 {
                     "name": "message_flag_change",
-                    "data": ["message_id", "flags", *self.additional_fields(1)],
+                    "data": ["message_id", "flags", *ADDITIONAL_FIELDS],
                 },
             )
             self.rules.append(rule)
@@ -50,7 +35,7 @@ class Handler:
                 func,
                 {
                     "name": "message_flag_set",
-                    "data": ["message_id", "mask", *self.additional_fields(2)],
+                    "data": ["message_id", "mask", *ADDITIONAL_FIELDS],
                 },
             )
             self.rules.append(rule)
@@ -65,7 +50,7 @@ class Handler:
                 func,
                 {
                     "name": "message_flag_remove",
-                    "data": ["message_id", "mask", *self.additional_fields(3)],
+                    "data": ["message_id", "mask", *ADDITIONAL_FIELDS],
                 },
             )
             self.rules.append(rule)
@@ -80,7 +65,7 @@ class Handler:
                 func,
                 {
                     "name": "message_new",
-                    "data": ["message_id", "flags", *self.additional_fields(4)],
+                    "data": ["message_id", "flags", *ADDITIONAL_FIELDS],
                     "dataclass": Message,
                 },
             )
@@ -102,7 +87,7 @@ class Handler:
                         "peer_id",
                         "timestamp",
                         "new_text",
-                        *self.additional_fields(5),
+                        *ADDITIONAL_FIELDS,
                     ],
                 },
             )
@@ -118,7 +103,7 @@ class Handler:
                 func,
                 {
                     "name": "message_read_in",
-                    "data": ["peer_id", "local_id", *self.additional_fields(6)],
+                    "data": ["peer_id", "local_id", ],
                 },
             )
             self.rules.append(rule)
@@ -133,7 +118,7 @@ class Handler:
                 func,
                 {
                     "name": "message_read_out",
-                    "data": ["peer_id", "local_id", *self.additional_fields(7)],
+                    "data": ["peer_id", "local_id", ],
                 },
             )
             self.rules.append(rule)
@@ -152,7 +137,7 @@ class Handler:
                         "user_id",
                         "extra",
                         "timestamp",
-                        *self.additional_fields(8),
+                        
                     ],
                 },
             )
@@ -172,7 +157,7 @@ class Handler:
                         "user_id",
                         "flags",
                         "timestamp",
-                        *self.additional_fields(9),
+                        
                     ],
                 },
             )
@@ -188,7 +173,7 @@ class Handler:
                 func,
                 {
                     "name": "chat_flag_change",
-                    "data": ["peer_id", "flags", *self.additional_fields(11)],
+                    "data": ["peer_id", "flags", ],
                 },
             )
             self.rules.append(rule)
@@ -203,7 +188,7 @@ class Handler:
                 func,
                 {
                     "name": "chat_flag_set",
-                    "data": ["peer_id", "mask", *self.additional_fields(12)],
+                    "data": ["peer_id", "mask", ],
                 },
             )
             self.rules.append(rule)
@@ -218,7 +203,7 @@ class Handler:
                 func,
                 {
                     "name": "chat_flag_remove",
-                    "data": ["peer_id", "mask", *self.additional_fields(10)],
+                    "data": ["peer_id", "mask", ],
                 },
             )
             self.rules.append(rule)
@@ -233,7 +218,7 @@ class Handler:
                 func,
                 {
                     "name": "chat_remove",
-                    "data": ["peer_id", "local_id", *self.additional_fields(13)],
+                    "data": ["peer_id", "local_id", ],
                 },
             )
             self.rules.append(rule)
@@ -248,7 +233,7 @@ class Handler:
                 func,
                 {
                     "name": "chat_restore",
-                    "data": ["peer_id", "local_id", *self.additional_fields(14)],
+                    "data": ["peer_id", "local_id", ],
                 },
             )
             self.rules.append(rule)
@@ -263,7 +248,7 @@ class Handler:
                 func,
                 {
                     "name": "chat_edit",
-                    "data": ["chat_id", "self", *self.additional_fields(51)],
+                    "data": ["chat_id", "self", ],
                 },
             )
             self.rules.append(rule)
@@ -278,7 +263,7 @@ class Handler:
                 func,
                 {
                     "name": "chat_info_edit",
-                    "data": ["type_id", "peer_id", "info", *self.additional_fields(52)],
+                    "data": ["type_id", "peer_id", "info", ],
                 },
             )
             self.rules.append(rule)
@@ -293,7 +278,7 @@ class Handler:
                 func,
                 {
                     "name": "message_typing_state",
-                    "data": ["user_id", "flags", *self.additional_fields(61)],
+                    "data": ["user_id", "flags", ],
                 },
             )
             self.rules.append(rule)
@@ -308,7 +293,7 @@ class Handler:
                 func,
                 {
                     "name": "chat_typing_state",
-                    "data": ["user_id", "chat_id", *self.additional_fields(62)],
+                    "data": ["user_id", "chat_id", ],
                 },
             )
             self.rules.append(rule)
@@ -328,7 +313,7 @@ class Handler:
                         "peer_id",
                         "total_count",
                         "ts",
-                        *self.additional_fields(63),
+                        
                     ],
                 },
             )
@@ -349,7 +334,7 @@ class Handler:
                         "peer_id",
                         "total_count",
                         "ts",
-                        *self.additional_fields(64),
+                        
                     ],
                 },
             )
@@ -365,7 +350,7 @@ class Handler:
                 func,
                 {
                     "name": "call",
-                    "data": ["user_id", "call_id", *self.additional_fields(70)],
+                    "data": ["user_id", "call_id", ],
                 },
             )
             self.rules.append(rule)
@@ -380,7 +365,7 @@ class Handler:
                 func,
                 {
                     "name": "left_counter",
-                    "data": ["counter", "null", *self.additional_fields(80)],
+                    "data": ["counter", "null", ],
                 },
             )
             self.rules.append(rule)
@@ -399,7 +384,7 @@ class Handler:
                         "peer_id",
                         "sound",
                         "disabled_until",
-                        *self.additional_fields(114),
+                        
                     ],
                 },
             )

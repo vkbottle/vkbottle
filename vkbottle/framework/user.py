@@ -36,7 +36,6 @@ class User(HTTP):
         self.__debug: bool = debug
         self.__api: UserApi = UserApi(token)
         UserApi.set_current(self.__api)
-        self._mode = mode
         self._patcher: vbml.Patcher = vbml_patcher or vbml.Patcher(pattern="^{}$")
 
         self.user_id: typing.Optional[int] = user_id or self.get_id_by_token(token)
@@ -92,12 +91,11 @@ class User(HTTP):
         :return: VK LongPoll Event
         """
         try:
-            url = "https://{}?act=a_check&key={}&ts={}&wait={}&mode={}&version={}".format(
+            url = "https://{}?act=a_check&key={}&ts={}&wait={}&mode=234&version={}".format(
                 long_poll_server["server"],
                 long_poll_server["key"],
                 long_poll_server["ts"],
                 self.__wait or DEFAULT_WAIT,
-                self.mode or MODE,
                 self.version or VERSION,
             )
             return await self.request.post(url)
@@ -175,8 +173,7 @@ class User(HTTP):
             exit(0)
 
     def mode(self, mode: int):
-        self._mode = mode
-        self.on.mode = mode
+        raise VKError("User LP mode specifier is abandoned, mode 234 is used as default. See issue #36")
 
     @property
     def loop(self):
