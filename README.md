@@ -118,7 +118,6 @@ from vkbottle.user import types
 from vkbottle.rule import VBMLUserRule
 
 user = User("user-token", 123)
-user.mode(2)
 
 @user.on.message_new(VBMLUserRule("can i ask you about <theme>?",))
 async def wrapper(ans: types.Message, theme):
