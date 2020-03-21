@@ -1,10 +1,26 @@
 import typing, asyncio
+import inspect
 
 from .cls import FunctionBranch, AbstractBranch
 
+from ...utils import logger
 from ...api.exceptions import BranchError
+from ...framework.rule import AbstractMessageRule
 
 BRANCH_DATA = ".BRANCHES.txt"
+
+
+class CoroutineBranch(AbstractBranch):
+    coroutine: typing.Callable = None
+
+    async def enter(self, ans):
+        logger.info("Branch {} entered at", self.key or self.coroutine.__name__)
+
+    async def exit(self, ans):
+        logger.info("Branch {} exit at", self.key or self.coroutine.__name__)
+
+    async def branch(self, ans):
+        return await self.coroutine(ans)
 
 
 class BranchManager:
@@ -49,7 +65,8 @@ class BranchManager:
                 raise BranchError(
                     "Branch {} hasn't been yet assigned with decorator".format(branch)
                 )
-            branch = self._meet_up[branch]
+            state = CoroutineBranch(branch)
+            state.coroutine = self._meet_up[branch]
         elif isinstance(branch, typing.Coroutine):
             q = {b.data["call"]: b for b in self._meet_up.values() if "call" in b.data}
             if branch not in q:
@@ -58,7 +75,8 @@ class BranchManager:
                         branch.__name__
                     )
                 )
-            branch = q[branch]
+            state = CoroutineBranch(q[branch])
+            state.coroutine = branch
         else:
             for k, v in self._meet_up.items():
                 if isinstance(v, branch):
@@ -67,9 +85,17 @@ class BranchManager:
         branch.create(**context)
         self._branch_queue[uid] = branch
 
-    def load(self, uid: int) -> AbstractBranch:
+    async def load(self, uid: int) -> typing.Tuple[
+        typing.Dict[
+            str, typing.Union[typing.Tuple[typing.Callable, typing.List[AbstractMessageRule], typing.Callable]]
+        ],
+        AbstractBranch
+    ]:
         if uid in self._branch_queue:
-            return self._branch_queue.get(uid)
+            branch = self._branch_queue.get(uid)
+            disposal = dict(inspect.getmembers(branch, predicate=lambda obj: isinstance(obj, tuple)))
+            disposal["default"] = [branch.__class__.branch, []]
+            return disposal, branch
 
     def exit(self, uid: int) -> AbstractBranch:
         if uid in self._branch_queue:

@@ -5,4 +5,5 @@ from .framework.branch import (
     AbstractBranch,
     FunctionBranch,
     ClsBranch,
+    rule_disposal,
 )

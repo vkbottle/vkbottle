@@ -1,3 +1,7 @@
+import typing
+from ..rule import AbstractMessageRule
+
+
 class Branch:
     branch_name: str
     branch_kwargs: dict
@@ -10,3 +14,14 @@ class Branch:
 class ExitBranch:
     def __init__(self):
         pass
+
+
+def rule_disposal(*rules: AbstractMessageRule):
+    disposal = []
+
+    def wrapper(func):
+        for rule in rules:
+            rule.create(func)
+            disposal.append(rule)
+        return func, disposal
+    return wrapper

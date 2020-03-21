@@ -1,4 +1,4 @@
-import typing
+import typing, types
 from asyncio import AbstractEventLoop
 from re import sub
 from ..utils import logger
@@ -128,12 +128,22 @@ class EventProcessor(RegexHelper):
             answer.text.replace("\n", " "),
         )
 
-        branch = self.branch.load(answer.peer_id)
-
+        disposal, branch = await self.branch.load(answer.peer_id)
         await branch.enter(answer)
-        task = await branch.branch(answer)
 
-        task = await self._handler_return(task, obj, client_info)
+        for n, member in disposal.items():
+            rules = member[1]
+            for rule in rules:
+                if not await rule(answer):
+                    break
+            else:
+                task = types.MethodType(member[0], branch)
+                args = [a for rule in rules for a in rule.context.args]
+                kwargs = {
+                    k: v for rule in rules for k, v in rule.context.kwargs.items()
+                }
+                await self._handler_return(await task(answer, *args, **kwargs), obj, client_info)
+                break
 
         logger.info(
             'New BRANCHED "{0}" compiled with branch <{2}> (from: {1})'.format(
@@ -148,7 +158,6 @@ class EventProcessor(RegexHelper):
             )
         )
         await branch.exit(answer)
-        return task
 
     async def _handler_return(self, handler_return, obj: dict, client_info: dict):
         """
