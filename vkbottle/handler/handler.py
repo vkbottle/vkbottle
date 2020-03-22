@@ -36,7 +36,7 @@ def should_ignore_ans(func: typing.Callable, arguments: list) -> bool:
 
 
 class Handler:
-    def __init__(self, group_id: int = 0):
+    def __init__(self, group_id: int = 0, patcher: Patcher = Patcher()):
         self.group_id: int = group_id
         self.rules: typing.List[typing.List[AbstractRule]] = list()
 
@@ -48,7 +48,7 @@ class Handler:
         self.event: Event = Event()
 
         self._pre_p: typing.Optional[typing.Callable] = None
-        self._patcher = Patcher.get_current()
+        self._patcher = Patcher.get_current() or patcher
 
         if not hasattr(Pattern, "context_copy"):
             raise RuntimeError(
