@@ -241,8 +241,8 @@ class VBML(AbstractMessageRule):
 class VBMLRule(VBML):
     async def check(self, message: Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
-        text = message.text.replace('<br>', '\n')
-        message = text \
+        message = message.text \
+            .replace('<br>', '\n') \
             .replace('&lt;', '<') \
             .replace('&gt;', '>') \
             .replace('&quot;', '"') \
@@ -259,7 +259,8 @@ class VBMLUserRule(VBML):
     async def check(self, message: user_longpoll.Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
         text = message.text.replace('<br>', '\n')
-        message = text \
+        message = message.text \
+            .replace('<br>', '\n') \
             .replace('&lt;', '<') \
             .replace('&gt;', '>') \
             .replace('&quot;', '"') \
