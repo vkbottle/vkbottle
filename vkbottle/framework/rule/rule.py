@@ -241,9 +241,15 @@ class VBML(AbstractMessageRule):
 class VBMLRule(VBML):
     async def check(self, message: Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
+        text = message.text.replace('<br>', '\n')
+        message = text \
+            .replace('&lt;', '<') \
+            .replace('&gt;', '>') \
+            .replace('&quot;', '"') \
+            .replace('&amp;', '&')
 
         for pattern in patterns:
-            if self._patcher.check(message.text, pattern) is not None:
+            if self._patcher.check(message, pattern) is not None:
                 self.context.kwargs = pattern.dict()
                 self.resolve(pattern)
                 return True
@@ -252,9 +258,15 @@ class VBMLRule(VBML):
 class VBMLUserRule(VBML):
     async def check(self, message: user_longpoll.Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
+        text = message.text.replace('<br>', '\n')
+        message = text \
+            .replace('&lt;', '<') \
+            .replace('&gt;', '>') \
+            .replace('&quot;', '"') \
+            .replace('&amp;', '&')
 
         for pattern in patterns:
-            if self._patcher.check(message.text, pattern) is not None:
+            if self._patcher.check(message, pattern) is not None:
                 self.context.kwargs = pattern.dict()
                 return True
 
