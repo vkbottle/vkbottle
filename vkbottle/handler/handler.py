@@ -96,10 +96,10 @@ class Handler:
             current_rest = await get_current_rest()
             if current_rest["version"] != __version__:
                 logger.info(
-                    "You are using old version of VKBottle. Update is found: {}".format(
-                        current_rest["version"]
+                    "You are using old version of VKBottle. Update is found: {} | {}".format(
+                        current_rest["version"],
+                        current_rest["description"],
                     ),
-                    current_rest["description"],
                 )
         logger.debug("Bot successfully dispatched")
 
