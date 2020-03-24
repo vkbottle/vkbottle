@@ -1,11 +1,16 @@
 from vkbottle import Bot, Message
 from vkbottle.rule import VBMLRule
-from vkbottle.branch import ClsBranch, ExitBranch, rule_disposal
+from vkbottle.branch import ClsBranch, ExitBranch, rule_disposal, Branch
 import os
 
 
 # Add variable TOKEN to your env variables
 bot = Bot(os.environ["TOKEN"])
+
+
+class LovelessBranch(ClsBranch):
+    async def branch(self, ans: Message):
+        return "I don't love you forever"
 
 
 @bot.branch.simple_branch()
@@ -17,7 +22,7 @@ async def branch_wrapper(ans: Message, word):
 
 
 @bot.branch.cls_branch(branch_name="another")
-class Branch(ClsBranch):
+class AnotherBranch(ClsBranch):
     @rule_disposal(VBMLRule("what <some>"))
     async def some(self, ans: Message, some):
         await ans(f"I don't know what {some} is that")
@@ -35,4 +40,10 @@ async def pronounce(ans: Message, word):
     return "Okay!"
 
 
+@bot.on.message_handler(text="love")
+async def loveless(ans: Message):
+    await ans("Loveless..")
+    return Branch(LovelessBranch)
+
+bot.branch.add_branch(LovelessBranch)
 bot.run_polling()

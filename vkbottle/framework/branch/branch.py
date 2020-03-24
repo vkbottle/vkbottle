@@ -1,4 +1,4 @@
-import typing, asyncio
+import typing, asyncio, types
 import inspect
 
 from .cls import FunctionBranch, AbstractBranch
@@ -38,6 +38,16 @@ class BranchManager:
             return func
 
         return decorator
+
+    def add_branch(self, branch: typing.Callable, name: str = None):
+        if inspect.isclass(type(branch)):
+            self._meet_up[name or branch.__name__] = branch(name)
+        elif asyncio.iscoroutinefunction(branch):
+            self._meet_up[name or branch.__name__] = FunctionBranch(
+                name or branch.__name__, call=branch
+            )
+        else:
+            raise BranchError("Branch Callable should be an AbstractBranch (ClsBranch) or a async function")
 
     def cls_branch(self, branch_name: str = None):
         def decorator(cls: typing.ClassVar):
