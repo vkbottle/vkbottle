@@ -35,6 +35,7 @@ class EventProcessor(RegexHelper):
 
     async def _processor(self, obj: dict, client_info: dict):
         processor = dict(obj=obj, client_info=client_info)
+        middleware_args = []
 
         message = Message(
             **{**obj, "text": self.init_bot_mention(obj["text"])},
@@ -45,6 +46,8 @@ class EventProcessor(RegexHelper):
             if self.status.middleware_expressions:
                 if mr is False:
                     return
+                elif mr is not None:
+                    middleware_args.append(mr)
 
         if message.from_id in self.branch.queue or message.peer_id in self.branch.queue:
             await self._branched_processor(obj, client_info)
@@ -70,7 +73,7 @@ class EventProcessor(RegexHelper):
                     k: v for rule in rules for k, v in rule.context.kwargs.items()
                 }
                 if not getattr(rules[0], "data", {}).get("ignore_ans"):
-                    args = [message, *args]
+                    args = [message, *middleware_args, *args]
 
                 task = await rules[0].call(*args, **kwargs)
 
