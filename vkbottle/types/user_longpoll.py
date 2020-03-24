@@ -3,6 +3,7 @@ from .attachments import Geo
 from .message import sep_bytes, MessageAction
 from ..api import UserApi
 import random
+import typing
 
 API = UserApi.get_current
 
@@ -16,6 +17,7 @@ class Message(BaseModel):
     attachments: dict = None
     random_id: int = None
     # from messages.getById
+    id: int = None
     from_id: int = None
     date: int = None
     out: int = None
@@ -25,6 +27,7 @@ class Message(BaseModel):
     important: bool = None
     geo: Geo = None
     reply_message: "Message" = None
+    fwd_messages: typing.List["Message"] = None
     action: MessageAction = None
 
     async def get(self) -> dict:
