@@ -24,7 +24,7 @@ class Message(BaseModel):
     ref_source: str = None
     important: bool = None
     geo: Geo = None
-    reply_message: int = None
+    reply_message: "Message" = None
     action: MessageAction = None
 
     async def get(self) -> dict:
