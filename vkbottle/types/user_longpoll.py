@@ -73,3 +73,6 @@ class Message(BaseModel):
                 ),
             )
         return m
+
+
+Message.update_forward_refs()
