@@ -1,5 +1,6 @@
 from .base import BaseModel
-from .message import sep_bytes
+from .attachments import Geo
+from .message import sep_bytes, MessageAction
 from ..api import UserApi
 import random
 
@@ -14,6 +15,17 @@ class Message(BaseModel):
     text: str = None
     attachments: dict = None
     random_id: int = None
+    # from messages.getById
+    from_id: int = None
+    date: int = None
+    out: int = None
+    read_state: int = None
+    ref: str = None
+    ref_source: str = None
+    important: bool = None
+    geo: Geo = None
+    reply_message: int = None
+    action: MessageAction = None
 
     async def get(self) -> dict:
         return (
@@ -23,22 +35,6 @@ class Message(BaseModel):
     @property
     def chat_id(self) -> int:
         return self.peer_id - 2000000000
-
-    @property
-    async def from_id(self) -> int:
-        return (await self.get())["from_id"]
-
-    @property
-    async def date(self) -> int:
-        return (await self.get())["date"]
-
-    @property
-    async def out(self) -> int:
-        return (await self.get())["out"]
-
-    @property
-    async def read_state(self) -> int:
-        return (await self.get())["read_state"]
 
     async def reply(self, message: str = None, attachment: str = None, **params):
 

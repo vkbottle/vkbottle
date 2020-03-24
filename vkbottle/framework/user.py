@@ -28,7 +28,7 @@ class User(HTTP):
         token: str,
         user_id: int = None,
         debug: bool = True,
-        mode: int = None,
+        expand_models: bool = True,
         log_to_path: typing.Union[str, bool] = None,
         vbml_patcher: vbml.Patcher = None,
     ):
@@ -36,6 +36,8 @@ class User(HTTP):
         self.__debug: bool = debug
         self.__api: UserApi = UserApi(token)
         UserApi.set_current(self.__api)
+
+        self._expand_models: bool = expand_models
         self._patcher: vbml.Patcher = vbml_patcher or vbml.Patcher(pattern="^{}$")
 
         self.user_id: typing.Optional[int] = user_id or self.get_id_by_token(token)
@@ -135,7 +137,7 @@ class User(HTTP):
 
     async def emulate(self, event: dict):
         for update in event.get("updates", []):
-            update_fields = update[1:]
+            update_code, update_fields = update[0], update[1:]
 
             for rule in self.on.rules:
                 check = await rule.check(update)
@@ -144,6 +146,9 @@ class User(HTTP):
                     fields, _ = rule.data["data"], rule.data["name"]
                     data = dict(zip(fields, update_fields))
                     args, kwargs = [], {}
+
+                    if self._expand_models:
+                        data.update(await self.expand_data(update_code, data))
 
                     if rule.data.get("dataclass"):
                         data = rule.data.get("dataclass")(**data)
@@ -172,8 +177,21 @@ class User(HTTP):
             logger.error("Keyboard Interrupt")
             exit(0)
 
+    async def expand_data(self, code: int, data: dict):
+        if code in range(6):
+            data.update(
+                (
+                    await self.api.request(
+                        "messages.getById", {"message_ids": data["message_id"]},
+                    )
+                )["items"][0]
+            )
+        return data
+
     def mode(self, mode: int):
-        raise VKError("User LP mode specifier is abandoned, mode 234 is used as default. See issue #36")
+        raise VKError(
+            "User LP mode specifier is abandoned, mode 234 is used as default. See issue #36"
+        )
 
     @property
     def loop(self):

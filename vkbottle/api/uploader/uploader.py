@@ -78,7 +78,9 @@ class PhotoUploader(Uploader):
 
     async def upload_wall_photo(self, pathlike, **params) -> typing.Union[str, dict]:
         server = await self.vk.api.request("photos.getWallUploadServer", {})
-        uploader = await self.upload(server, {"photo": self.open_pathlike(pathlike)}, params)
+        uploader = await self.upload(
+            server, {"photo": self.open_pathlike(pathlike)}, params
+        )
 
         params = {**uploader, **params}
         photo = await self.vk.api.request("photos.saveWallPhoto", params)

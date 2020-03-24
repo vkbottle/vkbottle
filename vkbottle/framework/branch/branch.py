@@ -85,15 +85,24 @@ class BranchManager:
         branch.create(**context)
         self._branch_queue[uid] = branch
 
-    async def load(self, uid: int) -> typing.Tuple[
+    async def load(
+        self, uid: int
+    ) -> typing.Tuple[
         typing.Dict[
-            str, typing.Union[typing.Tuple[typing.Callable, typing.List[AbstractMessageRule], typing.Callable]]
+            str,
+            typing.Union[
+                typing.Tuple[
+                    typing.Callable, typing.List[AbstractMessageRule], typing.Callable
+                ]
+            ],
         ],
-        AbstractBranch
+        AbstractBranch,
     ]:
         if uid in self._branch_queue:
             branch = self._branch_queue.get(uid)
-            disposal = dict(inspect.getmembers(branch, predicate=lambda obj: isinstance(obj, tuple)))
+            disposal = dict(
+                inspect.getmembers(branch, predicate=lambda obj: isinstance(obj, tuple))
+            )
             disposal["default"] = [branch.__class__.branch, []]
             return disposal, branch
 

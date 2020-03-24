@@ -100,11 +100,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(6, *rules)
             rule.create(
-                func,
-                {
-                    "name": "message_read_in",
-                    "data": ["peer_id", "local_id", ],
-                },
+                func, {"name": "message_read_in", "data": ["peer_id", "local_id",],},
             )
             self.rules.append(rule)
             return func
@@ -115,11 +111,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(7, *rules)
             rule.create(
-                func,
-                {
-                    "name": "message_read_out",
-                    "data": ["peer_id", "local_id", ],
-                },
+                func, {"name": "message_read_out", "data": ["peer_id", "local_id",],},
             )
             self.rules.append(rule)
             return func
@@ -131,15 +123,7 @@ class Handler:
             rule = UserLongPollEventRule(8, *rules)
             rule.create(
                 func,
-                {
-                    "name": "friend_online",
-                    "data": [
-                        "user_id",
-                        "extra",
-                        "timestamp",
-                        
-                    ],
-                },
+                {"name": "friend_online", "data": ["user_id", "extra", "timestamp",],},
             )
             self.rules.append(rule)
             return func
@@ -151,15 +135,7 @@ class Handler:
             rule = UserLongPollEventRule(9, *rules)
             rule.create(
                 func,
-                {
-                    "name": "friend_offline",
-                    "data": [
-                        "user_id",
-                        "flags",
-                        "timestamp",
-                        
-                    ],
-                },
+                {"name": "friend_offline", "data": ["user_id", "flags", "timestamp",],},
             )
             self.rules.append(rule)
             return func
@@ -170,11 +146,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(11, *rules)
             rule.create(
-                func,
-                {
-                    "name": "chat_flag_change",
-                    "data": ["peer_id", "flags", ],
-                },
+                func, {"name": "chat_flag_change", "data": ["peer_id", "flags",],},
             )
             self.rules.append(rule)
             return func
@@ -185,11 +157,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(12, *rules)
             rule.create(
-                func,
-                {
-                    "name": "chat_flag_set",
-                    "data": ["peer_id", "mask", ],
-                },
+                func, {"name": "chat_flag_set", "data": ["peer_id", "mask",],},
             )
             self.rules.append(rule)
             return func
@@ -200,11 +168,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(10, *rules)
             rule.create(
-                func,
-                {
-                    "name": "chat_flag_remove",
-                    "data": ["peer_id", "mask", ],
-                },
+                func, {"name": "chat_flag_remove", "data": ["peer_id", "mask",],},
             )
             self.rules.append(rule)
             return func
@@ -215,11 +179,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(13, *rules)
             rule.create(
-                func,
-                {
-                    "name": "chat_remove",
-                    "data": ["peer_id", "local_id", ],
-                },
+                func, {"name": "chat_remove", "data": ["peer_id", "local_id",],},
             )
             self.rules.append(rule)
             return func
@@ -230,11 +190,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(14, *rules)
             rule.create(
-                func,
-                {
-                    "name": "chat_restore",
-                    "data": ["peer_id", "local_id", ],
-                },
+                func, {"name": "chat_restore", "data": ["peer_id", "local_id",],},
             )
             self.rules.append(rule)
             return func
@@ -245,11 +201,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(51, *rules)
             rule.create(
-                func,
-                {
-                    "name": "chat_edit",
-                    "data": ["chat_id", "self", ],
-                },
+                func, {"name": "chat_edit", "data": ["chat_id", "self",],},
             )
             self.rules.append(rule)
             return func
@@ -261,10 +213,7 @@ class Handler:
             rule = UserLongPollEventRule(52, *rules)
             rule.create(
                 func,
-                {
-                    "name": "chat_info_edit",
-                    "data": ["type_id", "peer_id", "info", ],
-                },
+                {"name": "chat_info_edit", "data": ["type_id", "peer_id", "info",],},
             )
             self.rules.append(rule)
             return func
@@ -275,11 +224,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(61, *rules)
             rule.create(
-                func,
-                {
-                    "name": "message_typing_state",
-                    "data": ["user_id", "flags", ],
-                },
+                func, {"name": "message_typing_state", "data": ["user_id", "flags",],},
             )
             self.rules.append(rule)
             return func
@@ -290,11 +235,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(62, *rules)
             rule.create(
-                func,
-                {
-                    "name": "chat_typing_state",
-                    "data": ["user_id", "chat_id", ],
-                },
+                func, {"name": "chat_typing_state", "data": ["user_id", "chat_id",],},
             )
             self.rules.append(rule)
             return func
@@ -308,13 +249,7 @@ class Handler:
                 func,
                 {
                     "name": "chat_typing_states",
-                    "data": [
-                        "user_ids",
-                        "peer_id",
-                        "total_count",
-                        "ts",
-                        
-                    ],
+                    "data": ["user_ids", "peer_id", "total_count", "ts",],
                 },
             )
             self.rules.append(rule)
@@ -329,13 +264,7 @@ class Handler:
                 func,
                 {
                     "name": "chat_voice_message_states",
-                    "data": [
-                        "user_ids",
-                        "peer_id",
-                        "total_count",
-                        "ts",
-                        
-                    ],
+                    "data": ["user_ids", "peer_id", "total_count", "ts",],
                 },
             )
             self.rules.append(rule)
@@ -347,11 +276,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(70, *rules)
             rule.create(
-                func,
-                {
-                    "name": "call",
-                    "data": ["user_id", "call_id", ],
-                },
+                func, {"name": "call", "data": ["user_id", "call_id",],},
             )
             self.rules.append(rule)
             return func
@@ -362,11 +287,7 @@ class Handler:
         def decorator(func):
             rule = UserLongPollEventRule(80, *rules)
             rule.create(
-                func,
-                {
-                    "name": "left_counter",
-                    "data": ["counter", "null", ],
-                },
+                func, {"name": "left_counter", "data": ["counter", "null",],},
             )
             self.rules.append(rule)
             return func
@@ -380,12 +301,7 @@ class Handler:
                 func,
                 {
                     "name": "notifications_settings_changed",
-                    "data": [
-                        "peer_id",
-                        "sound",
-                        "disabled_until",
-                        
-                    ],
+                    "data": ["peer_id", "sound", "disabled_until",],
                 },
             )
             self.rules.append(rule)

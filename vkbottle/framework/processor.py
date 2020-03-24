@@ -142,7 +142,9 @@ class EventProcessor(RegexHelper):
                 kwargs = {
                     k: v for rule in rules for k, v in rule.context.kwargs.items()
                 }
-                await self._handler_return(await task(answer, *args, **kwargs), obj, client_info)
+                await self._handler_return(
+                    await task(answer, *args, **kwargs), obj, client_info
+                )
                 break
 
         logger.info(

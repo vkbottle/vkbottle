@@ -51,4 +51,3 @@ def flatten(lis):
             yield from flatten(item)
         else:
             yield item
-

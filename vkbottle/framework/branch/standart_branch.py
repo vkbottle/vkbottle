@@ -24,4 +24,5 @@ def rule_disposal(*rules: AbstractMessageRule):
             rule.create(func)
             disposal.append(rule)
         return func, disposal
+
     return wrapper
