@@ -289,6 +289,8 @@ class Bot(HTTP, EventProcessor):
             self.__secret = None
 
         if not self.status.dispatched:
+            if self.on.pre:
+                self.middleware.add_middleware(self.on.pre)
             await self.on.dispatch(self.get_current_rest)
             self.status.dispatched = True
 
@@ -316,6 +318,8 @@ class Bot(HTTP, EventProcessor):
         :return: "ok"
         """
         if not self.status.dispatched:
+            if self.on.pre:
+                self.middleware.add_middleware(self.on.pre)
             await self.on.dispatch(self.get_current_rest)
             self.status.dispatched = True
 
