@@ -1,4 +1,3 @@
-import typing
 from ..rule import AbstractMessageRule
 
 
@@ -14,6 +13,15 @@ class Branch:
 class ExitBranch:
     def __init__(self):
         pass
+
+
+class ImmutableBranchData:
+    def __init__(self, name: str, **kwargs):
+        self.name: str = name
+        self.data = kwargs
+
+    def __call__(self) -> dict:
+        return {"name": self.name, **self.data}
 
 
 def rule_disposal(*rules: AbstractMessageRule):

@@ -3,7 +3,7 @@ from .framework.branch import (
     Branch,
     ExitBranch,
     AbstractBranch,
-    FunctionBranch,
+    CoroutineBranch,
     ClsBranch,
     rule_disposal,
 )

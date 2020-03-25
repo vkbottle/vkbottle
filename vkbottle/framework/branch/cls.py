@@ -1,5 +1,6 @@
 from copy import copy
 from ...utils import logger
+import typing
 
 from ...types import Message
 
@@ -37,6 +38,12 @@ class ClsBranch(AbstractBranch):
         logger.info("Branch {} exit at", self.key)
 
 
-class FunctionBranch(ClsBranch):
-    async def branch(self, ans: Message):
-        return await self.data["call"](ans, **self.context)
+class CoroutineBranch(AbstractBranch):
+    async def enter(self, ans):
+        logger.info("Branch {} entered at", self.key or self.data["call"].__name__)
+
+    async def exit(self, ans):
+        logger.info("Branch {} exit at", self.key or self.data["call"].__name__)
+
+    async def branch(self, ans):
+        return await self.data["call"](ans)

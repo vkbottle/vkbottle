@@ -11,7 +11,7 @@ from .branch import BranchManager
 from .processor import EventProcessor
 from ..api import Api, request
 from ..api import VKError
-from ..const import DEFAULT_BOT_FOLDER, VBML_INSTALL
+from ..const import VBML_INSTALL
 from ..handler import Handler, ErrorHandler
 from ..handler.middleware import MiddlewareExecutor
 from ..http import HTTP
@@ -25,7 +25,6 @@ except ImportError:
 
 try:
     import uvloop
-
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     pass
@@ -105,7 +104,7 @@ class Bot(HTTP, EventProcessor):
         self.__loop = asyncio.get_event_loop()
 
         # Main workers
-        self.branch: BranchManager = BranchManager(DEFAULT_BOT_FOLDER)
+        self.branch: BranchManager = BranchManager()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.on: Handler = Handler(self.group_id)
         self.error_handler: ErrorHandler = ErrorHandler()
