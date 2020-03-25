@@ -50,7 +50,7 @@ class EventProcessor(RegexHelper):
                     middleware_args.append(mr)
 
         if message.from_id in self.branch.queue or message.peer_id in self.branch.queue:
-            await self._branched_processor(obj, client_info)
+            await self._branched_processor(obj, client_info, middleware_args)
             return
 
         logger.debug(
@@ -116,7 +116,7 @@ class EventProcessor(RegexHelper):
                 )
                 return True
 
-    async def _branched_processor(self, obj: dict, client_info: dict):
+    async def _branched_processor(self, obj: dict, client_info: dict, middleware_args: list):
         """
         Branched messages processor manager
         :param obj: VK Server Event Object
@@ -146,7 +146,7 @@ class EventProcessor(RegexHelper):
                     k: v for rule in rules for k, v in rule.context.kwargs.items()
                 }
                 await self._handler_return(
-                    await task(answer, *args, **kwargs), obj, client_info
+                    await task(answer, *middleware_args, *args, **kwargs), obj, client_info
                 )
                 break
 
