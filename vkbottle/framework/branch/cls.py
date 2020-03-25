@@ -23,7 +23,7 @@ class AbstractBranch(Copy):
     async def enter(self, ans: Message):
         ...
 
-    async def branch(self, ans: Message):
+    async def branch(self, ans: Message, *args):
         ...
 
     async def exit(self, ans: Message):
@@ -45,5 +45,5 @@ class CoroutineBranch(AbstractBranch):
     async def exit(self, ans):
         logger.info("Branch {} exit at", self.key or self.data["call"].__name__)
 
-    async def branch(self, ans):
-        return await self.data["call"](ans)
+    async def branch(self, ans, *args):
+        return await self.data["call"](ans, *args)
