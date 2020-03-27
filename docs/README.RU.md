@@ -5,7 +5,6 @@
 Нужные нам классы:
 
 ```python
-import typing
 from vkbottle import Bot, Message, keyboard_gen, VKError
 ```
 
@@ -23,6 +22,7 @@ await bot.api.users.get(users_id=1)
 
 ```python
 from vkbottle.api import Api
+Api.get_current()
 ```
 
 В обоих случаях методы вызываются асинхронно, для синхронного вызова потребуется воспользоваться `TaskManager` (читать [фреймворк документацию](/docs/FrameworkAPI.md))
@@ -32,10 +32,10 @@ from vkbottle.api import Api
 Мы можем создать простой обработчик событий любым веб-фреймворком (настоятельно рекомендуется использовать асинхронные решения).
 
 ```
-# app = FrameWork()
+# app = Application()
 @app.route('/')
-async def route():
-    return await bot.emulate(request.args(), confirmation_token='YourConfirm')
+async def route(request):
+    return await bot.emulate(request.args(), confirmation_token='YourConfirmationCode')
 ```
 
 Это решение помогает сохранять совместимость с процессом совмещения размещения бота и сайта на одном адресе.
@@ -188,6 +188,13 @@ async def wrapper(ans: Message):
 Класс в `context` имеет два поля: `args` и `kwargs`, изменяя одно - вы добавляете позиционные аргументы которые будут возвращены в хендлер, другое - непозиционные
 
 Полная документация по правилам ожидает вас [по этой ссылке](/docs/RulesExecutor.md)
+
+**Col Rules**
+
+Когда мы делали хендлеры сообщений мы познакомились одним из col rules - `text`. Кроме `text` существует еще:  
++ `commands` - принимает `List[str]`, автоматически добавляет / к командам  
++ `sticker` принимает `int` или `List[int]`, срабатывает на стикер с указанным id  
++ `lev` - принимает `str` или `List[str]`, срабатывает на расстояние Левенштейна на указанные строки =< 1
 
 ### Ошибки
 

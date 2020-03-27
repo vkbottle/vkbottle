@@ -27,21 +27,42 @@
 Рассмотрим для примера простой хендлер который вводит пользователя в бранч:
 
 ```python
-@bot.on.message(text='хочу в бранч', lower=True)
+@bot.on.message(text="хочу в бранч", lower=True)
 async def wrapper(ans: Message):
-    await ans('Теперь ты в бранче')
-    return Branch('my_branch')
+    await ans("Теперь ты в бранче")
+    return Branch("my_branch")
 ```
 
 Хендлер обозначает что теперь источник который написал сообщение "хочу в бранч" принадлежит бранчу с названием "my_branch". Давайте создадим бранч с таким именем:
 
+Варианты как бранч можно описать:
+
+### Минималистичные бранчи - росток (sprout)
+
 ```python
-@bot.branch.simple_branch('my_branch')
+@bot.branch.simple_branch("my_branch")
 async def branch(ans: Message):
-    if ans.text.lower() == 'выйти':
-        await ans('Ок, вывожу')
+    if ans.text.lower() == "выйти":
+        await ans("Ок, вывожу")
         return ExitBranch()
-    await ans('Ты в бранче. Пиши выйти чтобы выйти отсюда')
+    await ans("Ты в бранче. Пиши выйти чтобы выйти отсюда")
+```
+
+### Продвинутые бранчи - ветка (branch)
+
+```python
+from vkbottle.branch import ClsBranch, rule_disposal
+from vkbottle.rule import VBMLRule
+
+@bot.branch.cls_branch("my_branch")
+class Branch(ClsBranch):
+    @rule_disposal(VBMLRule("выйти", lower=True))
+    async def exit_branch(self, ans: Message):
+        await ans("Ок, вывожу")
+        return ExitBranch()
+    
+    async def branch(self, ans: Message, *args):
+        await ans("Ты в бранче. Пиши выйти чтобы выйти отсюда")
 ```
 
 Теперь после написания сообщения "хочу в бранч", любое сообщение пользователя получит ответ "Ты в бранче. Пиши выйти чтобы выйти отсюда". Но если пользователь напишет выйти, то цепочка разорвется
@@ -57,25 +78,45 @@ bot.branch.exit(ans.peer_id) # Для удаления источника из �
 
 Этот способ проще и функциональнее
 
-### Kwargs'ы в бранчах
+### Kwargs"ы в бранчах
 
 При инициации бранча можно так же передать некоторые необходимые значения, которые позже будут переданы и в хендлер бранча
 
+На ростках:
 ```python
-@bot.on.message(text='ставлю боту <mark:int>', lower=True)
+@bot.on.message(text="ставлю боту <mark:int>", lower=True)
 async def wrapper(ans: Message, mark):
-    await ans('Теперь расскажи что ты думаешь о нем')
-    return Branch('my_branch', mark=mark)
+    await ans("Теперь расскажи что ты думаешь о нем")
+    return Branch("my_branch", mark=mark)
 
-@bot.branch.simple_branch('my_branch')
+@bot.branch.simple_branch("my_branch")
 async def branch(ans: Message, mark):
-    if ans.text.lower() in ['это все', 'да']:
-        await ans(f'Ок, твоя оценка {mark} и рассказ о боте зачитан')
+    if ans.text.lower() in ["это все", "да"]:
+        await ans(f"Ок, твоя оценка {mark} и рассказ о боте зачитан")
         return ExitBranch()
-    await ans(f'Ты считаешь что <<{ans.text}>>. Мы тебя поняли. Это все?')
-    return Branch('my_branch', mark=mark)
+    await ans(f"Ты считаешь что <<{ans.text}>>. Мы тебя поняли. Это все?")
+    return Branch("my_branch", mark=mark)
+```
+
+На ветках:
+```python
+from vkbottle.branch import ClsBranch, rule_disposal
+from vkbottle.rule import VBMLRule
+
+@bot.on.message(text="ставлю боту <mark:int>", lower=True)
+async def wrapper(ans: Message, mark):
+    await ans("Теперь расскажи что ты думаешь о нем")
+    return Branch("my_branch", mark=mark)
+
+@bot.branch.cls_branch("my_branch")
+class Branch(ClsBranch):
+    @rule_disposal(VBMLRule(["это все", "да"], lower=True))
+    async def exit_branch(self, ans: Message):
+        await ans(f"Ок, твоя оценка {self.context['mark']} и рассказ о боте зачитан")
+        return ExitBranch()
+    
+    async def branch(self, ans: Message, *args):
+        await ans(f"Ты считаешь что <<{ans.text}>>. Мы тебя поняли. Это все?")
 ```
 
 Теперь бот будет получать оценку пользователя из обычного хендлера и передавать его в сам бранч
-
-Пока это все
