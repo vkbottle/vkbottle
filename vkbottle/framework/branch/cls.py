@@ -46,4 +46,4 @@ class CoroutineBranch(AbstractBranch):
         logger.info("Branch {} exit at", self.key or self.data["call"].__name__)
 
     async def branch(self, ans, *args):
-        return await self.data["call"](ans, *args)
+        return await self.data["call"](ans, *args, **self.context)
