@@ -98,6 +98,7 @@ class Bot(HTTP, EventProcessor):
 
         # Sign assets
         self.__api: Api = Api(token, throw_errors=throw_errors)
+        self._throw_errors: bool = throw_errors
         Api.set_current(self.__api)
 
         self.group_id = group_id or self.get_id_by_token(token)
@@ -375,12 +376,17 @@ class Bot(HTTP, EventProcessor):
                     )
                     await handler(e)
                 else:
-                    logger.error(
-                        "VKError! Add @bot.error_handler({}) to process this error!".format(
-                            e
+                    if self._throw_errors:
+                        logger.error(
+                            "VKError! Add @bot.error_handler({}) to process this error!".format(
+                                e
+                            )
                         )
+                        raise VKError(e)
+                    logger.error(
+                        "While bot worked error occurred \n\n{traceback}",
+                        traceback=traceback.format_exc(),
                     )
-                    raise VKError(e)
 
             except:
                 logger.error(
