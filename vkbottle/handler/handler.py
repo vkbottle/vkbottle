@@ -67,7 +67,8 @@ class Handler:
         self.chat_message.concatenate(handler.chat_message)
         self.message_handler.concatenate(handler.message_handler)
         self.event.rules += handler.event.rules
-        self._pre_p = handler.pre
+        if not self._pre_p:
+            self._pre_p = handler.pre
 
         logger.debug(
             "Bot Handler was concatenated with {handler}",
