@@ -10,6 +10,8 @@ class MiddlewareExecutor:
         self.middleware: typing.List[typing.Union[Middleware, typing.Callable]] = []
 
     def add_middleware(self, middleware: typing.Union[Middleware, typing.Callable]):
+        if middleware is None:
+            return
         self.middleware.append(middleware)
 
     def middleware_handler(self, *context):
