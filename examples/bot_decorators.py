@@ -33,13 +33,6 @@ async def wrapper(ans: Message):
     # Works if message in chat starts with '/start'
     await ans("this message starts with /start, yes?")
 
-
-@bot.on.message_handler.regex(".*?sad.*?")
-async def wrapper(ans: Message):
-    # Works if regex match r'.*?sad.*?' is True
-    await ans("sadness, im sad, sadistic. its all on my own!")
-
-
 # EVENT HANDLER
 
 """
