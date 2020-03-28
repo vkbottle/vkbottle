@@ -49,7 +49,7 @@ class EventProcessor(RegexHelper):
                 elif mr is not None:
                     middleware_args.append(mr)
 
-        if message.from_id in self.branch.queue or message.peer_id in self.branch.queue:
+        if message.peer_id in self.branch.queue:
             await self._branched_processor(obj, client_info, middleware_args)
             return
 
