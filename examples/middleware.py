@@ -2,12 +2,13 @@ from time import time as current
 
 from tortoise import Tortoise
 
-from vkbottle import Bot, Message
+from vkbottle import Bot, Message, TaskManager
 from vkbottle.rule import AbstractMessageRule
 from vkbottle.ext import Middleware
 from .tortoise_models import User
 
 bot = Bot("token")
+tm = TaskManager(bot.loop)
 
 """
 Better works with tortoise.
@@ -41,4 +42,6 @@ async def init_db():
     await Tortoise.generate_schemas()
 
 
-bot.run_polling(skip_updates=False)
+tm.add_task(bot.run(skip_updates=True))
+tm.add_task(init_db())
+tm.run()
