@@ -105,4 +105,4 @@ class BranchManager:
 
     def exit(self, uid: int) -> AbstractBranch:
         if uid in self._branch_queue:
-            return self._branch_queue.pop(uid, None)
+            del self._branch_queue[uid]
