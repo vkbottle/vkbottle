@@ -22,11 +22,11 @@ def restart():
     os.execv(sys.executable, args)
 
 
-async def _auto_reload():
+async def _auto_reload(check_dir: str = "."):
     """
     Coro which see changes in your code and restart him.
     :return:
     """
-    async for _ in awatch("."):
+    async for _ in awatch(check_dir):
         logger.info("Changes were found. Restarting...")
         restart()

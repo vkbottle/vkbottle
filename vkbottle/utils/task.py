@@ -45,6 +45,7 @@ class TaskManager:
         on_shutdown: typing.Callable = None,
         on_startup: typing.Callable = None,
         auto_reload: bool = False,
+        auto_reload_dir: str = ".",
         asyncio_debug_mode: bool = False,
     ):
         """
@@ -52,6 +53,7 @@ class TaskManager:
         :param auto_reload: auto reload code when changes
         :param on_shutdown: coroutine which runned after complete tasks
         :param on_startup: coroutine which runned before start main tasks
+        :param auto_reload_dir:
         :param asyncio_debug_mode: asyncio debug mode state
         :return:
         """
@@ -65,7 +67,7 @@ class TaskManager:
                 self.loop.set_debug(True)
 
             if auto_reload:
-                self.loop.create_task(_auto_reload())
+                self.loop.create_task(_auto_reload(auto_reload_dir))
 
             [self.loop.create_task(task) for task in self.tasks]
 

@@ -270,6 +270,7 @@ class Bot(HTTP, EventProcessor):
         *,
         skip_updates: bool = True,
         auto_reload: bool = False,
+        auto_reload_dir: str = ".",
         on_shutdown: typing.Callable = None,
         on_startup: typing.Callable = None,
     ):
@@ -279,7 +280,10 @@ class Bot(HTTP, EventProcessor):
         task = TaskManager(self.__loop)
         task.add_task(self.run(skip_updates))
         task.run(
-            auto_reload=auto_reload, on_shutdown=on_shutdown, on_startup=on_startup
+            auto_reload=auto_reload,
+            on_shutdown=on_shutdown,
+            on_startup=on_startup,
+            auto_reload_dir=auto_reload_dir,
         )
 
     async def run(self, skip_updates: bool, wait: int = DEFAULT_WAIT):
