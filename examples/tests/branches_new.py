@@ -9,11 +9,11 @@ bot = Bot(os.environ["TOKEN"])
 
 
 class LovelessBranch(ClsBranch):
-    async def branch(self, ans: Message):
+    async def branch(self, ans: Message, *args):
         return "I don't love you forever"
 
 
-@bot.branch.simple_branch()
+@bot.branch.simple_branch(branch_name="nun")
 async def branch_wrapper(ans: Message, word):
     if ans.text.lower() in ["exit", "stop"]:
         await ans("As you want to!")
@@ -25,18 +25,21 @@ async def branch_wrapper(ans: Message, word):
 class AnotherBranch(ClsBranch):
     @rule_disposal(VBMLRule("what <some>"))
     async def some(self, ans: Message, some):
+        self.context["s"] = some
         await ans(f"I don't know what {some} is that")
+        return ExitBranch()
 
-    async def branch(self, ans: Message):
+    async def branch(self, ans: Message, *args):
         return f"Saying {self.context['word']}"
 
     async def exit(self, ans: Message):
+        await ans(self.context)
         await ans("is this the escape?")
 
 
 @bot.on.message_handler(text=["say <word>", "add <word>"])
 async def pronounce(ans: Message, word):
-    bot.branch.add(ans.peer_id, Branch, word=word)
+    bot.branch.add(ans.peer_id, "another", word=word)
     return "Okay!"
 
 
