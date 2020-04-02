@@ -17,7 +17,7 @@ class BotStatus:
     middleware_expressions: bool = True
 
     @property
-    def readable(self) -> dict:
+    def as_dict(self) -> dict:
         return {"polling_started": self.polling_started, "dispatched": self.dispatched}
 
     def change_handler_return_context(

@@ -5,7 +5,7 @@ from ..additional import ActiveOffer, Sex, BdateVisiblity, Country, City, NameRe
 from ..user import User, UserRelation
 from ..community import Community
 
-from typing import List
+import typing
 
 
 class Ban(SimpleResponse):
@@ -36,9 +36,9 @@ class GetAppPermissions(SimpleResponse):
 
 class GetBannedResponse(BaseModel):
     count: int = None
-    items: List[int] = []
-    profiles: List[User] = []
-    groups: List[Community] = []
+    items: typing.List[int] = []
+    profiles: typing.List[User] = []
+    groups: typing.List[Community] = []
 
 
 class GetBanned(BaseModel):
@@ -85,7 +85,7 @@ class GetProfileInfoResponse(BaseModel):
     relation: UserRelation = None
     relation_partner: User = None
     relation_pending: int = None
-    relation_requests: List[User] = []
+    relation_requests: typing.List[User] = []
     bdate: str = None
     bdate_visiblity: BdateVisiblity = None
     home_town: str = None
@@ -104,7 +104,7 @@ class GetPushSettingsResponse(BaseModel):
     disabled: int = None
     disabled_until: int = None
     conversations: list = None
-    settings: Any = None
+    settings: typing.Any = None
 
 
 class GetPushSettings(BaseModel):

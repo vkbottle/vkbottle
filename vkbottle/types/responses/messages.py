@@ -1,12 +1,13 @@
 from .others import SimpleResponse
 from ..base import BaseModel
 from ..chat import Chat
-from ..message import Message
 from ..community import Community
 from ..additional import Email
 from ..user import User
 from ..attachments import Photo
 from ..conversation import Conversation
+
+# from ..int import int
 
 from typing import List, Any
 
@@ -15,7 +16,7 @@ class AddChatUser(SimpleResponse):
     pass
 
 
-class AllowMessagesFromGroup(SimpleResponse):
+class AllowintsFromGroup(SimpleResponse):
     pass
 
 
@@ -28,7 +29,7 @@ class Delete(SimpleResponse):
 
 
 class DeleteChatPhotoResponse(BaseModel):
-    message_id: int = None
+    int_id: int = None
     chat: Chat = None
 
 
@@ -40,7 +41,7 @@ class DeleteConversation(SimpleResponse):
     pass
 
 
-class DenyMessagesFromGroup(SimpleResponse):
+class DenyintsFromGroup(SimpleResponse):
     pass
 
 
@@ -52,17 +53,17 @@ class EditChat(SimpleResponse):
     pass
 
 
-class GetByConversationMessageIdResponse(BaseModel):
+class GetByConversationintIdResponse(BaseModel):
     count: int = None
-    items: List[Message] = []
+    items: List[int] = []
 
 
-class GetByConversationMessageId(BaseModel):
-    response: GetByConversationMessageIdResponse = None
+class GetByConversationintId(BaseModel):
+    response: GetByConversationintIdResponse = None
 
 
 class GetById(BaseModel):
-    response: GetByConversationMessageIdResponse = None
+    response: GetByConversationintIdResponse = None
 
 
 class GetChat(BaseModel):
@@ -127,7 +128,7 @@ class GetConversationsById(BaseModel):
 
 class GetHistoryResponse(BaseModel):
     count: int = None
-    items: List[Message] = []
+    items: List[int] = []
 
 
 class GetHistory(BaseModel):
@@ -138,17 +139,17 @@ class GetHistoryAttachments(BaseModel):
     response: Any = []
 
 
-class GetImportantMessagesResponseMessages(BaseModel):
+class GetImportantintsResponseints(BaseModel):
     count: int = None
-    items: List[Message] = []
+    items: List[int] = []
 
 
-class GetImportantMessagesResponse(BaseModel):
-    messages: GetImportantMessagesResponseMessages = None
+class GetImportantintsResponse(BaseModel):
+    ints: GetImportantintsResponseints = None
 
 
-class GetImportantMessages(BaseModel):
-    response: GetImportantMessagesResponse = None
+class GetImportantints(BaseModel):
+    response: GetImportantintsResponse = None
 
 
 class GetInviteLinkResponse(BaseModel):
@@ -170,7 +171,7 @@ class GetLastActivity(BaseModel):
 
 class GetLongPollHistoryResponse(BaseModel):
     history: List[List[int]] = []
-    messages: GetImportantMessagesResponseMessages = None
+    ints: GetImportantintsResponseints = None
     profiles: List[User] = []
     new_pts: int = None
 
@@ -189,12 +190,12 @@ class GetLongPollServer(BaseModel):
     response: GetLongPollServerResponse = None
 
 
-class IsMessagesFromGroupAllowedResponse(BaseModel):
+class IsintsFromGroupAllowedResponse(BaseModel):
     is_allowed: int = None
 
 
-class IsMessagesFromGroupAllowed(BaseModel):
-    response: IsMessagesFromGroupAllowedResponse = None
+class IsintsFromGroupAllowed(BaseModel):
+    response: IsintsFromGroupAllowedResponse = None
 
 
 class JoinChatByInviteLinkResponse(BaseModel):
@@ -235,7 +236,7 @@ class Restore(SimpleResponse):
 
 class SearchResponse(BaseModel):
     count: int = None
-    items: List[Message] = []
+    items: List[int] = []
 
 
 class Search(BaseModel):
@@ -260,7 +261,7 @@ class SetActivity(SimpleResponse):
 
 
 class SetChatPhotoResponse(BaseModel):
-    message_id: int = None
+    int_id: int = None
     chat: Chat = None
 
 

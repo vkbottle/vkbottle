@@ -1,1 +1,1 @@
-from . import community
+from .events_list import EventList

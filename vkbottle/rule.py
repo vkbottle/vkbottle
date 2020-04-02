@@ -1,1 +1,1 @@
-from .framework.rule import *
+from .framework.framework.rule import *

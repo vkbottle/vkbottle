@@ -48,5 +48,6 @@ async def loveless(ans: Message):
     await ans("Loveless..")
     return Branch(LovelessBranch)
 
+
 bot.branch.add_branch(LovelessBranch)
 bot.run_polling()

@@ -4,6 +4,7 @@ from .tools import (
     flatten,
     except_none_self,
     chunks,
+    init_bot_mention,
 )
 from .util import ContextInstanceMixin
 from .json import json

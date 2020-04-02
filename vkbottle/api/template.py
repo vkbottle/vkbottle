@@ -1,7 +1,7 @@
 import typing
 import json
 
-from .api import VKError
+from .exceptions import VKError
 
 
 class TemplateElement:

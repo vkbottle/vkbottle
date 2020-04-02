@@ -1,6 +1,6 @@
 from collections import MutableMapping
 from typing import Sequence
-import os, sys, time
+import os, sys, time, re
 
 
 class Logger:
@@ -20,6 +20,11 @@ def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
         yield l[i : i + n]
+
+
+def init_bot_mention(group_id: int, text: str):
+    pattern = r"^\[club" + str(group_id) + r"\|.*?\][\,]{0,1} "
+    return re.sub(pattern, "", text)
 
 
 def dict_of_dicts_merge(d1, d2):

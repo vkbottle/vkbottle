@@ -3,8 +3,8 @@ import traceback
 
 from aiohttp import ClientSession
 
-from ..const import VERSION_REST
-from ..utils import json
+from vkbottle.const import VERSION_REST
+from vkbottle.utils import json
 
 TRACEBACK = []
 

@@ -4,7 +4,7 @@ from enum import Enum
 from .attachments import Attachment
 from .attachments import Geo
 from .base import BaseModel
-from ..api import Api
+from vkbottle.api import Api
 import random
 from datetime import datetime
 

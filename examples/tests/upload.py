@@ -35,7 +35,9 @@ async def main(ans: Message):
 
 @bot.on.message(lev="upload photo")
 async def upload(ans: Message):
-    photo = await photo_uploader.client(bot).upload_message_photo("vkbottle_bot/img/1.jpg")
+    photo = await photo_uploader.client(bot).upload_message_photo(
+        "vkbottle_bot/img/1.jpg"
+    )
     await ans("hipster?", photo)
 
 
@@ -51,7 +53,9 @@ async def chat_favicon(ans: Message):
 # DOCUMENTS
 @bot.on.message(text="upload doc")
 async def upload_doc(ans: Message):
-    doc = await doc_uploader.upload_doc_to_message("vkbottle_bot/img/2.txt", ans.peer_id)
+    doc = await doc_uploader.upload_doc_to_message(
+        "vkbottle_bot/img/2.txt", ans.peer_id
+    )
     await ans("take it", attachment=doc)
 
 

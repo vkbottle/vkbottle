@@ -4,6 +4,7 @@ from ..base import BaseModel
 from ..user import User
 
 from typing import List, Any
+import typing
 
 
 class Add(SimpleResponse):

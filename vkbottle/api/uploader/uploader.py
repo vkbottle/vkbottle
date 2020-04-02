@@ -1,5 +1,5 @@
 import typing
-from ...framework import Bot, User
+from vkbottle.framework import Bot, User
 import aiohttp, json
 import ssl
 
