@@ -9,7 +9,9 @@ from .method import BaseMethod
 class MessagesAddChatUser(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, chat_id: int, user_id: int):
+    async def __call__(
+        self, chat_id: int, user_id: int = None
+    ) -> responses.messages.AddChatUser:
         """ messages.addChatUser
         From Vk Docs: Adds a new user to a chat.
         Access from user token(s)
@@ -17,14 +19,24 @@ class MessagesAddChatUser(BaseMethod):
         :param user_id: ID of the user to be added to the chat.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.addChatUser", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.addChatUser",
+            params,
+            response_model=responses.messages.AddChatUser,
+        )
 
 
 class MessagesAllowMessagesFromGroup(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int, key: str):
+    async def __call__(
+        self, group_id: int, key: str = None
+    ) -> dict:
         """ messages.allowMessagesFromGroup
         From Vk Docs: Allows sending messages from community to the current user.
         Access from user token(s)
@@ -32,14 +44,23 @@ class MessagesAllowMessagesFromGroup(BaseMethod):
         :param key: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.allowMessagesFromGroup", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.allowMessagesFromGroup",
+            params,
+        )
 
 
 class MessagesCreateChat(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_ids: typing.List, title: str):
+    async def __call__(
+        self, user_ids: typing.List = None, title: str = None
+    ) -> responses.messages.CreateChat:
         """ messages.createChat
         From Vk Docs: Creates a chat with several participants.
         Access from user token(s)
@@ -47,8 +68,14 @@ class MessagesCreateChat(BaseMethod):
         :param title: Chat title.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.createChat", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.createChat", params, response_model=responses.messages.CreateChat
+        )
 
 
 class MessagesDelete(BaseMethod):
@@ -58,8 +85,12 @@ class MessagesDelete(BaseMethod):
     ]
 
     async def __call__(
-        self, message_ids: typing.List, spam: bool, group_id: int, delete_for_all: bool
-    ):
+        self,
+        message_ids: typing.List = None,
+        spam: bool = None,
+        group_id: int = None,
+        delete_for_all: bool = None,
+    ) -> responses.messages.Delete:
         """ messages.delete
         From Vk Docs: Deletes one or more messages.
         Access from user, group token(s)
@@ -69,8 +100,14 @@ class MessagesDelete(BaseMethod):
         :param delete_for_all: '1' — delete message for for all.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.delete", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.delete", params, response_model=responses.messages.Delete
+        )
 
 
 class MessagesDeleteChatPhoto(BaseMethod):
@@ -79,7 +116,9 @@ class MessagesDeleteChatPhoto(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, chat_id: int, group_id: int):
+    async def __call__(
+        self, chat_id: int, group_id: int = None
+    ) -> responses.messages.DeleteChatPhoto:
         """ messages.deleteChatPhoto
         From Vk Docs: Deletes a chat's cover picture.
         Access from user, group token(s)
@@ -87,8 +126,16 @@ class MessagesDeleteChatPhoto(BaseMethod):
         :param group_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.deleteChatPhoto", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.deleteChatPhoto",
+            params,
+            response_model=responses.messages.DeleteChatPhoto,
+        )
 
 
 class MessagesDeleteConversation(BaseMethod):
@@ -97,7 +144,9 @@ class MessagesDeleteConversation(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, user_id: int, peer_id: int, group_id: int):
+    async def __call__(
+        self, user_id: int = None, peer_id: int = None, group_id: int = None
+    ) -> responses.messages.DeleteConversation:
         """ messages.deleteConversation
         From Vk Docs: Deletes all private messages in a conversation.
         Access from user, group token(s)
@@ -106,22 +155,38 @@ class MessagesDeleteConversation(BaseMethod):
         :param group_id: Group ID (for group messages with user access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.deleteConversation", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.deleteConversation",
+            params,
+            response_model=responses.messages.DeleteConversation,
+        )
 
 
 class MessagesDenyMessagesFromGroup(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int):
+    async def __call__(self, group_id: int) -> responses.messages.DenyintsFromGroup:
         """ messages.denyMessagesFromGroup
         From Vk Docs: Denies sending message from community to the current user.
         Access from user token(s)
         :param group_id: Group ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.denyMessagesFromGroup", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.denyMessagesFromGroup",
+            params,
+            response_model=responses.messages.DenyintsFromGroup,
+        )
 
 
 class MessagesEdit(BaseMethod):
@@ -133,16 +198,16 @@ class MessagesEdit(BaseMethod):
     async def __call__(
         self,
         peer_id: int,
-        message: str,
         message_id: int,
-        lat: typing.Any,
-        long: typing.Any,
-        attachment: str,
-        keep_forward_messages: bool,
-        keep_snippets: bool,
-        group_id: int,
-        dont_parse_links: bool,
-    ):
+        message: str = None,
+        lat: typing.Any = None,
+        long: typing.Any = None,
+        attachment: str = None,
+        keep_forward_messages: bool = None,
+        keep_snippets: bool = None,
+        group_id: int = None,
+        dont_parse_links: bool = None,
+    ) -> responses.messages.Edit:
         """ messages.edit
         From Vk Docs: Edits the message.
         Access from user, group token(s)
@@ -158,8 +223,14 @@ class MessagesEdit(BaseMethod):
         :param dont_parse_links: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.edit", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.edit", params, response_model=responses.messages.Edit
+        )
 
 
 class MessagesEditChat(BaseMethod):
@@ -168,7 +239,7 @@ class MessagesEditChat(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, chat_id: int, title: str):
+    async def __call__(self, chat_id: int, title: str) -> responses.messages.EditChat:
         """ messages.editChat
         From Vk Docs: Edits the title of a chat.
         Access from user, group token(s)
@@ -176,8 +247,14 @@ class MessagesEditChat(BaseMethod):
         :param title: New title of the chat.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.editChat", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.editChat", params, response_model=responses.messages.EditChat
+        )
 
 
 class MessagesGetByConversationMessageId(BaseMethod):
@@ -190,10 +267,10 @@ class MessagesGetByConversationMessageId(BaseMethod):
         self,
         peer_id: int,
         conversation_message_ids: typing.List,
-        extended: bool,
-        fields: typing.List,
-        group_id: int,
-    ):
+        extended: bool = None,
+        fields: typing.List = None,
+        group_id: int = None,
+    ) -> responses.messages.GetByConversationintId:
         """ messages.getByConversationMessageId
         From Vk Docs: Returns messages by their IDs within the conversation.
         Access from user, group token(s)
@@ -204,8 +281,16 @@ class MessagesGetByConversationMessageId(BaseMethod):
         :param group_id: Group ID (for group messages with group access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getByConversationMessageId", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getByConversationMessageId",
+            params,
+            response_model=responses.messages.GetByConversationintId,
+        )
 
 
 class MessagesGetById(BaseMethod):
@@ -217,11 +302,11 @@ class MessagesGetById(BaseMethod):
     async def __call__(
         self,
         message_ids: typing.List,
-        preview_length: int,
-        extended: bool,
-        fields: typing.List,
-        group_id: int,
-    ):
+        preview_length: int = None,
+        extended: bool = None,
+        fields: typing.List = None,
+        group_id: int = None,
+    ) -> responses.messages.GetById:
         """ messages.getById
         From Vk Docs: Returns messages by their IDs.
         Access from user, group token(s)
@@ -232,14 +317,22 @@ class MessagesGetById(BaseMethod):
         :param group_id: Group ID (for group messages with group access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getById", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getById", params, response_model=responses.messages.GetById
+        )
 
 
 class MessagesGetChatPreview(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, peer_id: int, link: str, fields: typing.List):
+    async def __call__(
+        self, peer_id: int = None, link: str = None, fields: typing.List = None
+    ) -> responses.messages.GetChatPreview:
         """ messages.getChatPreview
         From Vk Docs: 
         Access from user token(s)
@@ -248,8 +341,16 @@ class MessagesGetChatPreview(BaseMethod):
         :param fields: Profile fields to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getChatPreview", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getChatPreview",
+            params,
+            response_model=responses.messages.GetChatPreview,
+        )
 
 
 class MessagesGetConversationMembers(BaseMethod):
@@ -258,7 +359,9 @@ class MessagesGetConversationMembers(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, peer_id: int, fields: typing.List, group_id: int):
+    async def __call__(
+        self, peer_id: int, fields: typing.List = None, group_id: int = None
+    ) -> responses.messages.GetConverationMembers:
         """ messages.getConversationMembers
         From Vk Docs: Returns a list of IDs of users participating in a chat.
         Access from user, group token(s)
@@ -267,8 +370,16 @@ class MessagesGetConversationMembers(BaseMethod):
         :param group_id: Group ID (for group messages with group access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getConversationMembers", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getConversationMembers",
+            params,
+            response_model=responses.messages.GetConverationMembers,
+        )
 
 
 class MessagesGetConversations(BaseMethod):
@@ -279,14 +390,14 @@ class MessagesGetConversations(BaseMethod):
 
     async def __call__(
         self,
-        offset: int,
-        count: int,
-        filter: str,
-        extended: bool,
-        start_message_id: int,
-        fields: typing.List,
-        group_id: int,
-    ):
+        offset: int = None,
+        count: int = None,
+        filter: str = None,
+        extended: bool = None,
+        start_message_id: int = None,
+        fields: typing.List = None,
+        group_id: int = None,
+    ) -> responses.messages.GetConversations:
         """ messages.getConversations
         From Vk Docs: Returns a list of the current user's conversations.
         Access from user, group token(s)
@@ -299,8 +410,16 @@ class MessagesGetConversations(BaseMethod):
         :param group_id: Group ID (for group messages with group access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getConversations", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getConversations",
+            params,
+            response_model=responses.messages.GetConversations,
+        )
 
 
 class MessagesGetConversationsById(BaseMethod):
@@ -310,8 +429,12 @@ class MessagesGetConversationsById(BaseMethod):
     ]
 
     async def __call__(
-        self, peer_ids: typing.List, extended: bool, fields: typing.List, group_id: int
-    ):
+        self,
+        peer_ids: typing.List,
+        extended: bool = None,
+        fields: typing.List = None,
+        group_id: int = None,
+    ) -> responses.messages.GetConversationsById:
         """ messages.getConversationsById
         From Vk Docs: Returns conversations by their IDs
         Access from user, group token(s)
@@ -321,8 +444,16 @@ class MessagesGetConversationsById(BaseMethod):
         :param group_id: Group ID (for group messages with group access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getConversationsById", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getConversationsById",
+            params,
+            response_model=responses.messages.GetConversationsById,
+        )
 
 
 class MessagesGetHistory(BaseMethod):
@@ -333,16 +464,16 @@ class MessagesGetHistory(BaseMethod):
 
     async def __call__(
         self,
-        offset: int,
-        count: int,
-        user_id: int,
-        peer_id: int,
-        start_message_id: int,
-        rev: int,
-        extended: bool,
-        fields: typing.List,
-        group_id: int,
-    ):
+        offset: int = None,
+        count: int = None,
+        user_id: int = None,
+        peer_id: int = None,
+        start_message_id: int = None,
+        rev: int = None,
+        extended: bool = None,
+        fields: typing.List = None,
+        group_id: int = None,
+    ) -> responses.messages.GetHistory:
         """ messages.getHistory
         From Vk Docs: Returns message history for the specified user or group chat.
         Access from user, group token(s)
@@ -357,8 +488,14 @@ class MessagesGetHistory(BaseMethod):
         :param group_id: Group ID (for group messages with group access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getHistory", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getHistory", params, response_model=responses.messages.GetHistory
+        )
 
 
 class MessagesGetHistoryAttachments(BaseMethod):
@@ -370,15 +507,15 @@ class MessagesGetHistoryAttachments(BaseMethod):
     async def __call__(
         self,
         peer_id: int,
-        media_type: str,
-        start_from: str,
-        count: int,
-        photo_sizes: bool,
-        fields: typing.List,
-        group_id: int,
-        preserve_order: bool,
-        max_forwards_level: int,
-    ):
+        media_type: str = None,
+        start_from: str = None,
+        count: int = None,
+        photo_sizes: bool = None,
+        fields: typing.List = None,
+        group_id: int = None,
+        preserve_order: bool = None,
+        max_forwards_level: int = None,
+    ) -> responses.messages.GetHistoryAttachments:
         """ messages.getHistoryAttachments
         From Vk Docs: Returns media files from the dialog or group chat.
         Access from user, group token(s)
@@ -393,8 +530,16 @@ class MessagesGetHistoryAttachments(BaseMethod):
         :param max_forwards_level: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getHistoryAttachments", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getHistoryAttachments",
+            params,
+            response_model=responses.messages.GetHistoryAttachments,
+        )
 
 
 class MessagesGetInviteLink(BaseMethod):
@@ -403,7 +548,9 @@ class MessagesGetInviteLink(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, peer_id: int, reset: bool, group_id: int):
+    async def __call__(
+        self, peer_id: int, reset: bool = None, group_id: int = None
+    ) -> responses.messages.GetInviteLink:
         """ messages.getInviteLink
         From Vk Docs: 
         Access from user, group token(s)
@@ -412,22 +559,38 @@ class MessagesGetInviteLink(BaseMethod):
         :param group_id: Group ID
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getInviteLink", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getInviteLink",
+            params,
+            response_model=responses.messages.GetInviteLink,
+        )
 
 
 class MessagesGetLastActivity(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_id: int):
+    async def __call__(self, user_id: int) -> responses.messages.GetLastActivity:
         """ messages.getLastActivity
         From Vk Docs: Returns a user's current status and date of last activity.
         Access from user token(s)
         :param user_id: User ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getLastActivity", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getLastActivity",
+            params,
+            response_model=responses.messages.GetLastActivity,
+        )
 
 
 class MessagesGetLongPollHistory(BaseMethod):
@@ -438,19 +601,19 @@ class MessagesGetLongPollHistory(BaseMethod):
 
     async def __call__(
         self,
-        ts: int,
-        pts: int,
-        preview_length: int,
-        onlines: bool,
-        fields: typing.List,
-        events_limit: int,
-        msgs_limit: int,
-        max_msg_id: int,
-        group_id: int,
-        lp_version: int,
-        last_n: int,
-        credentials: bool,
-    ):
+        ts: int = None,
+        pts: int = None,
+        preview_length: int = None,
+        onlines: bool = None,
+        fields: typing.List = None,
+        events_limit: int = None,
+        msgs_limit: int = None,
+        max_msg_id: int = None,
+        group_id: int = None,
+        lp_version: int = None,
+        last_n: int = None,
+        credentials: bool = None,
+    ) -> responses.messages.GetLongPollHistory:
         """ messages.getLongPollHistory
         From Vk Docs: Returns updates in user's private messages.
         Access from user, group token(s)
@@ -468,8 +631,16 @@ class MessagesGetLongPollHistory(BaseMethod):
         :param credentials: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getLongPollHistory", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getLongPollHistory",
+            params,
+            response_model=responses.messages.GetLongPollHistory,
+        )
 
 
 class MessagesGetLongPollServer(BaseMethod):
@@ -478,7 +649,9 @@ class MessagesGetLongPollServer(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, need_pts: bool, group_id: int, lp_version: int):
+    async def __call__(
+        self, need_pts: bool = None, group_id: int = None, lp_version: int = None
+    ) -> responses.messages.GetLongPollServer:
         """ messages.getLongPollServer
         From Vk Docs: Returns data required for connection to a Long Poll server.
         Access from user, group token(s)
@@ -487,8 +660,16 @@ class MessagesGetLongPollServer(BaseMethod):
         :param lp_version: Long poll version
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.getLongPollServer", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.getLongPollServer",
+            params,
+            response_model=responses.messages.GetLongPollServer,
+        )
 
 
 class MessagesIsMessagesFromGroupAllowed(BaseMethod):
@@ -497,7 +678,9 @@ class MessagesIsMessagesFromGroupAllowed(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, group_id: int, user_id: int):
+    async def __call__(
+        self, group_id: int, user_id: int
+    ) -> responses.messages.IsintsFromGroupAllowed:
         """ messages.isMessagesFromGroupAllowed
         From Vk Docs: Returns information whether sending messages from the community to current user is allowed.
         Access from user, group token(s)
@@ -505,22 +688,38 @@ class MessagesIsMessagesFromGroupAllowed(BaseMethod):
         :param user_id: User ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.isMessagesFromGroupAllowed", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.isMessagesFromGroupAllowed",
+            params,
+            response_model=responses.messages.IsintsFromGroupAllowed,
+        )
 
 
 class MessagesJoinChatByInviteLink(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, link: str):
+    async def __call__(self, link: str) -> responses.messages.JoinChatByInviteLink:
         """ messages.joinChatByInviteLink
         From Vk Docs: 
         Access from user token(s)
         :param link: Invitation link.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.joinChatByInviteLink", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.joinChatByInviteLink",
+            params,
+            response_model=responses.messages.JoinChatByInviteLink,
+        )
 
 
 class MessagesMarkAsAnsweredConversation(BaseMethod):
@@ -529,7 +728,9 @@ class MessagesMarkAsAnsweredConversation(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, peer_id: int, answered: bool, group_id: int):
+    async def __call__(
+        self, peer_id: int, answered: bool = None, group_id: int = None
+    ) -> responses.messages.MarkAsAnsweredConversation:
         """ messages.markAsAnsweredConversation
         From Vk Docs: Marks and unmarks conversations as unanswered.
         Access from user, group token(s)
@@ -538,14 +739,24 @@ class MessagesMarkAsAnsweredConversation(BaseMethod):
         :param group_id: Group ID (for group messages with group access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.markAsAnsweredConversation", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.markAsAnsweredConversation",
+            params,
+            response_model=responses.messages.MarkAsAnsweredConversation,
+        )
 
 
 class MessagesMarkAsImportant(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, message_ids: typing.List, important: int):
+    async def __call__(
+        self, message_ids: typing.List = None, important: int = None
+    ) -> responses.messages.MarkAsImportant:
         """ messages.markAsImportant
         From Vk Docs: Marks and unmarks messages as important (starred).
         Access from user token(s)
@@ -553,8 +764,16 @@ class MessagesMarkAsImportant(BaseMethod):
         :param important: '1' — to add a star (mark as important), '0' — to remove the star
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.markAsImportant", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.markAsImportant",
+            params,
+            response_model=responses.messages.MarkAsImportant,
+        )
 
 
 class MessagesMarkAsImportantConversation(BaseMethod):
@@ -563,7 +782,9 @@ class MessagesMarkAsImportantConversation(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, peer_id: int, important: bool, group_id: int):
+    async def __call__(
+        self, peer_id: int, important: bool = None, group_id: int = None
+    ) -> responses.messages.MarkAsImportantConversation:
         """ messages.markAsImportantConversation
         From Vk Docs: Marks and unmarks conversations as important.
         Access from user, group token(s)
@@ -572,8 +793,16 @@ class MessagesMarkAsImportantConversation(BaseMethod):
         :param group_id: Group ID (for group messages with group access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.markAsImportantConversation", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.markAsImportantConversation",
+            params,
+            response_model=responses.messages.MarkAsImportantConversation,
+        )
 
 
 class MessagesMarkAsRead(BaseMethod):
@@ -584,11 +813,11 @@ class MessagesMarkAsRead(BaseMethod):
 
     async def __call__(
         self,
-        message_ids: typing.List,
-        peer_id: int,
-        start_message_id: int,
-        group_id: int,
-    ):
+        message_ids: typing.List = None,
+        peer_id: int = None,
+        start_message_id: int = None,
+        group_id: int = None,
+    ) -> responses.messages.MarkAsRead:
         """ messages.markAsRead
         From Vk Docs: Marks messages as read.
         Access from user, group token(s)
@@ -598,8 +827,14 @@ class MessagesMarkAsRead(BaseMethod):
         :param group_id: Group ID (for group messages with user access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.markAsRead", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.markAsRead", params, response_model=responses.messages.MarkAsRead
+        )
 
 
 class MessagesPin(BaseMethod):
@@ -608,7 +843,9 @@ class MessagesPin(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, peer_id: int, message_id: int):
+    async def __call__(
+        self, peer_id: int, message_id: int = None
+    ) -> responses.messages.Pin:
         """ messages.pin
         From Vk Docs: Pin a message.
         Access from user, group token(s)
@@ -616,8 +853,14 @@ class MessagesPin(BaseMethod):
         :param message_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.pin", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.pin", params, response_model=responses.messages.Pin
+        )
 
 
 class MessagesRemoveChatUser(BaseMethod):
@@ -626,7 +869,9 @@ class MessagesRemoveChatUser(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, chat_id: int, user_id: int, member_id: int):
+    async def __call__(
+        self, chat_id: int, user_id: int = None, member_id: int = None
+    ) -> responses.messages.RemoveChatUser:
         """ messages.removeChatUser
         From Vk Docs: Allows the current user to leave a chat or, if the current user started the chat, allows the user to remove another user from the chat.
         Access from user, group token(s)
@@ -635,8 +880,16 @@ class MessagesRemoveChatUser(BaseMethod):
         :param member_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.removeChatUser", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.removeChatUser",
+            params,
+            response_model=responses.messages.RemoveChatUser,
+        )
 
 
 class MessagesRestore(BaseMethod):
@@ -645,7 +898,9 @@ class MessagesRestore(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, message_id: int, group_id: int):
+    async def __call__(
+        self, message_id: int, group_id: int = None
+    ) -> responses.messages.Restore:
         """ messages.restore
         From Vk Docs: Restores a deleted message.
         Access from user, group token(s)
@@ -653,8 +908,14 @@ class MessagesRestore(BaseMethod):
         :param group_id: Group ID (for group messages with user access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.restore", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.restore", params, response_model=responses.messages.Restore
+        )
 
 
 class MessagesSearch(BaseMethod):
@@ -665,16 +926,16 @@ class MessagesSearch(BaseMethod):
 
     async def __call__(
         self,
-        q: str,
-        peer_id: int,
-        date: int,
-        preview_length: int,
-        offset: int,
-        count: int,
-        extended: bool,
-        fields: typing.List,
-        group_id: int,
-    ):
+        q: str = None,
+        peer_id: int = None,
+        date: int = None,
+        preview_length: int = None,
+        offset: int = None,
+        count: int = None,
+        extended: bool = None,
+        fields: typing.List = None,
+        group_id: int = None,
+    ) -> responses.messages.Search:
         """ messages.search
         From Vk Docs: Returns a list of the current user's private messages that match search criteria.
         Access from user, group token(s)
@@ -689,8 +950,14 @@ class MessagesSearch(BaseMethod):
         :param group_id: Group ID (for group messages with group access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.search", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.search", params, response_model=responses.messages.Search
+        )
 
 
 class MessagesSearchConversations(BaseMethod):
@@ -700,8 +967,13 @@ class MessagesSearchConversations(BaseMethod):
     ]
 
     async def __call__(
-        self, q: str, count: int, extended: bool, fields: typing.List, group_id: int
-    ):
+        self,
+        q: str = None,
+        count: int = None,
+        extended: bool = None,
+        fields: typing.List = None,
+        group_id: int = None,
+    ) -> responses.messages.SearchConversations:
         """ messages.searchConversations
         From Vk Docs: Returns a list of the current user's conversations that match search criteria.
         Access from user, group token(s)
@@ -712,8 +984,16 @@ class MessagesSearchConversations(BaseMethod):
         :param group_id: Group ID (for group messages with user access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.searchConversations", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.searchConversations",
+            params,
+            response_model=responses.messages.SearchConversations,
+        )
 
 
 class MessagesSend(BaseMethod):
@@ -724,26 +1004,26 @@ class MessagesSend(BaseMethod):
 
     async def __call__(
         self,
-        user_id: int,
-        random_id: int,
-        peer_id: int,
-        domain: str,
-        chat_id: int,
-        user_ids: typing.List,
-        message: str,
-        lat: typing.Any,
-        long: typing.Any,
-        attachment: str,
-        reply_to: int,
-        forward_messages: typing.List,
-        forward: str,
-        sticker_id: int,
-        group_id: int,
-        keyboard: str,
-        payload: str,
-        dont_parse_links: bool,
-        disable_mentions: bool,
-    ):
+        user_id: int = None,
+        random_id: int = None,
+        peer_id: int = None,
+        domain: str = None,
+        chat_id: int = None,
+        user_ids: typing.List = None,
+        message: str = None,
+        lat: typing.Any = None,
+        long: typing.Any = None,
+        attachment: str = None,
+        reply_to: int = None,
+        forward_messages: typing.List = None,
+        forward: str = None,
+        sticker_id: int = None,
+        group_id: int = None,
+        keyboard: str = None,
+        payload: str = None,
+        dont_parse_links: bool = None,
+        disable_mentions: bool = None,
+    ) -> responses.messages.Send:
         """ messages.send
         From Vk Docs: Sends a message.
         Access from user, group token(s)
@@ -768,8 +1048,14 @@ class MessagesSend(BaseMethod):
         :param disable_mentions: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.send", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.send", params, response_model=responses.messages.Send
+        )
 
 
 class MessagesSetActivity(BaseMethod):
@@ -778,7 +1064,13 @@ class MessagesSetActivity(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, user_id: int, type: str, peer_id: int, group_id: int):
+    async def __call__(
+        self,
+        user_id: int = None,
+        type: str = None,
+        peer_id: int = None,
+        group_id: int = None,
+    ) -> responses.messages.SetActivity:
         """ messages.setActivity
         From Vk Docs: Changes the status of a user as typing in a conversation.
         Access from user, group token(s)
@@ -788,8 +1080,16 @@ class MessagesSetActivity(BaseMethod):
         :param group_id: Group ID (for group messages with group access token)
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.setActivity", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.setActivity",
+            params,
+            response_model=responses.messages.SetActivity,
+        )
 
 
 class MessagesSetChatPhoto(BaseMethod):
@@ -798,15 +1098,23 @@ class MessagesSetChatPhoto(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, file: str):
+    async def __call__(self, file: str) -> responses.messages.SetChatPhoto:
         """ messages.setChatPhoto
         From Vk Docs: Sets a previously-uploaded picture as the cover picture of a chat.
         Access from user, group token(s)
         :param file: Upload URL from the 'response' field returned by the [vk.com/dev/photos.getChatUploadServer|photos.getChatUploadServer] method upon successfully uploading an image.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.setChatPhoto", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.setChatPhoto",
+            params,
+            response_model=responses.messages.SetChatPhoto,
+        )
 
 
 class MessagesUnpin(BaseMethod):
@@ -815,7 +1123,9 @@ class MessagesUnpin(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, peer_id: int, group_id: int):
+    async def __call__(
+        self, peer_id: int, group_id: int = None
+    ) -> responses.messages.Unpin:
         """ messages.unpin
         From Vk Docs: 
         Access from user, group token(s)
@@ -823,8 +1133,14 @@ class MessagesUnpin(BaseMethod):
         :param group_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("messages.unpin", params,)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.unpin", params, response_model=responses.messages.Unpin
+        )
 
 
 class Messages:

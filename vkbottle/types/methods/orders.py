@@ -12,7 +12,9 @@ class OrdersCancelSubscription(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, user_id: int, subscription_id: int, pending_cancel: bool):
+    async def __call__(
+        self, user_id: int, subscription_id: int, pending_cancel: bool = None
+    ):
         """ orders.cancelSubscription
         From Vk Docs: 
         Access from user, service token(s)
@@ -21,7 +23,11 @@ class OrdersCancelSubscription(BaseMethod):
         :param pending_cancel: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("orders.cancelSubscription", params)
 
 
@@ -32,7 +38,11 @@ class OrdersChangeState(BaseMethod):
     ]
 
     async def __call__(
-        self, order_id: int, action: str, app_order_id: int, test_mode: bool
+        self,
+        order_id: int,
+        action: str,
+        app_order_id: int = None,
+        test_mode: bool = None,
     ):
         """ orders.changeState
         From Vk Docs: Changes order status.
@@ -43,7 +53,11 @@ class OrdersChangeState(BaseMethod):
         :param test_mode: if this parameter is set to 1, this method returns a list of test mode orders. By default — 0.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("orders.changeState", params)
 
 
@@ -53,7 +67,9 @@ class OrdersGet(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, offset: int, count: int, test_mode: bool):
+    async def __call__(
+        self, offset: int = None, count: int = None, test_mode: bool = None
+    ):
         """ orders.get
         From Vk Docs: Returns a list of orders.
         Access from user, service token(s)
@@ -62,7 +78,11 @@ class OrdersGet(BaseMethod):
         :param test_mode: if this parameter is set to 1, this method returns a list of test mode orders. By default — 0.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("orders.get", params)
 
 
@@ -77,7 +97,11 @@ class OrdersGetAmount(BaseMethod):
         :param votes: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("orders.getAmount", params)
 
 
@@ -87,7 +111,12 @@ class OrdersGetById(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, order_id: int, order_ids: typing.List, test_mode: bool):
+    async def __call__(
+        self,
+        order_id: int = None,
+        order_ids: typing.List = None,
+        test_mode: bool = None,
+    ):
         """ orders.getById
         From Vk Docs: Returns information about orders by their IDs.
         Access from user, service token(s)
@@ -96,7 +125,11 @@ class OrdersGetById(BaseMethod):
         :param test_mode: if this parameter is set to 1, this method returns a list of test mode orders. By default — 0.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("orders.getById", params)
 
 
@@ -114,7 +147,11 @@ class OrdersGetUserSubscriptionById(BaseMethod):
         :param subscription_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("orders.getUserSubscriptionById", params)
 
 
@@ -131,7 +168,11 @@ class OrdersGetUserSubscriptions(BaseMethod):
         :param user_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("orders.getUserSubscriptions", params)
 
 
@@ -141,7 +182,7 @@ class OrdersUpdateSubscription(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, user_id: int, subscription_id: int, price: int):
+    async def __call__(self, user_id: int, price: int, subscription_id: int):
         """ orders.updateSubscription
         From Vk Docs: 
         Access from user, service token(s)
@@ -150,7 +191,11 @@ class OrdersUpdateSubscription(BaseMethod):
         :param price: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("orders.updateSubscription", params)
 
 

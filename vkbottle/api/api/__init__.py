@@ -1,2 +1,2 @@
-from .api import Api, UserApi
+from .api import API, UserApi, Api
 from .request import Request, request

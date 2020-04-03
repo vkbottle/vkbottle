@@ -16,7 +16,11 @@ class FaveAddArticle(BaseMethod):
         :param url: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.addArticle", params, response_model=responses.fave.AddArticle
         )
@@ -32,7 +36,11 @@ class FaveAddLink(BaseMethod):
         :param link: Link URL.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.addLink", params, response_model=responses.fave.AddLink
         )
@@ -41,7 +49,9 @@ class FaveAddLink(BaseMethod):
 class FaveAddPage(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_id: int, group_id: int) -> responses.fave.AddPage:
+    async def __call__(
+        self, user_id: int = None, group_id: int = None
+    ) -> responses.fave.AddPage:
         """ fave.addPage
         From Vk Docs: 
         Access from user token(s)
@@ -49,7 +59,11 @@ class FaveAddPage(BaseMethod):
         :param group_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.addPage", params, response_model=responses.fave.AddPage
         )
@@ -59,7 +73,7 @@ class FaveAddPost(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, id: int, access_key: str
+        self, owner_id: int, id: int, access_key: str = None
     ) -> responses.fave.AddPost:
         """ fave.addPost
         From Vk Docs: 
@@ -69,7 +83,11 @@ class FaveAddPost(BaseMethod):
         :param access_key: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.addPost", params, response_model=responses.fave.AddPost
         )
@@ -79,7 +97,7 @@ class FaveAddProduct(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, id: int, access_key: str
+        self, owner_id: int, id: int, access_key: str = None
     ) -> responses.fave.AddProduct:
         """ fave.addProduct
         From Vk Docs: 
@@ -89,7 +107,11 @@ class FaveAddProduct(BaseMethod):
         :param access_key: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.addProduct", params, response_model=responses.fave.AddProduct
         )
@@ -98,14 +120,18 @@ class FaveAddProduct(BaseMethod):
 class FaveAddTag(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, name: str) -> responses.fave.AddTag:
+    async def __call__(self, name: str = None) -> responses.fave.AddTag:
         """ fave.addTag
         From Vk Docs: 
         Access from user token(s)
         :param name: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.addTag", params, response_model=responses.fave.AddTag
         )
@@ -115,7 +141,7 @@ class FaveAddVideo(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, id: int, access_key: str
+        self, owner_id: int, id: int, access_key: str = None
     ) -> responses.fave.AddVideo:
         """ fave.addVideo
         From Vk Docs: 
@@ -125,7 +151,11 @@ class FaveAddVideo(BaseMethod):
         :param access_key: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.addVideo", params, response_model=responses.fave.AddVideo
         )
@@ -142,7 +172,11 @@ class FaveEditTag(BaseMethod):
         :param name: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.editTag", params, response_model=responses.fave.EditTag
         )
@@ -153,13 +187,13 @@ class FaveGet(BaseMethod):
 
     async def __call__(
         self,
-        extended: bool,
-        item_type: str,
-        tag_id: int,
-        offset: int,
-        count: int,
-        fields: str,
-        is_from_snackbar: bool,
+        extended: bool = None,
+        item_type: str = None,
+        tag_id: int = None,
+        offset: int = None,
+        count: int = None,
+        fields: str = None,
+        is_from_snackbar: bool = None,
     ) -> responses.fave.Get:
         """ fave.get
         From Vk Docs: 
@@ -173,7 +207,11 @@ class FaveGet(BaseMethod):
         :param is_from_snackbar: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("fave.get", params, response_model=responses.fave.Get)
 
 
@@ -181,7 +219,12 @@ class FaveGetPages(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, offset: int, count: int, type: str, fields: typing.List, tag_id: int
+        self,
+        offset: int = None,
+        count: int = None,
+        type: str = None,
+        fields: typing.List = None,
+        tag_id: int = None,
     ) -> responses.fave.GetPages:
         """ fave.getPages
         From Vk Docs: 
@@ -193,7 +236,11 @@ class FaveGetPages(BaseMethod):
         :param tag_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.getPages", params, response_model=responses.fave.GetPages
         )
@@ -209,7 +256,11 @@ class FaveGetTags(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.getTags", params, response_model=responses.fave.GetTags
         )
@@ -225,7 +276,11 @@ class FaveMarkSeen(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.markSeen", params, response_model=responses.fave.MarkSeen
         )
@@ -244,7 +299,11 @@ class FaveRemoveArticle(BaseMethod):
         :param article_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.removeArticle", params, response_model=responses.fave.RemoveArticle
         )
@@ -253,7 +312,9 @@ class FaveRemoveArticle(BaseMethod):
 class FaveRemoveLink(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, link_id: str, link: str) -> responses.fave.RemoveLink:
+    async def __call__(
+        self, link_id: str = None, link: str = None
+    ) -> responses.fave.RemoveLink:
         """ fave.removeLink
         From Vk Docs: Removes link from the user's faves.
         Access from user token(s)
@@ -261,7 +322,11 @@ class FaveRemoveLink(BaseMethod):
         :param link: Link URL
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.removeLink", params, response_model=responses.fave.RemoveLink
         )
@@ -270,7 +335,9 @@ class FaveRemoveLink(BaseMethod):
 class FaveRemovePage(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_id: int, group_id: int) -> responses.fave.RemovePage:
+    async def __call__(
+        self, user_id: int = None, group_id: int = None
+    ) -> responses.fave.RemovePage:
         """ fave.removePage
         From Vk Docs: 
         Access from user token(s)
@@ -278,7 +345,11 @@ class FaveRemovePage(BaseMethod):
         :param group_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.removePage", params, response_model=responses.fave.RemovePage
         )
@@ -295,7 +366,11 @@ class FaveRemovePost(BaseMethod):
         :param id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.removePost", params, response_model=responses.fave.RemovePost
         )
@@ -312,7 +387,11 @@ class FaveRemoveProduct(BaseMethod):
         :param id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.removeProduct", params, response_model=responses.fave.RemoveProduct
         )
@@ -328,7 +407,11 @@ class FaveRemoveTag(BaseMethod):
         :param id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.removeTag", params, response_model=responses.fave.RemoveTag
         )
@@ -344,7 +427,11 @@ class FaveReorderTags(BaseMethod):
         :param ids: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.reorderTags", params, response_model=responses.fave.ReorderTags
         )
@@ -354,7 +441,7 @@ class FaveSetPageTags(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, user_id: int, group_id: int, tag_ids: typing.List
+        self, user_id: int = None, group_id: int = None, tag_ids: typing.List = None
     ) -> responses.fave.SetPageTags:
         """ fave.setPageTags
         From Vk Docs: 
@@ -364,7 +451,11 @@ class FaveSetPageTags(BaseMethod):
         :param tag_ids: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.setPageTags", params, response_model=responses.fave.SetPageTags
         )
@@ -375,12 +466,12 @@ class FaveSetTags(BaseMethod):
 
     async def __call__(
         self,
-        item_type: str,
-        item_owner_id: int,
-        item_id: int,
-        tag_ids: typing.List,
-        link_id: str,
-        link_url: str,
+        item_type: str = None,
+        item_owner_id: int = None,
+        item_id: int = None,
+        tag_ids: typing.List = None,
+        link_id: str = None,
+        link_url: str = None,
     ) -> responses.fave.SetTags:
         """ fave.setTags
         From Vk Docs: 
@@ -393,7 +484,11 @@ class FaveSetTags(BaseMethod):
         :param link_url: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.setTags", params, response_model=responses.fave.SetTags
         )
@@ -403,7 +498,7 @@ class FaveTrackPageInteraction(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, user_id: int, group_id: int
+        self, user_id: int = None, group_id: int = None
     ) -> responses.fave.TrackPageInteraction:
         """ fave.trackPageInteraction
         From Vk Docs: 
@@ -412,7 +507,11 @@ class FaveTrackPageInteraction(BaseMethod):
         :param group_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "fave.trackPageInteraction",
             params,

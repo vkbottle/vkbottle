@@ -16,7 +16,11 @@ class StoriesBanOwner(BaseMethod):
         :param owners_ids: List of sources IDs
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.banOwner", params)
 
 
@@ -34,7 +38,11 @@ class StoriesDelete(BaseMethod):
         :param story_id: Story ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.delete", params)
 
 
@@ -44,7 +52,7 @@ class StoriesGet(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, owner_id: int, extended: bool):
+    async def __call__(self, owner_id: int = None, extended: bool = None):
         """ stories.get
         From Vk Docs: Returns stories available for current user.
         Access from user, group token(s)
@@ -52,14 +60,18 @@ class StoriesGet(BaseMethod):
         :param extended: '1' — to return additional fields for users and communities. Default value is 0.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.get", params)
 
 
 class StoriesGetBanned(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, extended: bool, fields: typing.List):
+    async def __call__(self, extended: bool = None, fields: typing.List = None):
         """ stories.getBanned
         From Vk Docs: Returns list of sources hidden from current user's feed.
         Access from user token(s)
@@ -67,7 +79,11 @@ class StoriesGetBanned(BaseMethod):
         :param fields: Additional fields to return
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.getBanned", params)
 
 
@@ -77,7 +93,9 @@ class StoriesGetById(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, stories: typing.List, extended: bool, fields: typing.List):
+    async def __call__(
+        self, stories: typing.List, extended: bool = None, fields: typing.List = None
+    ):
         """ stories.getById
         From Vk Docs: Returns story by its ID.
         Access from user, group token(s)
@@ -86,7 +104,11 @@ class StoriesGetById(BaseMethod):
         :param fields: Additional fields to return
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.getById", params)
 
 
@@ -98,12 +120,12 @@ class StoriesGetPhotoUploadServer(BaseMethod):
 
     async def __call__(
         self,
-        add_to_news: bool,
-        user_ids: typing.List,
-        reply_to_story: str,
-        link_text: str,
-        link_url: str,
-        group_id: int,
+        add_to_news: bool = None,
+        user_ids: typing.List = None,
+        reply_to_story: str = None,
+        link_text: str = None,
+        link_url: str = None,
+        group_id: int = None,
     ):
         """ stories.getPhotoUploadServer
         From Vk Docs: Returns URL for uploading a story with photo.
@@ -116,7 +138,11 @@ class StoriesGetPhotoUploadServer(BaseMethod):
         :param group_id: ID of the community to upload the story (should be verified or with the "fire" icon).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.getPhotoUploadServer", params)
 
 
@@ -130,9 +156,9 @@ class StoriesGetReplies(BaseMethod):
         self,
         owner_id: int,
         story_id: int,
-        access_key: str,
-        extended: bool,
-        fields: typing.List,
+        access_key: str = None,
+        extended: bool = None,
+        fields: typing.List = None,
     ):
         """ stories.getReplies
         From Vk Docs: Returns replies to the story.
@@ -144,7 +170,11 @@ class StoriesGetReplies(BaseMethod):
         :param fields: Additional fields to return
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.getReplies", params)
 
 
@@ -162,7 +192,11 @@ class StoriesGetStats(BaseMethod):
         :param story_id: Story ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.getStats", params)
 
 
@@ -174,12 +208,12 @@ class StoriesGetVideoUploadServer(BaseMethod):
 
     async def __call__(
         self,
-        add_to_news: bool,
-        user_ids: typing.List,
-        reply_to_story: str,
-        link_text: str,
-        link_url: str,
-        group_id: int,
+        add_to_news: bool = None,
+        user_ids: typing.List = None,
+        reply_to_story: str = None,
+        link_text: str = None,
+        link_url: str = None,
+        group_id: int = None,
     ):
         """ stories.getVideoUploadServer
         From Vk Docs: Allows to receive URL for uploading story with video.
@@ -192,7 +226,11 @@ class StoriesGetVideoUploadServer(BaseMethod):
         :param group_id: ID of the community to upload the story (should be verified or with the "fire" icon).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.getVideoUploadServer", params)
 
 
@@ -203,7 +241,12 @@ class StoriesGetViewers(BaseMethod):
     ]
 
     async def __call__(
-        self, owner_id: int, story_id: int, count: int, offset: int, extended: bool
+        self,
+        owner_id: int,
+        story_id: int,
+        count: int = None,
+        offset: int = None,
+        extended: bool = None,
     ):
         """ stories.getViewers
         From Vk Docs: Returns a list of story viewers.
@@ -215,7 +258,11 @@ class StoriesGetViewers(BaseMethod):
         :param extended: '1' — to return detailed information about photos
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.getViewers", params)
 
 
@@ -225,7 +272,7 @@ class StoriesHideAllReplies(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, owner_id: int, group_id: int):
+    async def __call__(self, owner_id: int, group_id: int = None):
         """ stories.hideAllReplies
         From Vk Docs: Hides all replies in the last 24 hours from the user to current user's stories.
         Access from user, group token(s)
@@ -233,7 +280,11 @@ class StoriesHideAllReplies(BaseMethod):
         :param group_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.hideAllReplies", params)
 
 
@@ -251,7 +302,11 @@ class StoriesHideReply(BaseMethod):
         :param story_id: Story ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.hideReply", params)
 
 
@@ -265,7 +320,11 @@ class StoriesUnbanOwner(BaseMethod):
         :param owners_ids: List of hidden sources to show stories from.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stories.unbanOwner", params)
 
 

@@ -2,6 +2,7 @@ from vkbottle.const import API_VERSION, API_URL
 from vkbottle.api.exceptions import VKError
 from vkbottle.http import HTTPRequest
 from vkbottle.utils import logger
+from .token import AbstractTokenGenerator
 import time
 import asyncio
 
@@ -12,7 +13,6 @@ async def request(
     token: str,
     throw_errors: bool = True,
     session: HTTPRequest = None,
-    raw_response: bool = False,
 ):
     url = "{}{method}/?access_token={token}&v={version}".format(
         API_URL, method=method, token=token, version=API_VERSION,
@@ -50,15 +50,12 @@ async def request(
                 [response["error"]["error_code"], response["error"]["error_msg"]]
             )
         return response
-
-    if raw_response:
-        return response
-    return response["response"]
+    return response
 
 
 class Request:
-    def __init__(self, token: str):
-        self.token = token
+    def __init__(self, token_generator: AbstractTokenGenerator):
+        self.token_generator: AbstractTokenGenerator = token_generator
 
     async def __call__(
         self,
@@ -71,11 +68,15 @@ class Request:
         response = await request(
             method,
             params,
-            self.token,
+            await self.token_generator.get_token(),
             throw_errors=throw_errors,
-            raw_response=raw_response,
         )
-        print(method, response)
+
+        logger.debug(f"Response: {response}")
+
         if not response_model:
             return response
-        return response_model(**response)
+        resp = response_model(**response)
+        if raw_response:
+            return resp
+        return resp.response

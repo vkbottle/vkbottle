@@ -11,12 +11,12 @@ class SearchGetHints(BaseMethod):
 
     async def __call__(
         self,
-        q: str,
-        offset: int,
-        limit: int,
-        filters: typing.List,
-        fields: typing.List,
-        search_global: bool,
+        q: str = None,
+        offset: int = None,
+        limit: int = None,
+        filters: typing.List = None,
+        fields: typing.List = None,
+        search_global: bool = None,
     ):
         """ search.getHints
         From Vk Docs: Allows the programmer to do a quick search for any substring.
@@ -29,7 +29,11 @@ class SearchGetHints(BaseMethod):
         :param search_global: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("search.getHints", params)
 
 

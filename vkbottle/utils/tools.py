@@ -1,6 +1,9 @@
+import re
+import sys
+import time
+import typing
 from collections import MutableMapping
 from typing import Sequence
-import os, sys, time, re
 
 
 class Logger:
@@ -12,12 +15,13 @@ class Logger:
     def __call__(self, message: str, *args, **kwargs):
         t = time.strftime("%m-%d %H:%M:%S", time.localtime())
         sys.stdout.write(
-            "\n[VKBottle] " + message.format(*args, **kwargs) + " [TIME {}]".format(t)
+            "\n[VKBottle] "
+            + str(message).format(*args, **kwargs)
+            + " [TIME {}]".format(t)
         )
 
 
 def chunks(l, n):
-    """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
         yield l[i : i + n]
 
@@ -27,12 +31,15 @@ def init_bot_mention(group_id: int, text: str):
     return re.sub(pattern, "", text)
 
 
+def get_attr(adict: dict, attrs: typing.List[str]):
+    attrs = set(attrs)
+    for attr in attrs:
+        if attr in adict:
+            return adict[attr]
+    return
+
+
 def dict_of_dicts_merge(d1, d2):
-    """
-    Update two dicts of dicts recursively,
-    if either mapping has leaves that are non-dicts,
-    the second's leaf overwrites the first's.
-    """
     for k, v in d1.items():
         if k in d2:
             if all(isinstance(e, MutableMapping) for e in (v, d2[k])):

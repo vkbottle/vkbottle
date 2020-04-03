@@ -10,7 +10,7 @@ class FriendsAdd(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, user_id: int, text: str, follow: bool
+        self, user_id: int = None, text: str = None, follow: bool = None
     ) -> responses.friends.Add:
         """ friends.add
         From Vk Docs: Approves or creates a friend request.
@@ -20,7 +20,11 @@ class FriendsAdd(BaseMethod):
         :param follow: '1' to pass an incoming request to followers list.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.add", params, response_model=responses.friends.Add
         )
@@ -30,7 +34,7 @@ class FriendsAddList(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, name: str, user_ids: typing.List
+        self, name: str, user_ids: typing.List = None
     ) -> responses.friends.AddList:
         """ friends.addList
         From Vk Docs: Creates a new friend list for the current user.
@@ -39,7 +43,11 @@ class FriendsAddList(BaseMethod):
         :param user_ids: IDs of users to be added to the friend list.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.addList", params, response_model=responses.friends.AddList
         )
@@ -49,7 +57,7 @@ class FriendsAreFriends(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, user_ids: typing.List, need_sign: bool
+        self, user_ids: typing.List, need_sign: bool = None
     ) -> responses.friends.AreFriends:
         """ friends.areFriends
         From Vk Docs: Checks the current user's friendship status with other specified users.
@@ -58,7 +66,11 @@ class FriendsAreFriends(BaseMethod):
         :param need_sign: '1' — to return 'sign' field. 'sign' is md5("{id}_{user_id}_{friends_status}_{application_secret}"), where id is current user ID. This field allows to check that data has not been modified by the client. By default: '0'.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.areFriends", params, response_model=responses.friends.AreFriends
         )
@@ -67,14 +79,18 @@ class FriendsAreFriends(BaseMethod):
 class FriendsDelete(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_id: int) -> responses.friends.Delete:
+    async def __call__(self, user_id: int = None) -> responses.friends.Delete:
         """ friends.delete
         From Vk Docs: Declines a friend request or deletes a user from the current user's friend list.
         Access from user token(s)
         :param user_id: ID of the user whose friend request is to be declined or who is to be deleted from the current user's friend list.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.delete", params, response_model=responses.friends.Delete
         )
@@ -90,7 +106,11 @@ class FriendsDeleteAllRequests(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.deleteAllRequests",
             params,
@@ -108,7 +128,11 @@ class FriendsDeleteList(BaseMethod):
         :param list_id: ID of the friend list to delete.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.deleteList", params, response_model=responses.friends.DeleteList
         )
@@ -118,7 +142,7 @@ class FriendsEdit(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, user_id: int, list_ids: typing.List
+        self, user_id: int, list_ids: typing.List = None
     ) -> responses.friends.Edit:
         """ friends.edit
         From Vk Docs: Edits the friend lists of the selected user.
@@ -127,7 +151,11 @@ class FriendsEdit(BaseMethod):
         :param list_ids: IDs of the friend lists to which to add the user.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.edit", params, response_model=responses.friends.Edit
         )
@@ -138,11 +166,11 @@ class FriendsEditList(BaseMethod):
 
     async def __call__(
         self,
-        name: str,
         list_id: int,
-        user_ids: typing.List,
-        add_user_ids: typing.List,
-        delete_user_ids: typing.List,
+        name: str = None,
+        user_ids: typing.List = None,
+        add_user_ids: typing.List = None,
+        delete_user_ids: typing.List = None,
     ) -> responses.friends.EditList:
         """ friends.editList
         From Vk Docs: Edits a friend list of the current user.
@@ -154,7 +182,11 @@ class FriendsEditList(BaseMethod):
         :param delete_user_ids: (Applies if 'user_ids' parameter is not set.), User IDs to delete from the friend list.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.editList", params, response_model=responses.friends.EditList
         )
@@ -168,14 +200,14 @@ class FriendsGet(BaseMethod):
 
     async def __call__(
         self,
-        user_id: int,
-        order: str,
-        list_id: int,
-        count: int,
-        offset: int,
-        fields: typing.List,
-        name_case: str,
-        ref: str,
+        user_id: int = None,
+        order: str = None,
+        list_id: int = None,
+        count: int = None,
+        offset: int = None,
+        fields: typing.List = None,
+        name_case: str = None,
+        ref: str = None,
     ) -> responses.friends.Get:
         """ friends.get
         From Vk Docs: Returns a list of user IDs or detailed information about a user's friends.
@@ -190,7 +222,11 @@ class FriendsGet(BaseMethod):
         :param ref: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.get", params, response_model=responses.friends.Get
         )
@@ -206,7 +242,11 @@ class FriendsGetAppUsers(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.getAppUsers", params, response_model=responses.friends.GetAppUsers
         )
@@ -216,7 +256,7 @@ class FriendsGetByPhones(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, phones: typing.List, fields: typing.List
+        self, phones: typing.List = None, fields: typing.List = None
     ) -> responses.friends.GetByPhones:
         """ friends.getByPhones
         From Vk Docs: Returns a list of the current user's friends whose phone numbers, validated or specified in a profile, are in a given list.
@@ -225,7 +265,11 @@ class FriendsGetByPhones(BaseMethod):
         :param fields: Profile fields to return. Sample values: 'nickname', 'screen_name', 'sex', 'bdate' (birthdate), 'city', 'country', 'timezone', 'photo', 'photo_medium', 'photo_big', 'has_mobile', 'rate', 'contacts', 'education', 'online, counters'.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.getByPhones", params, response_model=responses.friends.GetByPhones
         )
@@ -235,7 +279,7 @@ class FriendsGetLists(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, user_id: int, return_system: bool
+        self, user_id: int = None, return_system: bool = None
     ) -> responses.friends.GetLists:
         """ friends.getLists
         From Vk Docs: Returns a list of the user's friend lists.
@@ -244,7 +288,11 @@ class FriendsGetLists(BaseMethod):
         :param return_system: '1' — to return system friend lists. By default: '0'.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.getLists", params, response_model=responses.friends.GetLists
         )
@@ -255,12 +303,12 @@ class FriendsGetMutual(BaseMethod):
 
     async def __call__(
         self,
-        source_uid: int,
-        target_uid: int,
-        target_uids: typing.List,
-        order: str,
-        count: int,
-        offset: int,
+        source_uid: int = None,
+        target_uid: int = None,
+        target_uids: typing.List = None,
+        order: str = None,
+        count: int = None,
+        offset: int = None,
     ) -> responses.friends.GetMutual:
         """ friends.getMutual
         From Vk Docs: Returns a list of user IDs of the mutual friends of two users.
@@ -273,7 +321,11 @@ class FriendsGetMutual(BaseMethod):
         :param offset: Offset needed to return a specific subset of mutual friends.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.getMutual", params, response_model=responses.friends.GetMutual
         )
@@ -284,12 +336,12 @@ class FriendsGetOnline(BaseMethod):
 
     async def __call__(
         self,
-        user_id: int,
-        list_id: int,
-        online_mobile: bool,
-        order: str,
-        count: int,
-        offset: int,
+        user_id: int = None,
+        list_id: int = None,
+        online_mobile: bool = None,
+        order: str = None,
+        count: int = None,
+        offset: int = None,
     ) -> responses.friends.GetOnline:
         """ friends.getOnline
         From Vk Docs: Returns a list of user IDs of a user's friends who are online.
@@ -302,7 +354,11 @@ class FriendsGetOnline(BaseMethod):
         :param offset: Offset needed to return a specific subset of friends.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.getOnline", params, response_model=responses.friends.GetOnline
         )
@@ -311,14 +367,18 @@ class FriendsGetOnline(BaseMethod):
 class FriendsGetRecent(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, count: int) -> responses.friends.GetRecent:
+    async def __call__(self, count: int = None) -> responses.friends.GetRecent:
         """ friends.getRecent
         From Vk Docs: Returns a list of user IDs of the current user's recently added friends.
         Access from user token(s)
         :param count: Number of recently added friends to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.getRecent", params, response_model=responses.friends.GetRecent
         )
@@ -329,16 +389,16 @@ class FriendsGetRequests(BaseMethod):
 
     async def __call__(
         self,
-        offset: int,
-        count: int,
-        extended: bool,
-        need_mutual: bool,
-        out: bool,
-        sort: int,
-        need_viewed: bool,
-        suggested: bool,
-        ref: str,
-        fields: typing.List,
+        offset: int = None,
+        count: int = None,
+        extended: bool = None,
+        need_mutual: bool = None,
+        out: bool = None,
+        sort: int = None,
+        need_viewed: bool = None,
+        suggested: bool = None,
+        ref: str = None,
+        fields: typing.List = None,
     ) -> responses.friends.GetRequests:
         """ friends.getRequests
         From Vk Docs: Returns information about the current user's incoming and outgoing friend requests.
@@ -355,7 +415,11 @@ class FriendsGetRequests(BaseMethod):
         :param fields: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.getRequests", params, response_model=responses.friends.GetRequests
         )
@@ -366,11 +430,11 @@ class FriendsGetSuggestions(BaseMethod):
 
     async def __call__(
         self,
-        filter: typing.List,
-        count: int,
-        offset: int,
-        fields: typing.List,
-        name_case: str,
+        filter: typing.List = None,
+        count: int = None,
+        offset: int = None,
+        fields: typing.List = None,
+        name_case: str = None,
     ) -> responses.friends.GetSuggestions:
         """ friends.getSuggestions
         From Vk Docs: Returns a list of profiles of users whom the current user may know.
@@ -382,7 +446,11 @@ class FriendsGetSuggestions(BaseMethod):
         :param name_case: Case for declension of user name and surname: , 'nom' — nominative (default) , 'gen' — genitive , 'dat' — dative , 'acc' — accusative , 'ins' — instrumental , 'abl' — prepositional
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.getSuggestions",
             params,
@@ -396,11 +464,11 @@ class FriendsSearch(BaseMethod):
     async def __call__(
         self,
         user_id: int,
-        q: str,
-        fields: typing.List,
-        name_case: str,
-        offset: int,
-        count: int,
+        q: str = None,
+        fields: typing.List = None,
+        name_case: str = None,
+        offset: int = None,
+        count: int = None,
     ) -> responses.friends.Search:
         """ friends.search
         From Vk Docs: Returns a list of friends matching the search criteria.
@@ -413,7 +481,11 @@ class FriendsSearch(BaseMethod):
         :param count: Number of friends to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "friends.search", params, response_model=responses.friends.Search
         )

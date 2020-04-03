@@ -12,15 +12,15 @@ class MarketAdd(BaseMethod):
     async def __call__(
         self,
         owner_id: int,
-        name: str,
         description: str,
-        category_id: int,
-        price: typing.Any,
-        old_price: typing.Any,
-        deleted: bool,
         main_photo_id: int,
-        photo_ids: typing.List,
-        url: str,
+        name: str,
+        category_id: int,
+        price: typing.Any = None,
+        old_price: typing.Any = None,
+        deleted: bool = None,
+        photo_ids: typing.List = None,
+        url: str = None,
     ) -> responses.market.Add:
         """ market.add
         From Vk Docs: Ads a new item to the market.
@@ -37,7 +37,11 @@ class MarketAdd(BaseMethod):
         :param url: Url for button in market item.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.add", params, response_model=responses.market.Add
         )
@@ -47,7 +51,7 @@ class MarketAddAlbum(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, title: str, photo_id: int, main_album: bool
+        self, owner_id: int, title: str, photo_id: int = None, main_album: bool = None
     ) -> responses.market.AddAlbum:
         """ market.addAlbum
         From Vk Docs: Creates new collection of items
@@ -58,7 +62,11 @@ class MarketAddAlbum(BaseMethod):
         :param main_album: Set as main ('1' – set, '0' – no).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.addAlbum", params, response_model=responses.market.AddAlbum
         )
@@ -68,7 +76,7 @@ class MarketAddToAlbum(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, item_id: int, album_ids: typing.List
+        self, owner_id: int, album_ids: typing.List, item_id: int
     ) -> responses.market.AddToAlbum:
         """ market.addToAlbum
         From Vk Docs: Adds an item to one or multiple collections.
@@ -78,7 +86,11 @@ class MarketAddToAlbum(BaseMethod):
         :param album_ids: Collections IDs to add item to.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.addToAlbum", params, response_model=responses.market.AddToAlbum
         )
@@ -91,12 +103,12 @@ class MarketCreateComment(BaseMethod):
         self,
         owner_id: int,
         item_id: int,
-        message: str,
-        attachments: typing.List,
-        from_group: bool,
-        reply_to_comment: int,
-        sticker_id: int,
-        guid: str,
+        message: str = None,
+        attachments: typing.List = None,
+        from_group: bool = None,
+        reply_to_comment: int = None,
+        sticker_id: int = None,
+        guid: str = None,
     ) -> responses.market.CreateComment:
         """ market.createComment
         From Vk Docs: Creates a new comment for an item.
@@ -111,7 +123,11 @@ class MarketCreateComment(BaseMethod):
         :param guid: Random value to avoid resending one comment.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.createComment",
             params,
@@ -130,7 +146,11 @@ class MarketDelete(BaseMethod):
         :param item_id: Item ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.delete", params, response_model=responses.market.Delete
         )
@@ -149,7 +169,11 @@ class MarketDeleteAlbum(BaseMethod):
         :param album_id: Collection ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.deleteAlbum", params, response_model=responses.market.DeleteAlbum
         )
@@ -168,7 +192,11 @@ class MarketDeleteComment(BaseMethod):
         :param comment_id: comment id
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.deleteComment",
             params,
@@ -182,15 +210,15 @@ class MarketEdit(BaseMethod):
     async def __call__(
         self,
         owner_id: int,
-        item_id: int,
         name: str,
-        description: str,
         category_id: int,
-        price: typing.Any,
-        deleted: bool,
         main_photo_id: int,
-        photo_ids: typing.List,
-        url: str,
+        item_id: int,
+        description: str,
+        price: typing.Any,
+        deleted: bool = None,
+        photo_ids: typing.List = None,
+        url: str = None,
     ) -> responses.market.Edit:
         """ market.edit
         From Vk Docs: Edits an item.
@@ -207,7 +235,11 @@ class MarketEdit(BaseMethod):
         :param url: Url for button in market item.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.edit", params, response_model=responses.market.Edit
         )
@@ -217,7 +249,12 @@ class MarketEditAlbum(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, album_id: int, title: str, photo_id: int, main_album: bool
+        self,
+        owner_id: int,
+        title: str,
+        album_id: int,
+        photo_id: int = None,
+        main_album: bool = None,
     ) -> responses.market.EditAlbum:
         """ market.editAlbum
         From Vk Docs: Edits a collection of items
@@ -229,7 +266,11 @@ class MarketEditAlbum(BaseMethod):
         :param main_album: Set as main ('1' – set, '0' – no).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.editAlbum", params, response_model=responses.market.EditAlbum
         )
@@ -239,7 +280,11 @@ class MarketEditComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, comment_id: int, message: str, attachments: typing.List
+        self,
+        owner_id: int,
+        comment_id: int,
+        message: str = None,
+        attachments: typing.List = None,
     ) -> responses.market.EditComment:
         """ market.editComment
         From Vk Docs: Chages item comment's text
@@ -250,7 +295,11 @@ class MarketEditComment(BaseMethod):
         :param attachments: Comma-separated list of objects attached to a comment. The field is submitted the following way: , "'<owner_id>_<media_id>,<owner_id>_<media_id>'", , '' - media attachment type: "'photo' - photo, 'video' - video, 'audio' - audio, 'doc' - document", , '<owner_id>' - media owner id, '<media_id>' - media attachment id, , For example: "photo100172_166443618,photo66748_265827614",
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.editComment", params, response_model=responses.market.EditComment
         )
@@ -260,7 +309,12 @@ class MarketGet(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, album_id: int, count: int, offset: int, extended: bool
+        self,
+        owner_id: int,
+        album_id: int = None,
+        count: int = None,
+        offset: int = None,
+        extended: bool = None,
     ) -> responses.market.Get:
         """ market.get
         From Vk Docs: Returns items list for a community.
@@ -272,7 +326,11 @@ class MarketGet(BaseMethod):
         :param extended: '1' – method will return additional fields: 'likes, can_comment, car_repost, photos'. These parameters are not returned by default.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.get", params, response_model=responses.market.Get
         )
@@ -291,7 +349,11 @@ class MarketGetAlbumById(BaseMethod):
         :param album_ids: collections identifiers to obtain data from
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.getAlbumById", params, response_model=responses.market.GetAlbumById
         )
@@ -301,7 +363,7 @@ class MarketGetAlbums(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, offset: int, count: int
+        self, owner_id: int, offset: int = None, count: int = None
     ) -> responses.market.GetAlbums:
         """ market.getAlbums
         From Vk Docs: Returns community's collections list.
@@ -311,7 +373,11 @@ class MarketGetAlbums(BaseMethod):
         :param count: Number of items to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.getAlbums", params, response_model=responses.market.GetAlbums
         )
@@ -321,7 +387,7 @@ class MarketGetById(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, item_ids: typing.List, extended: bool
+        self, item_ids: typing.List, extended: bool = None
     ) -> responses.market.GetById:
         """ market.getById
         From Vk Docs: Returns information about market items by their ids.
@@ -330,7 +396,11 @@ class MarketGetById(BaseMethod):
         :param extended: '1' – to return additional fields: 'likes, can_comment, car_repost, photos'. By default: '0'.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.getById", params, response_model=responses.market.GetById
         )
@@ -340,8 +410,8 @@ class MarketGetCategories(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, count: int, offset: int
-    ) -> responses.market.GetCategoriesResponse:
+        self, count: int = None, offset: int = None
+    ) -> dict:
         """ market.getCategories
         From Vk Docs: Returns a list of market categories.
         Access from user token(s)
@@ -349,12 +419,14 @@ class MarketGetCategories(BaseMethod):
         :param offset: Offset needed to return a specific subset of results.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.getCategories",
             params,
-            response_model=responses.market.GetCategoriesResponse,
-            raw_response=True,
         )
 
 
@@ -365,13 +437,13 @@ class MarketGetComments(BaseMethod):
         self,
         owner_id: int,
         item_id: int,
-        need_likes: bool,
-        start_comment_id: int,
-        offset: int,
-        count: int,
-        sort: str,
-        extended: bool,
-        fields: typing.List,
+        need_likes: bool = None,
+        start_comment_id: int = None,
+        offset: int = None,
+        count: int = None,
+        sort: str = None,
+        extended: bool = None,
+        fields: typing.List = None,
     ) -> responses.market.GetComments:
         """ market.getComments
         From Vk Docs: Returns comments list for an item.
@@ -387,7 +459,11 @@ class MarketGetComments(BaseMethod):
         :param fields: List of additional profile fields to return. See the [vk.com/dev/fields|details]
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.getComments", params, response_model=responses.market.GetComments
         )
@@ -397,7 +473,7 @@ class MarketRemoveFromAlbum(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, item_id: int, album_ids: typing.List
+        self, owner_id: int, album_ids: typing.List, item_id: int
     ) -> responses.market.RemoveFromAlbum:
         """ market.removeFromAlbum
         From Vk Docs: Removes an item from one or multiple collections.
@@ -407,7 +483,11 @@ class MarketRemoveFromAlbum(BaseMethod):
         :param album_ids: Collections IDs to remove item from.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.removeFromAlbum",
             params,
@@ -419,7 +499,7 @@ class MarketReorderAlbums(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, album_id: int, before: int, after: int
+        self, owner_id: int, album_id: int, before: int = None, after: int = None
     ) -> responses.market.ReorderAlbums:
         """ market.reorderAlbums
         From Vk Docs: Reorders the collections list.
@@ -430,7 +510,11 @@ class MarketReorderAlbums(BaseMethod):
         :param after: ID of a collection to place current collection after it.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.reorderAlbums",
             params,
@@ -442,7 +526,12 @@ class MarketReorderItems(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, album_id: int, item_id: int, before: int, after: int
+        self,
+        owner_id: int,
+        item_id: int,
+        album_id: int = None,
+        before: int = None,
+        after: int = None,
     ) -> responses.market.ReorderItems:
         """ market.reorderItems
         From Vk Docs: Changes item place in a collection.
@@ -454,7 +543,11 @@ class MarketReorderItems(BaseMethod):
         :param after: ID of an item to place current item after it.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.reorderItems", params, response_model=responses.market.ReorderItems
         )
@@ -464,7 +557,7 @@ class MarketReport(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, item_id: int, reason: int
+        self, owner_id: int, item_id: int, reason: int = None
     ) -> responses.market.Report:
         """ market.report
         From Vk Docs: Sends a complaint to the item.
@@ -474,7 +567,11 @@ class MarketReport(BaseMethod):
         :param reason: Complaint reason. Possible values: *'0' — spam,, *'1' — child porn,, *'2' — extremism,, *'3' — violence,, *'4' — drugs propaganda,, *'5' — adult materials,, *'6' — insult.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.report", params, response_model=responses.market.Report
         )
@@ -484,7 +581,7 @@ class MarketReportComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, comment_id: int, reason: int
+        self, owner_id: int, reason: int, comment_id: int
     ) -> responses.market.ReportComment:
         """ market.reportComment
         From Vk Docs: Sends a complaint to the item's comment.
@@ -494,7 +591,11 @@ class MarketReportComment(BaseMethod):
         :param reason: Complaint reason. Possible values: *'0' — spam,, *'1' — child porn,, *'2' — extremism,, *'3' — violence,, *'4' — drugs propaganda,, *'5' — adult materials,, *'6' — insult.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.reportComment",
             params,
@@ -513,7 +614,11 @@ class MarketRestore(BaseMethod):
         :param item_id: Deleted item ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.restore", params, response_model=responses.market.Restore
         )
@@ -532,7 +637,11 @@ class MarketRestoreComment(BaseMethod):
         :param comment_id: deleted comment id
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.restoreComment",
             params,
@@ -546,17 +655,17 @@ class MarketSearch(BaseMethod):
     async def __call__(
         self,
         owner_id: int,
-        album_id: int,
-        q: str,
-        price_from: int,
-        price_to: int,
-        tags: typing.List,
-        sort: int,
-        rev: int,
-        offset: int,
-        count: int,
-        extended: bool,
-        status: int,
+        album_id: int = None,
+        q: str = None,
+        price_from: int = None,
+        price_to: int = None,
+        tags: typing.List = None,
+        sort: int = None,
+        rev: int = None,
+        offset: int = None,
+        count: int = None,
+        extended: bool = None,
+        status: int = None,
     ) -> responses.market.Search:
         """ market.search
         From Vk Docs: Searches market items in a community's catalog
@@ -575,7 +684,11 @@ class MarketSearch(BaseMethod):
         :param status: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "market.search", params, response_model=responses.market.Search
         )

@@ -2,7 +2,7 @@ class VKError(Exception):
     pass
 
 
-class FetchMethodError(Exception):
+class TokenGeneratorError(VKError):
     pass
 
 
@@ -14,13 +14,9 @@ class BranchError(Exception):
     pass
 
 
-class HandlerError(Exception):
+class HandlerError(VKError):
     pass
 
 
 class HandlerReturnError(HandlerError):
-    pass
-
-
-class VBMLError(Exception):
     pass

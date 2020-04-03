@@ -17,7 +17,11 @@ class AdsAddOfficeUsers(BaseMethod):
         :param data: Serialized JSON array of objects that describe added managers. Description of 'user_specification' objects see below.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.addOfficeUsers", params)
 
 
@@ -25,7 +29,7 @@ class AdsCheckLink(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, account_id: int, link_type: str, link_url: str, campaign_id: int
+        self, account_id: int, link_url: str, link_type: str, campaign_id: int = None
     ):
         """ ads.checkLink
         From Vk Docs: Allows to check the ad link.
@@ -36,7 +40,11 @@ class AdsCheckLink(BaseMethod):
         :param campaign_id: Campaign ID
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.checkLink", params)
 
 
@@ -51,7 +59,11 @@ class AdsCreateAds(BaseMethod):
         :param data: Serialized JSON array of objects that describe created ads. Description of 'ad_specification' objects see below.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.createAds", params)
 
 
@@ -66,7 +78,11 @@ class AdsCreateCampaigns(BaseMethod):
         :param data: Serialized JSON array of objects that describe created campaigns. Description of 'campaign_specification' objects see below.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.createCampaigns", params)
 
 
@@ -81,7 +97,11 @@ class AdsCreateClients(BaseMethod):
         :param data: Serialized JSON array of objects that describe created campaigns. Description of 'client_specification' objects see below.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.createClients", params)
 
 
@@ -91,11 +111,11 @@ class AdsCreateTargetGroup(BaseMethod):
     async def __call__(
         self,
         account_id: int,
-        client_id: int,
         name: str,
-        lifetime: int,
-        target_pixel_id: int,
-        target_pixel_rules: str,
+        client_id: int = None,
+        lifetime: int = None,
+        target_pixel_id: int = None,
+        target_pixel_rules: str = None,
     ):
         """ ads.createTargetGroup
         From Vk Docs: Creates a group to re-target ads for users who visited advertiser's site (viewed information about the product, registered, etc.).
@@ -108,7 +128,11 @@ class AdsCreateTargetGroup(BaseMethod):
         :param target_pixel_rules: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.createTargetGroup", params)
 
 
@@ -123,7 +147,11 @@ class AdsDeleteAds(BaseMethod):
         :param ids: Serialized JSON array with ad IDs.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.deleteAds", params)
 
 
@@ -138,7 +166,11 @@ class AdsDeleteCampaigns(BaseMethod):
         :param ids: Serialized JSON array with IDs of deleted campaigns.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.deleteCampaigns", params)
 
 
@@ -153,14 +185,20 @@ class AdsDeleteClients(BaseMethod):
         :param ids: Serialized JSON array with IDs of deleted clients.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.deleteClients", params)
 
 
 class AdsDeleteTargetGroup(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, client_id: int, target_group_id: int):
+    async def __call__(
+        self, account_id: int, target_group_id: int, client_id: int = None
+    ):
         """ ads.deleteTargetGroup
         From Vk Docs: Deletes a retarget group.
         Access from user token(s)
@@ -169,7 +207,11 @@ class AdsDeleteTargetGroup(BaseMethod):
         :param target_group_id: Group ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.deleteTargetGroup", params)
 
 
@@ -183,7 +225,11 @@ class AdsGetAccounts(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getAccounts", params)
 
 
@@ -193,12 +239,12 @@ class AdsGetAds(BaseMethod):
     async def __call__(
         self,
         account_id: int,
-        ad_ids: str,
-        campaign_ids: str,
-        client_id: int,
-        include_deleted: bool,
-        limit: int,
-        offset: int,
+        ad_ids: str = None,
+        campaign_ids: str = None,
+        client_id: int = None,
+        include_deleted: bool = None,
+        limit: int = None,
+        offset: int = None,
     ):
         """ ads.getAds
         From Vk Docs: Returns number of ads.
@@ -212,7 +258,11 @@ class AdsGetAds(BaseMethod):
         :param offset: Offset. Used in the same cases as 'limit' parameter.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getAds", params)
 
 
@@ -222,12 +272,12 @@ class AdsGetAdsLayout(BaseMethod):
     async def __call__(
         self,
         account_id: int,
-        ad_ids: str,
-        campaign_ids: str,
-        client_id: int,
-        include_deleted: bool,
-        limit: int,
-        offset: int,
+        ad_ids: str = None,
+        campaign_ids: str = None,
+        client_id: int = None,
+        include_deleted: bool = None,
+        limit: int = None,
+        offset: int = None,
     ):
         """ ads.getAdsLayout
         From Vk Docs: Returns descriptions of ad layouts.
@@ -241,7 +291,11 @@ class AdsGetAdsLayout(BaseMethod):
         :param offset: Offset. Used in the same cases as 'limit' parameter.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getAdsLayout", params)
 
 
@@ -251,12 +305,12 @@ class AdsGetAdsTargeting(BaseMethod):
     async def __call__(
         self,
         account_id: int,
-        ad_ids: str,
-        campaign_ids: str,
-        client_id: int,
-        include_deleted: bool,
-        limit: int,
-        offset: int,
+        ad_ids: str = None,
+        campaign_ids: str = None,
+        client_id: int = None,
+        include_deleted: bool = None,
+        limit: int = None,
+        offset: int = None,
     ):
         """ ads.getAdsTargeting
         From Vk Docs: Returns ad targeting parameters.
@@ -270,7 +324,11 @@ class AdsGetAdsTargeting(BaseMethod):
         :param offset: Offset needed to return a specific subset of results.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getAdsTargeting", params)
 
 
@@ -284,7 +342,11 @@ class AdsGetBudget(BaseMethod):
         :param account_id: Advertising account ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getBudget", params)
 
 
@@ -292,7 +354,11 @@ class AdsGetCampaigns(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, account_id: int, client_id: int, include_deleted: bool, campaign_ids: str
+        self,
+        account_id: int,
+        client_id: int = None,
+        include_deleted: bool = None,
+        campaign_ids: str = None,
     ):
         """ ads.getCampaigns
         From Vk Docs: Returns a list of campaigns in an advertising account.
@@ -303,21 +369,29 @@ class AdsGetCampaigns(BaseMethod):
         :param campaign_ids: Filter of advertising campaigns to show. Serialized JSON array with campaign IDs. Only campaigns that exist in 'campaign_ids' and belong to the specified advertising account will be shown. If the parameter is null, all campaigns will be shown.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getCampaigns", params)
 
 
 class AdsGetCategories(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, lang: str):
+    async def __call__(self, lang: str = None):
         """ ads.getCategories
         From Vk Docs: Returns a list of possible ad categories.
         Access from user token(s)
         :param lang: Language. The full list of supported languages is [vk.com/dev/api_requests|here].
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getCategories", params)
 
 
@@ -331,7 +405,11 @@ class AdsGetClients(BaseMethod):
         :param account_id: Advertising account ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getClients", params)
 
 
@@ -341,10 +419,10 @@ class AdsGetDemographics(BaseMethod):
     async def __call__(
         self,
         account_id: int,
-        ids_type: str,
         ids: str,
-        period: str,
         date_from: str,
+        ids_type: str,
+        period: str,
         date_to: str,
     ):
         """ ads.getDemographics
@@ -358,7 +436,11 @@ class AdsGetDemographics(BaseMethod):
         :param date_to: Date to show statistics to. For different value of 'period' different date format is used: *day: YYYY-MM-DD, example: 2011-09-27 — September 27, 2011, **0 — current day,, *month: YYYY-MM, example: 2011-09 — September 2011, **0 — current month,, *overall: 0.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getDemographics", params)
 
 
@@ -372,7 +454,11 @@ class AdsGetFloodStats(BaseMethod):
         :param account_id: Advertising account ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getFloodStats", params)
 
 
@@ -386,14 +472,18 @@ class AdsGetOfficeUsers(BaseMethod):
         :param account_id: Advertising account ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getOfficeUsers", params)
 
 
 class AdsGetPostsReach(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, ids_type: str, ids: str):
+    async def __call__(self, account_id: int, ids: str, ids_type: str):
         """ ads.getPostsReach
         From Vk Docs: Returns detailed statistics of promoted posts reach from campaigns and ads.
         Access from user token(s)
@@ -402,7 +492,11 @@ class AdsGetPostsReach(BaseMethod):
         :param ids: IDs requested ads or campaigns, separated with a comma, depending on the value set in 'ids_type'. Maximum 100 objects.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getPostsReach", params)
 
 
@@ -417,7 +511,11 @@ class AdsGetRejectionReason(BaseMethod):
         :param ad_id: Ad ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getRejectionReason", params)
 
 
@@ -427,10 +525,10 @@ class AdsGetStatistics(BaseMethod):
     async def __call__(
         self,
         account_id: int,
-        ids_type: str,
         ids: str,
-        period: str,
         date_from: str,
+        ids_type: str,
+        period: str,
         date_to: str,
     ):
         """ ads.getStatistics
@@ -444,7 +542,11 @@ class AdsGetStatistics(BaseMethod):
         :param date_to: Date to show statistics to. For different value of 'period' different date format is used: *day: YYYY-MM-DD, example: 2011-09-27 — September 27, 2011, **0 — current day,, *month: YYYY-MM, example: 2011-09 — September 2011, **0 — current month,, *overall: 0.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getStatistics", params)
 
 
@@ -452,7 +554,13 @@ class AdsGetSuggestions(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, section: str, ids: str, q: str, country: int, cities: str, lang: str
+        self,
+        section: str,
+        ids: str = None,
+        q: str = None,
+        country: int = None,
+        cities: str = None,
+        lang: str = None,
     ):
         """ ads.getSuggestions
         From Vk Docs: Returns a set of auto-suggestions for various targeting parameters.
@@ -465,14 +573,20 @@ class AdsGetSuggestions(BaseMethod):
         :param lang: Language of the returned string values. Supported languages: *ru — Russian,, *ua — Ukrainian,, *en — English.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getSuggestions", params)
 
 
 class AdsGetTargetGroups(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, client_id: int, extended: bool):
+    async def __call__(
+        self, account_id: int, client_id: int = None, extended: bool = None
+    ):
         """ ads.getTargetGroups
         From Vk Docs: Returns a list of target groups.
         Access from user token(s)
@@ -481,7 +595,11 @@ class AdsGetTargetGroups(BaseMethod):
         :param extended: '1' — to return pixel code.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getTargetGroups", params)
 
 
@@ -491,15 +609,15 @@ class AdsGetTargetingStats(BaseMethod):
     async def __call__(
         self,
         account_id: int,
-        client_id: int,
-        criteria: str,
-        ad_id: int,
-        ad_format: int,
-        ad_platform: str,
-        ad_platform_no_wall: str,
-        ad_platform_no_ad_network: str,
         link_url: str,
-        link_domain: str,
+        client_id: int = None,
+        criteria: str = None,
+        ad_id: int = None,
+        ad_format: int = None,
+        ad_platform: str = None,
+        ad_platform_no_wall: str = None,
+        ad_platform_no_ad_network: str = None,
+        link_domain: str = None,
     ):
         """ ads.getTargetingStats
         From Vk Docs: Returns the size of targeting audience, and also recommended values for CPC and CPM.
@@ -516,14 +634,18 @@ class AdsGetTargetingStats(BaseMethod):
         :param link_domain: Domain of the advertised object.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getTargetingStats", params)
 
 
 class AdsGetUploadURL(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, ad_format: int, icon: int):
+    async def __call__(self, ad_format: int, icon: int = None):
         """ ads.getUploadURL
         From Vk Docs: Returns URL to upload an ad photo to.
         Access from user token(s)
@@ -531,7 +653,11 @@ class AdsGetUploadURL(BaseMethod):
         :param icon: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getUploadURL", params)
 
 
@@ -545,7 +671,11 @@ class AdsGetVideoUploadURL(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.getVideoUploadURL", params)
 
 
@@ -553,7 +683,11 @@ class AdsImportTargetContacts(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, account_id: int, client_id: int, target_group_id: int, contacts: str
+        self,
+        account_id: int,
+        contacts: str,
+        target_group_id: int,
+        client_id: int = None,
     ):
         """ ads.importTargetContacts
         From Vk Docs: Imports a list of advertiser's contacts to count VK registered users against the target group.
@@ -564,7 +698,11 @@ class AdsImportTargetContacts(BaseMethod):
         :param contacts: List of phone numbers, emails or user IDs separated with a comma.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.importTargetContacts", params)
 
 
@@ -579,7 +717,11 @@ class AdsRemoveOfficeUsers(BaseMethod):
         :param ids: Serialized JSON array with IDs of deleted managers.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.removeOfficeUsers", params)
 
 
@@ -594,7 +736,11 @@ class AdsUpdateAds(BaseMethod):
         :param data: Serialized JSON array of objects that describe changes in ads. Description of 'ad_edit_specification' objects see below.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.updateAds", params)
 
 
@@ -609,7 +755,11 @@ class AdsUpdateCampaigns(BaseMethod):
         :param data: Serialized JSON array of objects that describe changes in campaigns. Description of 'campaign_mod' objects see below.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.updateCampaigns", params)
 
 
@@ -624,7 +774,11 @@ class AdsUpdateClients(BaseMethod):
         :param data: Serialized JSON array of objects that describe changes in clients. Description of 'client_mod' objects see below.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.updateClients", params)
 
 
@@ -634,13 +788,13 @@ class AdsUpdateTargetGroup(BaseMethod):
     async def __call__(
         self,
         account_id: int,
-        client_id: int,
         target_group_id: int,
         name: str,
-        domain: str,
-        lifetime: int,
-        target_pixel_id: int,
-        target_pixel_rules: str,
+        client_id: int = None,
+        domain: str = None,
+        lifetime: int = None,
+        target_pixel_id: int = None,
+        target_pixel_rules: str = None,
     ):
         """ ads.updateTargetGroup
         From Vk Docs: Edits a retarget group.
@@ -655,7 +809,11 @@ class AdsUpdateTargetGroup(BaseMethod):
         :param target_pixel_rules: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("ads.updateTargetGroup", params)
 
 

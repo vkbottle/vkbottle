@@ -12,12 +12,12 @@ class PrettycardsCreate(BaseMethod):
     async def __call__(
         self,
         owner_id: int,
-        photo: str,
         title: str,
+        photo: str,
         link: str,
-        price: str,
-        price_old: str,
-        button: str,
+        price: str = None,
+        price_old: str = None,
+        button: str = None,
     ):
         """ prettyCards.create
         From Vk Docs: 
@@ -31,7 +31,11 @@ class PrettycardsCreate(BaseMethod):
         :param button: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("prettyCards.create", params)
 
 
@@ -46,7 +50,11 @@ class PrettycardsDelete(BaseMethod):
         :param card_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("prettyCards.delete", params)
 
 
@@ -57,12 +65,12 @@ class PrettycardsEdit(BaseMethod):
         self,
         owner_id: int,
         card_id: int,
-        photo: str,
-        title: str,
-        link: str,
-        price: str,
-        price_old: str,
-        button: str,
+        photo: str = None,
+        title: str = None,
+        link: str = None,
+        price: str = None,
+        price_old: str = None,
+        button: str = None,
     ):
         """ prettyCards.edit
         From Vk Docs: 
@@ -77,14 +85,18 @@ class PrettycardsEdit(BaseMethod):
         :param button: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("prettyCards.edit", params)
 
 
 class PrettycardsGet(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, offset: int, count: int):
+    async def __call__(self, owner_id: int, offset: int = None, count: int = None):
         """ prettyCards.get
         From Vk Docs: 
         Access from user token(s)
@@ -93,7 +105,11 @@ class PrettycardsGet(BaseMethod):
         :param count: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("prettyCards.get", params)
 
 
@@ -108,7 +124,11 @@ class PrettycardsGetById(BaseMethod):
         :param card_ids: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("prettyCards.getById", params)
 
 
@@ -122,7 +142,11 @@ class PrettycardsGetUploadURL(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("prettyCards.getUploadURL", params)
 
 

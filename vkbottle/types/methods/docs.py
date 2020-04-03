@@ -10,7 +10,7 @@ class DocsAdd(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, doc_id: int, access_key: str
+        self, owner_id: int, doc_id: int, access_key: str = None
     ) -> responses.docs.Add:
         """ docs.add
         From Vk Docs: Copies a document to a user's or community's document list.
@@ -20,7 +20,11 @@ class DocsAdd(BaseMethod):
         :param access_key: Access key. This parameter is required if 'access_key' was returned with the document's data.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("docs.add", params, response_model=responses.docs.Add)
 
 
@@ -35,7 +39,11 @@ class DocsDelete(BaseMethod):
         :param doc_id: Document ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "docs.delete", params, response_model=responses.docs.Delete
         )
@@ -45,7 +53,7 @@ class DocsEdit(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, doc_id: int, title: str, tags: typing.List
+        self, owner_id: int, doc_id: int, title: str = None, tags: typing.List = None
     ) -> responses.docs.Edit:
         """ docs.edit
         From Vk Docs: Edits a document.
@@ -56,7 +64,11 @@ class DocsEdit(BaseMethod):
         :param tags: Document tags.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "docs.edit", params, response_model=responses.docs.Edit
         )
@@ -66,7 +78,11 @@ class DocsGet(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, count: int, offset: int, type: int, owner_id: int
+        self,
+        count: int = None,
+        offset: int = None,
+        type: int = None,
+        owner_id: int = None,
     ) -> responses.docs.Get:
         """ docs.get
         From Vk Docs: Returns detailed information about user or community documents.
@@ -77,7 +93,11 @@ class DocsGet(BaseMethod):
         :param owner_id: ID of the user or community that owns the documents. Use a negative value to designate a community ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("docs.get", params, response_model=responses.docs.Get)
 
 
@@ -91,7 +111,11 @@ class DocsGetById(BaseMethod):
         :param docs: Document IDs. Example: , "66748_91488,66748_91455",
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "docs.getById", params, response_model=responses.docs.GetById
         )
@@ -104,7 +128,7 @@ class DocsGetMessagesUploadServer(BaseMethod):
     ]
 
     async def __call__(
-        self, type: str, peer_id: int
+        self, type: str = None, peer_id: int = None
     ) -> responses.docs.GetMessagesUploadServer:
         """ docs.getMessagesUploadServer
         From Vk Docs: Returns the server address for document upload.
@@ -113,7 +137,11 @@ class DocsGetMessagesUploadServer(BaseMethod):
         :param peer_id: Destination ID. "For user: 'User ID', e.g. '12345'. For chat: '2000000000' + 'Chat ID', e.g. '2000000001'. For community: '- Community ID', e.g. '-12345'. "
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "docs.getMessagesUploadServer",
             params,
@@ -131,7 +159,11 @@ class DocsGetTypes(BaseMethod):
         :param owner_id: ID of the user or community that owns the documents. Use a negative value to designate a community ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "docs.getTypes", params, response_model=responses.docs.GetTypes
         )
@@ -140,14 +172,18 @@ class DocsGetTypes(BaseMethod):
 class DocsGetUploadServer(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int) -> responses.docs.GetUploadServer:
+    async def __call__(self, group_id: int = None) -> responses.docs.GetUploadServer:
         """ docs.getUploadServer
         From Vk Docs: Returns the server address for document upload.
         Access from user token(s)
         :param group_id: Community ID (if the document will be uploaded to the community).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "docs.getUploadServer",
             params,
@@ -161,14 +197,20 @@ class DocsGetWallUploadServer(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, group_id: int) -> responses.docs.GetWallUploadServer:
+    async def __call__(
+        self, group_id: int = None
+    ) -> responses.docs.GetWallUploadServer:
         """ docs.getWallUploadServer
         From Vk Docs: Returns the server address for document upload onto a user's or community's wall.
         Access from user, group token(s)
         :param group_id: Community ID (if the document will be uploaded to the community).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "docs.getWallUploadServer",
             params,
@@ -182,7 +224,9 @@ class DocsSave(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, file: str, title: str, tags: str) -> responses.docs.Save:
+    async def __call__(
+        self, file: str, title: str = None, tags: str = None
+    ) -> responses.docs.Save:
         """ docs.save
         From Vk Docs: Saves a document after [vk.com/dev/upload_files_2|uploading it to a server].
         Access from user, group token(s)
@@ -191,7 +235,11 @@ class DocsSave(BaseMethod):
         :param tags: Document tags.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "docs.save", params, response_model=responses.docs.Save
         )
@@ -204,7 +252,7 @@ class DocsSearch(BaseMethod):
     ]
 
     async def __call__(
-        self, q: str, search_own: bool, count: int, offset: int
+        self, q: str, search_own: bool = None, count: int = None, offset: int = None
     ) -> responses.docs.Search:
         """ docs.search
         From Vk Docs: Returns a list of documents matching the search criteria.
@@ -215,7 +263,11 @@ class DocsSearch(BaseMethod):
         :param offset: Offset needed to return a specific subset of results.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "docs.search", params, response_model=responses.docs.Search
         )

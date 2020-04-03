@@ -4,56 +4,63 @@ from vkbottle.utils import ContextInstanceMixin
 
 from vkbottle.types.methods import *
 from .request import Request
+from .builtin import AbstractTokenGenerator, ConsistentTokenGenerator, GENERATORS
 
 
-def exception_handler(loop, context):
-    pass
-
-
-class ApiInstance(ContextInstanceMixin):
-    def __init__(self, token: str, throw_errors: bool = True):
-        self._token = token
-        self._request = HTTPRequest()
-        self.request = Request(self._token)
+class API(ContextInstanceMixin):
+    def __init__(
+        self,
+        tokens: typing.List[str] = None,
+        generator: typing.Union[str] = "consistent",
+        throw_errors: bool = True,
+    ):
+        self.token_generator: AbstractTokenGenerator = GENERATORS.get(
+            generator, ConsistentTokenGenerator
+        )(tokens)
+        self._http = HTTPRequest()
         self.throw_errors: bool = throw_errors
 
         # VK Api Methods
-        self.account = Account(self.request)
-        self.ads = Ads(self.request)
-        self.appwidgets = Appwidgets(self.request)
-        self.apps = Apps(self.request)
-        self.auth = Auth(self.request)
-        self.board = Board(self.request)
-        self.database = Database(self.request)
-        self.docs = Docs(self.request)
-        self.fave = Fave(self.request)
-        self.friends = Friends(self.request)
-        self.gifts = Gifts(self.request)
-        self.groups = Groups(self.request)
-        self.leads = Leads(self.request)
-        self.likes = Likes(self.request)
-        self.market = Market(self.request)
-        self.messages = Messages(self.request)
-        self.newsfeed = Newsfeed(self.request)
-        self.notes = Notes(self.request)
-        self.notifications = Notifications(self.request)
-        self.orders = Orders(self.request)
-        self.pages = Pages(self.request)
-        self.photos = Photos(self.request)
-        self.polls = Polls(self.request)
-        self.prettycards = Prettycards(self.request)
-        self.search = Search(self.request)
-        self.secure = Secure(self.request)
-        self.stats = Stats(self.request)
-        self.status = Status(self.request)
-        self.storage = Storage(self.request)
-        self.stories = Stories(self.request)
-        self.streaming = Streaming(self.request)
-        self.users = Users(self.request)
-        self.utils = Utils(self.request)
-        self.video = Video(self.request)
-        self.wall = Wall(self.request)
-        self.widgets = Widgets(self.request)
+        self.account = Account(self.api)
+        self.ads = Ads(self.api)
+        self.appwidgets = Appwidgets(self.api)
+        self.apps = Apps(self.api)
+        self.auth = Auth(self.api)
+        self.board = Board(self.api)
+        self.database = Database(self.api)
+        self.docs = Docs(self.api)
+        self.fave = Fave(self.api)
+        self.friends = Friends(self.api)
+        self.gifts = Gifts(self.api)
+        self.groups = Groups(self.api)
+        self.leads = Leads(self.api)
+        self.likes = Likes(self.api)
+        self.market = Market(self.api)
+        self.messages = Messages(self.api)
+        self.newsfeed = Newsfeed(self.api)
+        self.notes = Notes(self.api)
+        self.notifications = Notifications(self.api)
+        self.orders = Orders(self.api)
+        self.pages = Pages(self.api)
+        self.photos = Photos(self.api)
+        self.polls = Polls(self.api)
+        self.prettycards = Prettycards(self.api)
+        self.search = Search(self.api)
+        self.secure = Secure(self.api)
+        self.stats = Stats(self.api)
+        self.status = Status(self.api)
+        self.storage = Storage(self.api)
+        self.stories = Stories(self.api)
+        self.streaming = Streaming(self.api)
+        self.users = Users(self.api)
+        self.utils = Utils(self.api)
+        self.video = Video(self.api)
+        self.wall = Wall(self.api)
+        self.widgets = Widgets(self.api)
+
+    def api(self, *args, **kwargs):
+        request = Request(self.token_generator)
+        return request(*args, **kwargs)
 
     async def request(
         self,
@@ -63,7 +70,7 @@ class ApiInstance(ContextInstanceMixin):
         response_model=None,
         raw_response: bool = False,
     ):
-        return await self.request(
+        return await self.api(
             method,
             params,
             throw_errors=throw_errors,
@@ -72,9 +79,9 @@ class ApiInstance(ContextInstanceMixin):
         )
 
 
-class UserApi(ApiInstance, ContextInstanceMixin):
+class UserApi(API, ContextInstanceMixin):
     pass
 
 
-class Api(ApiInstance, ContextInstanceMixin):
+class Api(API, ContextInstanceMixin):
     pass

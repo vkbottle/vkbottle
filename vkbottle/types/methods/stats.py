@@ -11,15 +11,15 @@ class StatsGet(BaseMethod):
 
     async def __call__(
         self,
-        group_id: int,
-        app_id: int,
-        timestamp_from: int,
-        timestamp_to: int,
-        interval: str,
-        intervals_count: int,
-        filters: typing.List,
-        stats_groups: typing.List,
-        extended: bool,
+        group_id: int = None,
+        app_id: int = None,
+        timestamp_from: int = None,
+        timestamp_to: int = None,
+        interval: str = None,
+        intervals_count: int = None,
+        filters: typing.List = None,
+        stats_groups: typing.List = None,
+        extended: bool = None,
     ):
         """ stats.get
         From Vk Docs: Returns statistics of a community or an application.
@@ -35,7 +35,11 @@ class StatsGet(BaseMethod):
         :param extended: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stats.get", params)
 
 
@@ -50,7 +54,11 @@ class StatsGetPostReach(BaseMethod):
         :param post_id: wall post id. Note that stats are available only for '300' last (newest) posts on a community wall.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stats.getPostReach", params)
 
 
@@ -64,7 +72,11 @@ class StatsTrackVisitor(BaseMethod):
         :param id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("stats.trackVisitor", params)
 
 

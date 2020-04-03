@@ -9,7 +9,9 @@ from .method import BaseMethod
 class GiftsGet(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_id: int, count: int, offset: int):
+    async def __call__(
+        self, user_id: int = None, count: int = None, offset: int = None
+    ):
         """ gifts.get
         From Vk Docs: Returns a list of user gifts.
         Access from user token(s)
@@ -18,7 +20,11 @@ class GiftsGet(BaseMethod):
         :param offset: Offset needed to return a specific subset of results.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("gifts.get", params)
 
 

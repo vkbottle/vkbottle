@@ -262,7 +262,8 @@ class VBMLRule(VBML):
 class VBMLUserRule(VBML):
     async def check(self, message: user_longpoll.Message):
         patterns: typing.List[Pattern] = self.data["pattern"]
-        text = message.text.replace("<br>", "\n")
+
+        # noqa: due to strange vk behaviour
         message = (
             message.text.replace("<br>", "\n")
             .replace("&lt;", "<")

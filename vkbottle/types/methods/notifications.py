@@ -11,11 +11,11 @@ class NotificationsGet(BaseMethod):
 
     async def __call__(
         self,
-        count: int,
-        start_from: str,
-        filters: typing.List,
-        start_time: int,
-        end_time: int,
+        count: int = None,
+        start_from: str = None,
+        filters: typing.List = None,
+        start_time: int = None,
+        end_time: int = None,
     ):
         """ notifications.get
         From Vk Docs: Returns a list of notifications about other users' feedback to the current user's wall posts.
@@ -27,7 +27,11 @@ class NotificationsGet(BaseMethod):
         :param end_time: Latest timestamp (in Unix time) of a notification to return. By default, the current time.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("notifications.get", params)
 
 
@@ -41,7 +45,11 @@ class NotificationsMarkAsViewed(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("notifications.markAsViewed", params)
 
 
@@ -52,7 +60,11 @@ class NotificationsSendMessage(BaseMethod):
     ]
 
     async def __call__(
-        self, user_ids: typing.List, message: str, fragment: str, group_id: int
+        self,
+        user_ids: typing.List,
+        message: str,
+        fragment: str = None,
+        group_id: int = None,
     ):
         """ notifications.sendMessage
         From Vk Docs: 
@@ -63,7 +75,11 @@ class NotificationsSendMessage(BaseMethod):
         :param group_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("notifications.sendMessage", params)
 
 

@@ -10,7 +10,11 @@ class PollsAddVote(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, poll_id: int, answer_ids: typing.List, is_board: bool
+        self,
+        poll_id: int,
+        answer_ids: typing.List,
+        owner_id: int = None,
+        is_board: bool = None,
     ):
         """ polls.addVote
         From Vk Docs: Adds the current user's vote to the selected answer in the poll.
@@ -21,7 +25,11 @@ class PollsAddVote(BaseMethod):
         :param is_board: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("polls.addVote", params)
 
 
@@ -30,14 +38,14 @@ class PollsCreate(BaseMethod):
 
     async def __call__(
         self,
-        question: str,
-        is_anonymous: bool,
-        is_multiple: bool,
-        end_date: int,
-        owner_id: int,
-        add_answers: str,
-        photo_id: int,
-        background_id: str,
+        question: str = None,
+        is_anonymous: bool = None,
+        is_multiple: bool = None,
+        end_date: int = None,
+        owner_id: int = None,
+        add_answers: str = None,
+        photo_id: int = None,
+        background_id: str = None,
     ):
         """ polls.create
         From Vk Docs: Creates polls that can be attached to the users' or communities' posts.
@@ -52,7 +60,11 @@ class PollsCreate(BaseMethod):
         :param background_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("polls.create", params)
 
 
@@ -60,7 +72,7 @@ class PollsDeleteVote(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, poll_id: int, answer_id: int, is_board: bool
+        self, poll_id: int, answer_id: int, owner_id: int = None, is_board: bool = None
     ):
         """ polls.deleteVote
         From Vk Docs: Deletes the current user's vote from the selected answer in the poll.
@@ -71,7 +83,11 @@ class PollsDeleteVote(BaseMethod):
         :param is_board: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("polls.deleteVote", params)
 
 
@@ -80,15 +96,15 @@ class PollsEdit(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
         poll_id: int,
-        question: str,
-        add_answers: str,
-        edit_answers: str,
-        delete_answers: str,
-        end_date: int,
-        photo_id: int,
-        background_id: str,
+        owner_id: int = None,
+        question: str = None,
+        add_answers: str = None,
+        edit_answers: str = None,
+        delete_answers: str = None,
+        end_date: int = None,
+        photo_id: int = None,
+        background_id: str = None,
     ):
         """ polls.edit
         From Vk Docs: Edits created polls
@@ -104,7 +120,11 @@ class PollsEdit(BaseMethod):
         :param background_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("polls.edit", params)
 
 
@@ -113,13 +133,13 @@ class PollsGetById(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
-        is_board: bool,
         poll_id: int,
-        extended: bool,
-        friends_count: int,
-        fields: typing.List,
-        name_case: str,
+        owner_id: int = None,
+        is_board: bool = None,
+        extended: bool = None,
+        friends_count: int = None,
+        fields: typing.List = None,
+        name_case: str = None,
     ):
         """ polls.getById
         From Vk Docs: Returns detailed information about a poll by its ID.
@@ -133,7 +153,11 @@ class PollsGetById(BaseMethod):
         :param name_case: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("polls.getById", params)
 
 
@@ -142,15 +166,15 @@ class PollsGetVoters(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
         poll_id: int,
         answer_ids: typing.List,
-        is_board: bool,
-        friends_only: bool,
-        offset: int,
-        count: int,
-        fields: typing.List,
-        name_case: str,
+        owner_id: int = None,
+        is_board: bool = None,
+        friends_only: bool = None,
+        offset: int = None,
+        count: int = None,
+        fields: typing.List = None,
+        name_case: str = None,
     ):
         """ polls.getVoters
         From Vk Docs: Returns a list of IDs of users who selected specific answers in the poll.
@@ -166,7 +190,11 @@ class PollsGetVoters(BaseMethod):
         :param name_case: Case for declension of user name and surname: , 'nom' — nominative (default) , 'gen' — genitive , 'dat' — dative , 'acc' — accusative , 'ins' — instrumental , 'abl' — prepositional
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("polls.getVoters", params)
 
 

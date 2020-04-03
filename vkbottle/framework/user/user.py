@@ -15,6 +15,7 @@ from vkbottle.utils import logger
 DEFAULT_WAIT = 20
 VERSION = 3
 MODE = 2
+Token = typing.Union[str, typing.List[str]]
 
 
 class User(HTTP):
@@ -25,22 +26,25 @@ class User(HTTP):
 
     def __init__(
         self,
-        token: str,
+        tokens: Token = None,
         user_id: int = None,
         debug: bool = True,
         expand_models: bool = True,
         log_to_path: typing.Union[str, bool] = None,
         vbml_patcher: vbml.Patcher = None,
     ):
+        self.__tokens = [tokens] if isinstance(tokens, str) else tokens
         self.__loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
         self.__debug: bool = debug
-        self.__api: UserApi = UserApi(token)
-        UserApi.set_current(self.__api)
+        self.api: UserApi = UserApi(self.__tokens)
+        UserApi.set_current(self.api)
 
         self._expand_models: bool = expand_models
         self._patcher: vbml.Patcher = vbml_patcher or vbml.Patcher(pattern="^{}$")
 
-        self.user_id: typing.Optional[int] = user_id or self.get_id_by_token(token)
+        self.user_id: typing.Optional[int] = user_id or self.get_id_by_token(
+            self.__tokens[0]
+        )
         self.on: UserHandler = UserHandler(self._mode)
 
         self.logger = LoggerLevel("INFO" if debug else "ERROR")
@@ -59,10 +63,6 @@ class User(HTTP):
                 rotation="100 MB",
             )
 
-    @property
-    def api(self):
-        return self.__api
-
     @staticmethod
     def get_id_by_token(token: str):
         """
@@ -72,7 +72,7 @@ class User(HTTP):
         """
         logger.debug("Making API request users.get to get user_id")
         response = asyncio.get_event_loop().run_until_complete(
-            request(token, "users.get")
+            request("users.get", {}, token)
         )
         if "error" in response:
             raise VKError("Token is invalid")
@@ -83,10 +83,10 @@ class User(HTTP):
         Get longPoll server for long request creation
         :return:
         """
-        self.long_poll_server = await self.api.messages.getLongPollServer()
+        self.long_poll_server = (await self.api.messages.get_long_poll_server()).dict()
         return self.long_poll_server
 
-    async def make_long_request(self, long_poll_server: dict) -> dict:
+    async def make_long_request(self, long_poll_server) -> dict:
         """
         Make longPoll request to the VK Server
         :param long_poll_server:
@@ -177,14 +177,17 @@ class User(HTTP):
             logger.error("Keyboard Interrupt")
             exit(0)
 
-    async def expand_data(self, code: int, data: dict):
+    async def expand_data(self, code: int, data):
         if code in range(6):
+            print(await self.api.request(
+                        "messages.getById", {"message_ids": data["message_id"]},
+                    ))
             data.update(
                 (
                     await self.api.request(
                         "messages.getById", {"message_ids": data["message_id"]},
                     )
-                )["items"][0]
+                )["response"]["items"][0]
             )
         return data
 

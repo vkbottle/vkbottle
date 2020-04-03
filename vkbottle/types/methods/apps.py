@@ -16,7 +16,11 @@ class AppsDeleteAppRequests(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "apps.deleteAppRequests",
             params,
@@ -32,13 +36,13 @@ class AppsGet(BaseMethod):
 
     async def __call__(
         self,
-        app_id: int,
-        app_ids: typing.List,
-        platform: str,
-        extended: bool,
-        return_friends: bool,
-        fields: typing.List,
-        name_case: str,
+        app_id: int = None,
+        app_ids: typing.List = None,
+        platform: str = None,
+        extended: bool = None,
+        return_friends: bool = None,
+        fields: typing.List = None,
+        name_case: str = None,
     ) -> responses.apps.Get:
         """ apps.get
         From Vk Docs: Returns applications data.
@@ -52,7 +56,11 @@ class AppsGet(BaseMethod):
         :param name_case: Case for declension of user name and surname: 'nom' — nominative (default),, 'gen' — genitive,, 'dat' — dative,, 'acc' — accusative,, 'ins' — instrumental,, 'abl' — prepositional. (only if 'return_friends' = '1')
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("apps.get", params, response_model=responses.apps.Get)
 
 
@@ -64,17 +72,17 @@ class AppsGetCatalog(BaseMethod):
 
     async def __call__(
         self,
-        sort: str,
-        offset: int,
         count: int,
-        platform: str,
-        extended: bool,
-        return_friends: bool,
-        fields: typing.List,
-        name_case: str,
-        q: str,
-        genre_id: int,
-        filter: str,
+        sort: str = None,
+        offset: int = None,
+        platform: str = None,
+        extended: bool = None,
+        return_friends: bool = None,
+        fields: typing.List = None,
+        name_case: str = None,
+        q: str = None,
+        genre_id: int = None,
+        filter: str = None,
     ) -> responses.apps.GetCatalog:
         """ apps.getCatalog
         From Vk Docs: Returns a list of applications (apps) available to users in the App Catalog.
@@ -92,7 +100,11 @@ class AppsGetCatalog(BaseMethod):
         :param filter: 'installed' — to return list of installed apps (only for mobile platform).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "apps.getCatalog", params, response_model=responses.apps.GetCatalog
         )
@@ -102,7 +114,12 @@ class AppsGetFriendsList(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, extended: bool, count: int, offset: int, type: str, fields: typing.List
+        self,
+        extended: bool = None,
+        count: int = None,
+        offset: int = None,
+        type: str = None,
+        fields: typing.List = None,
     ) -> responses.apps.GetFriendsList:
         """ apps.getFriendsList
         From Vk Docs: Creates friends list for requests and invites in current app.
@@ -114,7 +131,11 @@ class AppsGetFriendsList(BaseMethod):
         :param fields: Additional profile fields, see [vk.com/dev/fields|description].
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "apps.getFriendsList", params, response_model=responses.apps.GetFriendsList
         )
@@ -124,16 +145,21 @@ class AppsGetLeaderboard(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, type: str, extended: bool
+        self, type: str, global_: bool = None, extended: bool = None
     ) -> responses.apps.GetLeaderboard:
         """ apps.getLeaderboard
         From Vk Docs: Returns players rating in the game.
         Access from user token(s)
         :param type: Leaderboard type. Possible values: *'level' — by level,, *'points' — by mission points,, *'score' — by score ().
+        :param global: Rating type. Possible values: *'1' — global rating among all players,, *'0' — rating among user friends.
         :param extended: 1 — to return additional info about users
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "apps.getLeaderboard", params, response_model=responses.apps.GetLeaderboard
         )
@@ -142,14 +168,18 @@ class AppsGetLeaderboard(BaseMethod):
 class AppsGetScopes(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, type: str) -> responses.apps.GetScopes:
+    async def __call__(self, type: str = None) -> responses.apps.GetScopes:
         """ apps.getScopes
         From Vk Docs: Returns scopes for auth
         Access from user token(s)
         :param type: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "apps.getScopes", params, response_model=responses.apps.GetScopes
         )
@@ -165,7 +195,11 @@ class AppsGetScore(BaseMethod):
         :param user_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "apps.getScore", params, response_model=responses.apps.GetScore
         )
@@ -175,7 +209,13 @@ class AppsSendRequest(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, user_id: int, text: str, type: str, name: str, key: str, separate: bool
+        self,
+        user_id: int,
+        text: str = None,
+        type: str = None,
+        name: str = None,
+        key: str = None,
+        separate: bool = None,
     ) -> responses.apps.SendRequest:
         """ apps.sendRequest
         From Vk Docs: Sends a request to another user in an app that uses VK authorization.
@@ -188,7 +228,11 @@ class AppsSendRequest(BaseMethod):
         :param separate: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "apps.sendRequest", params, response_model=responses.apps.SendRequest
         )

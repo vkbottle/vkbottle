@@ -13,7 +13,7 @@ class DatabaseGetChairs(BaseMethod):
     ]
 
     async def __call__(
-        self, faculty_id: int, offset: int, count: int
+        self, faculty_id: int, offset: int = None, count: int = None
     ) -> responses.database.GetChairs:
         """ database.getChairs
         From Vk Docs: Returns list of chairs on a specified faculty.
@@ -23,7 +23,11 @@ class DatabaseGetChairs(BaseMethod):
         :param count: amount of chairs to get
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getChairs", params, response_model=responses.database.GetChairs
         )
@@ -35,11 +39,11 @@ class DatabaseGetCities(BaseMethod):
     async def __call__(
         self,
         country_id: int,
-        region_id: int,
-        q: str,
-        need_all: bool,
-        offset: int,
-        count: int,
+        region_id: int = None,
+        q: str = None,
+        need_all: bool = None,
+        offset: int = None,
+        count: int = None,
     ) -> responses.database.GetCities:
         """ database.getCities
         From Vk Docs: Returns a list of cities.
@@ -52,7 +56,11 @@ class DatabaseGetCities(BaseMethod):
         :param count: Number of cities to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getCities", params, response_model=responses.database.GetCities
         )
@@ -64,14 +72,20 @@ class DatabaseGetCitiesById(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, city_ids: typing.List) -> responses.database.GetCitiesById:
+    async def __call__(
+        self, city_ids: typing.List = None
+    ) -> responses.database.GetCitiesById:
         """ database.getCitiesById
         From Vk Docs: Returns information about cities by their IDs.
         Access from user, service token(s)
         :param city_ids: City IDs.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getCitiesById",
             params,
@@ -83,7 +97,11 @@ class DatabaseGetCountries(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, need_all: bool, code: str, offset: int, count: int
+        self,
+        need_all: bool = None,
+        code: str = None,
+        offset: int = None,
+        count: int = None,
     ) -> responses.database.GetCountries:
         """ database.getCountries
         From Vk Docs: Returns a list of countries.
@@ -94,7 +112,11 @@ class DatabaseGetCountries(BaseMethod):
         :param count: Number of countries to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getCountries",
             params,
@@ -109,7 +131,7 @@ class DatabaseGetCountriesById(BaseMethod):
     ]
 
     async def __call__(
-        self, country_ids: typing.List
+        self, country_ids: typing.List = None
     ) -> responses.database.GetCountriesById:
         """ database.getCountriesById
         From Vk Docs: Returns information about countries by their IDs.
@@ -117,7 +139,11 @@ class DatabaseGetCountriesById(BaseMethod):
         :param country_ids: Country IDs.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getCountriesById",
             params,
@@ -132,7 +158,7 @@ class DatabaseGetFaculties(BaseMethod):
     ]
 
     async def __call__(
-        self, university_id: int, offset: int, count: int
+        self, university_id: int, offset: int = None, count: int = None
     ) -> responses.database.GetFaculties:
         """ database.getFaculties
         From Vk Docs: Returns a list of faculties (i.e., university departments).
@@ -142,7 +168,11 @@ class DatabaseGetFaculties(BaseMethod):
         :param count: Number of faculties to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getFaculties",
             params,
@@ -157,7 +187,7 @@ class DatabaseGetMetroStations(BaseMethod):
     ]
 
     async def __call__(
-        self, city_id: int, offset: int, count: int, extended: bool
+        self, city_id: int, offset: int = None, count: int = None, extended: bool = None
     ) -> responses.database.GetMetroStations:
         """ database.getMetroStations
         From Vk Docs: Get metro stations by city
@@ -168,7 +198,11 @@ class DatabaseGetMetroStations(BaseMethod):
         :param extended: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getMetroStations",
             params,
@@ -183,7 +217,7 @@ class DatabaseGetMetroStationsById(BaseMethod):
     ]
 
     async def __call__(
-        self, station_ids: typing.List
+        self, station_ids: typing.List = None
     ) -> responses.database.GetMetroStationsById:
         """ database.getMetroStationsById
         From Vk Docs: Get metro station by his id
@@ -191,7 +225,11 @@ class DatabaseGetMetroStationsById(BaseMethod):
         :param station_ids: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getMetroStationsById",
             params,
@@ -206,7 +244,7 @@ class DatabaseGetRegions(BaseMethod):
     ]
 
     async def __call__(
-        self, country_id: int, q: str, offset: int, count: int
+        self, country_id: int, q: str = None, offset: int = None, count: int = None
     ) -> responses.database.GetRegions:
         """ database.getRegions
         From Vk Docs: Returns a list of regions.
@@ -217,7 +255,11 @@ class DatabaseGetRegions(BaseMethod):
         :param count: Number of regions to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getRegions", params, response_model=responses.database.GetRegions
         )
@@ -229,14 +271,20 @@ class DatabaseGetSchoolClasses(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, country_id: int) -> responses.database.GetSchoolClasses:
+    async def __call__(
+        self, country_id: int = None
+    ) -> responses.database.GetSchoolClasses:
         """ database.getSchoolClasses
         From Vk Docs: Returns a list of school classes specified for the country.
         Access from user, service token(s)
         :param country_id: Country ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getSchoolClasses",
             params,
@@ -251,7 +299,7 @@ class DatabaseGetSchools(BaseMethod):
     ]
 
     async def __call__(
-        self, q: str, city_id: int, offset: int, count: int
+        self, city_id: int, q: str = None, offset: int = None, count: int = None
     ) -> responses.database.GetSchools:
         """ database.getSchools
         From Vk Docs: Returns a list of schools.
@@ -262,7 +310,11 @@ class DatabaseGetSchools(BaseMethod):
         :param count: Number of schools to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getSchools", params, response_model=responses.database.GetSchools
         )
@@ -275,7 +327,12 @@ class DatabaseGetUniversities(BaseMethod):
     ]
 
     async def __call__(
-        self, q: str, country_id: int, city_id: int, offset: int, count: int
+        self,
+        q: str = None,
+        country_id: int = None,
+        city_id: int = None,
+        offset: int = None,
+        count: int = None,
     ) -> responses.database.GetUniversities:
         """ database.getUniversities
         From Vk Docs: Returns a list of higher education institutions.
@@ -287,7 +344,11 @@ class DatabaseGetUniversities(BaseMethod):
         :param count: Number of universities to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "database.getUniversities",
             params,

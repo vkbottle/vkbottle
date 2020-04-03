@@ -9,14 +9,18 @@ from .method import BaseMethod
 class AccountBan(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int) -> responses.account.Ban:
+    async def __call__(self, owner_id: int = None) -> responses.account.Ban:
         """ account.ban
         From Vk Docs: 
         Access from user token(s)
         :param owner_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.ban", params, response_model=responses.account.Ban
         )
@@ -27,10 +31,10 @@ class AccountChangePassword(BaseMethod):
 
     async def __call__(
         self,
-        restore_sid: str,
-        change_password_hash: str,
-        old_password: str,
         new_password: str,
+        restore_sid: str = None,
+        change_password_hash: str = None,
+        old_password: str = None,
     ) -> responses.account.ChangePassword:
         """ account.changePassword
         From Vk Docs: Changes a user password after access is successfully restored with the [vk.com/dev/auth.restore|auth.restore] method.
@@ -41,7 +45,11 @@ class AccountChangePassword(BaseMethod):
         :param new_password: New password that will be set as a current
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.changePassword",
             params,
@@ -53,7 +61,7 @@ class AccountGetActiveOffers(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, offset: int, count: int
+        self, offset: int = None, count: int = None
     ) -> responses.account.GetActiveOffers:
         """ account.getActiveOffers
         From Vk Docs: Returns a list of active ads (offers) which executed by the user will bring him/her respective number of votes to his balance in the application.
@@ -62,7 +70,11 @@ class AccountGetActiveOffers(BaseMethod):
         :param count: Number of results to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.getActiveOffers",
             params,
@@ -80,7 +92,11 @@ class AccountGetAppPermissions(BaseMethod):
         :param user_id: User ID whose settings information shall be got. By default: current user.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.getAppPermissions",
             params,
@@ -91,7 +107,9 @@ class AccountGetAppPermissions(BaseMethod):
 class AccountGetBanned(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, offset: int, count: int) -> responses.account.GetBanned:
+    async def __call__(
+        self, offset: int = None, count: int = None
+    ) -> responses.account.GetBanned:
         """ account.getBanned
         From Vk Docs: Returns a user's blacklist.
         Access from user token(s)
@@ -99,7 +117,11 @@ class AccountGetBanned(BaseMethod):
         :param count: Number of results to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.getBanned", params, response_model=responses.account.GetBanned
         )
@@ -108,14 +130,20 @@ class AccountGetBanned(BaseMethod):
 class AccountGetCounters(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, filter: typing.List) -> responses.account.GetCounters:
+    async def __call__(
+        self, filter: typing.List = None
+    ) -> responses.account.GetCounters:
         """ account.getCounters
         From Vk Docs: Returns non-null values of user counters.
         Access from user token(s)
         :param filter: Counters to be returned.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.getCounters", params, response_model=responses.account.GetCounters
         )
@@ -124,14 +152,18 @@ class AccountGetCounters(BaseMethod):
 class AccountGetInfo(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, fields: typing.List) -> responses.account.GetInfo:
+    async def __call__(self, fields: typing.List = None) -> responses.account.GetInfo:
         """ account.getInfo
         From Vk Docs: Returns current account info.
         Access from user token(s)
         :param fields: Fields to return. Possible values: *'country' — user country,, *'https_required' — is "HTTPS only" option enabled,, *'own_posts_default' — is "Show my posts only" option is enabled,, *'no_wall_replies' — are wall replies disabled or not,, *'intro' — is intro passed by user or not,, *'lang' — user language. By default: all.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.getInfo", params, response_model=responses.account.GetInfo
         )
@@ -147,7 +179,11 @@ class AccountGetProfileInfo(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.getProfileInfo",
             params,
@@ -158,14 +194,20 @@ class AccountGetProfileInfo(BaseMethod):
 class AccountGetPushSettings(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, device_id: str) -> responses.account.GetPushSettings:
+    async def __call__(
+        self, device_id: str = None
+    ) -> responses.account.GetPushSettings:
         """ account.getPushSettings
         From Vk Docs: Gets settings of push notifications.
         Access from user token(s)
         :param device_id: Unique device ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.getPushSettings",
             params,
@@ -179,12 +221,12 @@ class AccountRegisterDevice(BaseMethod):
     async def __call__(
         self,
         token: str,
-        device_model: str,
-        device_year: int,
         device_id: str,
-        system_version: str,
-        settings: str,
-        sandbox: bool,
+        device_model: str = None,
+        device_year: int = None,
+        system_version: str = None,
+        settings: str = None,
+        sandbox: bool = None,
     ) -> responses.account.RegisterDevice:
         """ account.registerDevice
         From Vk Docs: Subscribes an iOS/Android/Windows Phone-based device to receive push notifications
@@ -198,7 +240,11 @@ class AccountRegisterDevice(BaseMethod):
         :param sandbox: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.registerDevice",
             params,
@@ -211,20 +257,20 @@ class AccountSaveProfileInfo(BaseMethod):
 
     async def __call__(
         self,
-        first_name: str,
-        last_name: str,
-        maiden_name: str,
-        screen_name: str,
-        cancel_request_id: int,
-        sex: int,
-        relation: int,
-        relation_partner_id: int,
-        bdate: str,
-        bdate_visibility: int,
-        home_town: str,
-        country_id: int,
-        city_id: int,
-        status: str,
+        first_name: str = None,
+        last_name: str = None,
+        maiden_name: str = None,
+        screen_name: str = None,
+        cancel_request_id: int = None,
+        sex: int = None,
+        relation: int = None,
+        relation_partner_id: int = None,
+        bdate: str = None,
+        bdate_visibility: int = None,
+        home_town: str = None,
+        country_id: int = None,
+        city_id: int = None,
+        status: str = None,
     ) -> responses.account.SaveProfileInfo:
         """ account.saveProfileInfo
         From Vk Docs: Edits current profile info.
@@ -245,7 +291,11 @@ class AccountSaveProfileInfo(BaseMethod):
         :param status: Status text.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.saveProfileInfo",
             params,
@@ -256,7 +306,9 @@ class AccountSaveProfileInfo(BaseMethod):
 class AccountSetInfo(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, name: str, value: str) -> responses.account.SetInfo:
+    async def __call__(
+        self, name: str = None, value: str = None
+    ) -> responses.account.SetInfo:
         """ account.setInfo
         From Vk Docs: Allows to edit the current account info.
         Access from user token(s)
@@ -264,7 +316,11 @@ class AccountSetInfo(BaseMethod):
         :param value: Setting value.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.setInfo", params, response_model=responses.account.SetInfo
         )
@@ -274,7 +330,7 @@ class AccountSetNameInMenu(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, user_id: int, name: str
+        self, user_id: int, name: str = None
     ) -> responses.account.SetNameInMenu:
         """ account.setNameInMenu
         From Vk Docs: Sets an application screen name (up to 17 characters), that is shown to the user in the left menu.
@@ -283,7 +339,11 @@ class AccountSetNameInMenu(BaseMethod):
         :param name: Application screen name.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.setNameInMenu",
             params,
@@ -301,7 +361,11 @@ class AccountSetOffline(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.setOffline", params, response_model=responses.account.SetOffline
         )
@@ -310,14 +374,18 @@ class AccountSetOffline(BaseMethod):
 class AccountSetOnline(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, voip: bool) -> responses.account.SetOnline:
+    async def __call__(self, voip: bool = None) -> responses.account.SetOnline:
         """ account.setOnline
         From Vk Docs: Marks the current user as online for 15 minutes.
         Access from user token(s)
         :param voip: '1' if videocalls are available for current device.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.setOnline", params, response_model=responses.account.SetOnline
         )
@@ -327,7 +395,11 @@ class AccountSetPushSettings(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, device_id: str, settings: str, key: str, value: typing.List
+        self,
+        device_id: str,
+        settings: str = None,
+        key: str = None,
+        value: typing.List = None,
     ) -> responses.account.SetPushSettings:
         """ account.setPushSettings
         From Vk Docs: Change push settings.
@@ -338,7 +410,11 @@ class AccountSetPushSettings(BaseMethod):
         :param value: New value for the key in a [vk.com/dev/push_settings|special format].
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.setPushSettings",
             params,
@@ -350,7 +426,11 @@ class AccountSetSilenceMode(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, device_id: str, time: int, peer_id: int, sound: int
+        self,
+        device_id: str = None,
+        time: int = None,
+        peer_id: int = None,
+        sound: int = None,
     ) -> responses.account.SetSilenceMode:
         """ account.setSilenceMode
         From Vk Docs: Mutes push notifications for the set period of time.
@@ -361,7 +441,11 @@ class AccountSetSilenceMode(BaseMethod):
         :param sound: '1' — to enable sound in this dialog, '0' — to disable sound. Only if 'peer_id' contains user or community ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.setSilenceMode",
             params,
@@ -372,14 +456,18 @@ class AccountSetSilenceMode(BaseMethod):
 class AccountUnban(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int) -> responses.account.Unban:
+    async def __call__(self, owner_id: int = None) -> responses.account.Unban:
         """ account.unban
         From Vk Docs: 
         Access from user token(s)
         :param owner_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.unban", params, response_model=responses.account.Unban
         )
@@ -389,7 +477,7 @@ class AccountUnregisterDevice(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, device_id: str, sandbox: bool
+        self, device_id: str = None, sandbox: bool = None
     ) -> responses.account.UnregisterDevice:
         """ account.unregisterDevice
         From Vk Docs: Unsubscribes a device from push notifications.
@@ -398,7 +486,11 @@ class AccountUnregisterDevice(BaseMethod):
         :param sandbox: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "account.unregisterDevice",
             params,

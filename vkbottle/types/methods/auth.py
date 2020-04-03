@@ -10,7 +10,11 @@ class AuthCheckPhone(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER, APIAccessibility.OPEN]
 
     async def __call__(
-        self, phone: str, client_id: int, client_secret: str, auth_by_phone: bool
+        self,
+        phone: str,
+        client_id: int = None,
+        client_secret: str = None,
+        auth_by_phone: bool = None,
     ) -> responses.auth.CheckPhone:
         """ auth.checkPhone
         From Vk Docs: Checks a user's phone number for correctness.
@@ -21,7 +25,11 @@ class AuthCheckPhone(BaseMethod):
         :param auth_by_phone: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "auth.checkPhone", params, response_model=responses.auth.CheckPhone
         )
@@ -30,9 +38,7 @@ class AuthCheckPhone(BaseMethod):
 class AuthRestore(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER, APIAccessibility.OPEN]
 
-    async def __call__(
-        self, phone: str, last_name: str
-    ) -> responses.auth.RestoreResponse:
+    async def __call__(self, phone: str, last_name: str) -> dict:
         """ auth.restore
         From Vk Docs: Allows to restore account access using a code received via SMS. " This method is only available for apps with [vk.com/dev/auth_direct|Direct authorization] access. "
         Access from user, open token(s)
@@ -40,12 +46,13 @@ class AuthRestore(BaseMethod):
         :param last_name: User last name.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
-            "auth.restore",
-            params,
-            response_model=responses.auth.RestoreResponse,
-            raw_response=True,
+            "auth.restore", params
         )
 
 

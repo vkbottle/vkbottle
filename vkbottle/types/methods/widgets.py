@@ -14,13 +14,13 @@ class WidgetsGetComments(BaseMethod):
 
     async def __call__(
         self,
-        widget_api_id: int,
-        url: str,
-        page_id: str,
-        order: str,
-        fields: typing.List,
-        offset: int,
-        count: int,
+        widget_api_id: int = None,
+        url: str = None,
+        page_id: str = None,
+        order: str = None,
+        fields: typing.List = None,
+        offset: int = None,
+        count: int = None,
     ):
         """ widgets.getComments
         From Vk Docs: Gets a list of comments for the page added through the [vk.com/dev/Comments|Comments widget].
@@ -34,7 +34,11 @@ class WidgetsGetComments(BaseMethod):
         :param count: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("widgets.getComments", params)
 
 
@@ -45,7 +49,12 @@ class WidgetsGetPages(BaseMethod):
     ]
 
     async def __call__(
-        self, widget_api_id: int, order: str, period: str, offset: int, count: int
+        self,
+        widget_api_id: int = None,
+        order: str = None,
+        period: str = None,
+        offset: int = None,
+        count: int = None,
     ):
         """ widgets.getPages
         From Vk Docs: Gets a list of application/site pages where the [vk.com/dev/Comments|Comments widget] or [vk.com/dev/Like|Like widget] is installed.
@@ -57,7 +66,11 @@ class WidgetsGetPages(BaseMethod):
         :param count: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("widgets.getPages", params)
 
 

@@ -10,9 +10,9 @@ Described in code comments
 # STANDART HANDLERS
 
 
-@bot.on.message(text="hi")
+@bot.on.message(text=["hi", "hello"])
 async def wrapper(ans: Message):
-    # Works if message 'hi' in private dialog is received
+    # Works if message 'hi' or 'hello' in private dialog is received
     await ans("hi")
 
 
@@ -26,18 +26,6 @@ async def wrapper(ans: Message):
 async def wrapper(ans: Message):
     # Works if message 'apple' in both (chat or private) dialog received
     await ans("steve jobs..((((")
-
-
-@bot.on.chat_message.startswith(text="/start")
-async def wrapper(ans: Message):
-    # Works if message in chat starts with '/start'
-    await ans("this message starts with /start, yes?")
-
-
-@bot.on.message_handler.regex(".*?sad.*?")
-async def wrapper(ans: Message):
-    # Works if regex match r'.*?sad.*?' is True
-    await ans("sadness, im sad, sadistic. its all on my own!")
 
 
 # EVENT HANDLER

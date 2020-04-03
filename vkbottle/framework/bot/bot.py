@@ -3,7 +3,7 @@ import sys
 import traceback
 import typing
 
-from vbml import Patcher, PatchedValidators
+from vbml import Patcher
 
 from vkbottle.http import HTTP
 from vkbottle.types.events import EventList
@@ -12,30 +12,22 @@ from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework._status import BotStatus, LoggerLevel
 from vkbottle.framework.framework.branch import BranchManager
 from vkbottle.framework.bot.processor import AsyncHandleManager
+from vkbottle.framework.bot.builtin import DefaultValidators, DEFAULT_WAIT
 from vkbottle.api import Api, request
 from vkbottle.api import VKError
-from vkbottle.const import VBML_INSTALL
 from vkbottle.utils import logger, TaskManager, chunks
 from vkbottle.utils.json import USAGE
 
-try:
-    import vbml
-except ImportError:
-    print("Please install vbml to use VKBottle. Use command: {}".format(VBML_INSTALL))
 
 try:
     import uvloop
 
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
-    pass
+    uvloop = None
 
 
-DEFAULT_WAIT = 20
-
-
-class DefaultValidators(PatchedValidators):
-    pass
+Token = typing.Union[str, typing.List[str]]
 
 
 class Bot(HTTP, AsyncHandleManager):
@@ -43,7 +35,7 @@ class Bot(HTTP, AsyncHandleManager):
 
     def __init__(
         self,
-        token: str,
+        tokens: Token = None,
         *,
         group_id: int = None,
         debug: typing.Union[str, bool] = True,
@@ -55,14 +47,16 @@ class Bot(HTTP, AsyncHandleManager):
     ):
         """
         Init bot
-        :param token: bot token
+        :param tokens: bot tokens
         :param group_id: [auto]
         :param debug: should bot debug messages for emulating
         :param log_to_path: make logs
         :param secret: secret vk code for callback
         """
         # Base bot classifiers
-        self.__token: str = token
+        self.__tokens: typing.List[str] = [tokens] if isinstance(
+            tokens, str
+        ) else tokens
         self.__debug: bool = debug
         self.__wait = None
         self.__secret = secret
@@ -98,11 +92,11 @@ class Bot(HTTP, AsyncHandleManager):
             )
 
         # Sign assets
-        self.__api: Api = Api(token, throw_errors=throw_errors)
+        self.api: Api = Api(self.__tokens, throw_errors=throw_errors)
         self._throw_errors: bool = throw_errors
-        Api.set_current(self.__api)
+        Api.set_current(self.api)
 
-        self.group_id = group_id or self.get_id_by_token(token)
+        self.group_id = group_id or self.get_id_by_token(self.__tokens[0])
         self.__loop = asyncio.get_event_loop()
 
         # Main workers
@@ -178,7 +172,7 @@ class Bot(HTTP, AsyncHandleManager):
         )
         if "error" in response:
             raise VKError("Token is invalid")
-        return response[0]["id"]
+        return response["response"][0]["id"]
 
     def _check_secret(self, event: dict):
         """
@@ -194,7 +188,7 @@ class Bot(HTTP, AsyncHandleManager):
         return True
 
     def executor_api(self, api):
-        self.__api = api
+        self.api = api
         Api.set_current(api)
 
     def loop_update(self, loop: asyncio.AbstractEventLoop = None):
@@ -211,7 +205,7 @@ class Bot(HTTP, AsyncHandleManager):
         Create an empty copy of Bot
         :return: Bot
         """
-        copy = Bot(self.__token, group_id=self.group_id, debug=self.__debug,)
+        copy = Bot(self.__tokens, group_id=self.group_id, debug=self.__debug,)
         return copy
 
     def copy(self) -> "Bot":
@@ -231,9 +225,9 @@ class Bot(HTTP, AsyncHandleManager):
         Get longPoll server for long request create
         :return: LongPoll Server
         """
-        self.long_poll_server = (await self.api.groups.get_long_poll_server(
-            group_id=self.group_id
-        )).dict()
+        self.long_poll_server = (
+            await self.api.groups.get_long_poll_server(group_id=self.group_id)
+        ).dict()
         return self.long_poll_server
 
     async def make_long_request(self, long_poll_server: dict) -> dict:
@@ -397,10 +391,6 @@ class Bot(HTTP, AsyncHandleManager):
     @property
     def loop(self):
         return self.__loop
-
-    @property
-    def api(self):
-        return self.__api
 
     @property
     def patcher(self):

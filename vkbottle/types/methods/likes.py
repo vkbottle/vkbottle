@@ -10,7 +10,7 @@ class LikesAdd(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, type: str, owner_id: int, item_id: int, access_key: str
+        self, type: str, item_id: int, owner_id: int = None, access_key: str = None
     ) -> responses.likes.Add:
         """ likes.add
         From Vk Docs: Adds the specified object to the 'Likes' list of the current user.
@@ -21,7 +21,11 @@ class LikesAdd(BaseMethod):
         :param access_key: Access key required for an object owned by a private entity.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "likes.add", params, response_model=responses.likes.Add
         )
@@ -31,7 +35,7 @@ class LikesDelete(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, type: str, owner_id: int, item_id: int
+        self, type: str, item_id: int, owner_id: int = None
     ) -> responses.likes.Delete:
         """ likes.delete
         From Vk Docs: Deletes the specified object from the 'Likes' list of the current user.
@@ -41,7 +45,11 @@ class LikesDelete(BaseMethod):
         :param item_id: Object ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "likes.delete", params, response_model=responses.likes.Delete
         )
@@ -56,15 +64,15 @@ class LikesGetList(BaseMethod):
     async def __call__(
         self,
         type: str,
-        owner_id: int,
-        item_id: int,
-        page_url: str,
-        filter: str,
-        friends_only: int,
-        extended: bool,
-        offset: int,
-        count: int,
-        skip_own: bool,
+        owner_id: int = None,
+        item_id: int = None,
+        page_url: str = None,
+        filter: str = None,
+        friends_only: int = None,
+        extended: bool = None,
+        offset: int = None,
+        count: int = None,
+        skip_own: bool = None,
     ) -> responses.likes.GetList:
         """ likes.getList
         From Vk Docs: Returns a list of IDs of users who added the specified object to their 'Likes' list.
@@ -81,7 +89,11 @@ class LikesGetList(BaseMethod):
         :param skip_own: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "likes.getList", params, response_model=responses.likes.GetList
         )
@@ -91,7 +103,7 @@ class LikesIsLiked(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, user_id: int, type: str, owner_id: int, item_id: int
+        self, type: str, item_id: int, user_id: int = None, owner_id: int = None
     ) -> responses.likes.IsLiked:
         """ likes.isLiked
         From Vk Docs: Checks for the object in the 'Likes' list of the specified user.
@@ -102,7 +114,11 @@ class LikesIsLiked(BaseMethod):
         :param item_id: Object ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "likes.isLiked", params, response_model=responses.likes.IsLiked
         )

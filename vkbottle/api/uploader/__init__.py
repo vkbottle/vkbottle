@@ -1,3 +1,3 @@
-from .uploader import Uploader
+from .base import Uploader
 from .photo import PhotoUploader
 from .doc import DocUploader

@@ -9,7 +9,7 @@ from .method import BaseMethod
 class VideoAdd(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, target_id: int, video_id: int, owner_id: int):
+    async def __call__(self, video_id: int, owner_id: int, target_id: int = None):
         """ video.add
         From Vk Docs: Adds a video to a user or community page.
         Access from user token(s)
@@ -18,14 +18,20 @@ class VideoAdd(BaseMethod):
         :param owner_id: ID of the user or community that owns the video. Use a negative value to designate a community ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.add", params)
 
 
 class VideoAddAlbum(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int, title: str, privacy: typing.List):
+    async def __call__(
+        self, group_id: int = None, title: str = None, privacy: typing.List = None
+    ):
         """ video.addAlbum
         From Vk Docs: Creates an empty album for videos.
         Access from user token(s)
@@ -34,7 +40,11 @@ class VideoAddAlbum(BaseMethod):
         :param privacy: new access permissions for the album. Possible values: , *'0' – all users,, *'1' – friends only,, *'2' – friends and friends of friends,, *'3' – "only me".
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.addAlbum", params)
 
 
@@ -43,11 +53,11 @@ class VideoAddToAlbum(BaseMethod):
 
     async def __call__(
         self,
-        target_id: int,
-        album_id: int,
-        album_ids: typing.List,
-        owner_id: int,
         video_id: int,
+        owner_id: int,
+        target_id: int = None,
+        album_id: int = None,
+        album_ids: typing.List = None,
     ):
         """ video.addToAlbum
         From Vk Docs: 
@@ -59,7 +69,11 @@ class VideoAddToAlbum(BaseMethod):
         :param video_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.addToAlbum", params)
 
 
@@ -68,14 +82,14 @@ class VideoCreateComment(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
         video_id: int,
-        message: str,
-        attachments: typing.List,
-        from_group: bool,
-        reply_to_comment: int,
-        sticker_id: int,
-        guid: str,
+        owner_id: int = None,
+        message: str = None,
+        attachments: typing.List = None,
+        from_group: bool = None,
+        reply_to_comment: int = None,
+        sticker_id: int = None,
+        guid: str = None,
     ):
         """ video.createComment
         From Vk Docs: Adds a new comment on a video.
@@ -90,14 +104,20 @@ class VideoCreateComment(BaseMethod):
         :param guid: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.createComment", params)
 
 
 class VideoDelete(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, video_id: int, owner_id: int, target_id: int):
+    async def __call__(
+        self, video_id: int, owner_id: int = None, target_id: int = None
+    ):
         """ video.delete
         From Vk Docs: Deletes a video from a user or community page.
         Access from user token(s)
@@ -106,14 +126,18 @@ class VideoDelete(BaseMethod):
         :param target_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.delete", params)
 
 
 class VideoDeleteAlbum(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int, album_id: int):
+    async def __call__(self, album_id: int, group_id: int = None):
         """ video.deleteAlbum
         From Vk Docs: Deletes a video album.
         Access from user token(s)
@@ -121,14 +145,18 @@ class VideoDeleteAlbum(BaseMethod):
         :param album_id: Album ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.deleteAlbum", params)
 
 
 class VideoDeleteComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, comment_id: int):
+    async def __call__(self, comment_id: int, owner_id: int = None):
         """ video.deleteComment
         From Vk Docs: Deletes a comment on a video.
         Access from user token(s)
@@ -136,7 +164,11 @@ class VideoDeleteComment(BaseMethod):
         :param comment_id: ID of the comment to be deleted.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.deleteComment", params)
 
 
@@ -145,14 +177,14 @@ class VideoEdit(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
         video_id: int,
-        name: str,
-        desc: str,
-        privacy_view: typing.List,
-        privacy_comment: typing.List,
-        no_comments: bool,
-        repeat: bool,
+        owner_id: int = None,
+        name: str = None,
+        desc: str = None,
+        privacy_view: typing.List = None,
+        privacy_comment: typing.List = None,
+        no_comments: bool = None,
+        repeat: bool = None,
     ):
         """ video.edit
         From Vk Docs: Edits information about a video on a user or community page.
@@ -167,7 +199,11 @@ class VideoEdit(BaseMethod):
         :param repeat: '1' — to repeat the playback of the video, '0' — to play the video once,
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.edit", params)
 
 
@@ -175,7 +211,11 @@ class VideoEditAlbum(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, group_id: int, album_id: int, title: str, privacy: typing.List
+        self,
+        title: str,
+        album_id: int,
+        group_id: int = None,
+        privacy: typing.List = None,
     ):
         """ video.editAlbum
         From Vk Docs: Edits the title of a video album.
@@ -186,7 +226,11 @@ class VideoEditAlbum(BaseMethod):
         :param privacy: new access permissions for the album. Possible values: , *'0' – all users,, *'1' – friends only,, *'2' – friends and friends of friends,, *'3' – "only me".
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.editAlbum", params)
 
 
@@ -194,7 +238,11 @@ class VideoEditComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, comment_id: int, message: str, attachments: typing.List
+        self,
+        comment_id: int,
+        owner_id: int = None,
+        message: str = None,
+        attachments: typing.List = None,
     ):
         """ video.editComment
         From Vk Docs: Edits the text of a comment on a video.
@@ -205,7 +253,11 @@ class VideoEditComment(BaseMethod):
         :param attachments: List of objects attached to the comment, in the following format: "<owner_id>_<media_id>,<owner_id>_<media_id>", '' — Type of media attachment: 'photo' — photo, 'video' — video, 'audio' — audio, 'doc' — document, '<owner_id>' — ID of the media attachment owner. '<media_id>' — Media attachment ID. Example: "photo100172_166443618,photo66748_265827614"
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.editComment", params)
 
 
@@ -214,12 +266,12 @@ class VideoGet(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
-        videos: typing.List,
-        album_id: int,
-        count: int,
-        offset: int,
-        extended: bool,
+        owner_id: int = None,
+        videos: typing.List = None,
+        album_id: int = None,
+        count: int = None,
+        offset: int = None,
+        extended: bool = None,
     ):
         """ video.get
         From Vk Docs: Returns detailed information about videos.
@@ -232,14 +284,18 @@ class VideoGet(BaseMethod):
         :param extended: '1' — to return an extended response with additional fields
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.get", params)
 
 
 class VideoGetAlbumById(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, album_id: int):
+    async def __call__(self, album_id: int, owner_id: int = None):
         """ video.getAlbumById
         From Vk Docs: Returns video album info
         Access from user token(s)
@@ -247,7 +303,11 @@ class VideoGetAlbumById(BaseMethod):
         :param album_id: Album ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.getAlbumById", params)
 
 
@@ -255,7 +315,12 @@ class VideoGetAlbums(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, offset: int, count: int, extended: bool, need_system: bool
+        self,
+        owner_id: int = None,
+        offset: int = None,
+        count: int = None,
+        extended: bool = None,
+        need_system: bool = None,
     ):
         """ video.getAlbums
         From Vk Docs: Returns a list of video albums owned by a user or community.
@@ -267,7 +332,11 @@ class VideoGetAlbums(BaseMethod):
         :param need_system: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.getAlbums", params)
 
 
@@ -275,7 +344,7 @@ class VideoGetAlbumsByVideo(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, target_id: int, owner_id: int, video_id: int, extended: bool
+        self, video_id: int, owner_id: int, target_id: int = None, extended: bool = None
     ):
         """ video.getAlbumsByVideo
         From Vk Docs: 
@@ -286,7 +355,11 @@ class VideoGetAlbumsByVideo(BaseMethod):
         :param extended: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.getAlbumsByVideo", params)
 
 
@@ -295,15 +368,15 @@ class VideoGetComments(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
         video_id: int,
-        need_likes: bool,
-        start_comment_id: int,
-        offset: int,
-        count: int,
-        sort: str,
-        extended: bool,
-        fields: typing.List,
+        owner_id: int = None,
+        need_likes: bool = None,
+        start_comment_id: int = None,
+        offset: int = None,
+        count: int = None,
+        sort: str = None,
+        extended: bool = None,
+        fields: typing.List = None,
     ):
         """ video.getComments
         From Vk Docs: Returns a list of comments on a video.
@@ -319,7 +392,11 @@ class VideoGetComments(BaseMethod):
         :param fields: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.getComments", params)
 
 
@@ -328,11 +405,11 @@ class VideoRemoveFromAlbum(BaseMethod):
 
     async def __call__(
         self,
-        target_id: int,
-        album_id: int,
-        album_ids: typing.List,
-        owner_id: int,
         video_id: int,
+        owner_id: int,
+        target_id: int = None,
+        album_id: int = None,
+        album_ids: typing.List = None,
     ):
         """ video.removeFromAlbum
         From Vk Docs: 
@@ -344,14 +421,20 @@ class VideoRemoveFromAlbum(BaseMethod):
         :param video_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.removeFromAlbum", params)
 
 
 class VideoReorderAlbums(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, album_id: int, before: int, after: int):
+    async def __call__(
+        self, album_id: int, owner_id: int = None, before: int = None, after: int = None
+    ):
         """ video.reorderAlbums
         From Vk Docs: Reorders the album in the list of user video albums.
         Access from user token(s)
@@ -361,7 +444,11 @@ class VideoReorderAlbums(BaseMethod):
         :param after: ID of the album after which the album in question shall be placed.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.reorderAlbums", params)
 
 
@@ -370,14 +457,14 @@ class VideoReorderVideos(BaseMethod):
 
     async def __call__(
         self,
-        target_id: int,
-        album_id: int,
-        owner_id: int,
         video_id: int,
-        before_owner_id: int,
-        before_video_id: int,
-        after_owner_id: int,
-        after_video_id: int,
+        owner_id: int,
+        target_id: int = None,
+        album_id: int = None,
+        before_owner_id: int = None,
+        before_video_id: int = None,
+        after_owner_id: int = None,
+        after_video_id: int = None,
     ):
         """ video.reorderVideos
         From Vk Docs: Reorders the video in the video album.
@@ -392,7 +479,11 @@ class VideoReorderVideos(BaseMethod):
         :param after_video_id: ID of the video after which the photo in question shall be placed.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.reorderVideos", params)
 
 
@@ -400,7 +491,12 @@ class VideoReport(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, video_id: int, reason: int, comment: str, search_query: str
+        self,
+        owner_id: int,
+        video_id: int,
+        reason: int = None,
+        comment: str = None,
+        search_query: str = None,
     ):
         """ video.report
         From Vk Docs: Reports (submits a complaint about) a video.
@@ -412,14 +508,18 @@ class VideoReport(BaseMethod):
         :param search_query: (If the video was found in search results.) Search query string.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.report", params)
 
 
 class VideoReportComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, comment_id: int, reason: int):
+    async def __call__(self, owner_id: int, comment_id: int, reason: int = None):
         """ video.reportComment
         From Vk Docs: Reports (submits a complaint about) a comment on a video.
         Access from user token(s)
@@ -428,14 +528,18 @@ class VideoReportComment(BaseMethod):
         :param reason: Reason for the complaint: , 0 – spam , 1 – child pornography , 2 – extremism , 3 – violence , 4 – drug propaganda , 5 – adult material , 6 – insult, abuse
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.reportComment", params)
 
 
 class VideoRestore(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, video_id: int, owner_id: int):
+    async def __call__(self, video_id: int, owner_id: int = None):
         """ video.restore
         From Vk Docs: Restores a previously deleted video.
         Access from user token(s)
@@ -443,14 +547,18 @@ class VideoRestore(BaseMethod):
         :param owner_id: ID of the user or community that owns the video.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.restore", params)
 
 
 class VideoRestoreComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, comment_id: int):
+    async def __call__(self, comment_id: int, owner_id: int = None):
         """ video.restoreComment
         From Vk Docs: Restores a previously deleted comment on a video.
         Access from user token(s)
@@ -458,7 +566,11 @@ class VideoRestoreComment(BaseMethod):
         :param comment_id: ID of the deleted comment.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.restoreComment", params)
 
 
@@ -467,18 +579,18 @@ class VideoSave(BaseMethod):
 
     async def __call__(
         self,
-        name: str,
-        description: str,
-        is_private: bool,
-        wallpost: bool,
-        link: str,
-        group_id: int,
-        album_id: int,
-        privacy_view: typing.List,
-        privacy_comment: typing.List,
-        no_comments: bool,
-        repeat: bool,
-        compression: bool,
+        name: str = None,
+        description: str = None,
+        is_private: bool = None,
+        wallpost: bool = None,
+        link: str = None,
+        group_id: int = None,
+        album_id: int = None,
+        privacy_view: typing.List = None,
+        privacy_comment: typing.List = None,
+        no_comments: bool = None,
+        repeat: bool = None,
+        compression: bool = None,
     ):
         """ video.save
         From Vk Docs: Returns a server address (required for upload) and video data.
@@ -497,7 +609,11 @@ class VideoSave(BaseMethod):
         :param compression: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.save", params)
 
 
@@ -507,16 +623,16 @@ class VideoSearch(BaseMethod):
     async def __call__(
         self,
         q: str,
-        sort: int,
-        hd: int,
-        adult: bool,
-        filters: typing.List,
-        search_own: bool,
-        offset: int,
-        longer: int,
-        shorter: int,
-        count: int,
-        extended: bool,
+        sort: int = None,
+        hd: int = None,
+        adult: bool = None,
+        filters: typing.List = None,
+        search_own: bool = None,
+        offset: int = None,
+        longer: int = None,
+        shorter: int = None,
+        count: int = None,
+        extended: bool = None,
     ):
         """ video.search
         From Vk Docs: Returns a list of videos under the set search criterion.
@@ -534,7 +650,11 @@ class VideoSearch(BaseMethod):
         :param extended: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("video.search", params)
 
 

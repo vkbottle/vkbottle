@@ -13,9 +13,9 @@ class BoardAddTopic(BaseMethod):
         self,
         group_id: int,
         title: str,
-        text: str,
-        from_group: bool,
-        attachments: typing.List,
+        text: str = None,
+        from_group: bool = None,
+        attachments: typing.List = None,
     ) -> responses.board.AddTopic:
         """ board.addTopic
         From Vk Docs: Creates a new topic on a community's discussion board.
@@ -27,7 +27,11 @@ class BoardAddTopic(BaseMethod):
         :param attachments: List of media objects attached to the topic, in the following format: "<owner_id>_<media_id>,<owner_id>_<media_id>", '' — Type of media object: 'photo' — photo, 'video' — video, 'audio' — audio, 'doc' — document, '<owner_id>' — ID of the media owner. '<media_id>' — Media ID. Example: "photo100172_166443618,photo66748_265827614", , "NOTE: If you try to attach more than one reference, an error will be thrown.",
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.addTopic", params, response_model=responses.board.AddTopic
         )
@@ -46,7 +50,11 @@ class BoardCloseTopic(BaseMethod):
         :param topic_id: Topic ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.closeTopic", params, response_model=responses.board.CloseTopic
         )
@@ -59,11 +67,11 @@ class BoardCreateComment(BaseMethod):
         self,
         group_id: int,
         topic_id: int,
-        message: str,
-        attachments: typing.List,
-        from_group: bool,
-        sticker_id: int,
-        guid: str,
+        message: str = None,
+        attachments: typing.List = None,
+        from_group: bool = None,
+        sticker_id: int = None,
+        guid: str = None,
     ) -> responses.board.CreateComment:
         """ board.createComment
         From Vk Docs: Adds a comment on a topic on a community's discussion board.
@@ -77,7 +85,11 @@ class BoardCreateComment(BaseMethod):
         :param guid: Unique identifier to avoid repeated comments.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.createComment", params, response_model=responses.board.CreateComment
         )
@@ -90,7 +102,7 @@ class BoardDeleteComment(BaseMethod):
     ]
 
     async def __call__(
-        self, group_id: int, topic_id: int, comment_id: int
+        self, group_id: int, comment_id: int, topic_id: int
     ) -> responses.board.DeleteComment:
         """ board.deleteComment
         From Vk Docs: Deletes a comment on a topic on a community's discussion board.
@@ -100,7 +112,11 @@ class BoardDeleteComment(BaseMethod):
         :param comment_id: Comment ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.deleteComment", params, response_model=responses.board.DeleteComment
         )
@@ -119,7 +135,11 @@ class BoardDeleteTopic(BaseMethod):
         :param topic_id: Topic ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.deleteTopic", params, response_model=responses.board.DeleteTopic
         )
@@ -131,10 +151,10 @@ class BoardEditComment(BaseMethod):
     async def __call__(
         self,
         group_id: int,
-        topic_id: int,
         comment_id: int,
-        message: str,
-        attachments: typing.List,
+        topic_id: int,
+        message: str = None,
+        attachments: typing.List = None,
     ) -> responses.board.EditComment:
         """ board.editComment
         From Vk Docs: Edits a comment on a topic on a community's discussion board.
@@ -146,7 +166,11 @@ class BoardEditComment(BaseMethod):
         :param attachments: (Required if 'message' is not set.) List of media objects attached to the comment, in the following format: "<owner_id>_<media_id>,<owner_id>_<media_id>", '' — Type of media object: 'photo' — photo, 'video' — video, 'audio' — audio, 'doc' — document, '<owner_id>' — ID of the media owner. '<media_id>' — Media ID. Example: "photo100172_166443618,photo66748_265827614"
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.editComment", params, response_model=responses.board.EditComment
         )
@@ -156,7 +180,7 @@ class BoardEditTopic(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, group_id: int, topic_id: int, title: str
+        self, group_id: int, title: str, topic_id: int
     ) -> responses.board.EditTopic:
         """ board.editTopic
         From Vk Docs: Edits the title of a topic on a community's discussion board.
@@ -166,7 +190,11 @@ class BoardEditTopic(BaseMethod):
         :param title: New title of the topic.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.editTopic", params, response_model=responses.board.EditTopic
         )
@@ -183,7 +211,11 @@ class BoardFixTopic(BaseMethod):
         :param topic_id: Topic ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.fixTopic", params, response_model=responses.board.FixTopic
         )
@@ -199,12 +231,12 @@ class BoardGetComments(BaseMethod):
         self,
         group_id: int,
         topic_id: int,
-        need_likes: bool,
-        start_comment_id: int,
-        offset: int,
-        count: int,
-        extended: bool,
-        sort: str,
+        need_likes: bool = None,
+        start_comment_id: int = None,
+        offset: int = None,
+        count: int = None,
+        extended: bool = None,
+        sort: str = None,
     ) -> responses.board.GetComments:
         """ board.getComments
         From Vk Docs: Returns a list of comments on a topic on a community's discussion board.
@@ -219,7 +251,11 @@ class BoardGetComments(BaseMethod):
         :param sort: Sort order: 'asc' — by creation date in chronological order, 'desc' — by creation date in reverse chronological order,
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.getComments", params, response_model=responses.board.GetComments
         )
@@ -234,13 +270,13 @@ class BoardGetTopics(BaseMethod):
     async def __call__(
         self,
         group_id: int,
-        topic_ids: typing.List,
-        order: int,
-        offset: int,
-        count: int,
-        extended: bool,
-        preview: int,
-        preview_length: int,
+        topic_ids: typing.List = None,
+        order: int = None,
+        offset: int = None,
+        count: int = None,
+        extended: bool = None,
+        preview: int = None,
+        preview_length: int = None,
     ) -> responses.board.GetTopics:
         """ board.getTopics
         From Vk Docs: Returns a list of topics on a community's discussion board.
@@ -255,7 +291,11 @@ class BoardGetTopics(BaseMethod):
         :param preview_length: Number of characters after which to truncate the previewed comment. To preview the full comment, specify '0'.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.getTopics", params, response_model=responses.board.GetTopics
         )
@@ -272,7 +312,11 @@ class BoardOpenTopic(BaseMethod):
         :param topic_id: Topic ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.openTopic", params, response_model=responses.board.OpenTopic
         )
@@ -285,7 +329,7 @@ class BoardRestoreComment(BaseMethod):
     ]
 
     async def __call__(
-        self, group_id: int, topic_id: int, comment_id: int
+        self, group_id: int, comment_id: int, topic_id: int
     ) -> responses.board.RestoreComment:
         """ board.restoreComment
         From Vk Docs: Restores a comment deleted from a topic on a community's discussion board.
@@ -295,7 +339,11 @@ class BoardRestoreComment(BaseMethod):
         :param comment_id: Comment ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.restoreComment",
             params,
@@ -316,7 +364,11 @@ class BoardUnfixTopic(BaseMethod):
         :param topic_id: Topic ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "board.unfixTopic", params, response_model=responses.board.UnfixTopic
         )

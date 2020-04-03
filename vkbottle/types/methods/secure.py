@@ -9,7 +9,7 @@ from .method import BaseMethod
 class SecureAddAppEvent(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
-    async def __call__(self, user_id: int, activity_id: int, value: int):
+    async def __call__(self, user_id: int, activity_id: int, value: int = None):
         """ secure.addAppEvent
         From Vk Docs: Adds user activity information to an application
         Access from service token(s)
@@ -18,14 +18,18 @@ class SecureAddAppEvent(BaseMethod):
         :param value: depends on activity_id: * 1 – number, current level number,, * 2 – number, current user's points amount, , Any other value is ignored
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("secure.addAppEvent", params)
 
 
 class SecureCheckToken(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
-    async def __call__(self, token: str, ip: str):
+    async def __call__(self, token: str = None, ip: str = None):
         """ secure.checkToken
         From Vk Docs: Checks the user authentication in 'IFrame' and 'Flash' apps using the 'access_token' parameter.
         Access from service token(s)
@@ -33,7 +37,11 @@ class SecureCheckToken(BaseMethod):
         :param ip: user 'ip address'. Note that user may access using the 'ipv6' address, in this case it is required to transmit the 'ipv6' address. If not transmitted, the address will not be checked.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("secure.checkToken", params)
 
 
@@ -47,14 +55,24 @@ class SecureGetAppBalance(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("secure.getAppBalance", params)
 
 
 class SecureGetSMSHistory(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
-    async def __call__(self, user_id: int, date_from: int, date_to: int, limit: int):
+    async def __call__(
+        self,
+        user_id: int = None,
+        date_from: int = None,
+        date_to: int = None,
+        limit: int = None,
+    ):
         """ secure.getSMSHistory
         From Vk Docs: Shows a list of SMS notifications sent by the application using [vk.com/dev/secure.sendSMSNotification|secure.sendSMSNotification] method.
         Access from service token(s)
@@ -64,7 +82,11 @@ class SecureGetSMSHistory(BaseMethod):
         :param limit: number of returned posts. By default — 1000.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("secure.getSMSHistory", params)
 
 
@@ -73,12 +95,12 @@ class SecureGetTransactionsHistory(BaseMethod):
 
     async def __call__(
         self,
-        type: int,
-        uid_from: int,
-        uid_to: int,
-        date_from: int,
-        date_to: int,
-        limit: int,
+        type: int = None,
+        uid_from: int = None,
+        uid_to: int = None,
+        date_from: int = None,
+        date_to: int = None,
+        limit: int = None,
     ):
         """ secure.getTransactionsHistory
         From Vk Docs: Shows history of votes transaction between users and the application.
@@ -91,7 +113,11 @@ class SecureGetTransactionsHistory(BaseMethod):
         :param limit: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("secure.getTransactionsHistory", params)
 
 
@@ -105,7 +131,11 @@ class SecureGetUserLevel(BaseMethod):
         :param user_ids: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("secure.getUserLevel", params)
 
 
@@ -120,14 +150,20 @@ class SecureGiveEventSticker(BaseMethod):
         :param achievement_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("secure.giveEventSticker", params)
 
 
 class SecureSendNotification(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
-    async def __call__(self, user_ids: typing.List, user_id: int, message: str):
+    async def __call__(
+        self, message: str, user_ids: typing.List = None, user_id: int = None
+    ):
         """ secure.sendNotification
         From Vk Docs: Sends notification to the user.
         Access from service token(s)
@@ -136,7 +172,11 @@ class SecureSendNotification(BaseMethod):
         :param message: notification text which should be sent in 'UTF-8' encoding ('254' characters maximum).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("secure.sendNotification", params)
 
 
@@ -151,7 +191,11 @@ class SecureSendSMSNotification(BaseMethod):
         :param message: 'SMS' text to be sent in 'UTF-8' encoding. Only Latin letters and numbers are allowed. Maximum size is '160' characters.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("secure.sendSMSNotification", params)
 
 
@@ -159,7 +203,11 @@ class SecureSetCounter(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(
-        self, counters: typing.List, user_id: int, counter: int, increment: bool
+        self,
+        counters: typing.List = None,
+        user_id: int = None,
+        counter: int = None,
+        increment: bool = None,
     ):
         """ secure.setCounter
         From Vk Docs: Sets a counter which is shown to the user in bold in the left menu.
@@ -170,7 +218,11 @@ class SecureSetCounter(BaseMethod):
         :param increment: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("secure.setCounter", params)
 
 

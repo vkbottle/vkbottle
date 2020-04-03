@@ -19,7 +19,11 @@ class StreamingGetServerUrl(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("streaming.getServerUrl", params)
 
 
@@ -29,14 +33,18 @@ class StreamingSetSettings(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, monthly_tier: str):
+    async def __call__(self, monthly_tier: str = None):
         """ streaming.setSettings
         From Vk Docs: 
         Access from user, service token(s)
         :param monthly_tier: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("streaming.setSettings", params)
 
 

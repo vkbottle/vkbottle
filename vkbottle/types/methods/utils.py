@@ -20,7 +20,11 @@ class UtilsCheckLink(BaseMethod):
         :param url: Link to check (e.g., 'http://google.com').
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("utils.checkLink", params)
 
 
@@ -34,14 +38,18 @@ class UtilsDeleteFromLastShortened(BaseMethod):
         :param key: Link key (characters after vk.cc/).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("utils.deleteFromLastShortened", params)
 
 
 class UtilsGetLastShortenedLinks(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, count: int, offset: int):
+    async def __call__(self, count: int = None, offset: int = None):
         """ utils.getLastShortenedLinks
         From Vk Docs: Returns a list of user's shortened links.
         Access from user token(s)
@@ -49,7 +57,11 @@ class UtilsGetLastShortenedLinks(BaseMethod):
         :param offset: Offset needed to return a specific subset of links.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("utils.getLastShortenedLinks", params)
 
 
@@ -63,11 +75,11 @@ class UtilsGetLinkStats(BaseMethod):
     async def __call__(
         self,
         key: str,
-        source: str,
-        access_key: str,
-        interval: str,
-        intervals_count: int,
-        extended: bool,
+        source: str = None,
+        access_key: str = None,
+        interval: str = None,
+        intervals_count: int = None,
+        extended: bool = None,
     ):
         """ utils.getLinkStats
         From Vk Docs: Returns stats data for shortened link.
@@ -80,7 +92,11 @@ class UtilsGetLinkStats(BaseMethod):
         :param extended: 1 — to return extended stats data (sex, age, geo). 0 — to return views number only.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("utils.getLinkStats", params)
 
 
@@ -98,7 +114,11 @@ class UtilsGetServerTime(BaseMethod):
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("utils.getServerTime", params)
 
 
@@ -109,7 +129,7 @@ class UtilsGetShortLink(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, url: str, private: bool):
+    async def __call__(self, url: str, private: bool = None):
         """ utils.getShortLink
         From Vk Docs: Allows to receive a link shortened via vk.cc.
         Access from user, group, service token(s)
@@ -117,7 +137,11 @@ class UtilsGetShortLink(BaseMethod):
         :param private: 1 — private stats, 0 — public stats.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("utils.getShortLink", params)
 
 
@@ -135,7 +159,11 @@ class UtilsResolveScreenName(BaseMethod):
         :param screen_name: Screen name of the user, community (e.g., 'apiclub,' 'andrew', or 'rules_of_war'), or application.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("utils.resolveScreenName", params)
 
 

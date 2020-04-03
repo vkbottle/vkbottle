@@ -15,18 +15,18 @@ class GroupsAddAddress(BaseMethod):
     async def __call__(
         self,
         group_id: int,
-        title: str,
-        address: str,
-        additional_address: str,
-        country_id: int,
         city_id: int,
-        metro_id: int,
+        address: str,
+        country_id: int,
         latitude: typing.Any,
         longitude: typing.Any,
-        phone: str,
-        work_info_status: str,
-        timetable: str,
-        is_main_address: bool,
+        title: str,
+        additional_address: str = None,
+        metro_id: int = None,
+        phone: str = None,
+        work_info_status: str = None,
+        timetable: str = None,
+        is_main_address: bool = None,
     ) -> responses.groups.AddAddress:
         """ groups.addAddress
         From Vk Docs: 
@@ -46,7 +46,11 @@ class GroupsAddAddress(BaseMethod):
         :param is_main_address: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.addAddress", params, response_model=responses.groups.AddAddress
         )
@@ -59,7 +63,7 @@ class GroupsAddCallbackServer(BaseMethod):
     ]
 
     async def __call__(
-        self, group_id: int, url: str, title: str, secret_key: str
+        self, group_id: int, title: str, url: str, secret_key: str = None
     ) -> responses.groups.AddCallbackServer:
         """ groups.addCallbackServer
         From Vk Docs: 
@@ -70,7 +74,11 @@ class GroupsAddCallbackServer(BaseMethod):
         :param secret_key: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.addCallbackServer",
             params,
@@ -82,7 +90,7 @@ class GroupsAddLink(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, group_id: int, link: str, text: str
+        self, group_id: int, link: str, text: str = None
     ) -> responses.groups.AddLink:
         """ groups.addLink
         From Vk Docs: Allows to add a link to the community.
@@ -92,7 +100,11 @@ class GroupsAddLink(BaseMethod):
         :param text: Description text for the link.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.addLink", params, response_model=responses.groups.AddLink
         )
@@ -111,7 +123,11 @@ class GroupsApproveRequest(BaseMethod):
         :param user_id: User ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.approveRequest",
             params,
@@ -125,11 +141,11 @@ class GroupsBan(BaseMethod):
     async def __call__(
         self,
         group_id: int,
-        owner_id: int,
-        end_date: int,
-        reason: int,
-        comment: str,
-        comment_visible: bool,
+        owner_id: int = None,
+        end_date: int = None,
+        reason: int = None,
+        comment: str = None,
+        comment_visible: bool = None,
     ) -> responses.groups.Ban:
         """ groups.ban
         From Vk Docs: 
@@ -142,7 +158,11 @@ class GroupsBan(BaseMethod):
         :param comment_visible: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.ban", params, response_model=responses.groups.Ban
         )
@@ -154,10 +174,10 @@ class GroupsCreate(BaseMethod):
     async def __call__(
         self,
         title: str,
-        description: str,
-        type: str,
-        public_category: int,
-        subtype: int,
+        description: str = None,
+        type: str = None,
+        public_category: int = None,
+        subtype: int = None,
     ) -> responses.groups.Create:
         """ groups.create
         From Vk Docs: Creates a new community.
@@ -169,7 +189,11 @@ class GroupsCreate(BaseMethod):
         :param subtype: Public page subtype. Possible values: *'1' – place or small business,, *'2' – company, organization or website,, *'3' – famous person or group of people,, *'4' – product or work of art.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.create", params, response_model=responses.groups.Create
         )
@@ -191,7 +215,11 @@ class GroupsDeleteCallbackServer(BaseMethod):
         :param server_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.deleteCallbackServer",
             params,
@@ -212,7 +240,11 @@ class GroupsDeleteLink(BaseMethod):
         :param link_id: Link ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.deleteLink", params, response_model=responses.groups.DeleteLink
         )
@@ -231,7 +263,11 @@ class GroupsDisableOnline(BaseMethod):
         :param group_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.disableOnline",
             params,
@@ -245,50 +281,50 @@ class GroupsEdit(BaseMethod):
     async def __call__(
         self,
         group_id: int,
-        title: str,
-        description: str,
-        screen_name: str,
-        access: int,
-        website: str,
-        subject: str,
-        email: str,
-        phone: str,
-        rss: str,
-        event_start_date: int,
-        event_finish_date: int,
-        event_group_id: int,
-        public_category: int,
-        public_subcategory: int,
-        public_date: str,
-        wall: int,
-        topics: int,
-        photos: int,
-        video: int,
-        audio: int,
-        links: bool,
-        events: bool,
-        places: bool,
-        contacts: bool,
-        docs: int,
-        wiki: int,
-        messages: bool,
-        articles: bool,
-        addresses: bool,
-        age_limits: int,
-        market: bool,
-        market_comments: bool,
-        market_country: typing.List,
-        market_city: typing.List,
-        market_currency: int,
-        market_contact: int,
-        market_wiki: int,
-        obscene_filter: bool,
-        obscene_stopwords: bool,
-        obscene_words: typing.List,
-        main_section: int,
-        secondary_section: int,
-        country: int,
-        city: int,
+        title: str = None,
+        description: str = None,
+        screen_name: str = None,
+        access: int = None,
+        website: str = None,
+        subject: str = None,
+        email: str = None,
+        phone: str = None,
+        rss: str = None,
+        event_start_date: int = None,
+        event_finish_date: int = None,
+        event_group_id: int = None,
+        public_category: int = None,
+        public_subcategory: int = None,
+        public_date: str = None,
+        wall: int = None,
+        topics: int = None,
+        photos: int = None,
+        video: int = None,
+        audio: int = None,
+        links: bool = None,
+        events: bool = None,
+        places: bool = None,
+        contacts: bool = None,
+        docs: int = None,
+        wiki: int = None,
+        messages: bool = None,
+        articles: bool = None,
+        addresses: bool = None,
+        age_limits: int = None,
+        market: bool = None,
+        market_comments: bool = None,
+        market_country: typing.List = None,
+        market_city: typing.List = None,
+        market_currency: int = None,
+        market_contact: int = None,
+        market_wiki: int = None,
+        obscene_filter: bool = None,
+        obscene_stopwords: bool = None,
+        obscene_words: typing.List = None,
+        main_section: int = None,
+        secondary_section: int = None,
+        country: int = None,
+        city: int = None,
     ) -> responses.groups.Edit:
         """ groups.edit
         From Vk Docs: Edits a community.
@@ -340,7 +376,11 @@ class GroupsEdit(BaseMethod):
         :param city: City of the community.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.edit", params, response_model=responses.groups.Edit
         )
@@ -356,18 +396,18 @@ class GroupsEditAddress(BaseMethod):
         self,
         group_id: int,
         address_id: int,
-        title: str,
-        address: str,
-        additional_address: str,
-        country_id: int,
-        city_id: int,
-        metro_id: int,
-        latitude: typing.Any,
-        longitude: typing.Any,
-        phone: str,
-        work_info_status: str,
-        timetable: str,
-        is_main_address: bool,
+        title: str = None,
+        address: str = None,
+        additional_address: str = None,
+        country_id: int = None,
+        city_id: int = None,
+        metro_id: int = None,
+        latitude: typing.Any = None,
+        longitude: typing.Any = None,
+        phone: str = None,
+        work_info_status: str = None,
+        timetable: str = None,
+        is_main_address: bool = None,
     ) -> responses.groups.EditAddress:
         """ groups.editAddress
         From Vk Docs: 
@@ -388,7 +428,11 @@ class GroupsEditAddress(BaseMethod):
         :param is_main_address: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.editAddress", params, response_model=responses.groups.EditAddress
         )
@@ -401,7 +445,12 @@ class GroupsEditCallbackServer(BaseMethod):
     ]
 
     async def __call__(
-        self, group_id: int, server_id: int, url: str, title: str, secret_key: str
+        self,
+        group_id: int,
+        url: str,
+        server_id: int,
+        title: str,
+        secret_key: str = None,
     ) -> responses.groups.EditCallbackServer:
         """ groups.editCallbackServer
         From Vk Docs: 
@@ -413,7 +462,11 @@ class GroupsEditCallbackServer(BaseMethod):
         :param secret_key: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.editCallbackServer",
             params,
@@ -425,7 +478,7 @@ class GroupsEditLink(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, group_id: int, link_id: int, text: str
+        self, group_id: int, link_id: int, text: str = None
     ) -> responses.groups.EditLink:
         """ groups.editLink
         From Vk Docs: Allows to edit a link in the community.
@@ -435,7 +488,11 @@ class GroupsEditLink(BaseMethod):
         :param text: New description text for the link.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.editLink", params, response_model=responses.groups.EditLink
         )
@@ -448,11 +505,11 @@ class GroupsEditManager(BaseMethod):
         self,
         group_id: int,
         user_id: int,
-        role: str,
-        is_contact: bool,
-        contact_position: str,
-        contact_phone: str,
-        contact_email: str,
+        role: str = None,
+        is_contact: bool = None,
+        contact_position: str = None,
+        contact_phone: str = None,
+        contact_email: str = None,
     ) -> responses.groups.EditManager:
         """ groups.editManager
         From Vk Docs: Allows to add, remove or edit the community manager.
@@ -466,7 +523,11 @@ class GroupsEditManager(BaseMethod):
         :param contact_email: Contact e-mail.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.editManager", params, response_model=responses.groups.EditManager
         )
@@ -485,7 +546,11 @@ class GroupsEnableOnline(BaseMethod):
         :param group_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.enableOnline", params, response_model=responses.groups.EnableOnline
         )
@@ -496,12 +561,12 @@ class GroupsGet(BaseMethod):
 
     async def __call__(
         self,
-        user_id: int,
-        extended: bool,
-        filter: typing.List,
-        fields: typing.List,
-        offset: int,
-        count: int,
+        user_id: int = None,
+        extended: bool = None,
+        filter: typing.List = None,
+        fields: typing.List = None,
+        offset: int = None,
+        count: int = None,
     ) -> responses.groups.Get:
         """ groups.get
         From Vk Docs: Returns a list of the communities to which a user belongs.
@@ -514,7 +579,11 @@ class GroupsGet(BaseMethod):
         :param count: Number of communities to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.get", params, response_model=responses.groups.Get
         )
@@ -529,13 +598,13 @@ class GroupsGetAddresses(BaseMethod):
     async def __call__(
         self,
         group_id: int,
-        address_ids: typing.List,
-        latitude: typing.Any,
-        longitude: typing.Any,
-        offset: int,
-        count: int,
-        fields: typing.List,
-    ) -> responses.groups.GetAddressesResponse:
+        address_ids: typing.List = None,
+        latitude: typing.Any = None,
+        longitude: typing.Any = None,
+        offset: int = None,
+        count: int = None,
+        fields: typing.List = None,
+    ) -> dict:
         """ groups.getAddresses
         From Vk Docs: Returns a list of community addresses.
         Access from user, service token(s)
@@ -548,13 +617,12 @@ class GroupsGetAddresses(BaseMethod):
         :param fields: Address fields
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request(
-            "groups.getAddresses",
-            params,
-            response_model=responses.groups.GetAddressesResponse,
-            raw_response=True,
-        )
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request("groups.getAddresses", params)
 
 
 class GroupsGetBanned(BaseMethod):
@@ -564,7 +632,12 @@ class GroupsGetBanned(BaseMethod):
     ]
 
     async def __call__(
-        self, group_id: int, offset: int, count: int, fields: typing.List, owner_id: int
+        self,
+        group_id: int,
+        offset: int = None,
+        count: int = None,
+        fields: typing.List = None,
+        owner_id: int = None,
     ) -> responses.groups.GetBanned:
         """ groups.getBanned
         From Vk Docs: Returns a list of users on a community blacklist.
@@ -576,7 +649,11 @@ class GroupsGetBanned(BaseMethod):
         :param owner_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getBanned", params, response_model=responses.groups.GetBanned
         )
@@ -590,7 +667,10 @@ class GroupsGetById(BaseMethod):
     ]
 
     async def __call__(
-        self, group_ids: typing.List, group_id: str, fields: typing.List
+        self,
+        group_ids: typing.List = None,
+        group_id: str = None,
+        fields: typing.List = None,
     ) -> responses.groups.GetById:
         """ groups.getById
         From Vk Docs: Returns information about communities by their IDs.
@@ -600,7 +680,11 @@ class GroupsGetById(BaseMethod):
         :param fields: Group fields to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getById", params, response_model=responses.groups.GetById
         )
@@ -621,7 +705,11 @@ class GroupsGetCallbackConfirmationCode(BaseMethod):
         :param group_id: Community ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getCallbackConfirmationCode",
             params,
@@ -636,7 +724,7 @@ class GroupsGetCallbackServers(BaseMethod):
     ]
 
     async def __call__(
-        self, group_id: int, server_ids: typing.List
+        self, group_id: int, server_ids: typing.List = None
     ) -> responses.groups.GetCallbackServers:
         """ groups.getCallbackServers
         From Vk Docs: 
@@ -645,7 +733,11 @@ class GroupsGetCallbackServers(BaseMethod):
         :param server_ids: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getCallbackServers",
             params,
@@ -660,7 +752,7 @@ class GroupsGetCallbackSettings(BaseMethod):
     ]
 
     async def __call__(
-        self, group_id: int, server_id: int
+        self, group_id: int, server_id: int = None
     ) -> responses.groups.GetCallbackSettings:
         """ groups.getCallbackSettings
         From Vk Docs: Returns [vk.com/dev/callback_api|Callback API] notifications settings.
@@ -669,7 +761,11 @@ class GroupsGetCallbackSettings(BaseMethod):
         :param server_id: Server ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getCallbackSettings",
             params,
@@ -681,7 +777,7 @@ class GroupsGetCatalog(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, category_id: int, subcategory_id: int
+        self, category_id: int = None, subcategory_id: int = None
     ) -> responses.groups.GetCatalog:
         """ groups.getCatalog
         From Vk Docs: Returns communities list for a catalog category.
@@ -690,7 +786,11 @@ class GroupsGetCatalog(BaseMethod):
         :param subcategory_id: Subcategory id received from [vk.com/dev/groups.getCatalogInfo|groups.getCatalogInfo].
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getCatalog", params, response_model=responses.groups.GetCatalog
         )
@@ -700,7 +800,7 @@ class GroupsGetCatalogInfo(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, extended: bool, subcategories: bool
+        self, extended: bool = None, subcategories: bool = None
     ) -> responses.groups.GetCatalogInfo:
         """ groups.getCatalogInfo
         From Vk Docs: Returns categories list for communities catalog
@@ -709,7 +809,11 @@ class GroupsGetCatalogInfo(BaseMethod):
         :param subcategories: 1 – to return subcategories info. By default: 0.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getCatalogInfo",
             params,
@@ -723,10 +827,10 @@ class GroupsGetInvitedUsers(BaseMethod):
     async def __call__(
         self,
         group_id: int,
-        offset: int,
-        count: int,
-        fields: typing.List,
-        name_case: str,
+        offset: int = None,
+        count: int = None,
+        fields: typing.List = None,
+        name_case: str = None,
     ) -> responses.groups.GetInvitedUsers:
         """ groups.getInvitedUsers
         From Vk Docs: Returns invited users list of a community
@@ -738,7 +842,11 @@ class GroupsGetInvitedUsers(BaseMethod):
         :param name_case: Case for declension of user name and surname. Possible values: *'nom' — nominative (default),, *'gen' — genitive,, *'dat' — dative,, *'acc' — accusative, , *'ins' — instrumental,, *'abl' — prepositional.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getInvitedUsers",
             params,
@@ -750,7 +858,7 @@ class GroupsGetInvites(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, offset: int, count: int, extended: bool
+        self, offset: int = None, count: int = None, extended: bool = None
     ) -> responses.groups.GetInvites:
         """ groups.getInvites
         From Vk Docs: Returns a list of invitations to join communities and events.
@@ -760,7 +868,11 @@ class GroupsGetInvites(BaseMethod):
         :param extended: '1' — to return additional [vk.com/dev/fields_groups|fields] for communities..
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getInvites", params, response_model=responses.groups.GetInvites
         )
@@ -772,18 +884,22 @@ class GroupsGetLongPollServer(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, group_id: int) -> responses.groups.GetLongPollServerResponse:
+    async def __call__(self, group_id: int) -> responses.groups.GetLongPollServer:
         """ groups.getLongPollServer
         From Vk Docs: Returns the data needed to query a Long Poll server for events
         Access from user, group token(s)
         :param group_id: Community ID
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getLongPollServer",
             params,
-            response_model=responses.groups.GetLongPollServerResponse,
+            response_model=responses.groups.GetLongPollServer,
         )
 
 
@@ -800,7 +916,11 @@ class GroupsGetLongPollSettings(BaseMethod):
         :param group_id: Community ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getLongPollSettings",
             params,
@@ -817,12 +937,12 @@ class GroupsGetMembers(BaseMethod):
 
     async def __call__(
         self,
-        group_id: str,
-        sort: str,
-        offset: int,
-        count: int,
-        fields: typing.List,
-        filter: str,
+        group_id: str = None,
+        sort: str = None,
+        offset: int = None,
+        count: int = None,
+        fields: typing.List = None,
+        filter: str = None,
     ) -> responses.groups.GetMembers:
         """ groups.getMembers
         From Vk Docs: Returns a list of community members.
@@ -835,7 +955,11 @@ class GroupsGetMembers(BaseMethod):
         :param filter: *'friends' – only friends in this community will be returned,, *'unsure' – only those who pressed 'I may attend' will be returned (if it's an event).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getMembers", params, response_model=responses.groups.GetMembers
         )
@@ -845,7 +969,11 @@ class GroupsGetRequests(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, group_id: int, offset: int, count: int, fields: typing.List
+        self,
+        group_id: int,
+        offset: int = None,
+        count: int = None,
+        fields: typing.List = None,
     ) -> responses.groups.GetRequests:
         """ groups.getRequests
         From Vk Docs: Returns a list of requests to the community.
@@ -856,7 +984,11 @@ class GroupsGetRequests(BaseMethod):
         :param fields: Profile fields to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getRequests", params, response_model=responses.groups.GetRequests
         )
@@ -872,7 +1004,11 @@ class GroupsGetSettings(BaseMethod):
         :param group_id: Community ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.getSettings", params, response_model=responses.groups.GetSettings
         )
@@ -881,20 +1017,19 @@ class GroupsGetSettings(BaseMethod):
 class GroupsGetTokenPermissions(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.GROUP]
 
-    async def __call__(self,) -> responses.groups.GetTokenPermissionsResponse:
+    async def __call__(self,) -> dict:
         """ groups.getTokenPermissions
         From Vk Docs: 
         Access from group token(s)
         
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request(
-            "groups.getTokenPermissions",
-            params,
-            response_model=responses.groups.GetTokenPermissionsResponse,
-            raw_response=True,
-        )
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request("groups.getTokenPermissions", params)
 
 
 class GroupsInvite(BaseMethod):
@@ -908,7 +1043,11 @@ class GroupsInvite(BaseMethod):
         :param user_id: User ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.invite", params, response_model=responses.groups.Invite
         )
@@ -922,7 +1061,11 @@ class GroupsIsMember(BaseMethod):
     ]
 
     async def __call__(
-        self, group_id: str, user_id: int, user_ids: typing.List, extended: bool
+        self,
+        group_id: str,
+        user_id: int = None,
+        user_ids: typing.List = None,
+        extended: bool = None,
     ) -> responses.groups.IsMember:
         """ groups.isMember
         From Vk Docs: Returns information specifying whether a user is a member of a community.
@@ -933,7 +1076,11 @@ class GroupsIsMember(BaseMethod):
         :param extended: '1' — to return an extended response with additional fields. By default: '0'.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.isMember", params, response_model=responses.groups.IsMember
         )
@@ -942,7 +1089,9 @@ class GroupsIsMember(BaseMethod):
 class GroupsJoin(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int, not_sure: str) -> responses.groups.Join:
+    async def __call__(
+        self, group_id: int = None, not_sure: str = None
+    ) -> responses.groups.Join:
         """ groups.join
         From Vk Docs: With this method you can join the group or public page, and also confirm your participation in an event.
         Access from user token(s)
@@ -950,7 +1099,11 @@ class GroupsJoin(BaseMethod):
         :param not_sure: Optional parameter which is taken into account when 'gid' belongs to the event: '1' — Perhaps I will attend, '0' — I will be there for sure (default), ,
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.join", params, response_model=responses.groups.Join
         )
@@ -966,7 +1119,11 @@ class GroupsLeave(BaseMethod):
         :param group_id: ID or screen name of the community.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.leave", params, response_model=responses.groups.Leave
         )
@@ -985,7 +1142,11 @@ class GroupsRemoveUser(BaseMethod):
         :param user_id: User ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.removeUser", params, response_model=responses.groups.RemoveUser
         )
@@ -995,7 +1156,7 @@ class GroupsReorderLink(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, group_id: int, link_id: int, after: int
+        self, group_id: int, link_id: int, after: int = None
     ) -> responses.groups.ReorderLink:
         """ groups.reorderLink
         From Vk Docs: Allows to reorder links in the community.
@@ -1005,7 +1166,11 @@ class GroupsReorderLink(BaseMethod):
         :param after: ID of the link after which to place the link with 'link_id'.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.reorderLink", params, response_model=responses.groups.ReorderLink
         )
@@ -1017,14 +1182,14 @@ class GroupsSearch(BaseMethod):
     async def __call__(
         self,
         q: str,
-        type: str,
-        country_id: int,
-        city_id: int,
-        future: bool,
-        market: bool,
-        sort: int,
-        offset: int,
-        count: int,
+        type: str = None,
+        country_id: int = None,
+        city_id: int = None,
+        future: bool = None,
+        market: bool = None,
+        sort: int = None,
+        offset: int = None,
+        count: int = None,
     ) -> responses.groups.Search:
         """ groups.search
         From Vk Docs: Returns a list of communities matching the search criteria.
@@ -1040,7 +1205,11 @@ class GroupsSearch(BaseMethod):
         :param count: Number of communities to return. "Note that you can not receive more than first thousand of results, regardless of 'count' and 'offset' values."
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.search", params, response_model=responses.groups.Search
         )
@@ -1055,48 +1224,48 @@ class GroupsSetCallbackSettings(BaseMethod):
     async def __call__(
         self,
         group_id: int,
-        server_id: int,
-        api_version: str,
-        message_new: bool,
-        message_reply: bool,
-        message_allow: bool,
-        message_edit: bool,
-        message_deny: bool,
-        message_typing_state: bool,
-        photo_new: bool,
-        audio_new: bool,
-        video_new: bool,
-        wall_reply_new: bool,
-        wall_reply_edit: bool,
-        wall_reply_delete: bool,
-        wall_reply_restore: bool,
-        wall_post_new: bool,
-        wall_repost: bool,
-        board_post_new: bool,
-        board_post_edit: bool,
-        board_post_restore: bool,
-        board_post_delete: bool,
-        photo_comment_new: bool,
-        photo_comment_edit: bool,
-        photo_comment_delete: bool,
-        photo_comment_restore: bool,
-        video_comment_new: bool,
-        video_comment_edit: bool,
-        video_comment_delete: bool,
-        video_comment_restore: bool,
-        market_comment_new: bool,
-        market_comment_edit: bool,
-        market_comment_delete: bool,
-        market_comment_restore: bool,
-        poll_vote_new: bool,
-        group_join: bool,
-        group_leave: bool,
-        group_change_settings: bool,
-        group_change_photo: bool,
-        group_officers_edit: bool,
-        user_block: bool,
-        user_unblock: bool,
-        lead_forms_new: bool,
+        server_id: int = None,
+        api_version: str = None,
+        message_new: bool = None,
+        message_reply: bool = None,
+        message_allow: bool = None,
+        message_edit: bool = None,
+        message_deny: bool = None,
+        message_typing_state: bool = None,
+        photo_new: bool = None,
+        audio_new: bool = None,
+        video_new: bool = None,
+        wall_reply_new: bool = None,
+        wall_reply_edit: bool = None,
+        wall_reply_delete: bool = None,
+        wall_reply_restore: bool = None,
+        wall_post_new: bool = None,
+        wall_repost: bool = None,
+        board_post_new: bool = None,
+        board_post_edit: bool = None,
+        board_post_restore: bool = None,
+        board_post_delete: bool = None,
+        photo_comment_new: bool = None,
+        photo_comment_edit: bool = None,
+        photo_comment_delete: bool = None,
+        photo_comment_restore: bool = None,
+        video_comment_new: bool = None,
+        video_comment_edit: bool = None,
+        video_comment_delete: bool = None,
+        video_comment_restore: bool = None,
+        market_comment_new: bool = None,
+        market_comment_edit: bool = None,
+        market_comment_delete: bool = None,
+        market_comment_restore: bool = None,
+        poll_vote_new: bool = None,
+        group_join: bool = None,
+        group_leave: bool = None,
+        group_change_settings: bool = None,
+        group_change_photo: bool = None,
+        group_officers_edit: bool = None,
+        user_block: bool = None,
+        user_unblock: bool = None,
+        lead_forms_new: bool = None,
     ) -> responses.groups.SetCallbackSettings:
         """ groups.setCallbackSettings
         From Vk Docs: Allow to set notifications settings for group.
@@ -1146,7 +1315,11 @@ class GroupsSetCallbackSettings(BaseMethod):
         :param lead_forms_new: New form in lead forms
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.setCallbackSettings",
             params,
@@ -1163,47 +1336,47 @@ class GroupsSetLongPollSettings(BaseMethod):
     async def __call__(
         self,
         group_id: int,
-        enabled: bool,
-        api_version: str,
-        message_new: bool,
-        message_reply: bool,
-        message_allow: bool,
-        message_deny: bool,
-        message_edit: bool,
-        message_typing_state: bool,
-        photo_new: bool,
-        audio_new: bool,
-        video_new: bool,
-        wall_reply_new: bool,
-        wall_reply_edit: bool,
-        wall_reply_delete: bool,
-        wall_reply_restore: bool,
-        wall_post_new: bool,
-        wall_repost: bool,
-        board_post_new: bool,
-        board_post_edit: bool,
-        board_post_restore: bool,
-        board_post_delete: bool,
-        photo_comment_new: bool,
-        photo_comment_edit: bool,
-        photo_comment_delete: bool,
-        photo_comment_restore: bool,
-        video_comment_new: bool,
-        video_comment_edit: bool,
-        video_comment_delete: bool,
-        video_comment_restore: bool,
-        market_comment_new: bool,
-        market_comment_edit: bool,
-        market_comment_delete: bool,
-        market_comment_restore: bool,
-        poll_vote_new: bool,
-        group_join: bool,
-        group_leave: bool,
-        group_change_settings: bool,
-        group_change_photo: bool,
-        group_officers_edit: bool,
-        user_block: bool,
-        user_unblock: bool,
+        enabled: bool = None,
+        api_version: str = None,
+        message_new: bool = None,
+        message_reply: bool = None,
+        message_allow: bool = None,
+        message_deny: bool = None,
+        message_edit: bool = None,
+        message_typing_state: bool = None,
+        photo_new: bool = None,
+        audio_new: bool = None,
+        video_new: bool = None,
+        wall_reply_new: bool = None,
+        wall_reply_edit: bool = None,
+        wall_reply_delete: bool = None,
+        wall_reply_restore: bool = None,
+        wall_post_new: bool = None,
+        wall_repost: bool = None,
+        board_post_new: bool = None,
+        board_post_edit: bool = None,
+        board_post_restore: bool = None,
+        board_post_delete: bool = None,
+        photo_comment_new: bool = None,
+        photo_comment_edit: bool = None,
+        photo_comment_delete: bool = None,
+        photo_comment_restore: bool = None,
+        video_comment_new: bool = None,
+        video_comment_edit: bool = None,
+        video_comment_delete: bool = None,
+        video_comment_restore: bool = None,
+        market_comment_new: bool = None,
+        market_comment_edit: bool = None,
+        market_comment_delete: bool = None,
+        market_comment_restore: bool = None,
+        poll_vote_new: bool = None,
+        group_join: bool = None,
+        group_leave: bool = None,
+        group_change_settings: bool = None,
+        group_change_photo: bool = None,
+        group_officers_edit: bool = None,
+        user_block: bool = None,
+        user_unblock: bool = None,
     ) -> responses.groups.SetLongPollSettings:
         """ groups.setLongPollSettings
         From Vk Docs: Sets Long Poll notification settings
@@ -1252,7 +1425,11 @@ class GroupsSetLongPollSettings(BaseMethod):
         :param user_unblock: User removed from community blacklist
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.setLongPollSettings",
             params,
@@ -1263,7 +1440,9 @@ class GroupsSetLongPollSettings(BaseMethod):
 class GroupsUnban(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int, owner_id: int) -> responses.groups.Unban:
+    async def __call__(
+        self, group_id: int, owner_id: int = None
+    ) -> responses.groups.Unban:
         """ groups.unban
         From Vk Docs: 
         Access from user token(s)
@@ -1271,7 +1450,11 @@ class GroupsUnban(BaseMethod):
         :param owner_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "groups.unban", params, response_model=responses.groups.Unban
         )

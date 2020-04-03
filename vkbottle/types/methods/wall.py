@@ -20,7 +20,11 @@ class WallCloseComments(BaseMethod):
         :param post_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.closeComments", params)
 
 
@@ -32,14 +36,14 @@ class WallCreateComment(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
         post_id: int,
-        from_group: int,
-        message: str,
-        reply_to_comment: int,
-        attachments: typing.List,
-        sticker_id: int,
-        guid: str,
+        owner_id: int = None,
+        from_group: int = None,
+        message: str = None,
+        reply_to_comment: int = None,
+        attachments: typing.List = None,
+        sticker_id: int = None,
+        guid: str = None,
     ):
         """ wall.createComment
         From Vk Docs: Adds a comment to a post on a user wall or community wall.
@@ -54,14 +58,18 @@ class WallCreateComment(BaseMethod):
         :param guid: Unique identifier to avoid repeated comments.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.createComment", params)
 
 
 class WallDelete(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, post_id: int):
+    async def __call__(self, owner_id: int = None, post_id: int = None):
         """ wall.delete
         From Vk Docs: Deletes a post from a user wall or community wall.
         Access from user token(s)
@@ -69,14 +77,18 @@ class WallDelete(BaseMethod):
         :param post_id: ID of the post to be deleted.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.delete", params)
 
 
 class WallDeleteComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, comment_id: int):
+    async def __call__(self, comment_id: int, owner_id: int = None):
         """ wall.deleteComment
         From Vk Docs: Deletes a comment on a post on a user wall or community wall.
         Access from user token(s)
@@ -84,7 +96,11 @@ class WallDeleteComment(BaseMethod):
         :param comment_id: Comment ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.deleteComment", params)
 
 
@@ -93,22 +109,22 @@ class WallEdit(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
         post_id: int,
-        friends_only: bool,
-        message: str,
-        attachments: typing.List,
-        services: str,
-        signed: bool,
-        publish_date: int,
-        lat: typing.Any,
-        long: typing.Any,
-        place_id: int,
-        mark_as_ads: bool,
-        close_comments: bool,
-        poster_bkg_id: int,
-        poster_bkg_owner_id: int,
-        poster_bkg_access_hash: str,
+        owner_id: int = None,
+        friends_only: bool = None,
+        message: str = None,
+        attachments: typing.List = None,
+        services: str = None,
+        signed: bool = None,
+        publish_date: int = None,
+        lat: typing.Any = None,
+        long: typing.Any = None,
+        place_id: int = None,
+        mark_as_ads: bool = None,
+        close_comments: bool = None,
+        poster_bkg_id: int = None,
+        poster_bkg_owner_id: int = None,
+        poster_bkg_access_hash: str = None,
     ):
         """ wall.edit
         From Vk Docs: Edits a post on a user wall or community wall.
@@ -131,7 +147,11 @@ class WallEdit(BaseMethod):
         :param poster_bkg_access_hash: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.edit", params)
 
 
@@ -140,18 +160,18 @@ class WallEditAdsStealth(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
         post_id: int,
-        message: str,
-        attachments: typing.List,
-        signed: bool,
-        lat: typing.Any,
-        long: typing.Any,
-        place_id: int,
-        link_button: str,
-        link_title: str,
-        link_image: str,
-        link_video: str,
+        owner_id: int = None,
+        message: str = None,
+        attachments: typing.List = None,
+        signed: bool = None,
+        lat: typing.Any = None,
+        long: typing.Any = None,
+        place_id: int = None,
+        link_button: str = None,
+        link_title: str = None,
+        link_image: str = None,
+        link_video: str = None,
     ):
         """ wall.editAdsStealth
         From Vk Docs: Allows to edit hidden post.
@@ -170,7 +190,11 @@ class WallEditAdsStealth(BaseMethod):
         :param link_video: Link video ID in format "<owner_id>_<media_id>"
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.editAdsStealth", params)
 
 
@@ -178,7 +202,11 @@ class WallEditComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, comment_id: int, message: str, attachments: typing.List
+        self,
+        comment_id: int,
+        owner_id: int = None,
+        message: str = None,
+        attachments: typing.List = None,
     ):
         """ wall.editComment
         From Vk Docs: Edits a comment on a user wall or community wall.
@@ -189,7 +217,11 @@ class WallEditComment(BaseMethod):
         :param attachments: List of objects attached to the comment, in the following format: , "<owner_id>_<media_id>,<owner_id>_<media_id>", '' — Type of media attachment: 'photo' — photo, 'video' — video, 'audio' — audio, 'doc' — document, '<owner_id>' — ID of the media attachment owner. '<media_id>' — Media attachment ID. For example: "photo100172_166443618,photo66748_265827614"
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.editComment", params)
 
 
@@ -201,13 +233,13 @@ class WallGet(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
-        domain: str,
-        offset: int,
-        count: int,
-        filter: str,
-        extended: bool,
-        fields: typing.List,
+        owner_id: int = None,
+        domain: str = None,
+        offset: int = None,
+        count: int = None,
+        filter: str = None,
+        extended: bool = None,
+        fields: typing.List = None,
     ):
         """ wall.get
         From Vk Docs: Returns a list of posts on a user wall or community wall.
@@ -221,7 +253,11 @@ class WallGet(BaseMethod):
         :param fields: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.get", params)
 
 
@@ -234,9 +270,9 @@ class WallGetById(BaseMethod):
     async def __call__(
         self,
         posts: typing.List,
-        extended: bool,
-        copy_history_depth: int,
-        fields: typing.List,
+        extended: bool = None,
+        copy_history_depth: int = None,
+        fields: typing.List = None,
     ):
         """ wall.getById
         From Vk Docs: Returns a list of posts from user or community walls by their IDs.
@@ -247,7 +283,11 @@ class WallGetById(BaseMethod):
         :param fields: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.getById", params)
 
 
@@ -259,18 +299,18 @@ class WallGetComments(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
-        post_id: int,
-        need_likes: bool,
-        start_comment_id: int,
-        offset: int,
-        count: int,
-        sort: str,
-        preview_length: int,
-        extended: bool,
-        fields: typing.List,
-        comment_id: int,
-        thread_items_count: int,
+        owner_id: int = None,
+        post_id: int = None,
+        need_likes: bool = None,
+        start_comment_id: int = None,
+        offset: int = None,
+        count: int = None,
+        sort: str = None,
+        preview_length: int = None,
+        extended: bool = None,
+        fields: typing.List = None,
+        comment_id: int = None,
+        thread_items_count: int = None,
     ):
         """ wall.getComments
         From Vk Docs: Returns a list of comments on a post on a user wall or community wall.
@@ -289,7 +329,11 @@ class WallGetComments(BaseMethod):
         :param thread_items_count: Count items in threads.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.getComments", params)
 
 
@@ -299,7 +343,13 @@ class WallGetReposts(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, owner_id: int, post_id: int, offset: int, count: int):
+    async def __call__(
+        self,
+        owner_id: int = None,
+        post_id: int = None,
+        offset: int = None,
+        count: int = None,
+    ):
         """ wall.getReposts
         From Vk Docs: Returns information about reposts of a post on user wall or community wall.
         Access from user, service token(s)
@@ -309,7 +359,11 @@ class WallGetReposts(BaseMethod):
         :param count: Number of reposts to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.getReposts", params)
 
 
@@ -327,14 +381,18 @@ class WallOpenComments(BaseMethod):
         :param post_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.openComments", params)
 
 
 class WallPin(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, post_id: int):
+    async def __call__(self, post_id: int, owner_id: int = None):
         """ wall.pin
         From Vk Docs: Pins the post on wall.
         Access from user token(s)
@@ -342,7 +400,11 @@ class WallPin(BaseMethod):
         :param post_id: Post ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.pin", params)
 
 
@@ -351,22 +413,22 @@ class WallPost(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
-        friends_only: bool,
-        from_group: bool,
-        message: str,
-        attachments: typing.List,
-        services: str,
-        signed: bool,
-        publish_date: int,
-        lat: typing.Any,
-        long: typing.Any,
-        place_id: int,
-        post_id: int,
-        guid: str,
-        mark_as_ads: bool,
-        close_comments: bool,
-        mute_notifications: bool,
+        owner_id: int = None,
+        friends_only: bool = None,
+        from_group: bool = None,
+        message: str = None,
+        attachments: typing.List = None,
+        services: str = None,
+        signed: bool = None,
+        publish_date: int = None,
+        lat: typing.Any = None,
+        long: typing.Any = None,
+        place_id: int = None,
+        post_id: int = None,
+        guid: str = None,
+        mark_as_ads: bool = None,
+        close_comments: bool = None,
+        mute_notifications: bool = None,
     ):
         """ wall.post
         From Vk Docs: Adds a new post on a user wall or community wall. Can also be used to publish suggested or scheduled posts.
@@ -389,7 +451,11 @@ class WallPost(BaseMethod):
         :param mute_notifications: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.post", params)
 
 
@@ -399,17 +465,17 @@ class WallPostAdsStealth(BaseMethod):
     async def __call__(
         self,
         owner_id: int,
-        message: str,
-        attachments: typing.List,
-        signed: bool,
-        lat: typing.Any,
-        long: typing.Any,
-        place_id: int,
-        guid: str,
-        link_button: str,
-        link_title: str,
-        link_image: str,
-        link_video: str,
+        message: str = None,
+        attachments: typing.List = None,
+        signed: bool = None,
+        lat: typing.Any = None,
+        long: typing.Any = None,
+        place_id: int = None,
+        guid: str = None,
+        link_button: str = None,
+        link_title: str = None,
+        link_image: str = None,
+        link_video: str = None,
     ):
         """ wall.postAdsStealth
         From Vk Docs: Allows to create hidden post which will not be shown on the community's wall and can be used for creating an ad with type "Community post".
@@ -428,14 +494,18 @@ class WallPostAdsStealth(BaseMethod):
         :param link_video: Link video ID in format "<owner_id>_<media_id>"
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.postAdsStealth", params)
 
 
 class WallReportComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, comment_id: int, reason: int):
+    async def __call__(self, owner_id: int, comment_id: int, reason: int = None):
         """ wall.reportComment
         From Vk Docs: Reports (submits a complaint about) a comment on a post on a user wall or community wall.
         Access from user token(s)
@@ -444,14 +514,18 @@ class WallReportComment(BaseMethod):
         :param reason: Reason for the complaint: '0' – spam, '1' – child pornography, '2' – extremism, '3' – violence, '4' – drug propaganda, '5' – adult material, '6' – insult, abuse
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.reportComment", params)
 
 
 class WallReportPost(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, post_id: int, reason: int):
+    async def __call__(self, owner_id: int, post_id: int, reason: int = None):
         """ wall.reportPost
         From Vk Docs: Reports (submits a complaint about) a post on a user wall or community wall.
         Access from user token(s)
@@ -460,7 +534,11 @@ class WallReportPost(BaseMethod):
         :param reason: Reason for the complaint: '0' – spam, '1' – child pornography, '2' – extremism, '3' – violence, '4' – drug propaganda, '5' – adult material, '6' – insult, abuse
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.reportPost", params)
 
 
@@ -470,10 +548,10 @@ class WallRepost(BaseMethod):
     async def __call__(
         self,
         object: str,
-        message: str,
-        group_id: int,
-        mark_as_ads: bool,
-        mute_notifications: bool,
+        message: str = None,
+        group_id: int = None,
+        mark_as_ads: bool = None,
+        mute_notifications: bool = None,
     ):
         """ wall.repost
         From Vk Docs: Reposts (copies) an object to a user wall or community wall.
@@ -485,14 +563,18 @@ class WallRepost(BaseMethod):
         :param mute_notifications: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.repost", params)
 
 
 class WallRestore(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, post_id: int):
+    async def __call__(self, owner_id: int = None, post_id: int = None):
         """ wall.restore
         From Vk Docs: Restores a post deleted from a user wall or community wall.
         Access from user token(s)
@@ -500,14 +582,18 @@ class WallRestore(BaseMethod):
         :param post_id: ID of the post to be restored.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.restore", params)
 
 
 class WallRestoreComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, comment_id: int):
+    async def __call__(self, comment_id: int, owner_id: int = None):
         """ wall.restoreComment
         From Vk Docs: Restores a comment deleted from a user wall or community wall.
         Access from user token(s)
@@ -515,7 +601,11 @@ class WallRestoreComment(BaseMethod):
         :param comment_id: Comment ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.restoreComment", params)
 
 
@@ -527,14 +617,14 @@ class WallSearch(BaseMethod):
 
     async def __call__(
         self,
-        owner_id: int,
-        domain: str,
-        query: str,
-        owners_only: bool,
-        count: int,
-        offset: int,
-        extended: bool,
-        fields: typing.List,
+        owner_id: int = None,
+        domain: str = None,
+        query: str = None,
+        owners_only: bool = None,
+        count: int = None,
+        offset: int = None,
+        extended: bool = None,
+        fields: typing.List = None,
     ):
         """ wall.search
         From Vk Docs: Allows to search posts on user or community walls.
@@ -549,14 +639,18 @@ class WallSearch(BaseMethod):
         :param fields: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.search", params)
 
 
 class WallUnpin(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, post_id: int):
+    async def __call__(self, post_id: int, owner_id: int = None):
         """ wall.unpin
         From Vk Docs: Unpins the post on wall.
         Access from user token(s)
@@ -564,7 +658,11 @@ class WallUnpin(BaseMethod):
         :param post_id: Post ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("wall.unpin", params)
 
 

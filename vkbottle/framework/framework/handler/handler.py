@@ -1,6 +1,6 @@
 import typing
 import re
-from inspect import iscoroutinefunction, signature
+from inspect import signature
 from vkbottle.utils import logger
 
 from vbml import Patcher, Pattern
@@ -27,12 +27,6 @@ COL_RULES = {
     "levenstein": LevenshteinDisRule,
     "lev": LevenshteinDisRule,
 }
-
-
-def should_ignore_ans(func: typing.Callable, arguments: list) -> bool:
-    if not iscoroutinefunction(func):
-        raise HandlerError("Handling functions must be async")
-    return len([a for a in signature(func).parameters if a not in arguments]) < 1
 
 
 class Handler:
@@ -234,7 +228,6 @@ class MessageHandler:
         arguments = [
             arguments for pattern in patterns for arguments in pattern.arguments
         ]
-        rule.data["ignore_ans"] = should_ignore_ans(func, arguments)
 
         return rule
 

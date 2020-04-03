@@ -9,7 +9,9 @@ from .method import BaseMethod
 class NewsfeedAddBan(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_ids: typing.List, group_ids: typing.List):
+    async def __call__(
+        self, user_ids: typing.List = None, group_ids: typing.List = None
+    ):
         """ newsfeed.addBan
         From Vk Docs: Prevents news from specified users and communities from appearing in the current user's newsfeed.
         Access from user token(s)
@@ -17,14 +19,20 @@ class NewsfeedAddBan(BaseMethod):
         :param group_ids: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.addBan", params)
 
 
 class NewsfeedDeleteBan(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_ids: typing.List, group_ids: typing.List):
+    async def __call__(
+        self, user_ids: typing.List = None, group_ids: typing.List = None
+    ):
         """ newsfeed.deleteBan
         From Vk Docs: Allows news from previously banned users and communities to be shown in the current user's newsfeed.
         Access from user token(s)
@@ -32,7 +40,11 @@ class NewsfeedDeleteBan(BaseMethod):
         :param group_ids: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.deleteBan", params)
 
 
@@ -46,7 +58,11 @@ class NewsfeedDeleteList(BaseMethod):
         :param list_id: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.deleteList", params)
 
 
@@ -55,16 +71,16 @@ class NewsfeedGet(BaseMethod):
 
     async def __call__(
         self,
-        filters: typing.List,
-        return_banned: bool,
-        start_time: int,
-        end_time: int,
-        max_photos: int,
-        source_ids: str,
-        start_from: str,
-        count: int,
-        fields: typing.List,
-        section: str,
+        filters: typing.List = None,
+        return_banned: bool = None,
+        start_time: int = None,
+        end_time: int = None,
+        max_photos: int = None,
+        source_ids: str = None,
+        start_from: str = None,
+        count: int = None,
+        fields: typing.List = None,
+        section: str = None,
     ):
         """ newsfeed.get
         From Vk Docs: Returns data required to show newsfeed for the current user.
@@ -81,14 +97,20 @@ class NewsfeedGet(BaseMethod):
         :param section: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.get", params)
 
 
 class NewsfeedGetBanned(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, extended: bool, fields: typing.List, name_case: str):
+    async def __call__(
+        self, extended: bool = None, fields: typing.List = None, name_case: str = None
+    ):
         """ newsfeed.getBanned
         From Vk Docs: Returns a list of users and communities banned from the current user's newsfeed.
         Access from user token(s)
@@ -97,7 +119,11 @@ class NewsfeedGetBanned(BaseMethod):
         :param name_case: Case for declension of user name and surname: 'nom' — nominative (default), 'gen' — genitive , 'dat' — dative, 'acc' — accusative , 'ins' — instrumental , 'abl' — prepositional
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.getBanned", params)
 
 
@@ -106,14 +132,14 @@ class NewsfeedGetComments(BaseMethod):
 
     async def __call__(
         self,
-        count: int,
-        filters: typing.List,
-        reposts: str,
-        start_time: int,
-        end_time: int,
-        last_comments_count: int,
-        start_from: str,
-        fields: typing.List,
+        count: int = None,
+        filters: typing.List = None,
+        reposts: str = None,
+        start_time: int = None,
+        end_time: int = None,
+        last_comments_count: int = None,
+        start_from: str = None,
+        fields: typing.List = None,
     ):
         """ newsfeed.getComments
         From Vk Docs: Returns a list of comments in the current user's newsfeed.
@@ -128,14 +154,18 @@ class NewsfeedGetComments(BaseMethod):
         :param fields: Additional fields of [vk.com/dev/fields|profiles] and [vk.com/dev/fields_groups|communities] to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.getComments", params)
 
 
 class NewsfeedGetLists(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, list_ids: typing.List, extended: bool):
+    async def __call__(self, list_ids: typing.List = None, extended: bool = None):
         """ newsfeed.getLists
         From Vk Docs: Returns a list of newsfeeds followed by the current user.
         Access from user token(s)
@@ -143,7 +173,11 @@ class NewsfeedGetLists(BaseMethod):
         :param extended: Return additional list info
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.getLists", params)
 
 
@@ -151,7 +185,12 @@ class NewsfeedGetMentions(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, owner_id: int, start_time: int, end_time: int, offset: int, count: int
+        self,
+        owner_id: int = None,
+        start_time: int = None,
+        end_time: int = None,
+        offset: int = None,
+        count: int = None,
     ):
         """ newsfeed.getMentions
         From Vk Docs: Returns a list of posts on user walls in which the current user is mentioned.
@@ -163,7 +202,11 @@ class NewsfeedGetMentions(BaseMethod):
         :param count: Number of posts to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.getMentions", params)
 
 
@@ -172,12 +215,12 @@ class NewsfeedGetRecommended(BaseMethod):
 
     async def __call__(
         self,
-        start_time: int,
-        end_time: int,
-        max_photos: int,
-        start_from: str,
-        count: int,
-        fields: typing.List,
+        start_time: int = None,
+        end_time: int = None,
+        max_photos: int = None,
+        start_from: str = None,
+        count: int = None,
+        fields: typing.List = None,
     ):
         """ newsfeed.getRecommended
         From Vk Docs: , Returns a list of newsfeeds recommended to the current user.
@@ -190,7 +233,11 @@ class NewsfeedGetRecommended(BaseMethod):
         :param fields: Additional fields of [vk.com/dev/fields|profiles] and [vk.com/dev/fields_groups|communities] to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.getRecommended", params)
 
 
@@ -198,7 +245,11 @@ class NewsfeedGetSuggestedSources(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, offset: int, count: int, shuffle: bool, fields: typing.List
+        self,
+        offset: int = None,
+        count: int = None,
+        shuffle: bool = None,
+        fields: typing.List = None,
     ):
         """ newsfeed.getSuggestedSources
         From Vk Docs: Returns communities and users that current user is suggested to follow.
@@ -209,14 +260,18 @@ class NewsfeedGetSuggestedSources(BaseMethod):
         :param fields: list of extra fields to be returned. See available fields for [vk.com/dev/fields|users] and [vk.com/dev/fields_groups|communities].
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.getSuggestedSources", params)
 
 
 class NewsfeedIgnoreItem(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, type: str, owner_id: int, item_id: int):
+    async def __call__(self, type: str, item_id: int, owner_id: int):
         """ newsfeed.ignoreItem
         From Vk Docs: Hides an item from the newsfeed.
         Access from user token(s)
@@ -225,7 +280,11 @@ class NewsfeedIgnoreItem(BaseMethod):
         :param item_id: Item identifier
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.ignoreItem", params)
 
 
@@ -233,7 +292,11 @@ class NewsfeedSaveList(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, list_id: int, title: str, source_ids: typing.List, no_reposts: bool
+        self,
+        title: str,
+        list_id: int = None,
+        source_ids: typing.List = None,
+        no_reposts: bool = None,
     ):
         """ newsfeed.saveList
         From Vk Docs: Creates and edits user newsfeed lists
@@ -244,7 +307,11 @@ class NewsfeedSaveList(BaseMethod):
         :param no_reposts: reposts display on and off ('1' is for off).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.saveList", params)
 
 
@@ -256,15 +323,15 @@ class NewsfeedSearch(BaseMethod):
 
     async def __call__(
         self,
-        q: str,
-        extended: bool,
-        count: int,
-        latitude: typing.Any,
-        longitude: typing.Any,
-        start_time: int,
-        end_time: int,
-        start_from: str,
-        fields: typing.List,
+        q: str = None,
+        extended: bool = None,
+        count: int = None,
+        latitude: typing.Any = None,
+        longitude: typing.Any = None,
+        start_time: int = None,
+        end_time: int = None,
+        start_from: str = None,
+        fields: typing.List = None,
     ):
         """ newsfeed.search
         From Vk Docs: Returns search results by statuses.
@@ -280,14 +347,18 @@ class NewsfeedSearch(BaseMethod):
         :param fields: Additional fields of [vk.com/dev/fields|profiles] and [vk.com/dev/fields_groups|communities] to return.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.search", params)
 
 
 class NewsfeedUnignoreItem(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, type: str, owner_id: int, item_id: int):
+    async def __call__(self, type: str, item_id: int, owner_id: int):
         """ newsfeed.unignoreItem
         From Vk Docs: Returns a hidden item to the newsfeed.
         Access from user token(s)
@@ -296,14 +367,18 @@ class NewsfeedUnignoreItem(BaseMethod):
         :param item_id: Item identifier
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.unignoreItem", params)
 
 
 class NewsfeedUnsubscribe(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, type: str, owner_id: int, item_id: int):
+    async def __call__(self, type: str, item_id: int, owner_id: int = None):
         """ newsfeed.unsubscribe
         From Vk Docs: Unsubscribes the current user from specified newsfeeds.
         Access from user token(s)
@@ -312,7 +387,11 @@ class NewsfeedUnsubscribe(BaseMethod):
         :param item_id: Object ID.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request("newsfeed.unsubscribe", params)
 
 

@@ -1,4 +1,4 @@
-import typing, types
+import types
 from asyncio import AbstractEventLoop
 from re import sub
 from vkbottle.utils import logger, init_bot_mention
@@ -12,14 +12,7 @@ from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework.framework.branch import BranchManager
 from vkbottle.framework.framework.branch import Branch, ExitBranch
 from vkbottle.framework._status import BotStatus
-
-
-def get_attr(adict: dict, attrs: typing.List[str]):
-    attrs = set(attrs)
-    for attr in attrs:
-        if attr in adict:
-            return adict[attr]
-    return
+from vkbottle.utils.tools import get_attr
 
 
 class AsyncHandleManager:

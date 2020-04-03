@@ -1,5 +1,5 @@
 import typing
-from .uploader import Uploader
+from .base import Uploader
 from enum import Enum
 
 

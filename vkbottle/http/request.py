@@ -4,9 +4,7 @@ import traceback
 from aiohttp import ClientSession
 
 from vkbottle.const import VERSION_REST
-from vkbottle.utils import json
-
-TRACEBACK = []
+from vkbottle.utils import json, logger
 
 
 def request(func):
@@ -21,7 +19,7 @@ def request(func):
                 response = await func(*args, **kwargs, client=client)
             return response
         except Exception:
-            TRACEBACK.append(traceback.format_exc())
+            logger.error(f"Error while requesting:\n{traceback.format_exc()}")
 
     return decorator
 
@@ -43,7 +41,7 @@ class HTTPRequest:
         data: dict = None,
         json_: dict = None,
         content_type: str = "application/json",
-    ):
+    ) -> dict:
         async with client.post(
             url, params=params or {}, ssl=ssl.SSLContext(), data=data, json=json_,
         ) as response:
@@ -57,7 +55,7 @@ class HTTPRequest:
         data: dict = None,
         json_: dict = None,
         content_type: str = "application/json",
-    ):
+    ) -> dict:
         async with client.get(
             url, ssl=ssl.SSLContext(), data=data or None, json=json_ or None
         ) as response:
@@ -67,8 +65,13 @@ class HTTPRequest:
 class HTTP:
     request = HTTPRequest()
 
-    async def get_current_rest(self):
+    async def get_current_rest(self) -> dict:
         """
         Get current actual info about package from GitHub REST page
         """
-        return await self.request.get(url=VERSION_REST, content_type="text/plain")
+        rest_status = await self.request.get(
+            url=VERSION_REST, content_type="text/plain"
+        )
+        if rest_status is None:
+            logger.error("Check  your internet connection")
+        return rest_status

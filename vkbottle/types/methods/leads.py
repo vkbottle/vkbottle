@@ -12,11 +12,11 @@ class LeadsCheckUser(BaseMethod):
     async def __call__(
         self,
         lead_id: int,
-        test_result: int,
-        test_mode: bool,
-        auto_start: bool,
-        age: int,
-        country: str,
+        test_result: int = None,
+        test_mode: bool = None,
+        auto_start: bool = None,
+        age: int = None,
+        country: str = None,
     ) -> responses.leads.CheckUser:
         """ leads.checkUser
         From Vk Docs: Checks if the user can start the lead.
@@ -29,7 +29,11 @@ class LeadsCheckUser(BaseMethod):
         :param country: User country code.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "leads.checkUser", params, response_model=responses.leads.CheckUser
         )
@@ -42,7 +46,7 @@ class LeadsComplete(BaseMethod):
     ]
 
     async def __call__(
-        self, vk_sid: str, secret: str, comment: str
+        self, vk_sid: str, secret: str, comment: str = None
     ) -> responses.leads.Complete:
         """ leads.complete
         From Vk Docs: Completes the lead started by user.
@@ -52,7 +56,11 @@ class LeadsComplete(BaseMethod):
         :param comment: Comment text.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "leads.complete", params, response_model=responses.leads.Complete
         )
@@ -62,7 +70,11 @@ class LeadsGetStats(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, lead_id: int, secret: str, date_start: str, date_end: str
+        self,
+        lead_id: int,
+        secret: str = None,
+        date_start: str = None,
+        date_end: str = None,
     ) -> responses.leads.GetStats:
         """ leads.getStats
         From Vk Docs: Returns lead stats data.
@@ -73,7 +85,11 @@ class LeadsGetStats(BaseMethod):
         :param date_end: Day to finish stats (YYYY_MM_DD, e.g.2011-09-17).
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "leads.getStats", params, response_model=responses.leads.GetStats
         )
@@ -89,10 +105,10 @@ class LeadsGetUsers(BaseMethod):
         self,
         offer_id: int,
         secret: str,
-        offset: int,
-        count: int,
-        status: int,
-        reverse: bool,
+        offset: int = None,
+        count: int = None,
+        status: int = None,
+        reverse: bool = None,
     ) -> responses.leads.GetUsers:
         """ leads.getUsers
         From Vk Docs: Returns a list of last user actions for the offer.
@@ -105,7 +121,11 @@ class LeadsGetUsers(BaseMethod):
         :param reverse: Sort order. Possible values: *'1' — chronological,, *'0' — reverse chronological.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "leads.getUsers", params, response_model=responses.leads.GetUsers
         )
@@ -121,7 +141,11 @@ class LeadsMetricHit(BaseMethod):
         :param data: Metric data obtained in the lead interface.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "leads.metricHit", params, response_model=responses.leads.MetricHit
         )
@@ -137,10 +161,10 @@ class LeadsStart(BaseMethod):
         self,
         lead_id: int,
         secret: str,
-        uid: int,
-        aid: int,
-        test_mode: bool,
-        force: bool,
+        uid: int = None,
+        aid: int = None,
+        test_mode: bool = None,
+        force: bool = None,
     ) -> responses.leads.Start:
         """ leads.start
         From Vk Docs: Creates new session for the user passing the offer.
@@ -153,7 +177,11 @@ class LeadsStart(BaseMethod):
         :param force: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
         return await self.request(
             "leads.start", params, response_model=responses.leads.Start
         )

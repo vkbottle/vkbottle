@@ -14,8 +14,11 @@ class UsersGet(BaseMethod):
     ]
 
     async def __call__(
-        self, user_ids: typing.List, fields: typing.List, name_case: str
-    ):
+        self,
+        user_ids: typing.List = None,
+        fields: typing.List = None,
+        name_case: str = None,
+    ) -> responses.users.Get:
         """ users.get
         From Vk Docs: Returns detailed information on users.
         Access from user, group, service token(s)
@@ -24,8 +27,14 @@ class UsersGet(BaseMethod):
         :param name_case: Case for declension of user name and surname: 'nom' — nominative (default), 'gen' — genitive , 'dat' — dative, 'acc' — accusative , 'ins' — instrumental , 'abl' — prepositional
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("users.get", params)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "users.get", params, response_model=responses.users.Get
+        )
 
 
 class UsersGetFollowers(BaseMethod):
@@ -35,8 +44,13 @@ class UsersGetFollowers(BaseMethod):
     ]
 
     async def __call__(
-        self, user_id: int, offset: int, count: int, fields: typing.List, name_case: str
-    ):
+        self,
+        user_id: int = None,
+        offset: int = None,
+        count: int = None,
+        fields: typing.List = None,
+        name_case: str = None,
+    ) -> responses.users.GetFollowers:
         """ users.getFollowers
         From Vk Docs: Returns a list of IDs of followers of the user in question, sorted by date added, most recent first.
         Access from user, service token(s)
@@ -47,8 +61,14 @@ class UsersGetFollowers(BaseMethod):
         :param name_case: Case for declension of user name and surname: 'nom' — nominative (default), 'gen' — genitive , 'dat' — dative, 'acc' — accusative , 'ins' — instrumental , 'abl' — prepositional
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("users.getFollowers", params)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "users.getFollowers", params, response_model=responses.users.GetFollowers
+        )
 
 
 class UsersGetSubscriptions(BaseMethod):
@@ -58,8 +78,13 @@ class UsersGetSubscriptions(BaseMethod):
     ]
 
     async def __call__(
-        self, user_id: int, extended: bool, offset: int, count: int, fields: typing.List
-    ):
+        self,
+        user_id: int = None,
+        extended: bool = None,
+        offset: int = None,
+        count: int = None,
+        fields: typing.List = None,
+    ) -> responses.users.GetSubscriptions:
         """ users.getSubscriptions
         From Vk Docs: Returns a list of IDs of users and communities followed by the user.
         Access from user, service token(s)
@@ -70,28 +95,24 @@ class UsersGetSubscriptions(BaseMethod):
         :param fields: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("users.getSubscriptions", params)
-
-
-class UsersIsAppUser(BaseMethod):
-    access_token_type: APIAccessibility = [APIAccessibility.USER]
-
-    async def __call__(self, user_id: int):
-        """ users.isAppUser
-        From Vk Docs: Returns information whether a user installed the application.
-        Access from user token(s)
-        :param user_id: 
-        """
-
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("users.isAppUser", params)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "users.getSubscriptions",
+            params,
+            response_model=responses.users.GetSubscriptions,
+        )
 
 
 class UsersReport(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_id: int, type: str, comment: str):
+    async def __call__(
+        self, user_id: int, type: str, comment: str = None
+    ) -> responses.users.Report:
         """ users.report
         From Vk Docs: Reports (submits a complain about) a user.
         Access from user token(s)
@@ -100,8 +121,14 @@ class UsersReport(BaseMethod):
         :param comment: Comment describing the complaint.
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("users.report", params)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "users.report", params, response_model=responses.users.Report
+        )
 
 
 class UsersSearch(BaseMethod):
@@ -109,40 +136,40 @@ class UsersSearch(BaseMethod):
 
     async def __call__(
         self,
-        q: str,
-        sort: int,
-        offset: int,
-        count: int,
-        fields: typing.List,
-        city: int,
-        country: int,
-        hometown: str,
-        university_country: int,
-        university: int,
-        university_year: int,
-        university_faculty: int,
-        university_chair: int,
-        sex: int,
-        status: int,
-        age_from: int,
-        age_to: int,
-        birth_day: int,
-        birth_month: int,
-        birth_year: int,
-        online: bool,
-        has_photo: bool,
-        school_country: int,
-        school_city: int,
-        school_class: int,
-        school: int,
-        school_year: int,
-        religion: str,
-        interests: str,
-        company: str,
-        position: str,
-        group_id: int,
-        from_list: typing.List,
-    ):
+        q: str = None,
+        sort: int = None,
+        offset: int = None,
+        count: int = None,
+        fields: typing.List = None,
+        city: int = None,
+        country: int = None,
+        hometown: str = None,
+        university_country: int = None,
+        university: int = None,
+        university_year: int = None,
+        university_faculty: int = None,
+        university_chair: int = None,
+        sex: int = None,
+        status: int = None,
+        age_from: int = None,
+        age_to: int = None,
+        birth_day: int = None,
+        birth_month: int = None,
+        birth_year: int = None,
+        online: bool = None,
+        has_photo: bool = None,
+        school_country: int = None,
+        school_city: int = None,
+        school_class: int = None,
+        school: int = None,
+        school_year: int = None,
+        religion: str = None,
+        interests: str = None,
+        company: str = None,
+        position: str = None,
+        group_id: int = None,
+        from_list: typing.List = None,
+    ) -> responses.users.Search:
         """ users.search
         From Vk Docs: Returns a list of users matching the search criteria.
         Access from user token(s)
@@ -181,8 +208,14 @@ class UsersSearch(BaseMethod):
         :param from_list: 
         """
 
-        params = {k: v for k, v in locals().items() if k not in ["self"]}
-        return await self.request("users.search", params)
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "users.search", params, response_model=responses.users.Search
+        )
 
 
 class Users:
@@ -190,6 +223,5 @@ class Users:
         self.get = UsersGet(request)
         self.get_followers = UsersGetFollowers(request)
         self.get_subscriptions = UsersGetSubscriptions(request)
-        self.is_app_user = UsersIsAppUser(request)
         self.report = UsersReport(request)
         self.search = UsersSearch(request)
