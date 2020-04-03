@@ -48,7 +48,7 @@ async def wrapper(ans: Message):
     await ans("New chat name: {}".format(ans.action.text))
 
 
-# REGEX ARGS USE
+# REGEX ARGS USAGE
 
 
 @bot.on.message("my name is <name>")
@@ -56,20 +56,9 @@ async def wrapper(ans: Message, name):
     await ans("your name is {}".format(name))
 
 
-"""
-Do not do it like this:
-@bot.on.message('<arg1><arg2>')
-Arguments in these instances are not separable!
-"""
-
-
-@bot.on.message(text="+<country_code>(<state_code>)<number>")
+@bot.on.message(text="+<country_code:int>(<state_code:int>)<number:int>")
 async def wrapper(ans: Message, country_code, state_code, number):
-    # +0(123)456
-    if country_code.isdigit() and state_code.isdigit() and number.isdigit():
-        await ans("Well done!")
-    else:
-        await ans("Number is incorrect!")
+    return f"{country_code + 1}{state_code}{number}"
 
 
 # OPTIONAL HANDLERS
@@ -89,7 +78,7 @@ async def wrapper(ans: Message):
 @bot.on.chat_mention()
 async def wrapper(ans: Message):
     # Raising when bot is just mentioned, in one word
-    await ans("I have been mentioned")
+    await ans("I was mentioned")
 
 
 if __name__ == "__main__":

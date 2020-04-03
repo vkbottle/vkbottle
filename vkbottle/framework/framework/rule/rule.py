@@ -55,22 +55,22 @@ class AbstractRule(Copy):
         self.__init_subclass__()
         return await self.check(event)
 
-    async def check(self, event):
+    async def check(self, event) -> bool:
         ...
 
 
 class Any(AbstractRule):
-    async def check(self, event):
+    async def check(self, event) -> bool:
         return True
 
 
 class AbstractUserRule(AbstractRule):
-    async def check(self, update: typing.Tuple[dict, BaseModel]):
+    async def check(self, update: typing.Tuple[dict, BaseModel]) -> bool:
         ...
 
 
 class AbstractMessageRule(AbstractRule):
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         ...
 
 
@@ -88,7 +88,7 @@ class UnionMixin(AbstractMessageRule):
 
 
 class StickerRule(UnionMixin):
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         if message.attachments and message.attachments[0].sticker:
             if not self.data["mixin"]:
                 return True
@@ -102,7 +102,7 @@ class MessageRule(AbstractMessageRule):
             message = [message]
         self.data = {"message": message}
 
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         if message.text in self.data["message"]:
             return True
 
@@ -139,7 +139,7 @@ class LevenshteinDisRule(AbstractMessageRule):
 
         return current_row[n]
 
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         for sample in self.data["samples"]:
             if self.distance(message.text, sample) <= self.lev:
                 self.resolve(sample)
@@ -155,7 +155,7 @@ class CommandRule(AbstractMessageRule):
             message = [message]
         self.data = {"message": ["/" + c for c in message]}
 
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         if message.text in self.data["message"]:
             return True
 
@@ -166,7 +166,7 @@ class EventRule(AbstractRule):
             event = [event]
         self.data = {"event": event}
 
-    async def check(self, event):
+    async def check(self, event) -> bool:
         if "data" not in self.data:
             self.data["data"] = self.getfullargspec.annotations.get(
                 self.getfullargspec.args[0], dict
@@ -197,13 +197,13 @@ class UserMessageRule(AbstractUserRule, UnionMixin):
 
 
 class ChatMessage(AbstractMessageRule):
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         if message.peer_id > 2e9:
             return True
 
 
 class PrivateMessage(AbstractMessageRule):
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         if message.peer_id < 2e9:
             return True
 
@@ -242,7 +242,7 @@ class VBML(AbstractMessageRule):
 
 
 class VBMLRule(VBML):
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         patterns: typing.List[Pattern] = self.data["pattern"]
         message = (
             message.text.replace("<br>", "\n")
@@ -279,7 +279,7 @@ class VBMLUserRule(VBML):
 
 
 class AttachmentRule(UnionMixin):
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         attachments = flatten(
             [
                 list(attachment.dict(skip_defaults=True).keys())
@@ -304,7 +304,7 @@ class ChatActionRule(AbstractMessageRule):
         self.data["chat_action"] = chat_action
         self.data["rules"] = rules or {}
 
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         if message.action:
             if message.action.type in self.data["chat_action"]:
                 if {
@@ -327,7 +327,7 @@ class PayloadRule(AbstractMessageRule):
         except json.decoder.JSONDecodeError:
             return dict()
 
-    async def check(self, message: Message):
+    async def check(self, message: Message) -> bool:
         if message.payload is not None:
             payload = self.dispatch(message.payload)
             if self.data["mode"] == 1:

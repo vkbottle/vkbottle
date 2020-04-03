@@ -2,13 +2,6 @@ from vkbottle import Bot, Message, keyboard_gen, types
 
 bot = Bot("token")
 
-"""
-Bot functions
-When bot receive message «hi» in private chat it answers «hi, my lil friend« and sends a keyboard
-If user joins, bot will try to send a message «Welcome to the group!»
-If bot can't do it and VKError with codes 901 or 902 appeared, bot uses logger to send a log about it
-"""
-
 
 @bot.on.message(text=["hi", "hello"])
 async def wrapper(ans: Message):
