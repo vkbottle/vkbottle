@@ -134,21 +134,23 @@ class Bot(HTTP, AsyncHandleManager):
 
         chunk = list(chunks(updates, 100))
         for mid in chunk:
-            messages = await self.api.request(
-                "messages.getById", {"message_ids": ",".join(map(str, mid))}
-            )
-            await self.emulate(
-                {
-                    "updates": [
-                        {
-                            "type": "message_new",
-                            "object": {"message": m, "client_info": {}},
-                        }
+            try:
+                messages = await self.api.request(
+                    "messages.getById", {"message_ids": ",".join(map(str, mid))}
+                )
+                await self.emulate(
+                    {
+                        "updates": [
+                            {
+                                "type": "message_new",
+                                "object": {"message": m, "client_info": {}},
+                            }
                         for m in messages["items"]
-                    ]
-                }
-            )
-
+                        ]
+                    }
+                )
+            except:
+                continue
     def dispatch(self, ext: "Bot"):
         """
         Concatenate handlers to current bot object
