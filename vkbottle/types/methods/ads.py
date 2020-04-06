@@ -9,7 +9,9 @@ from .method import BaseMethod
 class AdsAddOfficeUsers(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, data: str):
+    async def __call__(
+        self, account_id: int, data: str
+    ) -> responses.ads.AddOfficeUsers:
         """ ads.addOfficeUsers
         From Vk Docs: Adds managers and/or supervisors to advertising account.
         Access from user token(s)
@@ -22,7 +24,11 @@ class AdsAddOfficeUsers(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.addOfficeUsers", params)
+        return await self.request(
+            "ads.addOfficeUsers",
+            params,
+            response_model=responses.ads.AddOfficeUsersModel,
+        )
 
 
 class AdsCheckLink(BaseMethod):
@@ -30,7 +36,7 @@ class AdsCheckLink(BaseMethod):
 
     async def __call__(
         self, account_id: int, link_url: str, link_type: str, campaign_id: int = None
-    ):
+    ) -> responses.ads.CheckLink:
         """ ads.checkLink
         From Vk Docs: Allows to check the ad link.
         Access from user token(s)
@@ -45,13 +51,15 @@ class AdsCheckLink(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.checkLink", params)
+        return await self.request(
+            "ads.checkLink", params, response_model=responses.ads.CheckLinkModel
+        )
 
 
 class AdsCreateAds(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, data: str):
+    async def __call__(self, account_id: int, data: str) -> responses.ads.CreateAds:
         """ ads.createAds
         From Vk Docs: Creates ads.
         Access from user token(s)
@@ -64,13 +72,17 @@ class AdsCreateAds(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.createAds", params)
+        return await self.request(
+            "ads.createAds", params, response_model=responses.ads.CreateAdsModel
+        )
 
 
 class AdsCreateCampaigns(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, data: str):
+    async def __call__(
+        self, account_id: int, data: str
+    ) -> responses.ads.CreateCampaigns:
         """ ads.createCampaigns
         From Vk Docs: Creates advertising campaigns.
         Access from user token(s)
@@ -83,13 +95,17 @@ class AdsCreateCampaigns(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.createCampaigns", params)
+        return await self.request(
+            "ads.createCampaigns",
+            params,
+            response_model=responses.ads.CreateCampaignsModel,
+        )
 
 
 class AdsCreateClients(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, data: str):
+    async def __call__(self, account_id: int, data: str) -> responses.ads.CreateClients:
         """ ads.createClients
         From Vk Docs: Creates clients of an advertising agency.
         Access from user token(s)
@@ -102,7 +118,9 @@ class AdsCreateClients(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.createClients", params)
+        return await self.request(
+            "ads.createClients", params, response_model=responses.ads.CreateClientsModel
+        )
 
 
 class AdsCreateTargetGroup(BaseMethod):
@@ -116,7 +134,7 @@ class AdsCreateTargetGroup(BaseMethod):
         lifetime: int = None,
         target_pixel_id: int = None,
         target_pixel_rules: str = None,
-    ):
+    ) -> responses.ads.CreateTargetGroup:
         """ ads.createTargetGroup
         From Vk Docs: Creates a group to re-target ads for users who visited advertiser's site (viewed information about the product, registered, etc.).
         Access from user token(s)
@@ -133,13 +151,17 @@ class AdsCreateTargetGroup(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.createTargetGroup", params)
+        return await self.request(
+            "ads.createTargetGroup",
+            params,
+            response_model=responses.ads.CreateTargetGroupModel,
+        )
 
 
 class AdsDeleteAds(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, ids: str):
+    async def __call__(self, account_id: int, ids: str) -> responses.ads.DeleteAds:
         """ ads.deleteAds
         From Vk Docs: Archives ads.
         Access from user token(s)
@@ -152,13 +174,17 @@ class AdsDeleteAds(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.deleteAds", params)
+        return await self.request(
+            "ads.deleteAds", params, response_model=responses.ads.DeleteAdsModel
+        )
 
 
 class AdsDeleteCampaigns(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, ids: str):
+    async def __call__(
+        self, account_id: int, ids: str
+    ) -> responses.ads.DeleteCampaigns:
         """ ads.deleteCampaigns
         From Vk Docs: Archives advertising campaigns.
         Access from user token(s)
@@ -171,13 +197,17 @@ class AdsDeleteCampaigns(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.deleteCampaigns", params)
+        return await self.request(
+            "ads.deleteCampaigns",
+            params,
+            response_model=responses.ads.DeleteCampaignsModel,
+        )
 
 
 class AdsDeleteClients(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, ids: str):
+    async def __call__(self, account_id: int, ids: str) -> responses.ads.DeleteClients:
         """ ads.deleteClients
         From Vk Docs: Archives clients of an advertising agency.
         Access from user token(s)
@@ -190,7 +220,9 @@ class AdsDeleteClients(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.deleteClients", params)
+        return await self.request(
+            "ads.deleteClients", params, response_model=responses.ads.DeleteClientsModel
+        )
 
 
 class AdsDeleteTargetGroup(BaseMethod):
@@ -198,7 +230,7 @@ class AdsDeleteTargetGroup(BaseMethod):
 
     async def __call__(
         self, account_id: int, target_group_id: int, client_id: int = None
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ ads.deleteTargetGroup
         From Vk Docs: Deletes a retarget group.
         Access from user token(s)
@@ -212,13 +244,17 @@ class AdsDeleteTargetGroup(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.deleteTargetGroup", params)
+        return await self.request(
+            "ads.deleteTargetGroup",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class AdsGetAccounts(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self,):
+    async def __call__(self,) -> responses.ads.GetAccounts:
         """ ads.getAccounts
         From Vk Docs: Returns a list of advertising accounts.
         Access from user token(s)
@@ -230,7 +266,9 @@ class AdsGetAccounts(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getAccounts", params)
+        return await self.request(
+            "ads.getAccounts", params, response_model=responses.ads.GetAccountsModel
+        )
 
 
 class AdsGetAds(BaseMethod):
@@ -245,7 +283,7 @@ class AdsGetAds(BaseMethod):
         include_deleted: bool = None,
         limit: int = None,
         offset: int = None,
-    ):
+    ) -> responses.ads.GetAds:
         """ ads.getAds
         From Vk Docs: Returns number of ads.
         Access from user token(s)
@@ -263,7 +301,9 @@ class AdsGetAds(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getAds", params)
+        return await self.request(
+            "ads.getAds", params, response_model=responses.ads.GetAdsModel
+        )
 
 
 class AdsGetAdsLayout(BaseMethod):
@@ -278,7 +318,7 @@ class AdsGetAdsLayout(BaseMethod):
         include_deleted: bool = None,
         limit: int = None,
         offset: int = None,
-    ):
+    ) -> responses.ads.GetAdsLayout:
         """ ads.getAdsLayout
         From Vk Docs: Returns descriptions of ad layouts.
         Access from user token(s)
@@ -296,7 +336,9 @@ class AdsGetAdsLayout(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getAdsLayout", params)
+        return await self.request(
+            "ads.getAdsLayout", params, response_model=responses.ads.GetAdsLayoutModel
+        )
 
 
 class AdsGetAdsTargeting(BaseMethod):
@@ -311,7 +353,7 @@ class AdsGetAdsTargeting(BaseMethod):
         include_deleted: bool = None,
         limit: int = None,
         offset: int = None,
-    ):
+    ) -> responses.ads.GetAdsTargeting:
         """ ads.getAdsTargeting
         From Vk Docs: Returns ad targeting parameters.
         Access from user token(s)
@@ -329,13 +371,17 @@ class AdsGetAdsTargeting(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getAdsTargeting", params)
+        return await self.request(
+            "ads.getAdsTargeting",
+            params,
+            response_model=responses.ads.GetAdsTargetingModel,
+        )
 
 
 class AdsGetBudget(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int):
+    async def __call__(self, account_id: int) -> responses.ads.GetBudget:
         """ ads.getBudget
         From Vk Docs: Returns current budget of the advertising account.
         Access from user token(s)
@@ -347,7 +393,9 @@ class AdsGetBudget(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getBudget", params)
+        return await self.request(
+            "ads.getBudget", params, response_model=responses.ads.GetBudgetModel
+        )
 
 
 class AdsGetCampaigns(BaseMethod):
@@ -359,7 +407,7 @@ class AdsGetCampaigns(BaseMethod):
         client_id: int = None,
         include_deleted: bool = None,
         campaign_ids: str = None,
-    ):
+    ) -> responses.ads.GetCampaigns:
         """ ads.getCampaigns
         From Vk Docs: Returns a list of campaigns in an advertising account.
         Access from user token(s)
@@ -374,13 +422,15 @@ class AdsGetCampaigns(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getCampaigns", params)
+        return await self.request(
+            "ads.getCampaigns", params, response_model=responses.ads.GetCampaignsModel
+        )
 
 
 class AdsGetCategories(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, lang: str = None):
+    async def __call__(self, lang: str = None) -> responses.ads.GetCategories:
         """ ads.getCategories
         From Vk Docs: Returns a list of possible ad categories.
         Access from user token(s)
@@ -392,13 +442,15 @@ class AdsGetCategories(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getCategories", params)
+        return await self.request(
+            "ads.getCategories", params, response_model=responses.ads.GetCategoriesModel
+        )
 
 
 class AdsGetClients(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int):
+    async def __call__(self, account_id: int) -> responses.ads.GetClients:
         """ ads.getClients
         From Vk Docs: Returns a list of advertising agency's clients.
         Access from user token(s)
@@ -410,7 +462,9 @@ class AdsGetClients(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getClients", params)
+        return await self.request(
+            "ads.getClients", params, response_model=responses.ads.GetClientsModel
+        )
 
 
 class AdsGetDemographics(BaseMethod):
@@ -424,7 +478,7 @@ class AdsGetDemographics(BaseMethod):
         ids_type: str,
         period: str,
         date_to: str,
-    ):
+    ) -> responses.ads.GetDemographics:
         """ ads.getDemographics
         From Vk Docs: Returns demographics for ads or campaigns.
         Access from user token(s)
@@ -441,13 +495,17 @@ class AdsGetDemographics(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getDemographics", params)
+        return await self.request(
+            "ads.getDemographics",
+            params,
+            response_model=responses.ads.GetDemographicsModel,
+        )
 
 
 class AdsGetFloodStats(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int):
+    async def __call__(self, account_id: int) -> responses.ads.GetFloodStats:
         """ ads.getFloodStats
         From Vk Docs: Returns information about current state of a counter — number of remaining runs of methods and time to the next counter nulling in seconds.
         Access from user token(s)
@@ -459,13 +517,15 @@ class AdsGetFloodStats(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getFloodStats", params)
+        return await self.request(
+            "ads.getFloodStats", params, response_model=responses.ads.GetFloodStatsModel
+        )
 
 
 class AdsGetOfficeUsers(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int):
+    async def __call__(self, account_id: int) -> responses.ads.GetOfficeUsers:
         """ ads.getOfficeUsers
         From Vk Docs: Returns a list of managers and supervisors of advertising account.
         Access from user token(s)
@@ -477,13 +537,19 @@ class AdsGetOfficeUsers(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getOfficeUsers", params)
+        return await self.request(
+            "ads.getOfficeUsers",
+            params,
+            response_model=responses.ads.GetOfficeUsersModel,
+        )
 
 
 class AdsGetPostsReach(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, ids: str, ids_type: str):
+    async def __call__(
+        self, account_id: int, ids: str, ids_type: str
+    ) -> responses.ads.GetPostsReach:
         """ ads.getPostsReach
         From Vk Docs: Returns detailed statistics of promoted posts reach from campaigns and ads.
         Access from user token(s)
@@ -497,13 +563,17 @@ class AdsGetPostsReach(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getPostsReach", params)
+        return await self.request(
+            "ads.getPostsReach", params, response_model=responses.ads.GetPostsReachModel
+        )
 
 
 class AdsGetRejectionReason(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, ad_id: int):
+    async def __call__(
+        self, account_id: int, ad_id: int
+    ) -> responses.ads.GetRejectionReason:
         """ ads.getRejectionReason
         From Vk Docs: Returns a reason of ad rejection for pre-moderation.
         Access from user token(s)
@@ -516,7 +586,11 @@ class AdsGetRejectionReason(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getRejectionReason", params)
+        return await self.request(
+            "ads.getRejectionReason",
+            params,
+            response_model=responses.ads.GetRejectionReasonModel,
+        )
 
 
 class AdsGetStatistics(BaseMethod):
@@ -530,7 +604,7 @@ class AdsGetStatistics(BaseMethod):
         ids_type: str,
         period: str,
         date_to: str,
-    ):
+    ) -> responses.ads.GetStatistics:
         """ ads.getStatistics
         From Vk Docs: Returns statistics of performance indicators for ads, campaigns, clients or the whole account.
         Access from user token(s)
@@ -547,7 +621,9 @@ class AdsGetStatistics(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getStatistics", params)
+        return await self.request(
+            "ads.getStatistics", params, response_model=responses.ads.GetStatisticsModel
+        )
 
 
 class AdsGetSuggestions(BaseMethod):
@@ -561,7 +637,7 @@ class AdsGetSuggestions(BaseMethod):
         country: int = None,
         cities: str = None,
         lang: str = None,
-    ):
+    ) -> responses.ads.GetSuggestions:
         """ ads.getSuggestions
         From Vk Docs: Returns a set of auto-suggestions for various targeting parameters.
         Access from user token(s)
@@ -578,7 +654,11 @@ class AdsGetSuggestions(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getSuggestions", params)
+        return await self.request(
+            "ads.getSuggestions",
+            params,
+            response_model=responses.ads.GetSuggestionsModel,
+        )
 
 
 class AdsGetTargetGroups(BaseMethod):
@@ -586,7 +666,7 @@ class AdsGetTargetGroups(BaseMethod):
 
     async def __call__(
         self, account_id: int, client_id: int = None, extended: bool = None
-    ):
+    ) -> responses.ads.GetTargetGroups:
         """ ads.getTargetGroups
         From Vk Docs: Returns a list of target groups.
         Access from user token(s)
@@ -600,7 +680,11 @@ class AdsGetTargetGroups(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getTargetGroups", params)
+        return await self.request(
+            "ads.getTargetGroups",
+            params,
+            response_model=responses.ads.GetTargetGroupsModel,
+        )
 
 
 class AdsGetTargetingStats(BaseMethod):
@@ -618,7 +702,7 @@ class AdsGetTargetingStats(BaseMethod):
         ad_platform_no_wall: str = None,
         ad_platform_no_ad_network: str = None,
         link_domain: str = None,
-    ):
+    ) -> responses.ads.GetTargetingStats:
         """ ads.getTargetingStats
         From Vk Docs: Returns the size of targeting audience, and also recommended values for CPC and CPM.
         Access from user token(s)
@@ -639,13 +723,19 @@ class AdsGetTargetingStats(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getTargetingStats", params)
+        return await self.request(
+            "ads.getTargetingStats",
+            params,
+            response_model=responses.ads.GetTargetingStatsModel,
+        )
 
 
 class AdsGetUploadURL(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, ad_format: int, icon: int = None):
+    async def __call__(
+        self, ad_format: int, icon: int = None
+    ) -> responses.ads.GetUploadURL:
         """ ads.getUploadURL
         From Vk Docs: Returns URL to upload an ad photo to.
         Access from user token(s)
@@ -658,13 +748,15 @@ class AdsGetUploadURL(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getUploadURL", params)
+        return await self.request(
+            "ads.getUploadURL", params, response_model=responses.ads.GetUploadURLModel
+        )
 
 
 class AdsGetVideoUploadURL(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self,):
+    async def __call__(self,) -> responses.ads.GetVideoUploadURL:
         """ ads.getVideoUploadURL
         From Vk Docs: Returns URL to upload an ad video to.
         Access from user token(s)
@@ -676,7 +768,11 @@ class AdsGetVideoUploadURL(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.getVideoUploadURL", params)
+        return await self.request(
+            "ads.getVideoUploadURL",
+            params,
+            response_model=responses.ads.GetVideoUploadURLModel,
+        )
 
 
 class AdsImportTargetContacts(BaseMethod):
@@ -685,10 +781,10 @@ class AdsImportTargetContacts(BaseMethod):
     async def __call__(
         self,
         account_id: int,
-        contacts: str,
         target_group_id: int,
         client_id: int = None,
-    ):
+        contacts: str = None,
+    ) -> responses.ads.ImportTargetContacts:
         """ ads.importTargetContacts
         From Vk Docs: Imports a list of advertiser's contacts to count VK registered users against the target group.
         Access from user token(s)
@@ -703,13 +799,19 @@ class AdsImportTargetContacts(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.importTargetContacts", params)
+        return await self.request(
+            "ads.importTargetContacts",
+            params,
+            response_model=responses.ads.ImportTargetContactsModel,
+        )
 
 
 class AdsRemoveOfficeUsers(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, ids: str):
+    async def __call__(
+        self, account_id: int, ids: str
+    ) -> responses.ads.RemoveOfficeUsers:
         """ ads.removeOfficeUsers
         From Vk Docs: Removes managers and/or supervisors from advertising account.
         Access from user token(s)
@@ -722,13 +824,17 @@ class AdsRemoveOfficeUsers(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.removeOfficeUsers", params)
+        return await self.request(
+            "ads.removeOfficeUsers",
+            params,
+            response_model=responses.ads.RemoveOfficeUsersModel,
+        )
 
 
 class AdsUpdateAds(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, data: str):
+    async def __call__(self, account_id: int, data: str) -> responses.ads.UpdateAds:
         """ ads.updateAds
         From Vk Docs: Edits ads.
         Access from user token(s)
@@ -741,13 +847,17 @@ class AdsUpdateAds(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.updateAds", params)
+        return await self.request(
+            "ads.updateAds", params, response_model=responses.ads.UpdateAdsModel
+        )
 
 
 class AdsUpdateCampaigns(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, data: str):
+    async def __call__(
+        self, account_id: int, data: str
+    ) -> responses.ads.UpdateCampaigns:
         """ ads.updateCampaigns
         From Vk Docs: Edits advertising campaigns.
         Access from user token(s)
@@ -760,13 +870,17 @@ class AdsUpdateCampaigns(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.updateCampaigns", params)
+        return await self.request(
+            "ads.updateCampaigns",
+            params,
+            response_model=responses.ads.UpdateCampaignsModel,
+        )
 
 
 class AdsUpdateClients(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, account_id: int, data: str):
+    async def __call__(self, account_id: int, data: str) -> responses.ads.UpdateClients:
         """ ads.updateClients
         From Vk Docs: Edits clients of an advertising agency.
         Access from user token(s)
@@ -779,7 +893,9 @@ class AdsUpdateClients(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.updateClients", params)
+        return await self.request(
+            "ads.updateClients", params, response_model=responses.ads.UpdateClientsModel
+        )
 
 
 class AdsUpdateTargetGroup(BaseMethod):
@@ -789,13 +905,13 @@ class AdsUpdateTargetGroup(BaseMethod):
         self,
         account_id: int,
         target_group_id: int,
-        name: str,
         client_id: int = None,
+        name: str = None,
         domain: str = None,
         lifetime: int = None,
         target_pixel_id: int = None,
         target_pixel_rules: str = None,
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ ads.updateTargetGroup
         From Vk Docs: Edits a retarget group.
         Access from user token(s)
@@ -814,7 +930,11 @@ class AdsUpdateTargetGroup(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("ads.updateTargetGroup", params)
+        return await self.request(
+            "ads.updateTargetGroup",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class Ads:

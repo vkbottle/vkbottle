@@ -9,7 +9,9 @@ from .method import BaseMethod
 class StatusGet(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_id: int = None, group_id: int = None):
+    async def __call__(
+        self, user_id: int = None, group_id: int = None
+    ) -> responses.status.Get:
         """ status.get
         From Vk Docs: Returns data required to show the status of a user or community.
         Access from user token(s)
@@ -22,13 +24,17 @@ class StatusGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("status.get", params)
+        return await self.request(
+            "status.get", params, response_model=responses.status.GetModel
+        )
 
 
 class StatusSet(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, text: str = None, group_id: int = None):
+    async def __call__(
+        self, text: str = None, group_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ status.set
         From Vk Docs: Sets a new status for the current user.
         Access from user token(s)
@@ -41,7 +47,9 @@ class StatusSet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("status.set", params)
+        return await self.request(
+            "status.set", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class Status:

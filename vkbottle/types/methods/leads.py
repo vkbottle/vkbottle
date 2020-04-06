@@ -35,7 +35,7 @@ class LeadsCheckUser(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "leads.checkUser", params, response_model=responses.leads.CheckUser
+            "leads.checkUser", params, response_model=responses.leads.CheckUserModel
         )
 
 
@@ -62,7 +62,7 @@ class LeadsComplete(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "leads.complete", params, response_model=responses.leads.Complete
+            "leads.complete", params, response_model=responses.leads.CompleteModel
         )
 
 
@@ -91,7 +91,7 @@ class LeadsGetStats(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "leads.getStats", params, response_model=responses.leads.GetStats
+            "leads.getStats", params, response_model=responses.leads.GetStatsModel
         )
 
 
@@ -127,7 +127,7 @@ class LeadsGetUsers(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "leads.getUsers", params, response_model=responses.leads.GetUsers
+            "leads.getUsers", params, response_model=responses.leads.GetUsersModel
         )
 
 
@@ -147,7 +147,7 @@ class LeadsMetricHit(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "leads.metricHit", params, response_model=responses.leads.MetricHit
+            "leads.metricHit", params, response_model=responses.leads.MetricHitModel
         )
 
 
@@ -183,7 +183,7 @@ class LeadsStart(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "leads.start", params, response_model=responses.leads.Start
+            "leads.start", params, response_model=responses.leads.StartModel
         )
 
 

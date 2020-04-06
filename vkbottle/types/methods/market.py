@@ -43,7 +43,7 @@ class MarketAdd(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.add", params, response_model=responses.market.Add
+            "market.add", params, response_model=responses.market.AddModel
         )
 
 
@@ -68,7 +68,7 @@ class MarketAddAlbum(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.addAlbum", params, response_model=responses.market.AddAlbum
+            "market.addAlbum", params, response_model=responses.market.AddAlbumModel
         )
 
 
@@ -77,7 +77,7 @@ class MarketAddToAlbum(BaseMethod):
 
     async def __call__(
         self, owner_id: int, album_ids: typing.List, item_id: int
-    ) -> responses.market.AddToAlbum:
+    ) -> responses.ok_response.OkResponse:
         """ market.addToAlbum
         From Vk Docs: Adds an item to one or multiple collections.
         Access from user token(s)
@@ -92,7 +92,9 @@ class MarketAddToAlbum(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.addToAlbum", params, response_model=responses.market.AddToAlbum
+            "market.addToAlbum",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -131,14 +133,16 @@ class MarketCreateComment(BaseMethod):
         return await self.request(
             "market.createComment",
             params,
-            response_model=responses.market.CreateComment,
+            response_model=responses.market.CreateCommentModel,
         )
 
 
 class MarketDelete(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, item_id: int) -> responses.market.Delete:
+    async def __call__(
+        self, owner_id: int, item_id: int
+    ) -> responses.ok_response.OkResponse:
         """ market.delete
         From Vk Docs: Deletes an item.
         Access from user token(s)
@@ -152,7 +156,9 @@ class MarketDelete(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.delete", params, response_model=responses.market.Delete
+            "market.delete",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -161,7 +167,7 @@ class MarketDeleteAlbum(BaseMethod):
 
     async def __call__(
         self, owner_id: int, album_id: int
-    ) -> responses.market.DeleteAlbum:
+    ) -> responses.ok_response.OkResponse:
         """ market.deleteAlbum
         From Vk Docs: Deletes a collection of items.
         Access from user token(s)
@@ -175,7 +181,9 @@ class MarketDeleteAlbum(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.deleteAlbum", params, response_model=responses.market.DeleteAlbum
+            "market.deleteAlbum",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -200,7 +208,7 @@ class MarketDeleteComment(BaseMethod):
         return await self.request(
             "market.deleteComment",
             params,
-            response_model=responses.market.DeleteComment,
+            response_model=responses.market.DeleteCommentModel,
         )
 
 
@@ -219,7 +227,7 @@ class MarketEdit(BaseMethod):
         deleted: bool = None,
         photo_ids: typing.List = None,
         url: str = None,
-    ) -> responses.market.Edit:
+    ) -> responses.ok_response.OkResponse:
         """ market.edit
         From Vk Docs: Edits an item.
         Access from user token(s)
@@ -241,7 +249,7 @@ class MarketEdit(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.edit", params, response_model=responses.market.Edit
+            "market.edit", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -255,7 +263,7 @@ class MarketEditAlbum(BaseMethod):
         album_id: int,
         photo_id: int = None,
         main_album: bool = None,
-    ) -> responses.market.EditAlbum:
+    ) -> responses.ok_response.OkResponse:
         """ market.editAlbum
         From Vk Docs: Edits a collection of items
         Access from user token(s)
@@ -272,7 +280,9 @@ class MarketEditAlbum(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.editAlbum", params, response_model=responses.market.EditAlbum
+            "market.editAlbum",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -285,7 +295,7 @@ class MarketEditComment(BaseMethod):
         comment_id: int,
         message: str = None,
         attachments: typing.List = None,
-    ) -> responses.market.EditComment:
+    ) -> responses.ok_response.OkResponse:
         """ market.editComment
         From Vk Docs: Chages item comment's text
         Access from user token(s)
@@ -301,7 +311,9 @@ class MarketEditComment(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.editComment", params, response_model=responses.market.EditComment
+            "market.editComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -332,7 +344,7 @@ class MarketGet(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.get", params, response_model=responses.market.Get
+            "market.get", params, response_model=responses.market.GetModel
         )
 
 
@@ -355,7 +367,9 @@ class MarketGetAlbumById(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.getAlbumById", params, response_model=responses.market.GetAlbumById
+            "market.getAlbumById",
+            params,
+            response_model=responses.market.GetAlbumByIdModel,
         )
 
 
@@ -379,7 +393,7 @@ class MarketGetAlbums(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.getAlbums", params, response_model=responses.market.GetAlbums
+            "market.getAlbums", params, response_model=responses.market.GetAlbumsModel
         )
 
 
@@ -402,7 +416,7 @@ class MarketGetById(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.getById", params, response_model=responses.market.GetById
+            "market.getById", params, response_model=responses.market.GetByIdModel
         )
 
 
@@ -411,7 +425,7 @@ class MarketGetCategories(BaseMethod):
 
     async def __call__(
         self, count: int = None, offset: int = None
-    ) -> dict:
+    ) -> responses.market.GetCategories:
         """ market.getCategories
         From Vk Docs: Returns a list of market categories.
         Access from user token(s)
@@ -427,6 +441,7 @@ class MarketGetCategories(BaseMethod):
         return await self.request(
             "market.getCategories",
             params,
+            response_model=responses.market.GetCategoriesModel,
         )
 
 
@@ -465,7 +480,9 @@ class MarketGetComments(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.getComments", params, response_model=responses.market.GetComments
+            "market.getComments",
+            params,
+            response_model=responses.market.GetCommentsModel,
         )
 
 
@@ -474,7 +491,7 @@ class MarketRemoveFromAlbum(BaseMethod):
 
     async def __call__(
         self, owner_id: int, album_ids: typing.List, item_id: int
-    ) -> responses.market.RemoveFromAlbum:
+    ) -> responses.ok_response.OkResponse:
         """ market.removeFromAlbum
         From Vk Docs: Removes an item from one or multiple collections.
         Access from user token(s)
@@ -491,7 +508,7 @@ class MarketRemoveFromAlbum(BaseMethod):
         return await self.request(
             "market.removeFromAlbum",
             params,
-            response_model=responses.market.RemoveFromAlbum,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -500,7 +517,7 @@ class MarketReorderAlbums(BaseMethod):
 
     async def __call__(
         self, owner_id: int, album_id: int, before: int = None, after: int = None
-    ) -> responses.market.ReorderAlbums:
+    ) -> responses.ok_response.OkResponse:
         """ market.reorderAlbums
         From Vk Docs: Reorders the collections list.
         Access from user token(s)
@@ -518,7 +535,7 @@ class MarketReorderAlbums(BaseMethod):
         return await self.request(
             "market.reorderAlbums",
             params,
-            response_model=responses.market.ReorderAlbums,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -532,7 +549,7 @@ class MarketReorderItems(BaseMethod):
         album_id: int = None,
         before: int = None,
         after: int = None,
-    ) -> responses.market.ReorderItems:
+    ) -> responses.ok_response.OkResponse:
         """ market.reorderItems
         From Vk Docs: Changes item place in a collection.
         Access from user token(s)
@@ -549,7 +566,9 @@ class MarketReorderItems(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.reorderItems", params, response_model=responses.market.ReorderItems
+            "market.reorderItems",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -558,7 +577,7 @@ class MarketReport(BaseMethod):
 
     async def __call__(
         self, owner_id: int, item_id: int, reason: int = None
-    ) -> responses.market.Report:
+    ) -> responses.ok_response.OkResponse:
         """ market.report
         From Vk Docs: Sends a complaint to the item.
         Access from user token(s)
@@ -573,7 +592,9 @@ class MarketReport(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.report", params, response_model=responses.market.Report
+            "market.report",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -582,7 +603,7 @@ class MarketReportComment(BaseMethod):
 
     async def __call__(
         self, owner_id: int, reason: int, comment_id: int
-    ) -> responses.market.ReportComment:
+    ) -> responses.ok_response.OkResponse:
         """ market.reportComment
         From Vk Docs: Sends a complaint to the item's comment.
         Access from user token(s)
@@ -599,14 +620,16 @@ class MarketReportComment(BaseMethod):
         return await self.request(
             "market.reportComment",
             params,
-            response_model=responses.market.ReportComment,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class MarketRestore(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, item_id: int) -> responses.market.Restore:
+    async def __call__(
+        self, owner_id: int, item_id: int
+    ) -> responses.ok_response.OkResponse:
         """ market.restore
         From Vk Docs: Restores recently deleted item
         Access from user token(s)
@@ -620,7 +643,9 @@ class MarketRestore(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.restore", params, response_model=responses.market.Restore
+            "market.restore",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -645,7 +670,7 @@ class MarketRestoreComment(BaseMethod):
         return await self.request(
             "market.restoreComment",
             params,
-            response_model=responses.market.RestoreComment,
+            response_model=responses.market.RestoreCommentModel,
         )
 
 
@@ -690,7 +715,7 @@ class MarketSearch(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "market.search", params, response_model=responses.market.Search
+            "market.search", params, response_model=responses.market.SearchModel
         )
 
 

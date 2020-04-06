@@ -1,13 +1,13 @@
-from .others import SimpleResponse
+import typing
+import enum
 from ..base import BaseModel
-
-from typing import Any
-
-
-class CheckPhone(SimpleResponse):
-    pass
+from vkbottle.types import objects
 
 
-class RestoreResponse(BaseModel):
+class Restore(BaseModel):
     success: int = None
-    sid: Any = None
+    sid: str = None
+
+
+class RestoreModel(BaseModel):
+    response: Restore = None

@@ -1,83 +1,47 @@
-from .others import SimpleResponse
+import typing
+import enum
 from ..base import BaseModel
+from vkbottle.types import objects
+
+Start = objects.leads.Start
 
 
-from typing import Any, List
+class StartModel(BaseModel):
+    response: Start = None
 
 
-class CheckUserResponse(BaseModel):
-    result: bool = None
-    reason: str = None
-    start_link: str = None
-    sid: Any = None
+CheckUser = objects.leads.Checked
 
 
-class CheckUser(BaseModel):
-    response: CheckUserResponse = None
+class CheckUserModel(BaseModel):
+    response: CheckUser = None
 
 
-class CompleteResponse(BaseModel):
-    limit: int = None
-    day_limit: int = None
-    spent: int = None
-    cost: str = None
-    test_mode: int = None
-    success: int = None
+Complete = objects.leads.Complete
 
 
-class Complete(BaseModel):
-    response: CompleteResponse = None
+class CompleteModel(BaseModel):
+    response: Complete = None
 
 
-class GetStatsResponseDays(BaseModel):
-    impressions: int = None
-    started: int = None
-    completed: int = None
-    spent: int = None
+GetStats = objects.leads.Lead
 
 
-class GetStatsResponse(BaseModel):
-    limit: int = None
-    spent: int = None
-    cost: str = None
-    impressions: int = None
-    started: int = None
-    completed: int = None
-    days: List[GetStatsResponseDays] = []
+class GetStatsModel(BaseModel):
+    response: GetStats = None
 
 
-class GetStats(BaseModel):
-    response: GetStatsResponse = None
+GetUsers = typing.List[objects.leads.Entry]
 
 
-class GetUsersResponse(BaseModel):
-    uid: int = None
-    aid: int = None
-    sid: str = None
-    date: int = None
-    start_date: int = None
-    status: int = None
-    test_mode: int = None
-    comment: str = None
+class GetUsersModel(BaseModel):
+    response: GetUsers = None
 
 
-class GetUsers(BaseModel):
-    response: List[GetUsersResponse] = []
-
-
-class MetricHitResponse(BaseModel):
+class MetricHit(BaseModel):
     result: bool = None
     redirect_link: str = None
 
 
-class MetricHit(BaseModel):
-    response: MetricHitResponse = None
-
-
-class StartResponse(BaseModel):
-    test_mode: int = None
-    vk_sid: Any = None
-
-
-class Start(BaseModel):
-    response: StartResponse = None
+class MetricHitModel(BaseModel):
+    response: MetricHit = None

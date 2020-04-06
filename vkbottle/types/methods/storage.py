@@ -15,7 +15,7 @@ class StorageGet(BaseMethod):
         keys: typing.List = None,
         user_id: int = None,
         global_: bool = None,
-    ):
+    ) -> responses.storage.Get:
         """ storage.get
         From Vk Docs: Returns a value of variable with the name set by key parameter.
         Access from user token(s)
@@ -30,7 +30,9 @@ class StorageGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("storage.get", params)
+        return await self.request(
+            "storage.get", params, response_model=responses.storage.GetModel
+        )
 
 
 class StorageGetKeys(BaseMethod):
@@ -42,7 +44,7 @@ class StorageGetKeys(BaseMethod):
         global_: bool = None,
         offset: int = None,
         count: int = None,
-    ):
+    ) -> responses.storage.GetKeys:
         """ storage.getKeys
         From Vk Docs: Returns the names of all variables.
         Access from user token(s)
@@ -57,7 +59,9 @@ class StorageGetKeys(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("storage.getKeys", params)
+        return await self.request(
+            "storage.getKeys", params, response_model=responses.storage.GetKeysModel
+        )
 
 
 class StorageSet(BaseMethod):
@@ -65,7 +69,7 @@ class StorageSet(BaseMethod):
 
     async def __call__(
         self, key: str, value: str = None, user_id: int = None, global_: bool = None
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ storage.set
         From Vk Docs: Saves a value of variable with the name set by 'key' parameter.
         Access from user token(s)
@@ -80,7 +84,9 @@ class StorageSet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("storage.set", params)
+        return await self.request(
+            "storage.set", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class Storage:

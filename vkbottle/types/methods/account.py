@@ -9,7 +9,7 @@ from .method import BaseMethod
 class AccountBan(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int = None) -> responses.account.Ban:
+    async def __call__(self, owner_id: int = None) -> responses.ok_response.OkResponse:
         """ account.ban
         From Vk Docs: 
         Access from user token(s)
@@ -22,7 +22,7 @@ class AccountBan(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "account.ban", params, response_model=responses.account.Ban
+            "account.ban", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -53,7 +53,7 @@ class AccountChangePassword(BaseMethod):
         return await self.request(
             "account.changePassword",
             params,
-            response_model=responses.account.ChangePassword,
+            response_model=responses.account.ChangePasswordModel,
         )
 
 
@@ -78,7 +78,7 @@ class AccountGetActiveOffers(BaseMethod):
         return await self.request(
             "account.getActiveOffers",
             params,
-            response_model=responses.account.GetActiveOffers,
+            response_model=responses.account.GetActiveOffersModel,
         )
 
 
@@ -100,7 +100,7 @@ class AccountGetAppPermissions(BaseMethod):
         return await self.request(
             "account.getAppPermissions",
             params,
-            response_model=responses.account.GetAppPermissions,
+            response_model=responses.account.GetAppPermissionsModel,
         )
 
 
@@ -123,7 +123,7 @@ class AccountGetBanned(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "account.getBanned", params, response_model=responses.account.GetBanned
+            "account.getBanned", params, response_model=responses.account.GetBannedModel
         )
 
 
@@ -145,7 +145,9 @@ class AccountGetCounters(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "account.getCounters", params, response_model=responses.account.GetCounters
+            "account.getCounters",
+            params,
+            response_model=responses.account.GetCountersModel,
         )
 
 
@@ -165,7 +167,7 @@ class AccountGetInfo(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "account.getInfo", params, response_model=responses.account.GetInfo
+            "account.getInfo", params, response_model=responses.account.GetInfoModel
         )
 
 
@@ -187,7 +189,7 @@ class AccountGetProfileInfo(BaseMethod):
         return await self.request(
             "account.getProfileInfo",
             params,
-            response_model=responses.account.GetProfileInfo,
+            response_model=responses.account.GetProfileInfoModel,
         )
 
 
@@ -211,7 +213,7 @@ class AccountGetPushSettings(BaseMethod):
         return await self.request(
             "account.getPushSettings",
             params,
-            response_model=responses.account.GetPushSettings,
+            response_model=responses.account.GetPushSettingsModel,
         )
 
 
@@ -227,7 +229,7 @@ class AccountRegisterDevice(BaseMethod):
         system_version: str = None,
         settings: str = None,
         sandbox: bool = None,
-    ) -> responses.account.RegisterDevice:
+    ) -> responses.ok_response.OkResponse:
         """ account.registerDevice
         From Vk Docs: Subscribes an iOS/Android/Windows Phone-based device to receive push notifications
         Access from user token(s)
@@ -248,7 +250,7 @@ class AccountRegisterDevice(BaseMethod):
         return await self.request(
             "account.registerDevice",
             params,
-            response_model=responses.account.RegisterDevice,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -299,7 +301,7 @@ class AccountSaveProfileInfo(BaseMethod):
         return await self.request(
             "account.saveProfileInfo",
             params,
-            response_model=responses.account.SaveProfileInfo,
+            response_model=responses.account.SaveProfileInfoModel,
         )
 
 
@@ -308,7 +310,7 @@ class AccountSetInfo(BaseMethod):
 
     async def __call__(
         self, name: str = None, value: str = None
-    ) -> responses.account.SetInfo:
+    ) -> responses.ok_response.OkResponse:
         """ account.setInfo
         From Vk Docs: Allows to edit the current account info.
         Access from user token(s)
@@ -322,7 +324,9 @@ class AccountSetInfo(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "account.setInfo", params, response_model=responses.account.SetInfo
+            "account.setInfo",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -331,7 +335,7 @@ class AccountSetNameInMenu(BaseMethod):
 
     async def __call__(
         self, user_id: int, name: str = None
-    ) -> responses.account.SetNameInMenu:
+    ) -> responses.ok_response.OkResponse:
         """ account.setNameInMenu
         From Vk Docs: Sets an application screen name (up to 17 characters), that is shown to the user in the left menu.
         Access from user token(s)
@@ -347,14 +351,14 @@ class AccountSetNameInMenu(BaseMethod):
         return await self.request(
             "account.setNameInMenu",
             params,
-            response_model=responses.account.SetNameInMenu,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class AccountSetOffline(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self,) -> responses.account.SetOffline:
+    async def __call__(self,) -> responses.ok_response.OkResponse:
         """ account.setOffline
         From Vk Docs: Marks a current user as offline.
         Access from user token(s)
@@ -367,14 +371,16 @@ class AccountSetOffline(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "account.setOffline", params, response_model=responses.account.SetOffline
+            "account.setOffline",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class AccountSetOnline(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, voip: bool = None) -> responses.account.SetOnline:
+    async def __call__(self, voip: bool = None) -> responses.ok_response.OkResponse:
         """ account.setOnline
         From Vk Docs: Marks the current user as online for 15 minutes.
         Access from user token(s)
@@ -387,7 +393,9 @@ class AccountSetOnline(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "account.setOnline", params, response_model=responses.account.SetOnline
+            "account.setOnline",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -400,7 +408,7 @@ class AccountSetPushSettings(BaseMethod):
         settings: str = None,
         key: str = None,
         value: typing.List = None,
-    ) -> responses.account.SetPushSettings:
+    ) -> responses.ok_response.OkResponse:
         """ account.setPushSettings
         From Vk Docs: Change push settings.
         Access from user token(s)
@@ -418,7 +426,7 @@ class AccountSetPushSettings(BaseMethod):
         return await self.request(
             "account.setPushSettings",
             params,
-            response_model=responses.account.SetPushSettings,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -431,7 +439,7 @@ class AccountSetSilenceMode(BaseMethod):
         time: int = None,
         peer_id: int = None,
         sound: int = None,
-    ) -> responses.account.SetSilenceMode:
+    ) -> responses.ok_response.OkResponse:
         """ account.setSilenceMode
         From Vk Docs: Mutes push notifications for the set period of time.
         Access from user token(s)
@@ -449,14 +457,14 @@ class AccountSetSilenceMode(BaseMethod):
         return await self.request(
             "account.setSilenceMode",
             params,
-            response_model=responses.account.SetSilenceMode,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class AccountUnban(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int = None) -> responses.account.Unban:
+    async def __call__(self, owner_id: int = None) -> responses.ok_response.OkResponse:
         """ account.unban
         From Vk Docs: 
         Access from user token(s)
@@ -469,7 +477,9 @@ class AccountUnban(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "account.unban", params, response_model=responses.account.Unban
+            "account.unban",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -478,7 +488,7 @@ class AccountUnregisterDevice(BaseMethod):
 
     async def __call__(
         self, device_id: str = None, sandbox: bool = None
-    ) -> responses.account.UnregisterDevice:
+    ) -> responses.ok_response.OkResponse:
         """ account.unregisterDevice
         From Vk Docs: Unsubscribes a device from push notifications.
         Access from user token(s)
@@ -494,7 +504,7 @@ class AccountUnregisterDevice(BaseMethod):
         return await self.request(
             "account.unregisterDevice",
             params,
-            response_model=responses.account.UnregisterDevice,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 

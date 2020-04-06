@@ -15,7 +15,7 @@ class NotesAdd(BaseMethod):
         text: str,
         privacy_view: typing.List = None,
         privacy_comment: typing.List = None,
-    ):
+    ) -> responses.notes.Add:
         """ notes.add
         From Vk Docs: Creates a new note for the current user.
         Access from user token(s)
@@ -30,7 +30,9 @@ class NotesAdd(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notes.add", params)
+        return await self.request(
+            "notes.add", params, response_model=responses.notes.AddModel
+        )
 
 
 class NotesCreateComment(BaseMethod):
@@ -43,7 +45,7 @@ class NotesCreateComment(BaseMethod):
         owner_id: int = None,
         reply_to: int = None,
         guid: str = None,
-    ):
+    ) -> responses.notes.CreateComment:
         """ notes.createComment
         From Vk Docs: Adds a new comment on a note.
         Access from user token(s)
@@ -59,13 +61,17 @@ class NotesCreateComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notes.createComment", params)
+        return await self.request(
+            "notes.createComment",
+            params,
+            response_model=responses.notes.CreateCommentModel,
+        )
 
 
 class NotesDelete(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, note_id: int):
+    async def __call__(self, note_id: int) -> responses.ok_response.OkResponse:
         """ notes.delete
         From Vk Docs: Deletes a note of the current user.
         Access from user token(s)
@@ -77,13 +83,17 @@ class NotesDelete(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notes.delete", params)
+        return await self.request(
+            "notes.delete", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class NotesDeleteComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, comment_id: int, owner_id: int = None):
+    async def __call__(
+        self, comment_id: int, owner_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ notes.deleteComment
         From Vk Docs: Deletes a comment on a note.
         Access from user token(s)
@@ -96,7 +106,11 @@ class NotesDeleteComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notes.deleteComment", params)
+        return await self.request(
+            "notes.deleteComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class NotesEdit(BaseMethod):
@@ -109,7 +123,7 @@ class NotesEdit(BaseMethod):
         title: str,
         privacy_view: typing.List = None,
         privacy_comment: typing.List = None,
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ notes.edit
         From Vk Docs: Edits a note of the current user.
         Access from user token(s)
@@ -125,13 +139,17 @@ class NotesEdit(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notes.edit", params)
+        return await self.request(
+            "notes.edit", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class NotesEditComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, comment_id: int, message: str, owner_id: int = None):
+    async def __call__(
+        self, comment_id: int, message: str, owner_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ notes.editComment
         From Vk Docs: Edits a comment on a note.
         Access from user token(s)
@@ -145,7 +163,11 @@ class NotesEditComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notes.editComment", params)
+        return await self.request(
+            "notes.editComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class NotesGet(BaseMethod):
@@ -158,7 +180,7 @@ class NotesGet(BaseMethod):
         offset: int = None,
         count: int = None,
         sort: int = None,
-    ):
+    ) -> responses.notes.Get:
         """ notes.get
         From Vk Docs: Returns a list of notes created by a user.
         Access from user token(s)
@@ -174,7 +196,9 @@ class NotesGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notes.get", params)
+        return await self.request(
+            "notes.get", params, response_model=responses.notes.GetModel
+        )
 
 
 class NotesGetById(BaseMethod):
@@ -182,7 +206,7 @@ class NotesGetById(BaseMethod):
 
     async def __call__(
         self, note_id: int, owner_id: int = None, need_wiki: bool = None
-    ):
+    ) -> responses.notes.GetById:
         """ notes.getById
         From Vk Docs: Returns a note by its ID.
         Access from user token(s)
@@ -196,7 +220,9 @@ class NotesGetById(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notes.getById", params)
+        return await self.request(
+            "notes.getById", params, response_model=responses.notes.GetByIdModel
+        )
 
 
 class NotesGetComments(BaseMethod):
@@ -209,7 +235,7 @@ class NotesGetComments(BaseMethod):
         sort: int = None,
         offset: int = None,
         count: int = None,
-    ):
+    ) -> responses.notes.GetComments:
         """ notes.getComments
         From Vk Docs: Returns a list of comments on a note.
         Access from user token(s)
@@ -225,13 +251,17 @@ class NotesGetComments(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notes.getComments", params)
+        return await self.request(
+            "notes.getComments", params, response_model=responses.notes.GetCommentsModel
+        )
 
 
 class NotesRestoreComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, comment_id: int, owner_id: int = None):
+    async def __call__(
+        self, comment_id: int, owner_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ notes.restoreComment
         From Vk Docs: Restores a deleted comment on a note.
         Access from user token(s)
@@ -244,7 +274,11 @@ class NotesRestoreComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notes.restoreComment", params)
+        return await self.request(
+            "notes.restoreComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class Notes:

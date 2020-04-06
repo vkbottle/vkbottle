@@ -1,156 +1,86 @@
-from .others import SimpleResponse
-from ..base import BaseModel
-
-from ..additional import ActiveOffer, Sex, BdateVisiblity, Country, City, NameRequest
-from ..user import User, UserRelation
-from ..community import Community
-
 import typing
+import enum
+from ..base import BaseModel
+from vkbottle.types import objects
 
 
-class Ban(SimpleResponse):
-    pass
+class SaveProfileInfo(BaseModel):
+    changed: objects.base.BoolInt = None
+    name_request: objects.account.NameRequest = None
 
 
-class ChangePasswordResponse(BaseModel):
+class SaveProfileInfoModel(BaseModel):
+    response: SaveProfileInfo = None
+
+
+class ChangePassword(BaseModel):
     token: str = None
     secret: str = None
 
 
-class ChangePassword(BaseModel):
-    response: ChangePasswordResponse = None
-
-
-class GetActiveOffersResponse(BaseModel):
-    count: int = None
-    items: typing.List[ActiveOffer] = []
+class ChangePasswordModel(BaseModel):
+    response: ChangePassword = None
 
 
 class GetActiveOffers(BaseModel):
-    response: GetActiveOffersResponse = None
-
-
-class GetAppPermissions(SimpleResponse):
-    pass
-
-
-class GetBannedResponse(BaseModel):
     count: int = None
-    items: typing.List[int] = []
-    profiles: typing.List[User] = []
-    groups: typing.List[Community] = []
+    items: typing.List = None
+
+
+class GetActiveOffersModel(BaseModel):
+    response: GetActiveOffers = None
+
+
+GetAppPermissions = typing.Dict
+
+
+class GetAppPermissionsModel(BaseModel):
+    response: GetAppPermissions = None
 
 
 class GetBanned(BaseModel):
-    response: GetBannedResponse = None
+    count: int = None
+    items: typing.List = None
+    profiles: typing.List = None
+    groups: typing.List = None
 
 
-class GetCountersResponse(BaseModel):
-    friends: int = None
-    friends_suggestions: int = None
-    messages: int = None
-    photos: int = None
-    videos: int = None
-    gifts: int = None
-    events: int = None
-    groups: int = None
-    sdk: int = None
-    app_requests: int = None
+class GetBannedModel(BaseModel):
+    response: GetBanned = None
 
 
-class GetCounters(BaseModel):
-    response: GetCountersResponse = None
+GetCounters = objects.account.AccountCounters
 
 
-class GetInfoResponse(BaseModel):
-    country: str = None
-    https_required: int = None
-    _2fa_required: int = None
-    own_posts_default: int = None
-    no_wall_replies: int = None
-    intro: int = None
-    lang: int = None
+class GetCountersModel(BaseModel):
+    response: GetCounters = None
 
 
-class GetInfo(BaseModel):
-    response: GetInfoResponse = None
+GetInfo = objects.account.Info
 
 
-class GetProfileInfoResponse(BaseModel):
-    first_name: str = None
-    last_name: str = None
-    maiden_name: str = None
-    screen_name: str = None
-    sex: Sex = None
-    relation: UserRelation = None
-    relation_partner: User = None
-    relation_pending: int = None
-    relation_requests: typing.List[User] = []
-    bdate: str = None
-    bdate_visiblity: BdateVisiblity = None
-    home_town: str = None
-    country: Country = None
-    city: City = None
-    name_request: NameRequest = None
-    status: str = None
-    phone: str = None
+class GetInfoModel(BaseModel):
+    response: GetInfo = None
 
 
-class GetProfileInfo(BaseModel):
-    response: GetProfileInfoResponse = None
+GetProfileInfo = objects.account.UserSettingsInterest
 
 
-class GetPushSettingsResponse(BaseModel):
-    disabled: int = None
-    disabled_until: int = None
-    conversations: list = None
-    settings: typing.Any = None
+class GetProfileInfoModel(BaseModel):
+    response: GetProfileInfo = None
 
 
-class GetPushSettings(BaseModel):
-    response: GetPushSettingsResponse = None
+GetPushSettings = objects.account.PushSettings
 
 
-class RegisterDevice(SimpleResponse):
-    pass
-
-
-class SaveProfileInfoResponse(BaseModel):
-    changed: int = None
-    name_request: NameRequest = None
+class GetPushSettingsModel(BaseModel):
+    response: GetPushSettings = None
 
 
 class SaveProfileInfo(BaseModel):
-    response: SaveProfileInfoResponse = None
+    changed: objects.base.BoolInt = None
+    name_request: objects.account.NameRequest = None
 
 
-class SetInfo(SimpleResponse):
-    pass
-
-
-class SetNameInMenu(SimpleResponse):
-    pass
-
-
-class SetOffline(SimpleResponse):
-    pass
-
-
-class SetOnline(SimpleResponse):
-    pass
-
-
-class SetPushSettings(SimpleResponse):
-    pass
-
-
-class SetSilenceMode(SimpleResponse):
-    pass
-
-
-class Unban(SimpleResponse):
-    pass
-
-
-class UnregisterDevice(SimpleResponse):
-    pass
+class SaveProfileInfoModel(BaseModel):
+    response: SaveProfileInfo = None

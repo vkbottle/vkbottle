@@ -11,7 +11,7 @@ class GiftsGet(BaseMethod):
 
     async def __call__(
         self, user_id: int = None, count: int = None, offset: int = None
-    ):
+    ) -> responses.gifts.Get:
         """ gifts.get
         From Vk Docs: Returns a list of user gifts.
         Access from user token(s)
@@ -25,7 +25,9 @@ class GiftsGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("gifts.get", params)
+        return await self.request(
+            "gifts.get", params, response_model=responses.gifts.GetModel
+        )
 
 
 class Gifts:

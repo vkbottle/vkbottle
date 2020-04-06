@@ -9,7 +9,9 @@ from .method import BaseMethod
 class SecureAddAppEvent(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
-    async def __call__(self, user_id: int, activity_id: int, value: int = None):
+    async def __call__(
+        self, user_id: int, activity_id: int, value: int = None
+    ) -> responses.ok_response.OkResponse:
         """ secure.addAppEvent
         From Vk Docs: Adds user activity information to an application
         Access from service token(s)
@@ -23,13 +25,19 @@ class SecureAddAppEvent(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("secure.addAppEvent", params)
+        return await self.request(
+            "secure.addAppEvent",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class SecureCheckToken(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
-    async def __call__(self, token: str = None, ip: str = None):
+    async def __call__(
+        self, token: str = None, ip: str = None
+    ) -> responses.secure.CheckToken:
         """ secure.checkToken
         From Vk Docs: Checks the user authentication in 'IFrame' and 'Flash' apps using the 'access_token' parameter.
         Access from service token(s)
@@ -42,13 +50,15 @@ class SecureCheckToken(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("secure.checkToken", params)
+        return await self.request(
+            "secure.checkToken", params, response_model=responses.secure.CheckTokenModel
+        )
 
 
 class SecureGetAppBalance(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
-    async def __call__(self,):
+    async def __call__(self,) -> responses.secure.GetAppBalance:
         """ secure.getAppBalance
         From Vk Docs: Returns payment balance of the application in hundredth of a vote.
         Access from service token(s)
@@ -60,7 +70,11 @@ class SecureGetAppBalance(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("secure.getAppBalance", params)
+        return await self.request(
+            "secure.getAppBalance",
+            params,
+            response_model=responses.secure.GetAppBalanceModel,
+        )
 
 
 class SecureGetSMSHistory(BaseMethod):
@@ -72,7 +86,7 @@ class SecureGetSMSHistory(BaseMethod):
         date_from: int = None,
         date_to: int = None,
         limit: int = None,
-    ):
+    ) -> responses.secure.GetSMSHistory:
         """ secure.getSMSHistory
         From Vk Docs: Shows a list of SMS notifications sent by the application using [vk.com/dev/secure.sendSMSNotification|secure.sendSMSNotification] method.
         Access from service token(s)
@@ -87,7 +101,11 @@ class SecureGetSMSHistory(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("secure.getSMSHistory", params)
+        return await self.request(
+            "secure.getSMSHistory",
+            params,
+            response_model=responses.secure.GetSMSHistoryModel,
+        )
 
 
 class SecureGetTransactionsHistory(BaseMethod):
@@ -101,7 +119,7 @@ class SecureGetTransactionsHistory(BaseMethod):
         date_from: int = None,
         date_to: int = None,
         limit: int = None,
-    ):
+    ) -> responses.secure.GetTransactionsHistory:
         """ secure.getTransactionsHistory
         From Vk Docs: Shows history of votes transaction between users and the application.
         Access from service token(s)
@@ -118,13 +136,17 @@ class SecureGetTransactionsHistory(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("secure.getTransactionsHistory", params)
+        return await self.request(
+            "secure.getTransactionsHistory",
+            params,
+            response_model=responses.secure.GetTransactionsHistoryModel,
+        )
 
 
 class SecureGetUserLevel(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
-    async def __call__(self, user_ids: typing.List):
+    async def __call__(self, user_ids: typing.List) -> responses.secure.GetUserLevel:
         """ secure.getUserLevel
         From Vk Docs: Returns one of the previously set game levels of one or more users in the application.
         Access from service token(s)
@@ -136,13 +158,19 @@ class SecureGetUserLevel(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("secure.getUserLevel", params)
+        return await self.request(
+            "secure.getUserLevel",
+            params,
+            response_model=responses.secure.GetUserLevelModel,
+        )
 
 
 class SecureGiveEventSticker(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
-    async def __call__(self, user_ids: typing.List, achievement_id: int):
+    async def __call__(
+        self, user_ids: typing.List, achievement_id: int
+    ) -> responses.secure.GiveEventSticker:
         """ secure.giveEventSticker
         From Vk Docs: Opens the game achievement and gives the user a sticker
         Access from service token(s)
@@ -155,7 +183,11 @@ class SecureGiveEventSticker(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("secure.giveEventSticker", params)
+        return await self.request(
+            "secure.giveEventSticker",
+            params,
+            response_model=responses.secure.GiveEventStickerModel,
+        )
 
 
 class SecureSendNotification(BaseMethod):
@@ -163,7 +195,7 @@ class SecureSendNotification(BaseMethod):
 
     async def __call__(
         self, message: str, user_ids: typing.List = None, user_id: int = None
-    ):
+    ) -> responses.secure.SendNotification:
         """ secure.sendNotification
         From Vk Docs: Sends notification to the user.
         Access from service token(s)
@@ -177,13 +209,19 @@ class SecureSendNotification(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("secure.sendNotification", params)
+        return await self.request(
+            "secure.sendNotification",
+            params,
+            response_model=responses.secure.SendNotificationModel,
+        )
 
 
 class SecureSendSMSNotification(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
-    async def __call__(self, user_id: int, message: str):
+    async def __call__(
+        self, user_id: int, message: str
+    ) -> responses.ok_response.OkResponse:
         """ secure.sendSMSNotification
         From Vk Docs: Sends 'SMS' notification to a user's mobile device.
         Access from service token(s)
@@ -196,7 +234,11 @@ class SecureSendSMSNotification(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("secure.sendSMSNotification", params)
+        return await self.request(
+            "secure.sendSMSNotification",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class SecureSetCounter(BaseMethod):
@@ -208,7 +250,7 @@ class SecureSetCounter(BaseMethod):
         user_id: int = None,
         counter: int = None,
         increment: bool = None,
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ secure.setCounter
         From Vk Docs: Sets a counter which is shown to the user in bold in the left menu.
         Access from service token(s)
@@ -223,7 +265,11 @@ class SecureSetCounter(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("secure.setCounter", params)
+        return await self.request(
+            "secure.setCounter",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class Secure:

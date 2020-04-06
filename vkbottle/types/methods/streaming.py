@@ -12,7 +12,7 @@ class StreamingGetServerUrl(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self,):
+    async def __call__(self,) -> responses.streaming.GetServerUrl:
         """ streaming.getServerUrl
         From Vk Docs: Allows to receive data for the connection to Streaming API.
         Access from user, service token(s)
@@ -24,7 +24,11 @@ class StreamingGetServerUrl(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("streaming.getServerUrl", params)
+        return await self.request(
+            "streaming.getServerUrl",
+            params,
+            response_model=responses.streaming.GetServerUrlModel,
+        )
 
 
 class StreamingSetSettings(BaseMethod):
@@ -33,7 +37,9 @@ class StreamingSetSettings(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, monthly_tier: str = None):
+    async def __call__(
+        self, monthly_tier: str = None
+    ) -> responses.ok_response.OkResponse:
         """ streaming.setSettings
         From Vk Docs: 
         Access from user, service token(s)
@@ -45,7 +51,11 @@ class StreamingSetSettings(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("streaming.setSettings", params)
+        return await self.request(
+            "streaming.setSettings",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class Streaming:

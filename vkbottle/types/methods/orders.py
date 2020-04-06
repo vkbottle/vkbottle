@@ -14,7 +14,7 @@ class OrdersCancelSubscription(BaseMethod):
 
     async def __call__(
         self, user_id: int, subscription_id: int, pending_cancel: bool = None
-    ):
+    ) -> responses.orders.CancelSubscription:
         """ orders.cancelSubscription
         From Vk Docs: 
         Access from user, service token(s)
@@ -28,7 +28,11 @@ class OrdersCancelSubscription(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("orders.cancelSubscription", params)
+        return await self.request(
+            "orders.cancelSubscription",
+            params,
+            response_model=responses.orders.CancelSubscriptionModel,
+        )
 
 
 class OrdersChangeState(BaseMethod):
@@ -43,7 +47,7 @@ class OrdersChangeState(BaseMethod):
         action: str,
         app_order_id: int = None,
         test_mode: bool = None,
-    ):
+    ) -> responses.orders.ChangeState:
         """ orders.changeState
         From Vk Docs: Changes order status.
         Access from user, service token(s)
@@ -58,7 +62,11 @@ class OrdersChangeState(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("orders.changeState", params)
+        return await self.request(
+            "orders.changeState",
+            params,
+            response_model=responses.orders.ChangeStateModel,
+        )
 
 
 class OrdersGet(BaseMethod):
@@ -69,7 +77,7 @@ class OrdersGet(BaseMethod):
 
     async def __call__(
         self, offset: int = None, count: int = None, test_mode: bool = None
-    ):
+    ) -> responses.orders.Get:
         """ orders.get
         From Vk Docs: Returns a list of orders.
         Access from user, service token(s)
@@ -83,13 +91,17 @@ class OrdersGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("orders.get", params)
+        return await self.request(
+            "orders.get", params, response_model=responses.orders.GetModel
+        )
 
 
 class OrdersGetAmount(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_id: int, votes: typing.List):
+    async def __call__(
+        self, user_id: int, votes: typing.List
+    ) -> responses.orders.GetAmount:
         """ orders.getAmount
         From Vk Docs: 
         Access from user token(s)
@@ -102,7 +114,9 @@ class OrdersGetAmount(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("orders.getAmount", params)
+        return await self.request(
+            "orders.getAmount", params, response_model=responses.orders.GetAmountModel
+        )
 
 
 class OrdersGetById(BaseMethod):
@@ -116,7 +130,7 @@ class OrdersGetById(BaseMethod):
         order_id: int = None,
         order_ids: typing.List = None,
         test_mode: bool = None,
-    ):
+    ) -> responses.orders.GetById:
         """ orders.getById
         From Vk Docs: Returns information about orders by their IDs.
         Access from user, service token(s)
@@ -130,7 +144,9 @@ class OrdersGetById(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("orders.getById", params)
+        return await self.request(
+            "orders.getById", params, response_model=responses.orders.GetByIdModel
+        )
 
 
 class OrdersGetUserSubscriptionById(BaseMethod):
@@ -139,7 +155,9 @@ class OrdersGetUserSubscriptionById(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, user_id: int, subscription_id: int):
+    async def __call__(
+        self, user_id: int, subscription_id: int
+    ) -> responses.orders.GetUserSubscriptionById:
         """ orders.getUserSubscriptionById
         From Vk Docs: 
         Access from user, service token(s)
@@ -152,7 +170,11 @@ class OrdersGetUserSubscriptionById(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("orders.getUserSubscriptionById", params)
+        return await self.request(
+            "orders.getUserSubscriptionById",
+            params,
+            response_model=responses.orders.GetUserSubscriptionByIdModel,
+        )
 
 
 class OrdersGetUserSubscriptions(BaseMethod):
@@ -161,7 +183,7 @@ class OrdersGetUserSubscriptions(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, user_id: int):
+    async def __call__(self, user_id: int) -> responses.orders.GetUserSubscriptions:
         """ orders.getUserSubscriptions
         From Vk Docs: 
         Access from user, service token(s)
@@ -173,7 +195,11 @@ class OrdersGetUserSubscriptions(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("orders.getUserSubscriptions", params)
+        return await self.request(
+            "orders.getUserSubscriptions",
+            params,
+            response_model=responses.orders.GetUserSubscriptionsModel,
+        )
 
 
 class OrdersUpdateSubscription(BaseMethod):
@@ -182,7 +208,9 @@ class OrdersUpdateSubscription(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, user_id: int, price: int, subscription_id: int):
+    async def __call__(
+        self, user_id: int, price: int, subscription_id: int
+    ) -> responses.orders.UpdateSubscription:
         """ orders.updateSubscription
         From Vk Docs: 
         Access from user, service token(s)
@@ -196,7 +224,11 @@ class OrdersUpdateSubscription(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("orders.updateSubscription", params)
+        return await self.request(
+            "orders.updateSubscription",
+            params,
+            response_model=responses.orders.UpdateSubscriptionModel,
+        )
 
 
 class Orders:

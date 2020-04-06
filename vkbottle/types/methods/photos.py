@@ -9,7 +9,9 @@ from .method import BaseMethod
 class PhotosConfirmTag(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, photo_id: str, tag_id: int, owner_id: int = None):
+    async def __call__(
+        self, photo_id: str, owner_id: int = None, tag_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ photos.confirmTag
         From Vk Docs: Confirms a tag on a photo.
         Access from user token(s)
@@ -23,13 +25,19 @@ class PhotosConfirmTag(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.confirmTag", params)
+        return await self.request(
+            "photos.confirmTag",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosCopy(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, photo_id: int, access_key: str = None):
+    async def __call__(
+        self, owner_id: int, photo_id: int, access_key: str = None
+    ) -> responses.photos.Copy:
         """ photos.copy
         From Vk Docs: Allows to copy a photo to the "Saved photos" album
         Access from user token(s)
@@ -43,7 +51,9 @@ class PhotosCopy(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.copy", params)
+        return await self.request(
+            "photos.copy", params, response_model=responses.photos.CopyModel
+        )
 
 
 class PhotosCreateAlbum(BaseMethod):
@@ -58,7 +68,7 @@ class PhotosCreateAlbum(BaseMethod):
         privacy_comment: typing.List = None,
         upload_by_admins_only: bool = None,
         comments_disabled: bool = None,
-    ):
+    ) -> responses.photos.CreateAlbum:
         """ photos.createAlbum
         From Vk Docs: Creates an empty photo album.
         Access from user token(s)
@@ -76,7 +86,11 @@ class PhotosCreateAlbum(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.createAlbum", params)
+        return await self.request(
+            "photos.createAlbum",
+            params,
+            response_model=responses.photos.CreateAlbumModel,
+        )
 
 
 class PhotosCreateComment(BaseMethod):
@@ -93,7 +107,7 @@ class PhotosCreateComment(BaseMethod):
         sticker_id: int = None,
         access_key: str = None,
         guid: str = None,
-    ):
+    ) -> responses.photos.CreateComment:
         """ photos.createComment
         From Vk Docs: Adds a new comment on the photo.
         Access from user token(s)
@@ -113,13 +127,19 @@ class PhotosCreateComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.createComment", params)
+        return await self.request(
+            "photos.createComment",
+            params,
+            response_model=responses.photos.CreateCommentModel,
+        )
 
 
 class PhotosDelete(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, photo_id: int, owner_id: int = None):
+    async def __call__(
+        self, photo_id: int, owner_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ photos.delete
         From Vk Docs: Deletes a photo.
         Access from user token(s)
@@ -132,13 +152,19 @@ class PhotosDelete(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.delete", params)
+        return await self.request(
+            "photos.delete",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosDeleteAlbum(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, album_id: int, group_id: int = None):
+    async def __call__(
+        self, album_id: int, group_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ photos.deleteAlbum
         From Vk Docs: Deletes a photo album belonging to the current user.
         Access from user token(s)
@@ -151,13 +177,19 @@ class PhotosDeleteAlbum(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.deleteAlbum", params)
+        return await self.request(
+            "photos.deleteAlbum",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosDeleteComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, comment_id: int, owner_id: int = None):
+    async def __call__(
+        self, comment_id: int, owner_id: int = None
+    ) -> responses.photos.DeleteComment:
         """ photos.deleteComment
         From Vk Docs: Deletes a comment on the photo.
         Access from user token(s)
@@ -170,7 +202,11 @@ class PhotosDeleteComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.deleteComment", params)
+        return await self.request(
+            "photos.deleteComment",
+            params,
+            response_model=responses.photos.DeleteCommentModel,
+        )
 
 
 class PhotosEdit(BaseMethod):
@@ -186,7 +222,7 @@ class PhotosEdit(BaseMethod):
         place_str: str = None,
         foursquare_id: str = None,
         delete_place: bool = None,
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ photos.edit
         From Vk Docs: Edits the caption of a photo.
         Access from user token(s)
@@ -205,7 +241,9 @@ class PhotosEdit(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.edit", params)
+        return await self.request(
+            "photos.edit", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class PhotosEditAlbum(BaseMethod):
@@ -221,7 +259,7 @@ class PhotosEditAlbum(BaseMethod):
         privacy_comment: typing.List = None,
         upload_by_admins_only: bool = None,
         comments_disabled: bool = None,
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ photos.editAlbum
         From Vk Docs: Edits information about a photo album.
         Access from user token(s)
@@ -240,7 +278,11 @@ class PhotosEditAlbum(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.editAlbum", params)
+        return await self.request(
+            "photos.editAlbum",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosEditComment(BaseMethod):
@@ -252,7 +294,7 @@ class PhotosEditComment(BaseMethod):
         owner_id: int = None,
         message: str = None,
         attachments: typing.List = None,
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ photos.editComment
         From Vk Docs: Edits a comment on a photo.
         Access from user token(s)
@@ -267,7 +309,11 @@ class PhotosEditComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.editComment", params)
+        return await self.request(
+            "photos.editComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosGet(BaseMethod):
@@ -288,7 +334,7 @@ class PhotosGet(BaseMethod):
         photo_sizes: bool = None,
         offset: int = None,
         count: int = None,
-    ):
+    ) -> responses.photos.Get:
         """ photos.get
         From Vk Docs: Returns a list of a user's or community's photos.
         Access from user, service token(s)
@@ -309,7 +355,9 @@ class PhotosGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.get", params)
+        return await self.request(
+            "photos.get", params, response_model=responses.photos.GetModel
+        )
 
 
 class PhotosGetAlbums(BaseMethod):
@@ -327,7 +375,7 @@ class PhotosGetAlbums(BaseMethod):
         need_system: bool = None,
         need_covers: bool = None,
         photo_sizes: bool = None,
-    ):
+    ) -> responses.photos.GetAlbums:
         """ photos.getAlbums
         From Vk Docs: Returns a list of a user's or community's photo albums.
         Access from user, service token(s)
@@ -345,13 +393,17 @@ class PhotosGetAlbums(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getAlbums", params)
+        return await self.request(
+            "photos.getAlbums", params, response_model=responses.photos.GetAlbumsModel
+        )
 
 
 class PhotosGetAlbumsCount(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, user_id: int = None, group_id: int = None):
+    async def __call__(
+        self, user_id: int = None, group_id: int = None
+    ) -> responses.photos.GetAlbumsCount:
         """ photos.getAlbumsCount
         From Vk Docs: Returns the number of photo albums belonging to a user or community.
         Access from user token(s)
@@ -364,7 +416,11 @@ class PhotosGetAlbumsCount(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getAlbumsCount", params)
+        return await self.request(
+            "photos.getAlbumsCount",
+            params,
+            response_model=responses.photos.GetAlbumsCountModel,
+        )
 
 
 class PhotosGetAll(BaseMethod):
@@ -380,7 +436,7 @@ class PhotosGetAll(BaseMethod):
         no_service_albums: bool = None,
         need_hidden: bool = None,
         skip_hidden: bool = None,
-    ):
+    ) -> responses.photos.GetAll:
         """ photos.getAll
         From Vk Docs: Returns a list of photos belonging to a user or community, in reverse chronological order.
         Access from user token(s)
@@ -399,7 +455,9 @@ class PhotosGetAll(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getAll", params)
+        return await self.request(
+            "photos.getAll", params, response_model=responses.photos.GetAllModel
+        )
 
 
 class PhotosGetAllComments(BaseMethod):
@@ -412,7 +470,7 @@ class PhotosGetAllComments(BaseMethod):
         need_likes: bool = None,
         offset: int = None,
         count: int = None,
-    ):
+    ) -> responses.photos.GetAllComments:
         """ photos.getAllComments
         From Vk Docs: Returns a list of comments on a specific photo album or all albums of the user sorted in reverse chronological order.
         Access from user token(s)
@@ -428,7 +486,11 @@ class PhotosGetAllComments(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getAllComments", params)
+        return await self.request(
+            "photos.getAllComments",
+            params,
+            response_model=responses.photos.GetAllCommentsModel,
+        )
 
 
 class PhotosGetById(BaseMethod):
@@ -439,7 +501,7 @@ class PhotosGetById(BaseMethod):
 
     async def __call__(
         self, photos: typing.List, extended: bool = None, photo_sizes: bool = None
-    ):
+    ) -> responses.photos.GetById:
         """ photos.getById
         From Vk Docs: Returns information about photos by their IDs.
         Access from user, service token(s)
@@ -453,7 +515,9 @@ class PhotosGetById(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getById", params)
+        return await self.request(
+            "photos.getById", params, response_model=responses.photos.GetByIdModel
+        )
 
 
 class PhotosGetChatUploadServer(BaseMethod):
@@ -465,7 +529,7 @@ class PhotosGetChatUploadServer(BaseMethod):
         crop_x: int = None,
         crop_y: int = None,
         crop_width: int = None,
-    ):
+    ) -> responses.base.GetUploadServer:
         """ photos.getChatUploadServer
         From Vk Docs: Returns an upload link for chat cover pictures.
         Access from user token(s)
@@ -480,7 +544,11 @@ class PhotosGetChatUploadServer(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getChatUploadServer", params)
+        return await self.request(
+            "photos.getChatUploadServer",
+            params,
+            response_model=responses.base.GetUploadServerModel,
+        )
 
 
 class PhotosGetComments(BaseMethod):
@@ -498,7 +566,7 @@ class PhotosGetComments(BaseMethod):
         access_key: str = None,
         extended: bool = None,
         fields: typing.List = None,
-    ):
+    ) -> responses.photos.GetComments:
         """ photos.getComments
         From Vk Docs: Returns a list of comments on a photo.
         Access from user token(s)
@@ -519,13 +587,17 @@ class PhotosGetComments(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getComments", params)
+        return await self.request(
+            "photos.getComments",
+            params,
+            response_model=responses.photos.GetCommentsModel,
+        )
 
 
 class PhotosGetMarketAlbumUploadServer(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int):
+    async def __call__(self, group_id: int) -> responses.base.GetUploadServer:
         """ photos.getMarketAlbumUploadServer
         From Vk Docs: Returns the server address for market album photo upload.
         Access from user token(s)
@@ -537,7 +609,11 @@ class PhotosGetMarketAlbumUploadServer(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getMarketAlbumUploadServer", params)
+        return await self.request(
+            "photos.getMarketAlbumUploadServer",
+            params,
+            response_model=responses.base.GetUploadServerModel,
+        )
 
 
 class PhotosGetMarketUploadServer(BaseMethod):
@@ -550,7 +626,7 @@ class PhotosGetMarketUploadServer(BaseMethod):
         crop_x: int = None,
         crop_y: int = None,
         crop_width: int = None,
-    ):
+    ) -> responses.photos.GetMarketUploadServer:
         """ photos.getMarketUploadServer
         From Vk Docs: Returns the server address for market photo upload.
         Access from user token(s)
@@ -566,7 +642,11 @@ class PhotosGetMarketUploadServer(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getMarketUploadServer", params)
+        return await self.request(
+            "photos.getMarketUploadServer",
+            params,
+            response_model=responses.photos.GetMarketUploadServerModel,
+        )
 
 
 class PhotosGetMessagesUploadServer(BaseMethod):
@@ -575,7 +655,9 @@ class PhotosGetMessagesUploadServer(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, peer_id: int = None):
+    async def __call__(
+        self, peer_id: int = None
+    ) -> responses.photos.GetMessagesUploadServer:
         """ photos.getMessagesUploadServer
         From Vk Docs: Returns the server address for photo upload in a private message for a user.
         Access from user, group token(s)
@@ -587,13 +669,19 @@ class PhotosGetMessagesUploadServer(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getMessagesUploadServer", params)
+        return await self.request(
+            "photos.getMessagesUploadServer",
+            params,
+            response_model=responses.photos.GetMessagesUploadServerModel,
+        )
 
 
 class PhotosGetNewTags(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, offset: int = None, count: int = None):
+    async def __call__(
+        self, offset: int = None, count: int = None
+    ) -> responses.photos.GetNewTags:
         """ photos.getNewTags
         From Vk Docs: Returns a list of photos with tags that have not been viewed.
         Access from user token(s)
@@ -606,7 +694,9 @@ class PhotosGetNewTags(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getNewTags", params)
+        return await self.request(
+            "photos.getNewTags", params, response_model=responses.photos.GetNewTagsModel
+        )
 
 
 class PhotosGetOwnerCoverPhotoUploadServer(BaseMethod):
@@ -622,7 +712,7 @@ class PhotosGetOwnerCoverPhotoUploadServer(BaseMethod):
         crop_y: int = None,
         crop_x2: int = None,
         crop_y2: int = None,
-    ):
+    ) -> responses.base.GetUploadServer:
         """ photos.getOwnerCoverPhotoUploadServer
         From Vk Docs: Returns the server address for owner cover upload.
         Access from user, group token(s)
@@ -638,13 +728,17 @@ class PhotosGetOwnerCoverPhotoUploadServer(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getOwnerCoverPhotoUploadServer", params)
+        return await self.request(
+            "photos.getOwnerCoverPhotoUploadServer",
+            params,
+            response_model=responses.base.GetUploadServerModel,
+        )
 
 
 class PhotosGetOwnerPhotoUploadServer(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int = None):
+    async def __call__(self, owner_id: int = None) -> responses.base.GetUploadServer:
         """ photos.getOwnerPhotoUploadServer
         From Vk Docs: Returns an upload server address for a profile or community photo.
         Access from user token(s)
@@ -656,7 +750,11 @@ class PhotosGetOwnerPhotoUploadServer(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getOwnerPhotoUploadServer", params)
+        return await self.request(
+            "photos.getOwnerPhotoUploadServer",
+            params,
+            response_model=responses.base.GetUploadServerModel,
+        )
 
 
 class PhotosGetTags(BaseMethod):
@@ -664,7 +762,7 @@ class PhotosGetTags(BaseMethod):
 
     async def __call__(
         self, photo_id: int, owner_id: int = None, access_key: str = None
-    ):
+    ) -> responses.photos.GetTags:
         """ photos.getTags
         From Vk Docs: Returns a list of tags on a photo.
         Access from user token(s)
@@ -678,13 +776,17 @@ class PhotosGetTags(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getTags", params)
+        return await self.request(
+            "photos.getTags", params, response_model=responses.photos.GetTagsModel
+        )
 
 
 class PhotosGetUploadServer(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int = None, album_id: int = None):
+    async def __call__(
+        self, group_id: int = None, album_id: int = None
+    ) -> responses.photos.GetUploadServer:
         """ photos.getUploadServer
         From Vk Docs: Returns the server address for photo upload.
         Access from user token(s)
@@ -697,7 +799,11 @@ class PhotosGetUploadServer(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getUploadServer", params)
+        return await self.request(
+            "photos.getUploadServer",
+            params,
+            response_model=responses.photos.GetUploadServerModel,
+        )
 
 
 class PhotosGetUserPhotos(BaseMethod):
@@ -710,7 +816,7 @@ class PhotosGetUserPhotos(BaseMethod):
         count: int = None,
         extended: bool = None,
         sort: str = None,
-    ):
+    ) -> responses.photos.GetUserPhotos:
         """ photos.getUserPhotos
         From Vk Docs: Returns a list of photos in which a user is tagged.
         Access from user token(s)
@@ -726,13 +832,19 @@ class PhotosGetUserPhotos(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getUserPhotos", params)
+        return await self.request(
+            "photos.getUserPhotos",
+            params,
+            response_model=responses.photos.GetUserPhotosModel,
+        )
 
 
 class PhotosGetWallUploadServer(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int = None):
+    async def __call__(
+        self, group_id: int = None
+    ) -> responses.photos.GetWallUploadServer:
         """ photos.getWallUploadServer
         From Vk Docs: Returns the server address for photo upload onto a user's wall.
         Access from user token(s)
@@ -744,13 +856,19 @@ class PhotosGetWallUploadServer(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.getWallUploadServer", params)
+        return await self.request(
+            "photos.getWallUploadServer",
+            params,
+            response_model=responses.photos.GetWallUploadServerModel,
+        )
 
 
 class PhotosMakeCover(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, photo_id: int, owner_id: int = None, album_id: int = None):
+    async def __call__(
+        self, photo_id: int, owner_id: int = None, album_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ photos.makeCover
         From Vk Docs: Makes a photo into an album cover.
         Access from user token(s)
@@ -764,13 +882,19 @@ class PhotosMakeCover(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.makeCover", params)
+        return await self.request(
+            "photos.makeCover",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosMove(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, target_album_id: int, photo_id: int, owner_id: int = None):
+    async def __call__(
+        self, target_album_id: int, owner_id: int = None, photo_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ photos.move
         From Vk Docs: Moves a photo from one album to another.
         Access from user token(s)
@@ -784,7 +908,9 @@ class PhotosMove(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.move", params)
+        return await self.request(
+            "photos.move", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class PhotosPutTag(BaseMethod):
@@ -793,13 +919,13 @@ class PhotosPutTag(BaseMethod):
     async def __call__(
         self,
         photo_id: int,
-        user_id: int,
         owner_id: int = None,
+        user_id: int = None,
         x: typing.Any = None,
         y: typing.Any = None,
         x2: typing.Any = None,
         y2: typing.Any = None,
-    ):
+    ) -> responses.photos.PutTag:
         """ photos.putTag
         From Vk Docs: Adds a tag on the photo.
         Access from user token(s)
@@ -817,13 +943,17 @@ class PhotosPutTag(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.putTag", params)
+        return await self.request(
+            "photos.putTag", params, response_model=responses.photos.PutTagModel
+        )
 
 
 class PhotosRemoveTag(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, photo_id: int, tag_id: int, owner_id: int = None):
+    async def __call__(
+        self, photo_id: int, owner_id: int = None, tag_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ photos.removeTag
         From Vk Docs: Removes a tag from a photo.
         Access from user token(s)
@@ -837,7 +967,11 @@ class PhotosRemoveTag(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.removeTag", params)
+        return await self.request(
+            "photos.removeTag",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosReorderAlbums(BaseMethod):
@@ -845,7 +979,7 @@ class PhotosReorderAlbums(BaseMethod):
 
     async def __call__(
         self, album_id: int, owner_id: int = None, before: int = None, after: int = None
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ photos.reorderAlbums
         From Vk Docs: Reorders the album in the list of user albums.
         Access from user token(s)
@@ -860,7 +994,11 @@ class PhotosReorderAlbums(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.reorderAlbums", params)
+        return await self.request(
+            "photos.reorderAlbums",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosReorderPhotos(BaseMethod):
@@ -868,7 +1006,7 @@ class PhotosReorderPhotos(BaseMethod):
 
     async def __call__(
         self, photo_id: int, owner_id: int = None, before: int = None, after: int = None
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ photos.reorderPhotos
         From Vk Docs: Reorders the photo in the list of photos of the user album.
         Access from user token(s)
@@ -883,13 +1021,19 @@ class PhotosReorderPhotos(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.reorderPhotos", params)
+        return await self.request(
+            "photos.reorderPhotos",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosReport(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, photo_id: int, reason: int = None):
+    async def __call__(
+        self, owner_id: int, photo_id: int, reason: int = None
+    ) -> responses.ok_response.OkResponse:
         """ photos.report
         From Vk Docs: Reports (submits a complaint about) a photo.
         Access from user token(s)
@@ -903,13 +1047,19 @@ class PhotosReport(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.report", params)
+        return await self.request(
+            "photos.report",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosReportComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, comment_id: int, reason: int = None):
+    async def __call__(
+        self, owner_id: int, comment_id: int, reason: int = None
+    ) -> responses.ok_response.OkResponse:
         """ photos.reportComment
         From Vk Docs: Reports (submits a complaint about) a comment on a photo.
         Access from user token(s)
@@ -923,13 +1073,19 @@ class PhotosReportComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.reportComment", params)
+        return await self.request(
+            "photos.reportComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosRestore(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, photo_id: int, owner_id: int = None):
+    async def __call__(
+        self, photo_id: int, owner_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ photos.restore
         From Vk Docs: Restores a deleted photo.
         Access from user token(s)
@@ -942,13 +1098,19 @@ class PhotosRestore(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.restore", params)
+        return await self.request(
+            "photos.restore",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PhotosRestoreComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, comment_id: int, owner_id: int = None):
+    async def __call__(
+        self, comment_id: int, owner_id: int = None
+    ) -> responses.photos.RestoreComment:
         """ photos.restoreComment
         From Vk Docs: Restores a deleted comment on a photo.
         Access from user token(s)
@@ -961,7 +1123,11 @@ class PhotosRestoreComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.restoreComment", params)
+        return await self.request(
+            "photos.restoreComment",
+            params,
+            response_model=responses.photos.RestoreCommentModel,
+        )
 
 
 class PhotosSave(BaseMethod):
@@ -977,7 +1143,7 @@ class PhotosSave(BaseMethod):
         latitude: typing.Any = None,
         longitude: typing.Any = None,
         caption: str = None,
-    ):
+    ) -> responses.photos.Save:
         """ photos.save
         From Vk Docs: Saves photos after successful uploading.
         Access from user token(s)
@@ -996,13 +1162,17 @@ class PhotosSave(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.save", params)
+        return await self.request(
+            "photos.save", params, response_model=responses.photos.SaveModel
+        )
 
 
 class PhotosSaveMarketAlbumPhoto(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int, server: int, photo: str, hash: str):
+    async def __call__(
+        self, group_id: int, server: int, photo: str, hash: str
+    ) -> responses.photos.SaveMarketAlbumPhoto:
         """ photos.saveMarketAlbumPhoto
         From Vk Docs: Saves market album photos after successful uploading.
         Access from user token(s)
@@ -1017,7 +1187,11 @@ class PhotosSaveMarketAlbumPhoto(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.saveMarketAlbumPhoto", params)
+        return await self.request(
+            "photos.saveMarketAlbumPhoto",
+            params,
+            response_model=responses.photos.SaveMarketAlbumPhotoModel,
+        )
 
 
 class PhotosSaveMarketPhoto(BaseMethod):
@@ -1027,11 +1201,11 @@ class PhotosSaveMarketPhoto(BaseMethod):
         self,
         photo: str,
         hash: str,
-        server: int,
         group_id: int = None,
+        server: int = None,
         crop_data: str = None,
         crop_hash: str = None,
-    ):
+    ) -> responses.photos.SaveMarketPhoto:
         """ photos.saveMarketPhoto
         From Vk Docs: Saves market photos after successful uploading.
         Access from user token(s)
@@ -1048,7 +1222,11 @@ class PhotosSaveMarketPhoto(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.saveMarketPhoto", params)
+        return await self.request(
+            "photos.saveMarketPhoto",
+            params,
+            response_model=responses.photos.SaveMarketPhotoModel,
+        )
 
 
 class PhotosSaveMessagesPhoto(BaseMethod):
@@ -1057,7 +1235,9 @@ class PhotosSaveMessagesPhoto(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, photo: str, server: int = None, hash: str = None):
+    async def __call__(
+        self, photo: str, server: int = None, hash: str = None
+    ) -> responses.photos.SaveMessagesPhoto:
         """ photos.saveMessagesPhoto
         From Vk Docs: Saves a photo after being successfully uploaded. URL obtained with [vk.com/dev/photos.getMessagesUploadServer|photos.getMessagesUploadServer] method.
         Access from user, group token(s)
@@ -1071,7 +1251,11 @@ class PhotosSaveMessagesPhoto(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.saveMessagesPhoto", params)
+        return await self.request(
+            "photos.saveMessagesPhoto",
+            params,
+            response_model=responses.photos.SaveMessagesPhotoModel,
+        )
 
 
 class PhotosSaveOwnerCoverPhoto(BaseMethod):
@@ -1080,7 +1264,9 @@ class PhotosSaveOwnerCoverPhoto(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, hash: str, photo: str):
+    async def __call__(
+        self, hash: str, photo: str
+    ) -> responses.photos.SaveOwnerCoverPhoto:
         """ photos.saveOwnerCoverPhoto
         From Vk Docs: Saves cover photo after successful uploading.
         Access from user, group token(s)
@@ -1093,13 +1279,19 @@ class PhotosSaveOwnerCoverPhoto(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.saveOwnerCoverPhoto", params)
+        return await self.request(
+            "photos.saveOwnerCoverPhoto",
+            params,
+            response_model=responses.photos.SaveOwnerCoverPhotoModel,
+        )
 
 
 class PhotosSaveOwnerPhoto(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, server: str = None, hash: str = None, photo: str = None):
+    async def __call__(
+        self, server: str = None, hash: str = None, photo: str = None
+    ) -> responses.photos.SaveOwnerPhoto:
         """ photos.saveOwnerPhoto
         From Vk Docs: Saves a profile or community photo. Upload URL can be got with the [vk.com/dev/photos.getOwnerPhotoUploadServer|photos.getOwnerPhotoUploadServer] method.
         Access from user token(s)
@@ -1113,7 +1305,11 @@ class PhotosSaveOwnerPhoto(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.saveOwnerPhoto", params)
+        return await self.request(
+            "photos.saveOwnerPhoto",
+            params,
+            response_model=responses.photos.SaveOwnerPhotoModel,
+        )
 
 
 class PhotosSaveWallPhoto(BaseMethod):
@@ -1129,7 +1325,7 @@ class PhotosSaveWallPhoto(BaseMethod):
         latitude: typing.Any = None,
         longitude: typing.Any = None,
         caption: str = None,
-    ):
+    ) -> responses.photos.SaveWallPhoto:
         """ photos.saveWallPhoto
         From Vk Docs: Saves a photo to a user's or community's wall after being uploaded.
         Access from user token(s)
@@ -1148,7 +1344,11 @@ class PhotosSaveWallPhoto(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.saveWallPhoto", params)
+        return await self.request(
+            "photos.saveWallPhoto",
+            params,
+            response_model=responses.photos.SaveWallPhotoModel,
+        )
 
 
 class PhotosSearch(BaseMethod):
@@ -1168,7 +1368,7 @@ class PhotosSearch(BaseMethod):
         offset: int = None,
         count: int = None,
         radius: int = None,
-    ):
+    ) -> responses.photos.Search:
         """ photos.search
         From Vk Docs: Returns a list of photos.
         Access from user, service token(s)
@@ -1188,7 +1388,9 @@ class PhotosSearch(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("photos.search", params)
+        return await self.request(
+            "photos.search", params, response_model=responses.photos.SearchModel
+        )
 
 
 class Photos:

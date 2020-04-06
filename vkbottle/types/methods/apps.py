@@ -9,7 +9,7 @@ from .method import BaseMethod
 class AppsDeleteAppRequests(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self,) -> responses.apps.DeleteAppRequests:
+    async def __call__(self,) -> responses.ok_response.OkResponse:
         """ apps.deleteAppRequests
         From Vk Docs: Deletes all request notifications from the current app.
         Access from user token(s)
@@ -24,7 +24,7 @@ class AppsDeleteAppRequests(BaseMethod):
         return await self.request(
             "apps.deleteAppRequests",
             params,
-            response_model=responses.apps.DeleteAppRequests,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -61,7 +61,9 @@ class AppsGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("apps.get", params, response_model=responses.apps.Get)
+        return await self.request(
+            "apps.get", params, response_model=responses.apps.GetModel
+        )
 
 
 class AppsGetCatalog(BaseMethod):
@@ -106,7 +108,7 @@ class AppsGetCatalog(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "apps.getCatalog", params, response_model=responses.apps.GetCatalog
+            "apps.getCatalog", params, response_model=responses.apps.GetCatalogModel
         )
 
 
@@ -137,7 +139,9 @@ class AppsGetFriendsList(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "apps.getFriendsList", params, response_model=responses.apps.GetFriendsList
+            "apps.getFriendsList",
+            params,
+            response_model=responses.apps.GetFriendsListModel,
         )
 
 
@@ -161,7 +165,9 @@ class AppsGetLeaderboard(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "apps.getLeaderboard", params, response_model=responses.apps.GetLeaderboard
+            "apps.getLeaderboard",
+            params,
+            response_model=responses.apps.GetLeaderboardModel,
         )
 
 
@@ -181,7 +187,7 @@ class AppsGetScopes(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "apps.getScopes", params, response_model=responses.apps.GetScopes
+            "apps.getScopes", params, response_model=responses.apps.GetScopesModel
         )
 
 
@@ -201,7 +207,7 @@ class AppsGetScore(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "apps.getScore", params, response_model=responses.apps.GetScore
+            "apps.getScore", params, response_model=responses.apps.GetScoreModel
         )
 
 
@@ -234,7 +240,7 @@ class AppsSendRequest(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "apps.sendRequest", params, response_model=responses.apps.SendRequest
+            "apps.sendRequest", params, response_model=responses.apps.SendRequestModel
         )
 
 

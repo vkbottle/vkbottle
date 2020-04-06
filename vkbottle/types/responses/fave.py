@@ -1,106 +1,38 @@
-from .others import SimpleResponse
+import typing
+import enum
 from ..base import BaseModel
-
-from typing import List, Any
-
-
-class AddArticle(SimpleResponse):
-    pass
-
-
-class AddLink(SimpleResponse):
-    pass
-
-
-class AddPage(SimpleResponse):
-    pass
-
-
-class AddPost(SimpleResponse):
-    pass
-
-
-class AddProduct(SimpleResponse):
-    pass
-
-
-class AddTagResponse(BaseModel):
-    id: int = None
-    name: str = None
-
-
-class AddTag(BaseModel):
-    response: AddTagResponse = None
-
-
-class AddVideo(SimpleResponse):
-    pass
-
-
-class EditTag(SimpleResponse):
-    pass
+from vkbottle.types import objects
 
 
 class Get(BaseModel):
-    response: Any = None
+    count: int = None
+    items: typing.List = None
+
+
+class GetModel(BaseModel):
+    response: Get = None
+
+
+AddTag = objects.fave.Tag
+
+
+class AddTagModel(BaseModel):
+    response: AddTag = None
 
 
 class GetPages(BaseModel):
-    response: Any = None
-
-
-class GetTagsResponse(BaseModel):
     count: int = None
-    items: List[AddTagResponse] = []
+    items: typing.List = None
+
+
+class GetPagesModel(BaseModel):
+    response: GetPages = None
 
 
 class GetTags(BaseModel):
-    response: GetTagsResponse = None
+    count: int = None
+    items: typing.List = None
 
 
-class MarkSeen(SimpleResponse):
-    pass
-
-
-class RemoveArticle(SimpleResponse):
-    pass
-
-
-class RemoveLink(SimpleResponse):
-    pass
-
-
-class RemovePage(SimpleResponse):
-    pass
-
-
-class RemovePost(SimpleResponse):
-    pass
-
-
-class RemoveProduct(SimpleResponse):
-    pass
-
-
-class RemoveTag(SimpleResponse):
-    pass
-
-
-class RemoveVideo(SimpleResponse):
-    pass
-
-
-class ReorderTags(SimpleResponse):
-    pass
-
-
-class SetPageTags(SimpleResponse):
-    pass
-
-
-class SetTags(SimpleResponse):
-    pass
-
-
-class TrackPageInteraction(SimpleResponse):
-    pass
+class GetTagsModel(BaseModel):
+    response: GetTags = None

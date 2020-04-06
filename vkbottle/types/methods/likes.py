@@ -27,7 +27,7 @@ class LikesAdd(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "likes.add", params, response_model=responses.likes.Add
+            "likes.add", params, response_model=responses.likes.AddModel
         )
 
 
@@ -51,7 +51,7 @@ class LikesDelete(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "likes.delete", params, response_model=responses.likes.Delete
+            "likes.delete", params, response_model=responses.likes.DeleteModel
         )
 
 
@@ -95,7 +95,7 @@ class LikesGetList(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "likes.getList", params, response_model=responses.likes.GetList
+            "likes.getList", params, response_model=responses.likes.GetListModel
         )
 
 
@@ -120,7 +120,7 @@ class LikesIsLiked(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "likes.isLiked", params, response_model=responses.likes.IsLiked
+            "likes.isLiked", params, response_model=responses.likes.IsLikedModel
         )
 
 

@@ -10,7 +10,7 @@ from vkbottle.types.events import EventList
 from vkbottle.framework.framework.handler import Handler, ErrorHandler
 from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework._status import BotStatus, LoggerLevel
-from vkbottle.framework.framework.branch import BranchManager
+from vkbottle.framework.framework.branch import DictBranch
 from vkbottle.framework.bot.processor import AsyncHandleManager
 from vkbottle.framework.bot.builtin import DefaultValidators, DEFAULT_WAIT
 from vkbottle.api import Api, request
@@ -100,7 +100,7 @@ class Bot(HTTP, AsyncHandleManager):
         self.__loop = asyncio.get_event_loop()
 
         # Main workers
-        self.branch: BranchManager = BranchManager()
+        self.branch: DictBranch = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.on: Handler = Handler(self.group_id)
         self.error_handler: ErrorHandler = ErrorHandler()

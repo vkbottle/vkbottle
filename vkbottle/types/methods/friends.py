@@ -26,7 +26,7 @@ class FriendsAdd(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.add", params, response_model=responses.friends.Add
+            "friends.add", params, response_model=responses.friends.AddModel
         )
 
 
@@ -49,7 +49,7 @@ class FriendsAddList(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.addList", params, response_model=responses.friends.AddList
+            "friends.addList", params, response_model=responses.friends.AddListModel
         )
 
 
@@ -72,7 +72,9 @@ class FriendsAreFriends(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.areFriends", params, response_model=responses.friends.AreFriends
+            "friends.areFriends",
+            params,
+            response_model=responses.friends.AreFriendsModel,
         )
 
 
@@ -92,14 +94,14 @@ class FriendsDelete(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.delete", params, response_model=responses.friends.Delete
+            "friends.delete", params, response_model=responses.friends.DeleteModel
         )
 
 
 class FriendsDeleteAllRequests(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self,) -> responses.friends.DeleteAllRequests:
+    async def __call__(self,) -> responses.ok_response.OkResponse:
         """ friends.deleteAllRequests
         From Vk Docs: Marks all incoming friend requests as viewed.
         Access from user token(s)
@@ -114,14 +116,14 @@ class FriendsDeleteAllRequests(BaseMethod):
         return await self.request(
             "friends.deleteAllRequests",
             params,
-            response_model=responses.friends.DeleteAllRequests,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class FriendsDeleteList(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, list_id: int) -> responses.friends.DeleteList:
+    async def __call__(self, list_id: int) -> responses.ok_response.OkResponse:
         """ friends.deleteList
         From Vk Docs: Deletes a friend list of the current user.
         Access from user token(s)
@@ -134,7 +136,9 @@ class FriendsDeleteList(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.deleteList", params, response_model=responses.friends.DeleteList
+            "friends.deleteList",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -143,7 +147,7 @@ class FriendsEdit(BaseMethod):
 
     async def __call__(
         self, user_id: int, list_ids: typing.List = None
-    ) -> responses.friends.Edit:
+    ) -> responses.ok_response.OkResponse:
         """ friends.edit
         From Vk Docs: Edits the friend lists of the selected user.
         Access from user token(s)
@@ -157,7 +161,7 @@ class FriendsEdit(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.edit", params, response_model=responses.friends.Edit
+            "friends.edit", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -171,7 +175,7 @@ class FriendsEditList(BaseMethod):
         user_ids: typing.List = None,
         add_user_ids: typing.List = None,
         delete_user_ids: typing.List = None,
-    ) -> responses.friends.EditList:
+    ) -> responses.ok_response.OkResponse:
         """ friends.editList
         From Vk Docs: Edits a friend list of the current user.
         Access from user token(s)
@@ -188,7 +192,9 @@ class FriendsEditList(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.editList", params, response_model=responses.friends.EditList
+            "friends.editList",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -228,7 +234,7 @@ class FriendsGet(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.get", params, response_model=responses.friends.Get
+            "friends.get", params, response_model=responses.friends.GetModel
         )
 
 
@@ -248,7 +254,9 @@ class FriendsGetAppUsers(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.getAppUsers", params, response_model=responses.friends.GetAppUsers
+            "friends.getAppUsers",
+            params,
+            response_model=responses.friends.GetAppUsersModel,
         )
 
 
@@ -271,7 +279,9 @@ class FriendsGetByPhones(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.getByPhones", params, response_model=responses.friends.GetByPhones
+            "friends.getByPhones",
+            params,
+            response_model=responses.friends.GetByPhonesModel,
         )
 
 
@@ -294,7 +304,7 @@ class FriendsGetLists(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.getLists", params, response_model=responses.friends.GetLists
+            "friends.getLists", params, response_model=responses.friends.GetListsModel
         )
 
 
@@ -327,7 +337,7 @@ class FriendsGetMutual(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.getMutual", params, response_model=responses.friends.GetMutual
+            "friends.getMutual", params, response_model=responses.friends.GetMutualModel
         )
 
 
@@ -360,7 +370,7 @@ class FriendsGetOnline(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.getOnline", params, response_model=responses.friends.GetOnline
+            "friends.getOnline", params, response_model=responses.friends.GetOnlineModel
         )
 
 
@@ -380,7 +390,7 @@ class FriendsGetRecent(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.getRecent", params, response_model=responses.friends.GetRecent
+            "friends.getRecent", params, response_model=responses.friends.GetRecentModel
         )
 
 
@@ -421,7 +431,9 @@ class FriendsGetRequests(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.getRequests", params, response_model=responses.friends.GetRequests
+            "friends.getRequests",
+            params,
+            response_model=responses.friends.GetRequestsModel,
         )
 
 
@@ -454,7 +466,7 @@ class FriendsGetSuggestions(BaseMethod):
         return await self.request(
             "friends.getSuggestions",
             params,
-            response_model=responses.friends.GetSuggestions,
+            response_model=responses.friends.GetSuggestionsModel,
         )
 
 
@@ -487,7 +499,7 @@ class FriendsSearch(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "friends.search", params, response_model=responses.friends.Search
+            "friends.search", params, response_model=responses.friends.SearchModel
         )
 
 

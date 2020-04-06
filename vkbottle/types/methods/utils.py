@@ -13,7 +13,7 @@ class UtilsCheckLink(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, url: str):
+    async def __call__(self, url: str) -> responses.utils.CheckLink:
         """ utils.checkLink
         From Vk Docs: Checks whether a link is blocked in VK.
         Access from user, group, service token(s)
@@ -25,13 +25,15 @@ class UtilsCheckLink(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("utils.checkLink", params)
+        return await self.request(
+            "utils.checkLink", params, response_model=responses.utils.CheckLinkModel
+        )
 
 
 class UtilsDeleteFromLastShortened(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, key: str):
+    async def __call__(self, key: str) -> responses.ok_response.OkResponse:
         """ utils.deleteFromLastShortened
         From Vk Docs: Deletes shortened link from user's list.
         Access from user token(s)
@@ -43,13 +45,19 @@ class UtilsDeleteFromLastShortened(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("utils.deleteFromLastShortened", params)
+        return await self.request(
+            "utils.deleteFromLastShortened",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class UtilsGetLastShortenedLinks(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, count: int = None, offset: int = None):
+    async def __call__(
+        self, count: int = None, offset: int = None
+    ) -> responses.utils.GetLastShortenedLinks:
         """ utils.getLastShortenedLinks
         From Vk Docs: Returns a list of user's shortened links.
         Access from user token(s)
@@ -62,7 +70,11 @@ class UtilsGetLastShortenedLinks(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("utils.getLastShortenedLinks", params)
+        return await self.request(
+            "utils.getLastShortenedLinks",
+            params,
+            response_model=responses.utils.GetLastShortenedLinksModel,
+        )
 
 
 class UtilsGetLinkStats(BaseMethod):
@@ -80,7 +92,7 @@ class UtilsGetLinkStats(BaseMethod):
         interval: str = None,
         intervals_count: int = None,
         extended: bool = None,
-    ):
+    ) -> responses.utils.GetLinkStats:
         """ utils.getLinkStats
         From Vk Docs: Returns stats data for shortened link.
         Access from user, group, service token(s)
@@ -97,7 +109,11 @@ class UtilsGetLinkStats(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("utils.getLinkStats", params)
+        return await self.request(
+            "utils.getLinkStats",
+            params,
+            response_model=responses.utils.GetLinkStatsModel,
+        )
 
 
 class UtilsGetServerTime(BaseMethod):
@@ -107,7 +123,7 @@ class UtilsGetServerTime(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self,):
+    async def __call__(self,) -> responses.utils.GetServerTime:
         """ utils.getServerTime
         From Vk Docs: Returns the current time of the VK server.
         Access from user, group, service token(s)
@@ -119,7 +135,11 @@ class UtilsGetServerTime(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("utils.getServerTime", params)
+        return await self.request(
+            "utils.getServerTime",
+            params,
+            response_model=responses.utils.GetServerTimeModel,
+        )
 
 
 class UtilsGetShortLink(BaseMethod):
@@ -129,7 +149,9 @@ class UtilsGetShortLink(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, url: str, private: bool = None):
+    async def __call__(
+        self, url: str, private: bool = None
+    ) -> responses.utils.GetShortLink:
         """ utils.getShortLink
         From Vk Docs: Allows to receive a link shortened via vk.cc.
         Access from user, group, service token(s)
@@ -142,7 +164,11 @@ class UtilsGetShortLink(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("utils.getShortLink", params)
+        return await self.request(
+            "utils.getShortLink",
+            params,
+            response_model=responses.utils.GetShortLinkModel,
+        )
 
 
 class UtilsResolveScreenName(BaseMethod):
@@ -152,7 +178,7 @@ class UtilsResolveScreenName(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, screen_name: str):
+    async def __call__(self, screen_name: str) -> responses.utils.ResolveScreenName:
         """ utils.resolveScreenName
         From Vk Docs: Detects a type of object (e.g., user, community, application) and its ID by screen name.
         Access from user, group, service token(s)
@@ -164,7 +190,11 @@ class UtilsResolveScreenName(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("utils.resolveScreenName", params)
+        return await self.request(
+            "utils.resolveScreenName",
+            params,
+            response_model=responses.utils.ResolveScreenNameModel,
+        )
 
 
 class Utils:

@@ -1,0 +1,17 @@
+import typing
+import enum
+from ..base import BaseModel
+from vkbottle.types import objects
+
+Get = typing.Dict
+
+
+class GetModel(BaseModel):
+    response: Get = None
+
+
+GetKeys = typing.List[str]
+
+
+class GetKeysModel(BaseModel):
+    response: GetKeys = None

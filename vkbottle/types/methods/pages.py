@@ -12,7 +12,7 @@ class PagesClearCache(BaseMethod):
         APIAccessibility.SERVICE,
     ]
 
-    async def __call__(self, url: str):
+    async def __call__(self, url: str) -> responses.ok_response.OkResponse:
         """ pages.clearCache
         From Vk Docs: Allows to clear the cache of particular 'external' pages which may be attached to VK posts.
         Access from user, service token(s)
@@ -24,7 +24,11 @@ class PagesClearCache(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("pages.clearCache", params)
+        return await self.request(
+            "pages.clearCache",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class PagesGet(BaseMethod):
@@ -39,7 +43,7 @@ class PagesGet(BaseMethod):
         title: str = None,
         need_source: bool = None,
         need_html: bool = None,
-    ):
+    ) -> responses.pages.Get:
         """ pages.get
         From Vk Docs: Returns information about a wiki page.
         Access from user token(s)
@@ -57,13 +61,17 @@ class PagesGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("pages.get", params)
+        return await self.request(
+            "pages.get", params, response_model=responses.pages.GetModel
+        )
 
 
 class PagesGetHistory(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, page_id: int, group_id: int = None, user_id: int = None):
+    async def __call__(
+        self, page_id: int, group_id: int = None, user_id: int = None
+    ) -> responses.pages.GetHistory:
         """ pages.getHistory
         From Vk Docs: Returns a list of all previous versions of a wiki page.
         Access from user token(s)
@@ -77,13 +85,15 @@ class PagesGetHistory(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("pages.getHistory", params)
+        return await self.request(
+            "pages.getHistory", params, response_model=responses.pages.GetHistoryModel
+        )
 
 
 class PagesGetTitles(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int = None):
+    async def __call__(self, group_id: int = None) -> responses.pages.GetTitles:
         """ pages.getTitles
         From Vk Docs: Returns a list of wiki pages in a group.
         Access from user token(s)
@@ -95,7 +105,9 @@ class PagesGetTitles(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("pages.getTitles", params)
+        return await self.request(
+            "pages.getTitles", params, response_model=responses.pages.GetTitlesModel
+        )
 
 
 class PagesGetVersion(BaseMethod):
@@ -107,7 +119,7 @@ class PagesGetVersion(BaseMethod):
         group_id: int = None,
         user_id: int = None,
         need_html: bool = None,
-    ):
+    ) -> responses.pages.GetVersion:
         """ pages.getVersion
         From Vk Docs: Returns the text of one of the previous versions of a wiki page.
         Access from user token(s)
@@ -122,13 +134,17 @@ class PagesGetVersion(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("pages.getVersion", params)
+        return await self.request(
+            "pages.getVersion", params, response_model=responses.pages.GetVersionModel
+        )
 
 
 class PagesParseWiki(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, text: str, group_id: int = None):
+    async def __call__(
+        self, text: str, group_id: int = None
+    ) -> responses.pages.ParseWiki:
         """ pages.parseWiki
         From Vk Docs: Returns HTML representation of the wiki markup.
         Access from user token(s)
@@ -141,7 +157,9 @@ class PagesParseWiki(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("pages.parseWiki", params)
+        return await self.request(
+            "pages.parseWiki", params, response_model=responses.pages.ParseWikiModel
+        )
 
 
 class PagesSave(BaseMethod):
@@ -154,7 +172,7 @@ class PagesSave(BaseMethod):
         group_id: int = None,
         user_id: int = None,
         title: str = None,
-    ):
+    ) -> responses.pages.Save:
         """ pages.save
         From Vk Docs: Saves the text of a wiki page.
         Access from user token(s)
@@ -170,7 +188,9 @@ class PagesSave(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("pages.save", params)
+        return await self.request(
+            "pages.save", params, response_model=responses.pages.SaveModel
+        )
 
 
 class PagesSaveAccess(BaseMethod):
@@ -183,7 +203,7 @@ class PagesSaveAccess(BaseMethod):
         user_id: int = None,
         view: int = None,
         edit: int = None,
-    ):
+    ) -> responses.pages.SaveAccess:
         """ pages.saveAccess
         From Vk Docs: Saves modified read and edit access settings for a wiki page.
         Access from user token(s)
@@ -199,7 +219,9 @@ class PagesSaveAccess(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("pages.saveAccess", params)
+        return await self.request(
+            "pages.saveAccess", params, response_model=responses.pages.SaveAccessModel
+        )
 
 
 class Pages:

@@ -9,7 +9,7 @@ from .method import BaseMethod
 class FaveAddArticle(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, url: str) -> responses.fave.AddArticle:
+    async def __call__(self, url: str) -> responses.ok_response.OkResponse:
         """ fave.addArticle
         From Vk Docs: 
         Access from user token(s)
@@ -22,14 +22,16 @@ class FaveAddArticle(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.addArticle", params, response_model=responses.fave.AddArticle
+            "fave.addArticle",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class FaveAddLink(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, link: str) -> responses.fave.AddLink:
+    async def __call__(self, link: str) -> responses.ok_response.OkResponse:
         """ fave.addLink
         From Vk Docs: Adds a link to user faves.
         Access from user token(s)
@@ -42,7 +44,7 @@ class FaveAddLink(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.addLink", params, response_model=responses.fave.AddLink
+            "fave.addLink", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -51,7 +53,7 @@ class FaveAddPage(BaseMethod):
 
     async def __call__(
         self, user_id: int = None, group_id: int = None
-    ) -> responses.fave.AddPage:
+    ) -> responses.ok_response.OkResponse:
         """ fave.addPage
         From Vk Docs: 
         Access from user token(s)
@@ -65,7 +67,7 @@ class FaveAddPage(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.addPage", params, response_model=responses.fave.AddPage
+            "fave.addPage", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -74,7 +76,7 @@ class FaveAddPost(BaseMethod):
 
     async def __call__(
         self, owner_id: int, id: int, access_key: str = None
-    ) -> responses.fave.AddPost:
+    ) -> responses.ok_response.OkResponse:
         """ fave.addPost
         From Vk Docs: 
         Access from user token(s)
@@ -89,7 +91,7 @@ class FaveAddPost(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.addPost", params, response_model=responses.fave.AddPost
+            "fave.addPost", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -98,7 +100,7 @@ class FaveAddProduct(BaseMethod):
 
     async def __call__(
         self, owner_id: int, id: int, access_key: str = None
-    ) -> responses.fave.AddProduct:
+    ) -> responses.ok_response.OkResponse:
         """ fave.addProduct
         From Vk Docs: 
         Access from user token(s)
@@ -113,7 +115,9 @@ class FaveAddProduct(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.addProduct", params, response_model=responses.fave.AddProduct
+            "fave.addProduct",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -133,7 +137,7 @@ class FaveAddTag(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.addTag", params, response_model=responses.fave.AddTag
+            "fave.addTag", params, response_model=responses.fave.AddTagModel
         )
 
 
@@ -142,7 +146,7 @@ class FaveAddVideo(BaseMethod):
 
     async def __call__(
         self, owner_id: int, id: int, access_key: str = None
-    ) -> responses.fave.AddVideo:
+    ) -> responses.ok_response.OkResponse:
         """ fave.addVideo
         From Vk Docs: 
         Access from user token(s)
@@ -157,14 +161,16 @@ class FaveAddVideo(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.addVideo", params, response_model=responses.fave.AddVideo
+            "fave.addVideo",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class FaveEditTag(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, id: int, name: str) -> responses.fave.EditTag:
+    async def __call__(self, id: int, name: str) -> responses.ok_response.OkResponse:
         """ fave.editTag
         From Vk Docs: 
         Access from user token(s)
@@ -178,7 +184,7 @@ class FaveEditTag(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.editTag", params, response_model=responses.fave.EditTag
+            "fave.editTag", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -212,7 +218,9 @@ class FaveGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("fave.get", params, response_model=responses.fave.Get)
+        return await self.request(
+            "fave.get", params, response_model=responses.fave.GetModel
+        )
 
 
 class FaveGetPages(BaseMethod):
@@ -242,7 +250,7 @@ class FaveGetPages(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.getPages", params, response_model=responses.fave.GetPages
+            "fave.getPages", params, response_model=responses.fave.GetPagesModel
         )
 
 
@@ -262,14 +270,14 @@ class FaveGetTags(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.getTags", params, response_model=responses.fave.GetTags
+            "fave.getTags", params, response_model=responses.fave.GetTagsModel
         )
 
 
 class FaveMarkSeen(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self,) -> responses.fave.MarkSeen:
+    async def __call__(self,) -> responses.ok_response.OkResponse:
         """ fave.markSeen
         From Vk Docs: 
         Access from user token(s)
@@ -282,7 +290,9 @@ class FaveMarkSeen(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.markSeen", params, response_model=responses.fave.MarkSeen
+            "fave.markSeen",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -291,7 +301,7 @@ class FaveRemoveArticle(BaseMethod):
 
     async def __call__(
         self, owner_id: int, article_id: int
-    ) -> responses.fave.RemoveArticle:
+    ) -> responses.ok_response.OkResponse:
         """ fave.removeArticle
         From Vk Docs: 
         Access from user token(s)
@@ -305,7 +315,9 @@ class FaveRemoveArticle(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.removeArticle", params, response_model=responses.fave.RemoveArticle
+            "fave.removeArticle",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -314,7 +326,7 @@ class FaveRemoveLink(BaseMethod):
 
     async def __call__(
         self, link_id: str = None, link: str = None
-    ) -> responses.fave.RemoveLink:
+    ) -> responses.ok_response.OkResponse:
         """ fave.removeLink
         From Vk Docs: Removes link from the user's faves.
         Access from user token(s)
@@ -328,7 +340,9 @@ class FaveRemoveLink(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.removeLink", params, response_model=responses.fave.RemoveLink
+            "fave.removeLink",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -337,7 +351,7 @@ class FaveRemovePage(BaseMethod):
 
     async def __call__(
         self, user_id: int = None, group_id: int = None
-    ) -> responses.fave.RemovePage:
+    ) -> responses.ok_response.OkResponse:
         """ fave.removePage
         From Vk Docs: 
         Access from user token(s)
@@ -351,14 +365,18 @@ class FaveRemovePage(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.removePage", params, response_model=responses.fave.RemovePage
+            "fave.removePage",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class FaveRemovePost(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, id: int) -> responses.fave.RemovePost:
+    async def __call__(
+        self, owner_id: int, id: int
+    ) -> responses.ok_response.OkResponse:
         """ fave.removePost
         From Vk Docs: 
         Access from user token(s)
@@ -372,14 +390,18 @@ class FaveRemovePost(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.removePost", params, response_model=responses.fave.RemovePost
+            "fave.removePost",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class FaveRemoveProduct(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, id: int) -> responses.fave.RemoveProduct:
+    async def __call__(
+        self, owner_id: int, id: int
+    ) -> responses.ok_response.OkResponse:
         """ fave.removeProduct
         From Vk Docs: 
         Access from user token(s)
@@ -393,14 +415,16 @@ class FaveRemoveProduct(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.removeProduct", params, response_model=responses.fave.RemoveProduct
+            "fave.removeProduct",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class FaveRemoveTag(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, id: int) -> responses.fave.RemoveTag:
+    async def __call__(self, id: int) -> responses.ok_response.OkResponse:
         """ fave.removeTag
         From Vk Docs: 
         Access from user token(s)
@@ -413,14 +437,16 @@ class FaveRemoveTag(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.removeTag", params, response_model=responses.fave.RemoveTag
+            "fave.removeTag",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class FaveReorderTags(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, ids: typing.List) -> responses.fave.ReorderTags:
+    async def __call__(self, ids: typing.List) -> responses.ok_response.OkResponse:
         """ fave.reorderTags
         From Vk Docs: 
         Access from user token(s)
@@ -433,7 +459,9 @@ class FaveReorderTags(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.reorderTags", params, response_model=responses.fave.ReorderTags
+            "fave.reorderTags",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -442,7 +470,7 @@ class FaveSetPageTags(BaseMethod):
 
     async def __call__(
         self, user_id: int = None, group_id: int = None, tag_ids: typing.List = None
-    ) -> responses.fave.SetPageTags:
+    ) -> responses.ok_response.OkResponse:
         """ fave.setPageTags
         From Vk Docs: 
         Access from user token(s)
@@ -457,7 +485,9 @@ class FaveSetPageTags(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.setPageTags", params, response_model=responses.fave.SetPageTags
+            "fave.setPageTags",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -472,7 +502,7 @@ class FaveSetTags(BaseMethod):
         tag_ids: typing.List = None,
         link_id: str = None,
         link_url: str = None,
-    ) -> responses.fave.SetTags:
+    ) -> responses.ok_response.OkResponse:
         """ fave.setTags
         From Vk Docs: 
         Access from user token(s)
@@ -490,7 +520,7 @@ class FaveSetTags(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "fave.setTags", params, response_model=responses.fave.SetTags
+            "fave.setTags", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -499,7 +529,7 @@ class FaveTrackPageInteraction(BaseMethod):
 
     async def __call__(
         self, user_id: int = None, group_id: int = None
-    ) -> responses.fave.TrackPageInteraction:
+    ) -> responses.ok_response.OkResponse:
         """ fave.trackPageInteraction
         From Vk Docs: 
         Access from user token(s)
@@ -515,7 +545,7 @@ class FaveTrackPageInteraction(BaseMethod):
         return await self.request(
             "fave.trackPageInteraction",
             params,
-            response_model=responses.fave.TrackPageInteraction,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 

@@ -18,7 +18,7 @@ class PrettycardsCreate(BaseMethod):
         price: str = None,
         price_old: str = None,
         button: str = None,
-    ):
+    ) -> dict:
         """ prettyCards.create
         From Vk Docs: 
         Access from user token(s)
@@ -42,7 +42,7 @@ class PrettycardsCreate(BaseMethod):
 class PrettycardsDelete(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, card_id: int):
+    async def __call__(self, owner_id: int, card_id: int) -> dict:
         """ prettyCards.delete
         From Vk Docs: 
         Access from user token(s)
@@ -71,7 +71,7 @@ class PrettycardsEdit(BaseMethod):
         price: str = None,
         price_old: str = None,
         button: str = None,
-    ):
+    ) -> dict:
         """ prettyCards.edit
         From Vk Docs: 
         Access from user token(s)
@@ -96,7 +96,9 @@ class PrettycardsEdit(BaseMethod):
 class PrettycardsGet(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, offset: int = None, count: int = None):
+    async def __call__(
+        self, owner_id: int, offset: int = None, count: int = None
+    ) -> dict:
         """ prettyCards.get
         From Vk Docs: 
         Access from user token(s)
@@ -116,7 +118,7 @@ class PrettycardsGet(BaseMethod):
 class PrettycardsGetById(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, card_ids: typing.List):
+    async def __call__(self, owner_id: int, card_ids: typing.List) -> dict:
         """ prettyCards.getById
         From Vk Docs: 
         Access from user token(s)
@@ -135,7 +137,7 @@ class PrettycardsGetById(BaseMethod):
 class PrettycardsGetUploadURL(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self,):
+    async def __call__(self,) -> dict:
         """ prettyCards.getUploadURL
         From Vk Docs: 
         Access from user token(s)

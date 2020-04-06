@@ -20,7 +20,7 @@ class StatsGet(BaseMethod):
         filters: typing.List = None,
         stats_groups: typing.List = None,
         extended: bool = None,
-    ):
+    ) -> responses.stats.Get:
         """ stats.get
         From Vk Docs: Returns statistics of a community or an application.
         Access from user token(s)
@@ -40,13 +40,17 @@ class StatsGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("stats.get", params)
+        return await self.request(
+            "stats.get", params, response_model=responses.stats.GetModel
+        )
 
 
 class StatsGetPostReach(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: str, post_id: int):
+    async def __call__(
+        self, owner_id: str, post_id: int
+    ) -> responses.stats.GetPostReach:
         """ stats.getPostReach
         From Vk Docs: Returns stats for a wall post.
         Access from user token(s)
@@ -59,13 +63,17 @@ class StatsGetPostReach(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("stats.getPostReach", params)
+        return await self.request(
+            "stats.getPostReach",
+            params,
+            response_model=responses.stats.GetPostReachModel,
+        )
 
 
 class StatsTrackVisitor(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, id: str):
+    async def __call__(self, id: str) -> responses.ok_response.OkResponse:
         """ stats.trackVisitor
         From Vk Docs: 
         Access from user token(s)
@@ -77,7 +85,11 @@ class StatsTrackVisitor(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("stats.trackVisitor", params)
+        return await self.request(
+            "stats.trackVisitor",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class Stats:

@@ -12,7 +12,9 @@ class WallCloseComments(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, owner_id: int, post_id: int):
+    async def __call__(
+        self, owner_id: int, post_id: int
+    ) -> responses.ok_response.OkResponse:
         """ wall.closeComments
         From Vk Docs: 
         Access from user, group token(s)
@@ -25,7 +27,11 @@ class WallCloseComments(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.closeComments", params)
+        return await self.request(
+            "wall.closeComments",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class WallCreateComment(BaseMethod):
@@ -44,7 +50,7 @@ class WallCreateComment(BaseMethod):
         attachments: typing.List = None,
         sticker_id: int = None,
         guid: str = None,
-    ):
+    ) -> responses.wall.CreateComment:
         """ wall.createComment
         From Vk Docs: Adds a comment to a post on a user wall or community wall.
         Access from user, group token(s)
@@ -63,13 +69,19 @@ class WallCreateComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.createComment", params)
+        return await self.request(
+            "wall.createComment",
+            params,
+            response_model=responses.wall.CreateCommentModel,
+        )
 
 
 class WallDelete(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int = None, post_id: int = None):
+    async def __call__(
+        self, owner_id: int = None, post_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ wall.delete
         From Vk Docs: Deletes a post from a user wall or community wall.
         Access from user token(s)
@@ -82,13 +94,17 @@ class WallDelete(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.delete", params)
+        return await self.request(
+            "wall.delete", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class WallDeleteComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, comment_id: int, owner_id: int = None):
+    async def __call__(
+        self, comment_id: int, owner_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ wall.deleteComment
         From Vk Docs: Deletes a comment on a post on a user wall or community wall.
         Access from user token(s)
@@ -101,7 +117,11 @@ class WallDeleteComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.deleteComment", params)
+        return await self.request(
+            "wall.deleteComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class WallEdit(BaseMethod):
@@ -125,7 +145,7 @@ class WallEdit(BaseMethod):
         poster_bkg_id: int = None,
         poster_bkg_owner_id: int = None,
         poster_bkg_access_hash: str = None,
-    ):
+    ) -> responses.wall.Edit:
         """ wall.edit
         From Vk Docs: Edits a post on a user wall or community wall.
         Access from user token(s)
@@ -152,7 +172,9 @@ class WallEdit(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.edit", params)
+        return await self.request(
+            "wall.edit", params, response_model=responses.wall.EditModel
+        )
 
 
 class WallEditAdsStealth(BaseMethod):
@@ -172,7 +194,7 @@ class WallEditAdsStealth(BaseMethod):
         link_title: str = None,
         link_image: str = None,
         link_video: str = None,
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ wall.editAdsStealth
         From Vk Docs: Allows to edit hidden post.
         Access from user token(s)
@@ -195,7 +217,11 @@ class WallEditAdsStealth(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.editAdsStealth", params)
+        return await self.request(
+            "wall.editAdsStealth",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class WallEditComment(BaseMethod):
@@ -207,7 +233,7 @@ class WallEditComment(BaseMethod):
         owner_id: int = None,
         message: str = None,
         attachments: typing.List = None,
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ wall.editComment
         From Vk Docs: Edits a comment on a user wall or community wall.
         Access from user token(s)
@@ -222,7 +248,11 @@ class WallEditComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.editComment", params)
+        return await self.request(
+            "wall.editComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class WallGet(BaseMethod):
@@ -240,7 +270,7 @@ class WallGet(BaseMethod):
         filter: str = None,
         extended: bool = None,
         fields: typing.List = None,
-    ):
+    ) -> responses.wall.Get:
         """ wall.get
         From Vk Docs: Returns a list of posts on a user wall or community wall.
         Access from user, service token(s)
@@ -258,7 +288,9 @@ class WallGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.get", params)
+        return await self.request(
+            "wall.get", params, response_model=responses.wall.GetModel
+        )
 
 
 class WallGetById(BaseMethod):
@@ -273,7 +305,7 @@ class WallGetById(BaseMethod):
         extended: bool = None,
         copy_history_depth: int = None,
         fields: typing.List = None,
-    ):
+    ) -> responses.wall.GetById:
         """ wall.getById
         From Vk Docs: Returns a list of posts from user or community walls by their IDs.
         Access from user, service token(s)
@@ -288,7 +320,9 @@ class WallGetById(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.getById", params)
+        return await self.request(
+            "wall.getById", params, response_model=responses.wall.GetByIdModel
+        )
 
 
 class WallGetComments(BaseMethod):
@@ -311,7 +345,7 @@ class WallGetComments(BaseMethod):
         fields: typing.List = None,
         comment_id: int = None,
         thread_items_count: int = None,
-    ):
+    ) -> responses.wall.GetComments:
         """ wall.getComments
         From Vk Docs: Returns a list of comments on a post on a user wall or community wall.
         Access from user, service token(s)
@@ -334,7 +368,9 @@ class WallGetComments(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.getComments", params)
+        return await self.request(
+            "wall.getComments", params, response_model=responses.wall.GetCommentsModel
+        )
 
 
 class WallGetReposts(BaseMethod):
@@ -349,7 +385,7 @@ class WallGetReposts(BaseMethod):
         post_id: int = None,
         offset: int = None,
         count: int = None,
-    ):
+    ) -> responses.wall.GetReposts:
         """ wall.getReposts
         From Vk Docs: Returns information about reposts of a post on user wall or community wall.
         Access from user, service token(s)
@@ -364,7 +400,9 @@ class WallGetReposts(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.getReposts", params)
+        return await self.request(
+            "wall.getReposts", params, response_model=responses.wall.GetRepostsModel
+        )
 
 
 class WallOpenComments(BaseMethod):
@@ -373,7 +411,9 @@ class WallOpenComments(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, owner_id: int, post_id: int):
+    async def __call__(
+        self, owner_id: int, post_id: int
+    ) -> responses.ok_response.OkResponse:
         """ wall.openComments
         From Vk Docs: 
         Access from user, group token(s)
@@ -386,13 +426,19 @@ class WallOpenComments(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.openComments", params)
+        return await self.request(
+            "wall.openComments",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class WallPin(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, post_id: int, owner_id: int = None):
+    async def __call__(
+        self, post_id: int, owner_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ wall.pin
         From Vk Docs: Pins the post on wall.
         Access from user token(s)
@@ -405,7 +451,9 @@ class WallPin(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.pin", params)
+        return await self.request(
+            "wall.pin", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class WallPost(BaseMethod):
@@ -429,7 +477,7 @@ class WallPost(BaseMethod):
         mark_as_ads: bool = None,
         close_comments: bool = None,
         mute_notifications: bool = None,
-    ):
+    ) -> responses.wall.Post:
         """ wall.post
         From Vk Docs: Adds a new post on a user wall or community wall. Can also be used to publish suggested or scheduled posts.
         Access from user token(s)
@@ -456,7 +504,9 @@ class WallPost(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.post", params)
+        return await self.request(
+            "wall.post", params, response_model=responses.wall.PostModel
+        )
 
 
 class WallPostAdsStealth(BaseMethod):
@@ -476,7 +526,7 @@ class WallPostAdsStealth(BaseMethod):
         link_title: str = None,
         link_image: str = None,
         link_video: str = None,
-    ):
+    ) -> responses.wall.PostAdsStealth:
         """ wall.postAdsStealth
         From Vk Docs: Allows to create hidden post which will not be shown on the community's wall and can be used for creating an ad with type "Community post".
         Access from user token(s)
@@ -499,13 +549,19 @@ class WallPostAdsStealth(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.postAdsStealth", params)
+        return await self.request(
+            "wall.postAdsStealth",
+            params,
+            response_model=responses.wall.PostAdsStealthModel,
+        )
 
 
 class WallReportComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, comment_id: int, reason: int = None):
+    async def __call__(
+        self, owner_id: int, comment_id: int, reason: int = None
+    ) -> responses.ok_response.OkResponse:
         """ wall.reportComment
         From Vk Docs: Reports (submits a complaint about) a comment on a post on a user wall or community wall.
         Access from user token(s)
@@ -519,13 +575,19 @@ class WallReportComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.reportComment", params)
+        return await self.request(
+            "wall.reportComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class WallReportPost(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, post_id: int, reason: int = None):
+    async def __call__(
+        self, owner_id: int, post_id: int, reason: int = None
+    ) -> responses.ok_response.OkResponse:
         """ wall.reportPost
         From Vk Docs: Reports (submits a complaint about) a post on a user wall or community wall.
         Access from user token(s)
@@ -539,7 +601,11 @@ class WallReportPost(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.reportPost", params)
+        return await self.request(
+            "wall.reportPost",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class WallRepost(BaseMethod):
@@ -552,7 +618,7 @@ class WallRepost(BaseMethod):
         group_id: int = None,
         mark_as_ads: bool = None,
         mute_notifications: bool = None,
-    ):
+    ) -> responses.wall.Repost:
         """ wall.repost
         From Vk Docs: Reposts (copies) an object to a user wall or community wall.
         Access from user token(s)
@@ -568,13 +634,17 @@ class WallRepost(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.repost", params)
+        return await self.request(
+            "wall.repost", params, response_model=responses.wall.RepostModel
+        )
 
 
 class WallRestore(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int = None, post_id: int = None):
+    async def __call__(
+        self, owner_id: int = None, post_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ wall.restore
         From Vk Docs: Restores a post deleted from a user wall or community wall.
         Access from user token(s)
@@ -587,13 +657,17 @@ class WallRestore(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.restore", params)
+        return await self.request(
+            "wall.restore", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class WallRestoreComment(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, comment_id: int, owner_id: int = None):
+    async def __call__(
+        self, comment_id: int, owner_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ wall.restoreComment
         From Vk Docs: Restores a comment deleted from a user wall or community wall.
         Access from user token(s)
@@ -606,7 +680,11 @@ class WallRestoreComment(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.restoreComment", params)
+        return await self.request(
+            "wall.restoreComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class WallSearch(BaseMethod):
@@ -625,7 +703,7 @@ class WallSearch(BaseMethod):
         offset: int = None,
         extended: bool = None,
         fields: typing.List = None,
-    ):
+    ) -> responses.wall.Search:
         """ wall.search
         From Vk Docs: Allows to search posts on user or community walls.
         Access from user, service token(s)
@@ -644,13 +722,17 @@ class WallSearch(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.search", params)
+        return await self.request(
+            "wall.search", params, response_model=responses.wall.SearchModel
+        )
 
 
 class WallUnpin(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, post_id: int, owner_id: int = None):
+    async def __call__(
+        self, post_id: int, owner_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ wall.unpin
         From Vk Docs: Unpins the post on wall.
         Access from user token(s)
@@ -663,7 +745,9 @@ class WallUnpin(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("wall.unpin", params)
+        return await self.request(
+            "wall.unpin", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class Wall:

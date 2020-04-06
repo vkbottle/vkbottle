@@ -17,7 +17,7 @@ class SearchGetHints(BaseMethod):
         filters: typing.List = None,
         fields: typing.List = None,
         search_global: bool = None,
-    ):
+    ) -> responses.search.GetHints:
         """ search.getHints
         From Vk Docs: Allows the programmer to do a quick search for any substring.
         Access from user token(s)
@@ -34,7 +34,9 @@ class SearchGetHints(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("search.getHints", params)
+        return await self.request(
+            "search.getHints", params, response_model=responses.search.GetHintsModel
+        )
 
 
 class Search:

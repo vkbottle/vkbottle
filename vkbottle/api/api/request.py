@@ -56,12 +56,13 @@ async def request(
 class Request:
     def __init__(self, token_generator: AbstractTokenGenerator):
         self.token_generator: AbstractTokenGenerator = token_generator
+        self.throw_errors: bool = True
 
     async def __call__(
         self,
         method: str,
         params: dict,
-        throw_errors: bool = True,
+        throw_errors: bool = None,
         response_model=None,
         raw_response: bool = False,
     ):
@@ -69,7 +70,9 @@ class Request:
             method,
             params,
             await self.token_generator.get_token(),
-            throw_errors=throw_errors,
+            throw_errors=throw_errors
+            if throw_errors is not None
+            else self.throw_errors,
         )
 
         logger.debug(f"Response: {response}")

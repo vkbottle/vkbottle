@@ -52,9 +52,9 @@ class LimitedTokenGenerator(AbstractTokenGenerator):
         index = self.state[1]
         timestack = math.floor(time.time())  # noqa: Accuracy to second
         if timestack == self.state[0]:
-            if index + 1 >= self.limit or index + 1 < len(self.tokens):
+            if index + 1 > self.limit or index + 1 < len(self.tokens):
                 logger.error(
-                    "LimitedTokenGenerator is not able to avoid the limit because there are not enough tokens"
+                    f"LimitedTokenGenerator is not able to avoid the limit because there are not enough tokens ({index + 1} \"{self.tokens[index][:11]}...\")"
                 )
                 self.state = (timestack, 0)
             else:

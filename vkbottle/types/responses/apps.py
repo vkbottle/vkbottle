@@ -1,55 +1,62 @@
-from .others import SimpleResponse
+import typing
+import enum
 from ..base import BaseModel
-from ..application import Application
+from vkbottle.types import objects
 
-from ..user import User
-
-
-from typing import List, Any
+SendRequest = typing.Dict
 
 
-class DeleteAppRequests(SimpleResponse):
-    pass
+class SendRequestModel(BaseModel):
+    response: SendRequest = None
 
 
-class GetResponse(BaseModel):
+class GetCatalog(BaseModel):
     count: int = None
-    items: List[Application] = []
+    items: typing.List = None
 
 
-class Get(BaseModel):
-    response: GetResponse = None
-
-
-class GetCatalog(Get):
-    pass
-
-
-class GetFriendsListResponse(BaseModel):
-    count: int = None
-    items: List[User] = []
+class GetCatalogModel(BaseModel):
+    response: GetCatalog = None
 
 
 class GetFriendsList(BaseModel):
-    response: GetFriendsListResponse = None
+    count: int = None
+    items: typing.List = None
+
+
+class GetFriendsListModel(BaseModel):
+    response: GetFriendsList = None
 
 
 class GetLeaderboard(BaseModel):
-    response: List[User] = []
-
-
-class GetScopesResponse(BaseModel):
     count: int = None
-    items: List[dict] = []
+    items: typing.List = None
+
+
+class GetLeaderboardModel(BaseModel):
+    response: GetLeaderboard = None
 
 
 class GetScopes(BaseModel):
-    response: GetScopesResponse = None
+    count: int = None
+    items: typing.List = None
 
 
-class GetScore(BaseModel):
-    response: Any = None
+class GetScopesModel(BaseModel):
+    response: GetScopes = None
 
 
-class SendRequest(SimpleResponse):
-    pass
+GetScore = typing.Dict
+
+
+class GetScoreModel(BaseModel):
+    response: GetScore = None
+
+
+class Get(BaseModel):
+    count: int = None
+    items: typing.List = None
+
+
+class GetModel(BaseModel):
+    response: Get = None

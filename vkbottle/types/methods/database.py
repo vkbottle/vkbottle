@@ -29,7 +29,9 @@ class DatabaseGetChairs(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "database.getChairs", params, response_model=responses.database.GetChairs
+            "database.getChairs",
+            params,
+            response_model=responses.database.GetChairsModel,
         )
 
 
@@ -62,7 +64,9 @@ class DatabaseGetCities(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "database.getCities", params, response_model=responses.database.GetCities
+            "database.getCities",
+            params,
+            response_model=responses.database.GetCitiesModel,
         )
 
 
@@ -89,7 +93,7 @@ class DatabaseGetCitiesById(BaseMethod):
         return await self.request(
             "database.getCitiesById",
             params,
-            response_model=responses.database.GetCitiesById,
+            response_model=responses.database.GetCitiesByIdModel,
         )
 
 
@@ -120,7 +124,7 @@ class DatabaseGetCountries(BaseMethod):
         return await self.request(
             "database.getCountries",
             params,
-            response_model=responses.database.GetCountries,
+            response_model=responses.database.GetCountriesModel,
         )
 
 
@@ -147,7 +151,7 @@ class DatabaseGetCountriesById(BaseMethod):
         return await self.request(
             "database.getCountriesById",
             params,
-            response_model=responses.database.GetCountriesById,
+            response_model=responses.database.GetCountriesByIdModel,
         )
 
 
@@ -176,7 +180,7 @@ class DatabaseGetFaculties(BaseMethod):
         return await self.request(
             "database.getFaculties",
             params,
-            response_model=responses.database.GetFaculties,
+            response_model=responses.database.GetFacultiesModel,
         )
 
 
@@ -206,7 +210,7 @@ class DatabaseGetMetroStations(BaseMethod):
         return await self.request(
             "database.getMetroStations",
             params,
-            response_model=responses.database.GetMetroStations,
+            response_model=responses.database.GetMetroStationsModel,
         )
 
 
@@ -233,7 +237,7 @@ class DatabaseGetMetroStationsById(BaseMethod):
         return await self.request(
             "database.getMetroStationsById",
             params,
-            response_model=responses.database.GetMetroStationsById,
+            response_model=responses.database.GetMetroStationsByIdModel,
         )
 
 
@@ -261,7 +265,9 @@ class DatabaseGetRegions(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "database.getRegions", params, response_model=responses.database.GetRegions
+            "database.getRegions",
+            params,
+            response_model=responses.database.GetRegionsModel,
         )
 
 
@@ -288,7 +294,7 @@ class DatabaseGetSchoolClasses(BaseMethod):
         return await self.request(
             "database.getSchoolClasses",
             params,
-            response_model=responses.database.GetSchoolClasses,
+            response_model=responses.database.GetSchoolClassesModel,
         )
 
 
@@ -316,7 +322,9 @@ class DatabaseGetSchools(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "database.getSchools", params, response_model=responses.database.GetSchools
+            "database.getSchools",
+            params,
+            response_model=responses.database.GetSchoolsModel,
         )
 
 
@@ -352,7 +360,7 @@ class DatabaseGetUniversities(BaseMethod):
         return await self.request(
             "database.getUniversities",
             params,
-            response_model=responses.database.GetUniversities,
+            response_model=responses.database.GetUniversitiesModel,
         )
 
 

@@ -1,73 +1,39 @@
-from .others import SimpleResponse
+import typing
+import enum
 from ..base import BaseModel
-
-from ..attachments.topic import TopicComment, Topic
-from ..user import User
-
-from typing import List
-
-
-class AddTopic(SimpleResponse):
-    pass
-
-
-class CloseTopic(SimpleResponse):
-    pass
-
-
-class CreateComment(SimpleResponse):
-    pass
-
-
-class DeleteComment(SimpleResponse):
-    pass
-
-
-class DeleteTopic(SimpleResponse):
-    pass
-
-
-class EditComment(SimpleResponse):
-    pass
-
-
-class EditTopic(SimpleResponse):
-    pass
-
-
-class FixTopic(SimpleResponse):
-    pass
-
-
-class GetCommentsResponse(BaseModel):
-    count: int = None
-    items: List[TopicComment] = []
-    profiles: List[User] = []
-
-
-class GetComments(BaseModel):
-    response: GetCommentsResponse = None
-
-
-class GetTopicsResponse(BaseModel):
-    count: int = None
-    items: List[Topic] = []
-    default_order: int = None
-    can_add_topics: int = None
-    profiles: List[User] = []
+from vkbottle.types import objects
 
 
 class GetTopics(BaseModel):
-    response: GetTopicsResponse = None
+    count: int = None
+    items: typing.List = None
+    default_order: objects.board.DefaultOrder = None
+    can_add_topics: objects.base.BoolInt = None
 
 
-class OpenTopic(SimpleResponse):
-    pass
+class GetTopicsModel(BaseModel):
+    response: GetTopics = None
 
 
-class RestoreComment(SimpleResponse):
-    pass
+AddTopic = typing.Dict
 
 
-class UnfixTopic(SimpleResponse):
-    pass
+class AddTopicModel(BaseModel):
+    response: AddTopic = None
+
+
+CreateComment = typing.Dict
+
+
+class CreateCommentModel(BaseModel):
+    response: CreateComment = None
+
+
+class GetComments(BaseModel):
+    count: int = None
+    items: typing.List = None
+    poll: objects.board.TopicPoll = None
+
+
+class GetCommentsModel(BaseModel):
+    response: GetComments = None

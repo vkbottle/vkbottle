@@ -15,19 +15,19 @@ class GroupsAddAddress(BaseMethod):
     async def __call__(
         self,
         group_id: int,
-        city_id: int,
         address: str,
         country_id: int,
         latitude: typing.Any,
-        longitude: typing.Any,
         title: str,
         additional_address: str = None,
+        city_id: int = None,
         metro_id: int = None,
+        longitude: typing.Any = None,
         phone: str = None,
         work_info_status: str = None,
         timetable: str = None,
         is_main_address: bool = None,
-    ) -> responses.groups.AddAddress:
+    ) -> responses.ok_response.OkResponse:
         """ groups.addAddress
         From Vk Docs: 
         Access from user, group token(s)
@@ -52,7 +52,9 @@ class GroupsAddAddress(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.addAddress", params, response_model=responses.groups.AddAddress
+            "groups.addAddress",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -82,7 +84,7 @@ class GroupsAddCallbackServer(BaseMethod):
         return await self.request(
             "groups.addCallbackServer",
             params,
-            response_model=responses.groups.AddCallbackServer,
+            response_model=responses.groups.AddCallbackServerModel,
         )
 
 
@@ -106,7 +108,7 @@ class GroupsAddLink(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.addLink", params, response_model=responses.groups.AddLink
+            "groups.addLink", params, response_model=responses.groups.AddLinkModel
         )
 
 
@@ -115,7 +117,7 @@ class GroupsApproveRequest(BaseMethod):
 
     async def __call__(
         self, group_id: int, user_id: int
-    ) -> responses.groups.ApproveRequest:
+    ) -> responses.ok_response.OkResponse:
         """ groups.approveRequest
         From Vk Docs: Allows to approve join request to the community.
         Access from user token(s)
@@ -131,7 +133,7 @@ class GroupsApproveRequest(BaseMethod):
         return await self.request(
             "groups.approveRequest",
             params,
-            response_model=responses.groups.ApproveRequest,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -146,7 +148,7 @@ class GroupsBan(BaseMethod):
         reason: int = None,
         comment: str = None,
         comment_visible: bool = None,
-    ) -> responses.groups.Ban:
+    ) -> responses.ok_response.OkResponse:
         """ groups.ban
         From Vk Docs: 
         Access from user token(s)
@@ -164,7 +166,7 @@ class GroupsBan(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.ban", params, response_model=responses.groups.Ban
+            "groups.ban", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -195,7 +197,7 @@ class GroupsCreate(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.create", params, response_model=responses.groups.Create
+            "groups.create", params, response_model=responses.groups.CreateModel
         )
 
 
@@ -207,7 +209,7 @@ class GroupsDeleteCallbackServer(BaseMethod):
 
     async def __call__(
         self, group_id: int, server_id: int
-    ) -> responses.groups.DeleteCallbackServer:
+    ) -> responses.ok_response.OkResponse:
         """ groups.deleteCallbackServer
         From Vk Docs: 
         Access from user, group token(s)
@@ -223,7 +225,7 @@ class GroupsDeleteCallbackServer(BaseMethod):
         return await self.request(
             "groups.deleteCallbackServer",
             params,
-            response_model=responses.groups.DeleteCallbackServer,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -232,7 +234,7 @@ class GroupsDeleteLink(BaseMethod):
 
     async def __call__(
         self, group_id: int, link_id: int
-    ) -> responses.groups.DeleteLink:
+    ) -> responses.ok_response.OkResponse:
         """ groups.deleteLink
         From Vk Docs: Allows to delete a link from the community.
         Access from user token(s)
@@ -246,7 +248,9 @@ class GroupsDeleteLink(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.deleteLink", params, response_model=responses.groups.DeleteLink
+            "groups.deleteLink",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -256,7 +260,7 @@ class GroupsDisableOnline(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, group_id: int) -> responses.groups.DisableOnline:
+    async def __call__(self, group_id: int) -> responses.ok_response.OkResponse:
         """ groups.disableOnline
         From Vk Docs: 
         Access from user, group token(s)
@@ -271,7 +275,7 @@ class GroupsDisableOnline(BaseMethod):
         return await self.request(
             "groups.disableOnline",
             params,
-            response_model=responses.groups.DisableOnline,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -325,7 +329,7 @@ class GroupsEdit(BaseMethod):
         secondary_section: int = None,
         country: int = None,
         city: int = None,
-    ) -> responses.groups.Edit:
+    ) -> responses.ok_response.OkResponse:
         """ groups.edit
         From Vk Docs: Edits a community.
         Access from user token(s)
@@ -382,7 +386,7 @@ class GroupsEdit(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.edit", params, response_model=responses.groups.Edit
+            "groups.edit", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -434,7 +438,9 @@ class GroupsEditAddress(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.editAddress", params, response_model=responses.groups.EditAddress
+            "groups.editAddress",
+            params,
+            response_model=responses.groups.EditAddressModel,
         )
 
 
@@ -451,7 +457,7 @@ class GroupsEditCallbackServer(BaseMethod):
         server_id: int,
         title: str,
         secret_key: str = None,
-    ) -> responses.groups.EditCallbackServer:
+    ) -> responses.ok_response.OkResponse:
         """ groups.editCallbackServer
         From Vk Docs: 
         Access from user, group token(s)
@@ -470,7 +476,7 @@ class GroupsEditCallbackServer(BaseMethod):
         return await self.request(
             "groups.editCallbackServer",
             params,
-            response_model=responses.groups.EditCallbackServer,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -479,7 +485,7 @@ class GroupsEditLink(BaseMethod):
 
     async def __call__(
         self, group_id: int, link_id: int, text: str = None
-    ) -> responses.groups.EditLink:
+    ) -> responses.ok_response.OkResponse:
         """ groups.editLink
         From Vk Docs: Allows to edit a link in the community.
         Access from user token(s)
@@ -494,7 +500,9 @@ class GroupsEditLink(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.editLink", params, response_model=responses.groups.EditLink
+            "groups.editLink",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -510,7 +518,7 @@ class GroupsEditManager(BaseMethod):
         contact_position: str = None,
         contact_phone: str = None,
         contact_email: str = None,
-    ) -> responses.groups.EditManager:
+    ) -> responses.ok_response.OkResponse:
         """ groups.editManager
         From Vk Docs: Allows to add, remove or edit the community manager.
         Access from user token(s)
@@ -529,7 +537,9 @@ class GroupsEditManager(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.editManager", params, response_model=responses.groups.EditManager
+            "groups.editManager",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -539,7 +549,7 @@ class GroupsEnableOnline(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, group_id: int) -> responses.groups.EnableOnline:
+    async def __call__(self, group_id: int) -> responses.ok_response.OkResponse:
         """ groups.enableOnline
         From Vk Docs: 
         Access from user, group token(s)
@@ -552,7 +562,9 @@ class GroupsEnableOnline(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.enableOnline", params, response_model=responses.groups.EnableOnline
+            "groups.enableOnline",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -585,7 +597,7 @@ class GroupsGet(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.get", params, response_model=responses.groups.Get
+            "groups.get", params, response_model=responses.groups.GetModel
         )
 
 
@@ -604,7 +616,7 @@ class GroupsGetAddresses(BaseMethod):
         offset: int = None,
         count: int = None,
         fields: typing.List = None,
-    ) -> dict:
+    ) -> responses.groups.GetAddresses:
         """ groups.getAddresses
         From Vk Docs: Returns a list of community addresses.
         Access from user, service token(s)
@@ -622,7 +634,11 @@ class GroupsGetAddresses(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("groups.getAddresses", params)
+        return await self.request(
+            "groups.getAddresses",
+            params,
+            response_model=responses.groups.GetAddressesModel,
+        )
 
 
 class GroupsGetBanned(BaseMethod):
@@ -655,7 +671,7 @@ class GroupsGetBanned(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.getBanned", params, response_model=responses.groups.GetBanned
+            "groups.getBanned", params, response_model=responses.groups.GetBannedModel
         )
 
 
@@ -686,7 +702,7 @@ class GroupsGetById(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.getById", params, response_model=responses.groups.GetById
+            "groups.getById", params, response_model=responses.groups.GetByIdModel
         )
 
 
@@ -713,7 +729,7 @@ class GroupsGetCallbackConfirmationCode(BaseMethod):
         return await self.request(
             "groups.getCallbackConfirmationCode",
             params,
-            response_model=responses.groups.GetCallbackConfirmationCode,
+            response_model=responses.groups.GetCallbackConfirmationCodeModel,
         )
 
 
@@ -741,7 +757,7 @@ class GroupsGetCallbackServers(BaseMethod):
         return await self.request(
             "groups.getCallbackServers",
             params,
-            response_model=responses.groups.GetCallbackServers,
+            response_model=responses.groups.GetCallbackServersModel,
         )
 
 
@@ -769,7 +785,7 @@ class GroupsGetCallbackSettings(BaseMethod):
         return await self.request(
             "groups.getCallbackSettings",
             params,
-            response_model=responses.groups.GetCallbackSettings,
+            response_model=responses.groups.GetCallbackSettingsModel,
         )
 
 
@@ -792,7 +808,7 @@ class GroupsGetCatalog(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.getCatalog", params, response_model=responses.groups.GetCatalog
+            "groups.getCatalog", params, response_model=responses.groups.GetCatalogModel
         )
 
 
@@ -817,7 +833,7 @@ class GroupsGetCatalogInfo(BaseMethod):
         return await self.request(
             "groups.getCatalogInfo",
             params,
-            response_model=responses.groups.GetCatalogInfo,
+            response_model=responses.groups.GetCatalogInfoModel,
         )
 
 
@@ -850,7 +866,7 @@ class GroupsGetInvitedUsers(BaseMethod):
         return await self.request(
             "groups.getInvitedUsers",
             params,
-            response_model=responses.groups.GetInvitedUsers,
+            response_model=responses.groups.GetInvitedUsersModel,
         )
 
 
@@ -874,7 +890,7 @@ class GroupsGetInvites(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.getInvites", params, response_model=responses.groups.GetInvites
+            "groups.getInvites", params, response_model=responses.groups.GetInvitesModel
         )
 
 
@@ -899,7 +915,7 @@ class GroupsGetLongPollServer(BaseMethod):
         return await self.request(
             "groups.getLongPollServer",
             params,
-            response_model=responses.groups.GetLongPollServer,
+            response_model=responses.groups.GetLongPollServerModel,
         )
 
 
@@ -924,7 +940,7 @@ class GroupsGetLongPollSettings(BaseMethod):
         return await self.request(
             "groups.getLongPollSettings",
             params,
-            response_model=responses.groups.GetLongPollSettings,
+            response_model=responses.groups.GetLongPollSettingsModel,
         )
 
 
@@ -961,7 +977,7 @@ class GroupsGetMembers(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.getMembers", params, response_model=responses.groups.GetMembers
+            "groups.getMembers", params, response_model=responses.groups.GetMembersModel
         )
 
 
@@ -990,7 +1006,9 @@ class GroupsGetRequests(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.getRequests", params, response_model=responses.groups.GetRequests
+            "groups.getRequests",
+            params,
+            response_model=responses.groups.GetRequestsModel,
         )
 
 
@@ -1010,14 +1028,16 @@ class GroupsGetSettings(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.getSettings", params, response_model=responses.groups.GetSettings
+            "groups.getSettings",
+            params,
+            response_model=responses.groups.GetSettingsModel,
         )
 
 
 class GroupsGetTokenPermissions(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.GROUP]
 
-    async def __call__(self,) -> dict:
+    async def __call__(self,) -> responses.groups.GetTokenPermissions:
         """ groups.getTokenPermissions
         From Vk Docs: 
         Access from group token(s)
@@ -1029,13 +1049,19 @@ class GroupsGetTokenPermissions(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("groups.getTokenPermissions", params)
+        return await self.request(
+            "groups.getTokenPermissions",
+            params,
+            response_model=responses.groups.GetTokenPermissionsModel,
+        )
 
 
 class GroupsInvite(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int, user_id: int) -> responses.groups.Invite:
+    async def __call__(
+        self, group_id: int, user_id: int
+    ) -> responses.ok_response.OkResponse:
         """ groups.invite
         From Vk Docs: Allows to invite friends to the community.
         Access from user token(s)
@@ -1049,7 +1075,9 @@ class GroupsInvite(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.invite", params, response_model=responses.groups.Invite
+            "groups.invite",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -1082,7 +1110,7 @@ class GroupsIsMember(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.isMember", params, response_model=responses.groups.IsMember
+            "groups.isMember", params, response_model=responses.groups.IsMemberModel
         )
 
 
@@ -1091,7 +1119,7 @@ class GroupsJoin(BaseMethod):
 
     async def __call__(
         self, group_id: int = None, not_sure: str = None
-    ) -> responses.groups.Join:
+    ) -> responses.ok_response.OkResponse:
         """ groups.join
         From Vk Docs: With this method you can join the group or public page, and also confirm your participation in an event.
         Access from user token(s)
@@ -1105,14 +1133,14 @@ class GroupsJoin(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.join", params, response_model=responses.groups.Join
+            "groups.join", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
 class GroupsLeave(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int) -> responses.groups.Leave:
+    async def __call__(self, group_id: int) -> responses.ok_response.OkResponse:
         """ groups.leave
         From Vk Docs: With this method you can leave a group, public page, or event.
         Access from user token(s)
@@ -1125,7 +1153,7 @@ class GroupsLeave(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.leave", params, response_model=responses.groups.Leave
+            "groups.leave", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -1134,7 +1162,7 @@ class GroupsRemoveUser(BaseMethod):
 
     async def __call__(
         self, group_id: int, user_id: int
-    ) -> responses.groups.RemoveUser:
+    ) -> responses.ok_response.OkResponse:
         """ groups.removeUser
         From Vk Docs: Removes a user from the community.
         Access from user token(s)
@@ -1148,7 +1176,9 @@ class GroupsRemoveUser(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.removeUser", params, response_model=responses.groups.RemoveUser
+            "groups.removeUser",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -1157,7 +1187,7 @@ class GroupsReorderLink(BaseMethod):
 
     async def __call__(
         self, group_id: int, link_id: int, after: int = None
-    ) -> responses.groups.ReorderLink:
+    ) -> responses.ok_response.OkResponse:
         """ groups.reorderLink
         From Vk Docs: Allows to reorder links in the community.
         Access from user token(s)
@@ -1172,7 +1202,9 @@ class GroupsReorderLink(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.reorderLink", params, response_model=responses.groups.ReorderLink
+            "groups.reorderLink",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -1211,7 +1243,7 @@ class GroupsSearch(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.search", params, response_model=responses.groups.Search
+            "groups.search", params, response_model=responses.groups.SearchModel
         )
 
 
@@ -1266,7 +1298,7 @@ class GroupsSetCallbackSettings(BaseMethod):
         user_block: bool = None,
         user_unblock: bool = None,
         lead_forms_new: bool = None,
-    ) -> responses.groups.SetCallbackSettings:
+    ) -> responses.ok_response.OkResponse:
         """ groups.setCallbackSettings
         From Vk Docs: Allow to set notifications settings for group.
         Access from user, group token(s)
@@ -1323,7 +1355,7 @@ class GroupsSetCallbackSettings(BaseMethod):
         return await self.request(
             "groups.setCallbackSettings",
             params,
-            response_model=responses.groups.SetCallbackSettings,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -1377,7 +1409,7 @@ class GroupsSetLongPollSettings(BaseMethod):
         group_officers_edit: bool = None,
         user_block: bool = None,
         user_unblock: bool = None,
-    ) -> responses.groups.SetLongPollSettings:
+    ) -> responses.ok_response.OkResponse:
         """ groups.setLongPollSettings
         From Vk Docs: Sets Long Poll notification settings
         Access from user, group token(s)
@@ -1433,7 +1465,7 @@ class GroupsSetLongPollSettings(BaseMethod):
         return await self.request(
             "groups.setLongPollSettings",
             params,
-            response_model=responses.groups.SetLongPollSettings,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -1442,7 +1474,7 @@ class GroupsUnban(BaseMethod):
 
     async def __call__(
         self, group_id: int, owner_id: int = None
-    ) -> responses.groups.Unban:
+    ) -> responses.ok_response.OkResponse:
         """ groups.unban
         From Vk Docs: 
         Access from user token(s)
@@ -1456,7 +1488,7 @@ class GroupsUnban(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "groups.unban", params, response_model=responses.groups.Unban
+            "groups.unban", params, response_model=responses.ok_response.OkResponseModel
         )
 
 

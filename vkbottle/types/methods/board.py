@@ -33,7 +33,7 @@ class BoardAddTopic(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.addTopic", params, response_model=responses.board.AddTopic
+            "board.addTopic", params, response_model=responses.board.AddTopicModel
         )
 
 
@@ -42,7 +42,7 @@ class BoardCloseTopic(BaseMethod):
 
     async def __call__(
         self, group_id: int, topic_id: int
-    ) -> responses.board.CloseTopic:
+    ) -> responses.ok_response.OkResponse:
         """ board.closeTopic
         From Vk Docs: Closes a topic on a community's discussion board so that comments cannot be posted.
         Access from user token(s)
@@ -56,7 +56,9 @@ class BoardCloseTopic(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.closeTopic", params, response_model=responses.board.CloseTopic
+            "board.closeTopic",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -91,7 +93,9 @@ class BoardCreateComment(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.createComment", params, response_model=responses.board.CreateComment
+            "board.createComment",
+            params,
+            response_model=responses.board.CreateCommentModel,
         )
 
 
@@ -103,7 +107,7 @@ class BoardDeleteComment(BaseMethod):
 
     async def __call__(
         self, group_id: int, comment_id: int, topic_id: int
-    ) -> responses.board.DeleteComment:
+    ) -> responses.ok_response.OkResponse:
         """ board.deleteComment
         From Vk Docs: Deletes a comment on a topic on a community's discussion board.
         Access from user, group token(s)
@@ -118,7 +122,9 @@ class BoardDeleteComment(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.deleteComment", params, response_model=responses.board.DeleteComment
+            "board.deleteComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -127,7 +133,7 @@ class BoardDeleteTopic(BaseMethod):
 
     async def __call__(
         self, group_id: int, topic_id: int
-    ) -> responses.board.DeleteTopic:
+    ) -> responses.ok_response.OkResponse:
         """ board.deleteTopic
         From Vk Docs: Deletes a topic from a community's discussion board.
         Access from user token(s)
@@ -141,7 +147,9 @@ class BoardDeleteTopic(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.deleteTopic", params, response_model=responses.board.DeleteTopic
+            "board.deleteTopic",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -155,7 +163,7 @@ class BoardEditComment(BaseMethod):
         topic_id: int,
         message: str = None,
         attachments: typing.List = None,
-    ) -> responses.board.EditComment:
+    ) -> responses.ok_response.OkResponse:
         """ board.editComment
         From Vk Docs: Edits a comment on a topic on a community's discussion board.
         Access from user token(s)
@@ -172,7 +180,9 @@ class BoardEditComment(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.editComment", params, response_model=responses.board.EditComment
+            "board.editComment",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -181,7 +191,7 @@ class BoardEditTopic(BaseMethod):
 
     async def __call__(
         self, group_id: int, title: str, topic_id: int
-    ) -> responses.board.EditTopic:
+    ) -> responses.ok_response.OkResponse:
         """ board.editTopic
         From Vk Docs: Edits the title of a topic on a community's discussion board.
         Access from user token(s)
@@ -196,14 +206,18 @@ class BoardEditTopic(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.editTopic", params, response_model=responses.board.EditTopic
+            "board.editTopic",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
 class BoardFixTopic(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int, topic_id: int) -> responses.board.FixTopic:
+    async def __call__(
+        self, group_id: int, topic_id: int
+    ) -> responses.ok_response.OkResponse:
         """ board.fixTopic
         From Vk Docs: Pins a topic (fixes its place) to the top of a community's discussion board.
         Access from user token(s)
@@ -217,7 +231,9 @@ class BoardFixTopic(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.fixTopic", params, response_model=responses.board.FixTopic
+            "board.fixTopic",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -257,7 +273,7 @@ class BoardGetComments(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.getComments", params, response_model=responses.board.GetComments
+            "board.getComments", params, response_model=responses.board.GetCommentsModel
         )
 
 
@@ -297,14 +313,16 @@ class BoardGetTopics(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.getTopics", params, response_model=responses.board.GetTopics
+            "board.getTopics", params, response_model=responses.board.GetTopicsModel
         )
 
 
 class BoardOpenTopic(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int, topic_id: int) -> responses.board.OpenTopic:
+    async def __call__(
+        self, group_id: int, topic_id: int
+    ) -> responses.ok_response.OkResponse:
         """ board.openTopic
         From Vk Docs: Re-opens a previously closed topic on a community's discussion board.
         Access from user token(s)
@@ -318,7 +336,9 @@ class BoardOpenTopic(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.openTopic", params, response_model=responses.board.OpenTopic
+            "board.openTopic",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -330,7 +350,7 @@ class BoardRestoreComment(BaseMethod):
 
     async def __call__(
         self, group_id: int, comment_id: int, topic_id: int
-    ) -> responses.board.RestoreComment:
+    ) -> responses.ok_response.OkResponse:
         """ board.restoreComment
         From Vk Docs: Restores a comment deleted from a topic on a community's discussion board.
         Access from user, group token(s)
@@ -347,7 +367,7 @@ class BoardRestoreComment(BaseMethod):
         return await self.request(
             "board.restoreComment",
             params,
-            response_model=responses.board.RestoreComment,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -356,7 +376,7 @@ class BoardUnfixTopic(BaseMethod):
 
     async def __call__(
         self, group_id: int, topic_id: int
-    ) -> responses.board.UnfixTopic:
+    ) -> responses.ok_response.OkResponse:
         """ board.unfixTopic
         From Vk Docs: Unpins a pinned topic from the top of a community's discussion board.
         Access from user token(s)
@@ -370,7 +390,9 @@ class BoardUnfixTopic(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "board.unfixTopic", params, response_model=responses.board.UnfixTopic
+            "board.unfixTopic",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 

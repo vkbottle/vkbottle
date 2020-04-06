@@ -2,6 +2,7 @@ import typing, asyncio
 import inspect
 
 from .cls import CoroutineBranch, AbstractBranch
+from .abc import AbstractBranchGenerator
 from .standart_branch import ImmutableBranchData
 
 from vkbottle.api.exceptions import BranchError
@@ -10,7 +11,7 @@ from vkbottle.framework.framework.rule import AbstractMessageRule
 BRANCH_DATA = ".BRANCHES.txt"
 
 
-class BranchManager:
+class DictBranch(AbstractBranchGenerator):
     def __init__(self):
         self._meet_up: typing.Dict[
             str, typing.Tuple[AbstractBranch, ImmutableBranchData]

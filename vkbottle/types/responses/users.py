@@ -1,67 +1,45 @@
-from .others import SimpleResponse
-from ..base import BaseModel
-from ..user import User
-from enum import Enum
 import typing
+import enum
+from ..base import BaseModel
+from vkbottle.types import objects
 
 
-class Get(BaseModel):
-    response: typing.List[User] = None
-
-
-class GetFollowers(Get):
-    pass
-
-
-class SubscriptionType(Enum):
-    profile = "profile"
-    page = "page"
-
-
-class Subscription(BaseModel):
-    id: int = None
-    type: SubscriptionType = None
-
-    name: str = None
-    screen_name: str = None
-    is_closed: typing.Union[int, bool] = None
-
-    first_name: str = None
-    last_name: str = None
-    can_access_closed: bool = None
-
-    is_admin: int = None
-    is_member: int = None
-    is_advertiser: int = None
-
-    photo_50: str = None
-    photo_100: str = None
-    photo_200: str = None
-
-
-class SubscriptionUsers(BaseModel):
+class Search(BaseModel):
     count: int = None
-    items: typing.List[int] = None
+    items: typing.List = None
 
 
-class SubscriptionGroups(BaseModel):
+class SearchModel(BaseModel):
+    response: Search = None
+
+
+class GetFollowers(BaseModel):
     count: int = None
-    items: typing.List[int] = None
+    items: typing.List = None
 
 
-class GetSubscriptionsResponse(BaseModel):
-    items: typing.List[Subscription] = None
-    users: SubscriptionUsers = None
-    groups: SubscriptionGroups = None
+class GetFollowersModel(BaseModel):
+    response: GetFollowers = None
 
 
 class GetSubscriptions(BaseModel):
-    response: GetSubscriptionsResponse = None
+    users: objects.users.UsersArray = None
+    groups: objects.groups.GroupsArray = None
 
 
-class Report(SimpleResponse):
-    pass
+class GetSubscriptionsModel(BaseModel):
+    response: GetSubscriptions = None
 
 
-class Search(Get):
-    pass
+Get = typing.List[objects.users.UserXtrCounters]
+
+
+class GetModel(BaseModel):
+    response: Get = None
+
+
+IsAppUser = objects.base.BoolInt
+
+
+class IsAppUserModel(BaseModel):
+    response: IsAppUser = None

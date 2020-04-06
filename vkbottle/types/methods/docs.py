@@ -25,13 +25,17 @@ class DocsAdd(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("docs.add", params, response_model=responses.docs.Add)
+        return await self.request(
+            "docs.add", params, response_model=responses.docs.AddModel
+        )
 
 
 class DocsDelete(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, owner_id: int, doc_id: int) -> responses.docs.Delete:
+    async def __call__(
+        self, owner_id: int, doc_id: int
+    ) -> responses.ok_response.OkResponse:
         """ docs.delete
         From Vk Docs: Deletes a user or community document.
         Access from user token(s)
@@ -45,7 +49,7 @@ class DocsDelete(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "docs.delete", params, response_model=responses.docs.Delete
+            "docs.delete", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -54,7 +58,7 @@ class DocsEdit(BaseMethod):
 
     async def __call__(
         self, owner_id: int, doc_id: int, title: str = None, tags: typing.List = None
-    ) -> responses.docs.Edit:
+    ) -> responses.ok_response.OkResponse:
         """ docs.edit
         From Vk Docs: Edits a document.
         Access from user token(s)
@@ -70,7 +74,7 @@ class DocsEdit(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "docs.edit", params, response_model=responses.docs.Edit
+            "docs.edit", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -98,7 +102,9 @@ class DocsGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("docs.get", params, response_model=responses.docs.Get)
+        return await self.request(
+            "docs.get", params, response_model=responses.docs.GetModel
+        )
 
 
 class DocsGetById(BaseMethod):
@@ -117,7 +123,7 @@ class DocsGetById(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "docs.getById", params, response_model=responses.docs.GetById
+            "docs.getById", params, response_model=responses.docs.GetByIdModel
         )
 
 
@@ -129,7 +135,7 @@ class DocsGetMessagesUploadServer(BaseMethod):
 
     async def __call__(
         self, type: str = None, peer_id: int = None
-    ) -> responses.docs.GetMessagesUploadServer:
+    ) -> responses.base.GetUploadServer:
         """ docs.getMessagesUploadServer
         From Vk Docs: Returns the server address for document upload.
         Access from user, group token(s)
@@ -145,7 +151,7 @@ class DocsGetMessagesUploadServer(BaseMethod):
         return await self.request(
             "docs.getMessagesUploadServer",
             params,
-            response_model=responses.docs.GetMessagesUploadServer,
+            response_model=responses.base.GetUploadServerModel,
         )
 
 
@@ -165,14 +171,14 @@ class DocsGetTypes(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "docs.getTypes", params, response_model=responses.docs.GetTypes
+            "docs.getTypes", params, response_model=responses.docs.GetTypesModel
         )
 
 
 class DocsGetUploadServer(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int = None) -> responses.docs.GetUploadServer:
+    async def __call__(self, group_id: int = None) -> responses.base.GetUploadServer:
         """ docs.getUploadServer
         From Vk Docs: Returns the server address for document upload.
         Access from user token(s)
@@ -187,7 +193,7 @@ class DocsGetUploadServer(BaseMethod):
         return await self.request(
             "docs.getUploadServer",
             params,
-            response_model=responses.docs.GetUploadServer,
+            response_model=responses.base.GetUploadServerModel,
         )
 
 
@@ -197,9 +203,7 @@ class DocsGetWallUploadServer(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(
-        self, group_id: int = None
-    ) -> responses.docs.GetWallUploadServer:
+    async def __call__(self, group_id: int = None) -> responses.base.GetUploadServer:
         """ docs.getWallUploadServer
         From Vk Docs: Returns the server address for document upload onto a user's or community's wall.
         Access from user, group token(s)
@@ -214,7 +218,7 @@ class DocsGetWallUploadServer(BaseMethod):
         return await self.request(
             "docs.getWallUploadServer",
             params,
-            response_model=responses.docs.GetWallUploadServer,
+            response_model=responses.base.GetUploadServerModel,
         )
 
 
@@ -241,7 +245,7 @@ class DocsSave(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "docs.save", params, response_model=responses.docs.Save
+            "docs.save", params, response_model=responses.docs.SaveModel
         )
 
 
@@ -269,7 +273,7 @@ class DocsSearch(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "docs.search", params, response_model=responses.docs.Search
+            "docs.search", params, response_model=responses.docs.SearchModel
         )
 
 

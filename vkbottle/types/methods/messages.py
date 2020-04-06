@@ -11,7 +11,7 @@ class MessagesAddChatUser(BaseMethod):
 
     async def __call__(
         self, chat_id: int, user_id: int = None
-    ) -> responses.messages.AddChatUser:
+    ) -> responses.ok_response.OkResponse:
         """ messages.addChatUser
         From Vk Docs: Adds a new user to a chat.
         Access from user token(s)
@@ -27,7 +27,7 @@ class MessagesAddChatUser(BaseMethod):
         return await self.request(
             "messages.addChatUser",
             params,
-            response_model=responses.messages.AddChatUser,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -36,7 +36,7 @@ class MessagesAllowMessagesFromGroup(BaseMethod):
 
     async def __call__(
         self, group_id: int, key: str = None
-    ) -> dict:
+    ) -> responses.ok_response.OkResponse:
         """ messages.allowMessagesFromGroup
         From Vk Docs: Allows sending messages from community to the current user.
         Access from user token(s)
@@ -52,6 +52,7 @@ class MessagesAllowMessagesFromGroup(BaseMethod):
         return await self.request(
             "messages.allowMessagesFromGroup",
             params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -74,7 +75,9 @@ class MessagesCreateChat(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.createChat", params, response_model=responses.messages.CreateChat
+            "messages.createChat",
+            params,
+            response_model=responses.messages.CreateChatModel,
         )
 
 
@@ -90,7 +93,7 @@ class MessagesDelete(BaseMethod):
         spam: bool = None,
         group_id: int = None,
         delete_for_all: bool = None,
-    ) -> responses.messages.Delete:
+    ) -> responses.ok_response.OkResponse:
         """ messages.delete
         From Vk Docs: Deletes one or more messages.
         Access from user, group token(s)
@@ -106,7 +109,9 @@ class MessagesDelete(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.delete", params, response_model=responses.messages.Delete
+            "messages.delete",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -134,7 +139,7 @@ class MessagesDeleteChatPhoto(BaseMethod):
         return await self.request(
             "messages.deleteChatPhoto",
             params,
-            response_model=responses.messages.DeleteChatPhoto,
+            response_model=responses.messages.DeleteChatPhotoModel,
         )
 
 
@@ -163,14 +168,14 @@ class MessagesDeleteConversation(BaseMethod):
         return await self.request(
             "messages.deleteConversation",
             params,
-            response_model=responses.messages.DeleteConversation,
+            response_model=responses.messages.DeleteConversationModel,
         )
 
 
 class MessagesDenyMessagesFromGroup(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, group_id: int) -> responses.messages.DenyintsFromGroup:
+    async def __call__(self, group_id: int) -> responses.ok_response.OkResponse:
         """ messages.denyMessagesFromGroup
         From Vk Docs: Denies sending message from community to the current user.
         Access from user token(s)
@@ -185,7 +190,7 @@ class MessagesDenyMessagesFromGroup(BaseMethod):
         return await self.request(
             "messages.denyMessagesFromGroup",
             params,
-            response_model=responses.messages.DenyintsFromGroup,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -229,7 +234,7 @@ class MessagesEdit(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.edit", params, response_model=responses.messages.Edit
+            "messages.edit", params, response_model=responses.messages.EditModel
         )
 
 
@@ -239,7 +244,9 @@ class MessagesEditChat(BaseMethod):
         APIAccessibility.GROUP,
     ]
 
-    async def __call__(self, chat_id: int, title: str) -> responses.messages.EditChat:
+    async def __call__(
+        self, chat_id: int, title: str
+    ) -> responses.ok_response.OkResponse:
         """ messages.editChat
         From Vk Docs: Edits the title of a chat.
         Access from user, group token(s)
@@ -253,7 +260,9 @@ class MessagesEditChat(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.editChat", params, response_model=responses.messages.EditChat
+            "messages.editChat",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -270,7 +279,7 @@ class MessagesGetByConversationMessageId(BaseMethod):
         extended: bool = None,
         fields: typing.List = None,
         group_id: int = None,
-    ) -> responses.messages.GetByConversationintId:
+    ) -> responses.messages.GetByConversationMessageId:
         """ messages.getByConversationMessageId
         From Vk Docs: Returns messages by their IDs within the conversation.
         Access from user, group token(s)
@@ -289,7 +298,7 @@ class MessagesGetByConversationMessageId(BaseMethod):
         return await self.request(
             "messages.getByConversationMessageId",
             params,
-            response_model=responses.messages.GetByConversationintId,
+            response_model=responses.messages.GetByConversationMessageIdModel,
         )
 
 
@@ -323,7 +332,7 @@ class MessagesGetById(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.getById", params, response_model=responses.messages.GetById
+            "messages.getById", params, response_model=responses.messages.GetByIdModel
         )
 
 
@@ -349,7 +358,7 @@ class MessagesGetChatPreview(BaseMethod):
         return await self.request(
             "messages.getChatPreview",
             params,
-            response_model=responses.messages.GetChatPreview,
+            response_model=responses.messages.GetChatPreviewModel,
         )
 
 
@@ -361,7 +370,7 @@ class MessagesGetConversationMembers(BaseMethod):
 
     async def __call__(
         self, peer_id: int, fields: typing.List = None, group_id: int = None
-    ) -> responses.messages.GetConverationMembers:
+    ) -> responses.messages.GetConversationMembers:
         """ messages.getConversationMembers
         From Vk Docs: Returns a list of IDs of users participating in a chat.
         Access from user, group token(s)
@@ -378,7 +387,7 @@ class MessagesGetConversationMembers(BaseMethod):
         return await self.request(
             "messages.getConversationMembers",
             params,
-            response_model=responses.messages.GetConverationMembers,
+            response_model=responses.messages.GetConversationMembersModel,
         )
 
 
@@ -418,7 +427,7 @@ class MessagesGetConversations(BaseMethod):
         return await self.request(
             "messages.getConversations",
             params,
-            response_model=responses.messages.GetConversations,
+            response_model=responses.messages.GetConversationsModel,
         )
 
 
@@ -452,7 +461,7 @@ class MessagesGetConversationsById(BaseMethod):
         return await self.request(
             "messages.getConversationsById",
             params,
-            response_model=responses.messages.GetConversationsById,
+            response_model=responses.messages.GetConversationsByIdModel,
         )
 
 
@@ -494,7 +503,9 @@ class MessagesGetHistory(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.getHistory", params, response_model=responses.messages.GetHistory
+            "messages.getHistory",
+            params,
+            response_model=responses.messages.GetHistoryModel,
         )
 
 
@@ -538,7 +549,7 @@ class MessagesGetHistoryAttachments(BaseMethod):
         return await self.request(
             "messages.getHistoryAttachments",
             params,
-            response_model=responses.messages.GetHistoryAttachments,
+            response_model=responses.messages.GetHistoryAttachmentsModel,
         )
 
 
@@ -567,7 +578,7 @@ class MessagesGetInviteLink(BaseMethod):
         return await self.request(
             "messages.getInviteLink",
             params,
-            response_model=responses.messages.GetInviteLink,
+            response_model=responses.messages.GetInviteLinkModel,
         )
 
 
@@ -589,7 +600,7 @@ class MessagesGetLastActivity(BaseMethod):
         return await self.request(
             "messages.getLastActivity",
             params,
-            response_model=responses.messages.GetLastActivity,
+            response_model=responses.messages.GetLastActivityModel,
         )
 
 
@@ -639,7 +650,7 @@ class MessagesGetLongPollHistory(BaseMethod):
         return await self.request(
             "messages.getLongPollHistory",
             params,
-            response_model=responses.messages.GetLongPollHistory,
+            response_model=responses.messages.GetLongPollHistoryModel,
         )
 
 
@@ -668,7 +679,7 @@ class MessagesGetLongPollServer(BaseMethod):
         return await self.request(
             "messages.getLongPollServer",
             params,
-            response_model=responses.messages.GetLongPollServer,
+            response_model=responses.messages.GetLongPollServerModel,
         )
 
 
@@ -680,7 +691,7 @@ class MessagesIsMessagesFromGroupAllowed(BaseMethod):
 
     async def __call__(
         self, group_id: int, user_id: int
-    ) -> responses.messages.IsintsFromGroupAllowed:
+    ) -> responses.messages.IsMessagesFromGroupAllowed:
         """ messages.isMessagesFromGroupAllowed
         From Vk Docs: Returns information whether sending messages from the community to current user is allowed.
         Access from user, group token(s)
@@ -696,7 +707,7 @@ class MessagesIsMessagesFromGroupAllowed(BaseMethod):
         return await self.request(
             "messages.isMessagesFromGroupAllowed",
             params,
-            response_model=responses.messages.IsintsFromGroupAllowed,
+            response_model=responses.messages.IsMessagesFromGroupAllowedModel,
         )
 
 
@@ -718,7 +729,7 @@ class MessagesJoinChatByInviteLink(BaseMethod):
         return await self.request(
             "messages.joinChatByInviteLink",
             params,
-            response_model=responses.messages.JoinChatByInviteLink,
+            response_model=responses.messages.JoinChatByInviteLinkModel,
         )
 
 
@@ -730,7 +741,7 @@ class MessagesMarkAsAnsweredConversation(BaseMethod):
 
     async def __call__(
         self, peer_id: int, answered: bool = None, group_id: int = None
-    ) -> responses.messages.MarkAsAnsweredConversation:
+    ) -> responses.ok_response.OkResponse:
         """ messages.markAsAnsweredConversation
         From Vk Docs: Marks and unmarks conversations as unanswered.
         Access from user, group token(s)
@@ -747,7 +758,7 @@ class MessagesMarkAsAnsweredConversation(BaseMethod):
         return await self.request(
             "messages.markAsAnsweredConversation",
             params,
-            response_model=responses.messages.MarkAsAnsweredConversation,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -772,7 +783,7 @@ class MessagesMarkAsImportant(BaseMethod):
         return await self.request(
             "messages.markAsImportant",
             params,
-            response_model=responses.messages.MarkAsImportant,
+            response_model=responses.messages.MarkAsImportantModel,
         )
 
 
@@ -784,7 +795,7 @@ class MessagesMarkAsImportantConversation(BaseMethod):
 
     async def __call__(
         self, peer_id: int, important: bool = None, group_id: int = None
-    ) -> responses.messages.MarkAsImportantConversation:
+    ) -> responses.ok_response.OkResponse:
         """ messages.markAsImportantConversation
         From Vk Docs: Marks and unmarks conversations as important.
         Access from user, group token(s)
@@ -801,7 +812,7 @@ class MessagesMarkAsImportantConversation(BaseMethod):
         return await self.request(
             "messages.markAsImportantConversation",
             params,
-            response_model=responses.messages.MarkAsImportantConversation,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -817,7 +828,7 @@ class MessagesMarkAsRead(BaseMethod):
         peer_id: int = None,
         start_message_id: int = None,
         group_id: int = None,
-    ) -> responses.messages.MarkAsRead:
+    ) -> responses.ok_response.OkResponse:
         """ messages.markAsRead
         From Vk Docs: Marks messages as read.
         Access from user, group token(s)
@@ -833,7 +844,9 @@ class MessagesMarkAsRead(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.markAsRead", params, response_model=responses.messages.MarkAsRead
+            "messages.markAsRead",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -859,7 +872,7 @@ class MessagesPin(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.pin", params, response_model=responses.messages.Pin
+            "messages.pin", params, response_model=responses.messages.PinModel
         )
 
 
@@ -871,7 +884,7 @@ class MessagesRemoveChatUser(BaseMethod):
 
     async def __call__(
         self, chat_id: int, user_id: int = None, member_id: int = None
-    ) -> responses.messages.RemoveChatUser:
+    ) -> responses.ok_response.OkResponse:
         """ messages.removeChatUser
         From Vk Docs: Allows the current user to leave a chat or, if the current user started the chat, allows the user to remove another user from the chat.
         Access from user, group token(s)
@@ -888,7 +901,7 @@ class MessagesRemoveChatUser(BaseMethod):
         return await self.request(
             "messages.removeChatUser",
             params,
-            response_model=responses.messages.RemoveChatUser,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -900,7 +913,7 @@ class MessagesRestore(BaseMethod):
 
     async def __call__(
         self, message_id: int, group_id: int = None
-    ) -> responses.messages.Restore:
+    ) -> responses.ok_response.OkResponse:
         """ messages.restore
         From Vk Docs: Restores a deleted message.
         Access from user, group token(s)
@@ -914,7 +927,9 @@ class MessagesRestore(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.restore", params, response_model=responses.messages.Restore
+            "messages.restore",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -956,7 +971,7 @@ class MessagesSearch(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.search", params, response_model=responses.messages.Search
+            "messages.search", params, response_model=responses.messages.SearchModel
         )
 
 
@@ -992,7 +1007,7 @@ class MessagesSearchConversations(BaseMethod):
         return await self.request(
             "messages.searchConversations",
             params,
-            response_model=responses.messages.SearchConversations,
+            response_model=responses.messages.SearchConversationsModel,
         )
 
 
@@ -1054,7 +1069,7 @@ class MessagesSend(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.send", params, response_model=responses.messages.Send
+            "messages.send", params, response_model=responses.messages.SendModel
         )
 
 
@@ -1070,7 +1085,7 @@ class MessagesSetActivity(BaseMethod):
         type: str = None,
         peer_id: int = None,
         group_id: int = None,
-    ) -> responses.messages.SetActivity:
+    ) -> responses.ok_response.OkResponse:
         """ messages.setActivity
         From Vk Docs: Changes the status of a user as typing in a conversation.
         Access from user, group token(s)
@@ -1088,7 +1103,7 @@ class MessagesSetActivity(BaseMethod):
         return await self.request(
             "messages.setActivity",
             params,
-            response_model=responses.messages.SetActivity,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 
@@ -1113,7 +1128,7 @@ class MessagesSetChatPhoto(BaseMethod):
         return await self.request(
             "messages.setChatPhoto",
             params,
-            response_model=responses.messages.SetChatPhoto,
+            response_model=responses.messages.SetChatPhotoModel,
         )
 
 
@@ -1125,7 +1140,7 @@ class MessagesUnpin(BaseMethod):
 
     async def __call__(
         self, peer_id: int, group_id: int = None
-    ) -> responses.messages.Unpin:
+    ) -> responses.ok_response.OkResponse:
         """ messages.unpin
         From Vk Docs: 
         Access from user, group token(s)
@@ -1139,7 +1154,9 @@ class MessagesUnpin(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "messages.unpin", params, response_model=responses.messages.Unpin
+            "messages.unpin",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 

@@ -11,7 +11,7 @@ class NewsfeedAddBan(BaseMethod):
 
     async def __call__(
         self, user_ids: typing.List = None, group_ids: typing.List = None
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ newsfeed.addBan
         From Vk Docs: Prevents news from specified users and communities from appearing in the current user's newsfeed.
         Access from user token(s)
@@ -24,7 +24,11 @@ class NewsfeedAddBan(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.addBan", params)
+        return await self.request(
+            "newsfeed.addBan",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class NewsfeedDeleteBan(BaseMethod):
@@ -32,7 +36,7 @@ class NewsfeedDeleteBan(BaseMethod):
 
     async def __call__(
         self, user_ids: typing.List = None, group_ids: typing.List = None
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ newsfeed.deleteBan
         From Vk Docs: Allows news from previously banned users and communities to be shown in the current user's newsfeed.
         Access from user token(s)
@@ -45,13 +49,17 @@ class NewsfeedDeleteBan(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.deleteBan", params)
+        return await self.request(
+            "newsfeed.deleteBan",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class NewsfeedDeleteList(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, list_id: int):
+    async def __call__(self, list_id: int) -> responses.ok_response.OkResponse:
         """ newsfeed.deleteList
         From Vk Docs: 
         Access from user token(s)
@@ -63,7 +71,11 @@ class NewsfeedDeleteList(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.deleteList", params)
+        return await self.request(
+            "newsfeed.deleteList",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class NewsfeedGet(BaseMethod):
@@ -81,7 +93,7 @@ class NewsfeedGet(BaseMethod):
         count: int = None,
         fields: typing.List = None,
         section: str = None,
-    ):
+    ) -> responses.newsfeed.Get:
         """ newsfeed.get
         From Vk Docs: Returns data required to show newsfeed for the current user.
         Access from user token(s)
@@ -102,7 +114,9 @@ class NewsfeedGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.get", params)
+        return await self.request(
+            "newsfeed.get", params, response_model=responses.newsfeed.GetModel
+        )
 
 
 class NewsfeedGetBanned(BaseMethod):
@@ -110,7 +124,7 @@ class NewsfeedGetBanned(BaseMethod):
 
     async def __call__(
         self, extended: bool = None, fields: typing.List = None, name_case: str = None
-    ):
+    ) -> responses.newsfeed.GetBanned:
         """ newsfeed.getBanned
         From Vk Docs: Returns a list of users and communities banned from the current user's newsfeed.
         Access from user token(s)
@@ -124,7 +138,11 @@ class NewsfeedGetBanned(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.getBanned", params)
+        return await self.request(
+            "newsfeed.getBanned",
+            params,
+            response_model=responses.newsfeed.GetBannedModel,
+        )
 
 
 class NewsfeedGetComments(BaseMethod):
@@ -140,7 +158,7 @@ class NewsfeedGetComments(BaseMethod):
         last_comments_count: int = None,
         start_from: str = None,
         fields: typing.List = None,
-    ):
+    ) -> responses.newsfeed.GetComments:
         """ newsfeed.getComments
         From Vk Docs: Returns a list of comments in the current user's newsfeed.
         Access from user token(s)
@@ -159,13 +177,19 @@ class NewsfeedGetComments(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.getComments", params)
+        return await self.request(
+            "newsfeed.getComments",
+            params,
+            response_model=responses.newsfeed.GetCommentsModel,
+        )
 
 
 class NewsfeedGetLists(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, list_ids: typing.List = None, extended: bool = None):
+    async def __call__(
+        self, list_ids: typing.List = None, extended: bool = None
+    ) -> responses.newsfeed.GetLists:
         """ newsfeed.getLists
         From Vk Docs: Returns a list of newsfeeds followed by the current user.
         Access from user token(s)
@@ -178,7 +202,9 @@ class NewsfeedGetLists(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.getLists", params)
+        return await self.request(
+            "newsfeed.getLists", params, response_model=responses.newsfeed.GetListsModel
+        )
 
 
 class NewsfeedGetMentions(BaseMethod):
@@ -191,7 +217,7 @@ class NewsfeedGetMentions(BaseMethod):
         end_time: int = None,
         offset: int = None,
         count: int = None,
-    ):
+    ) -> responses.newsfeed.GetMentions:
         """ newsfeed.getMentions
         From Vk Docs: Returns a list of posts on user walls in which the current user is mentioned.
         Access from user token(s)
@@ -207,7 +233,11 @@ class NewsfeedGetMentions(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.getMentions", params)
+        return await self.request(
+            "newsfeed.getMentions",
+            params,
+            response_model=responses.newsfeed.GetMentionsModel,
+        )
 
 
 class NewsfeedGetRecommended(BaseMethod):
@@ -221,7 +251,7 @@ class NewsfeedGetRecommended(BaseMethod):
         start_from: str = None,
         count: int = None,
         fields: typing.List = None,
-    ):
+    ) -> responses.newsfeed.GetRecommended:
         """ newsfeed.getRecommended
         From Vk Docs: , Returns a list of newsfeeds recommended to the current user.
         Access from user token(s)
@@ -238,7 +268,11 @@ class NewsfeedGetRecommended(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.getRecommended", params)
+        return await self.request(
+            "newsfeed.getRecommended",
+            params,
+            response_model=responses.newsfeed.GetRecommendedModel,
+        )
 
 
 class NewsfeedGetSuggestedSources(BaseMethod):
@@ -250,7 +284,7 @@ class NewsfeedGetSuggestedSources(BaseMethod):
         count: int = None,
         shuffle: bool = None,
         fields: typing.List = None,
-    ):
+    ) -> responses.newsfeed.GetSuggestedSources:
         """ newsfeed.getSuggestedSources
         From Vk Docs: Returns communities and users that current user is suggested to follow.
         Access from user token(s)
@@ -265,13 +299,19 @@ class NewsfeedGetSuggestedSources(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.getSuggestedSources", params)
+        return await self.request(
+            "newsfeed.getSuggestedSources",
+            params,
+            response_model=responses.newsfeed.GetSuggestedSourcesModel,
+        )
 
 
 class NewsfeedIgnoreItem(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, type: str, item_id: int, owner_id: int):
+    async def __call__(
+        self, type: str, item_id: int, owner_id: int
+    ) -> responses.ok_response.OkResponse:
         """ newsfeed.ignoreItem
         From Vk Docs: Hides an item from the newsfeed.
         Access from user token(s)
@@ -285,7 +325,11 @@ class NewsfeedIgnoreItem(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.ignoreItem", params)
+        return await self.request(
+            "newsfeed.ignoreItem",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class NewsfeedSaveList(BaseMethod):
@@ -297,7 +341,7 @@ class NewsfeedSaveList(BaseMethod):
         list_id: int = None,
         source_ids: typing.List = None,
         no_reposts: bool = None,
-    ):
+    ) -> responses.newsfeed.SaveList:
         """ newsfeed.saveList
         From Vk Docs: Creates and edits user newsfeed lists
         Access from user token(s)
@@ -312,7 +356,9 @@ class NewsfeedSaveList(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.saveList", params)
+        return await self.request(
+            "newsfeed.saveList", params, response_model=responses.newsfeed.SaveListModel
+        )
 
 
 class NewsfeedSearch(BaseMethod):
@@ -332,7 +378,7 @@ class NewsfeedSearch(BaseMethod):
         end_time: int = None,
         start_from: str = None,
         fields: typing.List = None,
-    ):
+    ) -> responses.newsfeed.Search:
         """ newsfeed.search
         From Vk Docs: Returns search results by statuses.
         Access from user, service token(s)
@@ -352,13 +398,17 @@ class NewsfeedSearch(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.search", params)
+        return await self.request(
+            "newsfeed.search", params, response_model=responses.newsfeed.SearchModel
+        )
 
 
 class NewsfeedUnignoreItem(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, type: str, item_id: int, owner_id: int):
+    async def __call__(
+        self, type: str, item_id: int, owner_id: int
+    ) -> responses.ok_response.OkResponse:
         """ newsfeed.unignoreItem
         From Vk Docs: Returns a hidden item to the newsfeed.
         Access from user token(s)
@@ -372,13 +422,19 @@ class NewsfeedUnignoreItem(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.unignoreItem", params)
+        return await self.request(
+            "newsfeed.unignoreItem",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class NewsfeedUnsubscribe(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self, type: str, item_id: int, owner_id: int = None):
+    async def __call__(
+        self, type: str, item_id: int, owner_id: int = None
+    ) -> responses.ok_response.OkResponse:
         """ newsfeed.unsubscribe
         From Vk Docs: Unsubscribes the current user from specified newsfeeds.
         Access from user token(s)
@@ -392,7 +448,11 @@ class NewsfeedUnsubscribe(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("newsfeed.unsubscribe", params)
+        return await self.request(
+            "newsfeed.unsubscribe",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
 
 
 class Newsfeed:

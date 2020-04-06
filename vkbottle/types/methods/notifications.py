@@ -16,7 +16,7 @@ class NotificationsGet(BaseMethod):
         filters: typing.List = None,
         start_time: int = None,
         end_time: int = None,
-    ):
+    ) -> responses.notifications.Get:
         """ notifications.get
         From Vk Docs: Returns a list of notifications about other users' feedback to the current user's wall posts.
         Access from user token(s)
@@ -32,13 +32,15 @@ class NotificationsGet(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notifications.get", params)
+        return await self.request(
+            "notifications.get", params, response_model=responses.notifications.GetModel
+        )
 
 
 class NotificationsMarkAsViewed(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
-    async def __call__(self,):
+    async def __call__(self,) -> responses.notifications.MarkAsViewed:
         """ notifications.markAsViewed
         From Vk Docs: Resets the counter of new notifications about other users' feedback to the current user's wall posts.
         Access from user token(s)
@@ -50,7 +52,11 @@ class NotificationsMarkAsViewed(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notifications.markAsViewed", params)
+        return await self.request(
+            "notifications.markAsViewed",
+            params,
+            response_model=responses.notifications.MarkAsViewedModel,
+        )
 
 
 class NotificationsSendMessage(BaseMethod):
@@ -65,7 +71,7 @@ class NotificationsSendMessage(BaseMethod):
         message: str,
         fragment: str = None,
         group_id: int = None,
-    ):
+    ) -> responses.notifications.SendMessage:
         """ notifications.sendMessage
         From Vk Docs: 
         Access from user, service token(s)
@@ -80,7 +86,11 @@ class NotificationsSendMessage(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("notifications.sendMessage", params)
+        return await self.request(
+            "notifications.sendMessage",
+            params,
+            response_model=responses.notifications.SendMessageModel,
+        )
 
 
 class Notifications:

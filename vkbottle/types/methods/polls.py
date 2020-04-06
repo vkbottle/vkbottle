@@ -12,10 +12,10 @@ class PollsAddVote(BaseMethod):
     async def __call__(
         self,
         poll_id: int,
-        answer_ids: typing.List,
         owner_id: int = None,
+        answer_ids: typing.List = None,
         is_board: bool = None,
-    ):
+    ) -> responses.polls.AddVote:
         """ polls.addVote
         From Vk Docs: Adds the current user's vote to the selected answer in the poll.
         Access from user token(s)
@@ -30,7 +30,9 @@ class PollsAddVote(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("polls.addVote", params)
+        return await self.request(
+            "polls.addVote", params, response_model=responses.polls.AddVoteModel
+        )
 
 
 class PollsCreate(BaseMethod):
@@ -46,7 +48,7 @@ class PollsCreate(BaseMethod):
         add_answers: str = None,
         photo_id: int = None,
         background_id: str = None,
-    ):
+    ) -> responses.polls.Create:
         """ polls.create
         From Vk Docs: Creates polls that can be attached to the users' or communities' posts.
         Access from user token(s)
@@ -65,15 +67,21 @@ class PollsCreate(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("polls.create", params)
+        return await self.request(
+            "polls.create", params, response_model=responses.polls.CreateModel
+        )
 
 
 class PollsDeleteVote(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, poll_id: int, answer_id: int, owner_id: int = None, is_board: bool = None
-    ):
+        self,
+        poll_id: int,
+        owner_id: int = None,
+        answer_id: int = None,
+        is_board: bool = None,
+    ) -> responses.polls.DeleteVote:
         """ polls.deleteVote
         From Vk Docs: Deletes the current user's vote from the selected answer in the poll.
         Access from user token(s)
@@ -88,7 +96,9 @@ class PollsDeleteVote(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("polls.deleteVote", params)
+        return await self.request(
+            "polls.deleteVote", params, response_model=responses.polls.DeleteVoteModel
+        )
 
 
 class PollsEdit(BaseMethod):
@@ -105,7 +115,7 @@ class PollsEdit(BaseMethod):
         end_date: int = None,
         photo_id: int = None,
         background_id: str = None,
-    ):
+    ) -> responses.ok_response.OkResponse:
         """ polls.edit
         From Vk Docs: Edits created polls
         Access from user token(s)
@@ -125,7 +135,9 @@ class PollsEdit(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("polls.edit", params)
+        return await self.request(
+            "polls.edit", params, response_model=responses.ok_response.OkResponseModel
+        )
 
 
 class PollsGetById(BaseMethod):
@@ -140,7 +152,7 @@ class PollsGetById(BaseMethod):
         friends_count: int = None,
         fields: typing.List = None,
         name_case: str = None,
-    ):
+    ) -> responses.polls.GetById:
         """ polls.getById
         From Vk Docs: Returns detailed information about a poll by its ID.
         Access from user token(s)
@@ -158,7 +170,9 @@ class PollsGetById(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("polls.getById", params)
+        return await self.request(
+            "polls.getById", params, response_model=responses.polls.GetByIdModel
+        )
 
 
 class PollsGetVoters(BaseMethod):
@@ -167,15 +181,15 @@ class PollsGetVoters(BaseMethod):
     async def __call__(
         self,
         poll_id: int,
-        answer_ids: typing.List,
         owner_id: int = None,
+        answer_ids: typing.List = None,
         is_board: bool = None,
         friends_only: bool = None,
         offset: int = None,
         count: int = None,
         fields: typing.List = None,
         name_case: str = None,
-    ):
+    ) -> responses.polls.GetVoters:
         """ polls.getVoters
         From Vk Docs: Returns a list of IDs of users who selected specific answers in the poll.
         Access from user token(s)
@@ -195,7 +209,9 @@ class PollsGetVoters(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("polls.getVoters", params)
+        return await self.request(
+            "polls.getVoters", params, response_model=responses.polls.GetVotersModel
+        )
 
 
 class Polls:

@@ -22,6 +22,9 @@ async def ban(ans: Message):
         if ans.reply_message.from_id < 0:
             return "Не баню своих коллег..."
 
+        person = await bot.api.messages.search(
+            ans.reply_message.from_id, name_case="acc"
+        )
         person = (
             await bot.api.request(
                 "users.get",

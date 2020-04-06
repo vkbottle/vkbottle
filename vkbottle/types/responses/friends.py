@@ -1,127 +1,119 @@
-from .others import SimpleResponse
-from ..base import BaseModel
-
-from ..user import User
-
-from typing import List, Any
 import typing
+import enum
+from ..base import BaseModel
+from vkbottle.types import objects
 
 
-class Add(SimpleResponse):
-    pass
+class Search(BaseModel):
+    count: int = None
+    items: typing.List = None
 
 
-class AddListResponse(BaseModel):
-    list_id: int = None
+class SearchModel(BaseModel):
+    response: Search = None
 
 
 class AddList(BaseModel):
-    response: AddListResponse = None
+    list_id: int = None
 
 
-class AreFriendsResponse(BaseModel):
-    user_id: int = None
-    friend_status: int = None
-    sign: str = None
+class AddListModel(BaseModel):
+    response: AddList = None
 
 
-class AreFriends(BaseModel):
-    response: typing.List[AreFriendsResponse] = None
+Add = typing.Dict
 
 
-class DeleteResponse(BaseModel):
-    success: int = None
+class AddModel(BaseModel):
+    response: Add = None
+
+
+AreFriends = typing.List[objects.friends.FriendStatus]
+
+
+class AreFriendsModel(BaseModel):
+    response: AreFriends = None
+
+
+class Delete(BaseModel):
+    success: objects.base.OkResponse = None
     friend_deleted: int = None
     out_request_deleted: int = None
     in_request_deleted: int = None
     suggestion_deleted: int = None
 
 
-class Delete(BaseModel):
-    response: DeleteResponse = None
+class DeleteModel(BaseModel):
+    response: Delete = None
 
 
-class DeleteAllRequests(SimpleResponse):
-    pass
+GetAppUsers = typing.List[int]
 
 
-class DeleteList(SimpleResponse):
-    pass
+class GetAppUsersModel(BaseModel):
+    response: GetAppUsers = None
 
 
-class Edit(SimpleResponse):
-    pass
+GetByPhones = typing.List[objects.users.UserXtrPhone]
 
 
-class EditList(SimpleResponse):
-    pass
-
-
-class GetResponse(BaseModel):
-    count: int = None
-    items: List[User] = []
-
-
-class Get(BaseModel):
-    response: GetResponse = None
-
-
-class GetAppUsers(BaseModel):
-    response: List[int] = []
-
-
-class GetByPhones(BaseModel):
-    response: List[User] = []
-
-
-class GetListsResponseItem(BaseModel):
-    name: str = None
-    id: int = None
-
-
-class GetListsResponse(BaseModel):
-    count: int = None
-    items: List[GetListsResponseItem] = []
+class GetByPhonesModel(BaseModel):
+    response: GetByPhones = None
 
 
 class GetLists(BaseModel):
-    response: GetListsResponse = None
-
-
-class GetMutual(BaseModel):
-    response: List[int] = []
-
-
-class GetOnline(BaseModel):
-    response: List[int] = []
-
-
-class GetRecent(BaseModel):
-    response: List[int] = []
-
-
-class GetRequestsItem(User):
-    mutual: Any = None
-    track_code: str = None
-
-
-class GetRequestsResponse(BaseModel):
     count: int = None
-    items: List[GetRequestsItem] = []
+    items: typing.List = None
+
+
+class GetListsModel(BaseModel):
+    response: GetLists = None
+
+
+GetMutual = typing.List[int]
+
+
+class GetMutualModel(BaseModel):
+    response: GetMutual = None
+
+
+GetOnline = typing.List[int]
+
+
+class GetOnlineModel(BaseModel):
+    response: GetOnline = None
+
+
+GetRecent = typing.List[int]
+
+
+class GetRecentModel(BaseModel):
+    response: GetRecent = None
 
 
 class GetRequests(BaseModel):
-    response: GetRequestsResponse = None
-
-
-class GetSuggestionsResponse(BaseModel):
     count: int = None
-    items: List[User] = []
+    items: typing.List = None
+    count_unread: int = None
+
+
+class GetRequestsModel(BaseModel):
+    response: GetRequests = None
 
 
 class GetSuggestions(BaseModel):
-    response: GetSuggestionsResponse = None
+    count: int = None
+    items: typing.List = None
 
 
-class Search(BaseModel):
-    response: GetSuggestionsResponse = None
+class GetSuggestionsModel(BaseModel):
+    response: GetSuggestions = None
+
+
+class Get(BaseModel):
+    count: int = None
+    items: typing.List = None
+
+
+class GetModel(BaseModel):
+    response: Get = None

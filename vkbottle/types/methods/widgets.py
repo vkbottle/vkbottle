@@ -21,7 +21,7 @@ class WidgetsGetComments(BaseMethod):
         fields: typing.List = None,
         offset: int = None,
         count: int = None,
-    ):
+    ) -> responses.widgets.GetComments:
         """ widgets.getComments
         From Vk Docs: Gets a list of comments for the page added through the [vk.com/dev/Comments|Comments widget].
         Access from user, service token(s)
@@ -39,7 +39,11 @@ class WidgetsGetComments(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("widgets.getComments", params)
+        return await self.request(
+            "widgets.getComments",
+            params,
+            response_model=responses.widgets.GetCommentsModel,
+        )
 
 
 class WidgetsGetPages(BaseMethod):
@@ -55,7 +59,7 @@ class WidgetsGetPages(BaseMethod):
         period: str = None,
         offset: int = None,
         count: int = None,
-    ):
+    ) -> responses.widgets.GetPages:
         """ widgets.getPages
         From Vk Docs: Gets a list of application/site pages where the [vk.com/dev/Comments|Comments widget] or [vk.com/dev/Like|Like widget] is installed.
         Access from user, service token(s)
@@ -71,7 +75,9 @@ class WidgetsGetPages(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request("widgets.getPages", params)
+        return await self.request(
+            "widgets.getPages", params, response_model=responses.widgets.GetPagesModel
+        )
 
 
 class Widgets:

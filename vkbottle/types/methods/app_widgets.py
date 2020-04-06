@@ -22,9 +22,7 @@ class AppwidgetsUpdate(BaseMethod):
             for k, v in locals().items()
             if k not in ["self"] and v is not None
         }
-        return await self.request(
-            "appWidgets.update", params
-        )
+        return await self.request("appWidgets.update", params)
 
 
 class Appwidgets:

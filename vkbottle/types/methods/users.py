@@ -33,7 +33,7 @@ class UsersGet(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "users.get", params, response_model=responses.users.Get
+            "users.get", params, response_model=responses.users.GetModel
         )
 
 
@@ -67,7 +67,9 @@ class UsersGetFollowers(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "users.getFollowers", params, response_model=responses.users.GetFollowers
+            "users.getFollowers",
+            params,
+            response_model=responses.users.GetFollowersModel,
         )
 
 
@@ -103,7 +105,27 @@ class UsersGetSubscriptions(BaseMethod):
         return await self.request(
             "users.getSubscriptions",
             params,
-            response_model=responses.users.GetSubscriptions,
+            response_model=responses.users.GetSubscriptionsModel,
+        )
+
+
+class UsersIsAppUser(BaseMethod):
+    access_token_type: APIAccessibility = [APIAccessibility.USER]
+
+    async def __call__(self, user_id: int = None) -> responses.users.IsAppUser:
+        """ users.isAppUser
+        From Vk Docs: Returns information whether a user installed the application.
+        Access from user token(s)
+        :param user_id: 
+        """
+
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "users.isAppUser", params, response_model=responses.users.IsAppUserModel
         )
 
 
@@ -112,7 +134,7 @@ class UsersReport(BaseMethod):
 
     async def __call__(
         self, user_id: int, type: str, comment: str = None
-    ) -> responses.users.Report:
+    ) -> responses.ok_response.OkResponse:
         """ users.report
         From Vk Docs: Reports (submits a complain about) a user.
         Access from user token(s)
@@ -127,7 +149,7 @@ class UsersReport(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "users.report", params, response_model=responses.users.Report
+            "users.report", params, response_model=responses.ok_response.OkResponseModel
         )
 
 
@@ -214,7 +236,7 @@ class UsersSearch(BaseMethod):
             if k not in ["self"] and v is not None
         }
         return await self.request(
-            "users.search", params, response_model=responses.users.Search
+            "users.search", params, response_model=responses.users.SearchModel
         )
 
 
@@ -223,5 +245,6 @@ class Users:
         self.get = UsersGet(request)
         self.get_followers = UsersGetFollowers(request)
         self.get_subscriptions = UsersGetSubscriptions(request)
+        self.is_app_user = UsersIsAppUser(request)
         self.report = UsersReport(request)
         self.search = UsersSearch(request)
