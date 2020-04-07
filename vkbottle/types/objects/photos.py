@@ -3,8 +3,6 @@ import typing
 from enum import Enum
 from ..base import BaseModel
 
-print(base)
-
 
 class CommentXtrPid(BaseModel):
     attachments: typing.List = None

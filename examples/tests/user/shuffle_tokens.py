@@ -19,7 +19,7 @@ user.api.token_generator = generator
 @user.on.message_new()
 async def new_message(ans: types.Message):
     if ans.from_id == user.user_id:
-        await ans("Я что-то написал, да?")
+        await ans(ans.text)
 
 
 user.run_polling()
