@@ -218,7 +218,7 @@ class SearchModel(BaseModel):
     response: Search = None
 
 
-Send = typing.Dict
+Send = int
 
 
 class SendModel(BaseModel):

@@ -9,9 +9,6 @@ Disposal = typing.Tuple[typing.Dict[str, BranchRule]]
 
 
 class AbstractBranchGenerator(ABC):
-    def __init__(self):
-        ...
-
     @abstractmethod
     def from_function(self, *args, **kwargs) -> None:
         pass

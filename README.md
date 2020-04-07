@@ -79,7 +79,8 @@ app = web.Application()
 
 async def executor(request: web.Request):
     event = await request.json()
-    return await bot.emulate(event=event, confirmation_token="ConfirmationToken")
+    emulation = await bot.emulate(event=event, confirmation_token="ConfirmationToken")
+    return web.Response(text=emulation)
 
 
 @bot.on.message(text="test", lower=True)

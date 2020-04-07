@@ -19,6 +19,7 @@ class API(ContextInstanceMixin):
         )(tokens)
         self._http = HTTPRequest()
         self.throw_errors: bool = throw_errors
+        self.group_id: int = None
 
         # VK Api Methods
         self.account = Account(self.api)
