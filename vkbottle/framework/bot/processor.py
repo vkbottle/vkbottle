@@ -9,7 +9,7 @@ from vkbottle.types.message import Message
 from vkbottle.api import Api
 from vkbottle.framework.framework.handler import Handler
 from vkbottle.framework.framework.handler import MiddlewareExecutor
-from vkbottle.framework.framework.branch import DictBranch
+from vkbottle.framework.framework.branch import DictBranch, GeneratorType
 from vkbottle.framework.framework.branch import Branch, ExitBranch
 from vkbottle.framework._status import BotStatus
 from vkbottle.utils.tools import get_attr
@@ -126,6 +126,7 @@ class AsyncHandleManager:
         )
 
         disposal, branch = await self.branch.load(answer.peer_id)
+        edited = None
         await branch.enter(answer)
 
         for n, member in disposal.items():
@@ -139,12 +140,16 @@ class AsyncHandleManager:
                 kwargs = {
                     k: v for rule in rules for k, v in rule.context.kwargs.items()
                 }
-                await self._handler_return(
+                edited = await self._handler_return(
                     await task(answer, *middleware_args, *args, **kwargs),
                     obj,
                     client_info,
                 )
                 break
+
+        if edited is False and self.branch.generator is GeneratorType.DATABASE:
+            if answer.peer_id in await self.branch.queue:
+                await self.branch.add(answer.peer_id, branch.key, **branch.context)
 
         logger.info(
             'New BRANCHED "{0}" compiled with branch <{2}> (from: {1})'.format(
@@ -173,9 +178,12 @@ class AsyncHandleManager:
                 handler_return.branch_name,
                 **handler_return.branch_kwargs
             )
+            return True
         elif isinstance(handler_return, ExitBranch):
             await self.branch.exit(obj["peer_id"])
+            return True
         elif handler_return is not None:
             await Message(**obj, client_info=client_info)(
                 str(handler_return), **self.status.handler_return_context
             )
+        return False

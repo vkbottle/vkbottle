@@ -2,7 +2,7 @@ import typing, asyncio
 import inspect
 
 from .cls import CoroutineBranch, AbstractBranch
-from .abc import AbstractBranchGenerator
+from .abc import AbstractBranchGenerator, GeneratorType
 from .standart_branch import ImmutableBranchData
 
 from vkbottle.api.exceptions import BranchError
@@ -12,12 +12,9 @@ BRANCH_DATA = ".BRANCHES.txt"
 
 class DictBranch(AbstractBranchGenerator):
     def __init__(self):
-        self._meet_up: typing.Dict[
-            str, typing.Tuple[AbstractBranch, ImmutableBranchData]
-        ] = {}
-        self._branch_queue: typing.Dict[
-            int, AbstractBranch
-        ] = {}
+        self._meet_up: typing.Dict[str, typing.Tuple[AbstractBranch, ImmutableBranchData]] = {}
+        self._branch_queue: typing.Dict[int, AbstractBranch] = {}
+        self.generator = GeneratorType.DATABASE
 
     def from_function(
             self,
@@ -72,7 +69,7 @@ class DictBranch(AbstractBranchGenerator):
         return self._branch_queue.keys()
 
     @property
-    def branches(self) -> typing.Dict[str, AbstractBranch]:
+    async def branches(self) -> typing.Dict[str, AbstractBranch]:
         return self._meet_up
 
     async def add(

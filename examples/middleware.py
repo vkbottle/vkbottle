@@ -3,8 +3,8 @@ from time import time as current
 from tortoise import Tortoise
 
 from vkbottle import Bot, Message
-from vkbottle.rule import AbstractMessageRule
 from vkbottle.ext import Middleware
+from vkbottle.rule import AbstractMessageRule
 from .tortoise_models import User
 
 bot = Bot("token")
@@ -41,4 +41,4 @@ async def init_db():
     await Tortoise.generate_schemas()
 
 
-bot.run_polling(skip_updates=False)
+bot.run_polling(skip_updates=False, on_startup=init_db)

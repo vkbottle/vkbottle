@@ -2,22 +2,30 @@ import typing
 from abc import ABC, abstractmethod
 from .cls import AbstractBranch
 from ..rule import AbstractMessageRule
+import enum
 
 Branch = typing.Union[str, AbstractBranch]
 BranchRule = typing.Tuple[typing.Callable, typing.List[AbstractMessageRule]]
+
+
+class GeneratorType(enum.Enum):
+    ABSTRACT = "abstract"
+    DATABASE = "database"
+    DICT = "dict"
 
 
 class AbstractBranchGenerator(ABC):
     Disposal = typing.Dict[str, BranchRule]
     cls_branch: typing.Any
     simple_branch: typing.Any
+    generator: GeneratorType = GeneratorType.ABSTRACT
 
     @abstractmethod
     def from_function(self, *args, **kwargs) -> None:
         pass
 
     @abstractmethod
-    def add_branch(self, branch: AbstractBranch, name: str = None, **context) -> AbstractBranch:
+    def add_branch(self, branch: AbstractBranch, name: str = None) -> AbstractBranch:
         ...
 
     @property
@@ -25,8 +33,13 @@ class AbstractBranchGenerator(ABC):
     async def queue(self) -> typing.List[int]:
         ...
 
+    @property
     @abstractmethod
-    async def add(self, uid: int, branch: Branch):
+    async def branches(self) -> typing.Dict[str, AbstractBranch]:
+        ...
+
+    @abstractmethod
+    async def add(self, uid: int, branch: Branch, **context):
         ...
 
     @abstractmethod
