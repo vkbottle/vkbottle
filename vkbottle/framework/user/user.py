@@ -181,10 +181,8 @@ class User(HTTP):
         if code in range(6):
             data.update(
                 (
-                    await self.api.request(
-                        "messages.getById", {"message_ids": data["message_id"]},
-                    )
-                )["response"]["items"][0]
+                    await self.api.messages.get_by_id(message_ids=data["message_id"])
+                ).items[0].dict()
             )
         return data
 

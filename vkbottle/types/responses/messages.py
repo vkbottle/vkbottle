@@ -239,7 +239,7 @@ class GetLongPollServerModel(BaseModel):
 
 
 class IsMessagesFromGroupAllowed(BaseModel):
-    is_allowed: objects.base.BoolInt = None
+    is_allowed: int = None
 
 
 class IsMessagesFromGroupAllowedModel(BaseModel):

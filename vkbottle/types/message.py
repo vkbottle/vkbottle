@@ -83,14 +83,14 @@ class Message(BaseModel, GetApi):
     async def reply(
             self,
             message: str = None,
-            random_id: int = FromExtension("random_id"),
+            attachment: str = None,
             user_id: int = None,
             domain: str = None,
             chat_id: int = None,
+            random_id: int = FromExtension("random_id"),
             user_ids: typing.List[int] = None,
             lat: typing.Any = None,
             long: typing.Any = None,
-            attachment: str = None,
             forward_messages: typing.List[int] = None,
             forward: str = None,
             sticker_id: int = None,
@@ -113,14 +113,14 @@ class Message(BaseModel, GetApi):
     async def __call__(
             self,
             message: str = None,
-            random_id: int = FromExtension("random_id"),
+            attachment: str = None,
             user_id: int = None,
             domain: str = None,
             chat_id: int = None,
+            random_id: int = FromExtension("random_id"),
             user_ids: typing.List[int] = None,
             lat: typing.Any = None,
             long: typing.Any = None,
-            attachment: str = None,
             reply_to: int = None,
             forward_messages: typing.List[int] = None,
             forward: str = None,
@@ -138,11 +138,11 @@ class Message(BaseModel, GetApi):
             )
         _m = []
         for message in sep_bytes(str(message if message is not None else "")):
-            mid = await self.api.messages.send(
+            _mid = await self.api.messages.send(
                 **self.get_params(locals()),
                 peer_id=self.peer_id,
             )
-            _m.append(mid)
+            _m.append(_mid)
         return _m if len(_m) > 1 else _m[0]
 
     @property

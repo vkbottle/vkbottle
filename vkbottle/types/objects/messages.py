@@ -297,3 +297,6 @@ class PinnedMessage(BaseModel):
 
 class UserXtrInvitedBy(users.UserXtrType):
     invited_by: int = None
+
+
+Message.update_forward_refs()

@@ -39,7 +39,7 @@ class AnotherBranch(ClsBranch):
 
 @bot.on.message_handler(text=["say <word>", "add <word>"])
 async def pronounce(ans: Message, word):
-    bot.branch.add(ans.peer_id, "another", word=word)
+    await bot.branch.add(ans.peer_id, "another", word=word)
     return "Okay!"
 
 

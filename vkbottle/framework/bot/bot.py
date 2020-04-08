@@ -12,7 +12,8 @@ from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.extensions.standard import StandardExtension
 from vkbottle.framework._status import BotStatus, LoggerLevel
-from vkbottle.framework.framework.branch import DictBranch, AbstractBranch
+from vkbottle.framework.framework.branch import DictBranch
+from vkbottle.framework.framework.branch.abc import AbstractBranchGenerator
 from vkbottle.framework.bot.processor import AsyncHandleManager
 from vkbottle.framework.bot.builtin import DefaultValidators, DEFAULT_WAIT
 from vkbottle.api import Api, request
@@ -105,7 +106,7 @@ class Bot(HTTP, AsyncHandleManager):
         AbstractExtension.set_current(self.extension)
 
         # Main workers
-        self.branch: AbstractBranch = DictBranch()
+        self.branch: typing.Union[AbstractBranchGenerator, DictBranch] = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.on: Handler = Handler(self.group_id)
         self.error_handler: ErrorHandler = ErrorHandler()

@@ -72,8 +72,8 @@ class Branch(ClsBranch):
 В связи с тем что прошлый способ не поддерживается в некоторых вариациях оформления Callback был публикован альтернативный синтаксис входа и выхода из бранчей:
 
 ```python
-bot.branch.add(ans.peer_id, "branch_name") # Для добавления источника в бранч
-bot.branch.exit(ans.peer_id) # Для удаления источника из бранча
+await bot.branch.add(ans.peer_id, "branch_name") # Для добавления источника в бранч
+await bot.branch.exit(ans.peer_id) # Для удаления источника из бранча
 ```
 
 Этот способ проще и функциональнее

@@ -3,9 +3,7 @@ from enum import Enum
 from ..base import BaseModel
 
 
-class BoolInt(Enum):
-    _0 = "0"
-    _1 = "1"
+BoolInt = int
 
 
 class City(BaseModel):

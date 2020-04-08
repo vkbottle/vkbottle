@@ -9,13 +9,15 @@ BranchRule = typing.Tuple[typing.Callable, typing.List[AbstractMessageRule]]
 
 class AbstractBranchGenerator(ABC):
     Disposal = typing.Dict[str, BranchRule]
+    cls_branch: typing.Any
+    simple_branch: typing.Any
 
     @abstractmethod
     def from_function(self, *args, **kwargs) -> None:
         pass
 
     @abstractmethod
-    def add_branch(self, branch: AbstractBranch, name: str) -> AbstractBranch:
+    def add_branch(self, branch: AbstractBranch, name: str = None, **context) -> AbstractBranch:
         ...
 
     @property
@@ -24,7 +26,7 @@ class AbstractBranchGenerator(ABC):
         ...
 
     @abstractmethod
-    def add(self, uid: int, branch: Branch):
+    async def add(self, uid: int, branch: Branch):
         ...
 
     @abstractmethod
@@ -32,5 +34,5 @@ class AbstractBranchGenerator(ABC):
         ...
 
     @abstractmethod
-    def exit(self, uid: int):
+    async def exit(self, uid: int):
         ...

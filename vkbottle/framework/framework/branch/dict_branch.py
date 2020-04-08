@@ -75,7 +75,7 @@ class DictBranch(AbstractBranchGenerator):
     def branches(self) -> typing.Dict[str, AbstractBranch]:
         return self._meet_up
 
-    def add(
+    async def add(
         self,
         uid: int,
         branch: typing.Union[typing.Callable, str, AbstractBranch],
@@ -126,7 +126,7 @@ class DictBranch(AbstractBranchGenerator):
             disposal["default"] = [branch.__class__.branch, []]
             return disposal, branch
 
-    def exit(
+    async def exit(
             self,
             uid: int,
     ) -> None:
