@@ -31,3 +31,5 @@ class Transaction(BaseModel):
     uid_from: int = None
     uid_to: int = None
     votes: int = None
+
+

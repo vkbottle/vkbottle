@@ -55,3 +55,5 @@ class SendMessageItem(BaseModel):
     user_id: int = None
     status: bool = None
     error: "SendMessageError" = None
+
+

@@ -49,3 +49,5 @@ class DocTypes(BaseModel):
 
 class DocUploadResponse(BaseModel):
     file: str = None
+
+

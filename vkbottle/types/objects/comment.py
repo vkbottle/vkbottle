@@ -10,3 +10,5 @@ class Thread(BaseModel):
     groups_can_post: bool = None
     items: typing.List = None
     show_reply_button: bool = None
+
+

@@ -8,3 +8,5 @@ from vkbottle.types import objects
 class Status(BaseModel):
     audio: "audio.Audio" = None
     text: str = None
+
+

@@ -69,3 +69,5 @@ class Price(BaseModel):
 class Section(BaseModel):
     id: int = None
     name: str = None
+
+

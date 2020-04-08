@@ -260,3 +260,5 @@ class WallUploadResponse(BaseModel):
     hash: str = None
     photo: str = None
     server: int = None
+
+

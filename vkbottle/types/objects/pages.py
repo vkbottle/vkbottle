@@ -48,3 +48,5 @@ class WikipageHistory(BaseModel):
     date: int = None
     editor_id: int = None
     editor_name: str = None
+
+

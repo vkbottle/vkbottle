@@ -52,3 +52,5 @@ class LinkProduct(BaseModel):
 class LinkRating(BaseModel):
     reviews_count: int = None
     stars: int = None
+
+

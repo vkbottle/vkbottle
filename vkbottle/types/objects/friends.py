@@ -47,3 +47,5 @@ class RequestsXtrMessage(BaseModel):
     message: str = None
     mutual: "RequestsMutual" = None
     user_id: int = None
+
+

@@ -80,3 +80,5 @@ class StatsSexAge(BaseModel):
     age_range: str = None
     female: int = None
     male: int = None
+
+

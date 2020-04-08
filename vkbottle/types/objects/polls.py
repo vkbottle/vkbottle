@@ -30,3 +30,5 @@ class Voters(BaseModel):
 class VotersUsers(BaseModel):
     count: int = None
     items: typing.List = None
+
+

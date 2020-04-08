@@ -42,3 +42,5 @@ class TopicPoll(BaseModel):
     poll_id: int = None
     question: str = None
     votes: str = None
+
+

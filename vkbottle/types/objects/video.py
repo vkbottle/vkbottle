@@ -91,3 +91,5 @@ class VideoFull(BaseModel):
 
 class VideoImage(base.Image):
     with_padding: "base.BoolInt" = None
+
+

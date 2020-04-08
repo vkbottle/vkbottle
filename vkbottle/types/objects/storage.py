@@ -7,3 +7,5 @@ from vkbottle.types import objects
 class Value(BaseModel):
     key: str = None
     value: str = None
+
+

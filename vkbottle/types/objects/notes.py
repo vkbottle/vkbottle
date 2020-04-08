@@ -26,3 +26,5 @@ class NoteComment(BaseModel):
     oid: int = None
     reply_to: int = None
     uid: int = None
+
+

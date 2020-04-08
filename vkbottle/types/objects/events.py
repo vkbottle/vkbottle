@@ -14,3 +14,5 @@ class EventAttach(BaseModel):
     member_status: "groups.GroupFullMemberStatus" = None
     text: str = None
     time: int = None
+
+

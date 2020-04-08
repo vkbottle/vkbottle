@@ -56,3 +56,5 @@ class LeadDays(BaseModel):
 class Start(BaseModel):
     test_mode: "base.BoolInt" = None
     vk_sid: str = None
+
+

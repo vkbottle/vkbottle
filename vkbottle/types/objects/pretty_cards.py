@@ -14,3 +14,5 @@ class PrettyCard(BaseModel):
     price: str = None
     price_old: str = None
     title: str = None
+
+

@@ -42,3 +42,5 @@ class Subscription(BaseModel):
     test_mode: bool = None
     trial_expire_time: int = None
     update_time: int = None
+
+

@@ -42,3 +42,5 @@ class PageType(Enum):
 class Tag(BaseModel):
     id: int = None
     name: str = None
+
+

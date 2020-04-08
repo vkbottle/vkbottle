@@ -333,3 +333,5 @@ class TargetGroup(BaseModel):
 class Users(BaseModel):
     accesses: typing.List = None
     user_id: int = None
+
+

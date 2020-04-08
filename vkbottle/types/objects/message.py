@@ -11,3 +11,5 @@ class ChatPreview(BaseModel):
     members: typing.List = None
     members_count: int = None
     title: str = None
+
+

@@ -231,3 +231,5 @@ class UserGroupFields(Enum):
 
 class UserId(BaseModel):
     user_id: int = None
+
+

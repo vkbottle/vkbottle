@@ -352,3 +352,5 @@ class UserXtrPhone(UserFull):
 
 class UserSettings(UserMin, UserSettingsXtr):
     pass
+
+

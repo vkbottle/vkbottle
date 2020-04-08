@@ -36,3 +36,5 @@ class Station(BaseModel):
 class University(BaseModel):
     id: int = None
     title: str = None
+
+

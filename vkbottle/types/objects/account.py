@@ -128,3 +128,5 @@ class UserSettingsInterests(BaseModel):
     games: "UserSettingsInterest" = None
     quotes: "UserSettingsInterest" = None
     about: "UserSettingsInterest" = None
+
+

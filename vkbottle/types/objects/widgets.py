@@ -64,3 +64,5 @@ class WidgetPage(BaseModel):
     photo: str = None
     title: str = None
     url: str = None
+
+

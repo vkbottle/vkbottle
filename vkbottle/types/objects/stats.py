@@ -70,3 +70,5 @@ class WallpostStat(BaseModel):
     report: int = None
     to_group: int = None
     unsubscribe: int = None
+
+

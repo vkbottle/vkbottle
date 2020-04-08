@@ -29,3 +29,5 @@ class HintType(Enum):
     group = "group"
     profile = "profile"
     vk_app = "vk_app"
+
+

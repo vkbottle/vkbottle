@@ -300,3 +300,5 @@ class UserXtrInvitedBy(users.UserXtrType):
 
 
 Message.update_forward_refs()
+
+

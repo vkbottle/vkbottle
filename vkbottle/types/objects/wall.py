@@ -213,3 +213,5 @@ class WallpostToId(BaseModel):
     signer_id: int = None
     text: str = None
     to_id: int = None
+
+

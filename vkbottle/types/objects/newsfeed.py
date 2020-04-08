@@ -185,3 +185,5 @@ class NewsfeedPhoto(photos.Photo):
     comments: "base.ObjectCount" = None
     can_comment: "base.BoolInt" = None
     can_repost: "base.BoolInt" = None
+
+

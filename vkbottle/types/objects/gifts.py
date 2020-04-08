@@ -25,3 +25,5 @@ class Layout(BaseModel):
     thumb_256: str = None
     thumb_48: str = None
     thumb_96: str = None
+
+

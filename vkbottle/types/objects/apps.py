@@ -62,3 +62,5 @@ class Leaderboard(BaseModel):
 class Scope(BaseModel):
     name: str = None
     title: str = None
+
+

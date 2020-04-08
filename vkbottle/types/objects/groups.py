@@ -622,3 +622,5 @@ class TokenPermissionSetting(BaseModel):
 
 class UserXtrRole(users.UserFull):
     role: "RoleOptions" = None
+
+

@@ -196,3 +196,5 @@ class WallCommentDelete(BaseModel):
     id: int = None
     user_id: int = None
     post_id: int = None
+
+
