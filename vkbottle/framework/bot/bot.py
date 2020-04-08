@@ -119,20 +119,17 @@ class Bot(HTTP, AsyncHandleManager):
         close, offset = False, 0
 
         while not close:
-            conversations = await self.api.request(
-                "messages.getConversations",
-                {"count": 200, "offset": offset, "filter": "unanswered"},
-            )
+            conversations = await self.api.messages.get_conversations(offset, 200, filter="unanswered")
             if offset == 0:
-                logger.info(f"Conversation count - {conversations['count']}")
-                if conversations["count"] == 0:
+                logger.info(f"Conversation count - {conversations.count}")
+                if conversations.count == 0:
                     return
             offset += 200
 
             updates.extend(
-                [item["conversation"]["out_read"] for item in conversations["items"]]
+                [item.conversation.out_read for item in conversations.items]
             )
-            if len(conversations["items"]) < 200:
+            if len(conversations.items) < 200:
                 close = True
 
         logger.warning("Answering...")
@@ -140,21 +137,19 @@ class Bot(HTTP, AsyncHandleManager):
         chunk = list(chunks(updates, 100))
         for mid in chunk:
             try:
-                messages = await self.api.request(
-                    "messages.getById", {"message_ids": ",".join(map(str, mid))}
-                )
+                messages = await self.api.messages.get_by_id(mid)
                 await self.emulate(
                     {
                         "updates": [
                             {
                                 "type": "message_new",
-                                "object": {"message": m, "client_info": {}},
+                                "object": {"message": m.dict(), "client_info": {}},
                             }
-                        for m in messages["items"]
+                            for m in messages.items
                         ]
                     }
                 )
-            except:
+            except VKError:
                 continue
 
     def dispatch(self, ext: "Bot"):
