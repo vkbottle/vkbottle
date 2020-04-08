@@ -2,11 +2,10 @@ import typing, asyncio
 import inspect
 
 from .cls import CoroutineBranch, AbstractBranch
-from .abc import AbstractBranchGenerator, Disposal
+from .abc import AbstractBranchGenerator
 from .standart_branch import ImmutableBranchData
 
 from vkbottle.api.exceptions import BranchError
-from vkbottle.framework.framework.rule import AbstractMessageRule
 
 BRANCH_DATA = ".BRANCHES.txt"
 
@@ -17,7 +16,7 @@ class DictBranch(AbstractBranchGenerator):
             str, typing.Tuple[AbstractBranch, ImmutableBranchData]
         ] = {}
         self._branch_queue: typing.Dict[
-            int, typing.Tuple[AbstractBranch, ImmutableBranchData]
+            int, AbstractBranch
         ] = {}
 
     def from_function(
@@ -69,8 +68,8 @@ class DictBranch(AbstractBranchGenerator):
         return decorator
 
     @property
-    def queue(self) -> typing.Dict[int, AbstractBranch]:
-        return self._branch_queue
+    async def queue(self) -> typing.List[int]:
+        return self._branch_queue.keys()
 
     @property
     def branches(self) -> typing.Dict[str, AbstractBranch]:
@@ -118,7 +117,7 @@ class DictBranch(AbstractBranchGenerator):
     async def load(
         self,
         uid: int,
-    ) -> typing.Tuple[Disposal]:
+    ) -> typing.Tuple["AbstractBranchGenerator.Disposal", AbstractBranch]:
         if uid in self._branch_queue:
             branch = self._branch_queue.get(uid)
             disposal = dict(

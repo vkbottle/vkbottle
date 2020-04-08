@@ -78,7 +78,7 @@ class Request:
         logger.debug(f"Response: {response}")
 
         if not response_model:
-            return response
+            return response["response"]
         resp = response_model(**response)
         if raw_response:
             return resp

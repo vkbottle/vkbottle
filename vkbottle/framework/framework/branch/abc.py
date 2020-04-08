@@ -5,10 +5,11 @@ from ..rule import AbstractMessageRule
 
 Branch = typing.Union[str, AbstractBranch]
 BranchRule = typing.Tuple[typing.Callable, typing.List[AbstractMessageRule]]
-Disposal = typing.Tuple[typing.Dict[str, BranchRule]]
 
 
 class AbstractBranchGenerator(ABC):
+    Disposal = typing.Dict[str, BranchRule]
+
     @abstractmethod
     def from_function(self, *args, **kwargs) -> None:
         pass
@@ -19,7 +20,7 @@ class AbstractBranchGenerator(ABC):
 
     @property
     @abstractmethod
-    def queue(self) -> typing.Dict[int, AbstractBranch]:
+    async def queue(self) -> typing.List[int]:
         ...
 
     @abstractmethod
@@ -27,7 +28,7 @@ class AbstractBranchGenerator(ABC):
         ...
 
     @abstractmethod
-    async def load(self, uid: int) -> typing.Tuple[Disposal]:
+    async def load(self, uid: int) -> typing.Tuple["AbstractBranchGenerator.Disposal", AbstractBranch]:
         ...
 
     @abstractmethod

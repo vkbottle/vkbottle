@@ -1,3 +1,3 @@
-from .standard import DictBranch
+from .dict_branch import DictBranch
 from .standart_branch import Branch, ExitBranch, rule_disposal
 from .cls import *

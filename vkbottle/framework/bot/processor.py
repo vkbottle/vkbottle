@@ -41,7 +41,7 @@ class AsyncHandleManager:
                 elif mr is not None:
                     middleware_args.append(mr)
 
-        if message.peer_id in self.branch.queue:
+        if message.peer_id in await self.branch.queue:
             await self._branched_processor(obj, client_info, middleware_args)
             return
 
