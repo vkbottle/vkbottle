@@ -18,9 +18,9 @@ class AndFilter(AbstractFilter):
 
 class AnyFilter(AbstractFilter):
     async def check(self, event) -> bool:
-        return any((await rule.check(event) for rule in self.rules))
+        return any([await rule.check(event) for rule in self.rules])
 
 
 class AllFilter(AbstractFilter):
     async def check(self, event) -> bool:
-        return all((await rule.check(event) for rule in self.rules))
+        return all([await rule.check(event) for rule in self.rules])

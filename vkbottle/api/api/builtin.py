@@ -1,8 +1,10 @@
-import typing
 import random
 import time
 import math
+
+from typing import List, Tuple, Coroutine, Any
 from vkbottle.utils.logger import logger
+
 from .token import AbstractTokenGenerator
 from .schema import TokenSchema
 
@@ -12,7 +14,7 @@ class RandomTokenGenerator(AbstractTokenGenerator):
     RandomTokenGenerator allows to randomize taken tokens, works good if the amount of tokens is big
     """
 
-    def __init__(self, tokens: typing.List[str]):
+    def __init__(self, tokens: List[str]):
         self.tokens = tokens
 
     async def get_token(self, *args, **kwargs) -> str:
@@ -24,7 +26,7 @@ class ConsistentTokenGenerator(AbstractTokenGenerator):
     ConsistentTokenGenerator is the best choice to generate tokens and avoid limit errors
     """
 
-    def __init__(self, tokens: typing.List[str]):
+    def __init__(self, tokens: List[str]):
         self.tokens = tokens
         self.state = 0
 
@@ -39,14 +41,14 @@ class LimitedTokenGenerator(AbstractTokenGenerator):
     LimitedTokenGenerator generates tokens with the fixed limit, it's aimed to efficiently avoid limit errors
     """
 
-    def __init__(self, tokens: typing.List[str], limit: int = 3):
+    def __init__(self, tokens: List[str], limit: int = 3):
         """
         :param tokens:
         :param limit: Fixed limit of availability of one token per second
         """
         self.tokens = tokens
         self.limit: int = limit
-        self.state: typing.Tuple[int] = (0, 0)
+        self.state: Tuple[int, int] = (0, 0)
 
     async def get_token(self, *args, **kwargs) -> str:
         index = self.state[1]
@@ -72,7 +74,7 @@ class ClassifiedTokenGenerator(AbstractTokenGenerator):
     def __init__(self, schema: TokenSchema):
         self.schema = schema
 
-    async def get_token(self, *args, **kwargs) -> str:
+    async def get_token(self, *args, **kwargs) -> Coroutine[Any, Any, str]:
         generator = self.schema.get_generator(*args, *kwargs)
         return generator.get_token(*args, **kwargs)
 

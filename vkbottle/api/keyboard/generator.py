@@ -8,6 +8,7 @@ def keyboard_gen(
     """Simple keyboard constructor
     :param pattern: Keyboard simple pattern, check github readme
     :param one_time: Should keyboard be hidden after first use?
+    :param inline: Should keyboard be inline?
     :return: VK Api Keyboard JSON
     """
     rows = pattern

@@ -8,6 +8,7 @@ from vbml import Patcher, Pattern
 from .events import Event
 from vkbottle.const import __version__
 from vkbottle.api import HandlerError
+from vkbottle.framework.framework.rule.filters import AbstractFilter
 from vkbottle.framework.framework.rule import (
     AbstractRule,
     VBMLRule,
@@ -176,7 +177,8 @@ class MessageHandler:
         for rule in self.default_rules + rules:
             if isinstance(rule, str):
                 rule = VBMLRule(rule)
-            rule.create(func)
+            if not isinstance(rule, AbstractFilter):
+                rule.create(func)
             current.append(rule)
 
         self.rules.append(current)
