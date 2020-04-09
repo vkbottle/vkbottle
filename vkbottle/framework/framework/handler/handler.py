@@ -20,6 +20,7 @@ from vkbottle.framework.framework.rule import (
     StickerRule,
     LevenshteinDisRule,
 )
+from vkbottle.framework.framework.rule.filters import AbstractFilter
 
 COL_RULES = {
     "commands": CommandRule,
@@ -174,13 +175,15 @@ class MessageHandler:
     def add_rules(self, rules: typing.List[AbstractRule], func: typing.Callable):
         current = list()
         for rule in self.default_rules + rules:
+            if isinstance(rule, AbstractFilter):
+                continue
             if isinstance(rule, str):
                 rule = VBMLRule(rule)
             rule.create(func)
             current.append(rule)
 
         self.rules.append(current)
-
+    
     def _col_rules(self, **col) -> typing.List[AbstractRule]:
         current = list()
         for k, v in col.items():
@@ -191,7 +194,6 @@ class MessageHandler:
 
     def _text_rule(
         self,
-        func: typing.Callable,
         text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
         lower: bool,
         command: bool,
