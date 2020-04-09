@@ -21,13 +21,12 @@ from vkbottle.api import VKError
 from vkbottle.utils import logger, TaskManager, chunks
 from vkbottle.utils.json import USAGE
 
-
 try:
     import uvloop
+
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     uvloop = None
-
 
 Token = typing.Union[str, typing.List[str]]
 
@@ -99,7 +98,7 @@ class Bot(HTTP, AsyncHandleManager):
 
         # Sign assets
         self.api: Api = Api(self.__tokens, throw_errors=throw_errors)
-        self.extension: AbstractExtension = extension if extension is not None else StandardExtension()
+        self.extension: AbstractExtension = extension or StandardExtension()
         self.api.group_id = self.group_id
         self._throw_errors: bool = throw_errors
         Api.set_current(self.api)
@@ -209,7 +208,7 @@ class Bot(HTTP, AsyncHandleManager):
         Create an empty copy of Bot
         :return: Bot
         """
-        copy = Bot(self.__tokens, group_id=self.group_id, debug=self.__debug,)
+        copy = Bot(self.__tokens, group_id=self.group_id, debug=self.__debug, )
         return copy
 
     def copy(self) -> "Bot":
@@ -249,13 +248,13 @@ class Bot(HTTP, AsyncHandleManager):
         return await self.request.post(url)
 
     def run_polling(
-        self,
-        *,
-        skip_updates: bool = True,
-        auto_reload: bool = False,
-        auto_reload_dir: str = ".",
-        on_shutdown: typing.Callable = None,
-        on_startup: typing.Callable = None,
+            self,
+            *,
+            skip_updates: bool = True,
+            auto_reload: bool = False,
+            auto_reload_dir: str = ".",
+            on_shutdown: typing.Callable = None,
+            on_startup: typing.Callable = None,
     ):
         """
         :return:
@@ -296,7 +295,7 @@ class Bot(HTTP, AsyncHandleManager):
                 await self.get_server()
 
     async def emulate(
-        self, event: dict, confirmation_token: str = None
+            self, event: dict, confirmation_token: str = None
     ) -> typing.Union[str, None]:
         """
         Process all types of events

@@ -1,6 +1,8 @@
-from .extension import AbstractExtension
 import random
+
+from .extension import AbstractExtension
 from vkbottle.api.api.api import Api
+
 
 class StandardExtension(AbstractExtension):
     def random_id(self):

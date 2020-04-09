@@ -1,4 +1,5 @@
-import typing, asyncio
+import typing
+import asyncio
 import inspect
 
 from .cls import CoroutineBranch, AbstractBranch
@@ -65,7 +66,7 @@ class DictBranch(AbstractBranchGenerator):
         return decorator
 
     @property
-    async def queue(self) -> typing.List[int]:
+    async def queue(self) -> typing.KeysView[int]:
         return self._branch_queue.keys()
 
     @property

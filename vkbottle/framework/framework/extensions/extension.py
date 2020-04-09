@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from vkbottle.utils import ContextInstanceMixin
+
 import typing
+
 
 class FromExtension:
     def __init__(self, attribute: str):

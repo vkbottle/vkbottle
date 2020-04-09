@@ -1,6 +1,5 @@
 from copy import copy
 from vkbottle.utils import logger
-import typing
 
 from vkbottle.types.message import Message
 
