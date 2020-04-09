@@ -14,8 +14,8 @@ from vkbottle import Bot, Message, keyboard_gen, VKError
 
 ```python
 # ...
-await bot.api.request("users.get", {"users_id": 1})
-await bot.api.users.get(users_id=1)
+await bot.api.request("users.get", {"user_ids": 1})
+await bot.api.users.get(user_ids=1)
 ```
 
 Получить API:
