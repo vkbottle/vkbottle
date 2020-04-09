@@ -49,3 +49,9 @@ class RequestsXtrMessage(BaseModel):
     user_id: int = None
 
 
+FriendStatus.update_forward_refs()
+FriendsList.update_forward_refs()
+MutualFriend.update_forward_refs()
+Requests.update_forward_refs()
+RequestsMutual.update_forward_refs()
+RequestsXtrMessage.update_forward_refs()

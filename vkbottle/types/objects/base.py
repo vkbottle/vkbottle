@@ -233,3 +233,22 @@ class UserId(BaseModel):
     user_id: int = None
 
 
+City.update_forward_refs()
+CommentsInfo.update_forward_refs()
+Country.update_forward_refs()
+Error.update_forward_refs()
+Geo.update_forward_refs()
+GeoCoordinates.update_forward_refs()
+Image.update_forward_refs()
+Likes.update_forward_refs()
+LikesInfo.update_forward_refs()
+MessageError.update_forward_refs()
+Object.update_forward_refs()
+ObjectCount.update_forward_refs()
+ObjectWithName.update_forward_refs()
+Place.update_forward_refs()
+RepostsInfo.update_forward_refs()
+RequestParam.update_forward_refs()
+Sticker.update_forward_refs()
+UploadServer.update_forward_refs()
+UserId.update_forward_refs()

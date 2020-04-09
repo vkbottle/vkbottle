@@ -215,3 +215,16 @@ class WallpostToId(BaseModel):
     to_id: int = None
 
 
+AppPost.update_forward_refs()
+AttachedNote.update_forward_refs()
+CommentAttachment.update_forward_refs()
+Geo.update_forward_refs()
+Graffiti.update_forward_refs()
+PostSource.update_forward_refs()
+PostedPhoto.update_forward_refs()
+Views.update_forward_refs()
+WallComment.update_forward_refs()
+Wallpost.update_forward_refs()
+WallpostAttachment.update_forward_refs()
+WallpostFull.update_forward_refs()
+WallpostToId.update_forward_refs()

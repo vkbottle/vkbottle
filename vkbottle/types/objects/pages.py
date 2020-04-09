@@ -50,3 +50,6 @@ class WikipageHistory(BaseModel):
     editor_name: str = None
 
 
+Wikipage.update_forward_refs()
+WikipageFull.update_forward_refs()
+WikipageHistory.update_forward_refs()

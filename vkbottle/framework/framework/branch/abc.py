@@ -43,7 +43,9 @@ class AbstractBranchGenerator(ABC):
         ...
 
     @abstractmethod
-    async def load(self, uid: int) -> typing.Tuple["AbstractBranchGenerator.Disposal", AbstractBranch]:
+    async def load(
+        self, uid: int
+    ) -> typing.Tuple["AbstractBranchGenerator.Disposal", AbstractBranch]:
         ...
 
     @abstractmethod

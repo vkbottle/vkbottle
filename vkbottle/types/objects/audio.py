@@ -16,3 +16,4 @@ class Audio(BaseModel):
     performer: str = None
 
 
+Audio.update_forward_refs()

@@ -2,6 +2,7 @@ from .extension import AbstractExtension
 import random
 from vkbottle.api.api.api import Api
 
+
 class StandardExtension(AbstractExtension):
     def random_id(self):
         return random.randint(-2e9, 2e9)

@@ -71,3 +71,10 @@ class Section(BaseModel):
     name: str = None
 
 
+Currency.update_forward_refs()
+MarketAlbum.update_forward_refs()
+MarketCategory.update_forward_refs()
+MarketItem.update_forward_refs()
+MarketItemFull.update_forward_refs()
+Price.update_forward_refs()
+Section.update_forward_refs()

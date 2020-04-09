@@ -105,3 +105,10 @@ class UploadLinkText(Enum):
     read = "read"
 
 
+PromoBlock.update_forward_refs()
+Replies.update_forward_refs()
+Story.update_forward_refs()
+StoryLink.update_forward_refs()
+StoryStats.update_forward_refs()
+StoryStatsStat.update_forward_refs()
+StoryVideo.update_forward_refs()

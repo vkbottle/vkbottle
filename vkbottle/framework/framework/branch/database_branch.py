@@ -32,9 +32,7 @@ class DatabaseBranch(AbstractBranchGenerator):
         pass
 
     async def from_function(
-            self,
-            func: typing.Callable,
-            branch_name: str = None,
+        self, func: typing.Callable, branch_name: str = None,
     ) -> typing.Tuple[AbstractBranch, ImmutableBranchData]:
         if not asyncio.iscoroutinefunction(func):
             raise BranchError("Branch functions should be async")
@@ -42,9 +40,12 @@ class DatabaseBranch(AbstractBranchGenerator):
         class FromFunctionDatabaseBranch(CoroutineBranch):
             key = branch_name or func.__name__
             data = {"call": func}
+
         return FromFunctionDatabaseBranch
 
-    def add_branch(self, branch: AbstractBranch, name: str = None, **context) -> AbstractBranch:
+    def add_branch(
+        self, branch: AbstractBranch, name: str = None, **context
+    ) -> AbstractBranch:
         self.names[name or branch.__name__] = branch
         return branch
 
@@ -59,14 +60,20 @@ class DatabaseBranch(AbstractBranchGenerator):
     async def add(self, uid: int, branch: Branch, **context):
         if isinstance(branch, str):
             if branch not in self.names:
-                raise BranchError(f"Branch {branch} hasn't yet been assigned with decorator")
+                raise BranchError(
+                    f"Branch {branch} hasn't yet been assigned with decorator"
+                )
         else:
             if branch not in self.names.values():
-                raise BranchError(f"Branch {branch.__name__} hasn't yet been assigned with decorator")
+                raise BranchError(
+                    f"Branch {branch.__name__} hasn't yet been assigned with decorator"
+                )
             branch = dict((v, k) for k, v in self.names.items())[branch]
         await self.set_user(uid, branch, json.dumps(context).decode(self.encoding))
 
-    async def load(self, uid: int) -> typing.Tuple["AbstractBranchGenerator.Disposal", AbstractBranch]:
+    async def load(
+        self, uid: int
+    ) -> typing.Tuple["AbstractBranchGenerator.Disposal", AbstractBranch]:
         branch_name, context = await self.get_user(uid)
         if isinstance(context, str):
             context = json.loads(context)
@@ -74,7 +81,9 @@ class DatabaseBranch(AbstractBranchGenerator):
         branch.context = context
         branch.key = branch_name
         if not branch:
-            raise BranchError(f"User {uid} is signed with undefined branch \"{branch_name}\"")
+            raise BranchError(
+                f'User {uid} is signed with undefined branch "{branch_name}"'
+            )
 
         disposal = dict(
             inspect.getmembers(branch, predicate=lambda obj: isinstance(obj, tuple))

@@ -16,3 +16,4 @@ class EventAttach(BaseModel):
     time: int = None
 
 
+EventAttach.update_forward_refs()

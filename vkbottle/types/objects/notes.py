@@ -28,3 +28,5 @@ class NoteComment(BaseModel):
     uid: int = None
 
 
+Note.update_forward_refs()
+NoteComment.update_forward_refs()

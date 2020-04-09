@@ -11,6 +11,8 @@ from examples.tortoise_models import UserState
 """
 Database branch manager itself
 """
+
+
 class SqliteBranch(DatabaseBranch):
     async def get_user(self, uid: int):
         """This method should return a tuple of two strings: branch name of the user and context"""

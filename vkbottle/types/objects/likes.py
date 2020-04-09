@@ -17,5 +17,3 @@ class Type(Enum):
     topic_comment = "topic_comment"
     market_comment = "market_comment"
     sitepage = "sitepage"
-
-

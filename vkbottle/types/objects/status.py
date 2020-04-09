@@ -10,3 +10,4 @@ class Status(BaseModel):
     text: str = None
 
 
+Status.update_forward_refs()

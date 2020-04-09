@@ -44,3 +44,6 @@ class Tag(BaseModel):
     name: str = None
 
 
+Bookmark.update_forward_refs()
+Page.update_forward_refs()
+Tag.update_forward_refs()

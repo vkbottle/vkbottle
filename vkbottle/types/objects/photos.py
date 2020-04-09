@@ -262,3 +262,21 @@ class WallUploadResponse(BaseModel):
     server: int = None
 
 
+CommentXtrPid.update_forward_refs()
+Image.update_forward_refs()
+MarketAlbumUploadResponse.update_forward_refs()
+MarketUploadResponse.update_forward_refs()
+MessageUploadResponse.update_forward_refs()
+OwnerUploadResponse.update_forward_refs()
+Photo.update_forward_refs()
+PhotoAlbum.update_forward_refs()
+PhotoAlbumFull.update_forward_refs()
+PhotoFull.update_forward_refs()
+PhotoFullXtrRealOffset.update_forward_refs()
+PhotoSizes.update_forward_refs()
+PhotoTag.update_forward_refs()
+PhotoUpload.update_forward_refs()
+PhotoUploadResponse.update_forward_refs()
+PhotoXtrRealOffset.update_forward_refs()
+PhotoXtrTagInfo.update_forward_refs()
+WallUploadResponse.update_forward_refs()

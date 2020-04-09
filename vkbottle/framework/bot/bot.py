@@ -24,6 +24,7 @@ from vkbottle.utils.json import USAGE
 
 try:
     import uvloop
+
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     uvloop = None
@@ -120,16 +121,16 @@ class Bot(HTTP, AsyncHandleManager):
         close, offset = False, 0
 
         while not close:
-            conversations = await self.api.messages.get_conversations(offset, 200, filter="unanswered")
+            conversations = await self.api.messages.get_conversations(
+                offset, 200, filter="unanswered"
+            )
             if offset == 0:
                 logger.info(f"Conversation count - {conversations.count}")
                 if conversations.count == 0:
                     return
             offset += 200
 
-            updates.extend(
-                [item.conversation.out_read for item in conversations.items]
-            )
+            updates.extend([item.conversation.out_read for item in conversations.items])
             if len(conversations.items) < 200:
                 close = True
 

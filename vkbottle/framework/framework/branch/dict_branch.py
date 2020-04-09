@@ -10,32 +10,33 @@ from vkbottle.api.exceptions import BranchError
 
 class DictBranch(AbstractBranchGenerator):
     def __init__(self):
-        self._meet_up: typing.Dict[str, typing.Tuple[AbstractBranch, ImmutableBranchData]] = {}
+        self._meet_up: typing.Dict[
+            str, typing.Tuple[AbstractBranch, ImmutableBranchData]
+        ] = {}
         self._branch_queue: typing.Dict[int, AbstractBranch] = {}
         self.generator = GeneratorType.DICT
 
     def from_function(
-            self,
-            func: typing.Callable,
-            branch_name: str = None,
+        self, func: typing.Callable, branch_name: str = None,
     ) -> typing.Tuple[AbstractBranch, ImmutableBranchData]:
         if not asyncio.iscoroutinefunction(func):
             raise BranchError("Branch functions should be async")
-        return CoroutineBranch, ImmutableBranchData(branch_name or func.__name__, call=func),
+        return (
+            CoroutineBranch,
+            ImmutableBranchData(branch_name or func.__name__, call=func),
+        )
 
-    def simple_branch(
-            self,
-            branch_name: str = None
-    ):
+    def simple_branch(self, branch_name: str = None):
         def decorator(func: typing.Callable):
-            self._meet_up[branch_name or func.__name__] = self.from_function(func, branch_name)
+            self._meet_up[branch_name or func.__name__] = self.from_function(
+                func, branch_name
+            )
             return func
+
         return decorator
 
     def add_branch(
-            self,
-            branch: typing.Callable,
-            name: str = None,
+        self, branch: typing.Callable, name: str = None,
     ):
         if inspect.isclass(type(branch)):
             self._meet_up[name or branch.__name__] = (branch, ImmutableBranchData(name))
@@ -50,8 +51,7 @@ class DictBranch(AbstractBranchGenerator):
             )
 
     def cls_branch(
-            self,
-            branch_name: str = None,
+        self, branch_name: str = None,
     ):
         def decorator(cls: typing.ClassVar):
             self._meet_up[branch_name or cls.__name__] = (
@@ -110,8 +110,7 @@ class DictBranch(AbstractBranchGenerator):
         return self._branch_queue[uid]
 
     async def load(
-        self,
-        uid: int,
+        self, uid: int,
     ) -> typing.Tuple["AbstractBranchGenerator.Disposal", AbstractBranch]:
         if uid in self._branch_queue:
             branch = self._branch_queue.get(uid)
@@ -121,9 +120,6 @@ class DictBranch(AbstractBranchGenerator):
             disposal["default"] = [branch.__class__.branch, []]
             return disposal, branch
 
-    async def exit(
-            self,
-            uid: int,
-    ) -> None:
+    async def exit(self, uid: int,) -> None:
         if uid in self._branch_queue:
             del self._branch_queue[uid]

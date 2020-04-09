@@ -44,3 +44,7 @@ class Subscription(BaseModel):
     update_time: int = None
 
 
+Amount.update_forward_refs()
+AmountItem.update_forward_refs()
+Order.update_forward_refs()
+Subscription.update_forward_refs()

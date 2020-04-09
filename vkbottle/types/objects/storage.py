@@ -9,3 +9,4 @@ class Value(BaseModel):
     value: str = None
 
 
+Value.update_forward_refs()

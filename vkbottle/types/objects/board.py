@@ -44,3 +44,6 @@ class TopicPoll(BaseModel):
     votes: str = None
 
 
+Topic.update_forward_refs()
+TopicComment.update_forward_refs()
+TopicPoll.update_forward_refs()

@@ -180,9 +180,9 @@ class User(HTTP):
     async def expand_data(self, code: int, data):
         if code in range(6):
             data.update(
-                (
-                    await self.api.messages.get_by_id(message_ids=data["message_id"])
-                ).items[0].dict()
+                (await self.api.messages.get_by_id(message_ids=data["message_id"]))
+                .items[0]
+                .dict()
             )
         return data
 

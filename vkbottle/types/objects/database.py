@@ -38,3 +38,9 @@ class University(BaseModel):
     title: str = None
 
 
+City.update_forward_refs()
+Faculty.update_forward_refs()
+Region.update_forward_refs()
+School.update_forward_refs()
+Station.update_forward_refs()
+University.update_forward_refs()

@@ -57,3 +57,10 @@ class SendMessageItem(BaseModel):
     error: "SendMessageError" = None
 
 
+Feedback.update_forward_refs()
+Notification.update_forward_refs()
+NotificationParent.update_forward_refs()
+NotificationsComment.update_forward_refs()
+Reply.update_forward_refs()
+SendMessageError.update_forward_refs()
+SendMessageItem.update_forward_refs()

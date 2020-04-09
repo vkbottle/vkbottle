@@ -82,3 +82,14 @@ class StatsSexAge(BaseModel):
     male: int = None
 
 
+DomainResolved.update_forward_refs()
+LastShortenedLink.update_forward_refs()
+LinkChecked.update_forward_refs()
+LinkStats.update_forward_refs()
+LinkStatsExtended.update_forward_refs()
+ShortLink.update_forward_refs()
+Stats.update_forward_refs()
+StatsCity.update_forward_refs()
+StatsCountry.update_forward_refs()
+StatsExtended.update_forward_refs()
+StatsSexAge.update_forward_refs()

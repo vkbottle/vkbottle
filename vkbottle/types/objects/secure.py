@@ -33,3 +33,7 @@ class Transaction(BaseModel):
     votes: int = None
 
 
+Level.update_forward_refs()
+SmsNotification.update_forward_refs()
+TokenChecked.update_forward_refs()
+Transaction.update_forward_refs()

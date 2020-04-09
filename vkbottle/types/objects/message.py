@@ -13,3 +13,4 @@ class ChatPreview(BaseModel):
     title: str = None
 
 
+ChatPreview.update_forward_refs()

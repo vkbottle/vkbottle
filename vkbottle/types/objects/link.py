@@ -54,3 +54,10 @@ class LinkRating(BaseModel):
     stars: int = None
 
 
+Link.update_forward_refs()
+LinkApplication.update_forward_refs()
+LinkApplicationStore.update_forward_refs()
+LinkButton.update_forward_refs()
+LinkButtonAction.update_forward_refs()
+LinkProduct.update_forward_refs()
+LinkRating.update_forward_refs()

@@ -19,5 +19,3 @@ class Fields(Enum):
     timetable = "timetable"
     phone = "phone"
     time_offset = "time_offset"
-
-

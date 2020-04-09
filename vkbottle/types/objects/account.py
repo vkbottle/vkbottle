@@ -130,3 +130,13 @@ class UserSettingsInterests(BaseModel):
     about: "UserSettingsInterest" = None
 
 
+AccountCounters.update_forward_refs()
+Info.update_forward_refs()
+NameRequest.update_forward_refs()
+Offer.update_forward_refs()
+PushConversations.update_forward_refs()
+PushConversationsItem.update_forward_refs()
+PushParams.update_forward_refs()
+PushSettings.update_forward_refs()
+UserSettingsInterest.update_forward_refs()
+UserSettingsInterests.update_forward_refs()

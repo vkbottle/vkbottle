@@ -16,3 +16,4 @@ class PrettyCard(BaseModel):
     title: str = None
 
 
+PrettyCard.update_forward_refs()

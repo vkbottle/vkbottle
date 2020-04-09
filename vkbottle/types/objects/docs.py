@@ -51,3 +51,9 @@ class DocUploadResponse(BaseModel):
     file: str = None
 
 
+Doc.update_forward_refs()
+DocPreview.update_forward_refs()
+DocPreviewPhoto.update_forward_refs()
+DocPreviewVideo.update_forward_refs()
+DocTypes.update_forward_refs()
+DocUploadResponse.update_forward_refs()

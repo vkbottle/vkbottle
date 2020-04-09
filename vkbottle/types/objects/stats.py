@@ -72,3 +72,11 @@ class WallpostStat(BaseModel):
     unsubscribe: int = None
 
 
+Activity.update_forward_refs()
+City.update_forward_refs()
+Country.update_forward_refs()
+Period.update_forward_refs()
+Reach.update_forward_refs()
+SexAge.update_forward_refs()
+Views.update_forward_refs()
+WallpostStat.update_forward_refs()

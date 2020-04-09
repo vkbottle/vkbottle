@@ -58,3 +58,9 @@ class Start(BaseModel):
     vk_sid: str = None
 
 
+Checked.update_forward_refs()
+Complete.update_forward_refs()
+Entry.update_forward_refs()
+Lead.update_forward_refs()
+LeadDays.update_forward_refs()
+Start.update_forward_refs()

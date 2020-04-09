@@ -10,9 +10,10 @@ from vkbottle.framework.framework import FromExtension
 
 # https://vk.com/dev/objects/message
 
+
 def sep_bytes(text: str, max_bytes: int = 4096) -> list:
     text = text.encode("utf-8")
-    separation = [text[i:i + max_bytes] for i in range(0, len(text), max_bytes)]
+    separation = [text[i : i + max_bytes] for i in range(0, len(text), max_bytes)]
     return list(map(bytes.decode, separation)) if len(separation) else [""]
 
 
@@ -81,25 +82,25 @@ class Message(BaseModel, GetApi):
         return self.peer_id - 2000000000
 
     async def reply(
-            self,
-            message: str = None,
-            attachment: str = None,
-            user_id: int = None,
-            domain: str = None,
-            chat_id: int = None,
-            random_id: int = FromExtension("random_id"),
-            user_ids: typing.List[int] = None,
-            lat: typing.Any = None,
-            long: typing.Any = None,
-            forward_messages: typing.List[int] = None,
-            forward: str = None,
-            sticker_id: int = None,
-            group_id: int = None,
-            keyboard: str = None,
-            payload: str = None,
-            dont_parse_links: bool = None,
-            disable_mentions: bool = None,
-        ):
+        self,
+        message: str = None,
+        attachment: str = None,
+        user_id: int = None,
+        domain: str = None,
+        chat_id: int = None,
+        random_id: int = FromExtension("random_id"),
+        user_ids: typing.List[int] = None,
+        lat: typing.Any = None,
+        long: typing.Any = None,
+        forward_messages: typing.List[int] = None,
+        forward: str = None,
+        sticker_id: int = None,
+        group_id: int = None,
+        keyboard: str = None,
+        payload: str = None,
+        dont_parse_links: bool = None,
+        disable_mentions: bool = None,
+    ):
 
         if message is not None:
             message = str(message)
@@ -111,36 +112,34 @@ class Message(BaseModel, GetApi):
         )
 
     async def __call__(
-            self,
-            message: str = None,
-            attachment: str = None,
-            user_id: int = None,
-            domain: str = None,
-            chat_id: int = None,
-            random_id: int = FromExtension("random_id"),
-            user_ids: typing.List[int] = None,
-            lat: typing.Any = None,
-            long: typing.Any = None,
-            reply_to: int = None,
-            forward_messages: typing.List[int] = None,
-            forward: str = None,
-            sticker_id: int = None,
-            group_id: int = None,
-            keyboard: str = None,
-            payload: str = None,
-            dont_parse_links: bool = None,
-            disable_mentions: bool = None,
+        self,
+        message: str = None,
+        attachment: str = None,
+        user_id: int = None,
+        domain: str = None,
+        chat_id: int = None,
+        random_id: int = FromExtension("random_id"),
+        user_ids: typing.List[int] = None,
+        lat: typing.Any = None,
+        long: typing.Any = None,
+        reply_to: int = None,
+        forward_messages: typing.List[int] = None,
+        forward: str = None,
+        sticker_id: int = None,
+        group_id: int = None,
+        keyboard: str = None,
+        payload: str = None,
+        dont_parse_links: bool = None,
+        disable_mentions: bool = None,
     ):
         if not message:
             return await self.api.messages.send(
-                **self.get_params(locals()),
-                peer_id=self.peer_id,
+                **self.get_params(locals()), peer_id=self.peer_id,
             )
         _m = []
         for message in sep_bytes(str(message if message is not None else "")):
             _mid = await self.api.messages.send(
-                **self.get_params(locals()),
-                peer_id=self.peer_id,
+                **self.get_params(locals()), peer_id=self.peer_id,
             )
             _m.append(_mid)
         return _m if len(_m) > 1 else _m[0]

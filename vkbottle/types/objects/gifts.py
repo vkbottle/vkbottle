@@ -27,3 +27,5 @@ class Layout(BaseModel):
     thumb_96: str = None
 
 
+Gift.update_forward_refs()
+Layout.update_forward_refs()

@@ -93,3 +93,9 @@ class VideoImage(base.Image):
     with_padding: "base.BoolInt" = None
 
 
+SaveResult.update_forward_refs()
+Video.update_forward_refs()
+VideoAlbumFull.update_forward_refs()
+VideoFiles.update_forward_refs()
+VideoFull.update_forward_refs()
+VideoImage.update_forward_refs()

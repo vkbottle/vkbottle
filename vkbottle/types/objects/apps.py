@@ -64,3 +64,7 @@ class Scope(BaseModel):
     title: str = None
 
 
+App.update_forward_refs()
+AppMin.update_forward_refs()
+Leaderboard.update_forward_refs()
+Scope.update_forward_refs()

@@ -10,3 +10,4 @@ class Error(BaseModel):
     redirect_uri: str = None
 
 
+Error.update_forward_refs()

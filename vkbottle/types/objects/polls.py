@@ -32,3 +32,7 @@ class VotersUsers(BaseModel):
     items: typing.List = None
 
 
+Answer.update_forward_refs()
+Poll.update_forward_refs()
+Voters.update_forward_refs()
+VotersUsers.update_forward_refs()

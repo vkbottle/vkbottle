@@ -31,3 +31,4 @@ class HintType(Enum):
     vk_app = "vk_app"
 
 
+Hint.update_forward_refs()

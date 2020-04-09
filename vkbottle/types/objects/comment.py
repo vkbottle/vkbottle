@@ -12,3 +12,4 @@ class Thread(BaseModel):
     show_reply_button: bool = None
 
 
+Thread.update_forward_refs()

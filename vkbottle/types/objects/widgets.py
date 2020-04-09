@@ -66,3 +66,9 @@ class WidgetPage(BaseModel):
     url: str = None
 
 
+CommentMedia.update_forward_refs()
+CommentReplies.update_forward_refs()
+CommentRepliesItem.update_forward_refs()
+WidgetComment.update_forward_refs()
+WidgetLikes.update_forward_refs()
+WidgetPage.update_forward_refs()
