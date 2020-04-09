@@ -7,14 +7,12 @@ from .standart_branch import ImmutableBranchData
 
 from vkbottle.api.exceptions import BranchError
 
-BRANCH_DATA = ".BRANCHES.txt"
-
 
 class DictBranch(AbstractBranchGenerator):
     def __init__(self):
         self._meet_up: typing.Dict[str, typing.Tuple[AbstractBranch, ImmutableBranchData]] = {}
         self._branch_queue: typing.Dict[int, AbstractBranch] = {}
-        self.generator = GeneratorType.DATABASE
+        self.generator = GeneratorType.DICT
 
     def from_function(
             self,
