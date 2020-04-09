@@ -11,6 +11,7 @@ from . import gifts
 from . import groups
 from . import leads
 from . import likes
+from . import link
 from . import market
 from . import messages
 from . import newsfeed

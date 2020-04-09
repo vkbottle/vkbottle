@@ -56,7 +56,8 @@ class StoredBranch(ClsBranch):
     async def branch(self, ans: Message, *args):
         if "word" not in self.context:
             return "Напиши /говорить <слово> чтобы оно сохранилось у меня в контексте!"
-        return f"Твое слово: {self.context['word']}"
+        user = await bot.api.users.get(ans.from_id)
+        return f"{user[0].first_name}, твое слово: {self.context['word']}"
 
 
 @bot.on.message(commands=["start"])
