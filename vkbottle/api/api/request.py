@@ -3,6 +3,7 @@ from vkbottle.api.exceptions import VKError
 from vkbottle.http import HTTPRequest
 from vkbottle.utils import logger
 from .token import AbstractTokenGenerator
+
 import time
 import asyncio
 
