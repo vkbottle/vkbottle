@@ -1,8 +1,8 @@
 import typing
 import re
+
 from inspect import signature
 from vkbottle.utils import logger
-
 from vbml import Patcher, Pattern
 
 from .events import Event
@@ -175,11 +175,10 @@ class MessageHandler:
     def add_rules(self, rules: typing.List[AbstractRule], func: typing.Callable):
         current = list()
         for rule in self.default_rules + rules:
-            if isinstance(rule, AbstractFilter):
-                continue
             if isinstance(rule, str):
                 rule = VBMLRule(rule)
-            rule.create(func)
+            if not isinstance(rule, AbstractFilter):
+                rule.create(func)
             current.append(rule)
 
         self.rules.append(current)
