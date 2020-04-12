@@ -18,7 +18,12 @@ await bot.api.request("users.get", {"user_ids": 1})
 await bot.api.users.get(user_ids=1)
 ```
 
-Получить API:
+**ВСЕ МЕТОДЫ НУЖНО ВЫЗЫВАТЬ СНЕЙК КЕЙСОМ:**
+
+~~messages.getConversationsById~~ **нет**  
+messages.get_conversations_by_id **да**  
+
+Получить API как ContextVar:
 
 ```python
 from vkbottle.api import Api
