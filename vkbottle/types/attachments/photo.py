@@ -16,6 +16,7 @@ class Photo(BaseModel):
     sizes: List[PhotoSizes] = []
     width: int = None
     height: int = None
+    access_key: str = None
 
 
 class PostedPhoto(BaseModel):
