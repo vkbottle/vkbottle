@@ -12,7 +12,7 @@ class AudioMessage(BaseModel):
     link_mp3: str = None
     link_ogg: str = None
     owner_id: int = None
-    waveform: typing.List = None
+    waveform: typing.List[int] = None
 
 
 class Chat(BaseModel):
@@ -26,7 +26,7 @@ class Chat(BaseModel):
     push_settings: "ChatPushSettings" = None
     title: str = None
     type: str = None
-    users: typing.List = None
+    users: typing.List[int] = None
 
 
 class ChatFull(BaseModel):
@@ -40,7 +40,7 @@ class ChatFull(BaseModel):
     push_settings: "ChatPushSettings" = None
     title: str = None
     type: str = None
-    users: typing.List = None
+    users: typing.List[int] = None
 
 
 class ChatPushSettings(BaseModel):
@@ -66,7 +66,7 @@ class Conversation(BaseModel):
     unanswered: bool = None
     special_service_type: str = None
     message_request: str = None
-    mentions: typing.List = None
+    mentions: typing.List[int] = None
     current_keyboard: "Keyboard" = None
 
 
@@ -100,11 +100,11 @@ class ConversationWithMessage(BaseModel):
 
 
 class ForeignMessage(BaseModel):
-    attachments: typing.List = None
+    attachments: typing.List["MessageAttachment"] = None
     conversation_message_id: int = None
     date: int = None
     from_id: int = None
-    fwd_messages: typing.List = None
+    fwd_messages: typing.List["Message"] = None
     geo: "base.Geo" = None
     id: int = None
     peer_id: int = None
@@ -157,7 +157,7 @@ class HistoryMessageAttachmentType(Enum):
 
 class Keyboard(BaseModel):
     author_id: int = None
-    buttons: typing.List = None
+    buttons: typing.List[dict] = None
     one_time: bool = None
     inline: bool = None
 
@@ -183,7 +183,7 @@ class LastActivity(BaseModel):
 
 class LongpollMessages(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List["Message"] = None
 
 
 class LongpollParams(BaseModel):
@@ -196,12 +196,12 @@ class LongpollParams(BaseModel):
 class Message(BaseModel):
     action: "MessageAction" = None
     admin_author_id: int = None
-    attachments: typing.List = None
+    attachments: typing.List["MessageAttachment"] = None
     conversation_message_id: int = None
     date: int = None
     deleted: "base.BoolInt" = None
     from_id: int = None
-    fwd_messages: typing.List = None
+    fwd_messages: typing.List["Message"] = None
     geo: "base.Geo" = None
     id: int = None
     important: bool = None
@@ -282,11 +282,11 @@ class MessageAttachmentType(Enum):
 
 
 class PinnedMessage(BaseModel):
-    attachments: typing.List = None
+    attachments: typing.List[MessageAttachment] = None
     conversation_message_id: int = None
     date: int = None
     from_id: int = None
-    fwd_messages: typing.List = None
+    fwd_messages: typing.List[Message] = None
     geo: "base.Geo" = None
     id: int = None
     peer_id: int = None

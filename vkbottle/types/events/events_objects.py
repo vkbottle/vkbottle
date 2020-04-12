@@ -1,16 +1,35 @@
 from vkbottle.types.base import BaseModel
 
-from vkbottle.types.wall_comment import WallComment
-from vkbottle.types.wall_post import WallPost
-from vkbottle.types.attachments.topic import TopicComment
-
-from vkbottle.types.additional import JoinType, BlockReason, AdminLevel
-from vkbottle.types.attachments import Photo
+from vkbottle.types.objects.wall import WallComment
+from vkbottle.types.objects.wall import Wallpost
+from vkbottle.types.objects.board import TopicComment
+from vkbottle.types.objects.photos import Photo
 
 from typing import Any
-import random
+from enum import Enum, IntEnum
 
-from enum import Enum
+
+class BlockReason(IntEnum):
+    other = 0
+    spam = 1
+    verbal_abuse = 2
+    strong_language = 3
+    irrelevant_messages = 4
+
+
+class JoinType(Enum):
+    join = "join"
+    unsure = "unsure"
+    accepted = "accepted"
+    approved = "approved"
+    request = "request"
+
+
+class AdminLevel(IntEnum):
+    no_role = 0
+    moderator = 1
+    editor = 2
+    administrator = 3
 
 
 class MessageAllow(BaseModel):
@@ -18,52 +37,12 @@ class MessageAllow(BaseModel):
     key: str = None
     api: list = None
 
-    async def __call__(
-        self,
-        message: str = None,
-        attachment: str = None,
-        keyboard: dict = None,
-        **params
-    ):
-        return await self.api[0].request(
-            "messages",
-            "send",
-            dict(
-                message=message,
-                peer_id=self.user_id,
-                attachment=attachment,
-                keyboard=keyboard,
-                random_id=random.randint(-2e9, 2e9),
-                **params
-            ),
-        )
-
 
 class MessageTypingState(BaseModel):
     state: str = None
     from_id: int = None
     to_id: int = None
     api: list = None
-
-    async def __call__(
-        self,
-        message: str = None,
-        attachment: str = None,
-        keyboard: dict = None,
-        **params
-    ):
-        return await self.api[0].request(
-            "messages",
-            "send",
-            dict(
-                message=message,
-                peer_id=self.from_id,
-                attachment=attachment,
-                keyboard=keyboard,
-                random_id=random.randint(-2e9, 2e9),
-                **params
-            ),
-        )
 
 
 class MessageDeny(BaseModel):
@@ -94,7 +73,7 @@ class VideoCommentDelete(BaseModel):
     video_id: int = None
 
 
-class WallPostNew(WallPost):
+class WallPostNew(Wallpost):
     postponed_id: int = None
 
 

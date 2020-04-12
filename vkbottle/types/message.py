@@ -1,14 +1,9 @@
 import typing
 from enum import Enum
-
-from .attachments import Attachment
-from .attachments import Geo
-from .base import BaseModel
+from .objects.messages import Message as MessageType
+from vkbottle.framework.framework.extensions import FromExtension
 from vkbottle.api import Api
 from datetime import datetime
-from vkbottle.framework.framework import FromExtension
-
-# https://vk.com/dev/objects/message
 
 
 def sep_bytes(text: str, max_bytes: int = 4096) -> list:
@@ -23,59 +18,7 @@ class GetApi:
         return Api.get_current()
 
 
-class Action(Enum):
-    chat_photo_update = "chat_photo_update"
-    chat_photo_remove = "chat_photo_remove"
-    chat_create = "chat_create"
-    chat_title_update = "chat_title_update"
-    chat_invite_user = "chat_invite_user"
-    chat_kick_user = "chat_kick_user"
-    chat_pin_message = "chat_pin_message"
-    chat_unpin_message = "chat_unpin_message"
-    chat_invite_user_by_link = "chat_invite_user_by_link"
-
-
-class MessageActionPhoto(BaseModel):
-    photo_50: str = None
-    photo_100: str = None
-    photo_200: str = None
-
-
-class MessageAction(BaseModel):
-    type: Action = None
-    member_id: int = None
-    text: str = None
-    email: str = None
-    photo: MessageActionPhoto = None
-
-
-class ClientInfo(BaseModel):
-    button_actions: list = None
-    keyboard: bool = None
-    inline_keyboard: bool = None
-    carousel: bool = None
-    lang_id: int = None
-
-
-class Message(BaseModel, GetApi):
-    id: int = None
-    date: int = None
-    peer_id: int = None
-    from_id: int = None
-    text: str = None
-    random_id: int = None
-    ref: str = None
-    ref_source: str = None
-    attachments: typing.List[Attachment] = []
-    important: bool = None
-    geo: Geo = None
-    payload: str = None
-    keyboard: typing.Union[str, dict] = None
-    action: MessageAction = None
-    fwd_messages: typing.List["Message"] = []
-    reply_message: "Message" = None
-    client_info: ClientInfo = None
-    conversation_message_id: int = None
+class Message(MessageType, GetApi):
 
     @property
     def chat_id(self) -> int:

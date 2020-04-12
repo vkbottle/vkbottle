@@ -1,6 +1,7 @@
 from .base import BaseModel
-from .attachments import Geo
-from .message import sep_bytes, MessageAction
+from .message import sep_bytes
+from .objects.messages import MessageAction
+from .objects.base import Geo
 from ..api.api import UserApi
 import random
 import typing

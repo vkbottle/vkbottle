@@ -28,9 +28,9 @@ from vkbottle.types.events.events_objects import (
 from vkbottle.types.events.events_list import EventList
 from vkbottle.types.message import Message
 from vkbottle.types.vkpay import VKPayTransaction, AppPayload
-from vkbottle.types.attachments.photo import Photo
-from vkbottle.types.attachments.audio import Audio
-from vkbottle.types.attachments.video import Video
+from vkbottle.types.objects.photos import Photo
+from vkbottle.types.objects.audio import Audio
+from vkbottle.types.objects.video import Video
 from vkbottle.framework.framework.rule import EventRule
 
 

@@ -10,7 +10,8 @@ bot = Bot(os.environ["TOKEN"], debug="DEBUG")
 @bot.middleware.middleware_handler()
 class UserCheck(Middleware):
     async def middleware(self, message: Message):
-        return message.from_id > 0
+        if not message.from_id > 0:
+            return False
 
 
 @bot.on.message_handler(
