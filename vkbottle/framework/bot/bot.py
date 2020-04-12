@@ -14,6 +14,7 @@ from vkbottle.framework.framework.extensions.standard import StandardExtension
 from vkbottle.framework._status import BotStatus, LoggerLevel
 from vkbottle.framework.framework.branch import DictBranch
 from vkbottle.framework.framework.branch.abc import AbstractBranchGenerator
+from vkbottle.framework.bot.blueprint import Blueprint
 from vkbottle.framework.bot.processor import AsyncHandleManager
 from vkbottle.framework.bot.builtin import DefaultValidators, DEFAULT_WAIT
 from vkbottle.api import Api, request
@@ -31,6 +32,7 @@ except ImportError:
 
 
 Token = typing.Union[str, typing.List[str]]
+AnyBot = typing.Union["Bot", Blueprint]
 
 
 class Bot(HTTP, AsyncHandleManager):
@@ -154,15 +156,23 @@ class Bot(HTTP, AsyncHandleManager):
             except VKError:
                 continue
 
-    def dispatch(self, ext: "Bot"):
+    async def dispatch(self, bot: AnyBot):
         """
         Concatenate handlers to current bot object
-        :param ext:
+        :param bot:
         :return:
         """
-        self.on.concatenate(ext.on)
-        self.error_handler.update(ext.error_handler.processors)
+        self.on.concatenate(bot.on)
+        self.error_handler.update(bot.error_handler.processors)
+        for branch_name, disposal in (await bot.branch.branches).items():
+            self.branch.add_branch(disposal[0], name=branch_name)
         logger.debug("Bot has been successfully dispatched")
+
+    def set_blueprints(self, *blueprints: Blueprint):
+        for blueprint in blueprints:
+            blueprint.create(familiar=(self.branch, self.extension, self.api))
+            self.loop.create_task(self.dispatch(blueprint))
+        logger.debug("Blueprints has successfully loaded")
 
     @staticmethod
     def get_id_by_token(token: str):

@@ -35,7 +35,7 @@ class AbstractBranchGenerator(ABC):
 
     @property
     @abstractmethod
-    async def branches(self) -> typing.Dict[str, AbstractBranch]:
+    async def branches(self) -> typing.Dict[str, typing.Tuple[AbstractBranch, ...]]:
         ...
 
     @abstractmethod
