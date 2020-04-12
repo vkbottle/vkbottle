@@ -1,9 +1,6 @@
 from vkbottle import Blueprint, Message
 
-bp = Blueprint(
-    name="greetings",
-    description="It was created to welcome users"
-)
+bp = Blueprint(name="greetings", description="It was created to welcome users")
 
 
 @bp.on.message_handler(text="Hello!")
