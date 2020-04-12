@@ -1,5 +1,7 @@
 from vkbottle import Bot, Message
-import os, random, string, asyncio
+import os
+import random
+import string
 from asyncio import sleep
 
 # Add variable TOKEN to your env variables
@@ -11,7 +13,7 @@ TIMES = 0
 def random_string(length=10):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
-    return "".join(random.choice(letters) for i in range(length))
+    return "".join(random.choice(letters) for _ in range(length))
 
 
 async def stress(ans: Message):

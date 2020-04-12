@@ -14,6 +14,7 @@ from vkbottle.framework.framework.extensions.standard import StandardExtension
 from vkbottle.framework._status import BotStatus, LoggerLevel
 from vkbottle.framework.framework.branch import DictBranch
 from vkbottle.framework.framework.branch.abc import AbstractBranchGenerator
+from vkbottle.framework.bot.blueprint import Blueprint
 from vkbottle.framework.bot.processor import AsyncHandleManager
 from vkbottle.framework.bot.builtin import DefaultValidators, DEFAULT_WAIT
 from vkbottle.api import Api, request
@@ -163,6 +164,11 @@ class Bot(HTTP, AsyncHandleManager):
         self.on.concatenate(ext.on)
         self.error_handler.update(ext.error_handler.processors)
         logger.debug("Bot has been successfully dispatched")
+
+    def set_blueprints(self, *blueprints: Blueprint):
+        for blueprint in blueprints:
+            self.on.concatenate(blueprint.on)
+        logger.debug("Blueprints has successfully loaded")
 
     @staticmethod
     def get_id_by_token(token: str):
@@ -400,6 +406,10 @@ class Bot(HTTP, AsyncHandleManager):
     @property
     def patcher(self):
         return Patcher.get_current()
+
+    @property
+    def ovh_root(self):
+        return "Subscribe -> vk.com/ovh_root"
 
     @property
     def eee(self):
