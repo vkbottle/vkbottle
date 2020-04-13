@@ -9,6 +9,7 @@ import vbml
 from vkbottle.framework._status import LoggerLevel
 from vkbottle.api import UserApi, VKError, request
 from vkbottle.framework.framework.handler import UserHandler
+from vkbottle.framework.user.blueprint import UserBlueprint
 from vkbottle.http import HTTP
 from vkbottle.utils import logger
 
@@ -77,6 +78,11 @@ class User(HTTP):
         if "error" in response:
             raise VKError("Token is invalid")
         return response["response"][0]["id"]
+
+    def set_blueprints(self, *blueprints: UserBlueprint):
+        for blueprint in blueprints:
+            self.on.concatenate(blueprint.on)
+        logger.debug("Blueprints have successfully loaded")
 
     async def get_server(self):
         """
@@ -166,7 +172,7 @@ class User(HTTP):
 
                     task = await rule.call(data, *args, **kwargs)
 
-                    if task is not None:
+                    if task:
                         await data(str(task))
 
     def run_polling(self):

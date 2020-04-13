@@ -1,4 +1,5 @@
-from .framework import Bot, User, Blueprint
+from .framework import Bot, Blueprint
+from .framework import User, UserBlueprint
 from .framework.framework import branch
 from .types.message import Message
 from .utils.task import TaskManager

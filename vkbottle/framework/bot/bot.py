@@ -172,7 +172,7 @@ class Bot(HTTP, AsyncHandleManager):
         for blueprint in blueprints:
             blueprint.create(familiar=(self.branch, self.extension, self.api))
             self.loop.create_task(self.dispatch(blueprint))
-        logger.debug("Blueprints has successfully loaded")
+        logger.debug("Blueprints have successfully loaded")
 
     @staticmethod
     def get_id_by_token(token: str):
