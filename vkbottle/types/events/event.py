@@ -4,9 +4,9 @@ from vkbottle.types.base import BaseModel
 from . import events_objects as EventsObjects
 
 from vkbottle.types.message import Message
-from vkbottle.types.attachments import Photo, Audio, Video
+from vkbottle.types import objects
 
-from vkbottle.types.wall_post import WallPost
+from vkbottle.types.objects.wall import Wallpost
 
 
 # https://vk.com/dev/groups_events
@@ -34,7 +34,7 @@ class MessageDeny(BaseEvent):
 
 
 class PhotoNew(BaseEvent):
-    object: Photo = None
+    object: objects.photos.Photo = None
 
 
 class PhotoCommentNew(BaseEvent):
@@ -54,11 +54,11 @@ class PhotoCommentDelete(BaseEvent):
 
 
 class AudioNew(BaseEvent):
-    object: Audio = None
+    object: objects.audio.Audio = None
 
 
 class VideoNew(BaseEvent):
-    object: Video = None
+    object: objects.video.Video = None
 
 
 class VideoCommentNew(BaseEvent):
@@ -78,7 +78,7 @@ class VideoCommentDelete(BaseEvent):
 
 
 class WallPostNew(BaseEvent):
-    object: WallPost = None
+    object: Wallpost = None
 
 
 class WallRepost(WallPostNew):

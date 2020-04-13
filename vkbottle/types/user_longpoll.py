@@ -19,6 +19,7 @@ class Message(BaseModel):
     random_id: int = None
     # from messages.getById
     id: int = None
+    conversation_message_id: int = None
     from_id: int = None
     date: int = None
     out: int = None

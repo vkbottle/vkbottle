@@ -49,7 +49,10 @@ class User(HTTP):
         )
         self.on: UserHandler = UserHandler()
 
-        self.logger = LoggerLevel("INFO" if debug else "ERROR")
+        if isinstance(debug, bool):
+            debug = "INFO" if debug else "ERROR"
+
+        self.logger = LoggerLevel(debug)
         logger.remove()
         logger.add(
             sys.stderr,
@@ -155,6 +158,7 @@ class User(HTTP):
                 )
 
     async def emulate(self, event: dict):
+        logger.debug(f"Response: {event}")
         for update in event.get("updates", []):
             update_code, update_fields = update[0], update[1:]
 

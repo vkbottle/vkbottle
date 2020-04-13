@@ -92,7 +92,7 @@ class GetConversationMembersModel(BaseModel):
 
 class GetConversationsById(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List["Conversation"] = None
 
 
 class GetConversationsByIdModel(BaseModel):
