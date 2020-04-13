@@ -1,4 +1,4 @@
-from vkbottle.user import User, types
+from vkbottle.user import User, Message
 from vkbottle.api.api.builtin import LimitedTokenGenerator
 import os
 
@@ -17,7 +17,7 @@ user.api.token_generator = generator
 
 
 @user.on.message_new()
-async def new_message(ans: types.Message):
+async def new_message(ans: Message):
     if ans.from_id == user.user_id:
         await ans(ans.text)
 
