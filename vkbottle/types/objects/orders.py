@@ -5,7 +5,7 @@ from vkbottle.types import objects
 
 
 class Amount(BaseModel):
-    amounts: typing.List = None
+    amounts: typing.List[dict] = None
     currency: str = None
 
 

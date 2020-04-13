@@ -21,7 +21,7 @@ class CommentMediaType(Enum):
 class CommentReplies(BaseModel):
     can_post: "base.BoolInt" = None
     count: int = None
-    replies: typing.List = None
+    replies: typing.List[dict] = None
 
 
 class CommentRepliesItem(BaseModel):
@@ -34,7 +34,7 @@ class CommentRepliesItem(BaseModel):
 
 
 class WidgetComment(BaseModel):
-    attachments: typing.List = None
+    attachments: typing.List[dict] = None
     can_delete: "base.BoolInt" = None
     comments: "CommentReplies" = None
     date: int = None

@@ -25,7 +25,7 @@ class Topic(BaseModel):
 
 
 class TopicComment(BaseModel):
-    attachments: typing.List = None
+    attachments: typing.List[dict] = None
     date: int = None
     from_id: int = None
     id: int = None
@@ -35,7 +35,7 @@ class TopicComment(BaseModel):
 
 class TopicPoll(BaseModel):
     answer_id: int = None
-    answers: typing.List = None
+    answers: typing.List[dict] = None
     created: int = None
     is_closed: "base.BoolInt" = None
     owner_id: int = None

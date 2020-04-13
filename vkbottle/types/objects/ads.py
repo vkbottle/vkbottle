@@ -112,7 +112,7 @@ class CampaignType(Enum):
 class Category(BaseModel):
     id: int = None
     name: str = None
-    subcategories: typing.List = None
+    subcategories: typing.List[int] = None
 
 
 class Client(BaseModel):
@@ -168,13 +168,13 @@ class DemoStats(BaseModel):
 
 
 class DemostatsFormat(BaseModel):
-    age: typing.List = None
-    cities: typing.List = None
+    age: typing.List[int] = None
+    cities: typing.List[base.City] = None
     day: str = None
     month: str = None
     overall: int = None
-    sex: typing.List = None
-    sex_age: typing.List = None
+    sex: typing.List[base.Sex] = None
+    sex_age: typing.List[dict] = None
 
 
 class FloodStats(BaseModel):
@@ -219,11 +219,11 @@ class PromotedPostReach(BaseModel):
 
 class RejectReason(BaseModel):
     comment: str = None
-    rules: typing.List = None
+    rules: typing.List["Rules"] = None
 
 
 class Rules(BaseModel):
-    paragraphs: typing.List = None
+    paragraphs: typing.List["Paragraphs"] = None
     title: str = None
 
 
@@ -331,7 +331,7 @@ class TargetGroup(BaseModel):
 
 
 class Users(BaseModel):
-    accesses: typing.List = None
+    accesses: typing.List["Accesses"] = None
     user_id: int = None
 
 

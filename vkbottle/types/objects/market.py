@@ -49,8 +49,8 @@ class MarketItemAvailability(Enum):
 
 
 class MarketItemFull(MarketItem):
-    albums_ids: typing.List = None
-    photos: typing.List = None
+    albums_ids: typing.List[int] = None
+    photos: typing.List[objects.photos.Photo] = None
     can_comment: "base.BoolInt" = None
     can_repost: "base.BoolInt" = None
     likes: "base.Likes" = None

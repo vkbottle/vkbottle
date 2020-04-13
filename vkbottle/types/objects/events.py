@@ -8,7 +8,7 @@ from vkbottle.types import objects
 class EventAttach(BaseModel):
     address: str = None
     button_text: str = None
-    friends: typing.List = None
+    friends: typing.List[objects.friends.FriendsList] = None
     id: int = None
     is_favorite: bool = None
     member_status: "groups.GroupFullMemberStatus" = None

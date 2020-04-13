@@ -26,7 +26,7 @@ class App(AppMin):
     author_url: str = None
     banner_1120: str = None
     banner_560: str = None
-    friends: typing.List = None
+    friends: typing.List[objects.friends.FriendsList] = None
     catalog_position: int = None
     description: str = None
     genre: str = None
@@ -38,7 +38,7 @@ class App(AppMin):
     platform_id: int = None
     published_date: int = None
     screen_name: str = None
-    screenshots: typing.List = None
+    screenshots: typing.List[dict] = None
     section: str = None
 
 

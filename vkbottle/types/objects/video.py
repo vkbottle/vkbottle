@@ -27,10 +27,10 @@ class Video(BaseModel):
     description: str = None
     duration: int = None
     files: "VideoFiles" = None
-    first_frame: typing.List = None
+    first_frame: typing.List[dict] = None
     height: int = None
     id: int = None
-    image: typing.List = None
+    image: typing.List[objects.photos.Image] = None
     is_favorite: bool = None
     live: "base.PropertyExists" = None
     owner_id: int = None
@@ -45,7 +45,7 @@ class Video(BaseModel):
 class VideoAlbumFull(BaseModel):
     count: int = None
     id: int = None
-    image: typing.List = None
+    image: typing.List[dict] = None
     is_system: int = None
     owner_id: int = None
     title: str = None
@@ -74,11 +74,11 @@ class VideoFull(BaseModel):
     description: str = None
     duration: int = None
     files: "VideoFiles" = None
-    first_frame: typing.List = None
+    first_frame: typing.List[dict] = None
     first_frame_640: str = None
     first_frame_1280: str = None
     id: int = None
-    image: typing.List = None
+    image: typing.List[objects.photos.Image] = None
     likes: "base.Likes" = None
     live: "base.PropertyExists" = None
     owner_id: int = None

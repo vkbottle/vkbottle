@@ -35,14 +35,14 @@ class Period(BaseModel):
 
 
 class Reach(BaseModel):
-    age: typing.List = None
-    cities: typing.List = None
-    countries: typing.List = None
+    age: typing.List[dict] = None
+    cities: typing.List[dict] = None
+    countries: typing.List[dict] = None
     mobile_reach: int = None
     reach: int = None
     reach_subscribers: int = None
-    sex: typing.List = None
-    sex_age: typing.List = None
+    sex: typing.List[dict] = None
+    sex_age: typing.List[dict] = None
 
 
 class SexAge(BaseModel):
@@ -51,12 +51,12 @@ class SexAge(BaseModel):
 
 
 class Views(BaseModel):
-    age: typing.List = None
-    cities: typing.List = None
-    countries: typing.List = None
+    age: typing.List[dict] = None
+    cities: typing.List[dict] = None
+    countries: typing.List[dict] = None
     mobile_views: int = None
-    sex: typing.List = None
-    sex_age: typing.List = None
+    sex: typing.List[dict] = None
+    sex_age: typing.List[dict] = None
     views: int = None
     visitors: int = None
 

@@ -25,7 +25,7 @@ class Country(BaseModel):
 class Error(BaseModel):
     error_code: int = None
     error_msg: str = None
-    request_params: typing.List = None
+    request_params: typing.List["RequestParam"] = None
 
 
 class Geo(BaseModel):
@@ -116,8 +116,8 @@ class Sex(Enum):
 
 
 class Sticker(BaseModel):
-    images: typing.List = None
-    images_with_background: typing.List = None
+    images: typing.List["Image"] = None
+    images_with_background: typing.List["Image"] = None
     product_id: int = None
     sticker_id: int = None
 

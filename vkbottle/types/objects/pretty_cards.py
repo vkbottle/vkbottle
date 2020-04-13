@@ -8,7 +8,7 @@ class PrettyCard(BaseModel):
     button: str = None
     button_text: str = None
     card_id: str = None
-    images: typing.List = None
+    images: typing.List[dict] = None
     link_url: str = None
     photo: str = None
     price: str = None

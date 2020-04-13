@@ -16,7 +16,7 @@ class CommentsFilters(Enum):
 class EventActivity(BaseModel):
     address: str = None
     button_text: str = None
-    friends: typing.List = None
+    friends: typing.List[objects.friends.FriendsList] = None
     member_status: "groups.GroupFullMemberStatus" = None
     text: str = None
     time: int = None
@@ -44,7 +44,7 @@ class IgnoreItemType(Enum):
 
 class ItemAudioAudio(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.audio.Audio] = None
 
 
 class ItemBase(BaseModel):
@@ -61,8 +61,8 @@ class ItemAudio(ItemBase):
 class ItemDigest(ItemBase):
     button_text: str = None
     feed_id: str = None
-    items: typing.List = None
-    main_post_ids: typing.List = None
+    items: typing.List[dict] = None
+    main_post_ids: typing.List[dict] = None
     template: str = None
     title: str = None
     track_code: str = None
@@ -74,7 +74,7 @@ class ItemFriend(ItemBase):
 
 class ItemFriendFriends(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[dict] = None
 
 
 class ItemNote(ItemBase):
@@ -83,7 +83,7 @@ class ItemNote(ItemBase):
 
 class ItemNoteNotes(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[dict] = None
 
 
 class ItemPhoto(ItemBase):
@@ -93,7 +93,7 @@ class ItemPhoto(ItemBase):
 
 class ItemPhotoPhotos(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[dict] = None
 
 
 class ItemPhotoTag(ItemBase):
@@ -103,12 +103,12 @@ class ItemPhotoTag(ItemBase):
 
 class ItemPhotoTagPhotoTags(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[dict] = None
 
 
 class ItemStoriesBlock(ItemBase):
     block_type: str = None
-    stories: typing.List = None
+    stories: typing.List[dict] = None
     title: str = None
     track_code: str = None
 
@@ -126,14 +126,14 @@ class ItemVideo(ItemBase):
 
 class ItemVideoVideo(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[dict] = None
 
 
 class ItemWallpost(ItemBase):
     activity: "EventActivity" = None
-    attachments: typing.List = None
+    attachments: typing.List[dict] = None
     comments: "base.CommentsInfo" = None
-    copy_history: typing.List = None
+    copy_history: typing.List[dict] = None
     geo: "base.Geo" = None
     likes: "base.LikesInfo" = None
     post_id: int = None
@@ -156,7 +156,7 @@ class List(BaseModel):
 
 class ListFull(List):
     no_reposts: "base.BoolInt" = None
-    source_ids: typing.List = None
+    source_ids: typing.List[dict] = None
 
 
 class NewsfeedItemType(Enum):
