@@ -29,14 +29,13 @@ class User(HTTP):
         self,
         tokens: Token = None,
         user_id: int = None,
-        debug: bool = True,
+        debug: typing.Union[str, bool] = True,
         expand_models: bool = True,
         log_to_path: typing.Union[str, bool] = None,
         vbml_patcher: vbml.Patcher = None,
     ):
         self.__tokens = [tokens] if isinstance(tokens, str) else tokens
         self.__loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
-        self.__debug: bool = debug
         self.api: UserApi = UserApi(self.__tokens)
         UserApi.set_current(self.api)
 
@@ -48,7 +47,11 @@ class User(HTTP):
         )
         self.on: UserHandler = UserHandler(self._mode)
 
-        self.logger = LoggerLevel("INFO" if debug else "ERROR")
+        if isinstance(debug, bool):
+            debug = "INFO" if debug else "ERROR"
+
+        self.logger = LoggerLevel(debug)
+
         logger.remove()
         logger.add(
             sys.stderr,
