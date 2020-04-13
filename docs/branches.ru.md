@@ -97,3 +97,7 @@ async def branch(ans: Message):
     # Для вывода пользователя из бранча
     return ExitBranch()
 ```
+## Другие способы хранения состояний
+Существуют также другие виды хранения бранчей, один из них `vkbottle.framework.framework.branch.database_branch.DatabaseBranch`
+
+Для того чтобы использовать его, требуется заполнить 4 метода абстрактного класса DatabaseBranch с помощью API вашего ORM. Пример вы можете найти [здесь](https://github.com/timoniq/vkbottle/blob/master/examples/database_branch.py)
