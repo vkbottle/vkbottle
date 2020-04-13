@@ -19,8 +19,8 @@ from vkbottle.branch import ClsBranch, rule_disposal
 ```python
 @bot.on.message(text="хочу в бранч", lower=True)
 async def wrapper(ans: Message):
-    await ans("Теперь ты в бранче")
-    return Branch("my_branch")
+    await ans("Теперь ты в бранче!")
+    await bot.branch.add(ans.peer_id, "my_branch")
 ```
 
 А сейчас приступим к написанию кода для нашего **ростка**:
@@ -29,7 +29,7 @@ async def wrapper(ans: Message):
 async def branch(ans: Message):
     if ans.text.lower() == "выйти":
         await ans("Окей, вывожу!")
-        return ExitBranch()
+        await bot.branch.exit(ans.peer_id)
 
     await ans("Ты в бранче. Пиши «выйти», чтобы выйти отсюда.")
 ```
@@ -60,7 +60,7 @@ async def wrapper(ans: Message, mark):
 @bot.branch.simple_branch("my_branch")
 async def branch(ans: Message, mark):
     if ans.text.lower() in ["это все", "да"]:
-        await ans(f"Ок, твоя оценка «{mark}» и рассказ о боте заcчитан!")
+        await ans(f"Окей, твоя оценка «{mark}» и рассказ о боте заcчитан!")
         await bot.branch.exit(ans.peer_id)
 
     await ans(f"Ты считаешь, что {ans.text}. Мы тебя поняли. Это все?")
@@ -72,7 +72,7 @@ from vkbottle.rule import VBMLRule
 
 @bot.on.message(text="ставлю боту <mark:int>", lower=True)
 async def wrapper(ans: Message, mark):
-    await ans("Теперь расскажи что ты думаешь о нем")
+    await ans("Теперь расскажи, что ты думаешь о нем:")
     await bot.branch.add(ans.peer_id,
                         "my_branch", mark=mark)
 
@@ -80,7 +80,7 @@ async def wrapper(ans: Message, mark):
 class Branch(ClsBranch):
     @rule_disposal(VBMLRule(["это все", "да"], lower=True))
     async def exit_branch(self, ans: Message):
-        await ans(f"Ок, твоя оценка «{self.context['mark']}» и рассказ о боте заcчитан!")
+        await ans(f"Окей, твоя оценка «{self.context['mark']}» и рассказ о боте заcчитан!")
         await bot.branch.exit(ans.peer_id)
     
     async def branch(self, ans: Message, *args):
