@@ -23,6 +23,14 @@ class Message(MessageType, GetApi):
     def chat_id(self) -> int:
         return self.peer_id - 2000000000
 
+    @property
+    def from_chat(self) -> bool:
+        return self.peer_id > 2e9
+
+    @property
+    def from_user(self) -> bool:
+        return self.from_id > 0
+
     async def reply(
         self,
         message: str = None,
