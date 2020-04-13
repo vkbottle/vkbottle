@@ -32,8 +32,8 @@ def init_bot_mention(group_id: int, text: str):
 
 
 def get_attr(adict: dict, attrs: typing.List[str]):
-    attrs = set(attrs)
-    for attr in attrs:
+    a: set = set(attrs)
+    for attr in a:
         if attr in adict:
             return adict[attr]
     return

@@ -3,12 +3,18 @@ import typing
 from vkbottle.api import exceptions, api
 from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
 from vkbottle.framework.framework.extensions import AbstractExtension
-from vkbottle.framework.framework.handler import Handler, ErrorHandler, MiddlewareExecutor
-from .builtin import DEFAULT_BLUEPRINT
+from vkbottle.framework.framework.handler import (
+    Handler,
+    ErrorHandler,
+    MiddlewareExecutor,
+)
+
+from .abc import AbstractBlueprint
 
 
-class Blueprint:
-    def __init__(self, name: str = None, description: str = None):
+class Blueprint(AbstractBlueprint):
+    def __init__(self, name: str = None, description: str = None) -> None:
+        super().__init__()
         # Main workers
         self.branch: typing.Optional[AbstractBranchGenerator] = DictBranch()
         self.middleware: MiddlewareExecutor = None
@@ -17,8 +23,8 @@ class Blueprint:
 
         self.extension: AbstractExtension = None
         self.api: api.Api = None
-        self._name = name or DEFAULT_BLUEPRINT[0]
-        self._description = description or DEFAULT_BLUEPRINT[1]
+        self._name = name or "Unknown"
+        self._description = description or "Unknown"
 
     def create(
         self,
@@ -33,19 +39,3 @@ class Blueprint:
             )
         self.extension = extension
         self.api = api_instance
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, new_name: str):
-        self._name = new_name
-
-    @property
-    def description(self):
-        return self._description
-
-    @description.setter
-    def description(self, new_description: str):
-        self._description = new_description

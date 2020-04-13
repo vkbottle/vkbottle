@@ -14,7 +14,7 @@ from vkbottle.framework.framework.extensions.standard import StandardExtension
 from vkbottle.framework._status import BotStatus, LoggerLevel
 from vkbottle.framework.framework.branch import DictBranch
 from vkbottle.framework.framework.branch.abc import AbstractBranchGenerator
-from vkbottle.framework.bot.blueprint import Blueprint
+from vkbottle.framework.blueprint.bot import Blueprint
 from vkbottle.framework.bot.processor import AsyncHandleManager
 from vkbottle.framework.bot.builtin import DefaultValidators, DEFAULT_WAIT
 from vkbottle.api import Api, request
@@ -169,10 +169,13 @@ class Bot(HTTP, AsyncHandleManager):
         logger.debug("Bot has been successfully dispatched")
 
     def set_blueprints(self, *blueprints: Blueprint):
+        """
+        Add blueprints
+        """
         for blueprint in blueprints:
             blueprint.create(familiar=(self.branch, self.extension, self.api))
             self.loop.create_task(self.dispatch(blueprint))
-        logger.debug("Blueprints has successfully loaded")
+        logger.debug("Blueprints have been successfully loaded")
 
     @staticmethod
     def get_id_by_token(token: str):

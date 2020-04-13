@@ -1,2 +1,3 @@
-from .framework import User
-from .types import user_longpoll as types
+from vkbottle.framework import User
+from vkbottle.types.user_longpoll import Message
+from vkbottle.framework.blueprint.user import Blueprint

@@ -6,9 +6,8 @@ ADDITIONAL_FIELDS = ("peer_id", "timestamp", "text", "info", "attachments", "ran
 
 
 class Handler:
-    def __init__(self, mode: int):
+    def __init__(self):
         self.rules: typing.List[UserLongPollEventRule] = list()
-        self.mode = mode
 
     def concatenate(self, other: "Handler"):
         self.rules += other.rules

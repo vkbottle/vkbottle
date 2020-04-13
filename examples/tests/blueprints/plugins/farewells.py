@@ -1,9 +1,9 @@
-from vkbottle import Blueprint, Message
+from vkbottle.bot import Blueprint, Message
 
 bp = Blueprint(name="Farewells")
 
 
-@bp.on.message_handler(text="Goodbye!")
+@bp.on.message_handler(text=["Goodbye!", "Bye!"])
 async def farewell_wrapper(ans: Message):
     await ans("Bye, nice to meet you.")
 

@@ -1,5 +1,5 @@
 from vkbottle import Bot, Message
-from .plugins import fare_bp, greet_bp
+from examples.tests.blueprints.plugins import fare_bp, greet_bp
 import os
 
 bot = Bot(tokens=os.environ["TOKEN"], debug="DEBUG")

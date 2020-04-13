@@ -9,19 +9,21 @@ import vbml
 from vkbottle.framework._status import LoggerLevel
 from vkbottle.api import UserApi, VKError, request
 from vkbottle.framework.framework.handler import UserHandler
+from vkbottle.framework.blueprint.user import Blueprint
 from vkbottle.http import HTTP
 from vkbottle.utils import logger
 
 DEFAULT_WAIT = 20
 VERSION = 3
 MODE = 2
+
 Token = typing.Union[str, typing.List[str]]
+AnyUser = typing.Union["User", Blueprint]
 
 
 class User(HTTP):
     long_poll_server: dict
     __wait: int
-    _mode: int = None
     version: int = None
 
     def __init__(
@@ -45,7 +47,7 @@ class User(HTTP):
         self.user_id: typing.Optional[int] = user_id or self.get_id_by_token(
             self.__tokens[0]
         )
-        self.on: UserHandler = UserHandler(self._mode)
+        self.on: UserHandler = UserHandler()
 
         self.logger = LoggerLevel("INFO" if debug else "ERROR")
         logger.remove()
@@ -77,6 +79,23 @@ class User(HTTP):
         if "error" in response:
             raise VKError("Token is invalid")
         return response["response"][0]["id"]
+
+    def dispatch(self, user: AnyUser):
+        """
+        Concatenate handlers to current user object
+        :param user:
+        :return:
+        """
+        self.on.concatenate(user.on)
+
+    def set_blueprints(self, *blueprints: Blueprint):
+        """
+                Add blueprints
+                """
+        for blueprint in blueprints:
+            blueprint.create(api_instance=self.api)
+            self.loop.create_task(self.dispatch(blueprint))
+        logger.debug("Blueprints have been successfully loaded")
 
     async def get_server(self):
         """

@@ -1,4 +1,4 @@
-from .bot import Bot, Blueprint
+from .bot import Bot
 from .user import User
 from vkbottle.framework.framework.branch import (
     Branch,

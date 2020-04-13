@@ -1,4 +1,4 @@
-from vkbottle import Blueprint, Message
+from vkbottle.bot import Blueprint, Message
 
 bp = Blueprint(name="greetings", description="It was created to welcome users")
 
