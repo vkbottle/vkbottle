@@ -15,7 +15,7 @@ class Message(BaseModel):
     peer_id: int = None
     timestamp: int = None
     text: str = None
-    attachments: dict = None
+    attachments: typing.Union[list, dict] = None
     random_id: int = None
     # from messages.getById
     id: int = None

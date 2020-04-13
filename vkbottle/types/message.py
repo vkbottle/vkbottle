@@ -19,7 +19,6 @@ class GetApi:
 
 
 class Message(MessageType, GetApi):
-
     @property
     def chat_id(self) -> int:
         return self.peer_id - 2000000000
