@@ -1,6 +1,6 @@
-__version__ = "2.6 Released 25.03.2020 01:00"  # Package VKBottle version
+__version__ = "2.7 Released 13.04.2020 14:00"  # Package VKBottle version
 
-__author__ = "Arseniy Timonik"
+__author__ = "Arsenii Timoniq"
 
 API_VERSION = 5.103  # VK Api version
 

@@ -72,12 +72,12 @@ class Photo(BaseModel):
     date: int = None
     height: int = None
     id: int = None
-    images: typing.List = None
+    images: typing.List[Image] = None
     lat: float = None
     long: float = None
     owner_id: int = None
     post_id: int = None
-    sizes: typing.List = None
+    sizes: typing.List["PhotoSizes"] = None
     text: str = None
     user_id: int = None
     width: int = None
@@ -102,7 +102,7 @@ class PhotoAlbumFull(BaseModel):
     id: int = None
     owner_id: int = None
     size: int = None
-    sizes: typing.List = None
+    sizes: typing.List["PhotoSizes"] = None
     thumb_id: int = None
     thumb_is_last: "base.BoolInt" = None
     thumb_src: str = None
@@ -119,7 +119,7 @@ class PhotoFull(BaseModel):
     date: int = None
     height: int = None
     id: int = None
-    images: typing.List = None
+    images: typing.List[Image] = None
     lat: float = None
     likes: "base.Likes" = None
     long: float = None
@@ -154,7 +154,7 @@ class PhotoFullXtrRealOffset(BaseModel):
     post_id: int = None
     real_offset: int = None
     reposts: "base.ObjectCount" = None
-    sizes: typing.List = None
+    sizes: typing.List["PhotoSizes"] = None
     tags: "base.ObjectCount" = None
     text: str = None
     user_id: int = None
@@ -225,7 +225,7 @@ class PhotoXtrRealOffset(BaseModel):
     photo_807: str = None
     post_id: int = None
     real_offset: int = None
-    sizes: typing.List = None
+    sizes: typing.List["PhotoSizes"] = None
     text: str = None
     user_id: int = None
     width: int = None
@@ -248,7 +248,7 @@ class PhotoXtrTagInfo(BaseModel):
     photo_807: str = None
     placer_id: int = None
     post_id: int = None
-    sizes: typing.List = None
+    sizes: typing.List["PhotoSizes"] = None
     tag_created: int = None
     tag_id: int = None
     text: str = None
