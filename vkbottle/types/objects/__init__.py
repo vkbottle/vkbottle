@@ -20,7 +20,6 @@ from . import notes
 from . import notifications
 from . import orders
 from . import pages
-from . import photos
 from . import polls
 from . import pretty_cards
 from . import search
@@ -34,3 +33,4 @@ from . import utils
 from . import video
 from . import wall
 from . import widgets
+from . import photos
