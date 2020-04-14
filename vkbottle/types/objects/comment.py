@@ -8,7 +8,7 @@ class Thread(BaseModel):
     can_post: bool = None
     count: int = None
     groups_can_post: bool = None
-    items: typing.List[dict] = None
+    items: typing.List = None
     show_reply_button: bool = None
 
 

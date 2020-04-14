@@ -31,7 +31,7 @@ class DocPreview(BaseModel):
 
 
 class DocPreviewPhoto(BaseModel):
-    sizes: typing.List[objects.photos.PhotoSizes] = None
+    sizes: typing.List = None
 
 
 class DocPreviewVideo(BaseModel):

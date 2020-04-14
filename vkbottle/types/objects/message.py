@@ -8,7 +8,7 @@ class ChatPreview(BaseModel):
     admin_id: int = None
     joined: bool = None
     local_id: int = None
-    members: typing.List[objects.messages.ConversationMember] = None
+    members: typing.List = None
     members_count: int = None
     title: str = None
 

@@ -135,7 +135,7 @@ class Occupation(BaseModel):
 class Personal(BaseModel):
     alcohol: int = None
     inspired_by: str = None
-    langs: typing.List[int] = None
+    langs: typing.List = None
     life_main: int = None
     people_main: int = None
     political: int = None
@@ -267,8 +267,8 @@ class UserFull(User):
     is_hidden_from_feed: "base.BoolInt" = None
     common_count: int = None
     occupation: "Occupation" = None
-    career: typing.List[Career] = None
-    military: typing.List[Military] = None
+    career: typing.List = None
+    military: typing.List = None
     university: int = None
     university_name: str = None
     faculty: int = None
@@ -280,9 +280,9 @@ class UserFull(User):
     relation: "UserRelation" = None
     relation_partner: "UserMin" = None
     personal: "Personal" = None
-    universities: typing.List[University] = None
-    schools: typing.List[School] = None
-    relatives: typing.List[Relative] = None
+    universities: typing.List = None
+    schools: typing.List = None
+    relatives: typing.List = None
     is_subscribed_podcasts: bool = None
     can_subscribe_podcasts: bool = None
     can_subscribe_posts: bool = None
@@ -322,7 +322,7 @@ class UserSettingsXtr(BaseModel):
     status: str = None
     status_audio: "audio.Audio" = None
     interests: "account.UserSettingsInterests" = None
-    languages: typing.List[int] = None
+    languages: typing.List = None
 
 
 class UserType(Enum):
@@ -339,7 +339,7 @@ class UserXtrType(User):
 
 class UsersArray(BaseModel):
     count: int = None
-    items: typing.List[User] = None
+    items: typing.List = None
 
 
 class UserXtrLists(UserFull):

@@ -11,7 +11,7 @@ class Bookmark(BaseModel):
     post: "wall.WallpostFull" = None
     product: "market.MarketItem" = None
     seen: bool = None
-    tags: typing.List["Tag"] = None
+    tags: typing.List = None
     type: "BookmarkType" = None
     video: "video.Video" = None
 
@@ -27,7 +27,7 @@ class BookmarkType(Enum):
 class Page(BaseModel):
     description: str = None
     group: "groups.GroupFull" = None
-    tags: typing.List["Tag"] = None
+    tags: typing.List = None
     type: "PageType" = None
     updated_date: int = None
     user: "users.UserFull" = None

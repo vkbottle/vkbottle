@@ -1,4 +1,4 @@
-from . import base, market, users, link
+from . import base, market, users
 import typing
 from enum import Enum
 from ..base import BaseModel
@@ -104,7 +104,7 @@ class CountersGroup(BaseModel):
 
 class Cover(BaseModel):
     enabled: "base.BoolInt" = None
-    images: typing.List[objects.photos.Image] = None
+    images: typing.List = None
 
 
 class Fields(Enum):
@@ -214,15 +214,15 @@ class GroupBanInfo(BaseModel):
 class GroupCategory(BaseModel):
     id: int = None
     name: str = None
-    subcategories: typing.List[dict] = None
+    subcategories: typing.List = None
 
 
 class GroupCategoryFull(BaseModel):
     id: int = None
     name: str = None
     page_count: int = None
-    page_previews: typing.List[dict] = None
-    subcategories: typing.List[dict] = None
+    page_previews: typing.List = None
+    subcategories: typing.List = None
 
 
 class GroupCategoryType(BaseModel):
@@ -258,8 +258,8 @@ class GroupFull(Group):
     has_photo: "base.BoolInt" = None
     status: str = None
     main_album_id: int = None
-    links: typing.List[link.Link] = None
-    contacts: typing.List[ContactsItem] = None
+    links: typing.List = None
+    contacts: typing.List = None
     site: str = None
     main_section: "GroupFullMainSection" = None
     trending: "base.BoolInt" = None
@@ -331,7 +331,7 @@ class GroupPhotos(Enum):
 class GroupPublicCategoryList(BaseModel):
     id: int = None
     name: str = None
-    subtypes_list: typing.List[dict] = None
+    subtypes_list: typing.List = None
 
 
 class GroupRole(Enum):
@@ -351,11 +351,11 @@ class GroupSettings(BaseModel):
     obscene_words: str = None
     photos: int = None
     public_category: int = None
-    public_category_list: typing.List[dict] = None
+    public_category_list: typing.List = None
     public_subcategory: int = None
     rss: str = None
     subject: int = None
-    subject_list: typing.List[dict] = None
+    subject_list: typing.List = None
     title: str = None
     topics: int = None
     video: int = None
@@ -470,7 +470,7 @@ class GroupXtrInvitedByType(Enum):
 
 class GroupsArray(BaseModel):
     count: int = None
-    items: typing.List[Group] = None
+    items: typing.List = None
 
 
 class LinksItem(BaseModel):
@@ -551,7 +551,7 @@ class MarketInfo(BaseModel):
 
 class MemberRole(BaseModel):
     id: int = None
-    permissions: typing.List[dict] = None
+    permissions: typing.List = None
     role: "MemberRoleStatus" = None
 
 

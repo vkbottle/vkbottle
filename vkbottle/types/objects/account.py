@@ -1,4 +1,4 @@
-from . import base, messages, wall
+from . import base
 import typing
 from enum import Enum
 from ..base import BaseModel
@@ -57,7 +57,7 @@ class Offer(BaseModel):
 
 class PushConversations(BaseModel):
     count: int = None
-    items: typing.List["PushConversationsItem"] = None
+    items: typing.List = None
 
 
 class PushConversationsItem(BaseModel):
@@ -67,25 +67,25 @@ class PushConversationsItem(BaseModel):
 
 
 class PushParams(BaseModel):
-    msg: typing.List["PushParamsMode"] = None
-    chat: typing.List["PushParamsMode"] = None
-    like: typing.List[base.Likes] = None
-    repost: typing.List[base.RepostsInfo] = None
-    comment: typing.List[base.CommentsInfo] = None
-    mention: typing.List["PushParamsMutual"] = None
-    reply: typing.List[messages.Message] = None
-    new_post: typing.List[wall.Wallpost] = None
-    wall_post: typing.List[wall.Wallpost] = None
-    wall_publish: typing.List[wall.Wallpost] = None
-    friend: typing.List["PushParamsMutual"] = None
-    friend_found: typing.List["PushParamsMutual"] = None
-    friend_accepted: typing.List[dict] = None
-    group_invite: typing.List[dict] = None
-    group_accepted: typing.List[dict] = None
-    birthday: typing.List[dict] = None
-    event_soon: typing.List[dict] = None
-    app_request: typing.List[dict] = None
-    sdk_open: typing.List[dict] = None
+    msg: typing.List = None
+    chat: typing.List = None
+    like: typing.List = None
+    repost: typing.List = None
+    comment: typing.List = None
+    mention: typing.List = None
+    reply: typing.List = None
+    new_post: typing.List = None
+    wall_post: typing.List = None
+    wall_publish: typing.List = None
+    friend: typing.List = None
+    friend_found: typing.List = None
+    friend_accepted: typing.List = None
+    group_invite: typing.List = None
+    group_accepted: typing.List = None
+    birthday: typing.List = None
+    event_soon: typing.List = None
+    app_request: typing.List = None
+    sdk_open: typing.List = None
 
 
 class PushParamsMode(Enum):
@@ -93,10 +93,6 @@ class PushParamsMode(Enum):
     off = "off"
     no_sound = "no_sound"
     no_text = "no_text"
-
-
-class PushParamsMutual(Enum):
-    mutual = "mutual"
 
 
 class PushParamsOnoff(Enum):

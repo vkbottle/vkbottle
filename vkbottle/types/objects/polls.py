@@ -14,7 +14,7 @@ class Answer(BaseModel):
 class Poll(BaseModel):
     anonymous: bool = None
     answer_id: int = None
-    answers: typing.List[dict] = None
+    answers: typing.List = None
     created: int = None
     id: int = None
     owner_id: int = None
@@ -29,7 +29,7 @@ class Voters(BaseModel):
 
 class VotersUsers(BaseModel):
     count: int = None
-    items: typing.List[dict] = None
+    items: typing.List = None
 
 
 Answer.update_forward_refs()

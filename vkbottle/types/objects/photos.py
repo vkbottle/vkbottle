@@ -5,7 +5,7 @@ from ..base import BaseModel
 
 
 class CommentXtrPid(BaseModel):
-    attachments: typing.List[dict] = None
+    attachments: typing.List = None
     date: int = None
     from_id: int = None
     id: int = None
@@ -14,7 +14,7 @@ class CommentXtrPid(BaseModel):
     reply_to_comment: int = None
     reply_to_user: int = None
     text: str = None
-    parents_stack: typing.List[dict] = None
+    parents_stack: typing.List = None
     thread: "comment.Thread" = None
 
 

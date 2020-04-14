@@ -6,7 +6,7 @@ from vkbottle.types import objects
 
 
 class Feedback(BaseModel):
-    attachments: typing.List[dict] = None
+    attachments: typing.List = None
     from_id: int = None
     geo: "base.Geo" = None
     id: int = None

@@ -38,12 +38,12 @@ class LinkCheckedStatus(Enum):
 
 class LinkStats(BaseModel):
     key: str = None
-    stats: typing.List["Stats"] = None
+    stats: typing.List = None
 
 
 class LinkStatsExtended(BaseModel):
     key: str = None
-    stats: typing.List["Stats"] = None
+    stats: typing.List = None
 
 
 class ShortLink(BaseModel):
@@ -69,8 +69,8 @@ class StatsCountry(BaseModel):
 
 
 class StatsExtended(BaseModel):
-    cities: typing.List[objects.base.City] = None
-    countries: typing.List[objects.base.Country] = None
+    cities: typing.List = None
+    countries: typing.List = None
     sex_age: typing.List = None
     timestamp: int = None
     views: int = None

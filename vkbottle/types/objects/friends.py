@@ -27,7 +27,7 @@ class FriendsList(BaseModel):
 
 class MutualFriend(BaseModel):
     common_count: int = None
-    common_friends: typing.List[FriendsList] = None
+    common_friends: typing.List = None
     id: int = None
 
 
@@ -39,7 +39,7 @@ class Requests(BaseModel):
 
 class RequestsMutual(BaseModel):
     count: int = None
-    users: typing.List[objects.users.User] = None
+    users: typing.List = None
 
 
 class RequestsXtrMessage(BaseModel):
