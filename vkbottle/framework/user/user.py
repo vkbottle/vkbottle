@@ -93,8 +93,8 @@ class User(HTTP):
 
     def set_blueprints(self, *blueprints: Blueprint):
         """
-                Add blueprints
-                """
+        Add blueprints
+        """
         for blueprint in blueprints:
             blueprint.create(api_instance=self.api)
             self.dispatch(blueprint)

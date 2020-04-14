@@ -60,7 +60,9 @@ class MessagesCreateChat(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, user_ids: typing.List = None, title: str = None
+        self,
+            user_ids: typing.List = None,
+            title: str = None,
     ) -> responses.messages.CreateChat:
         """ messages.createChat
         From Vk Docs: Creates a chat with several participants.
@@ -1038,6 +1040,8 @@ class MessagesSend(BaseMethod):
         payload: str = None,
         dont_parse_links: bool = None,
         disable_mentions: bool = None,
+        expire_ttl: int = None,
+        silent: bool = None,
     ) -> responses.messages.Send:
         """ messages.send
         From Vk Docs: Sends a message.

@@ -1,7 +1,8 @@
 from ..base import BaseModel
+import typing
 
 OkResponse = int
 
 
 class OkResponseModel(BaseModel):
-    response: int = None
+    response: typing.Union[int, dict] = None
