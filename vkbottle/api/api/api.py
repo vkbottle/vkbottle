@@ -1,6 +1,6 @@
 import typing
 from vkbottle.http import HTTPRequest
-from vkbottle.utils import ContextInstanceMixin
+from vkbottle.utils import ContextInstanceMixin, logger
 
 from vkbottle.types.methods import *
 from .request import Request
@@ -19,7 +19,10 @@ class API(ContextInstanceMixin):
         )(tokens)
         self._http = HTTPRequest()
         self.throw_errors: bool = throw_errors
-        self.group_id: int = None
+        self._group_id: int = None
+        self._user_id: int = None
+
+        logger.debug(f"API: using {len(tokens)} tokens, generator {generator} (can be changed)")
 
         # VK Api Methods
         self.account = Account(self.api)
@@ -78,6 +81,26 @@ class API(ContextInstanceMixin):
             response_model=response_model,
             raw_response=raw_response,
         )
+
+    @property
+    async def user_id(self):
+        if self._user_id is None:
+            current_user = await self.users.get()
+            self._user_id = current_user[0].id
+        return self._user_id
+
+    @property
+    async def group_id(self):
+        if self._group_id is None:
+            current_user = await self.groups.get()
+            self._group_id = current_user[0].id
+        return self._group_id
+
+    def __dict__(self):
+        return {"generator": self.token_generator.__class__.__qualname__, "throw_errors": self.throw_errors}
+
+    def __repr__(self):
+        return f"<API {self.__dict__()}>"
 
 
 class UserApi(API, ContextInstanceMixin):

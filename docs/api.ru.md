@@ -43,7 +43,7 @@ bot_token = "token-1"
 user_tokens = ["user-token-1", "user-token-2", "user-token-3"]
 user_generator = LimitedTokenGenerator(user_tokens, limit=3)
 
-bot = Bot(tokens=token, throw_errors=False)
+bot = Bot(tokens=bot_token, throw_errors=False)
 user = User() # При переопределении генератора, токены оставлять не обязательно
 user.api.token_generator = user_generator
 # bot.api
@@ -75,4 +75,88 @@ await user.api.users.get(1)
 # ...
 user = await bot.api.users.get(1)
 print(user[0].first_name) # Павел
+```
+
+## Клавиатуры
+
+Клавиатуры можно генерировать двумя по-своему удобными путями, через специально разработанную схему (`vkbottle.api.keybaord.generator.keyboard_gen`), либо через объективно ориентированный вариант генератора (`vkbottle.api.keyboard.Keyboard`)
+
+### Генератор keyboard_gen
+
+Генератор keyboard_gen является функцией принимающей один обязательный аргумент - схему. Схема является списком со списками со словарями (`List[List[dict]]`)  
+Словари на последнем уровне вложенности по сути являеются объектами кнопок в словаре. Они принимают те же параметры что описаны в документации вк, с учетом трех поправок:  
+
+* вместо `label` **можно** использовать `text`
+* `color` нужно ставить прямо в словаре
+* чтобы указать тип кнопки нужно назначить аргумент `type` в словарь кнопки
+
+Пример:
+
+```python
+from vkbottle.api.keyboard import keyboard_gen
+keyboard = keyboard_gen(
+    [
+        [{"text": "Кнопка #1", "color": "positive"}, {"text": "Кнопка #2"}], # Это первый ряд кнопок
+        [{"type": "location", "text": "Деанон бесплатно"}], # Это второй ряд
+    ],
+    inline=True,
+)
+```
+
+### Генератор  Keyboard
+
+Та же самая клавиатура на этом генераторе:
+
+```python
+from vkbottle.api.keyboard import Keyboard, Text, Location
+keyboard = Keyboard(inline=True)
+keyboard.add_row()
+keyboard.add_button(Text("Кнопка #1"), color="positive")
+keyboard.add_button(Text("Кнопка #2"))
+keyboard.add_row()
+keyboard.add_button(Location("Деанон бесплатно"))
+# keyboard.generate()
+```
+
+В обеих генераторах доступны для назначения аргументы:  
+**one_time** - если True, клавиатура исчезнет после первого использования  
+**inline** - если True, клавиатура будет прикреплена к сообщению
+
+Генерацию клавиатуры можно ускорить благодаря установке модулей для работы с json: `ujson`, `hyperjson`, `orjson`
+
+## Uploader (раздел не закончен)
+
+На данный момент доступно только загрузчики для фотографий и документов, но написать нужный не составит никакого труда при минимальных знаниях  
+
+Для начала работы с любым аплоадером, нужно его импортировать. На примере аплоадера для картинок:
+
+```python
+from vkbottle.api.uploader.photo import PhotoUploader
+```
+
+Далее нужно связать его с ботом или юзером с помощью инициализации, так же любой аплоадер принимает аргумент `generate_attachment_strings`, при значении True после загрузки будет возвращаться уже готовая строка для отправления в `attachment`:
+
+```python
+from vkbottle.api.uploader.photo import PhotoUploader
+from vkbottle.bot import Bot
+
+bot = Bot(...)
+photo_uploader  = PhotoUploader(bot, generate_attachment_strings=True)
+```
+
+Теперь чтобы получить строку для отправки: `await photo_uploader.upload_message_photo("img.png")`
+
+## Дополнительно
+
+Если метод из по какой то причине еще не был добавлен в vkbottle его можно вызвать с помощью `api.request`:
+
+```python
+from vkbottle.bot import Bot, Message
+
+bot = Bot("token")
+
+# Отрывок хендлера:
+async def handler(ans: Message):
+    a = await bot.api.request("some.newMethod", {"strange": 1}) 
+    # В таком случае методы нужно писать в камель кейсе как сказано в документации и респонс возвращается словарем а не объектом
 ```

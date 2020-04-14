@@ -2,7 +2,7 @@ import random
 import time
 import math
 
-from typing import List, Tuple, Coroutine, Any
+from typing import List, Coroutine, Any
 from vkbottle.utils.logger import logger
 
 from .token import AbstractTokenGenerator
@@ -48,22 +48,28 @@ class LimitedTokenGenerator(AbstractTokenGenerator):
         """
         self.tokens = tokens
         self.limit: int = limit
-        self.state: Tuple[int, int] = (0, 0)
+        self.last_time_stack = 0
+        self.step: List[str] = []
 
     async def get_token(self, *args, **kwargs) -> str:
-        index = self.state[1]
-        timestack = math.floor(time.time())  # noqa: Accuracy to second
-        if timestack == self.state[0]:
-            if index + 1 > self.limit or index + 1 < len(self.tokens):
-                logger.error(
-                    f'LimitedTokenGenerator is not able to avoid the limit because there are not enough tokens ({index + 1} "{self.tokens[index][:11]}...")'
-                )
-                self.state = (timestack, 0)
-            else:
-                self.state = (timestack, index + 1)
-        else:
-            self.state = (timestack, 0)
-        return self.tokens[index]
+        time_stack = math.ceil(time.time())  # noqa: Accuracy to second
+
+        if time_stack != self.last_time_stack:
+            if self.last_time_stack == 0 or not len(self.step):
+                self.step = self.token_sequence
+        elif not len(self.step):
+            logger.error(
+                f'LimitedTokenGenerator is not able to avoid the limit because there are not enough tokens'
+            )
+            self.step = self.token_sequence
+
+        self.last_time_stack = time_stack
+        token = self.step.pop(0)
+        return token
+
+    @property
+    def token_sequence(self) -> List[str]:
+        return sorted(self.tokens * self.limit)
 
 
 class ClassifiedTokenGenerator(AbstractTokenGenerator):
