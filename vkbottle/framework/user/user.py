@@ -97,7 +97,7 @@ class User(HTTP):
                 """
         for blueprint in blueprints:
             blueprint.create(api_instance=self.api)
-            self.loop.create_task(self.dispatch(blueprint))
+            self.dispatch(blueprint)
         logger.debug("Blueprints have been successfully loaded")
 
     async def get_server(self):
