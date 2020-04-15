@@ -54,10 +54,11 @@ class Bot(HTTP, AsyncHandleManager):
         """
         Init bot
         :param tokens: bot tokens
-        :param group_id: [auto]
+        :param group_id:
         :param debug: should bot debug messages for emulating
         :param log_to_path: make logs
         :param secret: secret vk code for callback
+        :param extension:
         """
         # Base bot classifiers
         self.__tokens: typing.List[str] = [tokens] if isinstance(

@@ -1077,6 +1077,30 @@ class MessagesSend(BaseMethod):
         )
 
 
+class MessagesSendService(BaseMethod):
+    access_token_type: APIAccessibility = [
+        APIAccessibility.GROUP,
+        APIAccessibility.VKME,
+    ]
+
+    async def __call__(self, peer_id: int, action_type: str) -> responses.ok_response.OkResponse:
+        """ messages.sendService
+        Still no docs in vk dox
+        """
+
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in locals().items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.sendService",
+            params,
+            response_model=responses.ok_response.OkResponseModel,
+        )
+
+
+
 class MessagesSetActivity(BaseMethod):
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
@@ -1205,6 +1229,7 @@ class Messages:
         self.search = MessagesSearch(request)
         self.search_conversations = MessagesSearchConversations(request)
         self.send = MessagesSend(request)
+        self.send_service = MessagesSendService(request)
         self.set_activity = MessagesSetActivity(request)
         self.set_chat_photo = MessagesSetChatPhoto(request)
         self.unpin = MessagesUnpin(request)

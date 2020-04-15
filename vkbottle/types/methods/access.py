@@ -6,3 +6,4 @@ class APIAccessibility(Enum):
     SERVICE = "service"
     GROUP = "group"
     OPEN = "open"
+    VKME = "vkme"
