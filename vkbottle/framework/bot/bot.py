@@ -179,18 +179,21 @@ class Bot(HTTP, AsyncHandleManager):
         logger.debug("Blueprints have been successfully loaded")
 
     @staticmethod
-    def get_id_by_token(token: str):
+    def get_id_by_token(token: str, throw_exc: bool = True) -> typing.Union[int, bool]:
         """
         Get group id from token
         :param token:
+        :param throw_exc:
         :return:
         """
         logger.debug("Making API request groups.getById to get group_id")
         response = asyncio.get_event_loop().run_until_complete(
-            request("groups.getById", {}, token)
+            request("groups.getById", {}, token, throw_errors=False)
         )
         if "error" in response:
-            raise VKError("Token is invalid")
+            if throw_exc:
+                raise VKError("Token is invalid")
+            return False
         return response["response"][0]["id"]
 
     def _check_secret(self, event: dict):
