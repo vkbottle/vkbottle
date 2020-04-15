@@ -96,6 +96,14 @@ class API(ContextInstanceMixin):
             self._group_id = current_user[0].id
         return self._group_id
 
+    @group_id.setter
+    def group_id(self, group_id: int):
+        self._group_id = group_id
+
+    @user_id.setter
+    def user_id(self, user_id: int):
+        self._user_id = user_id
+
     def __dict__(self):
         return {"generator": self.token_generator.__class__.__qualname__, "throw_errors": self.throw_errors}
 
