@@ -76,7 +76,7 @@ class Request:
             else self.throw_errors,
         )
 
-        logger.debug(f"Response: {response}")
+        logger.debug("Response: {}", response)
 
         if not response_model:
             return response["response"]

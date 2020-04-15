@@ -399,7 +399,7 @@ class Bot(HTTP, AsyncHandleManager):
 
         return "ok"
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         return "<Bot {}>".format(self.status.as_dict)
 
     @property
