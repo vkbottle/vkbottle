@@ -26,9 +26,9 @@ async def request(
         while not isinstance(response, dict):
             # Works only on python 3.6+
             delay = 1
-            logger.critical(
+            logger.error(
                 "\n---"
-                f"{time.localtime()} - DELAY {delay * 5} sec\n"
+                f"{time.strftime('%m-%d %H:%M:%S', time.localtime())} - DELAY {delay * 5} sec\n"
                 f"Check your internet connection. Maybe VK died, request returned: {response}"
                 f"Error appeared after request: {method}",
             )
@@ -36,7 +36,7 @@ async def request(
             delay += 1
             response = await session.post(url, data=params or {})
 
-            logger.critical(
+            logger.success(
                 f"--- {time.strftime('%m-%d %H:%M:%S', time.localtime())}\n"
                 f"- METHOD SUCCESS after {5 * sum(range(1, delay))} sec\n"
                 f"RESPONSE: {response}\n",
