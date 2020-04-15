@@ -71,7 +71,7 @@ async def error_wrapper(error):
 
 @bot.on.chat_invite()
 async def wrapper(ans: Message):
-    # Raising when bot is invited to chat
+    # Is raised if bot is invited to chat
     await ans("Hooray! Hi, friends!")
 
 
