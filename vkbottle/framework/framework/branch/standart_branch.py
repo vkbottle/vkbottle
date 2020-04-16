@@ -23,6 +23,9 @@ class ImmutableBranchData:
     def __call__(self) -> dict:
         return {"name": self.name, **self.data}
 
+    def __repr__(self):
+        return f"<Branch ImmutableBranchData name={self.name} data={self.data}>"
+
 
 def rule_disposal(*rules: AbstractMessageRule):
     disposal = []

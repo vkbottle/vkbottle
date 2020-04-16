@@ -29,3 +29,6 @@ class AbstractBlueprint(object, metaclass=ABCMeta):
     @description.setter
     def description(self, new_description: str):
         self._description = new_description
+
+    def __repr__(self):
+        return f"<Blueprint {self.__class__.__qualname__} name={self.name} description={self.description}>"

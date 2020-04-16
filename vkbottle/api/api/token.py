@@ -7,6 +7,9 @@ class AbstractTokenGenerator:
     async def __aenter__(self, *args, **kwargs):
         return await self.get_token(*args, **kwargs)
 
+    def __repr__(self):
+        return f"<{self.__class__.__qualname__} tokens_type={self.tokens_type}>"
+
     async def get_token(self, *args, **kwargs) -> str:
         ...
 

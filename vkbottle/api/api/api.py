@@ -17,10 +17,10 @@ class API(ContextInstanceMixin):
         self.token_generator: AbstractTokenGenerator = GENERATORS.get(
             generator, ConsistentTokenGenerator
         )(tokens)
-        self._http = HTTPRequest()
+        self._http: HTTPRequest = HTTPRequest()
         self.throw_errors: bool = throw_errors
-        self._group_id: int = None
-        self._user_id: int = None
+        self._group_id: typing.Optional[int] = None
+        self._user_id: typing.Optional[int] = None
 
         logger.debug(f"API: using {len(tokens)} tokens, generator {generator} (can be changed)")
 
@@ -108,7 +108,7 @@ class API(ContextInstanceMixin):
         return {"generator": self.token_generator.__class__.__qualname__, "throw_errors": self.throw_errors}
 
     def __repr__(self):
-        return f"<API {self.__dict__()}>"
+        return f"<API {self.__dict__()} ({self._group_id or self._user_id})>"
 
 
 class UserApi(API, ContextInstanceMixin):

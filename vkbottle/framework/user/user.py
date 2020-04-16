@@ -233,3 +233,6 @@ class User(HTTP):
     @property
     def loop(self):
         return self.__loop
+
+    def __repr__(self):
+        return f"<User {self.user_id}>"

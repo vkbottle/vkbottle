@@ -307,3 +307,6 @@ class Handler:
             return func
 
         return decorator
+
+    def __repr__(self):
+        return "<user.Handler>"
