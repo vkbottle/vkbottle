@@ -45,7 +45,7 @@ class Branch(ClsBranch):
     async def branch(self, ans: Message, *args):
         await ans("Ты в бранче. Пиши «выйти», чтобы выйти отсюда.")
 ```
-Теперь, если пользователь напишет **«Хочу в бранч»**, бот ответит ему **«Теперь ты в бранче»**. В дальнейшем на любое сообщение пользователя поступит ответ **«Ты в бранче. Пиши «выйти», чтобы выйти отсюда.»**, но если пользователь напишет **«Выйти»**, то цепочка разорвется.
+Теперь, если пользователь напишет **«Хочу в бранч»**, бот ответит ему **«Теперь ты в бранче»**. В дальнейшем на любое сообщение пользователя поступит ответ **«Ты в бранче. Пиши «выйти», чтобы выйти отсюда.»**, но если он напишет **«Выйти»**, то цепочка разорвется.
 
 ### Kwargs в бранчах
 При инициализации бранча возможно передать все необходимые значения. Они будут переданы в хендлер бранча.
@@ -54,8 +54,7 @@ class Branch(ClsBranch):
 @bot.on.message(text="ставлю боту <mark:int>", lower=True)
 async def wrapper(ans: Message, mark):
     await ans("Теперь расскажи, что ты думаешь о нем:")
-    await bot.branch.add(ans.peer_id,
-                        "my_branch", mark=mark)
+    await bot.branch.add(ans.peer_id, "my_branch", mark=mark)
 
 @bot.branch.simple_branch("my_branch")
 async def branch(ans: Message, mark):
@@ -73,8 +72,7 @@ from vkbottle.rule import VBMLRule
 @bot.on.message(text="ставлю боту <mark:int>", lower=True)
 async def wrapper(ans: Message, mark):
     await ans("Теперь расскажи, что ты думаешь о нем:")
-    await bot.branch.add(ans.peer_id,
-                        "my_branch", mark=mark)
+    await bot.branch.add(ans.peer_id, "my_branch", mark=mark)
 
 @bot.branch.cls_branch("my_branch")
 class Branch(ClsBranch):
