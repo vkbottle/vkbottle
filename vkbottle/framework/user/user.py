@@ -11,7 +11,14 @@ from vkbottle.api import UserApi, VKError, request
 from vkbottle.framework.framework.handler import UserHandler
 from vkbottle.framework.blueprint.user import Blueprint
 from vkbottle.http import HTTP
-from vkbottle.utils import logger
+from vkbottle.utils import TaskManager, logger
+
+try:
+    import uvloop
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+except ImportError:
+    uvloop = None
+
 
 DEFAULT_WAIT = 20
 VERSION = 3
@@ -30,7 +37,7 @@ class User(HTTP):
         self,
         tokens: Token = None,
         user_id: int = None,
-        debug: bool = True,
+        debug: typing.Union[str, bool] = True,
         expand_models: bool = True,
         log_to_path: typing.Union[str, bool] = None,
         vbml_patcher: vbml.Patcher = None,
@@ -192,13 +199,22 @@ class User(HTTP):
                     if task is not None:
                         await data(str(task))
 
-    def run_polling(self):
-        loop = self.__loop
-        try:
-            loop.run_until_complete(self.run())
-        except KeyboardInterrupt:
-            logger.error("Keyboard Interrupt")
-            exit(0)
+    def run_polling(
+        self,
+        *,
+        auto_reload: bool = False,
+        auto_reload_dir: str = ".",
+        on_shutdown: typing.Callable = None,
+        on_startup: typing.Callable = None,
+    ):
+        task = TaskManager(self.__loop)
+        task.add_task(self.run())
+        task.run(
+            auto_reload=auto_reload,
+            on_shutdown=on_shutdown,
+            on_startup=on_startup,
+            auto_reload_dir=auto_reload_dir,
+        )
 
     async def expand_data(self, code: int, data):
         if code in range(6):
