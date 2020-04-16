@@ -54,3 +54,9 @@ class Keyboard:
             "buttons": [[b.button for b in row] for row in self.buttons],
         }
         return json.dumps(keyboard)
+
+    def __str__(self):
+        return self.generate()
+
+    def __repr__(self):
+        return f"<Keyboard (generator) {len(self.buttons)} buttons>"

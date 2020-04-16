@@ -51,3 +51,9 @@ class AbstractBranchGenerator(ABC):
     @abstractmethod
     async def exit(self, uid: int):
         ...
+
+    def __repr__(self):
+        return f"<BranchGenerator {self.__class__.__name__}>"
+
+    def __dict__(self):
+        return self.branches

@@ -23,6 +23,9 @@ class Action:
     def dict(self):
         return vars(self)
 
+    def __repr__(self):
+        return f"<Keyboard (action) {self.__class__.__qualname__}>"
+
 
 class Text(Action):
     type = "text"

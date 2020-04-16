@@ -24,6 +24,9 @@ class AbstractExtension(ABC, ContextInstanceMixin):
     def group_id(self) -> int:
         pass
 
+    def __repr__(self):
+        return f"<Extension {self.__class__.__qualname__}>"
+
 
 def dispatch(value: typing.Any) -> typing.Any:
     if isinstance(value, FromExtension):

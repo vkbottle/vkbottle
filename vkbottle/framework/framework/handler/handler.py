@@ -316,16 +316,18 @@ class MessageHandler:
         return decorator
 
     def __repr__(self):
+        rules = ""
         for rules in self.rules:
-            print(
+            rules += (
                 rules[0].call.__name__
                 + ": "
                 + ", ".join([rule.__class__.__name__ for rule in rules])
+                + "\n"
             )
-        return str()
+        return rules
 
-    def __str__(self):
-        return self.__repr__()
+    def __bool__(self):
+        return len(self.rules) > 0
 
     @property
     def default_rules(self):

@@ -55,3 +55,6 @@ class TokenSchema:
                 )
             logger.error(f"Token Generator for method {method} is not assigned")
         return method
+
+    def __repr__(self):
+        return f"<TokenSchema {self.__class__.__qualname__}>"

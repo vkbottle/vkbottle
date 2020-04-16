@@ -31,3 +31,6 @@ class BotStatus:
         local.pop("self")
         self.handler_return_context = {k: v for k, v in local.items() if v is not None}
         return self.handler_return_context
+
+    def __repr__(self):
+        return str(self.as_dict)

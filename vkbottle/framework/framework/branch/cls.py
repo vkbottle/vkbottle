@@ -29,6 +29,10 @@ class AbstractBranch(Copy):
     async def exit(self, ans: Message):
         ...
 
+    def __repr__(self):
+        return f"<Branch {self.__class__.__name__}>"
+
+
 
 class ClsBranch(AbstractBranch):
     async def enter(self, ans: Message):

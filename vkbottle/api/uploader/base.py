@@ -40,3 +40,6 @@ class Uploader:
     @staticmethod
     def generate_attachment_string(segment: str, owner_id: int, id_: int) -> str:
         return "{segment}{owner_id}_{id_}".format(**locals())
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} linked {self.vk.__class__.__name__}>"

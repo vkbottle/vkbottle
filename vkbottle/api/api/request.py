@@ -84,3 +84,6 @@ class Request:
         if raw_response:
             return resp
         return resp.response
+
+    def __repr__(self):
+        return f"<Request {self.token_generator.__class__.__qualname__} throw_errors={self.throw_errors}>"
