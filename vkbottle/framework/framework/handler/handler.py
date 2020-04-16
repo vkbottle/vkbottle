@@ -153,11 +153,11 @@ class Handler:
 
     def __repr__(self):
         return (
-            f"MESSAGE HANDLERS:              {len(self.message.rules)}\n"
-            f"CHAT-MESSAGE HANDLERS:         {len(self.chat_message.rules)}\n"
+            f"MESSAGE HANDLERS:              {len(self.message.rules) + len(self.message_handler.rules)}\n"
+            f"CHAT-MESSAGE HANDLERS:         {len(self.chat_message.rules + len(self.message_handler.rules))}\n"
             f"EVENT HANDLERS:                {len(self.event.rules)}\n"
-            f"MESSAGE-PAYLOAD HANDLERS:      {len(self.message.payload.rules)}\n"
-            f"CHAT-MESSAGE-PAYLOAD HANDLERS: {len(self.chat_message.payload.rules)}"
+            f"MESSAGE-PAYLOAD HANDLERS:      {len(self.message.payload.rules) + len(self.message_handler.payload.rules)}\n"
+            f"CHAT-MESSAGE-PAYLOAD HANDLERS: {len(self.chat_message.payload.rules) + len(self.message_handler.payload.rules)}"
         )
 
     def __str__(self):
