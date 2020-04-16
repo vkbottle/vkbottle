@@ -4,7 +4,7 @@ from vkbottle.framework.framework.extensions import dispatch
 
 class BaseModel(pydantic.BaseModel):
     class Config:
-        allow_mutation = False
+        allow_mutation = True
         use_enum_values = True
 
     def __str__(self):
