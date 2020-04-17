@@ -22,7 +22,8 @@ class API(ContextInstanceMixin):
         self._group_id: typing.Optional[int] = None
         self._user_id: typing.Optional[int] = None
 
-        logger.debug(f"API: using {len(tokens)} tokens, generator {generator} (can be changed)")
+        logger.debug(f"API: using {len(tokens) if tokens is not None else 0} tokens, "
+                     f"generator {generator} (can be changed)")
 
         # VK Api Methods
         self.account = Account(self.api)
