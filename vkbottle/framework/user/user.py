@@ -202,6 +202,10 @@ class User(HTTP, AsyncHandleManager):
     @property
     def loop(self):
         return self.__loop
+    
+    @loop.setter
+    def loop(self, loop: asyncio.AbstractEventLoop):
+        self.__loop = loop
 
     def __repr__(self):
         return f"<User {self.user_id}>"

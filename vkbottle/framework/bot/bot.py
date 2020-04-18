@@ -414,6 +414,10 @@ class Bot(HTTP, AsyncHandleManager):
     @property
     def loop(self):
         return self.__loop
+    
+    @loop.setter
+    def loop(self, loop: asyncio.AbstractEventLoop):
+        self.__loop = loop
 
     @property
     def patcher(self):
