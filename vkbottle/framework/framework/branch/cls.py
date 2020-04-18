@@ -33,7 +33,6 @@ class AbstractBranch(Copy):
         return f"<Branch {self.__class__.__name__}>"
 
 
-
 class ClsBranch(AbstractBranch):
     async def enter(self, ans: Message):
         logger.info("Branch {} entered at", self.key)

@@ -2,19 +2,23 @@ import sys
 import traceback
 import typing
 import asyncio
+import warnings
 
 import aiohttp
 import vbml
 
 from vkbottle.framework._status import LoggerLevel
 from vkbottle.api import UserApi, VKError, request
-from vkbottle.framework.framework.handler import UserHandler
+from vkbottle.framework.framework.handler.user import Handler
+from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
 from vkbottle.framework.blueprint.user import Blueprint
 from vkbottle.http import HTTP
 from vkbottle.utils import TaskManager, logger
+from .processor import AsyncHandleManager
 
 try:
     import uvloop
+
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     uvloop = None
@@ -28,7 +32,7 @@ Token = typing.Union[str, typing.List[str]]
 AnyUser = typing.Union["User", Blueprint]
 
 
-class User(HTTP):
+class User(HTTP, AsyncHandleManager):
     long_poll_server: dict
     __wait: int
     version: int = None
@@ -54,7 +58,8 @@ class User(HTTP):
         self.user_id: typing.Optional[int] = user_id or self.get_id_by_token(
             self.__tokens[0]
         )
-        self.on: UserHandler = UserHandler()
+        self.on: Handler = Handler()
+        self.branch: AbstractBranchGenerator = DictBranch()
 
         if isinstance(debug, bool):
             debug = "INFO" if debug else "ERROR"
@@ -138,6 +143,7 @@ class User(HTTP):
         logger.info("Polling will be started. Is it OK?")
 
         await self.get_server()
+        self.on.dispatch()
         logger.debug("User Polling successfully started")
 
         while True:
@@ -165,39 +171,10 @@ class User(HTTP):
                 )
 
     async def emulate(self, event: dict):
-        logger.debug(f"Response: {event}")
+        logger.debug("Response: {}", event)
         for update in event.get("updates", []):
             update_code, update_fields = update[0], update[1:]
-
-            for rule in self.on.rules:
-                check = await rule.check(update)
-
-                if check is not None:
-                    fields, _ = rule.data["data"], rule.data["name"]
-                    data = dict(zip(fields, update_fields))
-                    args, kwargs = [], {}
-
-                    if self._expand_models:
-                        data.update(await self.expand_data(update_code, data))
-
-                    if rule.data.get("dataclass"):
-                        data = rule.data.get("dataclass")(**data)
-
-                    if isinstance(check, tuple):
-                        if all([await s_rule.check(data) for s_rule in check]):
-                            args = [a for rule in check for a in rule.context.args]
-                            kwargs = {
-                                k: v
-                                for rule in check
-                                for k, v in rule.context.kwargs.items()
-                            }
-                        else:
-                            continue
-
-                    task = await rule.call(data, *args, **kwargs)
-
-                    if task is not None:
-                        await data(str(task))
+            await self._processor(update, update_code, update_fields)
 
     def run_polling(
         self,
@@ -216,18 +193,10 @@ class User(HTTP):
             auto_reload_dir=auto_reload_dir,
         )
 
-    async def expand_data(self, code: int, data):
-        if code in range(6):
-            data.update(
-                (await self.api.messages.get_by_id(message_ids=data["message_id"]))
-                .items[0]
-                .dict()
-            )
-        return data
-
-    def mode(self, mode: int):
-        raise VKError(
-            "User LP mode specifier is abandoned, mode 234 is used as default. See issue #36"
+    def mode(self, *_):
+        warnings.warn(
+            "User LP mode specifier is abandoned, mode 234 is used as default. See issue #36",
+            DeprecationWarning
         )
 
     @property

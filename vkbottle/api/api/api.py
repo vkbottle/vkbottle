@@ -22,8 +22,10 @@ class API(ContextInstanceMixin):
         self._group_id: typing.Optional[int] = None
         self._user_id: typing.Optional[int] = None
 
-        logger.debug(f"API: using {len(tokens) if tokens is not None else 0} tokens, "
-                     f"generator {generator} (can be changed)")
+        logger.debug(
+            f"API: using {len(tokens) if tokens is not None else 0} tokens, "
+            f"generator {generator} (can be changed)"
+        )
 
         # VK Api Methods
         self.account = Account(self.api)
@@ -106,7 +108,10 @@ class API(ContextInstanceMixin):
         self._user_id = user_id
 
     def __dict__(self):
-        return {"generator": self.token_generator.__class__.__qualname__, "throw_errors": self.throw_errors}
+        return {
+            "generator": self.token_generator.__class__.__qualname__,
+            "throw_errors": self.throw_errors,
+        }
 
     def __repr__(self):
         return f"<API {self.__dict__()} ({self._group_id or self._user_id})>"

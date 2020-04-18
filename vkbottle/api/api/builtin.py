@@ -59,7 +59,7 @@ class LimitedTokenGenerator(AbstractTokenGenerator):
                 self.step = self.token_sequence
         elif not len(self.step):
             logger.error(
-                f'LimitedTokenGenerator is not able to avoid the limit because there are not enough tokens'
+                f"LimitedTokenGenerator is not able to avoid the limit because there are not enough tokens"
             )
             self.step = self.token_sequence
 

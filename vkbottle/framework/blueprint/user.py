@@ -2,9 +2,9 @@ import typing
 
 from vkbottle.api import exceptions, api
 from vkbottle.framework.framework.handler import (
-    UserHandler,
     ErrorHandler,
 )
+from vkbottle.framework.framework.handler.user import Handler
 
 from .abc import AbstractBlueprint
 
@@ -13,7 +13,7 @@ class Blueprint(AbstractBlueprint):
     def __init__(self, name: str = None, description: str = None) -> None:
         super().__init__()
         # Main workers
-        self.on: UserHandler = UserHandler()
+        self.on: Handler = Handler()
         self.error_handler = ErrorHandler()
 
         self.api: api.Api = None

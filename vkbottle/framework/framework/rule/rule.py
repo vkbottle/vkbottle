@@ -5,10 +5,13 @@ import re
 from copy import copy
 from vbml import Pattern, Patcher
 
-from vkbottle.types import BaseModel
-from vkbottle.types.message import Message
+from vkbottle.types.message import Message as BotMessage
+from vkbottle.types.user_longpoll import Message as UserMessage
 from vkbottle.types import user_longpoll
 from vkbottle.utils import flatten, json
+
+
+Message = typing.Union[BotMessage, UserMessage]
 
 
 class Copy:
@@ -64,18 +67,8 @@ class Any(AbstractRule):
         return True
 
 
-class AbstractUserRule(AbstractRule):
-    async def check(self, update: typing.Tuple[dict, BaseModel]) -> bool:
-        ...
-
-
 class AbstractMessageRule(AbstractRule):
     async def check(self, message: Message) -> bool:
-        ...
-
-
-class MessageUserRule(AbstractMessageRule):
-    async def check(self, message: user_longpoll.Message):
         ...
 
 
@@ -190,7 +183,7 @@ class UserLongPollEventRule(AbstractRule):
                 return tuple(self.data["rules"])
 
 
-class UserMessageRule(AbstractUserRule, UnionMixin):
+class UserMessageRule(UnionMixin):
     async def check(self, message: user_longpoll.Message):
         if message.text in self.data["mixin"]:
             return True
@@ -256,25 +249,6 @@ class VBMLRule(VBML):
             if self._patcher.check(message, pattern) is not None:
                 self.context.kwargs = pattern.dict()
                 self.resolve(pattern)
-                return True
-
-
-class VBMLUserRule(VBML):
-    async def check(self, message: user_longpoll.Message):
-        patterns: typing.List[Pattern] = self.data["pattern"]
-
-        # noqa: due to strange vk behaviour
-        message = (
-            message.text.replace("<br>", "\n")
-            .replace("&lt;", "<")
-            .replace("&gt;", ">")
-            .replace("&quot;", '"')
-            .replace("&amp;", "&")
-        )
-
-        for pattern in patterns:
-            if self._patcher.check(message, pattern) is not None:
-                self.context.kwargs = pattern.dict()
                 return True
 
 

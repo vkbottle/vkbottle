@@ -7,7 +7,8 @@ from vbml import Patcher
 
 from vkbottle.http import HTTP
 from vkbottle.types.events import EventList
-from vkbottle.framework.framework.handler import Handler, ErrorHandler
+from vkbottle.framework.framework.handler.handler import Handler
+from vkbottle.framework.framework.handler import ErrorHandler
 from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.extensions.standard import StandardExtension

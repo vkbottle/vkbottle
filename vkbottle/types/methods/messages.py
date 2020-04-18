@@ -60,9 +60,7 @@ class MessagesCreateChat(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self,
-            user_ids: typing.List = None,
-            title: str = None,
+        self, user_ids: typing.List = None, title: str = None,
     ) -> responses.messages.CreateChat:
         """ messages.createChat
         From Vk Docs: Creates a chat with several participants.
@@ -1083,7 +1081,9 @@ class MessagesSendService(BaseMethod):
         APIAccessibility.VKME,
     ]
 
-    async def __call__(self, peer_id: int, action_type: str) -> responses.ok_response.OkResponse:
+    async def __call__(
+        self, peer_id: int, action_type: str
+    ) -> responses.ok_response.OkResponse:
         """ messages.sendService
         Still no docs in vk dox
         """
@@ -1098,7 +1098,6 @@ class MessagesSendService(BaseMethod):
             params,
             response_model=responses.ok_response.OkResponseModel,
         )
-
 
 
 class MessagesSetActivity(BaseMethod):
