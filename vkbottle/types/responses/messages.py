@@ -149,6 +149,7 @@ class ChatSettings(BaseModel):
     state: ConversationUserState = None
     photo: objects.photos.PhotoSizes = None
     admin_ids: typing.List[int] = None
+    owner_id: int = None
     active_ids: typing.List[int] = None
 
 
@@ -163,6 +164,7 @@ class Conversation(BaseModel):
     can_write: CanWrite = None
     chat_settings: ChatSettings = None
 
+GetConversationsById.update_forward_refs()
 
 class ConversationsItem(BaseModel):
     conversation: Conversation = None
