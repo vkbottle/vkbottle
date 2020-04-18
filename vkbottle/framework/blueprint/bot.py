@@ -4,10 +4,10 @@ from vkbottle.api import exceptions, api
 from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
 from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.handler import (
-    Handler,
     ErrorHandler,
     MiddlewareExecutor,
 )
+from vkbottle.framework.framework.handler.handler import Handler
 
 from .abc import AbstractBlueprint
 

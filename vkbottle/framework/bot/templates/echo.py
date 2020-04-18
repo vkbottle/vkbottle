@@ -21,8 +21,7 @@ class Echo(AbstractTemplate):
     work_space: WorkSpace = ()
 
     def ready(
-            self,
-            workspace: WorkSpace = (BotWorkSpace.DIALOG, BotWorkSpace.CHAT)
+        self, workspace: WorkSpace = (BotWorkSpace.DIALOG, BotWorkSpace.CHAT)
     ) -> "Echo":
         self.bot.on.message_handler.add_handler(echo_wrapper)
         return self

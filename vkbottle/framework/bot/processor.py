@@ -7,9 +7,9 @@ from vbml import Patcher
 
 from vkbottle.types.message import Message
 from vkbottle.api import Api
-from vkbottle.framework.framework.handler import Handler
+from vkbottle.framework.framework.handler.handler import Handler
 from vkbottle.framework.framework.handler import MiddlewareExecutor
-from vkbottle.framework.framework.branch import DictBranch, GeneratorType
+from vkbottle.framework.framework.branch import AbstractBranchGenerator, GeneratorType
 from vkbottle.framework.framework.branch import Branch, ExitBranch
 from vkbottle.framework._status import BotStatus
 from vkbottle.utils.tools import get_attr
@@ -20,7 +20,7 @@ class AsyncHandleManager:
     on: Handler
     middleware: MiddlewareExecutor
     patcher: Patcher
-    branch: DictBranch
+    branch: AbstractBranchGenerator
     status: BotStatus
     group_id: int
     loop: AbstractEventLoop

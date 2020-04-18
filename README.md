@@ -14,7 +14,7 @@
    
    Последний стабильный релиз:
    ```sh
-   pip install vkbottle==2.6
+   pip install vkbottle==2.7.1
    ```
 
 2) С помощью установщика pip из GitHub: 
@@ -117,13 +117,12 @@ bot.run_polling()
 ### User LongPoll
 
 ```python
-from vkbottle.user import User, types
-from vkbottle.rule import VBMLUserRule
+from vkbottle.user import User, Message
 
-user = User("user-token", 123)
+user = User("user-token")
 
-@user.on.message_new(VBMLUserRule("can i ask you about <theme>?",))
-async def wrapper(ans: types.Message, theme):
+@user.on.message_handler(text="can i ask you about <theme>?")
+async def wrapper(ans: Message, theme: str):
     if theme in ["examples", "how to do smt", "depression", "insomnia"]:
         await ans("You can ask me about it in telegram @timoniq or make an issue on github!")
     else:
@@ -140,9 +139,6 @@ user.run_polling()
 
 * [Русская версия документации](docs/README.RU.md)  
 в ней же можно найти документацию по валидаторам, веткам
-
-* [Дополнительная документация - русская версия](docs/FrameworkAPI.md)  
-там можно найти все остальную информацию
 
 ## Based on
 
