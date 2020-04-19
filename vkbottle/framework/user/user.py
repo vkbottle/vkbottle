@@ -43,12 +43,13 @@ class User(HTTP, AsyncHandleManager):
         tokens: Token = None,
         user_id: int = None,
         debug: typing.Union[str, bool] = True,
+        loop: asyncio.AbstractEventLoop = None,
         expand_models: bool = True,
         log_to_path: typing.Union[str, bool] = None,
         vbml_patcher: vbml.Patcher = None,
     ):
         self.__tokens = [tokens] if isinstance(tokens, str) else tokens
-        self.__loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
+        self.__loop = loop or asyncio.get_event_loop()
         self.__debug: bool = debug
         self.api: UserApi = UserApi(self.__tokens)
         UserApi.set_current(self.api)
