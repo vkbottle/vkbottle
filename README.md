@@ -91,10 +91,10 @@ async def wrapper(ans: Message):
 
 
 app.router.add_route(
-        path='/',
-        method='POST',
-        handler=executor
-    )
+    path='/',
+    method='POST',
+    handler=executor
+)
 web.run_app(app=app, host=host, port=port)
 ```
 
