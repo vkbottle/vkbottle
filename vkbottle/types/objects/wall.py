@@ -127,7 +127,7 @@ class WallComment(BaseModel):
 
 class Wallpost(BaseModel):
     access_key: str = None
-    attachments: typing.List = None
+    attachments: typing.List["WallpostAttachment"] = None
     date: int = None
     edited: int = None
     from_id: int = None

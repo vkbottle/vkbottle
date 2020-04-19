@@ -90,8 +90,17 @@ async def wrapper(ans: Message):
     return "Tested!"
 
 
+<<<<<<< HEAD
 app.router.add_route('POST', '/', executor)
 web.run_app(app=app)
+=======
+app.router.add_route(
+    path='/',
+    method='POST',
+    handler=executor
+)
+web.run_app(app=app, host=host, port=port)
+>>>>>>> upstream/master
 ```
 
 ### Rules
