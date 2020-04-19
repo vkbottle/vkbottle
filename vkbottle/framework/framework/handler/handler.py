@@ -112,7 +112,6 @@ class Handler:
 
         def decorator(func):
             rule = ChatActionRule(type_, rules=rules)
-            rule.create(func)
             self.chat_message.add_rules([rule], func)
             return func
 
@@ -121,11 +120,7 @@ class Handler:
     def chat_mention(self):
         def decorator(func):
             pattern = Pattern(pattern=r"\[(club|public){}\|.*?]".format(self.group_id))
-            print(pattern.pattern)
-            ignore_ans = len(signature(func).parameters) < 1
-
             rule = VBMLRule(pattern)
-            rule.create(func, {"ignore_ans": ignore_ans})
             self.chat_message.add_rules([rule], func)
             return func
 
@@ -134,7 +129,6 @@ class Handler:
     def chat_invite(self):
         def decorator(func):
             rule = ChatActionRule("chat_invite_user", {"member_id": -self.group_id})
-            rule.create(func)
             self.chat_message.add_rules([rule], func)
             return func
 
