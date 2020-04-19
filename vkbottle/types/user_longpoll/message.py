@@ -1,8 +1,8 @@
-from .base import BaseModel
-from .message import sep_bytes
-from .objects.messages import MessageAction
-from .objects.base import Geo
-from ..api.api import UserApi
+from vkbottle.types.base import BaseModel
+from vkbottle.types.message import sep_bytes
+from vkbottle.types.objects.messages import MessageAction
+from vkbottle.types.objects.base import Geo
+from vkbottle.api.api import UserApi
 import random
 import typing
 

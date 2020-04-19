@@ -9,8 +9,9 @@ import vbml
 
 from vkbottle.framework._status import LoggerLevel
 from vkbottle.api import UserApi, VKError, request
-from vkbottle.framework.framework.handler.user import Handler
+from vkbottle.framework.framework.handler.user.handler import Handler
 from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
+from vkbottle.framework.framework.handler.middleware import MiddlewareExecutor
 from vkbottle.framework.blueprint.user import Blueprint
 from vkbottle.http import HTTP
 from vkbottle.utils import TaskManager, logger
@@ -60,6 +61,7 @@ class User(HTTP, AsyncHandleManager):
         )
         self.on: Handler = Handler()
         self.branch: AbstractBranchGenerator = DictBranch()
+        self.middleware: MiddlewareExecutor = MiddlewareExecutor()
 
         if isinstance(debug, bool):
             debug = "INFO" if debug else "ERROR"
@@ -202,10 +204,6 @@ class User(HTTP, AsyncHandleManager):
     @property
     def loop(self):
         return self.__loop
-    
-    @loop.setter
-    def loop(self, loop: asyncio.AbstractEventLoop):
-        self.__loop = loop
 
     def __repr__(self):
         return f"<User {self.user_id}>"

@@ -1,17 +1,15 @@
-import types
 from asyncio import AbstractEventLoop
-from re import sub
-from vkbottle.utils import logger, init_bot_mention
+import types
+from vkbottle.utils import logger
 
 from vbml import Patcher
 
-from vkbottle.types.message import Message
 from vkbottle.api import UserApi
-from vkbottle.framework.framework.handler.user import Handler
+from vkbottle.types.user_longpoll import Message
+from vkbottle.framework.framework.handler.user.handler import Handler
 from vkbottle.framework.framework.handler import MiddlewareExecutor
-from vkbottle.framework.framework.branch import AbstractBranchGenerator, GeneratorType
-from vkbottle.framework.framework.branch import Branch, ExitBranch
-from vkbottle.utils.tools import get_attr
+from vkbottle.framework.framework.branch import AbstractBranchGenerator
+from vkbottle.types.events import UserEvents
 
 
 class AsyncHandleManager:
@@ -24,8 +22,8 @@ class AsyncHandleManager:
     loop: AbstractEventLoop
     _expand_models: bool
 
-    async def _processor(self, update: dict, update_code: int, update_fields: list):
-        for rule in self.on.rules:
+    async def _event_processor(self, update: dict, update_code: int, update_fields: list):
+        for rule in self.on.event.rules:
             check = await rule.check(update)
 
             if check is not None:
@@ -55,6 +53,53 @@ class AsyncHandleManager:
                 if task is not None:
                     await data(str(task))
 
+    async def _processor(self, update: dict, update_code: int, update_fields: list):
+        data = update, update_code, update_fields
+        event = UserEvents(update_code)
+        logger.debug("New event: {} {}", event, update)
+        if event is UserEvents.new_message:
+            return await self._message_processor(*data)
+        return await self._event_processor(*data)
+
+    async def _message_processor(self, update: dict, update_code: int, update_fields: list):
+        for rule in self.on.message_rules:
+            check = await rule.check(update)
+
+            if check is not None:
+                fields, _ = rule.data["data"], rule.data["name"]
+                data = dict(zip(fields, update_fields))
+                args, kwargs = [], {}
+                middleware_args = []
+
+                if self._expand_models:
+                    data.update(await self.expand_data(update_code, data))
+
+                message = Message(**data)
+
+                if isinstance(check, tuple):
+                    if all([await s_rule.check(message) for s_rule in check]):
+                        args = [a for rule in check for a in rule.context.args]
+                        kwargs = {
+                            k: v
+                            for rule in check
+                            for k, v in rule.context.kwargs.items()
+                        }
+                    else:
+                        continue
+
+                async for mr in self.middleware.run_middleware(message):
+                    if mr is False:
+                        return
+                    elif mr is not None:
+                        middleware_args.append(mr)
+
+                if message.peer_id in await self.branch.queue:
+                    await self._branched_processor(message, middleware_args)
+                    return
+
+                task = await rule.call(message, *args, **kwargs)
+                return task
+
     async def expand_data(self, code: int, data):
         if code in range(6):
             data.update(
@@ -63,3 +108,41 @@ class AsyncHandleManager:
                 .dict()
             )
         return data
+
+    async def _branched_processor(self, message: Message, middleware_args: list):
+        logger.debug(
+            '-> BRANCHED MESSAGE FROM {} TEXT "{}"',
+            message.peer_id,
+            message.text.replace("\n", " "),
+        )
+
+        disposal, branch = await self.branch.load(message.peer_id)
+        await branch.enter(message)
+
+        for n, member in disposal.items():
+            rules = member[1]
+            for rule in rules:
+                if not await rule(message):
+                    break
+            else:
+                task = types.MethodType(member[0], branch)
+                args = [a for rule in rules for a in rule.context.args]
+                kwargs = {
+                    k: v for rule in rules for k, v in rule.context.kwargs.items()
+                }
+                await task(message, *middleware_args, *args, **kwargs),
+                break
+
+        logger.info(
+            'New BRANCHED "{0}" compiled with branch <{2}> (from: {1})'.format(
+                message.text.replace("\n", " "),
+                message.from_id,
+                '"{}" with {} kwargs'.format(
+                    branch.key,
+                    branch.context
+                    if len(branch.context) < 100
+                    else branch.context[1:99] + "...",
+                ),
+            )
+        )
+        await branch.exit(message)
