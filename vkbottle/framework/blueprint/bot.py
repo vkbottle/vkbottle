@@ -8,7 +8,6 @@ from vkbottle.framework.framework.handler import (
     MiddlewareExecutor,
 )
 from vkbottle.framework.framework.handler.handler import Handler
-
 from .abc import AbstractBlueprint
 
 
@@ -29,9 +28,9 @@ class Blueprint(AbstractBlueprint):
     def create(
         self,
         *,
-        familiar: typing.Tuple[AbstractBranchGenerator, AbstractExtension, api.Api],
+        familiar: typing.Tuple[AbstractBranchGenerator, AbstractExtension, api.Api, MiddlewareExecutor],
     ):
-        branch, extension, api_instance = familiar
+        branch, extension, api_instance, middleware = familiar
         if not isinstance(self.branch, type(branch)):
             raise exceptions.VKError(
                 f"All blueprints should have the same branch generative type ({self.name} "
@@ -39,3 +38,4 @@ class Blueprint(AbstractBlueprint):
             )
         self.extension = extension
         self.api = api_instance
+        self.middleware = middleware

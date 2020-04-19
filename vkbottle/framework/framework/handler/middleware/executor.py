@@ -1,8 +1,9 @@
+import types
+import typing
+
 from vkbottle.types import BaseModel
 from vkbottle.utils import logger
 from .middleware import Middleware
-import typing
-import types
 
 
 class MiddlewareExecutor:
