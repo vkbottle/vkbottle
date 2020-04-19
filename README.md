@@ -90,12 +90,8 @@ async def wrapper(ans: Message):
     return "Tested!"
 
 
-app.router.add_route(
-        path='/',
-        method='POST',
-        handler=executor
-    )
-web.run_app(app=app, host=host, port=port)
+app.router.add_route('POST', '/', executor)
+web.run_app(app=app)
 ```
 
 ### Rules
@@ -107,7 +103,7 @@ from vkbottle.rule import AttachmentRule
 bot = Bot("my-token")
 
 @bot.on.message(AttachmentRule("photo"))
-async def wrapper():
+async def wrapper(ans: Message):
     return "What a beautiful photo!"
     
 bot.run_polling()

@@ -3,7 +3,7 @@ from ..rule import AbstractRule, RuleExecute
 
 
 class AbstractFilter:
-    def __init__(self, *rules: typing.Tuple[AbstractRule]):
+    def __init__(self, *rules: AbstractRule):
         self.rules: typing.Tuple[AbstractRule] = rules
         self.context = RuleExecute()
 

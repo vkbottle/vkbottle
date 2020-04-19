@@ -1,7 +1,6 @@
 from vkbottle import Bot, Message
 from vkbottle.ext import Middleware
 import os
-from time import time
 
 # Add variable TOKEN to your env variables
 bot = Bot(os.environ["TOKEN"], debug="DEBUG")
