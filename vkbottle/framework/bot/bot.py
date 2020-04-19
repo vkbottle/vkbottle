@@ -45,6 +45,7 @@ class Bot(HTTP, AsyncHandleManager):
         *,
         group_id: int = None,
         debug: typing.Union[str, bool] = True,
+        loop: asyncio.AbstractEventLoop = None,
         throw_errors: bool = True,
         log_to_path: typing.Union[str, bool] = None,
         patcher: Patcher = None,
@@ -100,7 +101,7 @@ class Bot(HTTP, AsyncHandleManager):
             )
 
         self.group_id = group_id or self.get_id_by_token(self.__tokens[0])
-        self.__loop = asyncio.get_event_loop()
+        self.__loop = loop or asyncio.get_event_loop()
 
         # Sign assets
         self.api: Api = Api(self.__tokens, throw_errors=throw_errors)
@@ -176,7 +177,7 @@ class Bot(HTTP, AsyncHandleManager):
         Add blueprints
         """
         for blueprint in blueprints:
-            blueprint.create(familiar=(self.branch, self.extension, self.api, self.middleware))
+            blueprint.create(familiar=(self.branch, self.extension, self.api))
             self.loop.create_task(self.dispatch(blueprint))
         logger.debug("Blueprints have been successfully loaded")
 

@@ -16,7 +16,7 @@ class Blueprint(AbstractBlueprint):
         super().__init__()
         # Main workers
         self.branch: typing.Optional[AbstractBranchGenerator] = DictBranch()
-        self.middleware: MiddlewareExecutor = None
+        self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.on: Handler = Handler()
         self.error_handler = ErrorHandler()
 
@@ -28,9 +28,9 @@ class Blueprint(AbstractBlueprint):
     def create(
         self,
         *,
-        familiar: typing.Tuple[AbstractBranchGenerator, AbstractExtension, api.Api, MiddlewareExecutor],
+        familiar: typing.Tuple[AbstractBranchGenerator, AbstractExtension, api.Api],
     ):
-        branch, extension, api_instance, middleware = familiar
+        branch, extension, api_instance = familiar
         if not isinstance(self.branch, type(branch)):
             raise exceptions.VKError(
                 f"All blueprints should have the same branch generative type ({self.name} "
@@ -38,4 +38,3 @@ class Blueprint(AbstractBlueprint):
             )
         self.extension = extension
         self.api = api_instance
-        self.middleware = middleware
