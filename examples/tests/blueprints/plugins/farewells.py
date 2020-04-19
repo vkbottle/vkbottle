@@ -15,5 +15,5 @@ async def leaving(ans: Message):
 
 @bp.on.message_handler(text="New description <text>")
 async def set_description(ans: Message, text: str):
-    bp.description(text)
+    bp.description = text
     await ans("The description of the blueprint has changed!")
