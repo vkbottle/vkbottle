@@ -25,7 +25,6 @@ class Friend(AbstractRule):
         self.user_ids = user_ids
 
     async def check(self, update: FriendOnline) -> bool:
-        print(update.user_id, "is online")
         if abs(update.user_id) in self.user_ids:
             return True
 
@@ -41,7 +40,7 @@ async def probability(ans: Message, thing: str):
     await ans(f"Вероятность того, что {thing} равна {round(random.uniform(0.0, 1.0) * 100, 2)}%")
 
 
-@user.on.event.friend_online(Friend([562727057, 203744111]))
+@user.on.event.friend_online(Friend([1, 3]))
 async def friend_online(event: FriendOnline):
     await user.api.messages.send(event.user_id, message="тест юзер лп, ты онлайн")
 
