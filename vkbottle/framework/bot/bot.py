@@ -121,7 +121,7 @@ class Bot(HTTP, AsyncHandleManager):
 
     async def get_updates(self):
         # noqa
-        logger.info("Receiving  updates from conversations")
+        logger.info("Receiving updates from conversations")
         updates = []
         close, offset = False, 0
 
