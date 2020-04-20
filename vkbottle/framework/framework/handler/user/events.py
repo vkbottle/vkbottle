@@ -213,7 +213,9 @@ class UserEvents:
             rule.create(
                 func,
                 {
-                    "name": "chat_restore", "data": ["peer_id", "local_id"],
+                    "name": "chat_restore",
+                    "data": ["peer_id", "local_id"],
+                    "dataclass": events.RestoreDeleted,
                 },
             )
             self.rules.append(rule)
@@ -225,7 +227,12 @@ class UserEvents:
         def decorator(func):
             rule = UserLongPollEventRule(51, *rules)
             rule.create(
-                func, {"name": "chat_edit", "data": ["chat_id", "self"]},
+                func,
+                {
+                    "name": "chat_edit",
+                    "data": ["chat_id", "self"],
+                    "dataclass": events.ChatEdit,
+                },
             )
             self.rules.append(rule)
             return func
@@ -288,6 +295,7 @@ class UserEvents:
                 {
                     "name": "chat_voice_message_states",
                     "data": ["user_ids", "peer_id", "total_count", "ts"],
+                    "dataclass": events.ChatVoiceMessageStates,
                 },
             )
             self.rules.append(rule)

@@ -14,10 +14,12 @@ class UserEvents(IntEnum):
     replace_dialog_flags = 11
     install_dialog_flags = 12
     delete_messages = 13
+    chat_restore = 14
     topic_params_change = 51
     chat_info_edit = 52
     dialog_typing_state = 61
     conversation_typing_state = 62
+    chat_voice_message_states = 64
     call = 70
     counter = 80
     notifications_settings_changed = 114

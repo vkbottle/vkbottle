@@ -102,7 +102,23 @@ class ChangedNotificationsSettings(BaseModel):
     disabled_until: int
 
 
+class RestoreDeleted(DeleteMessages):
+    pass
+
+
 class ChatInfoEdit(BaseModel):
     type_id: int
     peer_id: int
     info: typing.Union[str, int]
+
+
+class ChatVoiceMessageStates(BaseModel):
+    user_ids: typing.List[int]
+    peer_id: int
+    total_count: int
+    ts: typing.Optional[int] = None
+
+
+class ChatEdit(BaseModel):
+    chat_id: int
+    self: int
