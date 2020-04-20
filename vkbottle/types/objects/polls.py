@@ -14,7 +14,7 @@ class Answer(BaseModel):
 class Poll(BaseModel):
     anonymous: bool = None
     answer_id: int = None
-    answers: typing.List = None
+    answers: typing.List[Answer] = None
     created: int = None
     id: int = None
     owner_id: int = None
