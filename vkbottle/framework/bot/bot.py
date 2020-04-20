@@ -2,7 +2,6 @@ import asyncio
 import sys
 import traceback
 import typing
-
 from vbml import Patcher
 
 from vkbottle.http import HTTP

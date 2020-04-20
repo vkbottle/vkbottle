@@ -100,13 +100,11 @@ class AsyncHandleManager:
                 task = await rule.call(message, *args, **kwargs)
                 return task
 
-    async def expand_data(self, code: int, data):
+    async def expand_data(self, code: int, data: dict) -> dict:
         if code in range(6):
-            data.update(
-                (await self.api.messages.get_by_id(message_ids=data["message_id"]))
-                .items[0]
-                .dict()
-            )
+            exp = (await self.api.messages.get_by_id(message_ids=data["message_id"])).items
+            if len(exp):
+                data.update(exp[0].dict())
         return data
 
     async def _branched_processor(self, message: Message, middleware_args: list):
