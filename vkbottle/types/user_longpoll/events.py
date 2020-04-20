@@ -100,3 +100,9 @@ class ChangedNotificationsSettings(BaseModel):
     peer_id: int
     sound: int
     disabled_until: int
+
+
+class ChatInfoEdit(BaseModel):
+    type_id: int
+    peer_id: int
+    info: typing.Union[str, int]

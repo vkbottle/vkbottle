@@ -237,7 +237,11 @@ class UserEvents:
             rule = UserLongPollEventRule(52, *rules)
             rule.create(
                 func,
-                {"name": "chat_info_edit", "data": ["type_id", "peer_id", "info"]},
+                {
+                    "name": "chat_info_edit",
+                    "data": ["type_id", "peer_id", "info"],
+                    "dataclass": events.ChatInfoEdit,
+                },
             )
             self.rules.append(rule)
             return func
