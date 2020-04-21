@@ -13,7 +13,7 @@ from vkbottle.framework.framework.handler.user.handler import Handler
 from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
 from vkbottle.framework.framework.handler.middleware import MiddlewareExecutor
 from vkbottle.framework.blueprint.user import Blueprint
-from vkbottle.http import HTTP
+from vkbottle.http import HTTP, App
 from vkbottle.utils import TaskManager, logger
 from .processor import AsyncHandleManager
 
@@ -40,6 +40,8 @@ class User(HTTP, AsyncHandleManager):
 
     def __init__(
         self,
+        login: str = None,
+        password: str = None,
         tokens: Token = None,
         user_id: int = None,
         debug: typing.Union[str, bool] = True,
@@ -49,6 +51,8 @@ class User(HTTP, AsyncHandleManager):
         vbml_patcher: vbml.Patcher = None,
     ):
         self.__tokens = [tokens] if isinstance(tokens, str) else tokens
+        if not tokens:
+            self.__tokens = self.get_tokens(login, password)
         self.__loop = loop or asyncio.get_event_loop()
         self.__debug: bool = debug
         self.api: UserApi = UserApi(self.__tokens)
@@ -97,6 +101,14 @@ class User(HTTP, AsyncHandleManager):
         if "error" in response:
             raise VKError("Token is invalid")
         return response["response"][0]["id"]
+
+    @staticmethod
+    def get_tokens(login: str, password: str) -> list:
+        app = App(login, password)
+        tokens = asyncio.get_event_loop().run_until_complete(
+            app()
+        )
+        return tokens
 
     def dispatch(self, user: AnyUser):
         """
