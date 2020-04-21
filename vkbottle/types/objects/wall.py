@@ -109,7 +109,7 @@ class Views(BaseModel):
 
 
 class WallComment(BaseModel):
-    attachments: typing.List = None
+    attachments: typing.List[CommentAttachment] = None
     date: int = None
     from_id: int = None
     id: int = None
