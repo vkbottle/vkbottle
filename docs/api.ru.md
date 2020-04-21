@@ -31,6 +31,35 @@ api = API(tokens=tokens, throw_errors=True)
 
 **tokens** - может быть как списком токенов,  так и одним токеном. В ботах рекомендуется использовать до 2 токенов (максимальная нагрузка - 40 запросов в секунду), тогда как при работе с юзерами может понадобится больше 6 из-за невероятно низкого лимита (3 запроса в секунду)
 
+**Дополнительно** Пример кастомного генератора:  
+
+Напишем генератор для определения токена из двух типов по условию (vk me и обычный):
+
+```python
+from vkbottle.api.api.token import AbstractTokenGenerator
+import typing
+import random
+
+class CustomTokenGenerator(AbstractTokenGenerator):
+    def __init__(self, vk_me_tokens: typing.List[str], tokens: typing.List[str]):
+        self.vk_me_tokens = vk_me_tokens
+        self.tokens = tokens
+    
+    async def get_token(self, method: str, params: dict) -> str:
+        if method in ["messages.setActivity", "messages.send"]:
+            return random.choice(self.vk_me_tokens)
+        return random.choice(self.tokens)
+```
+
+Теперь добавим его в наш API:
+
+```python
+from vkbottle.api import API
+
+api = API()
+api.token_generator = CustomTokenGenerator(["vkme-token"], ["token-1", "token-2"])
+```
+
 ### Bot API, User API
 Для вызова API методов с инициированным ботом потребуется использовать атрибут класса `Bot.api`:
 
