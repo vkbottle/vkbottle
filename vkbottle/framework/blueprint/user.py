@@ -1,7 +1,5 @@
 from vkbottle.api import api
-from vkbottle.framework.framework.handler import (
-    ErrorHandler,
-)
+from vkbottle.framework.framework.handler import ErrorHandler
 from vkbottle.framework.framework.handler.user.handler import Handler
 
 from .abc import AbstractBlueprint

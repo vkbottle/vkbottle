@@ -1,5 +1,6 @@
 from enum import IntEnum
 
+
 class UserEvents(IntEnum):
     replace_message_flags = 1
     install_message_flags = 2

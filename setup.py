@@ -22,11 +22,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3.7",
         "Operating System :: OS Independent",
     ],
-    install_requires=[
-        "aiohttp",
-        "pydantic",
-        "contextvars",
-        "vbml",
-        "watchgod",
-    ],
+    install_requires=["aiohttp", "pydantic", "contextvars", "vbml", "watchgod",],
 )

@@ -1,6 +1,7 @@
 from vkbottle.types.base import BaseModel
 import typing
 
+
 class MessageFields(BaseModel):
     message_id: int
     peer_id: typing.Optional[int] = None

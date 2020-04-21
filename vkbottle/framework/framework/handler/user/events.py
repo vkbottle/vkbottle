@@ -1,7 +1,5 @@
 import typing
-from vkbottle.framework.framework.rule import (
-    UserLongPollEventRule,
-)
+from vkbottle.framework.framework.rule import UserLongPollEventRule
 from vkbottle.types.user_longpoll import events
 
 ADDITIONAL_FIELDS = ("peer_id", "timestamp", "text", "info", "attachments", "random_id")
@@ -102,7 +100,8 @@ class UserEvents:
         def decorator(func):
             rule = UserLongPollEventRule(7, *rules)
             rule.create(
-                func, {
+                func,
+                {
                     "name": "message_read_out",
                     "data": ["peer_id", "local_id"],
                     "dataclass": events.OutRead,
@@ -182,10 +181,11 @@ class UserEvents:
             rule = UserLongPollEventRule(10, *rules)
             rule.create(
                 func,
-                {"name": "chat_flag_remove",
-                 "data": ["peer_id", "mask"],
-                 "dataclass": events.ResetDialogFlags,
-                 },
+                {
+                    "name": "chat_flag_remove",
+                    "data": ["peer_id", "mask"],
+                    "dataclass": events.ResetDialogFlags,
+                },
             )
             self.rules.append(rule)
             return func
@@ -198,7 +198,8 @@ class UserEvents:
             rule.create(
                 func,
                 {
-                    "name": "chat_remove", "data": ["peer_id", "local_id"],
+                    "name": "chat_remove",
+                    "data": ["peer_id", "local_id"],
                     "dataclass": events.DeleteMessages,
                 },
             )
@@ -311,7 +312,7 @@ class UserEvents:
                 {
                     "name": "call",
                     "data": ["user_id", "call_id"],
-                    "dataclass": events.Call
+                    "dataclass": events.Call,
                 },
             )
             self.rules.append(rule)
@@ -327,7 +328,7 @@ class UserEvents:
                 {
                     "name": "left_counter",
                     "data": ["counter", "null"],
-                    "dataclass": events.Counter
+                    "dataclass": events.Counter,
                 },
             )
             self.rules.append(rule)

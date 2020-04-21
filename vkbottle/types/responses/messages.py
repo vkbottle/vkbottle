@@ -164,7 +164,9 @@ class Conversation(BaseModel):
     can_write: CanWrite = None
     chat_settings: ChatSettings = None
 
+
 GetConversationsById.update_forward_refs()
+
 
 class ConversationsItem(BaseModel):
     conversation: Conversation = None

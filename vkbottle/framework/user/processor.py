@@ -22,7 +22,9 @@ class AsyncHandleManager:
     loop: AbstractEventLoop
     _expand_models: bool
 
-    async def _event_processor(self, update: dict, update_code: int, update_fields: list):
+    async def _event_processor(
+        self, update: dict, update_code: int, update_fields: list
+    ):
         for rule in self.on.event.rules:
             check = await rule.check(update)
 
@@ -61,7 +63,9 @@ class AsyncHandleManager:
             return await self._message_processor(*data)
         return await self._event_processor(*data)
 
-    async def _message_processor(self, update: dict, update_code: int, update_fields: list):
+    async def _message_processor(
+        self, update: dict, update_code: int, update_fields: list
+    ):
         for rule in self.on.message_rules:
             check = await rule.check(update)
 
@@ -102,7 +106,9 @@ class AsyncHandleManager:
 
     async def expand_data(self, code: int, data: dict) -> dict:
         if code in range(6):
-            exp = (await self.api.messages.get_by_id(message_ids=data["message_id"])).items
+            exp = (
+                await self.api.messages.get_by_id(message_ids=data["message_id"])
+            ).items
             if len(exp):
                 data.update(exp[0].dict())
         return data

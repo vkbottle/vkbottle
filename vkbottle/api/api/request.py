@@ -70,7 +70,7 @@ class Request:
         response = await request(
             method,
             params,
-            await self.token_generator.get_token(),
+            await self.token_generator.get_token(method=method, params=params),
             throw_errors=throw_errors
             if throw_errors is not None
             else self.throw_errors,

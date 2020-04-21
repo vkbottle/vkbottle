@@ -37,15 +37,15 @@ class Handler:
 
     def dispatch(self):
         self.message_rules.extend(
-            self.message.rules
-            + self.chat_message.rules
-            + self.message_handler.rules
+            self.message.rules + self.chat_message.rules + self.message_handler.rules
         )
 
-    def message_new(self, *rules: typing.Tuple[typing.Union[AbstractRule, AbstractFilter]]):
+    def message_new(
+        self, *rules: typing.Tuple[typing.Union[AbstractRule, AbstractFilter]]
+    ):
         warnings.warn(
             "Event message_new is deprecated, use message, chat_message, message_handler instead. See issue #77",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
         def decorator(func):
@@ -75,7 +75,9 @@ class MessageHandler:
         self._patcher = Patcher.get_current()
         self.prefix: list = ["/", "!"]
 
-    def add_handled_rule(self, rules: typing.List[AbstractRule], func: typing.Callable) -> UserLongPollEventRule:
+    def add_handled_rule(
+        self, rules: typing.List[AbstractRule], func: typing.Callable
+    ) -> UserLongPollEventRule:
         rule = UserLongPollEventRule(4, *rules)
         rule.create(
             func,
@@ -88,7 +90,9 @@ class MessageHandler:
         self.rules.append(rule)
         return rule
 
-    def add_rules(self, rules: typing.List[AbstractRule], func: typing.Callable) -> UserLongPollEventRule:
+    def add_rules(
+        self, rules: typing.List[AbstractRule], func: typing.Callable
+    ) -> UserLongPollEventRule:
         current = list()
         for rule in self.default_rules + rules:
             if isinstance(rule, str):

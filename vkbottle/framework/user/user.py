@@ -199,7 +199,7 @@ class User(HTTP, AsyncHandleManager):
     def mode(self, *_):
         warnings.warn(
             "User LP mode specifier is abandoned, mode 234 is used as default. See issue #36",
-            DeprecationWarning
+            DeprecationWarning,
         )
 
     @property
