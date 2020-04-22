@@ -40,9 +40,10 @@ class User(HTTP, AsyncHandleManager):
 
     def __init__(
         self,
+        tokens: Token = None,
+        *,
         login: str = None,
         password: str = None,
-        tokens: Token = None,
         user_id: int = None,
         debug: typing.Union[str, bool] = True,
         loop: asyncio.AbstractEventLoop = None,
@@ -51,8 +52,10 @@ class User(HTTP, AsyncHandleManager):
         vbml_patcher: vbml.Patcher = None,
     ):
         self.__tokens = [tokens] if isinstance(tokens, str) else tokens
-        if not tokens:
-            self.__tokens = self.get_tokens(login, password)
+
+        if login and password:
+            self.__tokens = [self.get_tokens(login, password)]
+
         self.__loop = loop or asyncio.get_event_loop()
         self.__debug: bool = debug
         self.api: UserApi = UserApi(self.__tokens)
