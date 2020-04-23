@@ -3,7 +3,7 @@ import traceback
 
 from aiohttp import ClientSession
 
-from vkbottle.const import VERSION_REST
+from vkbottle.const import VERSION_REST, __version__
 from vkbottle.utils import json, logger
 
 
@@ -73,5 +73,6 @@ class HTTP:
             url=VERSION_REST, content_type="text/plain"
         )
         if rest_status is None:
-            logger.error("Check  your internet connection")
+            logger.info("Unable to check version! Skipping it")
+            return {"version": __version__}
         return rest_status
