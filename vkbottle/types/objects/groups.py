@@ -171,7 +171,7 @@ class Group(BaseModel):
     id: int = None
     is_admin: "base.BoolInt" = None
     is_advertiser: "base.BoolInt" = None
-    is_closed: "GroupIsClosed" = None
+    is_closed: int = None
     is_member: "base.BoolInt" = None
     name: str = None
     photo_100: str = None
