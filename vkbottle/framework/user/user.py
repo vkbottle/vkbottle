@@ -40,14 +40,15 @@ class User(HTTP, AsyncHandleManager):
 
     def __init__(
         self,
-        tokens: Token = None,
-        *,
         login: str = None,
         password: str = None,
+        tokens: Token = None,
+        *,
         user_id: int = None,
         debug: typing.Union[str, bool] = True,
         loop: asyncio.AbstractEventLoop = None,
         expand_models: bool = True,
+        mobile: bool = False,
         log_to_path: typing.Union[str, bool] = None,
         vbml_patcher: vbml.Patcher = None,
     ):
@@ -82,7 +83,7 @@ class User(HTTP, AsyncHandleManager):
             format="<level>[<blue>VKBottle</blue>] {message}</level>",
             filter=self.logger,
             level=0,
-            enqueue=True,
+            enqueue=mobile is False,
         )
         if log_to_path:
             logger.add(

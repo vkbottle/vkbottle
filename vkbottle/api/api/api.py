@@ -95,7 +95,7 @@ class API(ContextInstanceMixin):
     @property
     async def group_id(self):
         if self._group_id is None:
-            current_user = await self.groups.get()
+            current_user = await self.groups.get_by_id()
             self._group_id = current_user[0].id
         return self._group_id
 
