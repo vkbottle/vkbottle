@@ -1,6 +1,5 @@
 import typing
 import re
-from inspect import signature
 from vkbottle.utils import logger
 
 from vbml import Patcher, Pattern
@@ -79,7 +78,7 @@ class Handler:
 
         self.message_handler.rules += self.message.rules + self.chat_message.rules
         self.message_handler.payload.rules += (
-            self.message.payload.rules + self.chat_message.payload.rules
+                self.message.payload.rules + self.chat_message.payload.rules
         )
 
         self.rules = self.message_handler.payload.rules + self.message_handler.rules
@@ -90,9 +89,8 @@ class Handler:
             current_rest = await get_current_rest()
             if current_rest["version"] != __version__:
                 logger.info(
-                    "You are using old version of VKBottle. Update is found: {} | {}".format(
-                        current_rest["version"], current_rest["description"],
-                    ),
+                    "You are using old version of VKBottle. Update is found: {} | {}",
+                    current_rest["version"], current_rest["description"]
                 )
         logger.debug("Bot successfully dispatched")
 
@@ -102,7 +100,7 @@ class Handler:
         self.message_handler.prefix = prefix
 
     def chat_action(
-        self, type_: typing.Union[str, typing.List[str]], rules: dict = None
+            self, type_: typing.Union[str, typing.List[str]], rules: dict = None
     ):
         """
         Special express processor of chat actions (https://vk.com/dev/objects/message - action object)
@@ -186,12 +184,12 @@ class MessageHandler:
         return current
 
     def _text_rule(
-        self,
-        func: typing.Callable,
-        text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
-        lower: bool,
-        command: bool,
-        pattern: str,
+            self,
+            func: typing.Callable,
+            text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
+            lower: bool,
+            command: bool,
+            pattern: str,
     ) -> AbstractRule:
         source = None
 
@@ -237,16 +235,16 @@ class MessageHandler:
         self.payload.rules += message_handler.payload.rules
 
     def add_handler(
-        self,
-        func: typing.Callable,
-        *rules,
-        text: typing.Union[
-            str, Pattern, typing.List[typing.Union[str, Pattern]]
-        ] = None,
-        lower: bool = False,
-        command: bool = False,
-        pattern: str = None,
-        **col_rules,
+            self,
+            func: typing.Callable,
+            *rules,
+            text: typing.Union[
+                str, Pattern, typing.List[typing.Union[str, Pattern]]
+            ] = None,
+            lower: bool = False,
+            command: bool = False,
+            pattern: str = None,
+            **col_rules,
     ):
         """
         Add handler to disself._patcher without decorators
@@ -281,14 +279,14 @@ class MessageHandler:
         return decorator
 
     def __call__(
-        self,
-        *rules,
-        text: typing.Union[
-            str, Pattern, typing.List[typing.Union[str, Pattern]]
-        ] = None,
-        command: bool = False,
-        lower: bool = False,
-        **col_rules,
+            self,
+            *rules,
+            text: typing.Union[
+                str, Pattern, typing.List[typing.Union[str, Pattern]]
+            ] = None,
+            command: bool = False,
+            lower: bool = False,
+            **col_rules,
     ):
         """
         Simple on.message(text) decorator. Support regex keys in text
@@ -313,10 +311,10 @@ class MessageHandler:
         rules = ""
         for rules in self.rules:
             rules += (
-                rules[0].call.__name__
-                + ": "
-                + ", ".join([rule.__class__.__name__ for rule in rules])
-                + "\n"
+                    rules[0].call.__name__
+                    + ": "
+                    + ", ".join([rule.__class__.__name__ for rule in rules])
+                    + "\n"
             )
         return rules
 

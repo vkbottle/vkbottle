@@ -105,7 +105,7 @@ class Bot(HTTP, AsyncHandleManager):
         # Sign assets
         self.api: Api = Api(self.__tokens, throw_errors=throw_errors)
         self.extension: AbstractExtension = extension if extension is not None else StandardExtension()
-        self.api.group_id = self.group_id
+
         self._throw_errors: bool = throw_errors
         Api.set_current(self.api)
         AbstractExtension.set_current(self.extension)
