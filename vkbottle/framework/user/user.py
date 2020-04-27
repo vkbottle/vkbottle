@@ -40,10 +40,10 @@ class User(HTTP, AsyncHandleManager):
 
     def __init__(
         self,
-        login: str = None,
-        password: str = None,
         tokens: Token = None,
         *,
+        login: str = None,
+        password: str = None,
         user_id: int = None,
         debug: typing.Union[str, bool] = True,
         loop: asyncio.AbstractEventLoop = None,

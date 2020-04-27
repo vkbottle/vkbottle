@@ -65,9 +65,14 @@ class API(ContextInstanceMixin):
         self.wall = Wall(self.api)
         self.widgets = Widgets(self.api)
 
-    def api(self, *args, **kwargs):
+    def api(self, method, params, **kwargs):
+
+        for k, v in params.items():
+            if isinstance(v, (tuple, list)):
+                params[k] = ','.join(repr(i) for i in v)
+
         request = Request(self.token_generator)
-        return request(*args, **kwargs)
+        return request(method, params, **kwargs)
 
     async def request(
         self,

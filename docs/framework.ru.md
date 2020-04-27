@@ -130,4 +130,78 @@ bot.run_polling()
 
 # Юзеры
 
-Документация скоро будет
+Для того чтобы работать с юзерами как с ботами достаточно просто импортировать так же именованные компоненты из `vkbottle.user`  
+
+```python
+from vkbottle.user import User, Message
+user = User("token") # Вы можете авторизоваться с помощью токена(ов)
+user = User(login="+71234567890", password="123456") # Или с помощью логина и пароля
+
+@user.on.message_handler(text="привет", lower=True)
+async def wrapper(ans: Message):
+    await ans("че надо")
+
+user.run_polling()
+```
+
+Для того чтобы хендлить ивенты:
+
+```python
+from vkbottle.user import User
+from vkbottle.types.user_longpoll.events import FriendOnline
+user = User("token")
+
+@user.on.event.friend_online()
+async def friend_online(event: FriendOnline):
+    await user.api.messages.send(peer_id=event.user_id, message="ого ты онлайн!", random_id=0)
+
+user.run_polling()
+```
+
+# Blueprint
+
+Вы можете использовать `Blueprint` для создания архитектуры вашего бота/юзербота
+
+Создайте папку `routes`, в ней создавайте файлы с `Blueprint`ами:
+
+`routes/events.py`
+```python
+from vkbottle.bot import Blueprint
+from vkbottle.types import GroupJoin
+
+bp = Blueprint(name="Работа с ивентами")
+
+@bp.on.event.group_join()
+async def group_join(event: GroupJoin):
+    # stuff
+    print("Ура, новый участник", event.user_id)
+
+# ...
+```
+
+`routes/messages.py`
+```python
+from vkbottle.bot import Blueprint, Message
+
+bp = Blueprint(name="Работа с сообщениями")
+
+@bp.on.message_handler(text="Привет")
+async def hello(ans: Message):
+    user = (await bp.api.users.get(user_ids=ans.from_id))[0]
+    await ans("Здравствуйте, " + user.first_name)
+
+# ...
+```
+
+`bot.py`
+```python
+from vkbottle import Bot
+from routes import events, messages
+
+bot = Bot("token")
+bot.set_blueprints(events.bp, messages.bp)
+
+bot.run_polling()
+```
+
+Готово!
