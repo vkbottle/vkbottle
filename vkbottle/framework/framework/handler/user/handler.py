@@ -1,5 +1,4 @@
 import typing
-import warnings
 import re
 from vkbottle.types.user_longpoll import Message
 from vkbottle.framework.framework.rule import (
@@ -40,32 +39,10 @@ class Handler:
             self.message.rules + self.chat_message.rules + self.message_handler.rules
         )
 
-    def message_new(
-        self, *rules: typing.Tuple[typing.Union[AbstractRule, AbstractFilter]]
-    ):
-        warnings.warn(
-            "Event message_new is deprecated, use message, chat_message, message_handler instead. See issue #77",
-            DeprecationWarning,
-        )
-
-        def decorator(func):
-            rule = UserLongPollEventRule(4, *rules)
-            rule.create(
-                func,
-                {
-                    "name": "message_new",
-                    "data": ["message_id", "flags", *ADDITIONAL_FIELDS],
-                    "dataclass": Message,
-                },
-            )
-            self.message_rules.append(rule)
-            return func
-
-        return decorator
-
     def concatenate(self, other: "Handler"):
-        self.message_rules += other.message_rules
-        self.event.rules += other.event.rules
+        self.message.concatenate(other.message)
+        self.chat_message.concatenate(other.chat_message)
+        self.message_handler.concatenate(other.message_handler)
 
 
 class MessageHandler:
