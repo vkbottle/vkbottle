@@ -88,7 +88,7 @@ bot.run_polling()
 Если вам по какой-то причине нужно возвращать boolean тип из хендлеров вы можете отключить это:
 
 ```python
-bot.middleware_expressions = False
+bot.status.middleware_expressions = False
 ```
 
 ## Error Handler для ошибок из вк
