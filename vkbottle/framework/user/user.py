@@ -51,6 +51,7 @@ class User(HTTP, AsyncHandleManager):
         mobile: bool = False,
         log_to_path: typing.Union[str, bool] = None,
         vbml_patcher: vbml.Patcher = None,
+        mode: int = 234,
     ):
         self.__tokens = [tokens] if isinstance(tokens, str) else tokens
 
@@ -60,6 +61,7 @@ class User(HTTP, AsyncHandleManager):
         self.__loop = loop or asyncio.get_event_loop()
         self.__debug: bool = debug
         self.api: UserApi = UserApi(self.__tokens)
+        self._mode = mode
 
         self._expand_models: bool = expand_models
         self._patcher: vbml.Patcher = vbml_patcher or vbml.Patcher(pattern="^{}$")
@@ -132,10 +134,10 @@ class User(HTTP, AsyncHandleManager):
             self.dispatch(blueprint)
         logger.debug("Blueprints have been successfully loaded")
 
-    async def get_server(self):
+    async def get_server(self) -> dict:
         """
         Get longPoll server for long request creation
-        :return:
+        :return: server
         """
         self.long_poll_server = (await self.api.messages.get_long_poll_server()).dict()
         return self.long_poll_server
@@ -147,10 +149,11 @@ class User(HTTP, AsyncHandleManager):
         :return: VK LongPoll Event
         """
         try:
-            url = "https://{}?act=a_check&key={}&ts={}&wait={}&mode=234&version={}".format(
+            url = "https://{}?act=a_check&key={}&ts={}&wait={}&mode={}&version={}".format(
                 long_poll_server["server"],
                 long_poll_server["key"],
                 long_poll_server["ts"],
+                self._mode,
                 self.__wait or DEFAULT_WAIT,
                 self.version or VERSION,
             )
@@ -204,6 +207,8 @@ class User(HTTP, AsyncHandleManager):
         on_shutdown: typing.Callable = None,
         on_startup: typing.Callable = None,
     ):
+        """ Run loop with bot.run() task with loop.run_forever()
+        """
         task = TaskManager(self.__loop)
         task.add_task(self.run())
         task.run(

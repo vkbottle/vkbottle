@@ -8,7 +8,7 @@ from vkbottle.api import UserApi
 from vkbottle.types.user_longpoll import Message
 from vkbottle.framework.framework.handler.user.handler import Handler
 from vkbottle.framework.framework.handler import MiddlewareExecutor
-from vkbottle.framework.framework.branch import AbstractBranchGenerator
+from vkbottle.framework.framework.branch import AbstractBranchGenerator, Branch, ExitBranch
 from vkbottle.types.events import UserEvents
 
 
@@ -102,6 +102,7 @@ class AsyncHandleManager:
                     return
 
                 task = await rule.call(message, *args, **kwargs)
+                await self._handler_return(task, data)
                 return task
 
     async def expand_data(self, code: int, data: dict) -> dict:
@@ -150,3 +151,24 @@ class AsyncHandleManager:
             )
         )
         await branch.exit(message)
+
+    async def _handler_return(self, handler_return, data: dict) -> bool:
+        """
+        Allows use returns in handlers and operates them
+        :param handler_return:
+        :param data:
+        :return:
+        """
+        if isinstance(handler_return, Branch):
+            await self.branch.add(
+                data["peer_id"],
+                handler_return.branch_name,
+                **handler_return.branch_kwargs
+            )
+            return True
+        elif isinstance(handler_return, ExitBranch):
+            await self.branch.exit(data["peer_id"])
+            return True
+        elif handler_return is not None:
+            await Message(**data)(str(handler_return))
+        return False
