@@ -3,11 +3,15 @@ from vkbottle.http import HTTPRequest
 from vkbottle.utils import ContextInstanceMixin, logger
 
 from vkbottle.types.methods import *
+from pydantic import BaseModel
 from .request import Request
 from .builtin import AbstractTokenGenerator, ConsistentTokenGenerator, GENERATORS
 
 
 class API(ContextInstanceMixin):
+    """ Main VK API object
+    Possess user_id/group_id getters, request
+    """
     def __init__(
         self,
         tokens: typing.List[str] = None,
@@ -22,12 +26,7 @@ class API(ContextInstanceMixin):
         self._group_id: typing.Optional[int] = None
         self._user_id: typing.Optional[int] = None
 
-        logger.debug(
-            f"API: using {len(tokens) if tokens is not None else 0} tokens, "
-            f"generator {generator} (can be changed)"
-        )
-
-        # VK Api Methods
+        # VK Api Categories
         self.account = Account(self.api)
         self.ads = Ads(self.api)
         self.appwidgets = Appwidgets(self.api)
@@ -65,8 +64,11 @@ class API(ContextInstanceMixin):
         self.wall = Wall(self.api)
         self.widgets = Widgets(self.api)
 
-    def api(self, method, params, **kwargs):
-
+    def api(self, method: str, params: dict, **kwargs) -> typing.Coroutine:
+        """ Return an awaitable request
+        :param method: method's name to make a request and pass to the token_generator
+        :param params: params dict is passed to the token_generator and used to make a request
+        """
         for k, v in params.items():
             if isinstance(v, (tuple, list)):
                 params[k] = ','.join(repr(i) for i in v)
@@ -79,9 +81,10 @@ class API(ContextInstanceMixin):
         method: str,
         params: dict,
         throw_errors: typing.Optional[bool] = None,
-        response_model=None,
+        response_model: typing.Optional[BaseModel] = None,
         raw_response: bool = False,
-    ):
+    ) -> typing.Union[dict, BaseModel]:
+        """Make a request"""
         return await self.api(
             method,
             params,
@@ -116,6 +119,7 @@ class API(ContextInstanceMixin):
         return {
             "generator": self.token_generator.__class__.__qualname__,
             "throw_errors": self.throw_errors,
+            "tokens_amount": len(self.token_generator),
         }
 
     def __repr__(self):

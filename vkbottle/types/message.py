@@ -1,5 +1,4 @@
 import typing
-from enum import Enum
 from .objects.messages import Message as MessageType
 from vkbottle.framework.framework.extensions import FromExtension
 from vkbottle.api import Api

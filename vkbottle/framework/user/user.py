@@ -60,7 +60,6 @@ class User(HTTP, AsyncHandleManager):
         self.__loop = loop or asyncio.get_event_loop()
         self.__debug: bool = debug
         self.api: UserApi = UserApi(self.__tokens)
-        UserApi.set_current(self.api)
 
         self._expand_models: bool = expand_models
         self._patcher: vbml.Patcher = vbml_patcher or vbml.Patcher(pattern="^{}$")
@@ -68,6 +67,8 @@ class User(HTTP, AsyncHandleManager):
         self.user_id: typing.Optional[int] = user_id or self.get_id_by_token(
             self.__tokens[0]
         )
+        self.api.user_id = user_id
+        UserApi.set_current(self.api)
         self.on: Handler = Handler()
         self.branch: AbstractBranchGenerator = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()

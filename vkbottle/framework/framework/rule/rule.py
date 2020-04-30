@@ -89,6 +89,15 @@ class StickerRule(UnionMixin):
                 return True
 
 
+class FromMe(AbstractMessageRule):
+    def __init__(self, from_me: bool = True):
+        self.from_me = from_me
+
+    async def check(self, message: Message) -> bool:
+        if (message.from_id == await message.api.user_id) is self.from_me:
+            return True
+
+
 class MessageRule(AbstractMessageRule):
     def __init__(self, message: typing.Union[str, typing.List[str]]):
         if isinstance(message, str):

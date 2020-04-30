@@ -80,6 +80,10 @@ class ClassifiedTokenGenerator(AbstractTokenGenerator):
     def __init__(self, schema: TokenSchema):
         self.schema = schema
 
+    @property
+    def tokens(self):
+        return []
+
     async def get_token(self, *args, **kwargs) -> Coroutine[Any, Any, str]:
         generator = self.schema.get_generator(*args, *kwargs)
         return generator.get_token(*args, **kwargs)

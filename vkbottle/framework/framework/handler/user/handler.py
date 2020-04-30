@@ -10,6 +10,7 @@ from vkbottle.framework.framework.rule import (
     LevenshteinDisRule,
     PrivateMessage,
     ChatMessage,
+    FromMe,
 )
 from vkbottle.framework.framework.rule.filters import AbstractFilter
 from vkbottle.api.exceptions import HandlerError
@@ -21,6 +22,7 @@ COL_RULES = {
     "sticker": StickerRule,
     "levenstein": LevenshteinDisRule,
     "lev": LevenshteinDisRule,
+    "from_me": FromMe,
 }
 
 

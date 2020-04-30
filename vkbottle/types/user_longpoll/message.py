@@ -2,14 +2,18 @@ from vkbottle.types.base import BaseModel
 from vkbottle.types.message import sep_bytes
 from vkbottle.types.objects.messages import MessageAction
 from vkbottle.types.objects.base import Geo
-from vkbottle.api.api import UserApi
+from vkbottle.api import UserApi
 import random
 import typing
 
-API = UserApi.get_current
+
+class GetApi:
+    @property
+    def api(self) -> UserApi:
+        return UserApi.get_current()
 
 
-class Message(BaseModel):
+class Message(BaseModel, GetApi):
     message_id: int = None
     flags: int = None
     peer_id: int = None
@@ -34,7 +38,7 @@ class Message(BaseModel):
 
     async def get(self) -> dict:
         return (
-            await API().request("messages.getById", {"message_ids": self.message_id})
+            await self.api.request("messages.getById", {"message_ids": self.message_id})
         )["items"][0]
 
     @property
@@ -44,7 +48,7 @@ class Message(BaseModel):
     async def reply(self, message: str = None, attachment: str = None, **params):
 
         locals().update(params)
-        return await API().request(
+        return await self.api.request(
             "messages.send",
             dict(
                 peer_id=self.peer_id,
@@ -62,7 +66,7 @@ class Message(BaseModel):
 
         locals().update(params)
         for message in sep_bytes(message or ""):
-            m = await API().request(
+            m = await self.api.request(
                 "messages.send",
                 dict(
                     peer_id=self.peer_id,

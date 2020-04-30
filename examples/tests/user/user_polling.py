@@ -29,7 +29,7 @@ class Friend(AbstractRule):
             return True
 
 
-@user.on.message_handler(text=["/time", "/время"])
+@user.on.message_handler(text=["/time", "/время"], from_me=True)
 async def new_message(ans: Message):
     current_time = time.strftime('%H:%M:%S', time.localtime())
     await ans(f"Текущее время: {current_time}")
