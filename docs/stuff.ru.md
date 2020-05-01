@@ -91,12 +91,33 @@ bot.run_polling()
 bot.status.middleware_expressions = False
 ```
 
-## Error Handler для ошибок из вк
+## Error Handler
+
+### Swear
+
+Вы можете хендлить все исключения, которые выбрасываются хендлером с помощью декоратора `swear`:  
 
 ```python
-@bot.error_handler(1, 2, 3)
-async def error_handler(e):
-    print("Ошибки пойманы!", e)
+from vkbottle.framework import swear
+from vkbottle import VKError
+
+async def exc_kick(e: VKError, message: Message):
+    await message("Не могу кикнуть =(")
+
+@bot.on.chat_message(commands=["самобан"])
+@swear(VKError, exception_handler=exc_kick)
+async def self_ban(ans: Message):
+    await bot.api.messages.remove_chat_user(ans.chat_id, ans.from_id)
+    return "хаха самобан"
 ```
 
-P.S. Скоро будет нормальный error handler. stay tuned
+Способ далее является устаревшим, но он применим для всех хендлеров в целом. С помощью него можно например ловить `Rate limit reached`:
+
+```python
+@bot.error_handler(29)
+async def error_handler(e):
+    # 
+    print("О нет Rate limit reached, спасите")
+```
+
+P.S. Скоро будет нормальный error handler
