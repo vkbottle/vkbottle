@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 import typing
 
 
-class AbstractBlueprint(object, metaclass=ABCMeta):
+class AbstractBlueprint(metaclass=ABCMeta):
     _name: typing.Optional[str] = None
     _description: typing.Optional[str] = None
 
