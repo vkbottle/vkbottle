@@ -19,7 +19,6 @@ nav:
   - "Возможности библиотеки":
       - "Workers (воркеры)": "features/workers.md"
       - "Branches (бранчи)": "features/branches.md"
-      - "Rules (правила)": "features/rules.md"
 markdown_extensions:
   - admonition
   - codehilite:
