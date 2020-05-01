@@ -24,11 +24,13 @@ class Blueprint(AbstractBlueprint):
         self.api: api.Api = None
         self._name = name or "Unknown"
         self._description = description or "Unknown"
+        self.data: dict = {}
 
     def create(
         self,
         *,
         familiar: typing.Tuple[AbstractBranchGenerator, AbstractExtension, api.Api],
+        data: typing.Optional[dict] = None,
     ):
         branch, extension, api_instance = familiar
         if not isinstance(self.branch, type(branch)):
@@ -38,3 +40,4 @@ class Blueprint(AbstractBlueprint):
             )
         self.extension = extension
         self.api = api_instance
+        self.data = data or {}
