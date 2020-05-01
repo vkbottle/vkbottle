@@ -1,5 +1,5 @@
 <h1 align="center">VKBottle - high quality VK Tool</h1>
-<p align="center"><a href="https://pypi.org/project/vkbottle/"><img alt="downloads" src="https://img.shields.io/static/v1?label=pypi%20package&message=2.7.1&color=brightgreen"></a> <a href="https://github.com/timoniq/vkbottle"><img src="https://img.shields.io/static/v1?label=version&message=opensource&color=green" alt="service-test status"></a> <a href="https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj"><img src="https://img.shields.io/static/v1?message=VK%20Chat&label=&color=blue"></a>
+<p align="center">
     <blockquote>VKBottle - это многофункциональный модуль для работы с VK Api и создания ботов. Проект все еще тестируется на различных нагрузках</blockquote>
 </p>
 <hr>
@@ -40,7 +40,6 @@ pip install uvloop
 Кроме того вы можете установить любую библиотеку для ускорения json из предложенных: `ujson`, `hyperjson`, `orjson`
 
 ### Фишки
-
 - Удобная и быстрая доставка сообщений через regex
 - Быстрый API враппер
 - Быстрый LongPoll фреймворк для ботов
@@ -131,14 +130,7 @@ async def wrapper(ans: Message, theme: str):
 user.run_polling()
 ```
 
-Больше примеров в папке [/examples](./examples)
-
-### Документация
-
-Полная документация:  
-
-* [Русская версия документации](docs/getting_started.md)  
-в ней же можно найти документацию по валидаторам, веткам
+Больше примеров в папке [/examples](https://github.com/timoniq/vkbottle/tree/master/examples)
 
 ## Based on
 
@@ -156,4 +148,4 @@ user.run_polling()
 ## Лицензия
 
 Copyright © 2019-2020 [timoniq](https://github.com/timoniq).  
-Этот проект имеет [GPL-3.0](./LICENSE.txt) лицензию.
+Этот проект имеет GPL-3.0 лицензию.

@@ -82,8 +82,8 @@ bot.run_polling()
 
 Кроме ***rules** и ****col_rules** существуют еще доп аргументы *(которые возможно будут перенесены или удалены в следующем релизе)*  
 А именно:  
-**command: bool** - для добавления префиксов к **text** из `Handler.(message_handler).prefix`
-**lower: bool** - для того чтобы игнорировать кейс в **text** (`re.IGNORECASE`)
+  - **command: bool** - для добавления префиксов к **text** из `Handler.(message_handler).prefix`
+  - **lower: bool** - для того чтобы игнорировать кейс в **text** (`re.IGNORECASE`)
 
 ### Добавление хендлера через функцию
 
@@ -128,7 +128,7 @@ bot.run_polling()
 
 Примеры всех хендлеров вы можете [найти здесь](https://github.com/timoniq/vkbottle/blob/master/examples/bot_decorators.py)
 
-# Юзеры
+## Юзеры
 
 Для того чтобы работать с юзерами как с ботами достаточно просто импортировать так же именованные компоненты из `vkbottle.user`  
 
@@ -158,13 +158,13 @@ async def friend_online(event: FriendOnline):
 user.run_polling()
 ```
 
-# Blueprint
+## Blueprint
 
 Вы можете использовать `Blueprint` для создания архитектуры вашего бота/юзербота
 
 Создайте папку `routes`, в ней создавайте файлы с `Blueprint`ами:
 
-`routes/events.py`
+### `routes/events.py`
 ```python
 from vkbottle.bot import Blueprint
 from vkbottle.types import GroupJoin
@@ -179,7 +179,7 @@ async def group_join(event: GroupJoin):
 # ...
 ```
 
-`routes/messages.py`
+### `routes/messages.py`
 ```python
 from vkbottle.bot import Blueprint, Message
 
@@ -193,7 +193,7 @@ async def hello(ans: Message):
 # ...
 ```
 
-`bot.py`
+### `bot.py`
 ```python
 from vkbottle import Bot
 from routes import events, messages
