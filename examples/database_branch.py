@@ -60,7 +60,7 @@ class StoredBranch(ClsBranch):
         return f"{user[0].first_name}, твое слово: {self.context['word']}"
 
 
-@bot.on.message(commands=["start"])
+@bot.on.message_handler(commands=["start"])
 async def start(ans: Message):
     await bot.branch.add(ans.peer_id, "talker")
     return "Ты в бранче!"

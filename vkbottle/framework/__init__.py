@@ -8,4 +8,4 @@ from vkbottle.framework.framework.branch import (
     CoroutineBranch,
 )
 from vkbottle.framework.framework.handler import Handler, Middleware
-from .framework import rule
+from .framework import rule, swear
