@@ -14,11 +14,11 @@ repo_name: timoniq/vkbottle
 repo_url: https://github.com/timoniq/vkbottle
 nav:
   - "Начало работы": "getting_started.md"
-  - "Создание бота": "creating_a_bot.md"
-  - "Использование ВК API": "using_vk_api.md"
+  - "Создание бота": "framework.ru.md"
+  - "Использование ВК API": "api.ru.md"
   - "Возможности библиотеки":
-      - "Workers (воркеры)": "features/workers.md"
-      - "Branches (бранчи)": "features/branches.md"
+      - "Workers (воркеры)": "stuff.ru.md"
+      - "Branches (бранчи)": "branches.ru.md"
 markdown_extensions:
   - admonition
   - codehilite:
