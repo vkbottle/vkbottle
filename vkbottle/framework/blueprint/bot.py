@@ -40,4 +40,5 @@ class Blueprint(AbstractBlueprint):
             )
         self.extension = extension
         self.api = api_instance
-        self.data = data or {}
+        if data is not None:
+            self.data = data
