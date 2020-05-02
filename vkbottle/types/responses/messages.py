@@ -80,10 +80,10 @@ class GetChatModel(BaseModel):
 
 class GetConversationMembers(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List["objects.messages.ConversationMember"] = None
     chat_restrictions: objects.messages.ChatRestrictions = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    profiles: typing.List["objects.users.User"] = None
+    groups: typing.List["objects.groups.Group"] = None
 
 
 class GetConversationMembersModel(BaseModel):

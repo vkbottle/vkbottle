@@ -132,3 +132,7 @@ class UserApi(API, ContextInstanceMixin):
 
 class Api(API, ContextInstanceMixin):
     pass
+
+
+def get_api() -> "API":
+    return Api.get_current() or UserApi.get_current()
