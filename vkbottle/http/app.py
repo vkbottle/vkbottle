@@ -5,7 +5,7 @@ import typing
 APPS = {
     "android": {"client_id": 2274003, "client_secret": "hHbZxrka2uZ6jB1inYsH"},
     "iphone": {"client_id": 3140623, "client_secret": "VeWdmVclDCtn6ihuP1nt"},
-    "desktop": {"client_id": 3697615, "client_secret": "AlVXZFMUqyrnABp8ncuU"}
+    "desktop": {"client_id": 3697615, "client_secret": "AlVXZFMUqyrnABp8ncuU"},
 }
 
 
@@ -30,4 +30,3 @@ class App(HTTP):
             if len(self._tokens) < limit:
                 self._tokens.append(response["access_token"])
         return self._tokens
-

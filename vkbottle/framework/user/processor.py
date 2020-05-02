@@ -8,7 +8,11 @@ from vkbottle.api import UserApi
 from vkbottle.types.user_longpoll import Message
 from vkbottle.framework.framework.handler.user.handler import Handler
 from vkbottle.framework.framework.handler import MiddlewareExecutor
-from vkbottle.framework.framework.branch import AbstractBranchGenerator, Branch, ExitBranch
+from vkbottle.framework.framework.branch import (
+    AbstractBranchGenerator,
+    Branch,
+    ExitBranch,
+)
 from vkbottle.types.events import UserEvents
 
 

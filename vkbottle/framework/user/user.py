@@ -112,9 +112,7 @@ class User(HTTP, AsyncHandleManager):
     @staticmethod
     def get_tokens(login: str, password: str) -> list:
         app = App(login, password)
-        tokens = asyncio.get_event_loop().run_until_complete(
-            app()
-        )
+        tokens = asyncio.get_event_loop().run_until_complete(app())
         return tokens
 
     def dispatch(self, user: AnyUser):

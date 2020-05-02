@@ -31,13 +31,21 @@ class Friend(AbstractRule):
 
 @user.on.message_handler(text=["/time", "/время"], from_me=True)
 async def new_message(ans: Message):
-    current_time = time.strftime('%H:%M:%S', time.localtime())
+    current_time = time.strftime("%H:%M:%S", time.localtime())
     return f"Текущее время: {current_time}"
 
 
-@user.on.message_handler(text=["/вероятность того что <thing", "/вероятность что <thing", "/вероятность <thing>"])
+@user.on.message_handler(
+    text=[
+        "/вероятность того что <thing",
+        "/вероятность что <thing",
+        "/вероятность <thing>",
+    ]
+)
 async def probability(ans: Message, thing: str):
-    await ans(f"Вероятность того, что {thing} равна {round(random.uniform(0.0, 1.0) * 100, 2)}%")
+    await ans(
+        f"Вероятность того, что {thing} равна {round(random.uniform(0.0, 1.0) * 100, 2)}%"
+    )
 
 
 @user.on.event.friend_online(Friend([1, 3]))

@@ -16,7 +16,9 @@ class AbstractTokenGenerator(ABC):
     def __len__(self):
         tokens: typing.Optional[typing.Iterable[str]] = getattr(self, "tokens")
         if tokens is None:
-            warnings.warn(f"Add property or name an attribute containing tokens '{self.__class__.__name__}.tokens'")
+            warnings.warn(
+                f"Add property or name an attribute containing tokens '{self.__class__.__name__}.tokens'"
+            )
             tokens = []
         return len(tokens)
 

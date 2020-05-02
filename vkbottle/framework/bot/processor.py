@@ -165,7 +165,9 @@ class AsyncHandleManager:
         )
         await branch.exit(answer)
 
-    async def _handler_return(self, handler_return, obj: dict, client_info: dict) -> bool:
+    async def _handler_return(
+        self, handler_return, obj: dict, client_info: dict
+    ) -> bool:
         """
         Allows use returns in handlers and operates them
         :param handler_return:

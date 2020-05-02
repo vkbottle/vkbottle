@@ -12,6 +12,7 @@ class API(ContextInstanceMixin):
     """ Main VK API object
     Possess user_id/group_id getters, request
     """
+
     def __init__(
         self,
         tokens: typing.List[str] = None,
@@ -71,7 +72,7 @@ class API(ContextInstanceMixin):
         """
         for k, v in params.items():
             if isinstance(v, (tuple, list)):
-                params[k] = ','.join(repr(i) for i in v)
+                params[k] = ",".join(repr(i) for i in v)
 
         request = Request(self.token_generator)
         return request(method, params, **kwargs)

@@ -96,7 +96,9 @@ class Bot(HTTP, AsyncHandleManager):
         logger.level("ERROR", color="<red>")
         if log_to_path:
             logger.add(
-                (logs_folder or "") + "log_{time}.log" if log_to_path is True else log_to_path,
+                (logs_folder or "") + "log_{time}.log"
+                if log_to_path is True
+                else log_to_path,
                 rotation="100 MB",
             )
 
