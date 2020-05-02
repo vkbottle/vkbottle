@@ -1,0 +1,32 @@
+site_name: VkBottle
+theme:
+  features:
+    - instant
+  palette:
+    primary: green
+  language: ru
+  name: material
+extra:
+  social:
+    - icon: fontawesome/brands/vk
+      link: https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj
+repo_name: timoniq/vkbottle
+repo_url: https://github.com/timoniq/vkbottle
+nav:
+  - "Начало работы": "getting_started.md"
+  - "Создание бота": "framework.ru.md"
+  - "Использование ВК API": "api.ru.md"
+  - "Возможности библиотеки":
+      - "Workers (воркеры)": "stuff.ru.md"
+      - "Branches (бранчи)": "branches.ru.md"
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.details
+  - pymdownx.critic
