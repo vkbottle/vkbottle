@@ -49,7 +49,6 @@ class Bot(HTTP, AsyncHandleManager):
         log_to_path: typing.Union[str, bool] = None,
         patcher: Patcher = None,
         mobile: bool = False,
-        secret: str = None,
         extension: AbstractExtension = None,
         logs_folder: typing.Optional[str] = None,
     ):
@@ -68,7 +67,6 @@ class Bot(HTTP, AsyncHandleManager):
         ) else tokens
         self.__debug: bool = debug
         self.__wait = None
-        self.__secret = secret
         self._status: BotStatus = BotStatus()
 
         if isinstance(debug, bool):
@@ -199,19 +197,6 @@ class Bot(HTTP, AsyncHandleManager):
             return False
         return response["response"][0]["id"]
 
-    def _check_secret(self, event: dict):
-        """
-        Match secret code with current secret
-        :param event:
-        :return:
-        """
-        if self.__secret:
-            logger.debug(
-                "Checking secret for event ({secret})", secret=event.get("secret")
-            )
-            return event.get("secret") == self.__secret
-        return True
-
     def executor_api(self, api):
         self.api = api
         Api.set_current(api)
@@ -317,11 +302,12 @@ class Bot(HTTP, AsyncHandleManager):
                 await self.get_server()
 
     async def emulate(
-        self, event: dict, confirmation_token: str = None
+        self, event: dict, secret: str = None, confirmation_token: str = None
     ) -> typing.Union[str, None]:
         """
         Process all types of events
         :param event: VK Event (LP or CB)
+        :param secret: secret vk code for callback
         :param confirmation_token: code which confirm VK callback
         :return: "ok"
         """
@@ -340,9 +326,13 @@ class Bot(HTTP, AsyncHandleManager):
                 return confirmation_token or "dissatisfied"
 
         updates = event.get("updates", [event])
-        if not self._check_secret(event):
-            logger.debug("Aborted. Secret is invalid")
-            return "access denied"
+
+        if secret:
+            logger.debug("Checking secret for event ({secret})", secret=event.get("secret"))
+
+            if event.get("secret") != secret:
+                logger.debug("Aborted. Secret is invalid")
+                return "access denied"
 
         for update in updates:
             try:

@@ -4,13 +4,13 @@ from vkbottle import Bot
 
 app = Application()
 routes = RouteTableDef()
-bot = Bot("my-token", secret="SecretKey")
+bot = Bot("my-token")
 
 
 @routes.get("/bot")
 async def executor(request: Request):
     return await bot.emulate(
-        event=dict(request.query), confirmation_token="ConfirmationToken"
+        event=dict(request.query), secret="my_secret", confirmation_token="my_confirmation"
     )
 
 
