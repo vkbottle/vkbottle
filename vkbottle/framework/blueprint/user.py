@@ -16,5 +16,6 @@ class Blueprint(AbstractBlueprint):
         self._name: str = name or "Unknown"
         self._description: str = description or "Unknown"
 
-    def create(self, *, api_instance: api.UserApi):
+    def create(self, *, api_instance: api.UserApi, error_handler: VKErrorHandler):
         self.api = api_instance
+        self.error_handler = error_handler

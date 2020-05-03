@@ -131,7 +131,7 @@ class User(HTTP, AsyncHandleManager):
         Add blueprints
         """
         for blueprint in blueprints:
-            blueprint.create(api_instance=self.api)
+            blueprint.create(api_instance=self.api, error_handler=self.error_handler)
             self.dispatch(blueprint)
         logger.debug("Blueprints have been successfully loaded")
 

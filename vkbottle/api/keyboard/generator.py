@@ -38,7 +38,7 @@ def keyboard_gen(
 
     keyboard = str(
         json.dumps(
-            dict(one_time=one_time, buttons=buttons, inline=inline), ensure_ascii=False
+            dict(one_time=one_time, buttons=buttons, inline=inline)
         )
         .encode("utf-8")
         .decode("utf-8")
