@@ -3,7 +3,7 @@ import sys
 import time
 import typing
 from collections import MutableMapping
-from typing import Sequence
+from typing import Sequence, List
 
 
 class Logger:
@@ -39,7 +39,7 @@ def get_attr(adict: dict, attrs: typing.List[str]):
     return
 
 
-def dict_of_dicts_merge(d1, d2):
+def dict_of_dicts_merge(d1, d2) -> dict:
     for k, v in d1.items():
         if k in d2:
             if all(isinstance(e, MutableMapping) for e in (v, d2[k])):
@@ -47,6 +47,23 @@ def dict_of_dicts_merge(d1, d2):
     d3 = d1.copy()
     d3.update(d2)
     return d3
+
+
+def to_snake_case(string: str) -> str:
+    return "".join(["_" + i.lower() if i.isupper() else i for i in string]).lstrip("_")
+
+
+def from_attr(obj, attr_path: List[str], init: typing.Optional[tuple] = None):
+    if init is None:
+        init = [None for _ in range(len(attr_path))]
+    attr = obj
+    for i, a in enumerate(attr_path):
+        attr = getattr(attr, a, None)
+        if attr is None:
+            return
+        elif init[i] is not None:
+            attr = attr(init[i])
+    return attr
 
 
 def except_none_self(adict: dict) -> dict:

@@ -13,7 +13,7 @@ from vkbottle.framework.framework.rule import (
     FromMe,
 )
 from vkbottle.framework.framework.rule.filters import AbstractFilter
-from vkbottle.api.exceptions import HandlerError
+from vkbottle.utils.exceptions import HandlerError
 from vbml import Pattern, Patcher
 from .events import UserEvents, ADDITIONAL_FIELDS
 

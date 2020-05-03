@@ -6,7 +6,7 @@ from vbml import Patcher, Pattern
 
 from .events import Event
 from vkbottle.const import __version__
-from vkbottle.api import HandlerError
+from vkbottle.utils.exceptions import HandlerError
 from vkbottle.framework.framework.rule.filters import AbstractFilter
 from vkbottle.framework.framework.rule import (
     AbstractRule,

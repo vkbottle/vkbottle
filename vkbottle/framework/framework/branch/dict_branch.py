@@ -5,7 +5,7 @@ from .cls import CoroutineBranch, AbstractBranch
 from .abc import AbstractBranchGenerator, GeneratorType
 from .standart_branch import ImmutableBranchData
 
-from vkbottle.api.exceptions import BranchError
+from vkbottle.utils.exceptions import BranchError
 
 
 class DictBranch(AbstractBranchGenerator):

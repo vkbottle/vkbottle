@@ -1,5 +1,5 @@
 from vkbottle.user import User, Message
-from vkbottle.api.api.builtin import LimitedTokenGenerator
+from vkbottle.api.token import LimitedTokenGenerator
 from vkbottle.types.user_longpoll.events import FriendOnline
 from vkbottle.rule import AbstractRule
 import os

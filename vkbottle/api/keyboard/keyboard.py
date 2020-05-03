@@ -1,5 +1,5 @@
 from .action import Text
-from ..exceptions import KeyboardError
+from vkbottle.utils.exceptions import KeyboardError
 from ...utils import except_none_self, json
 import typing
 

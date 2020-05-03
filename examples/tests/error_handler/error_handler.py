@@ -1,22 +1,22 @@
-from vkbottle.framework import swear
-from vkbottle.bot import Bot, Message
+from vkbottle.user import User, Message
 from vkbottle import VKError
 import os
 
 
 # Add variable TOKEN to your env variables
-bot = Bot(os.environ["TOKEN"], debug=True)
+user = User(os.environ["TOKEN"])
 
 
-async def exc_kick(e: BaseException, ans: Message):
-    await ans("Не могу кикнуть! Ошибка " + str(e))
+async def solve_captcha(e: VKError):
+    # solving captcha
+    await e.method_requested(**e.params_requested)
 
 
-@bot.on.chat_message(commands=["самобан", "selfban"])
-@swear(VKError, exception_handler=exc_kick)
+@user.on.message_handler(commands=["spam", "спам"])
 async def hi(ans: Message):
-    await bot.api.messages.remove_chat_user(ans.chat_id, ans.from_id)
-    return "Ура кикнул"
+    for _ in range(10):
+        await ans("spam")
 
 
-bot.run_polling()
+user.error_handler.add_error_handler(14, solve_captcha)
+user.run_polling()

@@ -2,7 +2,7 @@ from abc import abstractmethod
 from .abc import AbstractBranchGenerator, Branch, AbstractBranch, GeneratorType
 from .standart_branch import ImmutableBranchData
 from .cls import CoroutineBranch
-from vkbottle.api.exceptions import BranchError
+from vkbottle.utils.exceptions import BranchError
 from vkbottle.utils.json import json
 import typing
 import asyncio

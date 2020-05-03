@@ -38,7 +38,7 @@ api = API(tokens=tokens, throw_errors=True)
 Напишем генератор для определения токена из двух типов по условию (vk me и обычный):
 
 ```python
-from vkbottle.api.api.token import AbstractTokenGenerator
+from vkbottle.api.api.util.token import AbstractTokenGenerator
 import typing
 import random
 
@@ -68,7 +68,7 @@ api.token_generator = CustomTokenGenerator(["vkme-token"], ["token-1", "token-2"
 ```python
 from vkbottle.bot import Bot
 from vkbottle.user import User
-from vkbottle.api.api.builtin import LimitedTokenGenerator
+from vkbottle.api.api.util.builtin import LimitedTokenGenerator
 
 bot_token = "token-1"
 user_tokens = ["user-token-1", "user-token-2", "user-token-3"]

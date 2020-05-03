@@ -7,7 +7,10 @@ from vbml import Patcher
 from vkbottle.http import HTTP
 from vkbottle.types.events import EventList
 from vkbottle.framework.framework.handler.handler import Handler
-from vkbottle.framework.framework.handler import ErrorHandler
+from vkbottle.framework.framework.error_handler import (
+    VKErrorHandler,
+    DefaultErrorHandler,
+)
 from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.extensions.standard import StandardExtension
@@ -18,7 +21,7 @@ from vkbottle.framework.blueprint.bot import Blueprint
 from vkbottle.framework.bot.processor import AsyncHandleManager
 from vkbottle.framework.bot.builtin import DefaultValidators, DEFAULT_WAIT
 from vkbottle.api import Api, request
-from vkbottle.api import VKError
+from vkbottle.exceptions import VKError
 from vkbottle.utils import logger, TaskManager, chunks
 from vkbottle.utils.json import USAGE
 
@@ -117,7 +120,7 @@ class Bot(HTTP, AsyncHandleManager):
         self.branch: typing.Union[AbstractBranchGenerator, DictBranch] = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.on: Handler = Handler(self.group_id)
-        self.error_handler: ErrorHandler = ErrorHandler()
+        self.error_handler: VKErrorHandler = DefaultErrorHandler()
 
         logger.info("Using JSON_MODULE - {}".format(USAGE))
 
@@ -168,7 +171,7 @@ class Bot(HTTP, AsyncHandleManager):
         :return:
         """
         self.on.concatenate(bot.on)
-        self.error_handler.update(bot.error_handler.processors)
+        self.error_handler.handled_errors.update(bot.error_handler.handled_errors)
         self.middleware.middleware += bot.middleware.middleware
         for branch_name, disposal in (await bot.branch.branches).items():
             self.branch.add_branch(disposal[0], name=branch_name)
@@ -197,7 +200,7 @@ class Bot(HTTP, AsyncHandleManager):
         )
         if "error" in response:
             if throw_exc:
-                raise VKError("Token is invalid")
+                raise VKError(0, "Token is invalid")
             return False
         return response["response"][0]["id"]
 
@@ -358,7 +361,9 @@ class Bot(HTTP, AsyncHandleManager):
                     # VK API v5.103
                     client_info = obj.get("client_info")
                     if client_info is None:
-                        raise VKError("Change API version to 5.103 or later") from None
+                        raise VKError(
+                            0, "Change API version to 5.103 or later"
+                        ) from None
                     obj = obj["message"]
                     await self._processor(obj, client_info)
 
@@ -369,32 +374,7 @@ class Bot(HTTP, AsyncHandleManager):
                     )  # noqa
 
             except VKError as e:
-                e = list(e.args)[0]
-                logger.debug(
-                    "Error {error}, invented by update: {update}",
-                    error=e,
-                    update=update,
-                )
-                if e[0] in self.error_handler.processors:
-                    handler = self.error_handler.processors[e[0]]["call"]
-                    logger.debug(
-                        "VKError ?{}! Processing it with handler <{}>".format(
-                            e, handler.__name__
-                        )
-                    )
-                    await handler(e)
-                else:
-                    if self._throw_errors:
-                        logger.error(
-                            "VKError! Add @bot.error_handler({}) to process this error!".format(
-                                e
-                            )
-                        )
-                        raise VKError(e)
-                    logger.error(
-                        "While bot worked error occurred \n\n{traceback}",
-                        traceback=traceback.format_exc(),
-                    )
+                await self.error_handler.handle_error(e)
 
             except:
                 logger.error(

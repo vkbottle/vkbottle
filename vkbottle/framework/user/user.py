@@ -8,8 +8,10 @@ import aiohttp
 import vbml
 
 from vkbottle.framework._status import LoggerLevel
-from vkbottle.api import UserApi, VKError, request
+from vkbottle.api import UserApi, request
+from vkbottle.exceptions import VKError
 from vkbottle.framework.framework.handler.user.handler import Handler
+from vkbottle.framework.framework.error_handler import VKErrorHandler, DefaultErrorHandler
 from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
 from vkbottle.framework.framework.handler.middleware import MiddlewareExecutor
 from vkbottle.framework.blueprint.user import Blueprint
@@ -74,6 +76,7 @@ class User(HTTP, AsyncHandleManager):
         self.on: Handler = Handler()
         self.branch: AbstractBranchGenerator = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
+        self.error_handler: VKErrorHandler = DefaultErrorHandler()
 
         if isinstance(debug, bool):
             debug = "INFO" if debug else "ERROR"
@@ -106,7 +109,7 @@ class User(HTTP, AsyncHandleManager):
             request("users.get", {}, token)
         )
         if "error" in response:
-            raise VKError("Token is invalid")
+            raise VKError(0, "Token is invalid")
         return response["response"][0]["id"]
 
     @staticmethod
