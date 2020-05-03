@@ -13,7 +13,7 @@ class ButtonActions(enum.Enum):
 
 
 class ClientInfo(BaseModel):
-    button_actions: typing.List[ButtonActions]
-    keyboard: bool
-    inline_keyboard: bool
-    lang_id: int
+    button_actions: typing.List[ButtonActions] = None
+    keyboard: bool = None
+    inline_keyboard: bool = None
+    lang_id: int = None
