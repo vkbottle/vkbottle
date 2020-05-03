@@ -9,6 +9,7 @@ class ButtonActions(enum.Enum):
     vkpay = "vkpay"
     open_app = "open_app"
     open_link = "open_link"
+    open_photo = "open_photo"
 
 
 class ClientInfo(BaseModel):
