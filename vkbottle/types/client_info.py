@@ -1,5 +1,5 @@
 import enum
-
+import typing
 from .base import BaseModel
 
 
@@ -12,7 +12,7 @@ class ButtonActions(enum.Enum):
 
 
 class ClientInfo(BaseModel):
-    button_actions: ButtonActions
+    button_actions: typing.List[ButtonActions]
     keyboard: bool
     inline_keyboard: bool
     lang_id: int
