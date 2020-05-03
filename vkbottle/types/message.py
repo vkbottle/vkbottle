@@ -1,8 +1,10 @@
 import typing
-from .objects.messages import Message as MessageType
-from vkbottle.framework.framework.extensions import FromExtension
-from vkbottle.api import Api
 from datetime import datetime
+
+from vkbottle.api import Api
+from vkbottle.framework.framework.extensions import FromExtension
+from .client_info import ClientInfo
+from .objects.messages import Message as MessageType
 
 
 def sep_bytes(text: str, max_bytes: int = 4096) -> list:
@@ -18,6 +20,8 @@ class GetApi:
 
 
 class Message(MessageType, GetApi):
+    client_info: ClientInfo = None
+
     @property
     def chat_id(self) -> int:
         return self.peer_id - 2000000000
