@@ -69,7 +69,7 @@ class DatabaseBranch(AbstractBranchGenerator):
                     f"Branch {branch.__name__} hasn't yet been assigned with decorator"
                 )
             branch = dict((v, k) for k, v in self.names.items())[branch]
-        await self.set_user(uid, branch, json.dumps(context).decode(self.encoding))
+        await self.set_user(uid, branch, json.dumps(context))
 
     async def load(
         self, uid: int
