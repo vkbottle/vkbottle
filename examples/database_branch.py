@@ -46,7 +46,6 @@ class StoredBranch(ClsBranch):
     @rule_disposal(VBMLRule("/говорить <word>"))
     async def say(self, ans: Message, word: str):
         self.context["word"] = word
-        await bot.api.account.ban(1)
         return f"Теперь я буду говорить слово: {word}"
 
     @rule_disposal(VBMLRule("/остановить"))
