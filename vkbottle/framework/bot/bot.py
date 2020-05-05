@@ -204,17 +204,17 @@ class Bot(HTTP, AsyncHandleManager):
             return False
         return response["response"][0]["id"]
 
-    def _check_secret(self, event: dict):
+    def _check_secret(self, event: dict, secret: typing.Optional[str] = None):
         """
         Match secret code with current secret
         :param event:
         :return:
         """
-        if self.__secret:
+        if self.__secret or secret:
             logger.debug(
                 "Checking secret for event ({secret})", secret=event.get("secret")
             )
-            return event.get("secret") == self.__secret
+            return event.get("secret") == (self.__secret or secret)
         return True
 
     def executor_api(self, api):
@@ -322,12 +322,16 @@ class Bot(HTTP, AsyncHandleManager):
                 await self.get_server()
 
     async def emulate(
-        self, event: dict, confirmation_token: str = None
+        self,
+        event: dict,
+        confirmation_token: str = None,
+        secret: str = None,
     ) -> typing.Union[str, None]:
         """
         Process all types of events
         :param event: VK Event (LP or CB)
         :param confirmation_token: code which confirm VK callback
+        :param secret: secret key for callback
         :return: "ok"
         """
         if not self.status.dispatched:
@@ -345,7 +349,7 @@ class Bot(HTTP, AsyncHandleManager):
                 return confirmation_token or "dissatisfied"
 
         updates = event.get("updates", [event])
-        if not self._check_secret(event):
+        if not self._check_secret(event, secret=secret):
             logger.debug("Aborted. Secret is invalid")
             return "access denied"
 
