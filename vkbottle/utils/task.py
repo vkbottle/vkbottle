@@ -40,6 +40,9 @@ class TaskManager:
         if len(self.tasks) < 1:
             raise RuntimeError("Count of tasks - 0. Add tasks.")
         try:
+            if self.on_startup is not None:
+                self.loop.run_until_complete(self.on_startup())
+
             if self.auto_reload:
                 self.loop.create_task(_auto_reload(self.auto_reload_dir))
 

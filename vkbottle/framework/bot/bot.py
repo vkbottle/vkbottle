@@ -286,14 +286,15 @@ class Bot(HTTP, AsyncHandleManager):
         """
         :return:
         """
-        task = TaskManager(self.__loop)
-        task.add_task(self.run(skip_updates))
-        task.run(
+        task = TaskManager(
+            self.__loop,
             auto_reload=auto_reload,
             on_shutdown=on_shutdown,
             on_startup=on_startup,
             auto_reload_dir=auto_reload_dir,
         )
+        task.add_task(self.run(skip_updates))
+        task.run()
 
     async def run(self, skip_updates: bool, wait: int = DEFAULT_WAIT):
         self.__wait = wait

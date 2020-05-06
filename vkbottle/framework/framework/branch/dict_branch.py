@@ -74,6 +74,7 @@ class DictBranch(AbstractBranchGenerator):
         self,
         uid: int,
         branch: typing.Union[typing.Callable, str, AbstractBranch],
+        call_enter: bool = True,
         **context
     ) -> AbstractBranch:
         state, data = None, None
@@ -107,6 +108,8 @@ class DictBranch(AbstractBranchGenerator):
         branch = state(**data())
         branch.create(**context)
         self._branch_queue[uid] = branch
+        if call_enter:
+            await branch.enter()
         return self._branch_queue[uid]
 
     async def load(
@@ -120,6 +123,8 @@ class DictBranch(AbstractBranchGenerator):
             disposal["default"] = [branch.__class__.branch, []]
             return disposal, branch
 
-    async def exit(self, uid: int,) -> None:
+    async def exit(self, uid: int, call_exit: bool = True) -> None:
         if uid in self._branch_queue:
+            if call_exit:
+                await self._branch_queue[uid].exit()
             del self._branch_queue[uid]

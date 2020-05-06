@@ -141,7 +141,6 @@ class AsyncHandleManager:
         )
 
         disposal, branch = await self.branch.load(message.peer_id)
-        await branch.enter(message)
 
         for n, member in disposal.items():
             rules = member[1]
@@ -169,7 +168,6 @@ class AsyncHandleManager:
                 ),
             )
         )
-        await branch.exit(message)
 
     async def _handler_return(self, handler_return, data: dict) -> bool:
         """

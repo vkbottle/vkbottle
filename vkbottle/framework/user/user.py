@@ -213,14 +213,15 @@ class User(HTTP, AsyncHandleManager):
     ):
         """ Run loop with bot.run() task with loop.run_forever()
         """
-        task = TaskManager(self.__loop)
-        task.add_task(self.run())
-        task.run(
+        task = TaskManager(
+            self.__loop,
             auto_reload=auto_reload,
             on_shutdown=on_shutdown,
             on_startup=on_startup,
             auto_reload_dir=auto_reload_dir,
         )
+        task.add_task(self.run())
+        task.run()
 
     def mode(self, *_):
         warnings.warn(
