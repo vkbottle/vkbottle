@@ -2,7 +2,6 @@ from . import photos, base, groups
 import typing
 from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class BoardPostDelete(BaseModel):
@@ -73,9 +72,9 @@ class GroupSettingsChanges(BaseModel):
     public_subcategory: int = None
     age_limits: "groups.GroupFullAgeLimits" = None
     website: str = None
-    enable_status_default: "groups.GroupWall" = None
-    enable_audio: "groups.GroupAudio" = None
-    enable_video: "groups.GroupVideo" = None
+    enable_status_default: int = None
+    enable_audio: int = None
+    enable_video: int = None
     enable_photo: "groups.GroupPhotos" = None
     enable_market: "GroupMarket" = None
 

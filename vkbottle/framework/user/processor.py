@@ -66,6 +66,9 @@ class AsyncHandleManager:
     async def _processor(self, update: dict, update_code: int, update_fields: list):
         try:
             data = update, update_code, update_fields
+            if update_code not in list(map(int, UserEvents)):
+                logger.warning("Undefined event {}", update_code)
+                return
             event = UserEvents(update_code)
             logger.debug("New event: {} {}", event, update)
             if event is UserEvents.new_message:

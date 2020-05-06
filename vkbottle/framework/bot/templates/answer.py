@@ -9,14 +9,10 @@ class Answer(AbstractTemplate):
         answer: str,
         lower: bool = True,
     ) -> "Answer":
-
         async def wrapper(*_) -> str:
             return answer
 
-        self.bot.on.message_handler.add_handler(
-            wrapper,
-            text=text,
-            lower=lower)
+        self.bot.on.message_handler.add_handler(wrapper, text=text, lower=lower)
         return self
 
     def run(self, skip_updates: bool = True, **kwargs):

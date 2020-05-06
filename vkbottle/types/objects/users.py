@@ -2,7 +2,6 @@ from . import photos, base, friends, audio, account
 import typing
 from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class Career(BaseModel):

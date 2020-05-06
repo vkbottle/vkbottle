@@ -1,5 +1,4 @@
 import typing
-import enum
 from ..base import BaseModel
 from vkbottle.types import objects
 
@@ -236,10 +235,3 @@ UpdateCampaigns = typing.Dict
 
 class UpdateCampaignsModel(BaseModel):
     response: UpdateCampaigns = None
-
-
-UpdateClients = typing.Dict
-
-
-class UpdateClientsModel(BaseModel):
-    response: UpdateClients = None

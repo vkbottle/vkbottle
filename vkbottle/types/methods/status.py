@@ -1,6 +1,4 @@
 # Generated with love
-import typing
-import enum
 from vkbottle.types import responses
 from .access import APIAccessibility
 from .method import BaseMethod

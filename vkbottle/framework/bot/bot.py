@@ -322,10 +322,7 @@ class Bot(HTTP, AsyncHandleManager):
                 await self.get_server()
 
     async def emulate(
-        self,
-        event: dict,
-        confirmation_token: str = None,
-        secret: str = None,
+        self, event: dict, confirmation_token: str = None, secret: str = None,
     ) -> typing.Union[str, None]:
         """
         Process all types of events

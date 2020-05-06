@@ -37,9 +37,7 @@ def keyboard_gen(
         buttons.append(row_buttons)
 
     keyboard = str(
-        json.dumps(
-            dict(one_time=one_time, buttons=buttons, inline=inline)
-        )
+        json.dumps(dict(one_time=one_time, buttons=buttons, inline=inline))
         .encode("utf-8")
         .decode("utf-8")
     )

@@ -11,7 +11,10 @@ from vkbottle.framework._status import LoggerLevel
 from vkbottle.api import UserApi, request
 from vkbottle.exceptions import VKError
 from vkbottle.framework.framework.handler.user.handler import Handler
-from vkbottle.framework.framework.error_handler import VKErrorHandler, DefaultErrorHandler
+from vkbottle.framework.framework.error_handler import (
+    VKErrorHandler,
+    DefaultErrorHandler,
+)
 from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
 from vkbottle.framework.framework.handler.middleware import MiddlewareExecutor
 from vkbottle.framework.blueprint.user import Blueprint

@@ -1,5 +1,4 @@
 import typing
-import enum
 from ..base import BaseModel
 from vkbottle.types import objects
 
@@ -75,12 +74,3 @@ GetPushSettings = objects.account.PushSettings
 
 class GetPushSettingsModel(BaseModel):
     response: GetPushSettings = None
-
-
-class SaveProfileInfo(BaseModel):
-    changed: objects.base.BoolInt = None
-    name_request: objects.account.NameRequest = None
-
-
-class SaveProfileInfoModel(BaseModel):
-    response: SaveProfileInfo = None

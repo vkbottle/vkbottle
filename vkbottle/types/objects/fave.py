@@ -1,8 +1,7 @@
-from . import base, wall, market, video, groups, users, link
+from . import wall, market, video, groups, users, link
 import typing
 from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class Bookmark(BaseModel):

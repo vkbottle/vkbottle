@@ -1,5 +1,3 @@
-import typing
-import enum
 from ..base import BaseModel
 from vkbottle.types import objects
 

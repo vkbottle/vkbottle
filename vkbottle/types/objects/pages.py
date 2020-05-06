@@ -1,8 +1,6 @@
 from . import base
-import typing
 from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class PrivacySettings(Enum):
