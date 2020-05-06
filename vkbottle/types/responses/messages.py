@@ -13,7 +13,7 @@ class SetChatPhotoModel(BaseModel):
     response: SetChatPhoto = None
 
 
-CreateChat = typing.Dict
+CreateChat = int
 
 
 class CreateChatModel(BaseModel):
@@ -163,9 +163,6 @@ class Conversation(BaseModel):
     push_settings: PushSettings = None
     can_write: CanWrite = None
     chat_settings: ChatSettings = None
-
-
-GetConversationsById.update_forward_refs()
 
 
 class ConversationsItem(BaseModel):

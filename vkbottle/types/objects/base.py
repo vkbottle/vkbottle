@@ -1,5 +1,5 @@
 import typing
-from enum import Enum
+from enum import Enum, IntEnum
 from ..base import BaseModel
 
 
@@ -77,8 +77,8 @@ class ObjectWithName(BaseModel):
     name: str = None
 
 
-class OkResponse(Enum):
-    _1 = "1"
+class OkResponse(IntEnum):
+    ok = 1
 
 
 class Place(BaseModel):
@@ -95,8 +95,8 @@ class Place(BaseModel):
     type: str = None
 
 
-class PropertyExists(Enum):
-    _1 = "1"
+class PropertyExists(IntEnum):
+    exists = 1
 
 
 class RepostsInfo(BaseModel):
@@ -109,10 +109,10 @@ class RequestParam(BaseModel):
     value: str = None
 
 
-class Sex(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
+class Sex(IntEnum):
+    no = 0
+    female = 1
+    male = 2
 
 
 class Sticker(BaseModel):
