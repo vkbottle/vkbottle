@@ -294,3 +294,6 @@ Send = int
 
 class SendModel(BaseModel):
     response: Send = None
+
+
+GetConversationsById.update_forward_refs()
