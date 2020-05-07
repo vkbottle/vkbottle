@@ -2,7 +2,6 @@ import sys
 import traceback
 import typing
 import asyncio
-import warnings
 
 import aiohttp
 import vbml
@@ -66,7 +65,7 @@ class User(HTTP, AsyncHandleManager):
         self.__loop = loop or asyncio.get_event_loop()
         self.__debug: bool = debug
         self.api: UserApi = UserApi(self.__tokens)
-        self._mode = mode
+        self.mode = mode
 
         self._expand_models: bool = expand_models
         self._patcher: vbml.Patcher = vbml_patcher or vbml.Patcher(pattern="^{}$")
@@ -116,9 +115,11 @@ class User(HTTP, AsyncHandleManager):
         return response["response"][0]["id"]
 
     @staticmethod
-    def get_tokens(login: str, password: str) -> list:
+    def get_tokens(login: str, password: str, limit: int = 3) -> typing.List[str]:
         app = App(login, password)
-        tokens = asyncio.get_event_loop().run_until_complete(app())
+        tokens = asyncio.get_event_loop().run_until_complete(
+            app.get_tokens(limit=limit)
+        )
         return tokens
 
     def dispatch(self, user: AnyUser):
@@ -146,7 +147,7 @@ class User(HTTP, AsyncHandleManager):
         self.long_poll_server = (await self.api.messages.get_long_poll_server()).dict()
         return self.long_poll_server
 
-    async def make_long_request(self, long_poll_server) -> dict:
+    async def make_long_request(self, long_poll_server: dict) -> dict:
         """
         Make longPoll request to the VK Server
         :param long_poll_server:
@@ -157,7 +158,7 @@ class User(HTTP, AsyncHandleManager):
                 long_poll_server["server"],
                 long_poll_server["key"],
                 long_poll_server["ts"],
-                self._mode,
+                self.mode,
                 self.__wait or DEFAULT_WAIT,
                 self.version or VERSION,
             )
@@ -222,12 +223,6 @@ class User(HTTP, AsyncHandleManager):
         )
         task.add_task(self.run())
         task.run()
-
-    def mode(self, *_):
-        warnings.warn(
-            "User LP mode specifier is abandoned, mode 234 is used as default. See issue #36",
-            DeprecationWarning,
-        )
 
     @property
     def loop(self):

@@ -15,7 +15,7 @@ class App(HTTP):
         self._password = password
         self._tokens: typing.List[str] = []
 
-    async def __call__(self, limit: int = 3) -> list:
+    async def get_tokens(self, limit: int = 3) -> typing.List[str]:
         for k, v in APPS.items():
             response = await self.request.get(
                 "https://oauth.vk.com/token"
@@ -26,7 +26,7 @@ class App(HTTP):
                 f"&password={self._password}"
             )
             if "error" in response:
-                raise VKError(response["error_description"])
+                raise VKError(0, response["error_description"])
             if len(self._tokens) < limit:
                 self._tokens.append(response["access_token"])
         return self._tokens

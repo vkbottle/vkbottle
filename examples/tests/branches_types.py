@@ -32,10 +32,6 @@ class AnotherBranch(ClsBranch):
     async def branch(self, ans: Message, *args):
         return f"Saying {self.context['word']}"
 
-    async def exit(self, ans: Message):
-        await ans(self.context)
-        await ans("is this the escape?")
-
 
 @bot.on.message_handler(text=["say <word>", "add <word>"])
 async def pronounce(ans: Message, word):

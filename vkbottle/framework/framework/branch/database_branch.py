@@ -65,11 +65,11 @@ class DatabaseBranch(AbstractBranchGenerator):
         return self.names
 
     async def add(
-            self,
-            uid: int,
-            branch: typing.Union[Branch, str],
-            call_enter: bool = False,
-            **context
+        self,
+        uid: int,
+        branch: typing.Union[Branch, str],
+        call_enter: bool = False,
+        **context,
     ):
         if isinstance(branch, str):
             if branch not in self.names:

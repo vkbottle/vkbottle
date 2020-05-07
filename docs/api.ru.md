@@ -168,14 +168,14 @@ keyboard.add_button(Location("Деанон бесплатно"))
 from vkbottle.api.uploader.photo import PhotoUploader
 ```
 
-Далее нужно связать его с ботом или юзером с помощью инициализации, так же любой аплоадер принимает аргумент `generate_attachment_strings`, при значении True после загрузки будет возвращаться уже готовая строка для отправления в `attachment`:
+Далее нужно связать его с апи (можно из бота или юзера), так же любой аплоадер принимает аргумент `generate_attachment_strings`, при значении True после загрузки будет возвращаться уже готовая строка для отправления в `attachment`:
 
 ```python
 from vkbottle.api.uploader.photo import PhotoUploader
 from vkbottle.bot import Bot
 
 bot = Bot(...)
-photo_uploader  = PhotoUploader(bot, generate_attachment_strings=True)
+photo_uploader  = PhotoUploader(bot.api, generate_attachment_strings=True)
 ```
 
 Теперь чтобы получить строку для отправки: `await photo_uploader.upload_message_photo("img.png")`
