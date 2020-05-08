@@ -6,7 +6,6 @@ from vkbottle.types import objects
 class GetTopics(BaseModel):
     count: int = None
     items: typing.List = None
-    default_order: objects.board.DefaultOrder = None
     can_add_topics: objects.base.BoolInt = None
 
 
