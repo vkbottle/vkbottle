@@ -1,4 +1,5 @@
 import typing
+import warnings
 import re
 from vkbottle.utils import logger
 
@@ -168,8 +169,9 @@ class MessageHandler:
     def add_rules(self, rules: typing.List[AbstractRule], func: typing.Callable):
         current = list()
         for rule in self.default_rules + rules:
-            if isinstance(rule, str):
-                rule = VBMLRule(rule)
+            if not isinstance(rule, (AbstractRule, AbstractFilter)):
+                warnings.warn(f"Wrong rule! Got type {rule.__class__} instead of AbstractRule. Rule will be ignored", Warning)
+                continue
             if not isinstance(rule, AbstractFilter):
                 rule.create(func)
             current.append(rule)
