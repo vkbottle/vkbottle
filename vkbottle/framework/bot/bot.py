@@ -28,8 +28,6 @@ from vkbottle.utils.json import USAGE
 
 try:
     import uvloop
-
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     uvloop = None
 
@@ -55,6 +53,8 @@ class Bot(HTTP, AsyncHandleManager):
         secret: str = None,
         extension: AbstractExtension = None,
         logs_folder: typing.Optional[str] = None,
+        only_asyncio_loop: bool = False,
+        **context,
     ):
         """
         Init bot
@@ -73,6 +73,12 @@ class Bot(HTTP, AsyncHandleManager):
         self.__wait = None
         self.__secret = secret
         self._status: BotStatus = BotStatus()
+
+        self.context: dict = context
+
+        if uvloop is not None:
+            if not only_asyncio_loop:
+                asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
         if isinstance(debug, bool):
             debug = "INFO" if debug else "ERROR"
@@ -122,7 +128,10 @@ class Bot(HTTP, AsyncHandleManager):
         self.on: Handler = Handler(self.group_id)
         self.error_handler: VKErrorHandler = DefaultErrorHandler()
 
+        self._stop: bool = False
+
         logger.info("Using JSON_MODULE - {}".format(USAGE))
+        logger.info("Using asyncio loop - {}".format(asyncio.get_event_loop_policy()))
 
     async def get_updates(self):
         # noqa
@@ -286,6 +295,7 @@ class Bot(HTTP, AsyncHandleManager):
         """
         :return:
         """
+        self._stop = False
         task = TaskManager(
             self.__loop,
             auto_reload=auto_reload,
@@ -297,6 +307,10 @@ class Bot(HTTP, AsyncHandleManager):
         task.run()
 
     async def run(self, skip_updates: bool, wait: int = DEFAULT_WAIT):
+        """ Run bot polling forever
+        Can be manually stopped with:
+        bot.stop()
+        """
         self.__wait = wait
         logger.debug("Polling will be started. Is it OK?")
         if self.__secret is not None:
@@ -314,13 +328,15 @@ class Bot(HTTP, AsyncHandleManager):
         await self.get_server()
         logger.info("Polling successfully started. Press Ctrl+C to stop it")
 
-        while True:
+        while not self._stop:
             event = await self.make_long_request(self.long_poll_server)
             if isinstance(event, dict) and event.get("ts"):
                 self.loop.create_task(self.emulate(event))
                 self.long_poll_server["ts"] = event["ts"]
             else:
                 await self.get_server()
+
+        logger.error("Polling was stopped")
 
     async def emulate(
         self, event: dict, confirmation_token: str = None, secret: str = None,
@@ -380,11 +396,14 @@ class Bot(HTTP, AsyncHandleManager):
 
             except:
                 logger.error(
-                    "While bot worked error occurred \n\n{traceback}",
+                    "While event was emulating error occurred \n\n{traceback}",
                     traceback=traceback.format_exc(),
                 )
 
         return "ok"
+
+    def stop(self):
+        self._stop = True
 
     def __repr__(self) -> str:
         return "<Bot {}>".format(self.status.as_dict)

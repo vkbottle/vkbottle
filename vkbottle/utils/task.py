@@ -20,6 +20,7 @@ class TaskManager:
         asyncio_debug_mode: bool = False,
     ):
         self.tasks: typing.List[typing.Callable] = []
+
         self.loop: asyncio.AbstractEventLoop = loop or asyncio.get_event_loop()
 
         self.on_shutdown: CallableAwaitable = on_shutdown
@@ -52,12 +53,13 @@ class TaskManager:
 
         except KeyboardInterrupt:
             logger.info("Keyboard Interrupt")
-            exit(0)
+            self.close()
 
         finally:
             if self.on_shutdown is not None:
                 self.loop.run_until_complete(self.on_shutdown())
-            self.close()
+            if not self.loop.is_running():
+                self.close()
 
     def close(self):
         self.loop.close()

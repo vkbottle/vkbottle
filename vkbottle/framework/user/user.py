@@ -19,12 +19,11 @@ from vkbottle.framework.framework.handler.middleware import MiddlewareExecutor
 from vkbottle.framework.blueprint.user import Blueprint
 from vkbottle.http import HTTP, App
 from vkbottle.utils import TaskManager, logger
+from vkbottle.utils.json import USAGE
 from .processor import AsyncHandleManager
 
 try:
     import uvloop
-
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     uvloop = None
 
@@ -56,8 +55,16 @@ class User(HTTP, AsyncHandleManager):
         log_to_path: typing.Union[str, bool] = None,
         vbml_patcher: vbml.Patcher = None,
         mode: int = 234,
+        only_asyncio_loop: bool = False,
+        **context,
     ):
         self.__tokens = [tokens] if isinstance(tokens, str) else tokens
+
+        self.context: dict = context
+
+        if uvloop is not None:
+            if not only_asyncio_loop:
+                asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
         if login and password:
             self.__tokens = [self.get_tokens(login, password)]
@@ -80,6 +87,8 @@ class User(HTTP, AsyncHandleManager):
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.error_handler: VKErrorHandler = DefaultErrorHandler()
 
+        self._stop: bool = False
+
         if isinstance(debug, bool):
             debug = "INFO" if debug else "ERROR"
 
@@ -98,6 +107,9 @@ class User(HTTP, AsyncHandleManager):
                 "log_user_{time}.log" if log_to_path is True else log_to_path,
                 rotation="100 MB",
             )
+
+        logger.info("Using JSON_MODULE - {}".format(USAGE))
+        logger.info("Using asyncio loop - {}".format(asyncio.get_event_loop_policy().__class__.__module__))
 
     @staticmethod
     def get_id_by_token(token: str):
@@ -167,6 +179,10 @@ class User(HTTP, AsyncHandleManager):
             return await self.make_long_request(long_poll_server)
 
     async def run(self, wait: int = DEFAULT_WAIT):
+        """ Run user polling forever
+        Can be manually stopped with:
+        >> user.stop()
+        """
         self.__wait = wait
         logger.info("Polling will be started. Is it OK?")
 
@@ -174,7 +190,7 @@ class User(HTTP, AsyncHandleManager):
         self.on.dispatch()
         logger.debug("User Polling successfully started")
 
-        while True:
+        while not self._stop:
             try:
                 event = await self.make_long_request(self.long_poll_server)
                 if isinstance(event, dict) and event.get("ts"):
@@ -193,12 +209,15 @@ class User(HTTP, AsyncHandleManager):
 
             except:
                 logger.error(
-                    "While user lp worked error occurred \n\n{}".format(
+                    "While user lp was running error occurred \n\n{}".format(
                         traceback.format_exc()
                     )
                 )
 
+        logger.error("Polling was stopped")
+
     async def emulate(self, event: dict):
+        """ Emulate event """
         logger.debug("Response: {}", event)
         for update in event.get("updates", []):
             update_code, update_fields = update[0], update[1:]
@@ -214,6 +233,7 @@ class User(HTTP, AsyncHandleManager):
     ):
         """ Run loop with bot.run() task with loop.run_forever()
         """
+        self._stop = False
         task = TaskManager(
             self.__loop,
             auto_reload=auto_reload,
@@ -223,6 +243,9 @@ class User(HTTP, AsyncHandleManager):
         )
         task.add_task(self.run())
         task.run()
+
+    def stop(self):
+        self._stop = True
 
     @property
     def loop(self):
