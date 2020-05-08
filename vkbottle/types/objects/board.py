@@ -1,14 +1,6 @@
 from . import base
 import typing
-from enum import Enum
 from ..base import BaseModel
-
-
-class DefaultOrder(Enum):
-    _1 = "1"
-    _2 = "2"
-    minus1 = "-1"
-    minus2 = "-2"
 
 
 class Topic(BaseModel):

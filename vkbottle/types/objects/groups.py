@@ -58,15 +58,7 @@ class BanInfo(BaseModel):
     is_closed: bool = None
     date: int = None
     end_date: int = None
-    reason: "BanInfoReason" = None
-
-
-class BanInfoReason(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-    _4 = "4"
+    reason: int = None
 
 
 class CallbackServer(BaseModel):

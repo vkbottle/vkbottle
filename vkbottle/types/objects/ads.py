@@ -155,9 +155,9 @@ class Criteria(BaseModel):
 
 
 class CriteriaSex(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
+    no = 0
+    female = 1
+    male = 2
 
 
 class DemoStats(BaseModel):

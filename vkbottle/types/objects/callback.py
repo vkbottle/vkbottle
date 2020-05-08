@@ -44,23 +44,12 @@ class GroupLeave(BaseModel):
     self: "base.BoolInt" = None
 
 
-class GroupMarket(Enum):
-    _0 = "0"
-    _1 = "1"
-
-
-class GroupOfficerRole(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-
 
 class GroupOfficersEdit(BaseModel):
     admin_id: int = None
     user_id: int = None
-    level_old: "GroupOfficerRole" = None
-    level_new: "GroupOfficerRole" = None
+    level_old: int = None
+    level_new: int = None
 
 
 class GroupSettingsChanges(BaseModel):
@@ -76,7 +65,7 @@ class GroupSettingsChanges(BaseModel):
     enable_audio: int = None
     enable_video: int = None
     enable_photo: "groups.GroupPhotos" = None
-    enable_market: "GroupMarket" = None
+    enable_market: int = None
 
 
 class MarketComment(BaseModel):

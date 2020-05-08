@@ -223,7 +223,7 @@ class User(UserMin):
     online_app: int = None
     verified: "base.BoolInt" = None
     trending: "base.BoolInt" = None
-    friend_status: "friends.FriendStatusStatus" = None
+    friend_status: int = None
     mutual: "friends.RequestsMutual" = None
 
 

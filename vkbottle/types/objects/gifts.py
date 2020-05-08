@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum
 from ..base import BaseModel
 
 
@@ -12,10 +12,10 @@ class Gift(BaseModel):
     privacy: "GiftPrivacy" = None
 
 
-class GiftPrivacy(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
+class GiftPrivacy(IntEnum):
+    visible_name_and_message = 0
+    visible_name = 1
+    visible_only_owner = 2
 
 
 class Layout(BaseModel):
