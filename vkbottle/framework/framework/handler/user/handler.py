@@ -37,9 +37,11 @@ class Handler:
         self.message_handler: MessageHandler = MessageHandler()
 
     def dispatch(self):
-        self.message_rules.extend(
-            self.message.rules + self.chat_message.rules + self.message_handler.rules
-        )
+        self.message_rules.extend([
+            *self.message.rules,
+            *self.chat_message.rules,
+            *self.message_handler.rules
+        ])
 
     def concatenate(self, other: "Handler"):
         self.event.rules += other.event.rules
@@ -128,7 +130,7 @@ class MessageHandler:
             rule.watch_context = dict(zip(patterns, source))
         arguments = [
             arguments for pattern in patterns for arguments in pattern.arguments
-        ]
+        ]  # Why?
 
         return rule
 

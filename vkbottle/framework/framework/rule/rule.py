@@ -33,6 +33,10 @@ class RuleExecute:
 
 
 class AbstractRule(Copy):
+
+    call: typing.Callable
+    getfullargspec: inspect.FullArgSpec
+
     def __init_subclass__(cls, **kwargs):
         cls.context: RuleExecute = RuleExecute()
         cls.watch_context = None
@@ -226,8 +230,7 @@ class VBML(AbstractMessageRule):
     ):
         if isinstance(pattern, dict):
             self.watch_context = pattern
-            pattern = list(pattern.keys())
-            print(pattern)
+            pattern = list(pattern)  # It's not necessary to write .keys()
         self._patcher = Patcher.get_current()
         patterns: typing.List[Pattern] = []
         if isinstance(pattern, Pattern):
@@ -282,7 +285,9 @@ class AttachmentRule(UnionMixin):
 
 class ChatActionRule(AbstractMessageRule):
     def __init__(
-        self, chat_action: typing.Union[str, typing.List[str]], rules: dict = None
+        self,
+        chat_action: typing.Union[str, typing.List[str]],
+        rules: dict = None
     ):
         if isinstance(chat_action, str):
             chat_action = [chat_action]
