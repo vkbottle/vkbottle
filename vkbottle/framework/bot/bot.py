@@ -85,14 +85,14 @@ class Bot(HTTP, AsyncHandleManager):
 
         self.logger = LoggerLevel(debug)
 
-        if not loguru_installed():
-            if not Patcher.get_current():
-                Patcher.set_current(
-                    patcher
-                    if patcher is not None
-                    else Patcher(pattern="^{}$", validators=DefaultValidators)
-                )
+        if not Patcher.get_current():
+            Patcher.set_current(
+                patcher
+                if patcher is not None
+                else Patcher(pattern="^{}$", validators=DefaultValidators)
+            )
 
+        if not loguru_installed():
             logger.remove()
             logger.add(
                 sys.stderr,
