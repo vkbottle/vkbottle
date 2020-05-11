@@ -1,8 +1,7 @@
-from . import base
+from . import base, photos
 import typing
 from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class Doc(BaseModel):
@@ -31,7 +30,7 @@ class DocPreview(BaseModel):
 
 
 class DocPreviewPhoto(BaseModel):
-    sizes: typing.List = None
+    sizes: typing.List["photos.PhotoSizes"] = None
 
 
 class DocPreviewVideo(BaseModel):

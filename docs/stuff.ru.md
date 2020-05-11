@@ -111,6 +111,7 @@ async def self_ban(ans: Message):
     return "хаха самобан"
 ```
 
+### Only error
 Способ далее является устаревшим, но он применим для всех хендлеров в целом. С помощью него можно например ловить `Rate limit reached`:
 
 ```python
@@ -120,4 +121,27 @@ async def error_handler(e):
     print("О нет Rate limit reached, спасите")
 ```
 
-P.S. Скоро будет нормальный error handler
+P.S. Скоро будет нормальный error handler для этого типа
+
+## TaskManager
+
+Если вам нужно начать работу с vkbottle "с нуля" вам может понадобится `TaskManager`
+
+```python
+from vkbottle import TaskManager
+from vkbottle.api import API
+
+api = API("token")
+
+# Создайте вашу асинхронную функцию для запуска в таск менеджере
+# для начала работы с апи
+async def main():
+    await api.status.set("Я люблю котиков")
+
+task_manager = TaskManager()
+# Добавьте нужные таски
+task_manager.add_task(main())
+task_manager.run()
+```
+
+Если таск один, как в прошлом примере, оптимальнее будет воспользоваться методом `run_task`

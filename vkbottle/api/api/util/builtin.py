@@ -5,8 +5,8 @@ import math
 from typing import List, Coroutine, Any
 from vkbottle.utils.logger import logger
 
-from .token import AbstractTokenGenerator
-from .schema import TokenSchema
+from vkbottle.api.api.util.token import AbstractTokenGenerator
+from vkbottle.api.api.util.schema import TokenSchema
 
 
 class RandomTokenGenerator(AbstractTokenGenerator):

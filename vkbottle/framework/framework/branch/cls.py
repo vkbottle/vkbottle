@@ -20,13 +20,13 @@ class AbstractBranch(Copy):
         self.context = context
         ...
 
-    async def enter(self, ans: Message):
+    async def enter(self):
         ...
 
     async def branch(self, ans: Message, *args):
         ...
 
-    async def exit(self, ans: Message):
+    async def exit(self):
         ...
 
     def __repr__(self):
@@ -34,18 +34,18 @@ class AbstractBranch(Copy):
 
 
 class ClsBranch(AbstractBranch):
-    async def enter(self, ans: Message):
+    async def enter(self):
         logger.info("Branch {} entered at", self.key)
 
-    async def exit(self, ans: Message):
+    async def exit(self):
         logger.info("Branch {} exit at", self.key)
 
 
 class CoroutineBranch(AbstractBranch):
-    async def enter(self, ans):
+    async def enter(self):
         logger.info("Branch {} entered at", self.key or self.data["call"].__name__)
 
-    async def exit(self, ans):
+    async def exit(self):
         logger.info("Branch {} exit at", self.key or self.data["call"].__name__)
 
     async def branch(self, ans, *args):

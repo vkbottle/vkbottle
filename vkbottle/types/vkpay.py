@@ -1,6 +1,7 @@
-from .base import BaseModel
-from typing import Union
 from datetime import datetime
+from typing import Union
+
+from .base import BaseModel
 
 
 class VKPayTransaction(BaseModel):

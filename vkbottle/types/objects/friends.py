@@ -1,23 +1,14 @@
-from . import base, users
+from . import base
 import typing
-from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class FriendStatus(BaseModel):
-    friend_status: "FriendStatusStatus" = None
+    friend_status: int = None
     read_state: "base.BoolInt" = None
     request_message: str = None
     sign: str = None
     user_id: int = None
-
-
-class FriendStatusStatus(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
 
 
 class FriendsList(BaseModel):

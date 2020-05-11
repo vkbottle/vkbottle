@@ -1,26 +1,30 @@
+from abc import ABC, abstractmethod
+from vkbottle.utils.exceptions import VKError
 import typing
 import traceback
 from vkbottle.utils import logger
 
-def swear(
-        exception: typing.Union[Exception, typing.Tuple[Exception]],
-        exception_handler: typing.Callable = None,
-        ignore: bool = False,
-) -> typing.Union[typing.Any, Exception]:
-    """ Swear catcher allows to handle exceptions
-    """
-    def decorator(func):
-        async def wrapper(*args, **kwargs):
-            try:
-                return await func(*args, **kwargs)
-            except exception as e:
-                if ignore:
-                    return e
-                if exception_handler is not None:
-                    await exception_handler(e, *args, **kwargs)
-                else:
-                    logger.error(traceback.format_exc())
-            finally:
-                logger.debug(f"{func.__name__} successfully handled with swear")
-        return wrapper
-    return decorator
+
+class VKErrorHandler(ABC):
+    def __init__(self):
+        self.handled_errors: typing.Dict[int, typing.Callable] = {}
+
+    async def handle_error(self, e: VKError):
+        if e.error_code not in self.handled_errors:
+            return await self.unhandled_error(e)
+        return await self.handled_errors[e.error_code](e)
+
+    def add_error_handler(self, error_code: int, handler: typing.Callable):
+        self.handled_errors[error_code] = handler
+
+    @abstractmethod
+    async def unhandled_error(self, e: VKError):
+        pass
+
+    def __repr__(self):
+        return f"<VKErrorHandler handled_errors={tuple(self.handled_errors.keys())}>"
+
+
+class DefaultErrorHandler(VKErrorHandler):
+    async def unhandled_error(self, e: VKError):
+        logger.error(traceback.format_exc(2))

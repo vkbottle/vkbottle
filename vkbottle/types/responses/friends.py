@@ -21,7 +21,10 @@ class AddListModel(BaseModel):
     response: AddList = None
 
 
-Add = typing.Dict
+class Add(enum.IntEnum):
+    sent = 1
+    approved = 2
+    resending = 4
 
 
 class AddModel(BaseModel):

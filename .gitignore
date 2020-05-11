@@ -124,3 +124,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .DS_Store
+
+# Test databases
+*.db
+.db
+*.db-shm
+*.db-wal

@@ -13,7 +13,7 @@ class SetChatPhotoModel(BaseModel):
     response: SetChatPhoto = None
 
 
-CreateChat = typing.Dict
+CreateChat = int
 
 
 class CreateChatModel(BaseModel):
@@ -80,10 +80,10 @@ class GetChatModel(BaseModel):
 
 class GetConversationMembers(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List["objects.messages.ConversationMember"] = None
     chat_restrictions: objects.messages.ChatRestrictions = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    profiles: typing.List["objects.users.User"] = None
+    groups: typing.List["objects.groups.Group"] = None
 
 
 class GetConversationMembersModel(BaseModel):
@@ -163,9 +163,6 @@ class Conversation(BaseModel):
     push_settings: PushSettings = None
     can_write: CanWrite = None
     chat_settings: ChatSettings = None
-
-
-GetConversationsById.update_forward_refs()
 
 
 class ConversationsItem(BaseModel):
@@ -297,3 +294,6 @@ Send = int
 
 class SendModel(BaseModel):
     response: Send = None
+
+
+GetConversationsById.update_forward_refs()

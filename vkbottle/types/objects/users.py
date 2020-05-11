@@ -2,7 +2,6 @@ from . import photos, base, friends, audio, account
 import typing
 from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class Career(BaseModel):
@@ -224,7 +223,7 @@ class User(UserMin):
     online_app: int = None
     verified: "base.BoolInt" = None
     trending: "base.BoolInt" = None
-    friend_status: "friends.FriendStatusStatus" = None
+    friend_status: int = None
     mutual: "friends.RequestsMutual" = None
 
 
@@ -277,7 +276,7 @@ class UserFull(User):
     education_form: str = None
     education_status: str = None
     home_town: str = None
-    relation: "UserRelation" = None
+    relation: int = None
     relation_partner: "UserMin" = None
     personal: "Personal" = None
     universities: typing.List = None
@@ -286,18 +285,6 @@ class UserFull(User):
     is_subscribed_podcasts: bool = None
     can_subscribe_podcasts: bool = None
     can_subscribe_posts: bool = None
-
-
-class UserRelation(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-    _4 = "4"
-    _5 = "5"
-    _6 = "6"
-    _7 = "7"
-    _8 = "8"
 
 
 class UserSettingsXtr(BaseModel):
@@ -313,7 +300,7 @@ class UserSettingsXtr(BaseModel):
     name_request: "account.NameRequest" = None
     personal: "Personal" = None
     phone: str = None
-    relation: "UserRelation" = None
+    relation: int = None
     relation_partner: "UserMin" = None
     relation_pending: "base.BoolInt" = None
     relation_requests: typing.List = None

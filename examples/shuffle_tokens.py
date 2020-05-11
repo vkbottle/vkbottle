@@ -1,5 +1,6 @@
 from vkbottle.user import User, Message
-from vkbottle.api.api.builtin import ConsistentTokenGenerator
+from vkbottle.api.token import ConsistentTokenGenerator
+from vkbottle.rule import FromMe
 
 token_1 = "..."
 token_2 = "..."
@@ -13,10 +14,9 @@ user = User(token_1)
 user.api.token_generator = generator
 
 
-@user.on.message_new()
+@user.on.message_handler(FromMe())
 async def new_message(ans: Message):
-    if ans.from_id == user.user_id:
-        await ans("Я что-то написал, да?")
+    await ans("Я что-то написал, да?")
 
 
 user.run_polling()

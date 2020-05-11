@@ -1,7 +1,7 @@
 import typing
-from .token import AbstractTokenGenerator
+from vkbottle.api.api.util.token import AbstractTokenGenerator
 from vkbottle.utils.logger import logger
-from ..exceptions import TokenGeneratorError
+from vkbottle.utils.exceptions import TokenGeneratorError
 
 
 class TokenSchema:

@@ -2,7 +2,6 @@ from . import photos, base, groups
 import typing
 from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class BoardPostDelete(BaseModel):
@@ -45,39 +44,27 @@ class GroupLeave(BaseModel):
     self: "base.BoolInt" = None
 
 
-class GroupMarket(Enum):
-    _0 = "0"
-    _1 = "1"
-
-
-class GroupOfficerRole(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-
-
 class GroupOfficersEdit(BaseModel):
     admin_id: int = None
     user_id: int = None
-    level_old: "GroupOfficerRole" = None
-    level_new: "GroupOfficerRole" = None
+    level_old: int = None
+    level_new: int = None
 
 
 class GroupSettingsChanges(BaseModel):
     title: str = None
     description: str = None
-    access: "groups.GroupIsClosed" = None
+    access: int = None
     screen_name: str = None
     public_category: int = None
     public_subcategory: int = None
-    age_limits: "groups.GroupFullAgeLimits" = None
+    age_limits: int = None
     website: str = None
-    enable_status_default: "groups.GroupWall" = None
-    enable_audio: "groups.GroupAudio" = None
-    enable_video: "groups.GroupVideo" = None
-    enable_photo: "groups.GroupPhotos" = None
-    enable_market: "GroupMarket" = None
+    enable_status_default: int = None
+    enable_audio: int = None
+    enable_video: int = None
+    enable_photo: int = None
+    enable_market: int = None
 
 
 class MarketComment(BaseModel):

@@ -1,5 +1,5 @@
 from .action import Text
-from ..exceptions import KeyboardError
+from vkbottle.utils.exceptions import KeyboardError
 from ...utils import except_none_self, json
 import typing
 
@@ -26,7 +26,10 @@ class KeyboardButton:
 
     @property
     def button(self):
-        return {"action": except_none_self(self.action.dict()), "color": self.color}
+        b = {"action": except_none_self(self.action.dict())}
+        if self.action is Text:
+            b["color"] = self.color
+        return b
 
 
 class Keyboard:

@@ -1,4 +1,5 @@
 import typing
+import warnings
 import re
 from vkbottle.utils import logger
 
@@ -6,7 +7,7 @@ from vbml import Patcher, Pattern
 
 from .events import Event
 from vkbottle.const import __version__
-from vkbottle.api import HandlerError
+from vkbottle.utils.exceptions import HandlerError
 from vkbottle.framework.framework.rule.filters import AbstractFilter
 from vkbottle.framework.framework.rule import (
     AbstractRule,
@@ -78,7 +79,7 @@ class Handler:
 
         self.message_handler.rules += self.message.rules + self.chat_message.rules
         self.message_handler.payload.rules += (
-                self.message.payload.rules + self.chat_message.payload.rules
+            self.message.payload.rules + self.chat_message.payload.rules
         )
 
         self.rules = self.message_handler.payload.rules + self.message_handler.rules
@@ -90,7 +91,8 @@ class Handler:
             if current_rest["version"] != __version__:
                 logger.info(
                     "You are using old version of VKBottle. Update is found: {} | {}",
-                    current_rest["version"], current_rest["description"]
+                    current_rest["version"],
+                    current_rest["description"],
                 )
         logger.debug("Bot successfully dispatched")
 
@@ -100,7 +102,7 @@ class Handler:
         self.message_handler.prefix = prefix
 
     def chat_action(
-            self, type_: typing.Union[str, typing.List[str]], rules: dict = None
+        self, type_: typing.Union[str, typing.List[str]], rules: dict = None
     ):
         """
         Special express processor of chat actions (https://vk.com/dev/objects/message - action object)
@@ -167,8 +169,12 @@ class MessageHandler:
     def add_rules(self, rules: typing.List[AbstractRule], func: typing.Callable):
         current = list()
         for rule in self.default_rules + rules:
-            if isinstance(rule, str):
-                rule = VBMLRule(rule)
+            if not isinstance(rule, (AbstractRule, AbstractFilter)):
+                warnings.warn(
+                    f"Wrong rule! Got type {rule.__class__} instead of AbstractRule. Rule will be ignored",
+                    Warning,
+                )
+                continue
             if not isinstance(rule, AbstractFilter):
                 rule.create(func)
             current.append(rule)
@@ -184,12 +190,12 @@ class MessageHandler:
         return current
 
     def _text_rule(
-            self,
-            func: typing.Callable,
-            text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
-            lower: bool,
-            command: bool,
-            pattern: str,
+        self,
+        func: typing.Callable,
+        text: typing.Union[str, Pattern, typing.List[typing.Union[str, Pattern]]],
+        lower: bool,
+        command: bool,
+        pattern: str,
     ) -> AbstractRule:
         source = None
 
@@ -235,16 +241,16 @@ class MessageHandler:
         self.payload.rules += message_handler.payload.rules
 
     def add_handler(
-            self,
-            func: typing.Callable,
-            *rules,
-            text: typing.Union[
-                str, Pattern, typing.List[typing.Union[str, Pattern]]
-            ] = None,
-            lower: bool = False,
-            command: bool = False,
-            pattern: str = None,
-            **col_rules,
+        self,
+        func: typing.Callable,
+        *rules,
+        text: typing.Union[
+            str, Pattern, typing.List[typing.Union[str, Pattern]]
+        ] = None,
+        lower: bool = False,
+        command: bool = False,
+        pattern: str = None,
+        **col_rules,
     ):
         """
         Add handler to disself._patcher without decorators
@@ -279,14 +285,14 @@ class MessageHandler:
         return decorator
 
     def __call__(
-            self,
-            *rules,
-            text: typing.Union[
-                str, Pattern, typing.List[typing.Union[str, Pattern]]
-            ] = None,
-            command: bool = False,
-            lower: bool = False,
-            **col_rules,
+        self,
+        *rules,
+        text: typing.Union[
+            str, Pattern, typing.List[typing.Union[str, Pattern]]
+        ] = None,
+        command: bool = False,
+        lower: bool = False,
+        **col_rules,
     ):
         """
         Simple on.message(text) decorator. Support regex keys in text
@@ -311,10 +317,10 @@ class MessageHandler:
         rules = ""
         for rules in self.rules:
             rules += (
-                    rules[0].call.__name__
-                    + ": "
-                    + ", ".join([rule.__class__.__name__ for rule in rules])
-                    + "\n"
+                rules[0].call.__name__
+                + ": "
+                + ", ".join([rule.__class__.__name__ for rule in rules])
+                + "\n"
             )
         return rules
 

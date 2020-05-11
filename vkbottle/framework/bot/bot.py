@@ -7,7 +7,10 @@ from vbml import Patcher
 from vkbottle.http import HTTP
 from vkbottle.types.events import EventList
 from vkbottle.framework.framework.handler.handler import Handler
-from vkbottle.framework.framework.handler import ErrorHandler
+from vkbottle.framework.framework.error_handler import (
+    VKErrorHandler,
+    DefaultErrorHandler,
+)
 from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.extensions.standard import StandardExtension
@@ -18,15 +21,13 @@ from vkbottle.framework.blueprint.bot import Blueprint
 from vkbottle.framework.bot.processor import AsyncHandleManager
 from vkbottle.framework.bot.builtin import DefaultValidators, DEFAULT_WAIT
 from vkbottle.api import Api, request
-from vkbottle.api import VKError
+from vkbottle.exceptions import VKError
 from vkbottle.utils import logger, TaskManager, chunks
 from vkbottle.utils.json import USAGE
 from vkbottle.utils.logger import loguru_installed
 
 try:
     import uvloop
-
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     uvloop = None
 
@@ -52,6 +53,8 @@ class Bot(HTTP, AsyncHandleManager):
         secret: str = None,
         extension: AbstractExtension = None,
         logs_folder: typing.Optional[str] = None,
+        only_asyncio_loop: bool = False,
+        **context,
     ):
         """
         Init bot
@@ -70,6 +73,12 @@ class Bot(HTTP, AsyncHandleManager):
         self.__wait = None
         self.__secret = secret
         self._status: BotStatus = BotStatus()
+
+        self.context: dict = context
+
+        if uvloop is not None:
+            if not only_asyncio_loop:
+                asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
         if isinstance(debug, bool):
             debug = "INFO" if debug else "ERROR"
@@ -98,7 +107,7 @@ class Bot(HTTP, AsyncHandleManager):
             if log_to_path:
                 logger.add(
                     (logs_folder or "") + "log_{time}.log" if log_to_path is True else log_to_path,
-                    rotation="100 MB",
+                    rotation="20 MB",
                 )
         else:
             conf = {
@@ -118,7 +127,7 @@ class Bot(HTTP, AsyncHandleManager):
             }
 
             if log_to_path:
-                conf["handlers"].append(dict(synk=(logs_folder or "") + "log_{time}.log", rotation="100 MB")
+                conf["handlers"].append(dict(synk=(logs_folder or "") + "log_{time}.log", rotation="20 MB")
                                         if log_to_path is True
                                         else log_to_path,
                                         )
@@ -142,9 +151,16 @@ class Bot(HTTP, AsyncHandleManager):
         self.branch: typing.Union[AbstractBranchGenerator, DictBranch] = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.on: Handler = Handler(self.group_id)
-        self.error_handler: ErrorHandler = ErrorHandler()
+        self.error_handler: VKErrorHandler = DefaultErrorHandler()
+
+        self._stop: bool = False
 
         logger.info("Using JSON_MODULE - {}".format(USAGE))
+        logger.info(
+            "Using asyncio loop - {}".format(
+                asyncio.get_event_loop_policy().__class__.__module__
+            )
+        )
 
     async def get_updates(self):
         # noqa
@@ -193,7 +209,7 @@ class Bot(HTTP, AsyncHandleManager):
         :return:
         """
         self.on.concatenate(bot.on)
-        self.error_handler.update(bot.error_handler.processors)
+        self.error_handler.handled_errors.update(bot.error_handler.handled_errors)
         self.middleware.middleware += bot.middleware.middleware
         for branch_name, disposal in (await bot.branch.branches).items():
             self.branch.add_branch(disposal[0], name=branch_name)
@@ -222,21 +238,21 @@ class Bot(HTTP, AsyncHandleManager):
         )
         if "error" in response:
             if throw_exc:
-                raise VKError("Token is invalid")
+                raise VKError(0, "Token is invalid")
             return False
         return response["response"][0]["id"]
 
-    def _check_secret(self, event: dict):
+    def _check_secret(self, event: dict, secret: typing.Optional[str] = None):
         """
         Match secret code with current secret
         :param event:
         :return:
         """
-        if self.__secret:
+        if self.__secret or secret:
             logger.debug(
                 "Checking secret for event ({secret})", secret=event.get("secret")
             )
-            return event.get("secret") == self.__secret
+            return event.get("secret") == (self.__secret or secret)
         return True
 
     def executor_api(self, api):
@@ -308,16 +324,22 @@ class Bot(HTTP, AsyncHandleManager):
         """
         :return:
         """
-        task = TaskManager(self.__loop)
-        task.add_task(self.run(skip_updates))
-        task.run(
+        self._stop = False
+        task = TaskManager(
+            self.__loop,
             auto_reload=auto_reload,
             on_shutdown=on_shutdown,
             on_startup=on_startup,
             auto_reload_dir=auto_reload_dir,
         )
+        task.add_task(self.run(skip_updates))
+        task.run()
 
     async def run(self, skip_updates: bool, wait: int = DEFAULT_WAIT):
+        """ Run bot polling forever
+        Can be manually stopped with:
+        bot.stop()
+        """
         self.__wait = wait
         logger.debug("Polling will be started. Is it OK?")
         if self.__secret is not None:
@@ -335,7 +357,7 @@ class Bot(HTTP, AsyncHandleManager):
         await self.get_server()
         logger.info("Polling successfully started. Press Ctrl+C to stop it")
 
-        while True:
+        while not self._stop:
             event = await self.make_long_request(self.long_poll_server)
             if isinstance(event, dict) and event.get("ts"):
                 self.loop.create_task(self.emulate(event))
@@ -343,13 +365,16 @@ class Bot(HTTP, AsyncHandleManager):
             else:
                 await self.get_server()
 
+        logger.error("Polling was stopped")
+
     async def emulate(
-        self, event: dict, confirmation_token: str = None
+        self, event: dict, confirmation_token: str = None, secret: str = None,
     ) -> typing.Union[str, None]:
         """
         Process all types of events
         :param event: VK Event (LP or CB)
         :param confirmation_token: code which confirm VK callback
+        :param secret: secret key for callback
         :return: "ok"
         """
         if not self.status.dispatched:
@@ -367,7 +392,7 @@ class Bot(HTTP, AsyncHandleManager):
                 return confirmation_token or "dissatisfied"
 
         updates = event.get("updates", [event])
-        if not self._check_secret(event):
+        if not self._check_secret(event, secret=secret):
             logger.debug("Aborted. Secret is invalid")
             return "access denied"
 
@@ -383,51 +408,30 @@ class Bot(HTTP, AsyncHandleManager):
                     # VK API v5.103
                     client_info = obj.get("client_info")
                     if client_info is None:
-                        raise VKError("Change API version to 5.103 or later") from None
+                        raise VKError(
+                            0, "Change API version to 5.103 or later"
+                        ) from None
                     obj = obj["message"]
                     await self._processor(obj, client_info)
 
                 else:
-                    # If this is an event of the group AND this is not SELF-EVENT
                     await (
                         self._event_processor(obj=obj, event_type=update["type"])
                     )  # noqa
 
             except VKError as e:
-                e = list(e.args)[0]
-                logger.debug(
-                    "Error {error}, invented by update: {update}",
-                    error=e,
-                    update=update,
-                )
-                if e[0] in self.error_handler.processors:
-                    handler = self.error_handler.processors[e[0]]["call"]
-                    logger.debug(
-                        "VKError ?{}! Processing it with handler <{}>".format(
-                            e, handler.__name__
-                        )
-                    )
-                    await handler(e)
-                else:
-                    if self._throw_errors:
-                        logger.error(
-                            "VKError! Add @bot.error_handler({}) to process this error!".format(
-                                e
-                            )
-                        )
-                        raise VKError(e)
-                    logger.error(
-                        "While bot worked error occurred \n\n{traceback}",
-                        traceback=traceback.format_exc(),
-                    )
+                await self.error_handler.handle_error(e)
 
             except:
                 logger.error(
-                    "While bot worked error occurred \n\n{traceback}",
+                    "While event was emulating error occurred \n\n{traceback}",
                     traceback=traceback.format_exc(),
                 )
 
         return "ok"
+
+    def stop(self):
+        self._stop = True
 
     def __repr__(self) -> str:
         return "<Bot {}>".format(self.status.as_dict)

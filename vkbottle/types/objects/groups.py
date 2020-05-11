@@ -2,7 +2,6 @@ from . import base, market, users
 import typing
 from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class Address(BaseModel):
@@ -59,15 +58,7 @@ class BanInfo(BaseModel):
     is_closed: bool = None
     date: int = None
     end_date: int = None
-    reason: "BanInfoReason" = None
-
-
-class BanInfoReason(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-    _4 = "4"
+    reason: int = None
 
 
 class CallbackServer(BaseModel):
@@ -165,10 +156,11 @@ class Filter(Enum):
 
 
 class Group(BaseModel):
-    admin_level: "GroupAdminLevel" = None
+    admin_level: int = None
     deactivated: str = None
     finish_date: int = None
     id: int = None
+    wall: int = None
     is_admin: "base.BoolInt" = None
     is_advertiser: "base.BoolInt" = None
     is_closed: int = None
@@ -180,30 +172,6 @@ class Group(BaseModel):
     screen_name: str = None
     start_date: int = None
     type: "GroupType" = None
-
-
-class GroupAccess(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-
-
-class GroupAdminLevel(Enum):
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-
-
-class GroupAgeLimits(Enum):
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-
-
-class GroupAudio(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
 
 
 class GroupBanInfo(BaseModel):
@@ -230,15 +198,9 @@ class GroupCategoryType(BaseModel):
     name: str = None
 
 
-class GroupDocs(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-
-
 class GroupFull(Group):
     market: "MarketInfo" = None
-    member_status: "GroupFullMemberStatus" = None
+    member_status: int = None
     is_favorite: "base.BoolInt" = None
     is_subscribed: "base.BoolInt" = None
     city: "base.Object" = None
@@ -261,48 +223,18 @@ class GroupFull(Group):
     links: typing.List = None
     contacts: typing.List = None
     site: str = None
-    main_section: "GroupFullMainSection" = None
+    main_section: int = None
     trending: "base.BoolInt" = None
     can_message: "base.BoolInt" = None
     is_messages_blocked: "base.BoolInt" = None
     can_send_notify: "base.BoolInt" = None
     online_status: "OnlineStatus" = None
-    age_limits: "GroupFullAgeLimits" = None
+    age_limits: int = None
     ban_info: "GroupBanInfo" = None
     addresses: "AddressesInfo" = None
     is_subscribed_podcasts: bool = None
     can_subscribe_podcasts: bool = None
     can_subscribe_posts: bool = None
-
-
-class GroupFullAgeLimits(Enum):
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-
-
-class GroupFullMainSection(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-    _4 = "4"
-    _5 = "5"
-
-
-class GroupFullMemberStatus(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-    _4 = "4"
-    _5 = "5"
-
-
-class GroupIsClosed(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
 
 
 class GroupLink(BaseModel):
@@ -312,20 +244,6 @@ class GroupLink(BaseModel):
     id: int = None
     image_processing: "base.BoolInt" = None
     url: str = None
-
-
-class GroupMarketCurrency(Enum):
-    _643 = "643"
-    _980 = "980"
-    _398 = "398"
-    _978 = "978"
-    _840 = "840"
-
-
-class GroupPhotos(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
 
 
 class GroupPublicCategoryList(BaseModel):
@@ -364,84 +282,14 @@ class GroupSettings(BaseModel):
     wiki: int = None
 
 
-class GroupSubject(Enum):
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-    _4 = "4"
-    _5 = "5"
-    _6 = "6"
-    _7 = "7"
-    _8 = "8"
-    _9 = "9"
-    _10 = "10"
-    _11 = "11"
-    _12 = "12"
-    _13 = "13"
-    _14 = "14"
-    _15 = "15"
-    _16 = "16"
-    _17 = "17"
-    _18 = "18"
-    _19 = "19"
-    _20 = "20"
-    _21 = "21"
-    _22 = "22"
-    _23 = "23"
-    _24 = "24"
-    _25 = "25"
-    _26 = "26"
-    _27 = "27"
-    _28 = "28"
-    _29 = "29"
-    _30 = "30"
-    _31 = "31"
-    _32 = "32"
-    _33 = "33"
-    _34 = "34"
-    _35 = "35"
-    _36 = "36"
-    _37 = "37"
-    _38 = "38"
-    _39 = "39"
-    _40 = "40"
-    _41 = "41"
-    _42 = "42"
-
-
-class GroupTopics(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-
-
 class GroupType(Enum):
     group = "group"
     page = "page"
     event = "event"
 
 
-class GroupVideo(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-
-
-class GroupWall(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-
-
-class GroupWiki(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-
-
 class GroupXtrInvitedBy(BaseModel):
-    admin_level: "GroupXtrInvitedByAdminLevel" = None
+    admin_level: int = None
     id: str = None
     invited_by: int = None
     is_admin: "base.BoolInt" = None
@@ -454,12 +302,6 @@ class GroupXtrInvitedBy(BaseModel):
     photo_50: str = None
     screen_name: str = None
     type: "GroupXtrInvitedByType" = None
-
-
-class GroupXtrInvitedByAdminLevel(Enum):
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
 
 
 class GroupXtrInvitedByType(Enum):

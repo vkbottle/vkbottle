@@ -16,3 +16,8 @@ class AbstractFilter:
 
     async def check(self, event) -> bool:
         ...
+
+    def __repr__(self):
+        return (f"<Filter {self.__class__.__qualname__} "
+                f"rules={(rule.__class__.__name__ for rule in self.rules)} "
+                f"context={self.context}>")

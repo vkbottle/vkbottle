@@ -2,7 +2,6 @@ from . import base, users, wall
 import typing
 from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class CommentMedia(BaseModel):

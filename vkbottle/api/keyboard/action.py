@@ -1,5 +1,5 @@
 from ...utils import except_none_self
-from ..exceptions import KeyboardError
+from vkbottle.utils.exceptions import KeyboardError
 
 
 class Action:

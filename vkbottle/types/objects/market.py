@@ -1,8 +1,6 @@
 from . import photos, base
 import typing
-from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class Currency(BaseModel):
@@ -27,7 +25,7 @@ class MarketCategory(BaseModel):
 
 class MarketItem(BaseModel):
     access_key: str = None
-    availability: "MarketItemAvailability" = None
+    availability: int = None
     button_title: str = None
     category: "MarketCategory" = None
     date: int = None
@@ -40,12 +38,6 @@ class MarketItem(BaseModel):
     thumb_photo: str = None
     title: str = None
     url: str = None
-
-
-class MarketItemAvailability(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
 
 
 class MarketItemFull(MarketItem):

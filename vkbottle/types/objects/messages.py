@@ -2,7 +2,6 @@ from . import base, audio, docs, photos, video, gifts, market, wall, users, link
 import typing
 from enum import Enum
 from ..base import BaseModel
-from vkbottle.types import objects
 
 
 class AudioMessage(BaseModel):

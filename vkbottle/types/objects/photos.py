@@ -36,6 +36,8 @@ class ImageType(Enum):
     y = "y"
     z = "z"
     w = "w"
+    i = "i"
+    d = "d"
 
 
 class MarketAlbumUploadResponse(BaseModel):
@@ -179,6 +181,8 @@ class PhotoSizesType(Enum):
     y = "y"
     z = "z"
     w = "w"
+    i = "i"
+    d = "d"
 
 
 class PhotoTag(BaseModel):

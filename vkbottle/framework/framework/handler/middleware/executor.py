@@ -2,7 +2,7 @@ import types
 import typing
 
 from vkbottle.types import BaseModel
-from vkbottle.utils import logger
+from vkbottle.utils import logger, names
 from .middleware import Middleware
 
 
@@ -32,3 +32,6 @@ class MiddlewareExecutor:
         for middleware in self.middleware:
             logger.debug(f"Executing middleware {middleware.__class__.__name__}")
             yield await middleware(event)
+
+    def __repr__(self):
+        return f"<MiddlewareExecutor middleware={', '.join(names(self.middleware))}>"

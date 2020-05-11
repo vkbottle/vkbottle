@@ -1,14 +1,21 @@
 from asyncio import AbstractEventLoop
 import types
+import traceback
 from vkbottle.utils import logger
 
 from vbml import Patcher
 
 from vkbottle.api import UserApi
+from vkbottle.exceptions import VKError
 from vkbottle.types.user_longpoll import Message
 from vkbottle.framework.framework.handler.user.handler import Handler
+from vkbottle.framework.framework.error_handler import VKErrorHandler
 from vkbottle.framework.framework.handler import MiddlewareExecutor
-from vkbottle.framework.framework.branch import AbstractBranchGenerator, Branch, ExitBranch
+from vkbottle.framework.framework.branch import (
+    AbstractBranchGenerator,
+    Branch,
+    ExitBranch,
+)
 from vkbottle.types.events import UserEvents
 
 
@@ -21,6 +28,7 @@ class AsyncHandleManager:
     user_id: int
     loop: AbstractEventLoop
     _expand_models: bool
+    error_handler: VKErrorHandler
 
     async def _event_processor(
         self, update: dict, update_code: int, update_fields: list
@@ -56,12 +64,23 @@ class AsyncHandleManager:
                     await data(str(task))
 
     async def _processor(self, update: dict, update_code: int, update_fields: list):
-        data = update, update_code, update_fields
-        event = UserEvents(update_code)
-        logger.debug("New event: {} {}", event, update)
-        if event is UserEvents.new_message:
-            return await self._message_processor(*data)
-        return await self._event_processor(*data)
+        try:
+            data = update, update_code, update_fields
+            if update_code not in list(map(int, UserEvents)):
+                logger.warning("Undefined event {}", update_code)
+                return
+            event = UserEvents(update_code)
+            logger.debug("New event: {} {}", event, update)
+            if event is UserEvents.new_message:
+                return await self._message_processor(*data)
+            return await self._event_processor(*data)
+        except VKError as e:
+            await self.error_handler.handle_error(e)
+        except:
+            logger.error(
+                "While user polling worked error occurred \n\n{traceback}",
+                traceback=traceback.format_exc(),
+            )
 
     async def _message_processor(
         self, update: dict, update_code: int, update_fields: list
@@ -122,7 +141,6 @@ class AsyncHandleManager:
         )
 
         disposal, branch = await self.branch.load(message.peer_id)
-        await branch.enter(message)
 
         for n, member in disposal.items():
             rules = member[1]
@@ -150,7 +168,6 @@ class AsyncHandleManager:
                 ),
             )
         )
-        await branch.exit(message)
 
     async def _handler_return(self, handler_return, data: dict) -> bool:
         """
