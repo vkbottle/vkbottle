@@ -30,3 +30,6 @@ class App(HTTP):
             if len(self._tokens) < limit:
                 self._tokens.append(response["access_token"])
         return self._tokens
+
+    def __repr__(self):
+        return f"<App {self._login}>"

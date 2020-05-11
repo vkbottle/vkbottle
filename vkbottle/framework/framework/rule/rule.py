@@ -61,6 +61,9 @@ class AbstractRule(Copy):
     async def check(self, event) -> bool:
         ...
 
+    def __repr__(self):
+        return f"<Rule {self.__class__.__qualname__} context={self.context}>"
+
 
 class Any(AbstractRule):
     async def check(self, event) -> bool:

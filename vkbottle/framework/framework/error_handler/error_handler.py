@@ -21,6 +21,9 @@ class VKErrorHandler(ABC):
     async def unhandled_error(self, e: VKError):
         pass
 
+    def __repr__(self):
+        return f"<VKErrorHandler handled_errors={tuple(self.handled_errors.keys())}>"
+
 
 class DefaultErrorHandler(VKErrorHandler):
     async def unhandled_error(self, e: VKError):

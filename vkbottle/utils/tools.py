@@ -74,6 +74,10 @@ def except_none_self(adict: dict) -> dict:
     return ndict
 
 
+def names(object_list: list) -> typing.List[str]:
+    return [obj.__class__.__name__ for obj in object_list]
+
+
 def flatten(lis):
     for item in lis:
         if isinstance(item, Sequence) and not isinstance(item, str):

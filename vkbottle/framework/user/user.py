@@ -105,7 +105,7 @@ class User(HTTP, AsyncHandleManager):
         if log_to_path:
             logger.add(
                 "log_user_{time}.log" if log_to_path is True else log_to_path,
-                rotation="100 MB",
+                rotation="20 MB",
             )
 
         logger.info("Using JSON_MODULE - {}".format(USAGE))

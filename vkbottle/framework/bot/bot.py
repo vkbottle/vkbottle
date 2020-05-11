@@ -108,7 +108,7 @@ class Bot(HTTP, AsyncHandleManager):
                 (logs_folder or "") + "log_{time}.log"
                 if log_to_path is True
                 else log_to_path,
-                rotation="100 MB",
+                rotation="20 MB",
             )
 
         self.group_id = group_id or self.get_id_by_token(self.__tokens[0])

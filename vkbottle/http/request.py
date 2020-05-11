@@ -61,6 +61,9 @@ class HTTPRequest:
         ) as response:
             return await response.json(content_type=content_type)
 
+    def __repr__(self):
+        return "<HTTPRequest>"
+
 
 class HTTP:
     request = HTTPRequest()
@@ -76,3 +79,6 @@ class HTTP:
             logger.info("Unable to check version! Skipping it")
             return {"version": __version__}
         return rest_status
+
+    def __repr__(self):
+        return "<HTTP>"
