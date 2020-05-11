@@ -16,6 +16,7 @@ from vkbottle.framework.blueprint.user import Blueprint
 from vkbottle.http import HTTP, App
 from vkbottle.utils import TaskManager, logger
 from .processor import AsyncHandleManager
+from ...utils.logger import loguru_installed
 
 try:
     import uvloop
@@ -78,21 +79,43 @@ class User(HTTP, AsyncHandleManager):
         if isinstance(debug, bool):
             debug = "INFO" if debug else "ERROR"
 
-        self.logger = LoggerLevel(debug)
-        logger.remove()
-        logger.add(
-            sys.stderr,
-            colorize=True,
-            format="<level>[<blue>VKBottle</blue>] {message}</level>",
-            filter=self.logger,
-            level=0,
-            enqueue=mobile is False,
-        )
-        if log_to_path:
+        if not loguru_installed():
+            self.logger = LoggerLevel(debug)
+            logger.remove()
             logger.add(
-                "log_user_{time}.log" if log_to_path is True else log_to_path,
-                rotation="100 MB",
+                sink=sys.stderr,
+                colorize=True,
+                format="<level>[<blue>VKBottle</blue>] {message}</level>",
+                filter=self.logger,
+                level=0,
+                enqueue=mobile is False,
             )
+            if log_to_path:
+                logger.add(
+                    sink="log_user_{time}.log" if log_to_path is True else log_to_path,
+                    rotation="100 MB",
+                )
+        else:
+            conf = {
+                "handlers": [
+                    dict(
+                        sink=sys.stderr,
+                        colorize=True,
+                        format="<level>[<blue>VKBottle</blue>] {message}</level>",
+                        level=0,
+                        enqueue=mobile is False,
+                    )
+                ]
+            }
+            if log_to_path:
+                conf["handlers"].append(dict(
+                    sink=("log_user_{time}.log" if log_to_path is True else log_to_path),
+                    rotation="100 MB",
+                ))
+
+            logger.configure(**conf)
+            logger.disable("vkbottle")
+            logger.enable("vkbottle")
 
     @staticmethod
     def get_id_by_token(token: str):
@@ -112,9 +135,7 @@ class User(HTTP, AsyncHandleManager):
     @staticmethod
     def get_tokens(login: str, password: str) -> list:
         app = App(login, password)
-        tokens = asyncio.get_event_loop().run_until_complete(
-            app()
-        )
+        tokens = asyncio.get_event_loop().run_until_complete(app())
         return tokens
 
     def dispatch(self, user: AnyUser):

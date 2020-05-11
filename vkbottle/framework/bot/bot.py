@@ -21,7 +21,7 @@ from vkbottle.api import Api, request
 from vkbottle.api import VKError
 from vkbottle.utils import logger, TaskManager, chunks
 from vkbottle.utils.json import USAGE
-
+from vkbottle.utils.logger import loguru_installed
 
 try:
     import uvloop
@@ -76,29 +76,56 @@ class Bot(HTTP, AsyncHandleManager):
 
         self.logger = LoggerLevel(debug)
 
-        if not Patcher.get_current():
-            Patcher.set_current(
-                patcher
-                if patcher is not None
-                else Patcher(pattern="^{}$", validators=DefaultValidators)
-            )
+        if not loguru_installed():
+            if not Patcher.get_current():
+                Patcher.set_current(
+                    patcher
+                    if patcher is not None
+                    else Patcher(pattern="^{}$", validators=DefaultValidators)
+                )
 
-        logger.remove()
-        logger.add(
-            sys.stderr,
-            colorize=True,
-            format="<level>[<blue>VKBottle</blue>] {message}</level> <white>[TIME {time:HH:MM:ss}]</white>",
-            filter=self.logger,
-            level=0,
-            enqueue=mobile is False,
-        )
-        logger.level("INFO", color="<white>")
-        logger.level("ERROR", color="<red>")
-        if log_to_path:
+            logger.remove()
             logger.add(
-                (logs_folder or "") + "log_{time}.log" if log_to_path is True else log_to_path,
-                rotation="100 MB",
+                sys.stderr,
+                colorize=True,
+                format="<level>[<blue>VKBottle</blue>] {message}</level> <white>[TIME {time:HH:MM:ss}]</white>",
+                filter=self.logger,
+                level=0,
+                enqueue=mobile is False,
             )
+            logger.level("INFO", color="<white>")
+            logger.level("ERROR", color="<red>")
+            if log_to_path:
+                logger.add(
+                    (logs_folder or "") + "log_{time}.log" if log_to_path is True else log_to_path,
+                    rotation="100 MB",
+                )
+        else:
+            conf = {
+                "handlers": [
+                    dict(
+                        sys.stderr,
+                        colorize=True,
+                        format="<level>[<blue>VKBottle</blue>] {message}</level> <white>[TIME {time:HH:MM:ss}]</white>",
+                        level=0,
+                        enqueue=mobile is False,
+                    )
+                ],
+                "levels": [
+                    dict(name="ERROR", color="<red>"),
+                    dict(name="INFO", color="<white>"),
+                ],
+            }
+
+            if log_to_path:
+                conf["handlers"].append(dict(synk=(logs_folder or "") + "log_{time}.log", rotation="100 MB")
+                                        if log_to_path is True
+                                        else log_to_path,
+                                        )
+
+            logger.configure(**conf)
+            logger.disable("vkbottle")
+            logger.enable("vkbottle")
 
         self.group_id = group_id or self.get_id_by_token(self.__tokens[0])
         self.__loop = loop or asyncio.get_event_loop()
@@ -230,7 +257,7 @@ class Bot(HTTP, AsyncHandleManager):
         Create an empty copy of Bot
         :return: Bot
         """
-        copy = Bot(self.__tokens, group_id=self.group_id, debug=self.__debug,)
+        copy = Bot(self.__tokens, group_id=self.group_id, debug=self.__debug)
         return copy
 
     def copy(self) -> "Bot":
