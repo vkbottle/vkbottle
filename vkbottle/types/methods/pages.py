@@ -5,6 +5,7 @@ from .method import BaseMethod
 
 
 class PagesClearCache(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -19,7 +20,7 @@ class PagesClearCache(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -30,6 +31,7 @@ class PagesClearCache(BaseMethod):
 
 
 class PagesGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -56,7 +58,7 @@ class PagesGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -65,6 +67,7 @@ class PagesGet(BaseMethod):
 
 
 class PagesGetHistory(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -80,7 +83,7 @@ class PagesGetHistory(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -89,6 +92,7 @@ class PagesGetHistory(BaseMethod):
 
 
 class PagesGetTitles(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, group_id: int = None) -> responses.pages.GetTitles:
@@ -100,7 +104,7 @@ class PagesGetTitles(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -109,6 +113,7 @@ class PagesGetTitles(BaseMethod):
 
 
 class PagesGetVersion(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -129,7 +134,7 @@ class PagesGetVersion(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -138,6 +143,7 @@ class PagesGetVersion(BaseMethod):
 
 
 class PagesParseWiki(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -152,7 +158,7 @@ class PagesParseWiki(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -161,6 +167,7 @@ class PagesParseWiki(BaseMethod):
 
 
 class PagesSave(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -183,7 +190,7 @@ class PagesSave(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -192,6 +199,7 @@ class PagesSave(BaseMethod):
 
 
 class PagesSaveAccess(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -214,7 +222,7 @@ class PagesSaveAccess(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

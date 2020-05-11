@@ -5,6 +5,7 @@ from .method import BaseMethod
 
 
 class PrettycardsCreate(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -31,13 +32,14 @@ class PrettycardsCreate(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request("prettyCards.create", params)
 
 
 class PrettycardsDelete(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, owner_id: int, card_id: int) -> dict:
@@ -50,13 +52,14 @@ class PrettycardsDelete(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request("prettyCards.delete", params)
 
 
 class PrettycardsEdit(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -85,13 +88,14 @@ class PrettycardsEdit(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request("prettyCards.edit", params)
 
 
 class PrettycardsGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -107,13 +111,14 @@ class PrettycardsGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request("prettyCards.get", params)
 
 
 class PrettycardsGetById(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, owner_id: int, card_ids: typing.List) -> dict:
@@ -126,13 +131,14 @@ class PrettycardsGetById(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request("prettyCards.getById", params)
 
 
 class PrettycardsGetUploadURL(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self,) -> dict:
@@ -144,7 +150,7 @@ class PrettycardsGetUploadURL(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request("prettyCards.getUploadURL", params)

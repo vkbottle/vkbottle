@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class StatsGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -36,7 +37,7 @@ class StatsGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -45,6 +46,7 @@ class StatsGet(BaseMethod):
 
 
 class StatsGetPostReach(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -59,7 +61,7 @@ class StatsGetPostReach(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -70,6 +72,7 @@ class StatsGetPostReach(BaseMethod):
 
 
 class StatsTrackVisitor(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, id: str) -> responses.ok_response.OkResponse:
@@ -81,7 +84,7 @@ class StatsTrackVisitor(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

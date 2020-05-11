@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class BoardAddTopic(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -28,7 +29,7 @@ class BoardAddTopic(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -37,6 +38,7 @@ class BoardAddTopic(BaseMethod):
 
 
 class BoardCloseTopic(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -51,7 +53,7 @@ class BoardCloseTopic(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -62,6 +64,7 @@ class BoardCloseTopic(BaseMethod):
 
 
 class BoardCreateComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -88,7 +91,7 @@ class BoardCreateComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -99,6 +102,7 @@ class BoardCreateComment(BaseMethod):
 
 
 class BoardDeleteComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -117,7 +121,7 @@ class BoardDeleteComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -128,6 +132,7 @@ class BoardDeleteComment(BaseMethod):
 
 
 class BoardDeleteTopic(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -142,7 +147,7 @@ class BoardDeleteTopic(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -153,6 +158,7 @@ class BoardDeleteTopic(BaseMethod):
 
 
 class BoardEditComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -175,7 +181,7 @@ class BoardEditComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -186,6 +192,7 @@ class BoardEditComment(BaseMethod):
 
 
 class BoardEditTopic(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -201,7 +208,7 @@ class BoardEditTopic(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -212,6 +219,7 @@ class BoardEditTopic(BaseMethod):
 
 
 class BoardFixTopic(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -226,7 +234,7 @@ class BoardFixTopic(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -237,6 +245,7 @@ class BoardFixTopic(BaseMethod):
 
 
 class BoardGetComments(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -268,7 +277,7 @@ class BoardGetComments(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -277,6 +286,7 @@ class BoardGetComments(BaseMethod):
 
 
 class BoardGetTopics(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -308,7 +318,7 @@ class BoardGetTopics(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -317,6 +327,7 @@ class BoardGetTopics(BaseMethod):
 
 
 class BoardOpenTopic(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -331,7 +342,7 @@ class BoardOpenTopic(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -342,6 +353,7 @@ class BoardOpenTopic(BaseMethod):
 
 
 class BoardRestoreComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -360,7 +372,7 @@ class BoardRestoreComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -371,6 +383,7 @@ class BoardRestoreComment(BaseMethod):
 
 
 class BoardUnfixTopic(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -385,7 +398,7 @@ class BoardUnfixTopic(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

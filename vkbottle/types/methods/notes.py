@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class NotesAdd(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -26,7 +27,7 @@ class NotesAdd(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -35,6 +36,7 @@ class NotesAdd(BaseMethod):
 
 
 class NotesCreateComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -57,7 +59,7 @@ class NotesCreateComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -68,6 +70,7 @@ class NotesCreateComment(BaseMethod):
 
 
 class NotesDelete(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, note_id: int) -> responses.ok_response.OkResponse:
@@ -79,7 +82,7 @@ class NotesDelete(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -88,6 +91,7 @@ class NotesDelete(BaseMethod):
 
 
 class NotesDeleteComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -102,7 +106,7 @@ class NotesDeleteComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -113,6 +117,7 @@ class NotesDeleteComment(BaseMethod):
 
 
 class NotesEdit(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -135,7 +140,7 @@ class NotesEdit(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -144,6 +149,7 @@ class NotesEdit(BaseMethod):
 
 
 class NotesEditComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -159,7 +165,7 @@ class NotesEditComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -170,6 +176,7 @@ class NotesEditComment(BaseMethod):
 
 
 class NotesGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -192,7 +199,7 @@ class NotesGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -201,6 +208,7 @@ class NotesGet(BaseMethod):
 
 
 class NotesGetById(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -216,7 +224,7 @@ class NotesGetById(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -225,6 +233,7 @@ class NotesGetById(BaseMethod):
 
 
 class NotesGetComments(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -247,7 +256,7 @@ class NotesGetComments(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -256,6 +265,7 @@ class NotesGetComments(BaseMethod):
 
 
 class NotesRestoreComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -270,7 +280,7 @@ class NotesRestoreComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

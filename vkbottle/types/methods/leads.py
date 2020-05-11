@@ -5,6 +5,7 @@ from .method import BaseMethod
 
 
 class LeadsCheckUser(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -29,7 +30,7 @@ class LeadsCheckUser(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -38,6 +39,7 @@ class LeadsCheckUser(BaseMethod):
 
 
 class LeadsComplete(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -56,7 +58,7 @@ class LeadsComplete(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -65,6 +67,7 @@ class LeadsComplete(BaseMethod):
 
 
 class LeadsGetStats(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -85,7 +88,7 @@ class LeadsGetStats(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -94,6 +97,7 @@ class LeadsGetStats(BaseMethod):
 
 
 class LeadsGetUsers(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -121,7 +125,7 @@ class LeadsGetUsers(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -130,6 +134,7 @@ class LeadsGetUsers(BaseMethod):
 
 
 class LeadsMetricHit(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, data: str) -> responses.leads.MetricHit:
@@ -141,7 +146,7 @@ class LeadsMetricHit(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -150,6 +155,7 @@ class LeadsMetricHit(BaseMethod):
 
 
 class LeadsStart(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -177,7 +183,7 @@ class LeadsStart(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

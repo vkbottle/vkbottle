@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class OrdersCancelSubscription(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -24,7 +25,7 @@ class OrdersCancelSubscription(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -35,6 +36,7 @@ class OrdersCancelSubscription(BaseMethod):
 
 
 class OrdersChangeState(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -58,7 +60,7 @@ class OrdersChangeState(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -69,6 +71,7 @@ class OrdersChangeState(BaseMethod):
 
 
 class OrdersGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -87,7 +90,7 @@ class OrdersGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -96,6 +99,7 @@ class OrdersGet(BaseMethod):
 
 
 class OrdersGetAmount(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -110,7 +114,7 @@ class OrdersGetAmount(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -119,6 +123,7 @@ class OrdersGetAmount(BaseMethod):
 
 
 class OrdersGetById(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -140,7 +145,7 @@ class OrdersGetById(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -149,6 +154,7 @@ class OrdersGetById(BaseMethod):
 
 
 class OrdersGetUserSubscriptionById(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -166,7 +172,7 @@ class OrdersGetUserSubscriptionById(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -177,6 +183,7 @@ class OrdersGetUserSubscriptionById(BaseMethod):
 
 
 class OrdersGetUserSubscriptions(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -191,7 +198,7 @@ class OrdersGetUserSubscriptions(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -202,6 +209,7 @@ class OrdersGetUserSubscriptions(BaseMethod):
 
 
 class OrdersUpdateSubscription(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -220,7 +228,7 @@ class OrdersUpdateSubscription(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

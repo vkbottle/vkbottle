@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class WallCloseComments(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -23,7 +24,7 @@ class WallCloseComments(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -34,6 +35,7 @@ class WallCloseComments(BaseMethod):
 
 
 class WallCreateComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -65,7 +67,7 @@ class WallCreateComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -76,6 +78,7 @@ class WallCreateComment(BaseMethod):
 
 
 class WallDelete(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -90,7 +93,7 @@ class WallDelete(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -99,6 +102,7 @@ class WallDelete(BaseMethod):
 
 
 class WallDeleteComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -113,7 +117,7 @@ class WallDeleteComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -124,6 +128,7 @@ class WallDeleteComment(BaseMethod):
 
 
 class WallEdit(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -168,7 +173,7 @@ class WallEdit(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -177,6 +182,7 @@ class WallEdit(BaseMethod):
 
 
 class WallEditAdsStealth(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -213,7 +219,7 @@ class WallEditAdsStealth(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -224,6 +230,7 @@ class WallEditAdsStealth(BaseMethod):
 
 
 class WallEditComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -244,7 +251,7 @@ class WallEditComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -255,6 +262,7 @@ class WallEditComment(BaseMethod):
 
 
 class WallGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -284,7 +292,7 @@ class WallGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -293,6 +301,7 @@ class WallGet(BaseMethod):
 
 
 class WallGetById(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -316,7 +325,7 @@ class WallGetById(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -325,6 +334,7 @@ class WallGetById(BaseMethod):
 
 
 class WallGetComments(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -364,7 +374,7 @@ class WallGetComments(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -373,6 +383,7 @@ class WallGetComments(BaseMethod):
 
 
 class WallGetReposts(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -396,7 +407,7 @@ class WallGetReposts(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -405,6 +416,7 @@ class WallGetReposts(BaseMethod):
 
 
 class WallOpenComments(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -422,7 +434,7 @@ class WallOpenComments(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -433,6 +445,7 @@ class WallOpenComments(BaseMethod):
 
 
 class WallPin(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -447,7 +460,7 @@ class WallPin(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -456,6 +469,7 @@ class WallPin(BaseMethod):
 
 
 class WallPost(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -500,7 +514,7 @@ class WallPost(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -509,6 +523,7 @@ class WallPost(BaseMethod):
 
 
 class WallPostAdsStealth(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -545,7 +560,7 @@ class WallPostAdsStealth(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -556,6 +571,7 @@ class WallPostAdsStealth(BaseMethod):
 
 
 class WallReportComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -571,7 +587,7 @@ class WallReportComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -582,6 +598,7 @@ class WallReportComment(BaseMethod):
 
 
 class WallReportPost(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -597,7 +614,7 @@ class WallReportPost(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -608,6 +625,7 @@ class WallReportPost(BaseMethod):
 
 
 class WallRepost(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -630,7 +648,7 @@ class WallRepost(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -639,6 +657,7 @@ class WallRepost(BaseMethod):
 
 
 class WallRestore(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -653,7 +672,7 @@ class WallRestore(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -662,6 +681,7 @@ class WallRestore(BaseMethod):
 
 
 class WallRestoreComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -676,7 +696,7 @@ class WallRestoreComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -687,6 +707,7 @@ class WallRestoreComment(BaseMethod):
 
 
 class WallSearch(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -718,7 +739,7 @@ class WallSearch(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -727,6 +748,7 @@ class WallSearch(BaseMethod):
 
 
 class WallUnpin(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -741,7 +763,7 @@ class WallUnpin(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

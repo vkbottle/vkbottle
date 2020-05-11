@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class NewsfeedAddBan(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -20,7 +21,7 @@ class NewsfeedAddBan(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -31,6 +32,7 @@ class NewsfeedAddBan(BaseMethod):
 
 
 class NewsfeedDeleteBan(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -45,7 +47,7 @@ class NewsfeedDeleteBan(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -56,6 +58,7 @@ class NewsfeedDeleteBan(BaseMethod):
 
 
 class NewsfeedDeleteList(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, list_id: int) -> responses.ok_response.OkResponse:
@@ -67,7 +70,7 @@ class NewsfeedDeleteList(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -78,6 +81,7 @@ class NewsfeedDeleteList(BaseMethod):
 
 
 class NewsfeedGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -110,7 +114,7 @@ class NewsfeedGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -119,6 +123,7 @@ class NewsfeedGet(BaseMethod):
 
 
 class NewsfeedGetBanned(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -134,7 +139,7 @@ class NewsfeedGetBanned(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -145,6 +150,7 @@ class NewsfeedGetBanned(BaseMethod):
 
 
 class NewsfeedGetComments(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -173,7 +179,7 @@ class NewsfeedGetComments(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -184,6 +190,7 @@ class NewsfeedGetComments(BaseMethod):
 
 
 class NewsfeedGetLists(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -198,7 +205,7 @@ class NewsfeedGetLists(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -207,6 +214,7 @@ class NewsfeedGetLists(BaseMethod):
 
 
 class NewsfeedGetMentions(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -229,7 +237,7 @@ class NewsfeedGetMentions(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -240,6 +248,7 @@ class NewsfeedGetMentions(BaseMethod):
 
 
 class NewsfeedGetRecommended(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -264,7 +273,7 @@ class NewsfeedGetRecommended(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -275,6 +284,7 @@ class NewsfeedGetRecommended(BaseMethod):
 
 
 class NewsfeedGetSuggestedSources(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -295,7 +305,7 @@ class NewsfeedGetSuggestedSources(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -306,6 +316,7 @@ class NewsfeedGetSuggestedSources(BaseMethod):
 
 
 class NewsfeedIgnoreItem(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -321,7 +332,7 @@ class NewsfeedIgnoreItem(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -332,6 +343,7 @@ class NewsfeedIgnoreItem(BaseMethod):
 
 
 class NewsfeedSaveList(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -352,7 +364,7 @@ class NewsfeedSaveList(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -361,6 +373,7 @@ class NewsfeedSaveList(BaseMethod):
 
 
 class NewsfeedSearch(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -394,7 +407,7 @@ class NewsfeedSearch(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -403,6 +416,7 @@ class NewsfeedSearch(BaseMethod):
 
 
 class NewsfeedUnignoreItem(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -418,7 +432,7 @@ class NewsfeedUnignoreItem(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -429,6 +443,7 @@ class NewsfeedUnignoreItem(BaseMethod):
 
 
 class NewsfeedUnsubscribe(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -444,7 +459,7 @@ class NewsfeedUnsubscribe(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

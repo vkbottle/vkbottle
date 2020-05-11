@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class StoriesBanOwner(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -19,7 +20,7 @@ class StoriesBanOwner(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -30,6 +31,7 @@ class StoriesBanOwner(BaseMethod):
 
 
 class StoriesDelete(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -47,7 +49,7 @@ class StoriesDelete(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -58,6 +60,7 @@ class StoriesDelete(BaseMethod):
 
 
 class StoriesGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -75,7 +78,7 @@ class StoriesGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -84,6 +87,7 @@ class StoriesGet(BaseMethod):
 
 
 class StoriesGetBanned(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -98,7 +102,7 @@ class StoriesGetBanned(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -107,6 +111,7 @@ class StoriesGetBanned(BaseMethod):
 
 
 class StoriesGetById(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -125,7 +130,7 @@ class StoriesGetById(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -134,6 +139,7 @@ class StoriesGetById(BaseMethod):
 
 
 class StoriesGetPhotoUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -161,7 +167,7 @@ class StoriesGetPhotoUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -172,6 +178,7 @@ class StoriesGetPhotoUploadServer(BaseMethod):
 
 
 class StoriesGetReplies(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -197,7 +204,7 @@ class StoriesGetReplies(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -208,6 +215,7 @@ class StoriesGetReplies(BaseMethod):
 
 
 class StoriesGetStats(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -225,7 +233,7 @@ class StoriesGetStats(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -234,6 +242,7 @@ class StoriesGetStats(BaseMethod):
 
 
 class StoriesGetVideoUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -261,7 +270,7 @@ class StoriesGetVideoUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -272,6 +281,7 @@ class StoriesGetVideoUploadServer(BaseMethod):
 
 
 class StoriesGetViewers(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -297,7 +307,7 @@ class StoriesGetViewers(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -308,6 +318,7 @@ class StoriesGetViewers(BaseMethod):
 
 
 class StoriesHideAllReplies(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -325,7 +336,7 @@ class StoriesHideAllReplies(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -336,6 +347,7 @@ class StoriesHideAllReplies(BaseMethod):
 
 
 class StoriesHideReply(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -353,7 +365,7 @@ class StoriesHideReply(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -364,6 +376,7 @@ class StoriesHideReply(BaseMethod):
 
 
 class StoriesUnbanOwner(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -377,7 +390,7 @@ class StoriesUnbanOwner(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

@@ -4,6 +4,7 @@ from .method import BaseMethod
 
 
 class AppwidgetsUpdate(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.GROUP]
 
     async def __call__(self, code: str, type: str) -> dict:
@@ -16,7 +17,7 @@ class AppwidgetsUpdate(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request("appWidgets.update", params)

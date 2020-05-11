@@ -5,6 +5,7 @@ from .method import BaseMethod
 
 
 class AdsAddOfficeUsers(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -19,7 +20,7 @@ class AdsAddOfficeUsers(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -30,6 +31,7 @@ class AdsAddOfficeUsers(BaseMethod):
 
 
 class AdsCheckLink(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -46,7 +48,7 @@ class AdsCheckLink(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -55,6 +57,7 @@ class AdsCheckLink(BaseMethod):
 
 
 class AdsCreateAds(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, account_id: int, data: str) -> responses.ads.CreateAds:
@@ -67,7 +70,7 @@ class AdsCreateAds(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -76,6 +79,7 @@ class AdsCreateAds(BaseMethod):
 
 
 class AdsCreateCampaigns(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -90,7 +94,7 @@ class AdsCreateCampaigns(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -101,6 +105,7 @@ class AdsCreateCampaigns(BaseMethod):
 
 
 class AdsCreateClients(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, account_id: int, data: str) -> responses.ads.CreateClients:
@@ -113,7 +118,7 @@ class AdsCreateClients(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -122,6 +127,7 @@ class AdsCreateClients(BaseMethod):
 
 
 class AdsCreateTargetGroup(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -146,7 +152,7 @@ class AdsCreateTargetGroup(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -157,6 +163,7 @@ class AdsCreateTargetGroup(BaseMethod):
 
 
 class AdsDeleteAds(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, account_id: int, ids: str) -> responses.ads.DeleteAds:
@@ -169,7 +176,7 @@ class AdsDeleteAds(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -178,6 +185,7 @@ class AdsDeleteAds(BaseMethod):
 
 
 class AdsDeleteCampaigns(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -192,7 +200,7 @@ class AdsDeleteCampaigns(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -203,6 +211,7 @@ class AdsDeleteCampaigns(BaseMethod):
 
 
 class AdsDeleteClients(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, account_id: int, ids: str) -> responses.ads.DeleteClients:
@@ -215,7 +224,7 @@ class AdsDeleteClients(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -224,6 +233,7 @@ class AdsDeleteClients(BaseMethod):
 
 
 class AdsDeleteTargetGroup(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -239,7 +249,7 @@ class AdsDeleteTargetGroup(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -250,6 +260,7 @@ class AdsDeleteTargetGroup(BaseMethod):
 
 
 class AdsGetAccounts(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self,) -> responses.ads.GetAccounts:
@@ -261,7 +272,7 @@ class AdsGetAccounts(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -270,6 +281,7 @@ class AdsGetAccounts(BaseMethod):
 
 
 class AdsGetAds(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -296,7 +308,7 @@ class AdsGetAds(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -305,6 +317,7 @@ class AdsGetAds(BaseMethod):
 
 
 class AdsGetAdsLayout(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -331,7 +344,7 @@ class AdsGetAdsLayout(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -340,6 +353,7 @@ class AdsGetAdsLayout(BaseMethod):
 
 
 class AdsGetAdsTargeting(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -366,7 +380,7 @@ class AdsGetAdsTargeting(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -377,6 +391,7 @@ class AdsGetAdsTargeting(BaseMethod):
 
 
 class AdsGetBudget(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, account_id: int) -> responses.ads.GetBudget:
@@ -388,7 +403,7 @@ class AdsGetBudget(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -397,6 +412,7 @@ class AdsGetBudget(BaseMethod):
 
 
 class AdsGetCampaigns(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -417,7 +433,7 @@ class AdsGetCampaigns(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -426,6 +442,7 @@ class AdsGetCampaigns(BaseMethod):
 
 
 class AdsGetCategories(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, lang: str = None) -> responses.ads.GetCategories:
@@ -437,7 +454,7 @@ class AdsGetCategories(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -446,6 +463,7 @@ class AdsGetCategories(BaseMethod):
 
 
 class AdsGetClients(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, account_id: int) -> responses.ads.GetClients:
@@ -457,7 +475,7 @@ class AdsGetClients(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -466,6 +484,7 @@ class AdsGetClients(BaseMethod):
 
 
 class AdsGetDemographics(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -490,7 +509,7 @@ class AdsGetDemographics(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -501,6 +520,7 @@ class AdsGetDemographics(BaseMethod):
 
 
 class AdsGetFloodStats(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, account_id: int) -> responses.ads.GetFloodStats:
@@ -512,7 +532,7 @@ class AdsGetFloodStats(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -521,6 +541,7 @@ class AdsGetFloodStats(BaseMethod):
 
 
 class AdsGetOfficeUsers(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, account_id: int) -> responses.ads.GetOfficeUsers:
@@ -532,7 +553,7 @@ class AdsGetOfficeUsers(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -543,6 +564,7 @@ class AdsGetOfficeUsers(BaseMethod):
 
 
 class AdsGetPostsReach(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -558,7 +580,7 @@ class AdsGetPostsReach(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -567,6 +589,7 @@ class AdsGetPostsReach(BaseMethod):
 
 
 class AdsGetRejectionReason(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -581,7 +604,7 @@ class AdsGetRejectionReason(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -592,6 +615,7 @@ class AdsGetRejectionReason(BaseMethod):
 
 
 class AdsGetStatistics(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -616,7 +640,7 @@ class AdsGetStatistics(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -625,6 +649,7 @@ class AdsGetStatistics(BaseMethod):
 
 
 class AdsGetSuggestions(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -649,7 +674,7 @@ class AdsGetSuggestions(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -660,6 +685,7 @@ class AdsGetSuggestions(BaseMethod):
 
 
 class AdsGetTargetGroups(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -675,7 +701,7 @@ class AdsGetTargetGroups(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -686,6 +712,7 @@ class AdsGetTargetGroups(BaseMethod):
 
 
 class AdsGetTargetingStats(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -718,7 +745,7 @@ class AdsGetTargetingStats(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -729,6 +756,7 @@ class AdsGetTargetingStats(BaseMethod):
 
 
 class AdsGetUploadURL(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -743,7 +771,7 @@ class AdsGetUploadURL(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -752,6 +780,7 @@ class AdsGetUploadURL(BaseMethod):
 
 
 class AdsGetVideoUploadURL(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self,) -> responses.ads.GetVideoUploadURL:
@@ -763,7 +792,7 @@ class AdsGetVideoUploadURL(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -774,6 +803,7 @@ class AdsGetVideoUploadURL(BaseMethod):
 
 
 class AdsImportTargetContacts(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -794,7 +824,7 @@ class AdsImportTargetContacts(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -805,6 +835,7 @@ class AdsImportTargetContacts(BaseMethod):
 
 
 class AdsRemoveOfficeUsers(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -819,7 +850,7 @@ class AdsRemoveOfficeUsers(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -830,6 +861,7 @@ class AdsRemoveOfficeUsers(BaseMethod):
 
 
 class AdsUpdateAds(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, account_id: int, data: str) -> responses.ads.UpdateAds:
@@ -842,7 +874,7 @@ class AdsUpdateAds(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -851,6 +883,7 @@ class AdsUpdateAds(BaseMethod):
 
 
 class AdsUpdateCampaigns(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -865,7 +898,7 @@ class AdsUpdateCampaigns(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -876,6 +909,7 @@ class AdsUpdateCampaigns(BaseMethod):
 
 
 class AdsUpdateClients(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, account_id: int, data: str) -> responses.ads.UpdateClients:
@@ -888,7 +922,7 @@ class AdsUpdateClients(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -897,6 +931,7 @@ class AdsUpdateClients(BaseMethod):
 
 
 class AdsUpdateTargetGroup(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -925,7 +960,7 @@ class AdsUpdateTargetGroup(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

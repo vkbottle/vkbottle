@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class FaveAddArticle(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, url: str) -> responses.ok_response.OkResponse:
@@ -17,7 +18,7 @@ class FaveAddArticle(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -28,6 +29,7 @@ class FaveAddArticle(BaseMethod):
 
 
 class FaveAddLink(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, link: str) -> responses.ok_response.OkResponse:
@@ -39,7 +41,7 @@ class FaveAddLink(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -48,6 +50,7 @@ class FaveAddLink(BaseMethod):
 
 
 class FaveAddPage(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -62,7 +65,7 @@ class FaveAddPage(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -71,6 +74,7 @@ class FaveAddPage(BaseMethod):
 
 
 class FaveAddPost(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -86,7 +90,7 @@ class FaveAddPost(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -95,6 +99,7 @@ class FaveAddPost(BaseMethod):
 
 
 class FaveAddProduct(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -110,7 +115,7 @@ class FaveAddProduct(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -121,6 +126,7 @@ class FaveAddProduct(BaseMethod):
 
 
 class FaveAddTag(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, name: str = None) -> responses.fave.AddTag:
@@ -132,7 +138,7 @@ class FaveAddTag(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -141,6 +147,7 @@ class FaveAddTag(BaseMethod):
 
 
 class FaveAddVideo(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -156,7 +163,7 @@ class FaveAddVideo(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -167,6 +174,7 @@ class FaveAddVideo(BaseMethod):
 
 
 class FaveEditTag(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, id: int, name: str) -> responses.ok_response.OkResponse:
@@ -179,7 +187,7 @@ class FaveEditTag(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -188,6 +196,7 @@ class FaveEditTag(BaseMethod):
 
 
 class FaveGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -214,7 +223,7 @@ class FaveGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -223,6 +232,7 @@ class FaveGet(BaseMethod):
 
 
 class FaveGetPages(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -245,7 +255,7 @@ class FaveGetPages(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -254,6 +264,7 @@ class FaveGetPages(BaseMethod):
 
 
 class FaveGetTags(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self,) -> responses.fave.GetTags:
@@ -265,7 +276,7 @@ class FaveGetTags(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -274,6 +285,7 @@ class FaveGetTags(BaseMethod):
 
 
 class FaveMarkSeen(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self,) -> responses.ok_response.OkResponse:
@@ -285,7 +297,7 @@ class FaveMarkSeen(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -296,6 +308,7 @@ class FaveMarkSeen(BaseMethod):
 
 
 class FaveRemoveArticle(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -310,7 +323,7 @@ class FaveRemoveArticle(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -321,6 +334,7 @@ class FaveRemoveArticle(BaseMethod):
 
 
 class FaveRemoveLink(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -335,7 +349,7 @@ class FaveRemoveLink(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -346,6 +360,7 @@ class FaveRemoveLink(BaseMethod):
 
 
 class FaveRemovePage(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -360,7 +375,7 @@ class FaveRemovePage(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -371,6 +386,7 @@ class FaveRemovePage(BaseMethod):
 
 
 class FaveRemovePost(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -385,7 +401,7 @@ class FaveRemovePost(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -396,6 +412,7 @@ class FaveRemovePost(BaseMethod):
 
 
 class FaveRemoveProduct(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -410,7 +427,7 @@ class FaveRemoveProduct(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -421,6 +438,7 @@ class FaveRemoveProduct(BaseMethod):
 
 
 class FaveRemoveTag(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, id: int) -> responses.ok_response.OkResponse:
@@ -432,7 +450,7 @@ class FaveRemoveTag(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -443,6 +461,7 @@ class FaveRemoveTag(BaseMethod):
 
 
 class FaveReorderTags(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, ids: typing.List) -> responses.ok_response.OkResponse:
@@ -454,7 +473,7 @@ class FaveReorderTags(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -465,6 +484,7 @@ class FaveReorderTags(BaseMethod):
 
 
 class FaveSetPageTags(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -480,7 +500,7 @@ class FaveSetPageTags(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -491,6 +511,7 @@ class FaveSetPageTags(BaseMethod):
 
 
 class FaveSetTags(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -515,7 +536,7 @@ class FaveSetTags(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -524,6 +545,7 @@ class FaveSetTags(BaseMethod):
 
 
 class FaveTrackPageInteraction(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -538,7 +560,7 @@ class FaveTrackPageInteraction(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

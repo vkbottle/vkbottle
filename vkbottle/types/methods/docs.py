@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class DocsAdd(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -21,7 +22,7 @@ class DocsAdd(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -30,6 +31,7 @@ class DocsAdd(BaseMethod):
 
 
 class DocsDelete(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -44,7 +46,7 @@ class DocsDelete(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -53,6 +55,7 @@ class DocsDelete(BaseMethod):
 
 
 class DocsEdit(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -69,7 +72,7 @@ class DocsEdit(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -78,6 +81,7 @@ class DocsEdit(BaseMethod):
 
 
 class DocsGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -98,7 +102,7 @@ class DocsGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -107,6 +111,7 @@ class DocsGet(BaseMethod):
 
 
 class DocsGetById(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, docs: typing.List) -> responses.docs.GetById:
@@ -118,7 +123,7 @@ class DocsGetById(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -127,6 +132,7 @@ class DocsGetById(BaseMethod):
 
 
 class DocsGetMessagesUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -144,7 +150,7 @@ class DocsGetMessagesUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -155,6 +161,7 @@ class DocsGetMessagesUploadServer(BaseMethod):
 
 
 class DocsGetTypes(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, owner_id: int) -> responses.docs.GetTypes:
@@ -166,7 +173,7 @@ class DocsGetTypes(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -175,6 +182,7 @@ class DocsGetTypes(BaseMethod):
 
 
 class DocsGetUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, group_id: int = None) -> responses.base.GetUploadServer:
@@ -186,7 +194,7 @@ class DocsGetUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -197,6 +205,7 @@ class DocsGetUploadServer(BaseMethod):
 
 
 class DocsGetWallUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -211,7 +220,7 @@ class DocsGetWallUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -222,6 +231,7 @@ class DocsGetWallUploadServer(BaseMethod):
 
 
 class DocsSave(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -240,7 +250,7 @@ class DocsSave(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -249,6 +259,7 @@ class DocsSave(BaseMethod):
 
 
 class DocsSearch(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -268,7 +279,7 @@ class DocsSearch(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

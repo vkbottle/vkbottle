@@ -5,6 +5,7 @@ from .method import BaseMethod
 
 
 class UtilsCheckLink(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -20,7 +21,7 @@ class UtilsCheckLink(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -29,6 +30,7 @@ class UtilsCheckLink(BaseMethod):
 
 
 class UtilsDeleteFromLastShortened(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, key: str) -> responses.ok_response.OkResponse:
@@ -40,7 +42,7 @@ class UtilsDeleteFromLastShortened(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -51,6 +53,7 @@ class UtilsDeleteFromLastShortened(BaseMethod):
 
 
 class UtilsGetLastShortenedLinks(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -65,7 +68,7 @@ class UtilsGetLastShortenedLinks(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -76,6 +79,7 @@ class UtilsGetLastShortenedLinks(BaseMethod):
 
 
 class UtilsGetLinkStats(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -104,7 +108,7 @@ class UtilsGetLinkStats(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -115,6 +119,7 @@ class UtilsGetLinkStats(BaseMethod):
 
 
 class UtilsGetServerTime(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -130,7 +135,7 @@ class UtilsGetServerTime(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -141,6 +146,7 @@ class UtilsGetServerTime(BaseMethod):
 
 
 class UtilsGetShortLink(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -159,7 +165,7 @@ class UtilsGetShortLink(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -170,6 +176,7 @@ class UtilsGetShortLink(BaseMethod):
 
 
 class UtilsResolveScreenName(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -185,7 +192,7 @@ class UtilsResolveScreenName(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

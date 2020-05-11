@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class MessagesAddChatUser(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -20,7 +21,7 @@ class MessagesAddChatUser(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -31,6 +32,7 @@ class MessagesAddChatUser(BaseMethod):
 
 
 class MessagesAllowMessagesFromGroup(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -45,7 +47,7 @@ class MessagesAllowMessagesFromGroup(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -56,6 +58,7 @@ class MessagesAllowMessagesFromGroup(BaseMethod):
 
 
 class MessagesCreateChat(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -70,7 +73,7 @@ class MessagesCreateChat(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -81,6 +84,7 @@ class MessagesCreateChat(BaseMethod):
 
 
 class MessagesDelete(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -104,7 +108,7 @@ class MessagesDelete(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -115,6 +119,7 @@ class MessagesDelete(BaseMethod):
 
 
 class MessagesDeleteChatPhoto(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -132,7 +137,7 @@ class MessagesDeleteChatPhoto(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -143,6 +148,7 @@ class MessagesDeleteChatPhoto(BaseMethod):
 
 
 class MessagesDeleteConversation(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -161,7 +167,7 @@ class MessagesDeleteConversation(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -172,6 +178,7 @@ class MessagesDeleteConversation(BaseMethod):
 
 
 class MessagesDenyMessagesFromGroup(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, group_id: int) -> responses.ok_response.OkResponse:
@@ -183,7 +190,7 @@ class MessagesDenyMessagesFromGroup(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -194,6 +201,7 @@ class MessagesDenyMessagesFromGroup(BaseMethod):
 
 
 class MessagesEdit(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -229,7 +237,7 @@ class MessagesEdit(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -238,6 +246,7 @@ class MessagesEdit(BaseMethod):
 
 
 class MessagesEditChat(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -255,7 +264,7 @@ class MessagesEditChat(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -266,6 +275,7 @@ class MessagesEditChat(BaseMethod):
 
 
 class MessagesGetByConversationMessageId(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -291,7 +301,7 @@ class MessagesGetByConversationMessageId(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -302,6 +312,7 @@ class MessagesGetByConversationMessageId(BaseMethod):
 
 
 class MessagesGetById(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -327,7 +338,7 @@ class MessagesGetById(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -336,6 +347,7 @@ class MessagesGetById(BaseMethod):
 
 
 class MessagesGetChatPreview(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -351,7 +363,7 @@ class MessagesGetChatPreview(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -362,6 +374,7 @@ class MessagesGetChatPreview(BaseMethod):
 
 
 class MessagesGetConversationMembers(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -380,7 +393,7 @@ class MessagesGetConversationMembers(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -391,6 +404,7 @@ class MessagesGetConversationMembers(BaseMethod):
 
 
 class MessagesGetConversations(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -420,7 +434,7 @@ class MessagesGetConversations(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -431,6 +445,7 @@ class MessagesGetConversations(BaseMethod):
 
 
 class MessagesGetConversationsById(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -454,7 +469,7 @@ class MessagesGetConversationsById(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -465,6 +480,7 @@ class MessagesGetConversationsById(BaseMethod):
 
 
 class MessagesGetHistory(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -498,7 +514,7 @@ class MessagesGetHistory(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -509,6 +525,7 @@ class MessagesGetHistory(BaseMethod):
 
 
 class MessagesGetHistoryAttachments(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -542,7 +559,7 @@ class MessagesGetHistoryAttachments(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -553,6 +570,7 @@ class MessagesGetHistoryAttachments(BaseMethod):
 
 
 class MessagesGetInviteLink(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -571,7 +589,7 @@ class MessagesGetInviteLink(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -582,6 +600,7 @@ class MessagesGetInviteLink(BaseMethod):
 
 
 class MessagesGetLastActivity(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, user_id: int) -> responses.messages.GetLastActivity:
@@ -593,7 +612,7 @@ class MessagesGetLastActivity(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -604,6 +623,7 @@ class MessagesGetLastActivity(BaseMethod):
 
 
 class MessagesGetLongPollHistory(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -643,7 +663,7 @@ class MessagesGetLongPollHistory(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -654,6 +674,7 @@ class MessagesGetLongPollHistory(BaseMethod):
 
 
 class MessagesGetLongPollServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -672,7 +693,7 @@ class MessagesGetLongPollServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -683,6 +704,7 @@ class MessagesGetLongPollServer(BaseMethod):
 
 
 class MessagesIsMessagesFromGroupAllowed(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -700,7 +722,7 @@ class MessagesIsMessagesFromGroupAllowed(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -711,6 +733,7 @@ class MessagesIsMessagesFromGroupAllowed(BaseMethod):
 
 
 class MessagesJoinChatByInviteLink(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, link: str) -> responses.messages.JoinChatByInviteLink:
@@ -722,7 +745,7 @@ class MessagesJoinChatByInviteLink(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -733,6 +756,7 @@ class MessagesJoinChatByInviteLink(BaseMethod):
 
 
 class MessagesMarkAsAnsweredConversation(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -751,7 +775,7 @@ class MessagesMarkAsAnsweredConversation(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -762,6 +786,7 @@ class MessagesMarkAsAnsweredConversation(BaseMethod):
 
 
 class MessagesMarkAsImportant(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -776,7 +801,7 @@ class MessagesMarkAsImportant(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -787,6 +812,7 @@ class MessagesMarkAsImportant(BaseMethod):
 
 
 class MessagesMarkAsImportantConversation(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -805,7 +831,7 @@ class MessagesMarkAsImportantConversation(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -816,6 +842,7 @@ class MessagesMarkAsImportantConversation(BaseMethod):
 
 
 class MessagesMarkAsRead(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -839,7 +866,7 @@ class MessagesMarkAsRead(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -850,6 +877,7 @@ class MessagesMarkAsRead(BaseMethod):
 
 
 class MessagesPin(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -867,7 +895,7 @@ class MessagesPin(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -876,6 +904,7 @@ class MessagesPin(BaseMethod):
 
 
 class MessagesRemoveChatUser(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -894,7 +923,7 @@ class MessagesRemoveChatUser(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -905,6 +934,7 @@ class MessagesRemoveChatUser(BaseMethod):
 
 
 class MessagesRestore(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -922,7 +952,7 @@ class MessagesRestore(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -933,6 +963,7 @@ class MessagesRestore(BaseMethod):
 
 
 class MessagesSearch(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -966,7 +997,7 @@ class MessagesSearch(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -975,6 +1006,7 @@ class MessagesSearch(BaseMethod):
 
 
 class MessagesSearchConversations(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -1000,7 +1032,7 @@ class MessagesSearchConversations(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1011,6 +1043,7 @@ class MessagesSearchConversations(BaseMethod):
 
 
 class MessagesSend(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -1066,7 +1099,7 @@ class MessagesSend(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1075,6 +1108,7 @@ class MessagesSend(BaseMethod):
 
 
 class MessagesSendService(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.GROUP,
         APIAccessibility.VKME,
@@ -1089,7 +1123,7 @@ class MessagesSendService(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1100,6 +1134,7 @@ class MessagesSendService(BaseMethod):
 
 
 class MessagesSetActivity(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -1123,7 +1158,7 @@ class MessagesSetActivity(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1134,6 +1169,7 @@ class MessagesSetActivity(BaseMethod):
 
 
 class MessagesSetChatPhoto(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -1148,7 +1184,7 @@ class MessagesSetChatPhoto(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1159,6 +1195,7 @@ class MessagesSetChatPhoto(BaseMethod):
 
 
 class MessagesUnpin(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -1176,7 +1213,7 @@ class MessagesUnpin(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class PhotosConfirmTag(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -21,7 +22,7 @@ class PhotosConfirmTag(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -32,6 +33,7 @@ class PhotosConfirmTag(BaseMethod):
 
 
 class PhotosCopy(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -47,7 +49,7 @@ class PhotosCopy(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -56,6 +58,7 @@ class PhotosCopy(BaseMethod):
 
 
 class PhotosCreateAlbum(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -82,7 +85,7 @@ class PhotosCreateAlbum(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -93,6 +96,7 @@ class PhotosCreateAlbum(BaseMethod):
 
 
 class PhotosCreateComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -123,7 +127,7 @@ class PhotosCreateComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -134,6 +138,7 @@ class PhotosCreateComment(BaseMethod):
 
 
 class PhotosDelete(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -148,7 +153,7 @@ class PhotosDelete(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -159,6 +164,7 @@ class PhotosDelete(BaseMethod):
 
 
 class PhotosDeleteAlbum(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -173,7 +179,7 @@ class PhotosDeleteAlbum(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -184,6 +190,7 @@ class PhotosDeleteAlbum(BaseMethod):
 
 
 class PhotosDeleteComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -198,7 +205,7 @@ class PhotosDeleteComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -209,6 +216,7 @@ class PhotosDeleteComment(BaseMethod):
 
 
 class PhotosEdit(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -237,7 +245,7 @@ class PhotosEdit(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -246,6 +254,7 @@ class PhotosEdit(BaseMethod):
 
 
 class PhotosEditAlbum(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -274,7 +283,7 @@ class PhotosEditAlbum(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -285,6 +294,7 @@ class PhotosEditAlbum(BaseMethod):
 
 
 class PhotosEditComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -305,7 +315,7 @@ class PhotosEditComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -316,6 +326,7 @@ class PhotosEditComment(BaseMethod):
 
 
 class PhotosGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -351,7 +362,7 @@ class PhotosGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -360,6 +371,7 @@ class PhotosGet(BaseMethod):
 
 
 class PhotosGetAlbums(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -389,7 +401,7 @@ class PhotosGetAlbums(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -398,6 +410,7 @@ class PhotosGetAlbums(BaseMethod):
 
 
 class PhotosGetAlbumsCount(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -412,7 +425,7 @@ class PhotosGetAlbumsCount(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -423,6 +436,7 @@ class PhotosGetAlbumsCount(BaseMethod):
 
 
 class PhotosGetAll(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -451,7 +465,7 @@ class PhotosGetAll(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -460,6 +474,7 @@ class PhotosGetAll(BaseMethod):
 
 
 class PhotosGetAllComments(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -482,7 +497,7 @@ class PhotosGetAllComments(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -493,6 +508,7 @@ class PhotosGetAllComments(BaseMethod):
 
 
 class PhotosGetById(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -511,7 +527,7 @@ class PhotosGetById(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -520,6 +536,7 @@ class PhotosGetById(BaseMethod):
 
 
 class PhotosGetChatUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -540,7 +557,7 @@ class PhotosGetChatUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -551,6 +568,7 @@ class PhotosGetChatUploadServer(BaseMethod):
 
 
 class PhotosGetComments(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -583,7 +601,7 @@ class PhotosGetComments(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -594,6 +612,7 @@ class PhotosGetComments(BaseMethod):
 
 
 class PhotosGetMarketAlbumUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, group_id: int) -> responses.base.GetUploadServer:
@@ -605,7 +624,7 @@ class PhotosGetMarketAlbumUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -616,6 +635,7 @@ class PhotosGetMarketAlbumUploadServer(BaseMethod):
 
 
 class PhotosGetMarketUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -638,7 +658,7 @@ class PhotosGetMarketUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -649,6 +669,7 @@ class PhotosGetMarketUploadServer(BaseMethod):
 
 
 class PhotosGetMessagesUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -665,7 +686,7 @@ class PhotosGetMessagesUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -676,6 +697,7 @@ class PhotosGetMessagesUploadServer(BaseMethod):
 
 
 class PhotosGetNewTags(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -690,7 +712,7 @@ class PhotosGetNewTags(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -699,6 +721,7 @@ class PhotosGetNewTags(BaseMethod):
 
 
 class PhotosGetOwnerCoverPhotoUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -724,7 +747,7 @@ class PhotosGetOwnerCoverPhotoUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -735,6 +758,7 @@ class PhotosGetOwnerCoverPhotoUploadServer(BaseMethod):
 
 
 class PhotosGetOwnerPhotoUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, owner_id: int = None) -> responses.base.GetUploadServer:
@@ -746,7 +770,7 @@ class PhotosGetOwnerPhotoUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -757,6 +781,7 @@ class PhotosGetOwnerPhotoUploadServer(BaseMethod):
 
 
 class PhotosGetTags(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -772,7 +797,7 @@ class PhotosGetTags(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -781,6 +806,7 @@ class PhotosGetTags(BaseMethod):
 
 
 class PhotosGetUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -795,7 +821,7 @@ class PhotosGetUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -806,6 +832,7 @@ class PhotosGetUploadServer(BaseMethod):
 
 
 class PhotosGetUserPhotos(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -828,7 +855,7 @@ class PhotosGetUserPhotos(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -839,6 +866,7 @@ class PhotosGetUserPhotos(BaseMethod):
 
 
 class PhotosGetWallUploadServer(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -852,7 +880,7 @@ class PhotosGetWallUploadServer(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -863,6 +891,7 @@ class PhotosGetWallUploadServer(BaseMethod):
 
 
 class PhotosMakeCover(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -878,7 +907,7 @@ class PhotosMakeCover(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -889,6 +918,7 @@ class PhotosMakeCover(BaseMethod):
 
 
 class PhotosMove(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -904,7 +934,7 @@ class PhotosMove(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -913,6 +943,7 @@ class PhotosMove(BaseMethod):
 
 
 class PhotosPutTag(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -939,7 +970,7 @@ class PhotosPutTag(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -948,6 +979,7 @@ class PhotosPutTag(BaseMethod):
 
 
 class PhotosRemoveTag(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -963,7 +995,7 @@ class PhotosRemoveTag(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -974,6 +1006,7 @@ class PhotosRemoveTag(BaseMethod):
 
 
 class PhotosReorderAlbums(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -990,7 +1023,7 @@ class PhotosReorderAlbums(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1001,6 +1034,7 @@ class PhotosReorderAlbums(BaseMethod):
 
 
 class PhotosReorderPhotos(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -1017,7 +1051,7 @@ class PhotosReorderPhotos(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1028,6 +1062,7 @@ class PhotosReorderPhotos(BaseMethod):
 
 
 class PhotosReport(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -1043,7 +1078,7 @@ class PhotosReport(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1054,6 +1089,7 @@ class PhotosReport(BaseMethod):
 
 
 class PhotosReportComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -1069,7 +1105,7 @@ class PhotosReportComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1080,6 +1116,7 @@ class PhotosReportComment(BaseMethod):
 
 
 class PhotosRestore(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -1094,7 +1131,7 @@ class PhotosRestore(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1105,6 +1142,7 @@ class PhotosRestore(BaseMethod):
 
 
 class PhotosRestoreComment(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -1119,7 +1157,7 @@ class PhotosRestoreComment(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1130,6 +1168,7 @@ class PhotosRestoreComment(BaseMethod):
 
 
 class PhotosSave(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -1158,7 +1197,7 @@ class PhotosSave(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1167,6 +1206,7 @@ class PhotosSave(BaseMethod):
 
 
 class PhotosSaveMarketAlbumPhoto(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -1183,7 +1223,7 @@ class PhotosSaveMarketAlbumPhoto(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1194,6 +1234,7 @@ class PhotosSaveMarketAlbumPhoto(BaseMethod):
 
 
 class PhotosSaveMarketPhoto(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -1218,7 +1259,7 @@ class PhotosSaveMarketPhoto(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1229,6 +1270,7 @@ class PhotosSaveMarketPhoto(BaseMethod):
 
 
 class PhotosSaveMessagesPhoto(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -1247,7 +1289,7 @@ class PhotosSaveMessagesPhoto(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1258,6 +1300,7 @@ class PhotosSaveMessagesPhoto(BaseMethod):
 
 
 class PhotosSaveOwnerCoverPhoto(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.GROUP,
@@ -1275,7 +1318,7 @@ class PhotosSaveOwnerCoverPhoto(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1286,6 +1329,7 @@ class PhotosSaveOwnerCoverPhoto(BaseMethod):
 
 
 class PhotosSaveOwnerPhoto(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -1301,7 +1345,7 @@ class PhotosSaveOwnerPhoto(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1312,6 +1356,7 @@ class PhotosSaveOwnerPhoto(BaseMethod):
 
 
 class PhotosSaveWallPhoto(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -1340,7 +1385,7 @@ class PhotosSaveWallPhoto(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -1351,6 +1396,7 @@ class PhotosSaveWallPhoto(BaseMethod):
 
 
 class PhotosSearch(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -1384,7 +1430,7 @@ class PhotosSearch(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

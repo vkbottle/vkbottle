@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class NotificationsGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -28,7 +29,7 @@ class NotificationsGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -37,6 +38,7 @@ class NotificationsGet(BaseMethod):
 
 
 class NotificationsMarkAsViewed(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self,) -> responses.notifications.MarkAsViewed:
@@ -48,7 +50,7 @@ class NotificationsMarkAsViewed(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -59,6 +61,7 @@ class NotificationsMarkAsViewed(BaseMethod):
 
 
 class NotificationsSendMessage(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -82,7 +85,7 @@ class NotificationsSendMessage(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

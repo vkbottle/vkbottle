@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class AppsDeleteAppRequests(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self,) -> responses.ok_response.OkResponse:
@@ -17,7 +18,7 @@ class AppsDeleteAppRequests(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -28,6 +29,7 @@ class AppsDeleteAppRequests(BaseMethod):
 
 
 class AppsGet(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -57,7 +59,7 @@ class AppsGet(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -66,6 +68,7 @@ class AppsGet(BaseMethod):
 
 
 class AppsGetCatalog(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [
         APIAccessibility.USER,
         APIAccessibility.SERVICE,
@@ -103,7 +106,7 @@ class AppsGetCatalog(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -112,6 +115,7 @@ class AppsGetCatalog(BaseMethod):
 
 
 class AppsGetFriendsList(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -134,7 +138,7 @@ class AppsGetFriendsList(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -145,6 +149,7 @@ class AppsGetFriendsList(BaseMethod):
 
 
 class AppsGetLeaderboard(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -160,7 +165,7 @@ class AppsGetLeaderboard(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -171,6 +176,7 @@ class AppsGetLeaderboard(BaseMethod):
 
 
 class AppsGetScopes(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, type: str = None) -> responses.apps.GetScopes:
@@ -182,7 +188,7 @@ class AppsGetScopes(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -191,6 +197,7 @@ class AppsGetScopes(BaseMethod):
 
 
 class AppsGetScore(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, user_id: int) -> responses.apps.GetScore:
@@ -202,7 +209,7 @@ class AppsGetScore(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -211,6 +218,7 @@ class AppsGetScore(BaseMethod):
 
 
 class AppsSendRequest(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -235,7 +243,7 @@ class AppsSendRequest(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

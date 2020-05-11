@@ -5,6 +5,7 @@ from .method import BaseMethod
 
 
 class AuthCheckPhone(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER, APIAccessibility.OPEN]
 
     async def __call__(
@@ -25,7 +26,7 @@ class AuthCheckPhone(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -36,6 +37,7 @@ class AuthCheckPhone(BaseMethod):
 
 
 class AuthRestore(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER, APIAccessibility.OPEN]
 
     async def __call__(self, phone: str, last_name: str) -> responses.auth.Restore:
@@ -48,7 +50,7 @@ class AuthRestore(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

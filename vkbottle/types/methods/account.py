@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class AccountBan(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, owner_id: int = None) -> responses.ok_response.OkResponse:
@@ -17,7 +18,7 @@ class AccountBan(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -26,6 +27,7 @@ class AccountBan(BaseMethod):
 
 
 class AccountChangePassword(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -46,7 +48,7 @@ class AccountChangePassword(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -57,6 +59,7 @@ class AccountChangePassword(BaseMethod):
 
 
 class AccountGetActiveOffers(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -65,13 +68,13 @@ class AccountGetActiveOffers(BaseMethod):
         """ account.getActiveOffers
         From Vk Docs: Returns a list of active ads (offers) which executed by the user will bring him/her respective number of votes to his balance in the application.
         Access from user token(s)
-        :param offset: 
+        :param offset:
         :param count: Number of results to return.
         """
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -82,6 +85,7 @@ class AccountGetActiveOffers(BaseMethod):
 
 
 class AccountGetAppPermissions(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, user_id: int) -> responses.account.GetAppPermissions:
@@ -93,7 +97,7 @@ class AccountGetAppPermissions(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -104,6 +108,7 @@ class AccountGetAppPermissions(BaseMethod):
 
 
 class AccountGetBanned(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -118,7 +123,7 @@ class AccountGetBanned(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -127,6 +132,7 @@ class AccountGetBanned(BaseMethod):
 
 
 class AccountGetCounters(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -140,7 +146,7 @@ class AccountGetCounters(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -151,6 +157,7 @@ class AccountGetCounters(BaseMethod):
 
 
 class AccountGetInfo(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, fields: typing.List = None) -> responses.account.GetInfo:
@@ -162,7 +169,7 @@ class AccountGetInfo(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -171,18 +178,19 @@ class AccountGetInfo(BaseMethod):
 
 
 class AccountGetProfileInfo(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self,) -> responses.account.GetProfileInfo:
         """ account.getProfileInfo
         From Vk Docs: Returns the current account info.
         Access from user token(s)
-        
+
         """
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -193,6 +201,7 @@ class AccountGetProfileInfo(BaseMethod):
 
 
 class AccountGetPushSettings(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -206,7 +215,7 @@ class AccountGetPushSettings(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -217,6 +226,7 @@ class AccountGetPushSettings(BaseMethod):
 
 
 class AccountRegisterDevice(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -238,12 +248,12 @@ class AccountRegisterDevice(BaseMethod):
         :param device_id: Unique device ID.
         :param system_version: String version of device operating system.
         :param settings: Push settings in a [vk.com/dev/push_settings|special format].
-        :param sandbox: 
+        :param sandbox:
         """
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -254,6 +264,7 @@ class AccountRegisterDevice(BaseMethod):
 
 
 class AccountSaveProfileInfo(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -294,7 +305,7 @@ class AccountSaveProfileInfo(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -305,6 +316,7 @@ class AccountSaveProfileInfo(BaseMethod):
 
 
 class AccountSetInfo(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -319,7 +331,7 @@ class AccountSetInfo(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -330,6 +342,7 @@ class AccountSetInfo(BaseMethod):
 
 
 class AccountSetNameInMenu(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -344,7 +357,7 @@ class AccountSetNameInMenu(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -355,18 +368,19 @@ class AccountSetNameInMenu(BaseMethod):
 
 
 class AccountSetOffline(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self,) -> responses.ok_response.OkResponse:
         """ account.setOffline
         From Vk Docs: Marks a current user as offline.
         Access from user token(s)
-        
+
         """
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -377,6 +391,7 @@ class AccountSetOffline(BaseMethod):
 
 
 class AccountSetOnline(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, voip: bool = None) -> responses.ok_response.OkResponse:
@@ -388,7 +403,7 @@ class AccountSetOnline(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -399,6 +414,7 @@ class AccountSetOnline(BaseMethod):
 
 
 class AccountSetPushSettings(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -419,7 +435,7 @@ class AccountSetPushSettings(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -430,6 +446,7 @@ class AccountSetPushSettings(BaseMethod):
 
 
 class AccountSetSilenceMode(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -450,7 +467,7 @@ class AccountSetSilenceMode(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -461,18 +478,19 @@ class AccountSetSilenceMode(BaseMethod):
 
 
 class AccountUnban(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(self, owner_id: int = None) -> responses.ok_response.OkResponse:
         """ account.unban
-        From Vk Docs: 
+        From Vk Docs:
         Access from user token(s)
-        :param owner_id: 
+        :param owner_id:
         """
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -483,6 +501,7 @@ class AccountUnban(BaseMethod):
 
 
 class AccountUnregisterDevice(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
@@ -492,12 +511,12 @@ class AccountUnregisterDevice(BaseMethod):
         From Vk Docs: Unsubscribes a device from push notifications.
         Access from user token(s)
         :param device_id: Unique device ID.
-        :param sandbox: 
+        :param sandbox:
         """
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(

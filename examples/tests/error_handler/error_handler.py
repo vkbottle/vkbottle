@@ -9,8 +9,9 @@ user = User(os.environ["TOKEN"])
 
 async def solve_captcha(e: VKError):
     # solving captcha
-    print(e.raw_error["captcha_img"], e.raw_error["captcha_sid"])
-    await e.method_requested(**e.params_requested)
+    method = e.method_requested
+    method.kwargs = {"captcha_key": "key", "captcha_sid": e.raw_error["captcha_sid"]}
+    await method(**e.params_requested)
 
 
 @user.on.message_handler(commands=["spam", "спам"])

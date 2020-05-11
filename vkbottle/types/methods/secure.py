@@ -6,6 +6,7 @@ from .method import BaseMethod
 
 
 class SecureAddAppEvent(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(
@@ -21,7 +22,7 @@ class SecureAddAppEvent(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -32,6 +33,7 @@ class SecureAddAppEvent(BaseMethod):
 
 
 class SecureCheckToken(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(
@@ -46,7 +48,7 @@ class SecureCheckToken(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -55,6 +57,7 @@ class SecureCheckToken(BaseMethod):
 
 
 class SecureGetAppBalance(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(self,) -> responses.secure.GetAppBalance:
@@ -66,7 +69,7 @@ class SecureGetAppBalance(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -77,6 +80,7 @@ class SecureGetAppBalance(BaseMethod):
 
 
 class SecureGetSMSHistory(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(
@@ -97,7 +101,7 @@ class SecureGetSMSHistory(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -108,6 +112,7 @@ class SecureGetSMSHistory(BaseMethod):
 
 
 class SecureGetTransactionsHistory(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(
@@ -132,7 +137,7 @@ class SecureGetTransactionsHistory(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -143,6 +148,7 @@ class SecureGetTransactionsHistory(BaseMethod):
 
 
 class SecureGetUserLevel(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(self, user_ids: typing.List) -> responses.secure.GetUserLevel:
@@ -154,7 +160,7 @@ class SecureGetUserLevel(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -165,6 +171,7 @@ class SecureGetUserLevel(BaseMethod):
 
 
 class SecureGiveEventSticker(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(
@@ -179,7 +186,7 @@ class SecureGiveEventSticker(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -190,6 +197,7 @@ class SecureGiveEventSticker(BaseMethod):
 
 
 class SecureSendNotification(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(
@@ -205,7 +213,7 @@ class SecureSendNotification(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -216,6 +224,7 @@ class SecureSendNotification(BaseMethod):
 
 
 class SecureSendSMSNotification(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(
@@ -230,7 +239,7 @@ class SecureSendSMSNotification(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
@@ -241,6 +250,7 @@ class SecureSendSMSNotification(BaseMethod):
 
 
 class SecureSetCounter(BaseMethod):
+    kwargs: dict = {}
     access_token_type: APIAccessibility = [APIAccessibility.SERVICE]
 
     async def __call__(
@@ -261,7 +271,7 @@ class SecureSetCounter(BaseMethod):
 
         params = {
             k if not k.endswith("_") else k[:-1]: v
-            for k, v in locals().items()
+            for k, v in {**locals(), **self.kwargs}.items()
             if k not in ["self"] and v is not None
         }
         return await self.request(
