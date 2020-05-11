@@ -31,11 +31,11 @@ class Ad(BaseModel):
     ad_format: int = None
     ad_platform: typing.Union[int, str] = None
     all_limit: int = None
-    approved: "AdApproved" = None
+    approved: int = None
     campaign_id: int = None
     category1_id: int = None
     category2_id: int = None
-    cost_type: "AdCostType" = None
+    cost_type: int = None
     cpc: int = None
     cpm: int = None
     cpa: int = None
@@ -46,27 +46,14 @@ class Ad(BaseModel):
     impressions_limit: int = None
     impressions_limited: "base.BoolInt" = None
     name: str = None
-    status: "AdStatus" = None
+    status: int = None
     video: "base.BoolInt" = None
-
-
-class AdApproved(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-
-
-class AdCostType(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
 
 
 class AdLayout(BaseModel):
     ad_format: int = None
     campaign_id: int = None
-    cost_type: "AdCostType" = None
+    cost_type: int = None
     description: str = None
     id: int = None
     image_src: str = None
@@ -78,27 +65,15 @@ class AdLayout(BaseModel):
     video: "base.BoolInt" = None
 
 
-class AdStatus(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-
-
 class Campaign(BaseModel):
     all_limit: str = None
     day_limit: str = None
     id: int = None
     name: str = None
     start_time: int = None
-    status: "CampaignStatus" = None
+    status: int = None
     stop_time: int = None
     type: "CampaignType" = None
-
-
-class CampaignStatus(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
 
 
 class CampaignType(Enum):

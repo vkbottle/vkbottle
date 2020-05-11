@@ -1,4 +1,4 @@
-from . import groups, base, wall, photos
+from . import base, wall, photos
 import typing
 from enum import Enum
 from ..base import BaseModel
@@ -15,8 +15,8 @@ class CommentsFilters(Enum):
 class EventActivity(BaseModel):
     address: str = None
     button_text: str = None
-    friends: typing.List = None
-    member_status: "groups.GroupFullMemberStatus" = None
+    friends: typing.List["ItemFriend"] = None
+    member_status: int = None
     text: str = None
     time: int = None
 

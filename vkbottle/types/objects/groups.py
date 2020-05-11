@@ -160,6 +160,7 @@ class Group(BaseModel):
     deactivated: str = None
     finish_date: int = None
     id: int = None
+    wall: int = None
     is_admin: "base.BoolInt" = None
     is_advertiser: "base.BoolInt" = None
     is_closed: int = None
@@ -197,15 +198,9 @@ class GroupCategoryType(BaseModel):
     name: str = None
 
 
-class GroupDocs(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-
-
 class GroupFull(Group):
     market: "MarketInfo" = None
-    member_status: "GroupFullMemberStatus" = None
+    member_status: int = None
     is_favorite: "base.BoolInt" = None
     is_subscribed: "base.BoolInt" = None
     city: "base.Object" = None
@@ -228,48 +223,18 @@ class GroupFull(Group):
     links: typing.List = None
     contacts: typing.List = None
     site: str = None
-    main_section: "GroupFullMainSection" = None
+    main_section: int = None
     trending: "base.BoolInt" = None
     can_message: "base.BoolInt" = None
     is_messages_blocked: "base.BoolInt" = None
     can_send_notify: "base.BoolInt" = None
     online_status: "OnlineStatus" = None
-    age_limits: "GroupFullAgeLimits" = None
+    age_limits: int = None
     ban_info: "GroupBanInfo" = None
     addresses: "AddressesInfo" = None
     is_subscribed_podcasts: bool = None
     can_subscribe_podcasts: bool = None
     can_subscribe_posts: bool = None
-
-
-class GroupFullAgeLimits(Enum):
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-
-
-class GroupFullMainSection(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-    _4 = "4"
-    _5 = "5"
-
-
-class GroupFullMemberStatus(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-    _3 = "3"
-    _4 = "4"
-    _5 = "5"
-
-
-class GroupIsClosed(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
 
 
 class GroupLink(BaseModel):
@@ -279,20 +244,6 @@ class GroupLink(BaseModel):
     id: int = None
     image_processing: "base.BoolInt" = None
     url: str = None
-
-
-class GroupMarketCurrency(Enum):
-    _643 = "643"
-    _980 = "980"
-    _398 = "398"
-    _978 = "978"
-    _840 = "840"
-
-
-class GroupPhotos(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
 
 
 class GroupPublicCategoryList(BaseModel):

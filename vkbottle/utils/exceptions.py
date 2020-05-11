@@ -8,11 +8,13 @@ class VKError(Exception):
         error_description: str,
         method_requested=None,
         params_requested: typing.Optional[dict] = None,
+        raw_error: typing.Optional[dict] = None,
     ):
         self.error_code = error_code
         self.error_description = error_description
         self.method_requested = method_requested
         self.params_requested = params_requested
+        self.raw_error = raw_error
 
     def __repr__(self):
         return f"<VKError error_code={self.error_code} error_description={self.error_description}>"

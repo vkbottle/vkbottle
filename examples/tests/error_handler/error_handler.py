@@ -9,6 +9,7 @@ user = User(os.environ["TOKEN"])
 
 async def solve_captcha(e: VKError):
     # solving captcha
+    print(e.raw_error["captcha_img"], e.raw_error["captcha_sid"])
     await e.method_requested(**e.params_requested)
 
 

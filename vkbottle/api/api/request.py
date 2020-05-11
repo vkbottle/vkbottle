@@ -58,6 +58,7 @@ async def request(
                 (request_instance, None),
             ),
             params,
+            raw_error=response["error"],
         )
         if throw_errors:
             raise exception

@@ -3,12 +3,6 @@ from enum import Enum
 from ..base import BaseModel
 
 
-class AppLeaderboardType(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-
-
 class AppMin(BaseModel):
     type: "AppType" = None
     id: int = None
@@ -32,7 +26,7 @@ class App(AppMin):
     genre_id: int = None
     international: int = None
     is_in_catalog: int = None
-    leaderboard_type: "AppLeaderboardType" = None
+    leaderboard_type: int = None
     members_count: int = None
     platform_id: int = None
     published_date: int = None

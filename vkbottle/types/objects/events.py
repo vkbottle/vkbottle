@@ -9,7 +9,7 @@ class EventAttach(BaseModel):
     friends: typing.List = None
     id: int = None
     is_favorite: bool = None
-    member_status: "groups.GroupFullMemberStatus" = None
+    member_status: int = None
     text: str = None
     time: int = None
 

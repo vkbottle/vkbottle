@@ -3,12 +3,6 @@ from enum import Enum
 from ..base import BaseModel
 
 
-class PrivacySettings(Enum):
-    _0 = "0"
-    _1 = "1"
-    _2 = "2"
-
-
 class Wikipage(BaseModel):
     creator_id: int = None
     creator_name: int = None
@@ -18,8 +12,8 @@ class Wikipage(BaseModel):
     id: int = None
     title: str = None
     views: int = None
-    who_can_edit: "PrivacySettings" = None
-    who_can_view: "PrivacySettings" = None
+    who_can_edit: int = None
+    who_can_view: int = None
 
 
 class WikipageFull(BaseModel):
@@ -36,8 +30,8 @@ class WikipageFull(BaseModel):
     title: str = None
     view_url: str = None
     views: int = None
-    who_can_edit: "PrivacySettings" = None
-    who_can_view: "PrivacySettings" = None
+    who_can_edit: int = None
+    who_can_view: int = None
 
 
 class WikipageHistory(BaseModel):
