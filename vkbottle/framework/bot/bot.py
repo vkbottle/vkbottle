@@ -131,7 +131,11 @@ class Bot(HTTP, AsyncHandleManager):
         self._stop: bool = False
 
         logger.info("Using JSON_MODULE - {}".format(USAGE))
-        logger.info("Using asyncio loop - {}".format(asyncio.get_event_loop_policy()))
+        logger.info(
+            "Using asyncio loop - {}".format(
+                asyncio.get_event_loop_policy().__class__.__module__
+            )
+        )
 
     async def get_updates(self):
         # noqa
@@ -386,7 +390,6 @@ class Bot(HTTP, AsyncHandleManager):
                     await self._processor(obj, client_info)
 
                 else:
-                    # If this is an event of the group AND this is not SELF-EVENT
                     await (
                         self._event_processor(obj=obj, event_type=update["type"])
                     )  # noqa

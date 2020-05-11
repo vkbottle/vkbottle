@@ -26,24 +26,23 @@ async def request(
     response = await session.post(url, data=params or {})
 
     if not isinstance(response, dict):
+        delay = 1
+
         while not isinstance(response, dict):
-            # Works only on python 3.6+
-            delay = 1
             logger.error(
                 "\n---"
                 f"{time.strftime('%m-%d %H:%M:%S', time.localtime())} - DELAY {delay * 5} sec\n"
                 f"Check your internet connection. Maybe VK died, request returned: {response}"
-                f"Error appeared after request: {method}",
+                f"Error appeared after request: {method}"
             )
             await asyncio.sleep(delay * 5)
-            delay += 1
             response = await session.post(url, data=params or {})
 
-            logger.success(
-                f"--- {time.strftime('%m-%d %H:%M:%S', time.localtime())}\n"
-                f"- METHOD SUCCESS after {5 * sum(range(1, delay))} sec\n"
-                f"RESPONSE: {response}\n",
-            )
+        logger.success(
+            f"--- {time.strftime('%m-%d %H:%M:%S', time.localtime())}\n"
+            f"- METHOD SUCCESS after {5 * sum(range(1, delay))} sec\n"
+            f"RESPONSE: {response}\n"
+        )
 
     if "error" in response:
         logger.debug(
@@ -62,8 +61,8 @@ async def request(
         )
         if throw_errors:
             raise exception
+
         logger.debug(f"Error ignored {exception}")
-        return response
     return response
 
 
@@ -92,12 +91,9 @@ class Request:
 
         logger.debug("Response: {}", response)
 
-        if not response_model:
+        if not response_model or raw_response:
             return response["response"]
-        resp = response_model(**response)
-        if raw_response:
-            return resp
-        return resp.response
+        return response_model(**response).response
 
     def __repr__(self):
         return f"<Request {self.token_generator.__class__.__qualname__} throw_errors={self.throw_errors}>"

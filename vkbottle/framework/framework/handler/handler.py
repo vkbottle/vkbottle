@@ -170,7 +170,10 @@ class MessageHandler:
         current = list()
         for rule in self.default_rules + rules:
             if not isinstance(rule, (AbstractRule, AbstractFilter)):
-                warnings.warn(f"Wrong rule! Got type {rule.__class__} instead of AbstractRule. Rule will be ignored", Warning)
+                warnings.warn(
+                    f"Wrong rule! Got type {rule.__class__} instead of AbstractRule. Rule will be ignored",
+                    Warning,
+                )
                 continue
             if not isinstance(rule, AbstractFilter):
                 rule.create(func)

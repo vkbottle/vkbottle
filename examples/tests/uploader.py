@@ -16,7 +16,9 @@ async def picture(ans: Message):
 
 @bot.on.message_handler(commands="документ")
 async def document(ans: Message):
-    doc = await doc_uploader.upload_doc_to_message("vkbottle_bot/img/2.txt", ans.peer_id)
+    doc = await doc_uploader.upload_doc_to_message(
+        "vkbottle_bot/img/2.txt", ans.peer_id
+    )
     await ans("Вот документ:", attachment=doc)
 
 

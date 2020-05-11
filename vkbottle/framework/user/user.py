@@ -109,7 +109,11 @@ class User(HTTP, AsyncHandleManager):
             )
 
         logger.info("Using JSON_MODULE - {}".format(USAGE))
-        logger.info("Using asyncio loop - {}".format(asyncio.get_event_loop_policy().__class__.__module__))
+        logger.info(
+            "Using asyncio loop - {}".format(
+                asyncio.get_event_loop_policy().__class__.__module__
+            )
+        )
 
     @staticmethod
     def get_id_by_token(token: str):
