@@ -1,4 +1,4 @@
-from vkbottle.utils.exceptions import VKError
+from ..exceptions import VKError
 from .request import HTTP
 import typing
 

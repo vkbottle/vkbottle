@@ -9,7 +9,7 @@ class PhotoUploader(Uploader):
         pathlike: typing.Union[list, typing.Any],
         group_id: int = None,
         **params,
-    ) -> typing.Union[str, typing.List[dict]]:
+    ) -> typing.Union[str, typing.List[str]]:
 
         if not isinstance(pathlike, list):
             pathlike = [pathlike]
