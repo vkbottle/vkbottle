@@ -1,7 +1,8 @@
 from vkbottle import Bot, Message, vkscript
 from typing import List
+import os
 
-bot = Bot("token")
+bot = Bot(os.environ["TOKEN"])
 
 @vkscript
 def get_names(api, user_ids=1):
@@ -11,7 +12,7 @@ def get_names(api, user_ids=1):
     return names
 
 
-@bot.on.message_handler("/names <( )*ids:int>")
+@bot.on.message_handler(text="/names <( )*ids>")
 async def fetch_names(ans: Message, ids: List[int]):
     return ", ".join(await bot.api.execute(get_names(user_ids=ids)))
 

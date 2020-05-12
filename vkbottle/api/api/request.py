@@ -4,6 +4,7 @@ from vkbottle.api.api.category import Categories
 from vkbottle.http import HTTPRequest
 from vkbottle.utils import logger, to_snake_case, from_attr
 from vkbottle.api.api.util.token import AbstractTokenGenerator
+from .error_handler import VKErrorHandler
 
 import time
 import typing
@@ -61,10 +62,8 @@ async def request(
             params,
             raw_error=response["error"],
         )
-        if throw_errors:
-            raise exception
-
-        logger.debug(f"Error ignored {exception}")
+        error_handler = VKErrorHandler.get_current()
+        return await error_handler.handle_error(exception)
     return response
 
 

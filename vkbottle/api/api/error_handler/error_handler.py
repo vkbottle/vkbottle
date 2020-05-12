@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from vkbottle.utils.exceptions import VKError
 import typing
 import traceback
-from vkbottle.utils import logger
+from vkbottle.utils import logger, ContextInstanceMixin
 
 
-class VKErrorHandler(ABC):
+class VKErrorHandler(ABC, ContextInstanceMixin):
     def __init__(self):
         self.handled_errors: typing.Dict[int, typing.Callable] = {}
 
@@ -27,4 +27,4 @@ class VKErrorHandler(ABC):
 
 class DefaultErrorHandler(VKErrorHandler):
     async def unhandled_error(self, e: VKError):
-        logger.error(traceback.format_exc(2))
+        raise e

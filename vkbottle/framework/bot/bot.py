@@ -7,7 +7,7 @@ from vbml import Patcher
 from vkbottle.http import HTTP
 from vkbottle.types.events import EventList
 from vkbottle.framework.framework.handler.handler import Handler
-from vkbottle.framework.framework.error_handler import (
+from vkbottle.api.api.error_handler import (
     VKErrorHandler,
     DefaultErrorHandler,
 )
@@ -116,17 +116,18 @@ class Bot(HTTP, AsyncHandleManager):
 
         # Sign assets
         self.api: Api = Api(self.__tokens, throw_errors=throw_errors)
+        self.error_handler: VKErrorHandler = DefaultErrorHandler()
         self.extension: AbstractExtension = extension if extension is not None else StandardExtension()
 
         self._throw_errors: bool = throw_errors
         Api.set_current(self.api)
+        VKErrorHandler.set_current(self.error_handler)
         AbstractExtension.set_current(self.extension)
 
         # Main workers
         self.branch: typing.Union[AbstractBranchGenerator, DictBranch] = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.on: Handler = Handler(self.group_id)
-        self.error_handler: VKErrorHandler = DefaultErrorHandler()
 
         self._stop: bool = False
 
