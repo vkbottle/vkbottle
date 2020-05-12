@@ -53,7 +53,9 @@ async def request(
             response["error"]["error_msg"],
             from_attr(
                 Categories,
-                [method.split(".")[0], to_snake_case(method.split(".")[1])],
+                [method.split(".")[0], to_snake_case(method.split(".")[1])]
+                if "." in method
+                else method,
                 (request_instance, None),
             ),
             params,

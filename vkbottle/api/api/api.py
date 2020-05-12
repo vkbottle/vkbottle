@@ -63,6 +63,9 @@ class API(ContextInstanceMixin, Categories):
             raw_response=raw_response,
         )
 
+    async def execute(self, code):
+        return await self.request("execute", {"code": code})
+
     @property
     async def user_id(self):
         if self._user_id is None:

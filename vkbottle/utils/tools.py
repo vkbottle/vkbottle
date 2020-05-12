@@ -4,6 +4,8 @@ import time
 import typing
 from collections import MutableMapping
 from typing import Sequence, List
+import random
+import string
 
 
 class Logger:
@@ -47,6 +49,11 @@ def dict_of_dicts_merge(d1, d2) -> dict:
     d3 = d1.copy()
     d3.update(d2)
     return d3
+
+
+def random_string(length):
+    letters = string.ascii_lowercase
+    return "".join(random.choice(letters) for i in range(length))
 
 
 def to_snake_case(string: str) -> str:

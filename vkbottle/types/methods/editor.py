@@ -6,8 +6,11 @@ for file_name in os.listdir("."):
         with open(file_name, "r") as f:
             lines = f.readlines()
             for i, line in enumerate(lines):
-                if 'for k, v in locals().items()' in line:
-                    line = line.replace('for k, v in locals().items()', 'for k, v in {**locals(), **self.kwargs}.items()')
+                if "for k, v in locals().items()" in line:
+                    line = line.replace(
+                        "for k, v in locals().items()",
+                        "for k, v in {**locals(), **self.kwargs}.items()",
+                    )
                     lines[i] = line
             with open(file_name, "w") as fw:
                 fw.writelines(lines)
