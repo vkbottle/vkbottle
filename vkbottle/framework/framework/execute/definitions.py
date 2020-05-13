@@ -1,6 +1,6 @@
 import ast
 import typing
-from .base_converter import Converter, ConverterError, Area
+from .base_converter import Converter, ConverterError
 from vkbottle.utils import random_string
 
 CALL_REPLACEMENTS = {
@@ -19,12 +19,6 @@ def assign(d: ast.Assign):
             left_.append(find(target))
         elif target.__class__ == ast.Subscript:
             pass
-        elif target.__class__ == ast.Tuple:
-            raise NotImplementedError("Tuple assignments are not allowed")
-        else:
-            raise NotImplementedError(
-                f"Assignments of {target.__class__} are not implemented"
-            )
 
     right = find(d.value)
     return "var " + ",".join(f"{target}={right}" for target in left_) + ";"
@@ -132,8 +126,7 @@ def aug_assign(d: ast.AugAssign):
 
 @converter(ast.Name)
 def name(d: ast.Name):
-    values = Area.get_current().values
-    return values[d.id] if d.id in values else d.id
+    return d.id
 
 
 @converter(ast.While)
@@ -170,6 +163,9 @@ def call(d: ast.Call):
     while isinstance(func, ast.Attribute):
         calls.append(func.attr)
         func = func.value
+
+    if func.__class__ == ast.Str:
+        return str(find(d.args[0])) + "." + calls[0] + "(" + find(func) + ")"
 
     if func.id.lower() == "api":
         params = ",".join(f"{param.arg}:{find(param.value)}" for param in d.keywords)
@@ -270,6 +266,10 @@ def num_type(d: ast.Num):
 @converter(ast.Str)
 def str_type(d: ast.Num):
     return repr(d.s)
+
+@converter(ast.JoinedStr)
+def joined_str(d: ast.JoinedStr):
+    print(d)
 
 
 @converter(ast.NameConstant)
