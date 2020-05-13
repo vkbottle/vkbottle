@@ -166,6 +166,7 @@ class PhotoFullXtrRealOffset(BaseModel):
 class PhotoSizes(BaseModel):
     height: int = None
     url: str = None
+    src: str = None
     type: "PhotoSizesType" = None
     width: int = None
 

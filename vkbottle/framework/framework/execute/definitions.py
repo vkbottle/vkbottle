@@ -6,9 +6,13 @@ from vkbottle.utils import random_string
 CALL_REPLACEMENTS = {
     "append": "push",
 }
+CALL_STRING = ["join", "strip"]
+
 converter = Converter()
 find = converter.find_definition
 
+def dispatch_keywords(keywords: dict, assigner: str = ":", sep: str = ","):
+    return sep.join(f"{param.arg}{assigner}{find(param.value)}" for param in keywords)
 
 @converter(ast.Assign)
 def assign(d: ast.Assign):
@@ -165,10 +169,14 @@ def call(d: ast.Call):
         func = func.value
 
     if func.__class__ == ast.Str:
-        return str(find(d.args[0])) + "." + calls[0] + "(" + find(func) + ")"
+        if calls[0] in CALL_STRING:
+            return str(find(d.args[0])) + "." + calls[0] + "(" + find(func) + ")"
+        elif calls[0] == "format":
+            raise ConverterError("Use f-strings instead of str.format")
+        raise ConverterError("String formatter")
 
     if func.id.lower() == "api":
-        params = ",".join(f"{param.arg}:{find(param.value)}" for param in d.keywords)
+        params = dispatch_keywords(d.keywords)
         return "API." + ".".join(calls[::-1]) + "({" + params + "})"
     elif func.id == "len":
         return f"{find(d.args[0])}.length"
