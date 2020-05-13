@@ -117,7 +117,11 @@ class Bot(HTTP, AsyncHandleManager):
         # Sign assets
         self.api: Api = Api(self.__tokens, throw_errors=throw_errors)
         self.error_handler: VKErrorHandler = DefaultErrorHandler()
-        self.extension: AbstractExtension = extension if extension is not None else StandardExtension()
+        self.extension: AbstractExtension = (
+            extension
+            if extension is not None else
+            StandardExtension()
+        )
 
         self._throw_errors: bool = throw_errors
         Api.set_current(self.api)
@@ -423,10 +427,6 @@ class Bot(HTTP, AsyncHandleManager):
     @property
     def loop(self):
         return self.__loop
-
-    @loop.setter
-    def loop(self, loop: asyncio.AbstractEventLoop):
-        self.__loop = loop
 
     @property
     def patcher(self):
