@@ -269,8 +269,11 @@ def str_type(d: ast.Num):
 
 @converter(ast.JoinedStr)
 def joined_str(d: ast.JoinedStr):
-    print(d)
+    return "+".join(find(value) for value in d.values)
 
+@converter(ast.FormattedValue)
+def formatted_value(d: ast.FormattedValue):
+    return find(d.value)
 
 @converter(ast.NameConstant)
 def name_constant_type(d: ast.NameConstant):
