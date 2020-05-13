@@ -115,12 +115,12 @@ class Bot(HTTP, AsyncHandleManager):
         self.__loop = loop or asyncio.get_event_loop()
 
         # Sign assets
-        self.api: Api = Api(self.__tokens, throw_errors=throw_errors)
+        self._api: Api = Api(self.__tokens, throw_errors=throw_errors)
         self.error_handler: VKErrorHandler = DefaultErrorHandler()
         self.extension: AbstractExtension = extension if extension is not None else StandardExtension()
 
         self._throw_errors: bool = throw_errors
-        Api.set_current(self.api)
+        Api.set_current(self._api)
         VKErrorHandler.set_current(self.error_handler)
         AbstractExtension.set_current(self.extension)
 
@@ -210,7 +210,7 @@ class Bot(HTTP, AsyncHandleManager):
         """
         logger.debug("Making API request groups.getById to get group_id")
         response = asyncio.get_event_loop().run_until_complete(
-            request("groups.getById", {}, token, throw_errors=False)
+            request("groups.getById", {}, token)
         )
         if "error" in response:
             if throw_exc:
@@ -232,7 +232,7 @@ class Bot(HTTP, AsyncHandleManager):
         return True
 
     def executor_api(self, api):
-        self.api = api
+        self._api = api
         Api.set_current(api)
 
     def loop_update(self, loop: asyncio.AbstractEventLoop = None):
@@ -411,6 +411,10 @@ class Bot(HTTP, AsyncHandleManager):
 
     def __repr__(self) -> str:
         return "<Bot {}>".format(self.status.as_dict)
+
+    @property
+    def api(self) -> Api:
+        return self._api.get_current().construct(self.error_handler, self.extension)
 
     @property
     def __dict__(self) -> dict:

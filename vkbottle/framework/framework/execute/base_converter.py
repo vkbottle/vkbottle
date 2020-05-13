@@ -17,11 +17,14 @@ class Converter:
         def decorator(func):
             self.definitions[for_definition] = func
             return func
+
         return decorator
 
     def find_definition(self, d):
         if d.__class__ not in self.definitions:
-            raise ConverterError(f"Definition for {d.__class__} is undefined. Maybe vkscript doesn't support it")
+            raise ConverterError(
+                f"Definition for {d.__class__} is undefined. Maybe vkscript doesn't support it"
+            )
         return self.definitions[d.__class__](d)
 
     def scriptify(self, func: typing.Callable, **values) -> str:
@@ -29,4 +32,6 @@ class Converter:
         source = getsource(func)
         code = ast.parse(source).body[0]
         values_assignments = [f"var {k}={v};" for k, v in values.items()]
-        return "".join(values_assignments) + "".join(self.find_definition(line) for line in code.body)
+        return "".join(values_assignments) + "".join(
+            self.find_definition(line) for line in code.body
+        )

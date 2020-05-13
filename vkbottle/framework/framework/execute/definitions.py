@@ -11,8 +11,10 @@ CALL_STRING = ["join", "strip"]
 converter = Converter()
 find = converter.find_definition
 
+
 def dispatch_keywords(keywords: dict, assigner: str = ":", sep: str = ","):
     return sep.join(f"{param.arg}{assigner}{find(param.value)}" for param in keywords)
+
 
 @converter(ast.Assign)
 def assign(d: ast.Assign):
@@ -275,13 +277,16 @@ def num_type(d: ast.Num):
 def str_type(d: ast.Num):
     return repr(d.s)
 
+
 @converter(ast.JoinedStr)
 def joined_str(d: ast.JoinedStr):
     return "+".join(find(value) for value in d.values)
 
+
 @converter(ast.FormattedValue)
 def formatted_value(d: ast.FormattedValue):
     return find(d.value)
+
 
 @converter(ast.NameConstant)
 def name_constant_type(d: ast.NameConstant):
