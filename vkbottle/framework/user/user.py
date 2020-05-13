@@ -10,7 +10,7 @@ from vkbottle.framework._status import LoggerLevel
 from vkbottle.api import UserApi, request
 from vkbottle.exceptions import VKError
 from vkbottle.framework.framework.handler.user.handler import Handler
-from vkbottle.framework.framework.error_handler import (
+from vkbottle.api.api.error_handler import (
     VKErrorHandler,
     DefaultErrorHandler,
 )
@@ -81,7 +81,9 @@ class User(HTTP, AsyncHandleManager):
             self.__tokens[0]
         )
         self.api.user_id = user_id
+        self.error_handler: VKErrorHandler = DefaultErrorHandler()
         UserApi.set_current(self.api)
+        VKErrorHandler.set_current(self.error_handler)
         self.on: Handler = Handler()
         self.branch: AbstractBranchGenerator = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()

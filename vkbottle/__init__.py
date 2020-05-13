@@ -1,5 +1,5 @@
 from .framework import Bot, User
-from .framework.framework import branch
+from .framework.framework import branch, vkscript
 from .types.message import Message
 from .utils.task import TaskManager
 from .api.keyboard import keyboard_gen

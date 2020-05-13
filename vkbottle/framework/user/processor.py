@@ -9,7 +9,7 @@ from vkbottle.api import UserApi
 from vkbottle.exceptions import VKError
 from vkbottle.types.user_longpoll import Message
 from vkbottle.framework.framework.handler.user.handler import Handler
-from vkbottle.framework.framework.error_handler import VKErrorHandler
+from vkbottle.api.api.error_handler import VKErrorHandler
 from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework.framework.branch import (
     AbstractBranchGenerator,

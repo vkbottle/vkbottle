@@ -5,7 +5,7 @@ from ...utils import exceptions
 from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
 from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.handler import MiddlewareExecutor
-from vkbottle.framework.framework.error_handler import (
+from vkbottle.api.api.error_handler import (
     VKErrorHandler,
     DefaultErrorHandler,
 )

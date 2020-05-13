@@ -18,6 +18,8 @@ class AbstractFilter:
         ...
 
     def __repr__(self):
-        return (f"<Filter {self.__class__.__qualname__} "
-                f"rules={(rule.__class__.__name__ for rule in self.rules)} "
-                f"context={self.context}>")
+        return (
+            f"<Filter {self.__class__.__qualname__} "
+            f"rules={(rule.__class__.__name__ for rule in self.rules)} "
+            f"context={self.context}>"
+        )

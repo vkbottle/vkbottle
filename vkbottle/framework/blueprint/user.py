@@ -1,5 +1,5 @@
 from vkbottle.api import api
-from vkbottle.framework.framework.error_handler import (
+from vkbottle.api.api.error_handler import (
     VKErrorHandler,
     DefaultErrorHandler,
 )
