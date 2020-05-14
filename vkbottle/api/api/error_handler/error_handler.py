@@ -26,7 +26,7 @@ class VKErrorHandler(ABC, ContextInstanceMixin):
             return {"response": response}
         elif e.error_code not in self.handled_errors:
             return await self.unhandled_error(e)
-        return await self.handled_errors[e.error_code](e)
+        return {"response": await self.handled_errors[e.error_code](e)}
 
     def error_handler(self, error_code: int):
         def decorator(func):
