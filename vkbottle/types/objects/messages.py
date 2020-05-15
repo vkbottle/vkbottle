@@ -1,4 +1,4 @@
-from . import base, audio, docs, photos, video, gifts, market, wall, users, link, polls
+from . import base, audio, docs, photos, video, gifts, market, wall, users, link, polls, stories
 import typing
 from enum import Enum
 from ..base import BaseModel
@@ -259,6 +259,7 @@ class MessageAttachment(BaseModel):
     market_market_album: "market.MarketAlbum" = None
     photo: "photos.Photo" = None
     sticker: "base.Sticker" = None
+    story: "stories.Story" = None
     type: "MessageAttachmentType" = None
     video: "video.Video" = None
     wall: "wall.WallpostFull" = None
@@ -276,6 +277,7 @@ class MessageAttachmentType(Enum):
     market_album = "market_album"
     gift = "gift"
     sticker = "sticker"
+    story = "story"
     wall = "wall"
     wall_reply = "wall_reply"
     article = "article"
