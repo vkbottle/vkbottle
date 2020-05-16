@@ -71,7 +71,7 @@ class User(HTTP, AsyncHandleManager):
 
         self.__loop = loop or asyncio.get_event_loop()
         self.__debug: bool = debug
-        self.api: UserApi = UserApi(self.__tokens)
+        self._api: UserApi = UserApi(self.__tokens)
         self.mode = mode
 
         self._expand_models: bool = expand_models
@@ -80,10 +80,12 @@ class User(HTTP, AsyncHandleManager):
         self.user_id: typing.Optional[int] = user_id or self.get_id_by_token(
             self.__tokens[0]
         )
-        self.api.user_id = user_id
+
+        self._api.user_id = user_id
         self.error_handler: VKErrorHandler = DefaultErrorHandler()
-        UserApi.set_current(self.api)
+        UserApi.set_current(self._api)
         VKErrorHandler.set_current(self.error_handler)
+
         self.on: Handler = Handler()
         self.branch: AbstractBranchGenerator = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
@@ -257,6 +259,10 @@ class User(HTTP, AsyncHandleManager):
 
     def stop(self):
         self._stop = True
+
+    @property
+    def api(self) -> UserApi:
+        return self._api.get_current().construct(self.error_handler, None)
 
     @property
     def loop(self):

@@ -1,13 +1,19 @@
 import ast
 import typing
-from .base_converter import Converter, ConverterError, Area
+from .base_converter import Converter, ConverterError
 from vkbottle.utils import random_string
 
 CALL_REPLACEMENTS = {
     "append": "push",
 }
+CALL_STRING = ["join", "strip"]
+
 converter = Converter()
 find = converter.find_definition
+
+
+def dispatch_keywords(keywords: dict, assigner: str = ":", sep: str = ","):
+    return sep.join(f"{param.arg}{assigner}{find(param.value)}" for param in keywords)
 
 
 @converter(ast.Assign)
@@ -19,12 +25,6 @@ def assign(d: ast.Assign):
             left_.append(find(target))
         elif target.__class__ == ast.Subscript:
             pass
-        elif target.__class__ == ast.Tuple:
-            raise NotImplementedError("Tuple assignments are not allowed")
-        else:
-            raise NotImplementedError(
-                f"Assignments of {target.__class__} are not implemented"
-            )
 
     right = find(d.value)
     return "var " + ",".join(f"{target}={right}" for target in left_) + ";"
@@ -132,8 +132,7 @@ def aug_assign(d: ast.AugAssign):
 
 @converter(ast.Name)
 def name(d: ast.Name):
-    values = Area.get_current().values
-    return values[d.id] if d.id in values else d.id
+    return d.id
 
 
 @converter(ast.While)
@@ -171,8 +170,15 @@ def call(d: ast.Call):
         calls.append(func.attr)
         func = func.value
 
+    if func.__class__ == ast.Str:
+        if calls[0] in CALL_STRING:
+            return str(find(d.args[0])) + "." + calls[0] + "(" + find(func) + ")"
+        elif calls[0] == "format":
+            raise ConverterError("Use f-strings instead of str.format")
+        raise ConverterError("String formatter")
+
     if func.id.lower() == "api":
-        params = ",".join(f"{param.arg}:{find(param.value)}" for param in d.keywords)
+        params = dispatch_keywords(d.keywords)
         return "API." + ".".join(calls[::-1]) + "({" + params + "})"
     elif func.id == "len":
         return f"{find(d.args[0])}.length"
@@ -270,6 +276,16 @@ def num_type(d: ast.Num):
 @converter(ast.Str)
 def str_type(d: ast.Num):
     return repr(d.s)
+
+
+@converter(ast.JoinedStr)
+def joined_str(d: ast.JoinedStr):
+    return "+".join(find(value) for value in d.values)
+
+
+@converter(ast.FormattedValue)
+def formatted_value(d: ast.FormattedValue):
+    return find(d.value)
 
 
 @converter(ast.NameConstant)

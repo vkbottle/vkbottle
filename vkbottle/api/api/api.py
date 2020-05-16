@@ -1,6 +1,7 @@
 import typing
 from vkbottle.http import HTTPRequest
-from vkbottle.utils import ContextInstanceMixin
+from vkbottle.utils import ContextInstanceMixin, Constructor
+from .error_handler.error_handler import VKErrorHandler
 
 from pydantic import BaseModel
 from .request import Request
@@ -11,10 +12,13 @@ from vkbottle.api.api.util.builtin import (
     GENERATORS,
 )
 
+if typing.TYPE_CHECKING:
+    from vkbottle.framework.framework.extensions.extension import AbstractExtension
 
-class API(ContextInstanceMixin, Categories):
+
+class API(ContextInstanceMixin, Categories, Constructor):
     """ Main VK API object
-    Possess user_id/group_id getters, request
+    Possess user_id/group_id getters, request, constructor
     """
 
     def __init__(
@@ -31,10 +35,14 @@ class API(ContextInstanceMixin, Categories):
         self._group_id: typing.Optional[int] = None
         self._user_id: typing.Optional[int] = None
 
+        # Construct values
+        self.error_handler: typing.Optional["VKErrorHandler"] = None
+        self.extension: typing.Optional["AbstractExtension"] = None
+
         for category in self.__categories__:
             setattr(self, category, getattr(self, category)(self.api))
 
-    def api(self, method: str, params: dict, **kwargs) -> typing.Coroutine:
+    def api(self, method: str, params: dict, **kwargs) -> typing.Awaitable:
         """ Return an awaitable request
         :param method: method's name to make a request and pass to the token_generator
         :param params: params dict is passed to the token_generator and used to make a request
@@ -43,7 +51,7 @@ class API(ContextInstanceMixin, Categories):
             if isinstance(v, (tuple, list)):
                 params[k] = ",".join(repr(i) for i in v)
 
-        request = Request(self.token_generator)
+        request = Request(self.token_generator, self.error_handler)
         return request(method, params, **kwargs)
 
     async def request(
@@ -63,8 +71,16 @@ class API(ContextInstanceMixin, Categories):
             raw_response=raw_response,
         )
 
-    async def execute(self, code):
+    async def execute(self, code: str) -> typing.Any:
+        """ Make an execute method """
         return await self.request("execute", {"code": code})
+
+    def construct(
+        self, error_handler: "VKErrorHandler", extension: "AbstractExtension"
+    ) -> "API":
+        self.error_handler = error_handler
+        self.extension = extension
+        return self
 
     @property
     async def user_id(self):

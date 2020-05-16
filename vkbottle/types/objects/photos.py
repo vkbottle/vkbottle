@@ -166,23 +166,12 @@ class PhotoFullXtrRealOffset(BaseModel):
 class PhotoSizes(BaseModel):
     height: int = None
     url: str = None
+    src: str = None
     type: "PhotoSizesType" = None
     width: int = None
 
 
-class PhotoSizesType(Enum):
-    s = "s"
-    m = "m"
-    x = "x"
-    o = "o"
-    p = "p"
-    q = "q"
-    r = "r"
-    y = "y"
-    z = "z"
-    w = "w"
-    i = "i"
-    d = "d"
+PhotoSizesType = str
 
 
 class PhotoTag(BaseModel):

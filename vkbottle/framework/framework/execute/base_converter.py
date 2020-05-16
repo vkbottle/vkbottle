@@ -1,17 +1,10 @@
 import ast
 import typing
 from inspect import getsource
-from vkbottle.utils import ContextInstanceMixin
 
 
 class ConverterError(Exception):
     pass
-
-
-class Area(ContextInstanceMixin):
-    def __init__(self, **values):
-        self.values = values
-        self.set_current(self)
 
 
 class Converter:
@@ -29,12 +22,16 @@ class Converter:
 
     def find_definition(self, d):
         if d.__class__ not in self.definitions:
-            raise ConverterError(f"Definition for {d.__class__} is undefined")
+            raise ConverterError(
+                f"Definition for {d.__class__} is undefined. Maybe vkscript doesn't support it"
+            )
         return self.definitions[d.__class__](d)
 
     def scriptify(self, func: typing.Callable, **values) -> str:
         """ Translate function to VKScript """
         source = getsource(func)
         code = ast.parse(source).body[0]
-        Area(**values)
-        return "".join(self.find_definition(line) for line in code.body)
+        values_assignments = [f"var {k}={v};" for k, v in values.items()]
+        return "".join(values_assignments) + "".join(
+            self.find_definition(line) for line in code.body
+        )
