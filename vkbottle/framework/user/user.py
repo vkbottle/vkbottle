@@ -142,21 +142,26 @@ class User(HTTP, AsyncHandleManager):
         )
         return tokens
 
-    def dispatch(self, user: AnyUser):
+    async def dispatch(self, user: AnyUser):
         """
         Concatenate handlers to current user object
         :param user:
         :return:
         """
         self.on.concatenate(user.on)
+        self.error_handler.handled_errors.update(user.error_handler.handled_errors)
+        self.middleware.middleware += user.middleware.middleware
+        for branch_name, disposal in (await user.branch.branches).items():
+            self.branch.add_branch(disposal[0], name=branch_name)
+        logger.debug("Bot has been successfully dispatched")
 
     def set_blueprints(self, *blueprints: Blueprint):
         """
         Add blueprints
         """
         for blueprint in blueprints:
-            blueprint.create(api_instance=self.api, error_handler=self.error_handler)
-            self.dispatch(blueprint)
+            blueprint.create(familiar=(self.branch, self.api))
+            self.loop.create_task(self.dispatch(blueprint))
         logger.debug("Blueprints have been successfully loaded")
 
     async def get_server(self) -> dict:
