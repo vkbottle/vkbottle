@@ -19,7 +19,7 @@ async def solve_captcha(e: VKError):
             image = await response_image.content.read()
         async with session.post(
             "https://rucaptcha.com/in.php",
-            ata={"key": os.environ["RUCAPTCHA_TOKEN"], "file": image},
+            data={"key": os.environ["RUCAPTCHA_TOKEN"], "file": image},
         ) as response_wait:
             result_id = (await response_wait.text()).split("|")[1]
         await asyncio.sleep(5)
