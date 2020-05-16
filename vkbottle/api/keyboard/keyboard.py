@@ -27,7 +27,7 @@ class KeyboardButton:
     @property
     def button(self):
         b = {"action": except_none_self(self.action.dict())}
-        if self.action is Text:
+        if isinstance(self.action, Text):
             b["color"] = self.color
         return b
 
