@@ -151,8 +151,7 @@ class User(HTTP, AsyncHandleManager):
         self.on.concatenate(user.on)
         self.error_handler.handled_errors.update(user.error_handler.handled_errors)
         self.middleware.middleware += user.middleware.middleware
-        for branch_name, disposal in (await user.branch.branches).items():
-            self.branch.add_branch(disposal[0], name=branch_name)
+        self.branch.add_branches(user.branch.branches)
         logger.debug("Bot has been successfully dispatched")
 
     def set_blueprints(self, *blueprints: Blueprint):

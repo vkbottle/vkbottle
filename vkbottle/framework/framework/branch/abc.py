@@ -1,5 +1,6 @@
 import typing
 from abc import ABC, abstractmethod
+from vkbottle.utils.util import ContextInstanceMixin
 from .cls import AbstractBranch
 from ..rule import AbstractMessageRule
 import enum
@@ -14,7 +15,7 @@ class GeneratorType(enum.Enum):
     DICT = "dict"
 
 
-class AbstractBranchGenerator(ABC):
+class AbstractBranchGenerator(ABC, ContextInstanceMixin):
     Disposal = typing.Dict[str, BranchRule]
     cls_branch: typing.Any
     simple_branch: typing.Any
@@ -35,7 +36,11 @@ class AbstractBranchGenerator(ABC):
 
     @property
     @abstractmethod
-    async def branches(self) -> typing.Dict[str, typing.Tuple[AbstractBranch, ...]]:
+    def branches(self) -> typing.Dict[str, typing.Tuple[AbstractBranch, ...]]:
+        ...
+
+    @abstractmethod
+    def add_branches(self, new_branches: typing.Dict[str, typing.Tuple[AbstractBranch, ...]]):
         ...
 
     @abstractmethod

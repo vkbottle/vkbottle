@@ -191,8 +191,7 @@ class Bot(HTTP, AsyncHandleManager):
         self.on.concatenate(bot.on)
         self.error_handler.handled_errors.update(bot.error_handler.handled_errors)
         self.middleware.middleware += bot.middleware.middleware
-        for branch_name, disposal in (await bot.branch.branches).items():
-            self.branch.add_branch(disposal[0], name=branch_name)
+        self.branch.add_branches(bot.branch.branches)
         logger.debug("Bot has been successfully dispatched")
 
     def set_blueprints(self, *blueprints: Blueprint):
@@ -200,8 +199,8 @@ class Bot(HTTP, AsyncHandleManager):
         Add blueprints
         """
         for blueprint in blueprints:
-            blueprint.create(familiar=(self.branch, self.extension, self.api))
             self.loop.create_task(self.dispatch(blueprint))
+            blueprint.create(familiar=(self.branch, self.extension, self.api))
         logger.debug("Blueprints have been successfully loaded")
 
     @staticmethod

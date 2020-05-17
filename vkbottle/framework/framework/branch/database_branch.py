@@ -31,7 +31,10 @@ class DatabaseBranch(AbstractBranchGenerator):
         pass
 
     def get_branch(self, branch_name: str, context: typing.Union[str, dict]) -> Branch:
-        branch = self.names[branch_name]()
+        bare = self.names[branch_name]
+        if isinstance(bare, tuple):
+            bare = bare[0]
+        branch = bare()
         if isinstance(context, str):
             context = json.loads(context)
         branch.context = context
@@ -40,7 +43,7 @@ class DatabaseBranch(AbstractBranchGenerator):
 
     async def from_function(
         self, func: typing.Callable, branch_name: str = None,
-    ) -> typing.Tuple[AbstractBranch, ImmutableBranchData]:
+    ) -> AbstractBranch:
         if not asyncio.iscoroutinefunction(func):
             raise BranchError("Branch functions should be async")
 
@@ -61,8 +64,11 @@ class DatabaseBranch(AbstractBranchGenerator):
         return await self.all_users()
 
     @property
-    async def branches(self) -> typing.Dict[str, AbstractBranch]:
+    def branches(self) -> typing.Dict[str, AbstractBranch]:
         return self.names
+
+    def add_branches(self, new_branches: typing.Dict[str, AbstractBranch]):
+        self.names.update(new_branches)
 
     async def add(
         self,
@@ -111,3 +117,6 @@ class DatabaseBranch(AbstractBranchGenerator):
                 branch = self.get_branch(name, context)
                 await branch.exit()
             await self.delete_user(uid)
+
+    def get_current(self, *args, **kwargs):
+        return self

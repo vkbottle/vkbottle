@@ -31,6 +31,9 @@ class RuleExecute:
     def __call__(self):
         return self.args, self.kwargs
 
+    def __repr__(self):
+        return f"<{self.args}{self.kwargs}>"
+
 
 class AbstractRule(Copy):
 
@@ -230,7 +233,7 @@ class VBML(AbstractMessageRule):
     ):
         if isinstance(pattern, dict):
             self.watch_context = pattern
-            pattern = list(pattern)  # It's not necessary to write .keys()
+            pattern = list(pattern)
         self._patcher = Patcher.get_current()
         patterns: typing.List[Pattern] = []
         if isinstance(pattern, Pattern):
@@ -244,7 +247,7 @@ class VBML(AbstractMessageRule):
                 else:
                     patterns.append(p)
         elif isinstance(pattern, str):
-            patterns = [self._patcher.pattern(pattern)]
+            patterns = [self._patcher.pattern(pattern, flags=re.IGNORECASE if lower else None)]
 
         self.data = {"pattern": patterns}
 
