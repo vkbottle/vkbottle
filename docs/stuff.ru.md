@@ -111,17 +111,33 @@ async def self_ban(ans: Message):
     return "хаха самобан"
 ```
 
-### Only error
-Способ далее является устаревшим, но он применим для всех хендлеров в целом. С помощью него можно например ловить `Rate limit reached`:
+### Error Handler
+
+Для того чтобы хендлить ошибки вк без выбрасывания исключения можно воспользоваться `error_handler`. Он отлично подойдет для, например, решения капчи или delay для методов которые привысили лимит (частая проблема для пользователей User Longpoll)
+
+Для того чтобы добавить простейший хендлер ошибки можно воспользоваться декоратором:
 
 ```python
-@bot.error_handler(29)
-async def error_handler(e):
-    # 
-    print("О нет Rate limit reached, спасите")
+from vkbottle.user import User, Message
+from vkbottle.exceptions import VKError
+from asyncio import sleep
+
+user = User("token")
+
+@user.error_handler.error_handler(6)
+async def rps_handler(e: VKError):
+    await sleep(1)
+    await e.method_requested(**e.params_requested)
 ```
 
-P.S. Скоро будет нормальный error handler для этого типа
+Для того чтобы добавить решение капчи существует специальный хендлер `captcha_handler`, он должен возвращать код от решенной капчи:
+
+```python
+@user.error_handler.captcha_handler
+async def solve_captcha(e: VKError):
+    key = "Здесь вы решаете капчу и возвращаете код"
+    return key
+```
 
 ## TaskManager
 

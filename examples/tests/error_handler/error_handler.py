@@ -48,10 +48,10 @@ async def hi(ans: Message, text: str):
     for symbol in list(text):
         new_text += symbol
         await user.api.messages.edit(ans.peer_id, message_id, new_text + "|")
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.5)
         if random.randint(0, 100) > 50:
             await user.api.messages.edit(ans.peer_id, message_id, new_text)
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)
 
 
 user.error_handler.add_error_handler(6, rps_limit)
