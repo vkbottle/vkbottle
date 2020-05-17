@@ -37,6 +37,11 @@ class Handler:
         self.message_handler: MessageHandler = MessageHandler()
 
     def dispatch(self):
+        self.message_rules.extend([
+            *self.message.rules,
+            *self.chat_message.rules,
+            *self.message_handler.rules
+        ])
         self.message_rules.extend(
             [*self.message.rules, *self.chat_message.rules, *self.message_handler.rules]
         )

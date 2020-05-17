@@ -285,7 +285,9 @@ class AttachmentRule(UnionMixin):
 
 class ChatActionRule(AbstractMessageRule):
     def __init__(
-        self, chat_action: typing.Union[str, typing.List[str]], rules: dict = None
+        self,
+        chat_action: typing.Union[str, typing.List[str]],
+        rules: dict = None
     ):
         if isinstance(chat_action, str):
             chat_action = [chat_action]
