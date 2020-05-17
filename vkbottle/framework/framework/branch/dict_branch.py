@@ -19,7 +19,7 @@ class DictBranch(DatabaseBranch):
         del self.user_states[uid]
 
     async def all_users(self) -> typing.List[int]:
-        return list(self.user_states.keys())
+        return list(self.user_states)
 
     def cls_branch(
             self, branch_name: str = None,

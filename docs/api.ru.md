@@ -203,3 +203,24 @@ async def handler(ans: Message):
 from vkbottle.user import User
 user = User(login="+71234567890", password="123456")
 ```
+
+# Перевод в VKScript
+
+Вы можете воспользоваться трансляцией в вкскрипт для создания ваших запросов `execute`. Это очень просто. Код из обернутой в декоратор vkscript функции автоматически транслируется в родной для execute вкскрипт:
+
+```python
+from vkbottle import vkscript
+
+@vkscript
+def get_names(api, user_ids=1):
+    names = []
+    for user in api.users.get(user_ids=user_ids):
+        names.append(user.first_name)
+    return names
+``` 
+
+Для получения кода в вкскрипт просто вызовите эту функцию:
+
+```python
+get_names(user_ids=[1, 10])
+```
