@@ -9,6 +9,7 @@ from .tools import (
     from_attr,
     names,
     random_string,
+    method_requested,
 )
 from .util import ContextInstanceMixin
 from .json import json

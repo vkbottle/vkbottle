@@ -121,5 +121,5 @@ class ChatVoiceMessageStates(BaseModel):
 
 
 class ChatEdit(BaseModel):
-    chat_id: int
-    self: int
+    chat_id: int = None
+    self: int = None

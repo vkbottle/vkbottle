@@ -17,6 +17,7 @@ from vkbottle.framework.framework.branch import (
     ExitBranch,
 )
 from vkbottle.types.events import UserEvents
+from vkbottle.framework.framework.handler.user.events import ADDITIONAL_FIELDS
 
 
 class AsyncHandleManager:
@@ -33,16 +34,19 @@ class AsyncHandleManager:
     async def _event_processor(
         self, update: dict, update_code: int, update_fields: list
     ):
+        data = None
+
         for rule in self.on.event.rules:
             check = await rule.check(update)
 
             if check is not None:
                 fields, _ = rule.data["data"], rule.data["name"]
                 data = dict(zip(fields, update_fields))
-                args, kwargs = [], {}
 
                 if self._expand_models:
                     data.update(await self.expand_data(update_code, data))
+
+                args, kwargs = [], {}
 
                 if rule.data.get("dataclass"):
                     data = rule.data.get("dataclass")(**data)
@@ -85,17 +89,18 @@ class AsyncHandleManager:
     async def _message_processor(
         self, update: dict, update_code: int, update_fields: list
     ):
+        fields = ["message_id", "flags", *ADDITIONAL_FIELDS]
+        data = dict(zip(fields, update_fields))
+
+        if self._expand_models:
+            data.update(await self.expand_data(update_code, data))
+
         for rule in self.on.message_rules:
             check = await rule.check(update)
 
             if check is not None:
-                fields, _ = rule.data["data"], rule.data["name"]
-                data = dict(zip(fields, update_fields))
                 args, kwargs = [], {}
                 middleware_args = []
-
-                if self._expand_models:
-                    data.update(await self.expand_data(update_code, data))
 
                 message = Message(**data)
 

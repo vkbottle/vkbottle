@@ -1,6 +1,6 @@
 import typing
 from vkbottle.http import HTTPRequest
-from vkbottle.utils import ContextInstanceMixin, Constructor
+from vkbottle.utils import ContextInstanceMixin, Constructor, method_requested
 from .error_handler.error_handler import VKErrorHandler
 
 from pydantic import BaseModel
@@ -14,6 +14,7 @@ from vkbottle.api.api.util.builtin import (
 
 if typing.TYPE_CHECKING:
     from vkbottle.framework.framework.extensions.extension import AbstractExtension
+    from vkbottle.types.methods.method import BaseMethod
 
 
 class API(ContextInstanceMixin, Categories, Constructor):
@@ -74,6 +75,10 @@ class API(ContextInstanceMixin, Categories, Constructor):
     async def execute(self, code: str) -> typing.Any:
         """ Make an execute method """
         return await self.request("execute", {"code": code})
+
+    @staticmethod
+    def get_method_requested(method: str) -> "BaseMethod":
+        return method_requested(method, Categories, None)
 
     def construct(
         self, error_handler: "VKErrorHandler", extension: "AbstractExtension"

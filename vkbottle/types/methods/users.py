@@ -245,6 +245,27 @@ class UsersSearch(BaseMethod):
         )
 
 
+class UsersSetCovidStatus(BaseMethod):
+    kwargs: dict = {}
+    access_token_type: APIAccessibility = [APIAccessibility.COVID]
+
+    async def __call__(self, status_id: int) -> responses.ok_response.OkResponse:
+        """
+        Set special Covid emoji
+        :param status_id: special status ID
+        """
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in {**locals(), **self.kwargs}.items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "users.setCovidStatus",
+            params,
+            response_model=responses.ok_response.OkResponseModel
+        )
+
+
 class Users:
     def __init__(self, request):
         self.get = UsersGet(request)
@@ -253,3 +274,4 @@ class Users:
         self.is_app_user = UsersIsAppUser(request)
         self.report = UsersReport(request)
         self.search = UsersSearch(request)
+        self.set_covid_status = UsersSetCovidStatus(request)

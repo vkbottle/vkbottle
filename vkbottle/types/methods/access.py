@@ -7,3 +7,4 @@ class APIAccessibility(Enum):
     GROUP = "group"
     OPEN = "open"
     VKME = "vkme"
+    COVID = "covid"
