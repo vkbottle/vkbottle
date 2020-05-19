@@ -53,13 +53,4 @@ async def friend_online(event: FriendOnline):
     await user.api.messages.send(event.user_id, message="тест юзер лп, ты онлайн")
 
 
-async def statuses():
-    for sid in range(1, 35):
-        try:
-            await user.api.users.set_covid_status(sid)
-            input(f"{sid}: ")
-        except:
-            print("?")
-
-
-user.run_polling(on_startup=statuses)
+user.run_polling()

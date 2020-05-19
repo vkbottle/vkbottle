@@ -2,6 +2,7 @@
 
 | emoji | status_id |
 |--|--|
+| 🐈 | 0 |
 | :sunglasses: | 1 |
 | :mask: | 2 |
 | :clown_face: | 3 |
