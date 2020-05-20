@@ -14,7 +14,7 @@ from vkbottle.api.api.error_handler import (
     VKErrorHandler,
     DefaultErrorHandler,
 )
-from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
+from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch, BranchCheckupKey
 from vkbottle.framework.framework.handler.middleware import MiddlewareExecutor
 from vkbottle.framework.blueprint.user import Blueprint
 from vkbottle.http import HTTP, App

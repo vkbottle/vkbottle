@@ -10,6 +10,8 @@ Middleware (мидлвари далее) используются как пер�
 
 Все примеры будут разобраны ниже
 
+**ВНИМАНИЕ!** С версии `2.7.5` Middleware должен имплементить методы `pre` и `post`, а не `middleware`, как было раньше. Если вы пользуетесь версией ниже `2.7.5` замените `pre` на `middleware`, а от post придется воздержаться
+
 ### Не обрабатывать сообщения от ботов
 
 Создадим простой мидлварь, который будет возвращать `False` если источник сообщения - бот, а не пользователь:
@@ -22,7 +24,7 @@ bot = Bot("token")
 
 @bot.middleware.middleware_handler()
 class NoBotMiddleware(Middleware):
-    async def middleware(self, message: Message):
+    async def pre(self, message: Message):
         if not message.from_user:
             return False
 
@@ -47,7 +49,7 @@ database: typing.Dict[int, str] = {}  # Наш прототип базы дан�
 
 @bot.middleware.middleware_handler()
 class RegistrationMiddleware(Middleware):
-    async def middleware(self, message: Message):
+    async def pre(self, message: Message):
         if message.from_id not in database:
             database[message.from_id] = message.text
         return database[message.from_id]
@@ -71,7 +73,7 @@ poor_statistics: typing.List[int] = []
 
 @bot.middleware.middleware_handler()
 class StatisticsMiddleware(Middleware):
-    async def middleware(self, message: Message):
+    async def pre(self, message: Message):
         user = (await bot.api.users.get(user_ids=message.from_id))[0]
         poor_statistics.append(user.sex)
 

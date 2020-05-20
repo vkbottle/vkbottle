@@ -22,7 +22,7 @@ class DictBranch(DatabaseBranch):
         return list(self.user_states)
 
     def cls_branch(
-            self, branch_name: str = None,
+        self, branch_name: str = None,
     ):
         def decorator(cls: typing.ClassVar):
             self.names[branch_name or cls.__name__] = (
@@ -30,6 +30,7 @@ class DictBranch(DatabaseBranch):
                 ImmutableBranchData(branch_name),
             )
             return cls
+
         return decorator
 
     def simple_branch(self, branch_name: str = None):
@@ -38,5 +39,5 @@ class DictBranch(DatabaseBranch):
                 func, branch_name
             )
             return func
-        return decorator
 
+        return decorator

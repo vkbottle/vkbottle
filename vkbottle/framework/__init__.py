@@ -6,6 +6,7 @@ from vkbottle.framework.framework.branch import (
     AbstractBranch,
     ClsBranch,
     CoroutineBranch,
+    BranchCheckupKey,
 )
 from vkbottle.framework.framework.handler import Handler, Middleware
 from .framework import rule, converter, vkscript, swear

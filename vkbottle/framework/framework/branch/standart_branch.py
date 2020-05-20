@@ -1,4 +1,5 @@
 from vkbottle.framework.framework.rule import AbstractMessageRule
+from enum import Enum, auto
 
 
 class Branch:
@@ -13,6 +14,11 @@ class Branch:
 class ExitBranch:
     def __init__(self):
         pass
+
+
+class BranchCheckupKey(Enum):
+    PEER_ID = "peer_id"
+    FROM_ID = "from_id"
 
 
 class ImmutableBranchData:

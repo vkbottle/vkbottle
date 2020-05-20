@@ -1,4 +1,17 @@
-from . import base, audio, docs, photos, video, gifts, market, wall, users, link, polls, stories
+from . import (
+    base,
+    audio,
+    docs,
+    photos,
+    video,
+    gifts,
+    market,
+    wall,
+    users,
+    link,
+    polls,
+    stories,
+)
 import typing
 from enum import Enum
 from ..base import BaseModel

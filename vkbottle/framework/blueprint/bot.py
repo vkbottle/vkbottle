@@ -7,9 +7,7 @@ from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.handler.handler import Handler
 from .abc import AbstractBlueprint
 
-Familiar = typing.Tuple[
-    AbstractBranchGenerator, AbstractExtension, Api
-]
+Familiar = typing.Tuple[AbstractBranchGenerator, AbstractExtension, Api]
 
 
 class Blueprint(AbstractBlueprint):
@@ -23,10 +21,7 @@ class Blueprint(AbstractBlueprint):
         self._description = description or "Unknown"
 
     def create(
-        self,
-        *,
-        familiar: Familiar,
-        data: typing.Optional[dict] = None,
+        self, *, familiar: Familiar, data: typing.Optional[dict] = None,
     ):
         branch, extension, api_instance = familiar
         if not isinstance(self.branch, type(branch)):

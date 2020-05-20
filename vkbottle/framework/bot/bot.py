@@ -15,7 +15,7 @@ from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.extensions.standard import StandardExtension
 from vkbottle.framework._status import BotStatus, LoggerLevel
-from vkbottle.framework.framework.branch import DictBranch
+from vkbottle.framework.framework.branch import DictBranch, BranchCheckupKey
 from vkbottle.framework.framework.branch.abc import AbstractBranchGenerator
 from vkbottle.framework.blueprint.bot import Blueprint
 from vkbottle.framework.bot.processor import AsyncHandleManager
@@ -118,9 +118,7 @@ class Bot(HTTP, AsyncHandleManager):
         self._api: Api = Api(self.__tokens, throw_errors=throw_errors)
         self.error_handler: VKErrorHandler = DefaultErrorHandler()
         self.extension: AbstractExtension = (
-            extension
-            if extension is not None else
-            StandardExtension()
+            extension if extension is not None else StandardExtension()
         )
 
         self._throw_errors: bool = throw_errors
@@ -134,6 +132,7 @@ class Bot(HTTP, AsyncHandleManager):
         self.on: Handler = Handler(self.group_id)
 
         self._stop: bool = False
+        self.branch_checkup_key: BranchCheckupKey = BranchCheckupKey.PEER_ID
 
         logger.info("Using JSON_MODULE - {}".format(USAGE))
         logger.info(

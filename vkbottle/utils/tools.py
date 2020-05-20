@@ -11,6 +11,7 @@ if typing.TYPE_CHECKING:
     from vkbottle.api.api.category import Categories
     from vkbottle.types.methods.method import BaseMethod
 
+
 class Logger:
     def __getattr__(self, item):
         if item in ["remove", "add", "level"]:
@@ -95,11 +96,16 @@ def flatten(lis):
         else:
             yield item
 
-def method_requested(method: str, categoties: "Categories", request_instance) -> "BaseMethod":
-    return from_attr(
-        categoties,
-        [method.split(".")[0], to_snake_case(method.split(".")[1])]
-        if "." in method
-        else method,
-        (request_instance, None),
-    ),
+
+def method_requested(
+    method: str, categoties: "Categories", request_instance
+) -> "BaseMethod":
+    return (
+        from_attr(
+            categoties,
+            [method.split(".")[0], to_snake_case(method.split(".")[1])]
+            if "." in method
+            else method,
+            (request_instance, None),
+        ),
+    )

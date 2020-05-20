@@ -247,7 +247,9 @@ class VBML(AbstractMessageRule):
                 else:
                     patterns.append(p)
         elif isinstance(pattern, str):
-            patterns = [self._patcher.pattern(pattern, flags=re.IGNORECASE if lower else None)]
+            patterns = [
+                self._patcher.pattern(pattern, flags=re.IGNORECASE if lower else None)
+            ]
 
         self.data = {"pattern": patterns}
 
@@ -288,9 +290,7 @@ class AttachmentRule(UnionMixin):
 
 class ChatActionRule(AbstractMessageRule):
     def __init__(
-        self,
-        chat_action: typing.Union[str, typing.List[str]],
-        rules: dict = None
+        self, chat_action: typing.Union[str, typing.List[str]], rules: dict = None
     ):
         if isinstance(chat_action, str):
             chat_action = [chat_action]

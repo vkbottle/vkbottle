@@ -1,2 +1,2 @@
-from .middleware import Middleware
+from .middleware import Middleware, MiddlewareFlags
 from .executor import MiddlewareExecutor

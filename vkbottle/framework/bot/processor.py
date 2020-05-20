@@ -8,9 +8,9 @@ from vbml import Patcher
 from vkbottle.types.message import Message
 from vkbottle.api import Api
 from vkbottle.framework.framework.handler.handler import Handler
-from vkbottle.framework.framework.handler import MiddlewareExecutor
+from vkbottle.framework.framework.handler import MiddlewareExecutor, MiddlewareFlags
 from vkbottle.framework.framework.branch import AbstractBranchGenerator, GeneratorType
-from vkbottle.framework.framework.branch import Branch, ExitBranch
+from vkbottle.framework.framework.branch import Branch, ExitBranch, BranchCheckupKey
 from vkbottle.framework._status import BotStatus
 from vkbottle.utils.tools import get_attr
 
@@ -24,6 +24,7 @@ class AsyncHandleManager:
     status: BotStatus
     group_id: int
     loop: AbstractEventLoop
+    branch_checkup_key: BranchCheckupKey = BranchCheckupKey.PEER_ID
 
     async def _processor(self, obj: dict, client_info: dict):
         processor = dict(obj=obj, client_info=client_info)
@@ -34,14 +35,16 @@ class AsyncHandleManager:
             client_info=client_info
         )
 
-        async for mr in self.middleware.run_middleware(message):
+        async for mr in self.middleware.run_middleware(
+            message, flag=MiddlewareFlags.PRE
+        ):
             if self.status.middleware_expressions:
                 if mr is False:
                     return
                 elif mr is not None:
                     middleware_args.append(mr)
 
-        if message.peer_id in await self.branch.queue:
+        if message.dict()[self.branch_checkup_key.value] in await self.branch.queue:
             await self._branched_processor(obj, client_info, middleware_args)
             return
 
@@ -64,7 +67,6 @@ class AsyncHandleManager:
                 kwargs = {
                     k: v for rule in rules for k, v in rule.context.kwargs.items()
                 }
-
                 args = [message, *middleware_args, *args]
 
                 task = await rules[0].call(*args, **kwargs)
@@ -80,6 +82,9 @@ class AsyncHandleManager:
                 break
 
         await self._handler_return(task, **processor)
+
+        async for mr in self.middleware.run_middleware(message, flag=MiddlewareFlags.POST):
+            logger.debug(f"POST Middleware handler returned: {mr}")
 
     async def _event_processor(self, obj: dict, event_type: str):
         """

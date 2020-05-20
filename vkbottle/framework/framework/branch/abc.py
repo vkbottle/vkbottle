@@ -40,7 +40,9 @@ class AbstractBranchGenerator(ABC, ContextInstanceMixin):
         ...
 
     @abstractmethod
-    def add_branches(self, new_branches: typing.Dict[str, typing.Tuple[AbstractBranch, ...]]):
+    def add_branches(
+        self, new_branches: typing.Dict[str, typing.Tuple[AbstractBranch, ...]]
+    ):
         ...
 
     @abstractmethod

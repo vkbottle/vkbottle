@@ -3,7 +3,7 @@ import typing
 
 from vkbottle.types import BaseModel
 from vkbottle.utils import logger, names
-from .middleware import Middleware
+from .middleware import Middleware, MiddlewareFlags
 
 
 class MiddlewareExecutor:
@@ -28,10 +28,12 @@ class MiddlewareExecutor:
     def export_middleware(self, middleware_list: typing.List[Middleware]):
         self.middleware.extend(middleware_list)
 
-    async def run_middleware(self, event: BaseModel):
+    async def run_middleware(self, event: BaseModel, flag: MiddlewareFlags):
         for middleware in self.middleware:
-            logger.debug(f"Executing middleware {middleware.__class__.__name__}")
-            yield await middleware(event)
+            logger.debug(
+                f"Executing middleware {middleware.__class__.__name__} ({str(flag)})"
+            )
+            yield await middleware.emulate_middleware(event, flag)
 
     def __repr__(self):
         return f"<MiddlewareExecutor middleware={', '.join(names(self.middleware))}>"

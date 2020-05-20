@@ -100,3 +100,14 @@ async def branch(ans: Message):
 Существуют также другие виды хранения бранчей, один из них `vkbottle.framework.framework.branch.database_branch.DatabaseBranch`
 
 Для того чтобы использовать его, требуется заполнить 4 метода абстрактного класса DatabaseBranch с помощью API вашего ORM. Пример вы можете найти [здесь](https://github.com/timoniq/vkbottle/blob/master/examples/database_branch.py)
+
+## Ключ проверки состояний
+
+Данная фишка только для ботов и позволяет изменить стандартное поле хранения состояний то есть `peer_id` на `from_id`
+
+```python
+from vkbottle.framework import BranchCheckupKey
+bot.branch_checkup_key = BranchCheckupKey.FROM_ID
+# ...
+await bot.branch.add(message.from_id, "branch")
+```

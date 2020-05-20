@@ -14,11 +14,7 @@ class Blueprint(AbstractBlueprint):
         self._name: str = name or "Unknown"
         self._description: str = description or "Unknown"
 
-    def create(
-        self,
-        *,
-        familiar: Tuple[AbstractBranchGenerator, UserApi]
-    ):
+    def create(self, *, familiar: Tuple[AbstractBranchGenerator, UserApi]):
         branch, api_instance = familiar
         if not isinstance(self.branch, type(branch)):
             raise VKError(

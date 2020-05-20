@@ -262,7 +262,7 @@ class UsersSetCovidStatus(BaseMethod):
         return await self.request(
             "users.setCovidStatus",
             params,
-            response_model=responses.ok_response.OkResponseModel
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 

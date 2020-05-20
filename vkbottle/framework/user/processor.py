@@ -10,7 +10,7 @@ from vkbottle.exceptions import VKError
 from vkbottle.types.user_longpoll import Message
 from vkbottle.framework.framework.handler.user.handler import Handler
 from vkbottle.api.api.error_handler import VKErrorHandler
-from vkbottle.framework.framework.handler import MiddlewareExecutor
+from vkbottle.framework.framework.handler import MiddlewareExecutor, MiddlewareFlags
 from vkbottle.framework.framework.branch import (
     AbstractBranchGenerator,
     Branch,
@@ -115,7 +115,9 @@ class AsyncHandleManager:
                     else:
                         continue
 
-                async for mr in self.middleware.run_middleware(message):
+                async for mr in self.middleware.run_middleware(
+                    message, flag=MiddlewareFlags.PRE
+                ):
                     if mr is False:
                         return
                     elif mr is not None:
@@ -127,6 +129,7 @@ class AsyncHandleManager:
 
                 task = await rule.call(message, *args, **kwargs)
                 await self._handler_return(task, data)
+                await self.middleware.run_middleware(message, flag=MiddlewareFlags.PRE)
                 return task
 
     async def expand_data(self, code: int, data: dict) -> dict:
