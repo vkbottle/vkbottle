@@ -5,7 +5,7 @@ from vkbottle.types import objects
 
 class Search(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.users.User] = None
 
 
 class SearchModel(BaseModel):
@@ -14,7 +14,7 @@ class SearchModel(BaseModel):
 
 class GetFollowers(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.users.User] = None
 
 
 class GetFollowersModel(BaseModel):

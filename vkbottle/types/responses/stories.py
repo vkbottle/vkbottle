@@ -13,7 +13,8 @@ class UploadModel(BaseModel):
 
 class GetBanned(BaseModel):
     count: int = None
-    items: typing.List = None
+    profiles: typing.List[objects.users.User] = None
+    groups: typing.List[objects.groups.Group] = None
 
 
 class GetBannedModel(BaseModel):
@@ -22,7 +23,7 @@ class GetBannedModel(BaseModel):
 
 class GetById(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.stories.Story] = None
 
 
 class GetByIdModel(BaseModel):
@@ -31,7 +32,7 @@ class GetByIdModel(BaseModel):
 
 class GetPhotoUploadServer(BaseModel):
     upload_url: str = None
-    user_ids: typing.List = None
+    user_ids: typing.List[int] = None
 
 
 class GetPhotoUploadServerModel(BaseModel):
@@ -40,7 +41,7 @@ class GetPhotoUploadServerModel(BaseModel):
 
 class GetReplies(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.stories.Replies] = None
 
 
 class GetRepliesModel(BaseModel):
@@ -56,7 +57,7 @@ class GetStatsModel(BaseModel):
 
 class GetVideoUploadServer(BaseModel):
     upload_url: str = None
-    user_ids: typing.List = None
+    user_ids: typing.List[int] = None
 
 
 class GetVideoUploadServerModel(BaseModel):
@@ -65,7 +66,7 @@ class GetVideoUploadServerModel(BaseModel):
 
 class GetViewers(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[int] = None
 
 
 class GetViewersModel(BaseModel):
@@ -74,7 +75,7 @@ class GetViewersModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.stories.Story] = None
     promo_data: objects.stories.PromoBlock = None
 
 

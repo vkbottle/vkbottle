@@ -11,13 +11,13 @@ class SendMessageModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    items: typing.List[objects.notifications.Notification] = None
+    profiles: typing.List[objects.users.User] = None
+    groups: typing.List[objects.groups.Group] = None
     last_viewed: int = None
-    photos: typing.List = None
-    videos: typing.List = None
-    apps: typing.List = None
+    photos: typing.List[objects.photos.Photo] = None
+    videos: typing.List[objects.video.Video] = None
+    apps: typing.List[objects.apps.App] = None
     next_from: str = None
     ttl: int = None
 

@@ -5,7 +5,7 @@ from vkbottle.types import objects
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.pretty_cards.PrettyCard] = None
 
 
 class GetModel(BaseModel):

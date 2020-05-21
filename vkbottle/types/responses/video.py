@@ -5,7 +5,7 @@ from vkbottle.types import objects
 
 class Search(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.video.Video] = None
 
 
 class SearchModel(BaseModel):
@@ -43,7 +43,7 @@ class GetAlbumsByVideoModel(BaseModel):
 
 class GetAlbums(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.video.VideoAlbumFull] = None
 
 
 class GetAlbumsModel(BaseModel):
@@ -52,7 +52,7 @@ class GetAlbumsModel(BaseModel):
 
 class GetComments(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.wall.WallComment] = None
 
 
 class GetCommentsModel(BaseModel):
@@ -61,7 +61,7 @@ class GetCommentsModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.video.Video] = None
 
 
 class GetModel(BaseModel):

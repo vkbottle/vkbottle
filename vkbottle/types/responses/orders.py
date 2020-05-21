@@ -44,13 +44,8 @@ class GetUserSubscriptionByIdModel(BaseModel):
     response: GetUserSubscriptionById = None
 
 
-class GetUserSubscriptions(BaseModel):
-    count: int = None
-    items: typing.List = None
-
-
 class GetUserSubscriptionsModel(BaseModel):
-    response: GetUserSubscriptions = None
+    response: objects.orders.Subscription = None
 
 
 Get = typing.List[objects.orders.Order]

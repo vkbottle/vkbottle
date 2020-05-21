@@ -1,10 +1,11 @@
 import typing
 from ..base import BaseModel
+from vkbottle.types import objects
 
 
 class GetPages(BaseModel):
     count: int = None
-    pages: typing.List = None
+    pages: typing.List[objects.widgets.WidgetPage] = None
 
 
 class GetPagesModel(BaseModel):
@@ -13,7 +14,7 @@ class GetPagesModel(BaseModel):
 
 class GetComments(BaseModel):
     count: int = None
-    posts: typing.List = None
+    posts: typing.List[objects.widgets.WidgetComment] = None
 
 
 class GetCommentsModel(BaseModel):

@@ -5,7 +5,7 @@ from vkbottle.types import objects
 
 class Search(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.photos.Photo] = None
 
 
 class SearchModel(BaseModel):
@@ -49,7 +49,7 @@ class GetAlbumsCountModel(BaseModel):
 
 class GetAlbums(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.photos.PhotoAlbum] = None
 
 
 class GetAlbumsModel(BaseModel):
@@ -58,7 +58,7 @@ class GetAlbumsModel(BaseModel):
 
 class GetAllComments(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.photos.CommentXtrPid] = None
 
 
 class GetAllCommentsModel(BaseModel):
@@ -67,7 +67,7 @@ class GetAllCommentsModel(BaseModel):
 
 class GetAll(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.photos.Photo] = None
     more: objects.base.BoolInt = None
 
 
@@ -85,7 +85,7 @@ class GetByIdModel(BaseModel):
 class GetComments(BaseModel):
     count: int = None
     real_offset: int = None
-    items: typing.List = None
+    items: typing.List[objects.photos.CommentXtrPid] = None
 
 
 class GetCommentsModel(BaseModel):
@@ -108,7 +108,7 @@ class GetMessagesUploadServerModel(BaseModel):
 
 class GetNewTags(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.photos.PhotoTag] = None
 
 
 class GetNewTagsModel(BaseModel):
@@ -131,7 +131,7 @@ class GetUploadServerModel(BaseModel):
 
 class GetUserPhotos(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.photos.Photo] = None
 
 
 class GetUserPhotosModel(BaseModel):
@@ -147,7 +147,7 @@ class GetWallUploadServerModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.photos.Photo] = None
 
 
 class GetModel(BaseModel):

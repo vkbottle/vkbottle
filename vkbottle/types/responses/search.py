@@ -1,12 +1,8 @@
 import typing
 from ..base import BaseModel
+from vkbottle.types import objects
 
-
-class GetHints(BaseModel):
-    count: int = None
-    items: typing.List = None
-    suggested_queries: typing.List = None
-
+GetHints = typing.List[objects.search.Hint]
 
 class GetHintsModel(BaseModel):
     response: GetHints = None

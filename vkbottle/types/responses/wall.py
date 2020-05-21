@@ -5,7 +5,7 @@ from vkbottle.types import objects
 
 class Search(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.wall.Wallpost] = None
 
 
 class SearchModel(BaseModel):
@@ -37,7 +37,7 @@ class GetByIdModel(BaseModel):
 
 class GetComments(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.wall.WallComment] = None
     can_post: bool = None
     groups_can_post: bool = None
     current_level_count: int = None
@@ -48,9 +48,9 @@ class GetCommentsModel(BaseModel):
 
 
 class GetReposts(BaseModel):
-    items: typing.List = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    items: typing.List[objects.wall.Wallpost] = None
+    profiles: typing.List[objects.users.UserFull] = None
+    groups: typing.List[objects.groups.Group] = None
 
 
 class GetRepostsModel(BaseModel):
@@ -59,7 +59,7 @@ class GetRepostsModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.wall.Wallpost] = None
 
 
 class GetModel(BaseModel):

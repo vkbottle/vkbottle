@@ -18,7 +18,7 @@ class CheckLinkModel(BaseModel):
 
 class GetLastShortenedLinks(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.utils.LastShortenedLink] = None
 
 
 class GetLastShortenedLinksModel(BaseModel):
