@@ -44,8 +44,10 @@ class GetUserSubscriptionByIdModel(BaseModel):
     response: GetUserSubscriptionById = None
 
 
+GetUserSubscriptions = objects.orders.Subscription
+
 class GetUserSubscriptionsModel(BaseModel):
-    response: objects.orders.Subscription = None
+    response: GetUserSubscriptions = None
 
 
 Get = typing.List[objects.orders.Order]
