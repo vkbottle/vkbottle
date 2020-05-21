@@ -129,7 +129,10 @@ class AsyncHandleManager:
 
                 task = await rule.call(message, *args, **kwargs)
                 await self._handler_return(task, data)
-                await self.middleware.run_middleware(message, flag=MiddlewareFlags.PRE)
+
+                async for mr in self.middleware.run_middleware(message, flag=MiddlewareFlags.POST):
+                    logger.debug(f"POST Middleware handler returned: {mr}")
+
                 return task
 
     async def expand_data(self, code: int, data: dict) -> dict:
