@@ -33,13 +33,14 @@ class StatusSet(BaseMethod):
     access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
-        self, text: str = None, group_id: int = None
+        self, text: str = None, group_id: int = None, audio: str = None
     ) -> responses.ok_response.OkResponse:
         """ status.set
         From Vk Docs: Sets a new status for the current user.
         Access from user token(s)
         :param text: Text of the new status.
         :param group_id: Identifier of a community to set a status in. If left blank the status is set to current user.
+        :param audio: needed to make status with audio
         """
 
         params = {
