@@ -5,7 +5,7 @@ from vkbottle.types import objects
 
 class Search(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.market.MarketItem] = None
 
 
 class SearchModel(BaseModel):
@@ -44,7 +44,7 @@ class DeleteCommentModel(BaseModel):
 
 class GetAlbumById(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.market.MarketAlbum] = None
 
 
 class GetAlbumByIdModel(BaseModel):
@@ -53,7 +53,7 @@ class GetAlbumByIdModel(BaseModel):
 
 class GetAlbums(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.market.MarketAlbum] = None
 
 
 class GetAlbumsModel(BaseModel):
@@ -62,7 +62,7 @@ class GetAlbumsModel(BaseModel):
 
 class GetById(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.market.MarketItem] = None
 
 
 class GetByIdModel(BaseModel):
@@ -71,7 +71,7 @@ class GetByIdModel(BaseModel):
 
 class GetCategories(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.market.MarketCategory] = None
 
 
 class GetCategoriesModel(BaseModel):
@@ -80,7 +80,8 @@ class GetCategoriesModel(BaseModel):
 
 class GetComments(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.wall.WallComment] = None
+    profiles: typing.List[objects.users.User] = None
 
 
 class GetCommentsModel(BaseModel):
@@ -89,7 +90,7 @@ class GetCommentsModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.market.MarketItem] = None
 
 
 class GetModel(BaseModel):

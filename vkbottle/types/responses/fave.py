@@ -3,9 +3,17 @@ from ..base import BaseModel
 from vkbottle.types import objects
 
 
+class Fave(BaseModel):
+    added_date: int = None
+    seen: bool = None
+    type: str = None
+    link: objects.link.Link = None
+    tags: typing.List[str] = None
+
+
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[Fave] = None
 
 
 class GetModel(BaseModel):
@@ -21,7 +29,7 @@ class AddTagModel(BaseModel):
 
 class GetPages(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.fave.Page] = None
 
 
 class GetPagesModel(BaseModel):
@@ -30,7 +38,7 @@ class GetPagesModel(BaseModel):
 
 class GetTags(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.fave.Tag] = None
 
 
 class GetTagsModel(BaseModel):

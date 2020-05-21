@@ -46,7 +46,7 @@ class EditModel(BaseModel):
 
 class GetByConversationMessageId(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.messages.Message] = None
 
 
 class GetByConversationMessageIdModel(BaseModel):
@@ -64,7 +64,7 @@ class GetByIdModel(BaseModel):
 
 class GetChatPreview(BaseModel):
     preview: dict = None
-    profiles: typing.List = None
+    profiles: typing.List[objects.message.ChatPreview] = None
 
 
 class GetChatPreviewModel(BaseModel):
@@ -174,8 +174,8 @@ class GetConversations(BaseModel):
     count: int = None
     unread_count: int = None
     items: typing.List[ConversationsItem] = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    profiles: typing.List[objects.users.User] = None
+    groups: typing.List[objects.groups.Group] = None
 
 
 class GetConversationsModel(BaseModel):
@@ -183,7 +183,7 @@ class GetConversationsModel(BaseModel):
 
 
 class GetHistoryAttachments(BaseModel):
-    items: typing.List = None
+    items: typing.List[objects.messages.HistoryAttachment] = None
     next_from: str = None
 
 
@@ -193,9 +193,9 @@ class GetHistoryAttachmentsModel(BaseModel):
 
 class GetHistory(BaseModel):
     count: int = None
-    items: typing.List = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    items: typing.List[objects.messages.Message] = None
+    in_read: int = None
+    out_read: int = None
 
 
 class GetHistoryModel(BaseModel):
@@ -218,14 +218,12 @@ class GetLastActivityModel(BaseModel):
 
 
 class GetLongPollHistory(BaseModel):
-    history: typing.List = None
-    groups: typing.List = None
+    history: typing.List[typing.List[int]] = None
+    groups: typing.List[objects.groups.Group] = None
     messages: objects.messages.LongpollMessages = None
-    profiles: typing.List = None
-    chats: typing.List = None
+    profiles: typing.List[objects.users.User] = None
     new_pts: int = None
     more: bool = None
-    conversations: typing.List = None
 
 
 class GetLongPollHistoryModel(BaseModel):
@@ -271,9 +269,9 @@ class PinModel(BaseModel):
 
 class SearchConversations(BaseModel):
     count: int = None
-    items: typing.List = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    items: typing.List[objects.messages.Conversation] = None
+    profiles: typing.List[objects.users.User] = None
+    groups: typing.List[objects.groups.Group] = None
 
 
 class SearchConversationsModel(BaseModel):
@@ -282,7 +280,7 @@ class SearchConversationsModel(BaseModel):
 
 class Search(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.messages.Message] = None
 
 
 class SearchModel(BaseModel):

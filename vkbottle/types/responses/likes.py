@@ -30,7 +30,7 @@ class DeleteModel(BaseModel):
 
 class GetList(BaseModel):
     count: int = None
-    items: typing.List = None
+    users: typing.List[int] = None
 
 
 class GetListModel(BaseModel):

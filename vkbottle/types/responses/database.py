@@ -5,16 +5,20 @@ from vkbottle.types import objects
 
 class GetUniversities(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.database.University] = None
 
 
 class GetUniversitiesModel(BaseModel):
     response: GetUniversities = None
 
 
+class Chair(BaseModel):
+    id: int = None
+    title: str = None
+
 class GetChairs(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[Chair] = None
 
 
 class GetChairsModel(BaseModel):
@@ -30,7 +34,7 @@ class GetCitiesByIdModel(BaseModel):
 
 class GetCities(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.database.City] = None
 
 
 class GetCitiesModel(BaseModel):
@@ -44,9 +48,14 @@ class GetCountriesByIdModel(BaseModel):
     response: GetCountriesById = None
 
 
+class Country(BaseModel):
+    id: int = None
+    title: str = None
+
+
 class GetCountries(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[Country] = None
 
 
 class GetCountriesModel(BaseModel):
@@ -55,7 +64,7 @@ class GetCountriesModel(BaseModel):
 
 class GetFaculties(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.database.Faculty] = None
 
 
 class GetFacultiesModel(BaseModel):
@@ -71,7 +80,7 @@ class GetMetroStationsByIdModel(BaseModel):
 
 class GetMetroStations(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.database.Station] = None
 
 
 class GetMetroStationsModel(BaseModel):
@@ -80,7 +89,7 @@ class GetMetroStationsModel(BaseModel):
 
 class GetRegions(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.database.Region] = None
 
 
 class GetRegionsModel(BaseModel):
@@ -96,7 +105,7 @@ class GetSchoolClassesModel(BaseModel):
 
 class GetSchools(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.database.School] = None
 
 
 class GetSchoolsModel(BaseModel):

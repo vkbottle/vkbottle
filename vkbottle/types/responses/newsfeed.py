@@ -1,10 +1,13 @@
 import typing
 from ..base import BaseModel
+from vkbottle.types import objects
 
 
 class Search(BaseModel):
-    items: typing.List = None
-    suggested_queries: typing.List = None
+    total_count: int = None
+    count: int = None
+    next_from: str = None
+    items: typing.List[objects.wall.Wallpost] = None
 
 
 class SearchModel(BaseModel):
@@ -12,8 +15,9 @@ class SearchModel(BaseModel):
 
 
 class GetBanned(BaseModel):
-    groups: typing.List = None
-    members: typing.List = None
+    groups: typing.List[objects.groups.Group] = None
+    members: typing.List[objects.users.User] = None
+    profiles: typing.List[objects.users.User] = None
 
 
 class GetBannedModel(BaseModel):
@@ -21,9 +25,9 @@ class GetBannedModel(BaseModel):
 
 
 class GetComments(BaseModel):
-    items: typing.List = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    items: typing.List[objects.wall.Wallpost] = None
+    profiles: typing.List[objects.users.User] = None
+    groups: typing.List[objects.groups.Group] = None
     next_from: str = None
 
 
@@ -31,9 +35,16 @@ class GetCommentsModel(BaseModel):
     response: GetComments = None
 
 
+class WallpostList(BaseModel):
+    id: int = None
+    title: str = None
+
+
 class GetLists(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[WallpostList] = None
+    no_reposts: bool = None
+    source_ids: typing.List[int] = None
 
 
 class GetListsModel(BaseModel):
@@ -42,7 +53,7 @@ class GetListsModel(BaseModel):
 
 class GetMentions(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.wall.Wallpost] = None
 
 
 class GetMentionsModel(BaseModel):
@@ -50,9 +61,9 @@ class GetMentionsModel(BaseModel):
 
 
 class GetRecommended(BaseModel):
-    items: typing.List = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    items: typing.List[objects.wall.Wallpost] = None
+    profiles: typing.List[objects.users.User] = None
+    groups: typing.List[objects.groups.Group] = None
     new_offset: str = None
     next_from: str = None
 
@@ -63,7 +74,7 @@ class GetRecommendedModel(BaseModel):
 
 class GetSuggestedSources(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.groups.Group] = None
 
 
 class GetSuggestedSourcesModel(BaseModel):
@@ -71,9 +82,9 @@ class GetSuggestedSourcesModel(BaseModel):
 
 
 class Get(BaseModel):
-    items: typing.List = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    items: typing.List[objects.wall.Wallpost] = None
+    profiles: typing.List[objects.users.User] = None
+    groups: typing.List[objects.groups.Group] = None
     next_from: str = None
 
 

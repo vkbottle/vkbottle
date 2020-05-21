@@ -1,5 +1,6 @@
 import typing
 from ..base import BaseModel
+from vkbottle.types import objects
 
 SendRequest = typing.Dict
 
@@ -10,7 +11,7 @@ class SendRequestModel(BaseModel):
 
 class GetCatalog(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.apps.App] = None
 
 
 class GetCatalogModel(BaseModel):
@@ -19,7 +20,7 @@ class GetCatalogModel(BaseModel):
 
 class GetFriendsList(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.users.User] = None
 
 
 class GetFriendsListModel(BaseModel):
@@ -28,16 +29,21 @@ class GetFriendsListModel(BaseModel):
 
 class GetLeaderboard(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.users.User] = None
 
 
 class GetLeaderboardModel(BaseModel):
     response: GetLeaderboard = None
 
 
+class Scope(BaseModel):
+    name: str = None
+    title: str = None
+
+
 class GetScopes(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[Scope] = None
 
 
 class GetScopesModel(BaseModel):
@@ -53,7 +59,7 @@ class GetScoreModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.apps.App] = None
 
 
 class GetModel(BaseModel):

@@ -117,8 +117,8 @@ class GetCampaignsModel(BaseModel):
 
 
 class GetCategories(BaseModel):
-    v1: typing.List = None
-    v2: typing.List = None
+    v1: typing.List[objects.ads.Category] = None
+    v2: typing.List[objects.ads.Category] = None
 
 
 class GetCategoriesModel(BaseModel):

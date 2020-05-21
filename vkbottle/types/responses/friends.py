@@ -6,7 +6,7 @@ from vkbottle.types import objects
 
 class Search(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.users.User] = None
 
 
 class SearchModel(BaseModel):
@@ -66,7 +66,7 @@ class GetByPhonesModel(BaseModel):
 
 class GetLists(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.friends.FriendsList] = None
 
 
 class GetListsModel(BaseModel):
@@ -94,9 +94,15 @@ class GetRecentModel(BaseModel):
     response: GetRecent = None
 
 
+class FriendRequest(BaseModel):
+    user_id: int = None
+    mutual: objects.friends.RequestsMutual = None
+    message: objects.friends.RequestsXtrMessage = None
+
+
 class GetRequests(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[FriendRequest] = None
     count_unread: int = None
 
 
@@ -106,7 +112,7 @@ class GetRequestsModel(BaseModel):
 
 class GetSuggestions(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.users.User] = None
 
 
 class GetSuggestionsModel(BaseModel):
@@ -115,7 +121,7 @@ class GetSuggestionsModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.users.User] = None
 
 
 class GetModel(BaseModel):

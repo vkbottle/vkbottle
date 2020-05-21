@@ -5,7 +5,7 @@ from vkbottle.types import objects
 
 class Search(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.docs.Doc] = None
 
 
 class SearchModel(BaseModel):
@@ -27,9 +27,15 @@ class GetByIdModel(BaseModel):
     response: GetById = None
 
 
+class DocType(BaseModel):
+    id: int = None
+    name: str = None
+    count: int = None
+
+
 class GetTypes(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[DocType] = None
 
 
 class GetTypesModel(BaseModel):
@@ -38,7 +44,7 @@ class GetTypesModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.docs.Doc] = None
 
 
 class GetModel(BaseModel):

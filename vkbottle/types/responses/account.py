@@ -23,7 +23,7 @@ class ChangePasswordModel(BaseModel):
 
 class GetActiveOffers(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[int] = None
 
 
 class GetActiveOffersModel(BaseModel):
@@ -39,9 +39,7 @@ class GetAppPermissionsModel(BaseModel):
 
 class GetBanned(BaseModel):
     count: int = None
-    items: typing.List = None
-    profiles: typing.List = None
-    groups: typing.List = None
+    items: typing.List[objects.users.User] = None
 
 
 class GetBannedModel(BaseModel):

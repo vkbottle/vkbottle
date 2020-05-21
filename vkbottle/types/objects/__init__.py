@@ -15,6 +15,7 @@ from . import likes
 from . import link
 from . import market
 from . import messages
+from . import message
 from . import newsfeed
 from . import notes
 from . import notifications

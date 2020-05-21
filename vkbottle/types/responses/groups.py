@@ -5,7 +5,7 @@ from vkbottle.types import objects
 
 class Search(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.groups.Group] = None
 
 
 class SearchModel(BaseModel):
@@ -43,7 +43,7 @@ class EditAddressModel(BaseModel):
 
 class GetAddresses(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.groups.Address] = None
 
 
 class GetAddressesModel(BaseModel):
@@ -52,7 +52,7 @@ class GetAddressesModel(BaseModel):
 
 class GetBanned(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.groups.GroupBanInfo] = None
 
 
 class GetBannedModel(BaseModel):
@@ -76,7 +76,7 @@ class GetCallbackConfirmationCodeModel(BaseModel):
 
 class GetCallbackServers(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.groups.CallbackServer] = None
 
 
 class GetCallbackServersModel(BaseModel):
@@ -90,9 +90,16 @@ class GetCallbackSettingsModel(BaseModel):
     response: GetCallbackSettings = None
 
 
+class Category(BaseModel):
+    id: int = None
+    name: str = None
+
+
 class GetCatalogInfo(BaseModel):
     enabled: int = None
-    categories: typing.List = None
+    categories: typing.List[Category] = None
+    page_count: int = None
+    page_previews: typing.List[objects.groups.Group] = None
 
 
 class GetCatalogInfoModel(BaseModel):
@@ -101,7 +108,7 @@ class GetCatalogInfoModel(BaseModel):
 
 class GetCatalog(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.groups.Group] = None
 
 
 class GetCatalogModel(BaseModel):
@@ -110,7 +117,7 @@ class GetCatalogModel(BaseModel):
 
 class GetInvitedUsers(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.users.User] = None
 
 
 class GetInvitedUsersModel(BaseModel):
@@ -119,7 +126,7 @@ class GetInvitedUsersModel(BaseModel):
 
 class GetInvites(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.groups.Group] = None
 
 
 class GetInvitesModel(BaseModel):
@@ -142,7 +149,7 @@ class GetLongPollSettingsModel(BaseModel):
 
 class GetMembers(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[typing.Union[int, objects.users.User]] = None
 
 
 class GetMembersModel(BaseModel):
@@ -151,7 +158,7 @@ class GetMembersModel(BaseModel):
 
 class GetRequests(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[typing.Union[int, objects.users.User]] = None
 
 
 class GetRequestsModel(BaseModel):
@@ -165,9 +172,14 @@ class GetSettingsModel(BaseModel):
     response: GetSettings = None
 
 
+class Setting(BaseModel):
+    setting: int = None
+    name: str = None
+
+
 class GetTokenPermissions(BaseModel):
     mask: int = None
-    permissions: typing.List = None
+    settings: typing.List[Setting] = None
 
 
 class GetTokenPermissionsModel(BaseModel):
@@ -176,7 +188,7 @@ class GetTokenPermissionsModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[typing.Union[int, objects.groups.Group]] = None
 
 
 class GetModel(BaseModel):

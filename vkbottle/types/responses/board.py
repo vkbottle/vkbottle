@@ -5,7 +5,7 @@ from vkbottle.types import objects
 
 class GetTopics(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.board.Topic] = None
     can_add_topics: objects.base.BoolInt = None
 
 
@@ -29,7 +29,7 @@ class CreateCommentModel(BaseModel):
 
 class GetComments(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.board.TopicComment] = None
     poll: objects.board.TopicPoll = None
 
 
