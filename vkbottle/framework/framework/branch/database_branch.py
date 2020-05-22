@@ -88,7 +88,13 @@ class DatabaseBranch(AbstractBranchGenerator):
                     f"Branch {branch.__name__!r} hasn't yet been assigned with decorator"
                 )
             branch = dict((v, k) for k, v in self.names.items())[branch]
-        await self.set_user(uid, branch, json.dumps(context))
+
+        dumped_context = context
+
+        if self.generator is GeneratorType.DATABASE:
+            dumped_context = json.dumps(context)
+
+        await self.set_user(uid, branch, dumped_context)
 
         if call_enter:
             await self.get_branch(branch, context).enter()
