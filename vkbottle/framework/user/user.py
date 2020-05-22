@@ -14,7 +14,7 @@ from vkbottle.api.api.error_handler import (
     VKErrorHandler,
     DefaultErrorHandler,
 )
-from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch, BranchCheckupKey
+from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
 from vkbottle.framework.framework.handler.middleware import MiddlewareExecutor
 from vkbottle.framework.blueprint.user import Blueprint
 from vkbottle.http import HTTP, App
@@ -69,7 +69,7 @@ class User(HTTP, AsyncHandleManager):
         if login and password:
             self.__tokens = [self.get_tokens(login, password)]
 
-        self.__loop = loop or asyncio.get_event_loop()
+        self.loop = loop or asyncio.get_event_loop()
         self.__debug: bool = debug
         self._api: UserApi = UserApi(self.__tokens)
         self.mode = mode
@@ -120,7 +120,7 @@ class User(HTTP, AsyncHandleManager):
         )
 
     @staticmethod
-    def get_id_by_token(token: str):
+    def get_id_by_token(token: str) -> int:
         """
         Get group id from token
         :param token:
@@ -142,7 +142,7 @@ class User(HTTP, AsyncHandleManager):
         )
         return tokens
 
-    async def dispatch(self, user: AnyUser):
+    async def dispatch(self, user: AnyUser) -> None:
         """
         Concatenate handlers to current user object
         :param user:
@@ -154,7 +154,7 @@ class User(HTTP, AsyncHandleManager):
         self.branch.add_branches(user.branch.branches)
         logger.debug("Bot has been successfully dispatched")
 
-    def set_blueprints(self, *blueprints: Blueprint):
+    def set_blueprints(self, *blueprints: Blueprint) -> None:
         """
         Add blueprints
         """
@@ -206,7 +206,7 @@ class User(HTTP, AsyncHandleManager):
             try:
                 event = await self.make_long_request(self.long_poll_server)
                 if isinstance(event, dict) and event.get("ts"):
-                    self.__loop.create_task(self.emulate(event))
+                    self.loop.create_task(self.emulate(event))
                     self.long_poll_server["ts"] = event["ts"]
                 else:
                     await self.get_server()
@@ -247,7 +247,7 @@ class User(HTTP, AsyncHandleManager):
         """
         self._stop = False
         task = TaskManager(
-            self.__loop,
+            self.loop,
             auto_reload=auto_reload,
             on_shutdown=on_shutdown,
             on_startup=on_startup,
@@ -256,7 +256,7 @@ class User(HTTP, AsyncHandleManager):
         task.add_task(self.run())
         task.run()
 
-    def stop(self):
+    def stop(self) -> None:
         self._stop = True
 
     @property
@@ -264,8 +264,8 @@ class User(HTTP, AsyncHandleManager):
         return self._api.get_current().construct(self.error_handler, None)
 
     @property
-    def loop(self):
-        return self.__loop
+    def link(self) -> str:
+        return f"https://vk.com/id{self.user_id}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<User {self.user_id}>"

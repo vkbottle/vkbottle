@@ -15,6 +15,7 @@ from . import (
 import typing
 from enum import Enum
 from ..base import BaseModel
+from vkbottle.utils.json import json
 
 
 class AudioMessage(BaseModel):
@@ -230,6 +231,33 @@ class Message(BaseModel):
     reply_message: "ForeignMessage" = None
     text: str = None
     update_time: int = None
+
+    def get_photo_attachments(self) -> typing.List["photos.Photo"]:
+        return [attachment.photo for attachment in self.attachments if attachment.photo]
+
+    def get_video_attachments(self) -> typing.List["video.Video"]:
+        return [attachment.video for attachment in self.attachments if attachment.video]
+
+    def get_doc_attachments(self) -> typing.List["docs.Doc"]:
+        return [attachment.doc for attachment in self.attachments if attachment.doc]
+
+    def get_audio_attachments(self) -> typing.List["audio.Audio"]:
+        return [attachment.audio for attachment in self.attachments if attachment.audio]
+
+    def get_message_id(self) -> int:
+        return self.id or self.conversation_message_id
+
+    def get_payload_json(
+            self,
+            throw_error: bool = False,
+            unpack_failure: typing.Callable[[str], dict] = lambda payload: payload
+    ) -> typing.Union[dict, None]:
+        try:
+            return json.loads(self.payload)
+        except json.decoder.JSONDecodeError as e:
+            if throw_error:
+                raise e
+        return unpack_failure(self.payload)
 
 
 class MessageAction(BaseModel):

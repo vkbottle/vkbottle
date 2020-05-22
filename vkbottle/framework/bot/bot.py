@@ -112,7 +112,7 @@ class Bot(HTTP, AsyncHandleManager):
             )
 
         self.group_id = group_id or self.get_id_by_token(self.__tokens[0])
-        self.__loop = loop or asyncio.get_event_loop()
+        self.loop = loop or asyncio.get_event_loop()
 
         # Sign assets
         self._api: Api = Api(self.__tokens, throw_errors=throw_errors)
@@ -237,14 +237,14 @@ class Bot(HTTP, AsyncHandleManager):
         self._api = api
         Api.set_current(api)
 
-    def loop_update(self, loop: asyncio.AbstractEventLoop = None):
+    def loop_update(self, loop: asyncio.AbstractEventLoop = None) -> asyncio.AbstractEventLoop:
         """
         Update event loop
         :param loop:
         :return:
         """
-        self.__loop = loop or asyncio.get_event_loop()
-        return self.__loop
+        self.loop = loop or asyncio.get_event_loop()
+        return self.loop
 
     def empty_copy(self) -> "Bot":
         """
@@ -304,7 +304,7 @@ class Bot(HTTP, AsyncHandleManager):
         """
         self._stop = False
         task = TaskManager(
-            self.__loop,
+            self.loop,
             auto_reload=auto_reload,
             on_shutdown=on_shutdown,
             on_startup=on_startup,
@@ -408,7 +408,7 @@ class Bot(HTTP, AsyncHandleManager):
 
         return "ok"
 
-    def stop(self):
+    def stop(self) -> None:
         self._stop = True
 
     def __repr__(self) -> str:
@@ -427,12 +427,12 @@ class Bot(HTTP, AsyncHandleManager):
         return self._status
 
     @property
-    def loop(self):
-        return self.__loop
+    def patcher(self) -> Patcher:
+        return Patcher.get_current()
 
     @property
-    def patcher(self):
-        return Patcher.get_current()
+    def link(self) -> str:
+        return f"https://vk.com/club{self.group_id}"
 
     @property
     def eee(self):

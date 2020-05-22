@@ -7,20 +7,18 @@ from vkbottle.const import VERSION_REST, __version__
 from vkbottle.utils import json, logger
 
 
-def request(func):
+def request_decorator(func):
     """
     aioHTTP Request Decorator Wrapper
     :param func: wrapped function
     """
-
     async def decorator(*args, **kwargs):
         try:
             async with ClientSession(json_serialize=json.dumps) as client:
                 response = await func(*args, **kwargs, client=client)
             return response
-        except Exception:
+        except Exception as e:
             logger.error(f"Error while requesting:\n{traceback.format_exc()}")
-
     return decorator
 
 
@@ -32,7 +30,7 @@ class HTTPRequest:
     def __init__(self):
         pass
 
-    @request
+    @request_decorator
     async def post(
         self,
         url: str,
@@ -47,7 +45,7 @@ class HTTPRequest:
         ) as response:
             return await response.json(content_type=content_type)
 
-    @request
+    @request_decorator
     async def get(
         self,
         url: str,

@@ -54,15 +54,7 @@ class Message(MessageType, GetApi):
         dont_parse_links: bool = None,
         disable_mentions: bool = None,
     ):
-
-        if message is not None:
-            message = str(message)
-
-        return self.api.messages.send(
-            **self.get_params(locals()),
-            reply_to=self.id or self.conversation_message_id,
-            peer_id=self.peer_id,
-        )
+        return self.__call__(**self.get_params(locals()), reply_to=self.get_message_id())
 
     async def __call__(
         self,
