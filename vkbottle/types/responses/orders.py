@@ -46,6 +46,7 @@ class GetUserSubscriptionByIdModel(BaseModel):
 
 GetUserSubscriptions = objects.orders.Subscription
 
+
 class GetUserSubscriptionsModel(BaseModel):
     response: GetUserSubscriptions = None
 

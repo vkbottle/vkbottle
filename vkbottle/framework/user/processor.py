@@ -130,7 +130,9 @@ class AsyncHandleManager:
                 task = await rule.call(message, *args, **kwargs)
                 await self._handler_return(task, data)
 
-                async for mr in self.middleware.run_middleware(message, flag=MiddlewareFlags.POST):
+                async for mr in self.middleware.run_middleware(
+                    message, flag=MiddlewareFlags.POST
+                ):
                     logger.debug(f"POST Middleware handler returned: {mr}")
 
                 return task
@@ -191,7 +193,7 @@ class AsyncHandleManager:
             await self.branch.add(
                 data["peer_id"],
                 handler_return.branch_name,
-                **handler_return.branch_kwargs
+                **handler_return.branch_kwargs,
             )
             return True
         elif isinstance(handler_return, ExitBranch):

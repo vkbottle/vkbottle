@@ -237,7 +237,9 @@ class Bot(HTTP, AsyncHandleManager):
         self._api = api
         Api.set_current(api)
 
-    def loop_update(self, loop: asyncio.AbstractEventLoop = None) -> asyncio.AbstractEventLoop:
+    def loop_update(
+        self, loop: asyncio.AbstractEventLoop = None
+    ) -> asyncio.AbstractEventLoop:
         """
         Update event loop
         :param loop:

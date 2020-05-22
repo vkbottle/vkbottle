@@ -123,6 +123,7 @@ class Handler:
             rule = VBMLRule(pattern)
             self.chat_message.add_rules([rule], func)
             return func
+
         return decorator
 
     def chat_invite(self):

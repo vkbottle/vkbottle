@@ -12,6 +12,7 @@ def request_decorator(func):
     aioHTTP Request Decorator Wrapper
     :param func: wrapped function
     """
+
     async def decorator(*args, **kwargs):
         try:
             async with ClientSession(json_serialize=json.dumps) as client:
@@ -19,6 +20,7 @@ def request_decorator(func):
             return response
         except Exception as e:
             logger.error(f"Error while requesting:\n{traceback.format_exc()}")
+
     return decorator
 
 

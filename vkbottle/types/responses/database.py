@@ -16,6 +16,7 @@ class Chair(BaseModel):
     id: int = None
     title: str = None
 
+
 class GetChairs(BaseModel):
     count: int = None
     items: typing.List[Chair] = None

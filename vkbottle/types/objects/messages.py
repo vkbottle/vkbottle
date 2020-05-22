@@ -248,9 +248,9 @@ class Message(BaseModel):
         return self.id or self.conversation_message_id
 
     def get_payload_json(
-            self,
-            throw_error: bool = False,
-            unpack_failure: typing.Callable[[str], dict] = lambda payload: payload
+        self,
+        throw_error: bool = False,
+        unpack_failure: typing.Callable[[str], dict] = lambda payload: payload,
     ) -> typing.Union[dict, None]:
         try:
             return json.loads(self.payload)

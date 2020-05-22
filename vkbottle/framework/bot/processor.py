@@ -32,7 +32,7 @@ class AsyncHandleManager:
 
         message = Message(
             **{**obj, "text": init_bot_mention(self.group_id, obj["text"])},
-            client_info=client_info
+            client_info=client_info,
         )
 
         async for mr in self.middleware.run_middleware(
@@ -83,7 +83,9 @@ class AsyncHandleManager:
 
         await self._handler_return(task, **processor)
 
-        async for mr in self.middleware.run_middleware(message, flag=MiddlewareFlags.POST):
+        async for mr in self.middleware.run_middleware(
+            message, flag=MiddlewareFlags.POST
+        ):
             logger.debug(f"POST Middleware handler returned: {mr}")
 
     async def _event_processor(self, obj: dict, event_type: str):
@@ -123,6 +125,7 @@ class AsyncHandleManager:
         obj["text"] = sub(r"\[club" + str(self.group_id) + r"\|.*?\] ", "", obj["text"])
 
         answer = Message(**obj, client_info=client_info)
+        branch_checkup_key = answer.dict()[self.branch_checkup_key.value]
 
         logger.debug(
             '-> BRANCHED MESSAGE FROM {} TEXT "{}"',
@@ -130,7 +133,7 @@ class AsyncHandleManager:
             answer.text.replace("\n", " "),
         )
 
-        disposal, branch = await self.branch.load(answer.peer_id)
+        disposal, branch = await self.branch.load(branch_checkup_key)
         edited = None
 
         for n, member in disposal.items():
@@ -153,7 +156,7 @@ class AsyncHandleManager:
 
         if edited is False and self.branch.generator is GeneratorType.DATABASE:
             if answer.peer_id in await self.branch.queue:
-                await self.branch.add(answer.peer_id, branch.key, **branch.context)
+                await self.branch.add(branch_checkup_key, branch.key, **branch.context)
 
         logger.info(
             'New BRANCHED "{0}" compiled with branch <{2}> (from: {1})'.format(
@@ -181,7 +184,7 @@ class AsyncHandleManager:
             await self.branch.add(
                 obj["peer_id"],
                 handler_return.branch_name,
-                **handler_return.branch_kwargs
+                **handler_return.branch_kwargs,
             )
             return True
         elif isinstance(handler_return, ExitBranch):
