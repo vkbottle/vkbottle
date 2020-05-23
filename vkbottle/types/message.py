@@ -54,7 +54,7 @@ class Message(MessageType, GetApi):
         dont_parse_links: bool = None,
         disable_mentions: bool = None,
     ):
-        return self.__call__(
+        return await self.__call__(
             **self.get_params(locals()), reply_to=self.get_message_id()
         )
 
