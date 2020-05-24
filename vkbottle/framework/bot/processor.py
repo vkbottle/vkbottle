@@ -154,7 +154,8 @@ class AsyncHandleManager:
                 break
 
         if edited is False and self.branch.generator is GeneratorType.DATABASE:
-            await self.branch.add(branch_checkup_key, branch.key, **branch.context)
+            if branch_checkup_key in await self.branch.queue:
+                await self.branch.add(branch_checkup_key, branch.key, **branch.context)
 
         logger.info(
             'New BRANCHED "{0}" compiled with branch <{2}> (from: {1})'.format(
