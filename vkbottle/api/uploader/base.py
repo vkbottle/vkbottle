@@ -1,5 +1,6 @@
 from vkbottle.api import API
-import aiohttp, json
+import aiohttp
+import json
 import ssl
 
 

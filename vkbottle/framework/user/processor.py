@@ -44,7 +44,7 @@ class AsyncHandleManager:
                 data = dict(zip(fields, update_fields))
 
                 if self._expand_models:
-                    data.update(await self.expand_data(update_code, data))
+                    data.update(await self.expand_data(update_code, data))  # FIX
 
                 args, kwargs = [], {}
 
@@ -92,30 +92,32 @@ class AsyncHandleManager:
     ):
         fields = ["message_id", "flags", *ADDITIONAL_FIELDS]
         data = dict(zip(fields, update_fields))
+        middleware_args = []
+
+        message = Message(**data)
+
+        async for mr in self.middleware.run_middleware(
+            message, flag=MiddlewareFlags.PRE
+        ):
+            if mr is False:
+                return
+            elif mr is not None:
+                middleware_args.append(mr)
+
+        if message.dict()[self.branch.checkup_key.value] in await self.branch.queue:
+            await self._branched_processor(message, middleware_args)
+            return
 
         if self._expand_models:
             data.update(await self.expand_data(update_code, data))
+
+        task = None
 
         for rule in self.on.message_rules:
             check = await rule.check(update)
 
             if check is not None:
                 args, kwargs = [], {}
-                middleware_args = []
-
-                message = Message(**data)
-
-                async for mr in self.middleware.run_middleware(
-                    message, flag=MiddlewareFlags.PRE
-                ):
-                    if mr is False:
-                        return
-                    elif mr is not None:
-                        middleware_args.append(mr)
-
-                if message.dict()[self.branch.checkup_key.value] in await self.branch.queue:
-                    await self._branched_processor(message, middleware_args)
-                    return
 
                 if isinstance(check, tuple):
                     if all([await s_rule.check(message) for s_rule in check]):
@@ -131,12 +133,12 @@ class AsyncHandleManager:
                 task = await rule.call(message, *args, **kwargs)
                 await self._handler_return(task, data)
 
-                async for mr in self.middleware.run_middleware(
-                    message, flag=MiddlewareFlags.POST
-                ):
-                    logger.debug(f"POST Middleware handler returned: {mr}")
+        async for mr in self.middleware.run_middleware(
+            message, flag=MiddlewareFlags.POST
+        ):
+            logger.debug(f"POST Middleware handler returned: {mr}")
 
-                return task
+        return task
 
     async def expand_data(self, code: int, data: dict) -> dict:
         if code in range(6):

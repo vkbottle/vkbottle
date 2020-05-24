@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 
 from vkbottle.framework.framework.branch.standart_branch import BranchCheckupKey
 from vkbottle.utils.util import ContextInstanceMixin
-from ..branch import BranchCheckupKey
 from .cls import AbstractBranch
 from ..rule import AbstractMessageRule
 

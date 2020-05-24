@@ -63,7 +63,7 @@ class Message(BaseModel, GetApi):
         )
 
     async def __call__(self, message: str = None, attachment: str = None, **params):
-
+        m = None
         locals().update(params)
         for message in sep_bytes(message or ""):
             m = await self.api.request(
