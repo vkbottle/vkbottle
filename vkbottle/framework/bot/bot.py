@@ -132,7 +132,6 @@ class Bot(HTTP, AsyncHandleManager):
         self.on: Handler = Handler(self.group_id)
 
         self._stop: bool = False
-        self.branch_checkup_key: BranchCheckupKey = BranchCheckupKey.PEER_ID
 
         logger.info("Using JSON_MODULE - {}".format(USAGE))
         logger.info(
