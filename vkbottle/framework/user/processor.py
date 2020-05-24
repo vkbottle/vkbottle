@@ -80,6 +80,7 @@ class AsyncHandleManager:
             return await self._event_processor(*data)
         except VKError as e:
             await self.error_handler.handle_error(e)
+
         except:
             logger.error(
                 "While user polling worked error occurred \n\n{traceback}",
@@ -104,6 +105,18 @@ class AsyncHandleManager:
 
                 message = Message(**data)
 
+                async for mr in self.middleware.run_middleware(
+                    message, flag=MiddlewareFlags.PRE
+                ):
+                    if mr is False:
+                        return
+                    elif mr is not None:
+                        middleware_args.append(mr)
+
+                if message.dict()[self.branch.checkup_key.value] in await self.branch.queue:
+                    await self._branched_processor(message, middleware_args)
+                    return
+
                 if isinstance(check, tuple):
                     if all([await s_rule.check(message) for s_rule in check]):
                         args = [a for rule in check for a in rule.context.args]
@@ -114,18 +127,6 @@ class AsyncHandleManager:
                         }
                     else:
                         continue
-
-                async for mr in self.middleware.run_middleware(
-                    message, flag=MiddlewareFlags.PRE
-                ):
-                    if mr is False:
-                        return
-                    elif mr is not None:
-                        middleware_args.append(mr)
-
-                if message.peer_id in await self.branch.queue:
-                    await self._branched_processor(message, middleware_args)
-                    return
 
                 task = await rule.call(message, *args, **kwargs)
                 await self._handler_return(task, data)
@@ -147,13 +148,14 @@ class AsyncHandleManager:
         return data
 
     async def _branched_processor(self, message: Message, middleware_args: list):
+        branch_checkup_key = message.dict()[self.branch.checkup_key.value]
         logger.debug(
             '-> BRANCHED MESSAGE FROM {} TEXT "{}"',
-            message.peer_id,
+            branch_checkup_key,
             message.text.replace("\n", " "),
         )
 
-        disposal, branch = await self.branch.load(message.peer_id)
+        disposal, branch = await self.branch.load(branch_checkup_key)
 
         for n, member in disposal.items():
             rules = member[1]
@@ -172,7 +174,7 @@ class AsyncHandleManager:
         logger.info(
             'New BRANCHED "{0}" compiled with branch <{2}> (from: {1})'.format(
                 message.text.replace("\n", " "),
-                message.from_id,
+                branch_checkup_key,
                 '"{}" with {} kwargs'.format(
                     branch.key,
                     branch.context

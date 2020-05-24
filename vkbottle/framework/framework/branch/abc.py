@@ -1,6 +1,7 @@
 import typing
 from abc import ABC, abstractmethod
 from vkbottle.utils.util import ContextInstanceMixin
+from ..branch import BranchCheckupKey
 from .cls import AbstractBranch
 from ..rule import AbstractMessageRule
 import enum
@@ -20,6 +21,7 @@ class AbstractBranchGenerator(ABC, ContextInstanceMixin):
     cls_branch: typing.Any
     simple_branch: typing.Any
     generator: GeneratorType = GeneratorType.ABSTRACT
+    checkup_key: BranchCheckupKey = BranchCheckupKey.PEER_ID
 
     @abstractmethod
     def from_function(self, *args, **kwargs) -> None:

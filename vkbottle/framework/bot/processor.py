@@ -24,7 +24,6 @@ class AsyncHandleManager:
     status: BotStatus
     group_id: int
     loop: AbstractEventLoop
-    branch_checkup_key: BranchCheckupKey = BranchCheckupKey.PEER_ID
 
     async def _processor(self, obj: dict, client_info: dict):
         processor = dict(obj=obj, client_info=client_info)
@@ -44,7 +43,7 @@ class AsyncHandleManager:
                 elif mr is not None:
                     middleware_args.append(mr)
 
-        if message.dict()[self.branch_checkup_key.value] in await self.branch.queue:
+        if message.dict()[self.branch.checkup_key.value] in await self.branch.queue:
             await self._branched_processor(obj, client_info, middleware_args)
             return
 
@@ -125,7 +124,7 @@ class AsyncHandleManager:
         obj["text"] = sub(r"\[club" + str(self.group_id) + r"\|.*?\] ", "", obj["text"])
 
         answer = Message(**obj, client_info=client_info)
-        branch_checkup_key = answer.dict()[self.branch_checkup_key.value]
+        branch_checkup_key = answer.dict()[self.branch.checkup_key.value]
 
         logger.debug(
             '-> BRANCHED MESSAGE FROM {} TEXT "{}"',
@@ -155,8 +154,7 @@ class AsyncHandleManager:
                 break
 
         if edited is False and self.branch.generator is GeneratorType.DATABASE:
-            if answer.peer_id in await self.branch.queue:
-                await self.branch.add(branch_checkup_key, branch.key, **branch.context)
+            await self.branch.add(branch_checkup_key, branch.key, **branch.context)
 
         logger.info(
             'New BRANCHED "{0}" compiled with branch <{2}> (from: {1})'.format(
