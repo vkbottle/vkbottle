@@ -75,27 +75,23 @@ bot.run_polling(skip_updates=False)
 from vkbottle import Bot, Message
 from aiohttp import web
 
-bot = Bot(token="my-token", secret="my-secret")
+bot = Bot(token="my-token")
 app = web.Application()
 
 
 async def executor(request: web.Request):
     event = await request.json()
-    emulation = await bot.emulate(event=event, confirmation_token="ConfirmationToken")
+    emulation = await bot.emulate(event, confirmation_token="ConfirmationToken")
     return web.Response(text=emulation)
 
 
 @bot.on.message(text="test", lower=True)
 async def wrapper(ans: Message):
-    return "Tested!"
+    return "Got it."
 
 
-app.router.add_route(
-    path='/',
-    method='POST',
-    handler=executor
-)
-web.run_app(app=app, host=host, port=port)
+app.router.add_route("/", "POST", executor)
+web.run_app(app=app)
 ```
 
 ### Rules
