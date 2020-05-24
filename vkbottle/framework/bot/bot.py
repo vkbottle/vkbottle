@@ -15,7 +15,7 @@ from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.extensions.standard import StandardExtension
 from vkbottle.framework._status import BotStatus, LoggerLevel
-from vkbottle.framework.framework.branch import DictBranch, BranchCheckupKey
+from vkbottle.framework.framework.branch import DictBranch
 from vkbottle.framework.framework.branch.abc import AbstractBranchGenerator
 from vkbottle.framework.blueprint.bot import Blueprint
 from vkbottle.framework.bot.processor import AsyncHandleManager

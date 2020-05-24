@@ -1,10 +1,11 @@
+import enum
 import typing
 from abc import ABC, abstractmethod
+
+from vkbottle.framework.framework.branch.standart_branch import BranchCheckupKey
 from vkbottle.utils.util import ContextInstanceMixin
-from ..branch import BranchCheckupKey
 from .cls import AbstractBranch
 from ..rule import AbstractMessageRule
-import enum
 
 Branch = typing.Union[str, AbstractBranch]
 BranchRule = typing.Tuple[typing.Callable, typing.List[AbstractMessageRule]]
