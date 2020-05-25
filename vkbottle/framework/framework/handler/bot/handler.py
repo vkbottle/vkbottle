@@ -12,17 +12,29 @@ from vkbottle.framework.framework.rule import (
     ChatMessage,
     PrivateMessage,
     Any,
-    StickerRule,
     AbstractMessageRule,
 )
 
-COL_RULES = {
-    "commands": CommandRule,
-    "sticker": StickerRule,
-}
+from ..handler import ABCHandler
+from ..message import ABCMessageHandler
 
 
-class Handler:
+class MessageHandler(ABCMessageHandler):
+    def __init__(self, *, default_rules: typing.List[AbstractMessageRule]):
+        self._default_rules = default_rules
+        self._patcher = Patcher.get_current()
+
+    def add_rules(self, rules: typing.List[AbstractRule], func: typing.Callable):
+        current = list()
+        for rule in self.default_rules + rules:
+            if not isinstance(rule, (AbstractRule, AbstractFilter)):
+                warnings.warn(
+                    f"Wrong rule! Got type {rule.__class__} instead of AbstractRule. Rule will be ignored",
+                    Warning,
+                )
+                continue
+            if not isinstance(rule, AbstractFilter):
+                rule.create(func)
             current.append(rule)
         self.rules.append(current)
 
@@ -68,55 +80,14 @@ class BotHandler(ABCHandler):
         """
 
         self.message_handler.rules += self.message.rules + self.chat_message.rules
-        )
         self.message_rules += self.message_handler.rules
 
         if get_current_rest:
-
             # Check updates from timoniq/vkbottle-rest
             current_rest = await get_current_rest()
+            if current_rest.get("version") != __version__:
                 logger.info(
                     "You are using old version of VKBottle. Update is found: {} | {}",
-                    current_rest["version"],
-                    current_rest["description"],
-                )
-        logger.debug("Bot successfully dispatched")
-
-    def change_prefix_for_all(self, prefix: list) -> None:
-        self.message.prefix = prefix
-        self.chat_message.prefix = prefix
-        self.message_handler.prefix = prefix
-
-    def chat_action(
-        self, type_: typing.Union[str, typing.List[str]], rules: dict = None
-    ):
-        """
-        Special express processor of chat actions (https://vk.com/dev/objects/message - action object)
-        :param type_: action name
-        :param rules:
-        """
-
-        def decorator(func):
-            rule = ChatActionRule(type_, rules=rules)
-            self.chat_message.add_rules([rule], func)
-            return func
-
-        return decorator
-
-    def chat_mention(self):
-        def decorator(func):
-            pattern = Pattern(pattern=r"\[(club|public){}\|.*?]".format(self.group_id))
-            rule = VBMLRule(pattern)
-            self.chat_message.add_rules([rule], func)
-            return func
-
-        return decorator
-
-    def chat_invite(self):
-        def decorator(func):
-            rule = ChatActionRule("chat_invite_user", {"member_id": -self.group_id})
-            self.chat_message.add_rules([rule], func)
-            return func
                     current_rest.get("version"),
                     current_rest.get("description"),
                 )
