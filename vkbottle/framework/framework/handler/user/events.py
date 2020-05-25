@@ -1,15 +1,13 @@
-import typing
-from vkbottle.framework.framework.rule import UserLongPollEventRule
+from vkbottle.framework.framework.rule import UserLongPollEventRule, AbstractRule
 from vkbottle.types.user_longpoll import events
+from ..events import ABCEvents
+import typing
 
 ADDITIONAL_FIELDS = ("peer_id", "timestamp", "text", "info", "attachments", "random_id")
 
 
-class UserEvents:
-    def __init__(self):
-        self.rules: typing.List[UserLongPollEventRule] = list()
-
-    def message_flag_change(self, *rules):
+class UserEvents(ABCEvents):
+    def message_flag_change(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(1, *rules)
             rule.create(
@@ -25,7 +23,7 @@ class UserEvents:
 
         return decorator
 
-    def message_flag_set(self, *rules):
+    def message_flag_set(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(2, *rules)
             rule.create(
@@ -41,7 +39,7 @@ class UserEvents:
 
         return decorator
 
-    def message_flag_remove(self, *rules):
+    def message_flag_remove(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(3, *rules)
             rule.create(
@@ -57,7 +55,7 @@ class UserEvents:
 
         return decorator
 
-    def message_edit(self, *rules):
+    def message_edit(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(5, *rules)
             rule.create(
@@ -80,7 +78,7 @@ class UserEvents:
 
         return decorator
 
-    def message_read_in(self, *rules):
+    def message_read_in(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(6, *rules)
             rule.create(
@@ -96,7 +94,7 @@ class UserEvents:
 
         return decorator
 
-    def message_read_out(self, *rules):
+    def message_read_out(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(7, *rules)
             rule.create(
@@ -112,7 +110,7 @@ class UserEvents:
 
         return decorator
 
-    def friend_online(self, *rules):
+    def friend_online(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(8, *rules)
             rule.create(
@@ -128,7 +126,7 @@ class UserEvents:
 
         return decorator
 
-    def friend_offline(self, *rules):
+    def friend_offline(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(9, *rules)
             rule.create(
@@ -144,7 +142,7 @@ class UserEvents:
 
         return decorator
 
-    def chat_flag_change(self, *rules):
+    def chat_flag_change(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(11, *rules)
             rule.create(
@@ -160,7 +158,7 @@ class UserEvents:
 
         return decorator
 
-    def chat_flag_set(self, *rules):
+    def chat_flag_set(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(12, *rules)
             rule.create(
@@ -176,7 +174,7 @@ class UserEvents:
 
         return decorator
 
-    def chat_flag_remove(self, *rules):
+    def chat_flag_remove(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(10, *rules)
             rule.create(
@@ -192,7 +190,7 @@ class UserEvents:
 
         return decorator
 
-    def delete_messages(self, *rules):
+    def delete_messages(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(13, *rules)
             rule.create(
@@ -208,7 +206,7 @@ class UserEvents:
 
         return decorator
 
-    def chat_restore(self, *rules):
+    def chat_restore(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(14, *rules)
             rule.create(
@@ -224,7 +222,7 @@ class UserEvents:
 
         return decorator
 
-    def chat_edit(self, *rules):
+    def chat_edit(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(51, *rules)
             rule.create(
@@ -240,7 +238,7 @@ class UserEvents:
 
         return decorator
 
-    def chat_info_edit(self, *rules):
+    def chat_info_edit(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(52, *rules)
             rule.create(
@@ -256,7 +254,7 @@ class UserEvents:
 
         return decorator
 
-    def message_typing_state(self, *rules):
+    def message_typing_state(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(61, *rules)
             rule.create(
@@ -272,7 +270,7 @@ class UserEvents:
 
         return decorator
 
-    def chat_typing_state(self, *rules):
+    def chat_typing_state(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(62, *rules)
             rule.create(
@@ -288,7 +286,7 @@ class UserEvents:
 
         return decorator
 
-    def chat_voice_message_states(self, *rules):
+    def chat_voice_message_states(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(64, *rules)
             rule.create(
@@ -304,7 +302,7 @@ class UserEvents:
 
         return decorator
 
-    def call(self, *rules):
+    def call(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(70, *rules)
             rule.create(
@@ -320,7 +318,7 @@ class UserEvents:
 
         return decorator
 
-    def counter(self, *rules):
+    def counter(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(80, *rules)
             rule.create(
@@ -336,7 +334,7 @@ class UserEvents:
 
         return decorator
 
-    def notifications_settings_changed(self, *rules):
+    def notifications_settings_changed(self, *rules: typing.Tuple[AbstractRule]):
         def decorator(func):
             rule = UserLongPollEventRule(114, *rules)
             rule.create(
@@ -351,6 +349,3 @@ class UserEvents:
             return func
 
         return decorator
-
-    def __repr__(self):
-        return "<user.Handler>"

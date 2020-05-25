@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from vkbottle.utils import ContextInstanceMixin
+from .storage import ABCStorage
 import typing
 
 
@@ -14,6 +15,11 @@ class AbstractExtension(ABC, ContextInstanceMixin):
 
     @abstractmethod
     def random_id(self) -> int:
+        pass
+
+    @property
+    @abstractmethod
+    def storage(self) -> ABCStorage:
         pass
 
     @abstractmethod

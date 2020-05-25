@@ -1,4 +1,4 @@
-from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
+from vkbottle.framework.framework.branch import ABCBranchGenerator, DictBranch
 from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.api.api.api import Api
 from vkbottle.api.api.error_handler import (
@@ -15,7 +15,7 @@ class AbstractBlueprint(metaclass=ABCMeta):
 
     @abstractmethod
     def __init__(self, name: str = None, description: str = None) -> None:
-        self.branch: typing.Optional[AbstractBranchGenerator] = DictBranch()
+        self.branch: typing.Optional[ABCBranchGenerator] = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.error_handler: VKErrorHandler = DefaultErrorHandler()
 

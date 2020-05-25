@@ -38,3 +38,7 @@ class HandlerError(Exception):
 
 class HandlerReturnError(HandlerError):
     pass
+
+
+class StorageError(Exception):
+    pass

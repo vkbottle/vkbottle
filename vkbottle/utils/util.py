@@ -10,7 +10,7 @@ class ContextInstanceMixin:
     """
 
     def __init_subclass__(cls, **kwargs):
-        cls.__context_instance = contextvars.ContextVar("instance_" + cls.__name__)
+        cls.__context_instance = contextvars.ContextVar("instance_" + (kwargs.get("ctx_name") or cls.__name__))
         return cls
 
     @classmethod

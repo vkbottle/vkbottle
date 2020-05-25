@@ -2,7 +2,7 @@ import enum
 import typing
 from abc import ABC, abstractmethod
 
-from vkbottle.framework.framework.branch.standart_branch import BranchCheckupKey
+from vkbottle.framework.framework.branch.standard_branch import BranchCheckupKey
 from vkbottle.utils.util import ContextInstanceMixin
 from .cls import AbstractBranch
 from ..rule import AbstractMessageRule
@@ -17,7 +17,7 @@ class GeneratorType(enum.Enum):
     DICT = "dict"
 
 
-class AbstractBranchGenerator(ABC, ContextInstanceMixin):
+class ABCBranchGenerator(ABC, ContextInstanceMixin):
     Disposal = typing.Dict[str, BranchRule]
     cls_branch: typing.Any
     simple_branch: typing.Any
@@ -55,7 +55,7 @@ class AbstractBranchGenerator(ABC, ContextInstanceMixin):
     @abstractmethod
     async def load(
         self, uid: int
-    ) -> typing.Tuple["AbstractBranchGenerator.Disposal", AbstractBranch]:
+    ) -> typing.Tuple["ABCBranchGenerator.Disposal", AbstractBranch]:
         ...
 
     @abstractmethod

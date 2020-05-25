@@ -2,18 +2,18 @@ import typing
 
 from vkbottle.api.api import Api
 from ...utils.exceptions import VKError
-from vkbottle.framework.framework.branch import AbstractBranchGenerator
+from vkbottle.framework.framework.branch import ABCBranchGenerator
 from vkbottle.framework.framework.extensions import AbstractExtension
-from vkbottle.framework.framework.handler.handler import Handler
+from vkbottle.framework.framework.handler.bot.handler import BotHandler
 from .abc import AbstractBlueprint
 
-Familiar = typing.Tuple[AbstractBranchGenerator, AbstractExtension, Api]
+Familiar = typing.Tuple[ABCBranchGenerator, AbstractExtension, Api]
 
 
 class Blueprint(AbstractBlueprint):
     def __init__(self, name: str = None, description: str = None) -> None:
         super().__init__()
-        self.on: Handler = Handler()
+        self.on: BotHandler = BotHandler()
         self.extension: AbstractExtension = None
         self.data: dict = {}
 

@@ -1,1 +1,2 @@
-from .handler import Handler
+from .handler import UserHandler
+from .events import UserEvents

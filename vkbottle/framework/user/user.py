@@ -6,21 +6,23 @@ import asyncio
 import aiohttp
 import vbml
 
-from vkbottle.framework._status import LoggerLevel
+from vkbottle.framework.status import LoggerLevel
 from vkbottle.api import UserApi, request
 from vkbottle.exceptions import VKError
-from vkbottle.framework.framework.handler.user.handler import Handler
+from vkbottle.framework.framework.handler import UserHandler
 from vkbottle.api.api.error_handler import (
     VKErrorHandler,
     DefaultErrorHandler,
 )
-from vkbottle.framework.framework.branch import AbstractBranchGenerator, DictBranch
+from vkbottle.framework.framework.branch import ABCBranchGenerator, DictBranch
 from vkbottle.framework.framework.handler.middleware import MiddlewareExecutor
 from vkbottle.framework.blueprint.user import Blueprint
-from vkbottle.http import HTTP, App
+from vkbottle.http import App
 from vkbottle.utils import TaskManager, logger
 from vkbottle.utils.json import USAGE
-from .processor import AsyncHandleManager
+from .processor import UserProcessor
+from ..polling import PollingAPI
+from ..status import UserStatus
 
 try:
     import uvloop
@@ -36,9 +38,9 @@ Token = typing.Union[str, typing.List[str]]
 AnyUser = typing.Union["User", Blueprint]
 
 
-class User(HTTP, AsyncHandleManager):
+class User(PollingAPI):
     long_poll_server: dict
-    __wait: int
+    wait: int
     version: int = None
 
     def __init__(
@@ -86,12 +88,16 @@ class User(HTTP, AsyncHandleManager):
         UserApi.set_current(self._api)
         VKErrorHandler.set_current(self.error_handler)
 
-        self.on: Handler = Handler()
-        self.branch: AbstractBranchGenerator = DictBranch()
+        self.on: UserHandler = UserHandler()
+        self.branch: ABCBranchGenerator = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
         self.error_handler: VKErrorHandler = DefaultErrorHandler()
+        self.deconstructed_handle: UserProcessor = UserProcessor(
+            self.user_id, expand_models=expand_models
+        )
 
         self._stop: bool = False
+        self.status = UserStatus()
 
         if isinstance(debug, bool):
             debug = "INFO" if debug else "ERROR"
@@ -183,7 +189,7 @@ class User(HTTP, AsyncHandleManager):
                 long_poll_server["key"],
                 long_poll_server["ts"],
                 self.mode,
-                self.__wait or DEFAULT_WAIT,
+                self.wait or DEFAULT_WAIT,
                 self.version or VERSION,
             )
             return await self.request.post(url)
@@ -195,11 +201,14 @@ class User(HTTP, AsyncHandleManager):
         Can be manually stopped with:
         >> user.stop()
         """
-        self.__wait = wait
+        self.wait = wait
         logger.info("Polling will be started. Is it OK?")
 
         await self.get_server()
-        self.on.dispatch()
+        await self.on.dispatch()
+        self.middleware.add_middleware(self.on.pre_p)
+        self.status.dispatched = True
+
         logger.debug("User Polling successfully started")
 
         while not self._stop:
@@ -233,7 +242,7 @@ class User(HTTP, AsyncHandleManager):
         logger.debug("Response: {}", event)
         for update in event.get("updates", []):
             update_code, update_fields = update[0], update[1:]
-            await self._processor(update, update_code, update_fields)
+            await self.handle.parent_processor(update, update_code, update_fields)
 
     def run_polling(
         self,
@@ -258,6 +267,13 @@ class User(HTTP, AsyncHandleManager):
 
     def stop(self) -> None:
         self._stop = True
+
+    @property
+    def handle(self) -> UserProcessor:
+        """ Construct handle with active workers """
+        return self.deconstructed_handle.construct(
+            self.api, self.on, self.middleware, self.status, self.branch
+        )
 
     @property
     def api(self) -> UserApi:

@@ -1,4 +1,5 @@
 from ..utils import logger
+from abc import ABC
 
 
 class LoggerLevel:
@@ -10,7 +11,7 @@ class LoggerLevel:
         return record["level"].no >= level_no
 
 
-class BotStatus:
+class ABCStatus(ABC):
     polling_started: bool = False
     dispatched: bool = False
     handler_return_context: dict = {}
@@ -20,17 +21,25 @@ class BotStatus:
     def as_dict(self) -> dict:
         return {"polling_started": self.polling_started, "dispatched": self.dispatched}
 
+    def __repr__(self):
+        return str(self.as_dict)
+
     def change_handler_return_context(
         self,
         attachment: str = None,
         keyboard: dict = None,
         template: dict = None,
         **params
-    ):
+    ) -> dict:
         local = locals()
         local.pop("self")
         self.handler_return_context = {k: v for k, v in local.items() if v is not None}
         return self.handler_return_context
 
-    def __repr__(self):
-        return str(self.as_dict)
+
+class BotStatus(ABCStatus):
+    pass
+
+
+class UserStatus(ABCStatus):
+    pass

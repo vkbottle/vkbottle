@@ -2,7 +2,7 @@ import typing
 
 from .abc import GeneratorType
 from .database_branch import DatabaseBranch
-from .standart_branch import ImmutableBranchData
+from .standard_branch import ImmutableBranchData
 
 
 class DictBranch(DatabaseBranch):

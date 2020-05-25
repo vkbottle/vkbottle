@@ -1,12 +1,9 @@
 import asyncio
 import sys
-import traceback
 import typing
 from vbml import Patcher
 
-from vkbottle.http import HTTP
-from vkbottle.types.events import EventList
-from vkbottle.framework.framework.handler.handler import Handler
+from vkbottle.framework.framework.handler.bot.handler import BotHandler
 from vkbottle.api.api.error_handler import (
     VKErrorHandler,
     DefaultErrorHandler,
@@ -14,16 +11,17 @@ from vkbottle.api.api.error_handler import (
 from vkbottle.framework.framework.handler import MiddlewareExecutor
 from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.extensions.standard import StandardExtension
-from vkbottle.framework._status import BotStatus, LoggerLevel
+from vkbottle.framework.status import BotStatus, LoggerLevel
 from vkbottle.framework.framework.branch import DictBranch
-from vkbottle.framework.framework.branch.abc import AbstractBranchGenerator
+from vkbottle.framework.framework.branch.abc import ABCBranchGenerator
 from vkbottle.framework.blueprint.bot import Blueprint
-from vkbottle.framework.bot.processor import AsyncHandleManager
 from vkbottle.framework.bot.builtin import DefaultValidators, DEFAULT_WAIT
 from vkbottle.api import Api, request
 from vkbottle.exceptions import VKError
 from vkbottle.utils import logger, TaskManager, chunks
 from vkbottle.utils.json import USAGE
+from ..polling import PollingAPI
+from .processor import BotProcessor
 
 
 try:
@@ -36,7 +34,7 @@ Token = typing.Union[str, typing.List[str]]
 AnyBot = typing.Union["Bot", Blueprint]
 
 
-class Bot(HTTP, AsyncHandleManager):
+class Bot(PollingAPI):
     long_poll_server: dict
 
     def __init__(
@@ -127,11 +125,12 @@ class Bot(HTTP, AsyncHandleManager):
         AbstractExtension.set_current(self.extension)
 
         # Main workers
-        self.branch: typing.Union[AbstractBranchGenerator, DictBranch] = DictBranch()
+        self.branch: typing.Union[ABCBranchGenerator, DictBranch] = DictBranch()
         self.middleware: MiddlewareExecutor = MiddlewareExecutor()
-        self.on: Handler = Handler(self.group_id)
+        self.on: BotHandler = BotHandler(self.group_id)
 
         self._stop: bool = False
+        self.deconstructed_handle: BotProcessor = BotProcessor(self.group_id)
 
         logger.info("Using JSON_MODULE - {}".format(USAGE))
         logger.info(
@@ -326,7 +325,7 @@ class Bot(HTTP, AsyncHandleManager):
             self.__secret = None
 
         if not self.status.dispatched:
-            self.middleware.add_middleware(self.on.pre)
+            self.middleware.add_middleware(self.on.pre_p)
             await self.on.dispatch(self.get_current_rest)
             self.status.dispatched = True
 
@@ -349,15 +348,14 @@ class Bot(HTTP, AsyncHandleManager):
     async def emulate(
         self, event: dict, confirmation_token: str = None, secret: str = None,
     ) -> typing.Union[str, None]:
-        """
-        Process all types of events
+        """ Process all types of events
         :param event: VK Event (LP or CB)
         :param confirmation_token: code which confirm VK callback
         :param secret: secret key for callback
         :return: "ok"
         """
         if not self.status.dispatched:
-            self.middleware.add_middleware(self.on.pre)
+            self.middleware.add_middleware(self.on.pre_p)
             await self.on.dispatch(self.get_current_rest)
             self.status.dispatched = True
 
@@ -376,36 +374,12 @@ class Bot(HTTP, AsyncHandleManager):
             return "access denied"
 
         for update in updates:
+            if not update.get("object"):
+                continue
             try:
-                if not update.get("object"):
-                    continue
-
-                obj = update["object"]
-
-                if update["type"] == EventList.MESSAGE_NEW:
-
-                    # VK API v5.103
-                    client_info = obj.get("client_info")
-                    if client_info is None:
-                        raise VKError(
-                            0, "Change API version to 5.103 or later"
-                        ) from None
-                    obj = obj["message"]
-                    await self._processor(obj, client_info)
-
-                else:
-                    await (
-                        self._event_processor(obj=obj, event_type=update["type"])
-                    )  # noqa
-
+                await self.handle.parent_processor(update, obj=update["object"])
             except VKError as e:
                 await self.error_handler.handle_error(e)
-
-            except:
-                logger.error(
-                    "While event was emulating error occurred \n\n{traceback}",
-                    traceback=traceback.format_exc(),
-                )
 
         return "ok"
 
@@ -426,6 +400,13 @@ class Bot(HTTP, AsyncHandleManager):
     @property
     def status(self) -> BotStatus:
         return self._status
+
+    @property
+    def handle(self) -> BotProcessor:
+        """ Construct handle with active workers """
+        return self.deconstructed_handle.construct(
+            self.api, self.on, self.middleware, self.status, self.branch
+        )
 
     @property
     def patcher(self) -> Patcher:

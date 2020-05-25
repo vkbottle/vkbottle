@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from .abc import AbstractBranchGenerator, Branch, AbstractBranch, GeneratorType
+from .abc import ABCBranchGenerator, Branch, AbstractBranch, GeneratorType
 from .cls import CoroutineBranch
 from vkbottle.utils.exceptions import BranchError
 from vkbottle.utils.json import json
@@ -8,7 +8,7 @@ import asyncio
 import inspect
 
 
-class DatabaseBranch(AbstractBranchGenerator):
+class DatabaseBranch(ABCBranchGenerator):
     def __init__(self):
         self.names: typing.Dict[str, typing.Type[AbstractBranch]] = {}
         self.generator = GeneratorType.DATABASE
@@ -73,7 +73,7 @@ class DatabaseBranch(AbstractBranchGenerator):
         self,
         uid: int,
         branch: typing.Union[Branch, str],
-        call_enter: bool = False,
+        call_enter: bool = True,
         **context,
     ):
         if isinstance(branch, str):
@@ -90,7 +90,7 @@ class DatabaseBranch(AbstractBranchGenerator):
 
         dumped_context = context
 
-        if self.__class__.generator is GeneratorType.DATABASE:
+        if self.generator == GeneratorType.DATABASE:
             dumped_context = json.dumps(context)
 
         await self.set_user(uid, branch, dumped_context)
@@ -100,7 +100,7 @@ class DatabaseBranch(AbstractBranchGenerator):
 
     async def load(
         self, uid: int
-    ) -> typing.Tuple["AbstractBranchGenerator.Disposal", AbstractBranch]:
+    ) -> typing.Tuple["ABCBranchGenerator.Disposal", AbstractBranch]:
         branch_name, context = await self.get_user(uid)
         branch = self.get_branch(branch_name, context)
 
