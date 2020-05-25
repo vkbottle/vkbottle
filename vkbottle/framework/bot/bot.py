@@ -196,7 +196,7 @@ class Bot(PollingAPI):
         Add blueprints
         """
         for blueprint in blueprints:
-            self.loop.create_task(self.dispatch(blueprint))
+            self.loop.run_until_complete(self.dispatch(blueprint))
             blueprint.create(familiar=(self.branch, self.extension, self.api))
         logger.debug("Blueprints have been successfully loaded")
 

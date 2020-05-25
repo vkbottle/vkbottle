@@ -166,7 +166,7 @@ class User(PollingAPI):
         """
         for blueprint in blueprints:
             blueprint.create(familiar=(self.branch, self.api))
-            self.loop.create_task(self.dispatch(blueprint))
+            self.loop.run_until_complete(self.dispatch(blueprint))
         logger.debug("Blueprints have been successfully loaded")
 
     async def get_server(self) -> dict:
