@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import typing
 
+
 class ABCStorage(ABC):
     @abstractmethod
     def get(self, key: str) -> typing.Any:

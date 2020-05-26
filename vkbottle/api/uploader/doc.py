@@ -3,6 +3,12 @@ from .base import Uploader
 
 
 class DocUploader(Uploader):
+    FILE_EXTENSIONS = [
+        ".txt",
+        ".docx",
+        ".mp3",
+    ]
+
     async def upload_doc_to_wall(
         self, pathlike, group_id: int = None, **params
     ) -> typing.Union[str, dict]:

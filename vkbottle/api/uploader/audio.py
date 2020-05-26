@@ -3,6 +3,8 @@ from .base import Uploader
 
 
 class AudioUploader(Uploader):
+    FILE_EXTENSIONS = [".mp3", ".ogg", ".opus"]
+
     async def upload_audio(
         self,
         artist: str,

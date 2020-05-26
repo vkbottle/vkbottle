@@ -180,6 +180,23 @@ photo_uploader  = PhotoUploader(bot.api, generate_attachment_strings=True)
 
 Теперь чтобы получить строку для отправки: `await photo_uploader.upload_message_photo("img.png")`
 
+**Загрузка по ссылке**
+
+Для того чтобы загрузить файл по ссылке воспользуйтесь методом `get_data_from_link`:
+
+```python
+from vkbottle.api.uploader.photo import PhotoUploader
+from vkbottle.bot import Bot
+
+bot = Bot(...)
+photo_uploader  = PhotoUploader(bot.api, generate_attachment_strings=True)
+
+# ...
+
+data = await photo_uploader.get_data_from_link("https://link_to_photo")
+photo = await photo_uploader.upload_message_photo(data)
+```
+
 ## Дополнительно
 
 Если метод из по какой то причине еще не был добавлен в vkbottle его можно вызвать с помощью `api.request`:

@@ -22,4 +22,12 @@ async def document(ans: Message):
     await ans("Вот документ:", attachment=doc)
 
 
+@bot.on.message_handler(text="по ссылке <link>")
+async def from_link(ans: Message, link: str):
+    data = await photo_uploader.get_data_from_link(link)
+    await ans(
+        "А вот и оно!", attachment=await photo_uploader.upload_message_photo(data)
+    )
+
+
 bot.run_polling()

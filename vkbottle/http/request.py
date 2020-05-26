@@ -1,5 +1,6 @@
 import ssl
 import traceback
+import typing
 
 from aiohttp import ClientSession
 
@@ -41,10 +42,13 @@ class HTTPRequest:
         data: dict = None,
         json_: dict = None,
         content_type: str = "application/json",
-    ) -> dict:
+        read_content: bool = False,
+    ) -> typing.Union[dict]:
         async with client.post(
             url, params=params or {}, ssl=ssl.SSLContext(), data=data, json=json_,
         ) as response:
+            if read_content:
+                return await response.content.read()
             return await response.json(content_type=content_type)
 
     @request_decorator
@@ -55,10 +59,13 @@ class HTTPRequest:
         data: dict = None,
         json_: dict = None,
         content_type: str = "application/json",
-    ) -> dict:
+        read_content: bool = False,
+    ) -> typing.Union[dict]:
         async with client.get(
             url, ssl=ssl.SSLContext(), data=data or None, json=json_ or None
         ) as response:
+            if read_content:
+                return await response.content.read()
             return await response.json(content_type=content_type)
 
     def __repr__(self):

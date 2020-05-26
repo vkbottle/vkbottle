@@ -3,6 +3,8 @@ from .base import Uploader
 
 
 class PhotoUploader(Uploader):
+    FILE_EXTENSIONS = [".jpg", ".png", ".gif"]
+
     async def upload_photo_to_album(
         self,
         album_id: int,
