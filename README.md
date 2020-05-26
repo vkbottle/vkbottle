@@ -23,6 +23,16 @@
    pip install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
    ```
    
+### Документация
+
+Доступны следующие разделы:  
+
+* [Первый бот на vkbottle](https://github.com/timoniq/vkbottle/blob/master/docs/getting_started.md) - пособие для новичков, краткое введение
+* [Работа с API, генераторами токенов. Генераторы клавиатур, загрузчики вложений, перевод в VKScript](https://github.com/timoniq/vkbottle/blob/master/docs/api.ru.md)
+* [Введение в составляющие фреймворка](https://github.com/timoniq/vkbottle/blob/master/docs/framework.ru.md) - Боты, юзерботы, хендлеры и блупринты
+* [Бранчи - имплементация FSM](https://github.com/timoniq/vkbottle/blob/master/docs/branches.ru.md)
+* [Внешние составляющие: Middleware, хендлинг ошибок и капчи, TaskManager](https://github.com/timoniq/vkbottle/blob/master/docs/stuff.ru.md)
+   
 ### Кастомизация
 
 После установки `vkbottle` рекомендуется сразу же установить дополнительные модули `uvloop` и `loguru`, без них фреймворк работает медленне и логи не настраиваемы. О возможностях этих модулей можно прочитать в их документации
@@ -128,13 +138,6 @@ user.run_polling()
 ```
 
 Больше примеров в папке [/examples](./examples)
-
-### Документация
-
-Полная документация:  
-
-* [Русская версия документации](docs/getting_started.md)  
-в ней же можно найти документацию по валидаторам, веткам
 
 ## Based on
 
