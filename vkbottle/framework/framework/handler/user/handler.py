@@ -66,12 +66,8 @@ class UserHandler(ABCHandler):
     async def dispatch(
         self, get_current_rest: typing.Callable[[], typing.Awaitable[dict]] = None
     ) -> None:
-        self.message_rules.extend(
-            [*self.message.rules, *self.chat_message.rules, *self.message_handler.rules]
-        )
-        self.message_rules.extend(
-            [*self.message.rules, *self.chat_message.rules, *self.message_handler.rules]
-        )
+        self.message_handler.rules += self.message.rules + self.chat_message.rules
+        self.message_rules += self.message_handler.rules
 
         if get_current_rest:
             # Check updates from timoniq/vkbottle-rest
