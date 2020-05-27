@@ -69,7 +69,7 @@ class User(PollingAPI):
                 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
         if login and password:
-            self.__tokens = [self.get_tokens(login, password)]
+            self.__tokens = self.get_tokens(login, password)
 
         self.loop = loop or asyncio.get_event_loop()
         self.__debug: bool = debug
