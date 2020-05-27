@@ -26,10 +26,13 @@ COL_RULES = {
 
 
 class ABCMessageHandler(ABC):
-    rules: typing.List[typing.List[AbstractRule]] = []
-    prefix: typing.List[typing.AnyStr] = []
-    _default_rules: typing.List[AbstractRule] = []
+
     _patcher: Patcher
+
+    def __init__(self):
+        self.rules: typing.List[typing.List[AbstractRule]] = []
+        self.prefix: typing.List[typing.AnyStr] = []
+        self._default_rules: typing.List[AbstractRule] = []
 
     @abstractmethod
     def add_rules(self, rules: typing.List[AbstractRule], func: typing.Callable):

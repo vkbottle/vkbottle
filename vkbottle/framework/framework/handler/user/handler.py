@@ -20,6 +20,7 @@ from ..message import ABCMessageHandler
 
 class MessageHandler(ABCMessageHandler):
     def __init__(self, *, default_rules: typing.List[AbstractMessageRule]):
+        super().__init__()
         self._default_rules = default_rules
         self._patcher = Patcher.get_current()
 
