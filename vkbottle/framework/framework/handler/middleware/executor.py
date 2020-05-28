@@ -28,12 +28,12 @@ class MiddlewareExecutor:
     def export_middleware(self, middleware_list: typing.List[Middleware]):
         self.middleware.extend(middleware_list)
 
-    async def run_middleware(self, event: BaseModel, flag: MiddlewareFlags):
+    async def run_middleware(self, event: BaseModel, flag: MiddlewareFlags, *middleware_args):
         for middleware in self.middleware:
             logger.debug(
                 f"Executing middleware {middleware.__class__.__name__} ({str(flag)})"
             )
-            yield await middleware.emulate_middleware(event, flag)
+            yield await middleware.emulate_middleware(event, flag, *middleware_args)
 
     def __repr__(self):
         return f"<MiddlewareExecutor middleware={', '.join(names(self.middleware))}>"
