@@ -92,7 +92,7 @@ class BotProcessor(ABCProcessor):
                 break
 
         async for mr in self.middleware.run_middleware(
-            message, flag=MiddlewareFlags.POST, *middleware_args
+            message, MiddlewareFlags.POST, *middleware_args
         ):
             logger.debug(f"POST Middleware handler returned: {mr}")
 

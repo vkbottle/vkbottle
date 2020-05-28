@@ -26,7 +26,7 @@ class Middleware(ABC):
             warnings.warn(
                 "Middleware.middleware is deprecated, use pre and post instead. See issue #108"
             )
-            return await self.middleware(event)
+            return await self.middleware(event, *middleware_args)
 
         elif flag is MiddlewareFlags.PRE:
             return await self.pre(event, *middleware_args)
