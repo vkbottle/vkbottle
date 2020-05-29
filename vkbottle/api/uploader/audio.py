@@ -1,16 +1,13 @@
 import typing
 from .base import Uploader
+from io import BytesIO
 
 
 class AudioUploader(Uploader):
     FILE_EXTENSIONS = [".mp3", ".ogg", ".opus"]
 
     async def upload_audio(
-        self,
-        artist: str,
-        title: str,
-        pathlike: typing.Union[str, typing.Any],
-        **params,
+        self, artist: str, title: str, pathlike: typing.Union[str, BytesIO], **params,
     ) -> typing.Union[str, dict]:
 
         server = await self.api.request("audio.getUploadServer", {})

@@ -28,7 +28,9 @@ class MiddlewareExecutor:
     def export_middleware(self, middleware_list: typing.List[Middleware]):
         self.middleware.extend(middleware_list)
 
-    async def run_middleware(self, event: BaseModel, flag: MiddlewareFlags, *middleware_args):
+    async def run_middleware(
+        self, event: BaseModel, flag: MiddlewareFlags, *middleware_args
+    ):
         for middleware in self.middleware:
             logger.debug(
                 f"Executing middleware {middleware.__class__.__name__} ({str(flag)})"
