@@ -14,7 +14,9 @@ class Middleware(ABC):
     async def middleware(self, event: BaseModel):
         return MiddlewareFlags.UNASSIGNED
 
-    async def emulate_middleware(self, event: BaseModel, flag: "MiddlewareFlags", *middleware_args):
+    async def emulate_middleware(
+        self, event: BaseModel, flag: "MiddlewareFlags", *middleware_args
+    ):
         """ Emulate middleware based on given flag: PRE or POST
         :param event: Base executed event
         :param flag: MiddlewareFlags

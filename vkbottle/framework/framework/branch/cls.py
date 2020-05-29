@@ -50,3 +50,6 @@ class CoroutineBranch(AbstractBranch):
 
     async def branch(self, ans, *args):
         return await self.data["call"](ans, *args, **self.context)
+
+    def __call__(self):
+        return self
