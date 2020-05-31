@@ -1,6 +1,7 @@
 import typing
-from .base import Uploader
 from io import BytesIO
+
+from .base import Uploader
 
 
 class AudioUploader(Uploader):
@@ -23,3 +24,23 @@ class AudioUploader(Uploader):
                 "audio", await self.api.user_id, audio["id"]
             )
         return audio
+
+    async def upload_audio_message(
+        self,
+        pathlike: typing.Union[str, BytesIO],
+        peer_id: int,
+        doc_type: str = "audio_message",
+        **params,
+    ):
+        server = await self.api.request(
+            "docs.getMessagesUploadServer", {"type": doc_type, "peer_id": peer_id}
+        )
+        uploader = await self.upload(
+            server, {"file": self.open_pathlike(pathlike)}, params
+        )
+        params = {**uploader, **params}
+        doc = await self.api.request("docs.save", params)
+        if self.gas:
+            doc = doc[doc["type"]]
+            return self.generate_attachment_string("doc", doc["owner_id"], doc["id"])
+        return doc

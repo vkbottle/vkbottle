@@ -1,6 +1,8 @@
 # Generated with love
 import typing
+
 from vkbottle.types import responses
+
 from .access import APIAccessibility
 from .method import BaseMethod
 
@@ -139,6 +141,7 @@ class WallEdit(BaseMethod):
         message: str = None,
         attachments: typing.List = None,
         services: str = None,
+        copyright: str = None,
         signed: bool = None,
         publish_date: int = None,
         lat: typing.Any = None,
@@ -159,6 +162,7 @@ class WallEdit(BaseMethod):
         :param message: (Required if 'attachments' is not set.) Text of the post.
         :param attachments: (Required if 'message' is not set.) List of objects attached to the post, in the following format: "<owner_id>_<media_id>,<owner_id>_<media_id>", '' — Type of media attachment: 'photo' — photo, 'video' — video, 'audio' — audio, 'doc' — document, '<owner_id>' — ID of the media application owner. '<media_id>' — Media application ID. Example: "photo100172_166443618,photo66748_265827614", May contain a link to an external page to include in the post. Example: "photo66748_265827614,http://habrahabr.ru", "NOTE: If more than one link is being attached, an error is thrown."
         :param services: 
+        :param copyright:
         :param signed: 
         :param publish_date: 
         :param lat: 
