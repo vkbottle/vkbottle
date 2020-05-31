@@ -53,6 +53,8 @@ class Message(MessageType, GetApi):
         payload: str = None,
         dont_parse_links: bool = None,
         disable_mentions: bool = None,
+        template: dict = None,
+        intent: str = None,
     ):
         return await self.__call__(
             **self.get_params(locals()), reply_to=self.get_message_id()
@@ -78,6 +80,8 @@ class Message(MessageType, GetApi):
         payload: str = None,
         dont_parse_links: bool = None,
         disable_mentions: bool = None,
+        template: dict = None,
+        intent: str = None,
     ):
         if not message:
             return await self.api.messages.send(

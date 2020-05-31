@@ -1072,6 +1072,8 @@ class MessagesSend(BaseMethod):
         disable_mentions: bool = None,
         expire_ttl: int = None,
         silent: bool = None,
+        template: dict = None,
+        intent: str = None,
     ) -> responses.messages.Send:
         """ messages.send
         From Vk Docs: Sends a message.
