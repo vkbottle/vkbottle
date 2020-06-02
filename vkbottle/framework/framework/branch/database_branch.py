@@ -90,7 +90,7 @@ class DatabaseBranch(ABCBranchGenerator):
 
         dumped_context = context
 
-        if self.generator == GeneratorType.DATABASE:
+        if self.__class__.generator == GeneratorType.DATABASE:
             dumped_context = json.dumps(context)
 
         await self.set_user(uid, branch, dumped_context)
