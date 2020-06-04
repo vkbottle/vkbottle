@@ -157,8 +157,8 @@ def for_cycle(d: ast.For):
 def if_statement(d: ast.If):
     return (
         "if(" + find(d.test) + "){" + "".join(find(li) + ";" for li in d.body) + "}else{" +
-        (find(d.orelse) if len(d.orelse) else "")
-        or "" + "};"
+        (find(d.orelse) if len(d.orelse) else "") +
+        "};"
     )
 
 
