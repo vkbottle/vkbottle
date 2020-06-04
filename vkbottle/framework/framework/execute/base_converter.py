@@ -33,7 +33,7 @@ class Converter:
         code = ast.parse(source).body[0]
         args = [a.arg for a in code.args.args]
         args.pop(0)
-        if any(v not in values.values() for v in args):
+        if any(v not in values for v in args):
             raise ConverterError("All values should be passed to func. Predefined kwargs are not allowed")
         values_assignments = [f"var {k}={v};" for k, v in values.items()]
         return "".join(values_assignments) + "".join(
