@@ -156,7 +156,7 @@ def for_cycle(d: ast.For):
 @converter(ast.If)
 def if_statement(d: ast.If):
     return (
-        "if(" + find(d.test) + "){" + "".join(find(li) + ";" for li in d.body) + "}else{" +
+        "if(" + find(d.test) + "){" + "".join(find(li) for li in d.body) + "}else{" +
         (find(d.orelse) if len(d.orelse) else "") +
         "};"
     )
@@ -265,12 +265,6 @@ def dict_type(d: ast.Dict):
     return "{" + dict_s + "}"
 
 
-@converter(ast.List)
-@converter(ast.Tuple)
-def list_type(d: typing.Union[ast.List, ast.Tuple]):
-    return "[" + ",".join(find(elt) for elt in d.elts) + "]"
-
-
 @converter(ast.Num)
 def num_type(d: ast.Num):
     return str(d.n)
@@ -292,8 +286,9 @@ def formatted_value(d: ast.FormattedValue):
 
 
 @converter(ast.List)
+@converter(ast.Tuple)
 def list_type(d: ast.List):
-    return "[" ",".join(find(a) for a in d.elts) + "]"
+    return "[" + ",".join(find(a) for a in d.elts) + "]"
 
 
 @converter(ast.NameConstant)
