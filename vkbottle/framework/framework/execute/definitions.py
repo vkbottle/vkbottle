@@ -6,7 +6,7 @@ from vkbottle.utils import random_string
 CALL_REPLACEMENTS = {
     "append": "push",
 }
-CALL_STRING = ["join", "strip"]
+CALL_STRING = ["join", "strip", "split"]
 
 converter = Converter()
 find = converter.find_definition
@@ -156,7 +156,8 @@ def for_cycle(d: ast.For):
 @converter(ast.If)
 def if_statement(d: ast.If):
     return (
-        "if(" + find(d.test) + "){" + find(d.body) + "}else{" + find(d.orelse)
+        "if(" + find(d.test) + "){" + "".join(find(li) + ";" for li in d.body) + "}else{" +
+        (find(d.orelse) if len(d.orelse) else "")
         or "" + "};"
     )
 
@@ -185,7 +186,9 @@ def call(d: ast.Call):
     elif calls and calls[0] in CALL_REPLACEMENTS:
         args = ",".join(find(arg) for arg in d.args)
         return find(d.func.value) + "." + CALL_REPLACEMENTS[calls[0]] + "(" + args + ")"
-    raise ConverterError(f"Call for {d.func.id} is not referenced")
+    elif calls[0] in CALL_STRING:
+        return find(func) + "." + calls[0] + "(" + find(d.args[0]) + ")"
+    raise ConverterError(f"Call for {getattr(d.func, 'attr', d.func.__dict__)} is not referenced")
 
 
 @converter(ast.Pass)
@@ -286,6 +289,11 @@ def joined_str(d: ast.JoinedStr):
 @converter(ast.FormattedValue)
 def formatted_value(d: ast.FormattedValue):
     return find(d.value)
+
+
+@converter(ast.List)
+def list_type(d: ast.List):
+    return "[" ",".join(find(a) for a in d.elts) + "]"
 
 
 @converter(ast.NameConstant)

@@ -31,6 +31,10 @@ class Converter:
         """ Translate function to VKScript """
         source = getsource(func)
         code = ast.parse(source).body[0]
+        args = [a.arg for a in code.args.args]
+        args.pop(0)
+        if any(v not in values.values() for v in args):
+            raise ConverterError("All values should be passed to func. Predefined kwargs are not allowed")
         values_assignments = [f"var {k}={v};" for k, v in values.items()]
         return "".join(values_assignments) + "".join(
             self.find_definition(line) for line in code.body
