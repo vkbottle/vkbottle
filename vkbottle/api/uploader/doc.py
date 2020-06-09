@@ -1,5 +1,6 @@
 import typing
 from .base import Uploader
+from io import BytesIO
 
 
 class DocUploader(Uploader):
@@ -10,7 +11,7 @@ class DocUploader(Uploader):
     ]
 
     async def upload_doc_to_wall(
-        self, pathlike, group_id: int = None, **params
+        self, pathlike: typing.Union[str, BytesIO], group_id: int = None, **params
     ) -> typing.Union[str, dict]:
         server = await self.api.request(
             "docs.getWallUploadServer", {"group_id": group_id} if group_id else {}
@@ -26,7 +27,7 @@ class DocUploader(Uploader):
         return doc
 
     async def upload_doc(
-        self, pathlike, group_id: int = None, **params
+        self, pathlike: typing.Union[str, BytesIO], group_id: int = None, **params
     ) -> typing.Union[str, dict]:
         server = await self.api.request(
             "docs.getUploadServer", {"group_id": group_id} if group_id else {}
@@ -42,7 +43,11 @@ class DocUploader(Uploader):
         return doc
 
     async def upload_doc_to_message(
-        self, pathlike, peer_id: int, doc_type: str = "doc", **params
+        self,
+        pathlike: typing.Union[str, BytesIO],
+        peer_id: int,
+        doc_type: str = "doc",
+        **params
     ):
         server = await self.api.request(
             "docs.getMessagesUploadServer", {"type": doc_type, "peer_id": peer_id}

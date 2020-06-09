@@ -13,8 +13,8 @@ class LovelessBranch(ClsBranch):
         return "I don't love you forever"
 
 
-@bot.branch.simple_branch(branch_name="nun")
-async def branch_wrapper(ans: Message, word):
+@bot.branch.simple_branch(branch_name="repeat")
+async def branch_wrapper(ans: Message, word: str):
     if ans.text.lower() in ["exit", "stop"]:
         await ans("As you want to!")
         return ExitBranch()
@@ -43,6 +43,12 @@ async def pronounce(ans: Message, word):
 async def loveless(ans: Message):
     await ans("Loveless..")
     return Branch(LovelessBranch)
+
+
+@bot.on.message_handler(text="repeat <word>")
+async def to_nun(ans: Message, word: str):
+    await ans("ok")
+    await bot.branch.add(ans.from_id, "repeat", word=word)
 
 
 bot.branch.add_branch(LovelessBranch)

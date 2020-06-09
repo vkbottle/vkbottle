@@ -1,5 +1,6 @@
 import typing
 from .base import Uploader
+from io import BytesIO
 
 
 class PhotoUploader(Uploader):
@@ -8,7 +9,7 @@ class PhotoUploader(Uploader):
     async def upload_photo_to_album(
         self,
         album_id: int,
-        pathlike: typing.Union[list, typing.Any],
+        pathlike: typing.Union[str, BytesIO],
         group_id: int = None,
         **params,
     ) -> typing.Union[str, typing.List[str]]:
@@ -38,7 +39,9 @@ class PhotoUploader(Uploader):
             ]
         return photos
 
-    async def upload_wall_photo(self, pathlike, **params) -> typing.Union[str, dict]:
+    async def upload_wall_photo(
+        self, pathlike: typing.Union[str, BytesIO], **params
+    ) -> typing.Union[str, dict]:
         server = await self.api.request("photos.getWallUploadServer", {})
         uploader = await self.upload(
             server, {"photo": self.open_pathlike(pathlike)}, params
@@ -52,7 +55,9 @@ class PhotoUploader(Uploader):
             )
         return photo
 
-    async def update_favicon(self, pathlike, group_id: int = None, **params):
+    async def update_favicon(
+        self, pathlike: typing.Union[str, BytesIO], group_id: int = None, **params
+    ):
         server = await self.api.request(
             "photos.getOwnerPhotoUploadServer",
             {"owner_id": self.get_owner_id(group_id)},
@@ -63,7 +68,9 @@ class PhotoUploader(Uploader):
         photo = await self.api.request("photos.saveOwnerPhoto", uploader)
         return photo
 
-    async def upload_message_photo(self, pathlike, **params):
+    async def upload_message_photo(
+        self, pathlike: typing.Union[str, BytesIO], **params
+    ):
         server = await self.api.request("photos.getMessagesUploadServer", params)
         uploader = await self.upload(
             server, {"photo": self.open_pathlike(pathlike)}, {}
@@ -76,14 +83,16 @@ class PhotoUploader(Uploader):
             )
         return photo
 
-    async def upload_chat_favicon(self, pathlike, chat_id: int, **params) -> str:
+    async def upload_chat_favicon(
+        self, pathlike: typing.Union[str, BytesIO], chat_id: int, **params
+    ) -> str:
         server = await self.api.request(
             "photos.getChatUploadServer", dict(chat_id=chat_id, **params)
         )
         uploader = await self.upload(server, {"file": self.open_pathlike(pathlike)}, {})
         return uploader["response"]
 
-    async def upload_market_photo(self, pathlike, **params):
+    async def upload_market_photo(self, pathlike: typing.Union[str, BytesIO], **params):
         server = await self.api.request("photos.getMarketUploadServer", params)
         uploader = await self.upload(server, {"file": self.open_pathlike(pathlike)}, {})
 

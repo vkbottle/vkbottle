@@ -2,7 +2,7 @@ import os
 
 from tortoise import Tortoise  # my humble choice
 
-from vkbottle import Bot, Message, User
+from vkbottle import Bot, Message
 from vkbottle.branch import ClsBranch, rule_disposal
 from vkbottle.framework.framework.branch.database_branch import DatabaseBranch
 from vkbottle.rule import VBMLRule
@@ -33,19 +33,13 @@ class SqliteBranch(DatabaseBranch):
         return [u.uid async for u in UserState.all()]
 
     async def delete_user(self, uid: int):
-        """This method should delete the user's instance from the database"""
+        """This method should delete the user's bot from the database"""
         u = await UserState.get(uid=uid)
         await u.delete()
 
 
 bot = Bot(os.environ.get("token"))
 bot.branch = SqliteBranch()
-
-user = User(os.environ.get("user_token"))
-user.branch = SqliteBranch()
-
-# Database branches are available for user and bot instances
-instance = user if os.environ.get("user_token") else bot
 
 
 class StoredBranch(ClsBranch):
@@ -66,9 +60,9 @@ class StoredBranch(ClsBranch):
         return f"{u[0].first_name}, твое слово: {self.context['word']}"
 
 
-@instance.on.message_handler(commands=["start"], from_me=False)
+@bot.on.message_handler(commands=["start"])
 async def start(ans: Message):
-    await instance.branch.add(ans.peer_id, "talker")
+    await bot.branch.add(ans.peer_id, "talker")
     return "Ты в бранче!"
 
 
@@ -79,5 +73,5 @@ async def init_db():
     await Tortoise.generate_schemas()
 
 
-instance.branch.add_branch(StoredBranch, "talker")
-instance.run_polling(on_startup=init_db)
+bot.branch.add_branch(StoredBranch, "talker")
+bot.run_polling(on_startup=init_db)

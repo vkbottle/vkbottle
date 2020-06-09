@@ -6,6 +6,7 @@ from aiohttp import ClientSession
 
 from vkbottle.const import VERSION_REST, __version__
 from vkbottle.utils import json, logger
+from .proxy import Proxy
 
 
 def request_decorator(func):
@@ -45,7 +46,12 @@ class HTTPRequest:
         read_content: bool = False,
     ) -> typing.Union[dict]:
         async with client.post(
-            url, params=params or {}, ssl=ssl.SSLContext(), data=data, json=json_,
+            url,
+            params=params or {},
+            ssl=ssl.SSLContext(),
+            data=data,
+            json=json_,
+            **self.proxy_params,
         ) as response:
             if read_content:
                 return await response.content.read()
@@ -62,11 +68,26 @@ class HTTPRequest:
         read_content: bool = False,
     ) -> typing.Union[dict]:
         async with client.get(
-            url, ssl=ssl.SSLContext(), data=data or None, json=json_ or None
+            url,
+            ssl=ssl.SSLContext(),
+            data=data or None,
+            json=json_ or None,
+            **self.proxy_params,
         ) as response:
             if read_content:
                 return await response.content.read()
             return await response.json(content_type=content_type)
+
+    @property
+    def proxy_params(self) -> dict:
+        if self.proxy:
+            return {"proxy": self.proxy.get_proxy(),
+                    "proxy_auth": self.proxy.get_auth()}
+        return {}
+
+    @property
+    def proxy(self) -> Proxy:
+        return Proxy.get_current()
 
     def __repr__(self):
         return "<HTTPRequest>"

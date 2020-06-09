@@ -40,17 +40,17 @@ class DatabaseBranch(ABCBranchGenerator):
         branch.key = branch_name
         return branch
 
-    async def from_function(
+    def from_function(
         self, func: typing.Callable, branch_name: str = None,
     ) -> AbstractBranch:
         if not asyncio.iscoroutinefunction(func):
             raise BranchError("Branch functions should be async")
 
-        class FromFunctionDatabaseBranch(CoroutineBranch):
-            key = branch_name or func.__name__
-            data = {"call": func}
+        from_function_branch = CoroutineBranch()
+        from_function_branch.key = branch_name or func.__name__
+        from_function_branch.data = {"call": func}
 
-        return FromFunctionDatabaseBranch
+        return from_function_branch
 
     def add_branch(
         self, branch: AbstractBranch, name: str = None, **context
@@ -90,7 +90,7 @@ class DatabaseBranch(ABCBranchGenerator):
 
         dumped_context = context
 
-        if self.generator == GeneratorType.DATABASE:
+        if self.__class__.generator in [GeneratorType.DATABASE, GeneratorType.ABSTRACT]:
             dumped_context = json.dumps(context)
 
         await self.set_user(uid, branch, dumped_context)
@@ -123,5 +123,5 @@ class DatabaseBranch(ABCBranchGenerator):
                 await branch.exit()
             await self.delete_user(uid)
 
-    def get_current(self, *args, **kwargs):
+    def get_current(self, *args, **kwargs) -> "DatabaseBranch":
         return self

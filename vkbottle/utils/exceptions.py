@@ -28,6 +28,10 @@ class KeyboardError(Exception):
     pass
 
 
+class TemplateError(Exception):
+    pass
+
+
 class BranchError(Exception):
     pass
 

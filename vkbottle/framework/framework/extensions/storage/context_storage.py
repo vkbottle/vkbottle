@@ -1,6 +1,5 @@
 from .abc import ABCStorage
 from vkbottle.utils import ContextInstanceMixin
-import contextvars
 import typing
 
 
@@ -15,7 +14,8 @@ class CtxStorage(ABCStorage, ContextInstanceMixin):
 
     def set(self, key: str, value: typing.Any) -> None:
         current_storage = self.get_current().storage
-        self.set_current(CtxStorage({**current_storage, key: value}, True))
+        current_storage[key] = value
+        self.set_current(CtxStorage(current_storage, True))
 
     def get(self, key: str) -> typing.Any:
         return self.get_current().storage.get(key)
