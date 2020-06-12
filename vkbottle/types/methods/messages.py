@@ -1225,6 +1225,33 @@ class MessagesUnpin(BaseMethod):
         )
 
 
+class MessagesRecognizeAudioMessage(BaseMethod):
+    kwargs: dict = {}
+    access_token_type: APIAccessibility = [
+        APIAccessibility.USER
+    ]
+
+    async def __call__(
+        self, audio_message_id: str, message_id: int
+    ) -> responses.ok_response.OkResponse:
+        """ messages.recogniseAudioMessage
+        Hidden method:
+        :param audio_message_id: {owner_id}_{doc_id}
+        :param message_id:
+        """
+
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in {**locals(), **self.kwargs}.items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.recogniseAudioMessage",
+            params,
+            response_model=responses.ok_response.OkResponseModel
+        )
+
+
 class Messages:
     def __init__(self, request):
         self.add_chat_user = MessagesAddChatUser(request)
@@ -1270,3 +1297,4 @@ class Messages:
         self.set_activity = MessagesSetActivity(request)
         self.set_chat_photo = MessagesSetChatPhoto(request)
         self.unpin = MessagesUnpin(request)
+        self.recognize_audio_message = MessagesRecognizeAudioMessage(request)
