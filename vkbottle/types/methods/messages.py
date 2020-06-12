@@ -1297,3 +1297,4 @@ class Messages:
         self.set_activity = MessagesSetActivity(request)
         self.set_chat_photo = MessagesSetChatPhoto(request)
         self.unpin = MessagesUnpin(request)
+        self.recognize_audio_message = MessagesRecognizeAudioMessage(request)
