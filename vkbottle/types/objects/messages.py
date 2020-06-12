@@ -25,6 +25,8 @@ class AudioMessage(BaseModel):
     link_mp3: str = None
     link_ogg: str = None
     owner_id: int = None
+    transcript: str = None
+    transcript_state: str = None
     waveform: typing.List[int] = None
 
 
