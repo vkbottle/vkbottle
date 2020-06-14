@@ -177,7 +177,7 @@ async def wrapper(ans: Message, name):
 from vkbottle.rule import ChatActionRule
 # Импортировали стандартное правило на событие в чате
 
-@bot.on.message(ChatActionRule("chat_invite_user", "chat_invite_user_by_link"))
+@bot.on.message(ChatActionRule(["chat_invite_user", "chat_invite_user_by_link"]))
 async def wrapper(ans: Message):
     await ans(f'Ура! Новый участник в нашей беседе')
 ```
