@@ -107,7 +107,7 @@ bot.run_polling()
 
 ``` python  
 from vkbottle.bot import Bot, Message  
-from vkbottle.types import GroupJoin # Ваше IDE даст вам подсказку по
+from vkbottle.types import GroupJoin # Ваш IDE даст вам подсказку
 
 bot = Bot("token", debug="DEBUG", throw_errors=False)
 
