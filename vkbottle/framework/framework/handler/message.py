@@ -153,11 +153,13 @@ class ABCMessageHandler(ABC):
         """
 
         def decorator(func):
-            current: typing.List[AbstractRule] = list(rules)
-            current.extend(self._col_rules(**col_rules))
+            current: typing.List[AbstractRule] = []
 
             if text:
                 current.append(self._text_rule(func, text, lower, command, "{}$"))
+
+            current.extend(rules)
+            current.extend(self._col_rules(**col_rules))
 
             self.add_rules(current, func)
             return func
