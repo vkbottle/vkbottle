@@ -110,13 +110,15 @@ class ABCMessageHandler(ABC):
         :param pattern: any regex pattern pattern. {} means text which will be formatted
         :return: True
         """
-        current: typing.List[AbstractRule] = list(rules)
-        current.extend(self._col_rules(**col_rules))
+        current: typing.List[AbstractRule] = []
 
         if text:
             current.append(
                 self._text_rule(func, text, lower, command, pattern or "{}$")
             )
+
+        current.extend(rules)
+        current.extend(self._col_rules(**col_rules))
 
         self.add_rules(current, func)
 
