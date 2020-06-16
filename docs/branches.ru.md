@@ -39,7 +39,7 @@ async def branch(ans: Message):
 class Branch(ClsBranch):
     @rule_disposal(VBMLRule("выйти", lower=True))
     async def exit_branch(self, ans: Message):
-        await ans("Окей, вывожу!")
+        await ans("Окей, выхожу!")
         await bot.branch.exit(ans.peer_id)
     
     async def branch(self, ans: Message, *args):
