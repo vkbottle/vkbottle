@@ -30,6 +30,15 @@ class AudioMessage(BaseModel):
     waveform: typing.List[int] = None
 
 
+class Call(BaseModel):
+    initiator_id: int = None
+    receiver_id: int = None
+    state: str = None
+    time: int = None
+    duration: int = None
+    video: bool = None
+
+
 class Chat(BaseModel):
     admin_id: int = None
     id: int = None
@@ -293,6 +302,7 @@ class MessageActionStatus(Enum):
 class MessageAttachment(BaseModel):
     audio: "audio.Audio" = None
     audio_message: "AudioMessage" = None
+    call: "Call" = None
     doc: "docs.Doc" = None
     poll: "polls.Poll" = None
     gift: "gifts.Layout" = None
@@ -313,6 +323,7 @@ class MessageAttachmentType(Enum):
     photo = "photo"
     audio = "audio"
     video = "video"
+    call = "call"
     doc = "doc"
     link = "link"
     poll = "poll"
