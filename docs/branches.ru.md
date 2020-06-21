@@ -28,7 +28,7 @@ async def wrapper(ans: Message):
 @bot.branch.simple_branch("my_branch")
 async def branch(ans: Message):
     if ans.text.lower() == "выйти":
-        await ans("Окей, вывожу!")
+        await ans("Окей, выхожу!")
         await bot.branch.exit(ans.peer_id)
 
     await ans("Ты в бранче. Пиши «выйти», чтобы выйти отсюда.")

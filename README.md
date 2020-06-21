@@ -155,4 +155,4 @@ user.run_polling()
 ## Лицензия
 
 Copyright © 2019-2020 [timoniq](https://github.com/timoniq).  
-Этот проект имеет [GPL-3.0](./LICENSE.txt) лицензию.
+Этот проект имеет [MIT](./LICENSE.txt) лицензию.
