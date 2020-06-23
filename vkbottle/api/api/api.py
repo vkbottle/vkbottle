@@ -28,7 +28,7 @@ class API(ContextInstanceMixin, Categories, Constructor):
         generator: typing.Union[str] = "consistent",
         throw_errors: bool = True,
     ):
-        if isinstance(tokens, str):
+        if not isinstance(tokens, list):
             tokens = [tokens]
 
         self.token_generator: AbstractTokenGenerator = GENERATORS.get(
