@@ -16,24 +16,25 @@ def keyboard_gen(
     for row in rows:
         row_buttons = list()
         for button in row:
-            row_buttons.append(
-                dict(
-                    action=dict(
-                        type=button.get("type", "text"),
-                        label=button.get("text", button.get("label")),
-                        **{
-                            k: v
-                            for k, v in button.items()
-                            if k not in ["type", "text", "label", "color"]
-                        }
-                    ),
-                    **(
-                        {"color": button.get("color", "default")}
-                        if button.get("type", "text") == "text"
-                        else {}
-                    )
-                )
+            action = dict()
+            fields = dict()
+
+            action["type"] = button.get("type", "text")
+            action.update(
+                {
+                    k: v
+                    for k, v in button.items()
+                    if k not in ("type", "text", "label", "color")
+                }
             )
+
+            if action["type"] == "text":
+                action["label"] = button.get("text", button.get("label"))
+                fields["color"] = button.get("color", "default")
+
+            row_button = {"action": action, **fields}
+
+            row_buttons.append(row_button)
         buttons.append(row_buttons)
 
     keyboard = str(
