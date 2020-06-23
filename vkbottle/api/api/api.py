@@ -24,10 +24,13 @@ class API(ContextInstanceMixin, Categories, Constructor):
 
     def __init__(
         self,
-        tokens: typing.List[str] = None,
+        tokens: typing.Union[str, typing.List[str]] = None,
         generator: typing.Union[str] = "consistent",
         throw_errors: bool = True,
     ):
+        if isinstance(tokens, str):
+            tokens = [tokens]
+
         self.token_generator: AbstractTokenGenerator = GENERATORS.get(
             generator, ConsistentTokenGenerator
         )(tokens)
