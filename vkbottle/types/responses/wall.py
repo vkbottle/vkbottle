@@ -59,7 +59,7 @@ class GetRepostsModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List[objects.wall.Wallpost] = None
+    items: typing.List[objects.wall.WallpostFull] = None
 
 
 class GetModel(BaseModel):
