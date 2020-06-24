@@ -15,6 +15,12 @@ class Wikipage(BaseModel):
     who_can_edit: int = None
     who_can_view: int = None
 
+    def __hash__(self):
+        return hash((self.group_id, self.id))
+
+    def __eq__(self, other):
+        return self.group_id == other.group_id and self.id == other.id
+
 
 class WikipageFull(BaseModel):
     created: int = None
@@ -32,6 +38,12 @@ class WikipageFull(BaseModel):
     views: int = None
     who_can_edit: int = None
     who_can_view: int = None
+
+    def __hash__(self):
+        return hash((self.group_id, self.id))
+
+    def __eq__(self, other):
+        return self.group_id == other.group_id and self.id == other.id
 
 
 class WikipageHistory(BaseModel):

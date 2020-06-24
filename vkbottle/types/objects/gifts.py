@@ -11,6 +11,12 @@ class Gift(BaseModel):
     message: str = None
     privacy: "GiftPrivacy" = None
 
+    def __hash__(self):
+        return hash((self.from_id, self.id))
+
+    def __eq__(self, other):
+        return self.from_id == other.from_id and self.id == other.id
+
 
 class GiftPrivacy(IntEnum):
     visible_name_and_message = 0
@@ -23,6 +29,12 @@ class Layout(BaseModel):
     thumb_256: str = None
     thumb_48: str = None
     thumb_96: str = None
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
 
 
 Gift.update_forward_refs()

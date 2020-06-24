@@ -95,6 +95,12 @@ class PhotoAlbum(BaseModel):
     title: str = None
     updated: int = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class PhotoAlbumFull(BaseModel):
     can_upload: "base.BoolInt" = None
@@ -111,6 +117,12 @@ class PhotoAlbumFull(BaseModel):
     title: str = None
     updated: int = None
     upload_by_admins_only: "base.BoolInt" = None
+
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
 
 
 class PhotoFull(BaseModel):
@@ -132,6 +144,12 @@ class PhotoFull(BaseModel):
     text: str = None
     user_id: int = None
     width: int = None
+
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
 
 
 class PhotoFullXtrRealOffset(BaseModel):
@@ -161,6 +179,12 @@ class PhotoFullXtrRealOffset(BaseModel):
     text: str = None
     user_id: int = None
     width: int = None
+
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
 
 
 class PhotoSizes(BaseModel):
@@ -222,6 +246,12 @@ class PhotoXtrRealOffset(BaseModel):
     text: str = None
     user_id: int = None
     width: int = None
+
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
 
 
 class PhotoXtrTagInfo(BaseModel):

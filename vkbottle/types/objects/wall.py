@@ -32,6 +32,12 @@ class AttachedNote(BaseModel):
     title: str = None
     view_url: str = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class CommentAttachment(BaseModel):
     audio: "audio.Audio" = None
@@ -73,6 +79,12 @@ class Graffiti(BaseModel):
     photo_200: str = None
     photo_586: str = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class PostSource(BaseModel):
     data: str = None
@@ -103,6 +115,12 @@ class PostedPhoto(BaseModel):
     photo_130: str = None
     photo_604: str = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class Views(BaseModel):
     count: int = None
@@ -124,6 +142,12 @@ class WallComment(BaseModel):
     parents_stack: typing.List = None
     deleted: bool = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class Wallpost(BaseModel):
     access_key: str = None
@@ -143,6 +167,12 @@ class Wallpost(BaseModel):
     signer_id: int = None
     text: str = None
     views: "Views" = None
+
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
 
 
 class WallpostAttachment(BaseModel):

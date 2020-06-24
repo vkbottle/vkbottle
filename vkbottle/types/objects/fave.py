@@ -42,6 +42,12 @@ class Tag(BaseModel):
     id: int = None
     name: str = None
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 Bookmark.update_forward_refs()
 Page.update_forward_refs()

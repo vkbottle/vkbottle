@@ -10,6 +10,12 @@ class FriendStatus(BaseModel):
     sign: str = None
     user_id: int = None
 
+    def __hash__(self):
+        return hash(self.user_id)
+
+    def __eq__(self, other):
+        return self.user_id == other.user_id
+
 
 class FriendsList(BaseModel):
     id: int = None
@@ -21,11 +27,23 @@ class MutualFriend(BaseModel):
     common_friends: typing.List = None
     id: int = None
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 class Requests(BaseModel):
     _from: str = None
     mutual: "RequestsMutual" = None
     user_id: int = None
+
+    def __hash__(self):
+        return hash(self.user_id)
+
+    def __eq__(self, other):
+        return self.user_id == other.user_id
 
 
 class RequestsMutual(BaseModel):
@@ -38,6 +56,12 @@ class RequestsXtrMessage(BaseModel):
     message: str = None
     mutual: "RequestsMutual" = None
     user_id: int = None
+
+    def __hash__(self):
+        return hash(self.user_id)
+
+    def __eq__(self, other):
+        return self.user_id == other.user_id
 
 
 FriendStatus.update_forward_refs()

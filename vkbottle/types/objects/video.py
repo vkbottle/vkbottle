@@ -39,6 +39,12 @@ class Video(BaseModel):
     views: int = None
     width: int = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class VideoAlbumFull(BaseModel):
     count: int = None
@@ -48,6 +54,12 @@ class VideoAlbumFull(BaseModel):
     owner_id: int = None
     title: str = None
     updated_time: int = None
+
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
 
 
 class VideoFiles(BaseModel):
@@ -85,6 +97,12 @@ class VideoFull(BaseModel):
     repeat: "base.BoolInt" = None
     title: str = None
     views: int = None
+
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
 
 
 class VideoImage(base.Image):

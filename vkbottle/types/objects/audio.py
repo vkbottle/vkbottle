@@ -27,11 +27,23 @@ class AudioAlbum(BaseModel):
     access_key: str = None
     thumb: AlbumThumb = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class Artist(BaseModel):
     name: str = None
     domain: str = None
     id: str = None
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
 
 
 class Audio(BaseModel):
@@ -51,6 +63,12 @@ class Audio(BaseModel):
     genre_id: int = None
     performer: str = None
     main_artists: List[Artist] = None
+
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
 
 
 Audio.update_forward_refs()

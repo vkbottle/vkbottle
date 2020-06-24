@@ -173,6 +173,12 @@ class Group(BaseModel):
     start_date: int = None
     type: "GroupType" = None
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 class GroupBanInfo(BaseModel):
     comment: str = None

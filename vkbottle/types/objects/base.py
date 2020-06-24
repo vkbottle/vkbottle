@@ -10,6 +10,12 @@ class City(BaseModel):
     id: int = None
     title: str = None
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 class CommentsInfo(BaseModel):
     can_post: "BoolInt" = None
@@ -20,6 +26,12 @@ class CommentsInfo(BaseModel):
 class Country(BaseModel):
     id: int = None
     title: str = None
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
 
 
 class Error(BaseModel):
@@ -67,6 +79,12 @@ class Object(BaseModel):
     id: int = None
     title: str = None
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 class ObjectCount(BaseModel):
     count: int = None
@@ -75,6 +93,12 @@ class ObjectCount(BaseModel):
 class ObjectWithName(BaseModel):
     id: int = None
     name: str = None
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
 
 
 class OkResponse(IntEnum):
@@ -93,6 +117,12 @@ class Place(BaseModel):
     longitude: float = None
     title: str = None
     type: str = None
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
 
 
 class PropertyExists(IntEnum):
@@ -120,6 +150,12 @@ class Sticker(BaseModel):
     images_with_background: typing.List = None
     product_id: int = None
     sticker_id: int = None
+
+    def __hash__(self):
+        return hash((self.product_id, self.sticker_id))
+
+    def __eq__(self, other):
+        return self.product_id == other.product_id and self.sticker_id == other.sticker_id
 
 
 class UploadServer(BaseModel):

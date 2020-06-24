@@ -212,6 +212,12 @@ class UserMin(BaseModel):
     can_access_closed: bool = None
     is_closed: bool = None
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 class User(UserMin):
     sex: "base.Sex" = None

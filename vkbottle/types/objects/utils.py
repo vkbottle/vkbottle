@@ -7,6 +7,12 @@ class DomainResolved(BaseModel):
     object_id: int = None
     type: "DomainResolvedType" = None
 
+    def __hash__(self):
+        return hash((self.object_id, self.type))
+
+    def __eq__(self, other):
+        return self.object_id == other.object_id and self.type == other.type
+
 
 class DomainResolvedType(Enum):
     user = "user"
