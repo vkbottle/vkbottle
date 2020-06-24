@@ -13,6 +13,12 @@ class AppMin(BaseModel):
     icon_278: str = None
     icon_75: str = None
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 class App(AppMin):
     author_group: int = None

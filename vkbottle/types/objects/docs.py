@@ -17,6 +17,12 @@ class Doc(BaseModel):
     type: int = None
     url: str = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class DocAttachmentType(Enum):
     doc = "doc"

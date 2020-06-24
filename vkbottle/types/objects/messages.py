@@ -29,6 +29,12 @@ class AudioMessage(BaseModel):
     transcript_state: str = None
     waveform: typing.List[int] = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class Call(BaseModel):
     initiator_id: int = None
@@ -52,6 +58,12 @@ class Chat(BaseModel):
     type: str = None
     users: typing.List[int] = None
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 class ChatFull(BaseModel):
     admin_id: int = None
@@ -65,6 +77,12 @@ class ChatFull(BaseModel):
     title: str = None
     type: str = None
     users: typing.List[int] = None
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
 
 
 class ChatPushSettings(BaseModel):
@@ -104,6 +122,12 @@ class ConversationMember(BaseModel):
     request_date: int = None
     member_id: int = None
 
+    def __hash__(self):
+        return hash(self.member_id)
+
+    def __eq__(self, other):
+        return self.member_id == other.member_id
+
 
 class ConversationPeer(BaseModel):
     id: int = None
@@ -136,6 +160,12 @@ class ForeignMessage(BaseModel):
     text: str = None
     update_time: int = None
 
+    def __hash__(self):
+        return hash((self.from_id, self.id))
+
+    def __eq__(self, other):
+        return self.from_id == other.from_id and self.id == other.id
+
 
 class Graffiti(BaseModel):
     access_key: str = None
@@ -145,11 +175,23 @@ class Graffiti(BaseModel):
     url: str = None
     width: int = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class HistoryAttachment(BaseModel):
     attachment: "HistoryMessageAttachment" = None
     message_id: int = None
     from_id: int = None
+
+    def __hash__(self):
+        return hash((self.from_id, self.message_id))
+
+    def __eq__(self, other):
+        return self.from_id == other.from_id and self.message_id == other.message_id
 
 
 class HistoryMessageAttachment(BaseModel):
@@ -242,6 +284,12 @@ class Message(BaseModel):
     reply_message: "ForeignMessage" = None
     text: str = None
     update_time: int = None
+
+    def __hash__(self):
+        return hash((self.from_id, self.id))
+
+    def __eq__(self, other):
+        return self.from_id == other.from_id and self.id == other.id
 
     def get_photo_attachments(self) -> typing.List["photos.Photo"]:
         return [attachment.photo for attachment in self.attachments if attachment.photo]
@@ -351,6 +399,12 @@ class PinnedMessage(BaseModel):
     reply_message: "ForeignMessage" = None
     text: str = None
     keyboard: "Keyboard" = None
+
+    def __hash__(self):
+        return hash((self.from_id, self.id))
+
+    def __eq__(self, other):
+        return self.from_id == other.from_id and self.id == other.id
 
 
 class UserXtrInvitedBy(users.UserXtrType):

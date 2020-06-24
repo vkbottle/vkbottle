@@ -16,6 +16,12 @@ class MarketAlbum(BaseModel):
     title: str = None
     updated_time: int = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class MarketCategory(BaseModel):
     id: int = None
@@ -38,6 +44,12 @@ class MarketItem(BaseModel):
     thumb_photo: str = None
     title: str = None
     url: str = None
+
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
 
 
 class MarketItemFull(MarketItem):

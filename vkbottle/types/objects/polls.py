@@ -19,6 +19,12 @@ class Poll(BaseModel):
     question: str = None
     votes: str = None
 
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
 
 class Voters(BaseModel):
     answer_id: int = None

@@ -12,15 +12,33 @@ class Faculty(BaseModel):
     id: int = None
     title: str = None
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 class Region(BaseModel):
     id: int = None
     title: str = None
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
+
 
 class School(BaseModel):
     id: int = None
     title: str = None
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
 
 
 class Station(BaseModel):
@@ -29,10 +47,22 @@ class Station(BaseModel):
     id: int = None
     name: str = None
 
+    def __hash__(self):
+        return hash((self.city_id, self.id))
+
+    def __eq__(self, other):
+        return self.city_id == other.city_id and self.id == other.id
+
 
 class University(BaseModel):
     id: int = None
     title: str = None
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        return self.id == other.id
 
 
 City.update_forward_refs()
