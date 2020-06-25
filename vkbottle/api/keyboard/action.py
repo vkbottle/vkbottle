@@ -18,7 +18,7 @@ class Action:
                     "Action {} cannot assign {}".format(cls.__class__.__name__, k)
                 )
             setattr(cls, k, v)
-            cls.type = getattr(cls, "type")
+        cls.type = getattr(cls, "type")
 
     def dict(self):
         return vars(self)
