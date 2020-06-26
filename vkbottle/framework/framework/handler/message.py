@@ -168,14 +168,15 @@ class ABCMessageHandler(ABC):
 
     def __repr__(self):
         rules = ""
-        for rules in self.rules:
+        for rule in self.rules:
             rules += (
-                rules[0].call.__name__
+                "("
+                + rule[0].call.__name__
                 + ": "
-                + ", ".join([rule.__class__.__name__ for rule in rules])
-                + "\n"
+                + ", ".join([rule_.__class__.__name__ for rule_ in rule])
+                + "), "
             )
-        return rules
+        return "<ABCMessageHandler {}>".format(rules.rstrip(", "))
 
     def __bool__(self):
         return len(self.rules) > 0
