@@ -46,7 +46,7 @@ class Keyboard:
 
     def add(self, action: typing.Union[Text], color: str = None):
         if not len(self.buttons):
-            raise KeyboardError("Firstly add row with keyboard.row()")
+            self.row()
         button = KeyboardButton(action, color)
         self.buttons[-1].append(button)
         return self
@@ -58,7 +58,7 @@ class Keyboard:
 
     def add_button(self, action: typing.Union[Text], color: str = None):
         if not len(self.buttons):
-            raise KeyboardError("Firstly add row with keyboard.add_row()")
+            self.row()
         button = KeyboardButton(action, color)
         self.buttons[-1].append(button)
         return button
