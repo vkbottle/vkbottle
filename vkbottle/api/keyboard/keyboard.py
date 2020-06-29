@@ -38,6 +38,19 @@ class Keyboard:
         self.one_time: bool = one_time
         self.inline: bool = inline
 
+    def row(self):
+        if len(self.buttons) and not len(self.buttons[-1]):
+            raise KeyboardError("Last row is empty!")
+        self.buttons.append([])
+        return self
+
+    def add(self, action: typing.Union[Text], color: str = None):
+        if not len(self.buttons):
+            self.row()
+        button = KeyboardButton(action, color)
+        self.buttons[-1].append(button)
+        return self
+
     def add_row(self):
         if len(self.buttons) and not len(self.buttons[-1]):
             raise KeyboardError("Last row is empty!")
