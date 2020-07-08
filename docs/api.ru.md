@@ -25,7 +25,7 @@ api = API(tokens=tokens, throw_errors=True)
 | limited | LimitedTokenGenerator | Токены используются максимальное возможное кол-во (`limit`) раз |
 | classified (-) | ClassifiedTokenGenerator | Редко используемый генератор, доступен только через переопределение, нужен, если токены имеют разные права. Вместо списка токенов этот генератор получает схему (`vkbottle.api.api.schema`) (документация по schema тут) |
 
-Хороший пример с генератором: [https://github.com/timoniq/vkbottle/tree/master/examples/tests/user/shuffle_tokens.py]()
+Хороший пример с генератором: [https://github.com/timoniq/vkbottle/blob/master/examples/tests/user/shuffle_tokens.py]()
 
   - **throw_errors** определяет стандартное поведение API
  . После,  он может быть переопределен только при вызове собственно метода
@@ -95,9 +95,10 @@ await user.api.users.get(1)
 ```
 Рекомендуется использовать IDE с подсказками, так как все методы, ответы и объекты типизированы, а все это полезно только при условии IDE с подсказками
 
-??? danger "Все методы нужно вызывать снейк кейсом:"
-      - {--messages.getById--} - **нет**
-      - {++messages.get_by_id++} - **да**
+**Все методы нужно вызывать снейк кейсом, то есть**
+
+~~messages.getById~~ **messages.get_by_id**
+
 
 
 #### Респонсы
