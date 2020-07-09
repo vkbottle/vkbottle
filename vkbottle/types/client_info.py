@@ -10,6 +10,7 @@ class ButtonActions(enum.Enum):
     open_app = "open_app"
     open_link = "open_link"
     open_photo = "open_photo"
+    callback = "callback"
 
 
 class ClientInfo(BaseModel):
