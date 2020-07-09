@@ -181,8 +181,10 @@ class Group(BaseModel):
 
 
 class GroupBanInfo(BaseModel):
-    comment: str = None
-    end_date: int = None
+    type: str = None
+    group: Group = None
+    profile: users.User = None
+    ban_info: BanInfo = None
 
 
 class GroupCategory(BaseModel):

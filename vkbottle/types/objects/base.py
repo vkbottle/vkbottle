@@ -145,9 +145,15 @@ class Sex(IntEnum):
     male = 2
 
 
+class StickerImages(BaseModel):
+    url: str = None
+    width: int = None
+    height: int = None
+
+
 class Sticker(BaseModel):
-    images: typing.List = None
-    images_with_background: typing.List = None
+    images: typing.List[StickerImages] = None
+    images_with_background: typing.List[StickerImages] = None
     product_id: int = None
     sticker_id: int = None
 
@@ -285,6 +291,7 @@ ObjectWithName.update_forward_refs()
 Place.update_forward_refs()
 RepostsInfo.update_forward_refs()
 RequestParam.update_forward_refs()
+StickerImages.update_forward_refs()
 Sticker.update_forward_refs()
 UploadServer.update_forward_refs()
 UserId.update_forward_refs()
