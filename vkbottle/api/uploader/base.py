@@ -44,6 +44,7 @@ class Uploader:
     def open_pathlike(pathlike: typing.Union[str, BytesIO]) -> BytesIO:
         if isinstance(pathlike, str):
             return open(pathlike, "rb")
+        pathlike.seek(0)
         return pathlike
 
     @staticmethod
