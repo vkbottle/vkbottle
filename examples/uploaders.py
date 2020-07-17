@@ -31,7 +31,7 @@ async def photo_from_bytes(ans: Message):
 
 @bot.on.message_handler(text="audio_message")
 async def audio(ans: Message):
-    tts = gTTS(text="vkbottle", lang="en")
+    tts = gTTS(text="бокале монада", lang="ru")
     fp = BytesIO()
     tts.write_to_fp(fp)
     audio_message = await audio_uploader.upload_audio_message(fp, ans.peer_id)
