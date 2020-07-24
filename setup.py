@@ -14,7 +14,7 @@ setuptools.setup(
     description="Homogenic!",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    license="GPL-3.0",
+    license="MIT",
     url="https://github.com/timoniq/vkbottle",
     packages=setuptools.find_packages(),
     classifiers=[
@@ -22,5 +22,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3.7",
         "Operating System :: OS Independent",
     ],
-    install_requires=["aiohttp", "pydantic", "contextvars", "vbml", "watchgod",],
+    install_requires=["aiohttp", "pydantic", "contextvars", "vbml", "watchgod", ],
 )
