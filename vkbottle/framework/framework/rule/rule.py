@@ -4,12 +4,12 @@ import re
 
 from copy import copy
 from vbml import Pattern, Patcher
+from html import unescape
 
 from vkbottle.types.message import Message as BotMessage
 from vkbottle.types.user_longpoll import Message as UserMessage
 from vkbottle.types import user_longpoll
 from vkbottle.utils import flatten, json
-
 
 Message = typing.Union[BotMessage, UserMessage]
 
@@ -36,7 +36,6 @@ class RuleExecute:
 
 
 class AbstractRule(Copy):
-
     call: typing.Callable
     getfullargspec: inspect.FullArgSpec
 
@@ -222,14 +221,14 @@ class PrivateMessage(AbstractMessageRule):
 
 class VBML(AbstractMessageRule):
     def __init__(
-        self,
-        pattern: typing.Union[
-            str,
-            Pattern,
-            typing.List[typing.Union[str, Pattern]],
-            typing.Dict[typing.Union[str, Pattern], typing.Union[list, dict]],
-        ],
-        lower: bool = None,
+            self,
+            pattern: typing.Union[
+                str,
+                Pattern,
+                typing.List[typing.Union[str, Pattern]],
+                typing.Dict[typing.Union[str, Pattern], typing.Union[list, dict]],
+            ],
+            lower: bool = None,
     ):
         if isinstance(pattern, dict):
             self.watch_context = pattern
@@ -257,13 +256,8 @@ class VBML(AbstractMessageRule):
 class VBMLRule(VBML):
     async def check(self, message: Message) -> bool:
         patterns: typing.List[Pattern] = self.data["pattern"]
-        message = (
-            message.text.replace("<br>", "\n")
-            .replace("&lt;", "<")
-            .replace("&gt;", ">")
-            .replace("&quot;", '"')
-            .replace("&amp;", "&")
-        )
+        message = message.text.replace("<br>", "\n")
+        message = unescape(message)
 
         for pattern in patterns:
             if self._patcher.check(message, pattern) is not None:
@@ -290,7 +284,7 @@ class AttachmentRule(UnionMixin):
 
 class ChatActionRule(AbstractMessageRule):
     def __init__(
-        self, chat_action: typing.Union[str, typing.List[str]], rules: dict = None
+            self, chat_action: typing.Union[str, typing.List[str]], rules: dict = None
     ):
         if isinstance(chat_action, str):
             chat_action = [chat_action]

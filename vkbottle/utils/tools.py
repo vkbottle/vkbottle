@@ -2,7 +2,7 @@ import re
 import sys
 import time
 import typing
-from collections import MutableMapping
+from collections.abc import MutableMapping
 from typing import Sequence, List
 import random
 import string
