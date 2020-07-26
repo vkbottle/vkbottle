@@ -14,7 +14,7 @@
    
    Последний стабильный релиз:
    ```sh
-   pip install vkbottle==2.7.5
+   pip install vkbottle==2.7.7
    ```
 
 2) С помощью установщика pip из GitHub: 
@@ -23,6 +23,16 @@
    pip install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
    ```
    
+### Документация
+
+Доступны следующие разделы:  
+
+* [Первый бот на vkbottle](https://github.com/timoniq/vkbottle/blob/master/docs/getting_started.md) - пособие для новичков, краткое введение
+* [Работа с API, генераторами токенов. Генераторы клавиатур, загрузчики вложений, перевод в VKScript](https://github.com/timoniq/vkbottle/blob/master/docs/api.ru.md)
+* [Введение в составляющие фреймворка](https://github.com/timoniq/vkbottle/blob/master/docs/framework.ru.md) - Боты, юзерботы, хендлеры и блупринты
+* [Бранчи - имплементация FSM](https://github.com/timoniq/vkbottle/blob/master/docs/branches.ru.md)
+* [Внешние составляющие: Middleware, хендлинг ошибок и капчи, TaskManager](https://github.com/timoniq/vkbottle/blob/master/docs/stuff.ru.md)
+
 ### Кастомизация
 
 После установки `vkbottle` рекомендуется сразу же установить дополнительные модули `uvloop` и `loguru`, без них фреймворк работает медленне и логи не настраиваемы. О возможностях этих модулей можно прочитать в их документации
@@ -40,6 +50,8 @@ pip install uvloop
 Кроме того вы можете установить любую библиотеку для ускорения json из предложенных: `ujson`, `hyperjson`, `orjson`
 
 ### Фишки
+
+
 - Удобная и быстрая доставка сообщений через regex
 - Быстрый API враппер
 - Быстрый LongPoll фреймворк для ботов
@@ -74,27 +86,23 @@ bot.run_polling(skip_updates=False)
 from vkbottle import Bot, Message
 from aiohttp import web
 
-bot = Bot(token="my-token", secret="my-secret")
+bot = Bot(token="my-token")
 app = web.Application()
 
 
 async def executor(request: web.Request):
     event = await request.json()
-    emulation = await bot.emulate(event=event, confirmation_token="ConfirmationToken")
+    emulation = await bot.emulate(event, confirmation_token="ConfirmationToken")
     return web.Response(text=emulation)
 
 
 @bot.on.message(text="test", lower=True)
 async def wrapper(ans: Message):
-    return "Tested!"
+    return "Got it."
 
 
-app.router.add_route(
-    path='/',
-    method='POST',
-    handler=executor
-)
-web.run_app(app=app, host=host, port=port)
+app.router.add_route("/", "POST", executor)
+web.run_app(app=app)
 ```
 
 ### Rules
@@ -148,4 +156,4 @@ user.run_polling()
 ## Лицензия
 
 Copyright © 2019-2020 [timoniq](https://github.com/timoniq).  
-Этот проект имеет MIT лицензию.
+Этот проект имеет [MIT](https://github.com/timoniq/vkbottle/blob/master/LICENSE) лицензию.
