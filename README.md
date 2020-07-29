@@ -1,11 +1,14 @@
-<h1 align="center">VKBottle - high quality VK Tool</h1>
+<h1 align="center">VKBottle - high quality bot building library</h1>
 <p align="center"><a href="https://pypi.org/project/vkbottle/">
     <img alt="downloads" src="https://img.shields.io/static/v1?label=pypi%20package&message=2.7.7&color=brightgreen"></a> 
     <a href="https://github.com/timoniq/vkbottle">
     <img src="https://img.shields.io/static/v1?label=version&message=opensource&color=green" alt="service-test status"></a>  
     <a href="https://t.me/vkbottle_ru">
         <img src="https://img.shields.io/static/v1?message=Telegram%20Chat&label=&color=blue">
-     </a>
+    </a>
+    <a href="https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj">
+        <img src="https://img.shields.io/static/v1?message=VK%20Chat&label=&color=blue">
+    </a>
     <blockquote>VKBottle - это многофункциональный модуль для работы с VK Api и создания ботов. Проект все еще тестируется на различных нагрузках</blockquote>
 </p>
 <hr>
@@ -20,7 +23,7 @@
    
    Последний стабильный релиз:
    ```sh
-   pip install vkbottle==2.7.7
+   pip install vkbottle==2.7.8
    ```
 
 2) С помощью установщика pip из GitHub: 
@@ -28,7 +31,9 @@
    ```sh
    pip install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
    ```
-   
+
+> Минимальная версия python для комфортной работы с библиотекой - 3.7
+
 ### Документация
 
 Доступны следующие разделы:  
@@ -41,7 +46,7 @@
    
 ### Кастомизация
 
-После установки `vkbottle` рекомендуется сразу же установить дополнительные модули `uvloop` и `loguru`, без них фреймворк работает медленне и логи не настраиваемы. О возможностях этих модулей можно прочитать в их документации
+После установки `vkbottle` рекомендуется сразу же установить дополнительные модули `loguru` и `loguru`, без них фреймворк работает медленне и логи не настраиваемы. О возможностях этих модулей можно прочитать в их документации
 
 <a href="https://github.com/Delgan/loguru"><img alt="downloads" src="https://img.shields.io/static/v1?label=powered%20by&message=loguru&color=orange"></a>
 <a href="https://github.com/MagicStack/uvloop"><img alt="downloads" src="https://img.shields.io/static/v1?label=powered%20by&message=uvloop&color=purple"></a>
@@ -66,6 +71,17 @@ pip install uvloop
 - Блокирующая обработка - Middlewares
 - Правила - Rules
 - User LongPoll API
+
+### Наши официальные чаты
+
+<a href="https://t.me/vkbottle_ru">
+    <img src="https://img.shields.io/static/v1?message=Telegram%20Chat&label=&color=blue">
+</a>
+<a href="https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj">
+    <img src="https://img.shields.io/static/v1?message=VK%20Chat&label=&color=blue">
+</a>
+
+Задавайте вопросы в наших чатах и получайте на них быстрые ответы от активного комьюнити!
 
 ***
 
@@ -133,12 +149,11 @@ from vkbottle.user import User, Message
 
 user = User("user-token")
 
-@user.on.message_handler(text="can i ask you about <theme>?")
-async def wrapper(ans: Message, theme: str):
-    if theme in ["examples", "how to do smt", "depression", "insomnia"]:
-        await ans("You can ask me about it in telegram @timoniq or make an issue on github!")
-    else:
-        await ans("Ok, sooner or later i ll respond you")
+@user.on.message_handler(text="do you like <item>?")
+async def wrapper(ans: Message, item: str):
+    if item in ["memes", "chicket nuggets", "vkbottle"]:
+        return f"Yes! I adore {item}!"
+    return "No..."
 
 user.run_polling()
 ```
@@ -155,8 +170,8 @@ user.run_polling()
 
 ## Contributing
 
-ПР поддерживаются! Мне приятно видеть ваш вклад в развитие библиотеки  
-Задавайте вопросы в блоке Issues и в чате VK!
+ПР поддерживаются! Нам приятно видеть ваш вклад в развитие библиотеки  
+Задавайте вопросы в блоке Issues и в чате Telegram/VK!
 
 ## Лицензия
 
