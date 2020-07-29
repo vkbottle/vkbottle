@@ -161,7 +161,7 @@ user = User("user-token")
 
 @user.on.message_handler(text="do you like <item>?")
 async def wrapper(ans: Message, item: str):
-    if item in ["memes", "chicket nuggets", "vkbottle"]:
+    if item in ["memes", "chicken nuggets", "vkbottle"]:
         return f"Yes! I adore {item}!"
     return "No..."
 
