@@ -121,7 +121,7 @@ class GetSuggestionsModel(BaseModel):
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List[objects.users.User] = None
+    items: typing.List[typing.Union[int, objects.users.User]] = None
 
 
 class GetModel(BaseModel):
