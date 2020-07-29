@@ -1,7 +1,5 @@
 import setuptools
 
-from vkbottle import const
-
 try:
     with open("README.md", "r", encoding="utf-8") as f:
         long_description = f.read()
@@ -11,9 +9,12 @@ except UnicodeDecodeError:
 except FileNotFoundError:
     long_description = ""
 
+with open("vkbottle/const.py") as f:
+    exec(f.read())
+
 setuptools.setup(
     name="vkbottle",
-    version=const.__version__,
+    version=locals()["__version__"],
     author="timoniq",
     description="Homogenic!",
     long_description=long_description,

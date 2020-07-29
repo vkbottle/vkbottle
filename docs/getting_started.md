@@ -18,9 +18,9 @@ await bot.api.request("users.get", {"user_ids": 1})
 await bot.api.users.get(user_ids=1)
 ```
 
-??? danger "Все методы нужно вызывать снейк кейсом:"
-      - {--messages.getConversationsById--} - **нет**  
-      - {++messages.get_conversations_by_id++} - **да**  
+**Все методы нужно вызывать снейк кейсом, то есть**
+
+~~messages.getById~~ **messages.get_by_id** 
 
 Получить API как ContextVar:
 
