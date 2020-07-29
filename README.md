@@ -1,6 +1,6 @@
 <h1 align="center">VKBottle - high quality bot building library</h1>
 <p align="center"><a href="https://pypi.org/project/vkbottle/">
-    <img alt="downloads" src="https://img.shields.io/static/v1?label=pypi%20package&message=2.7.7&color=brightgreen"></a> 
+    <img alt="downloads" src="https://img.shields.io/static/v1?label=pypi%20package&message=2.7.8&color=brightgreen"></a> 
     <a href="https://github.com/timoniq/vkbottle">
     <img src="https://img.shields.io/static/v1?label=version&message=opensource&color=green" alt="service-test status"></a>  
     <a href="https://t.me/vkbottle_ru">
@@ -34,6 +34,8 @@
 
 > Минимальная версия python для комфортной работы с библиотекой - 3.7
 
+> Для красивых логов установите loguru (`pip install loguru`)
+
 ### Документация
 
 Доступны следующие разделы:  
@@ -46,7 +48,7 @@
    
 ### Кастомизация
 
-После установки `vkbottle` рекомендуется сразу же установить дополнительные модули `loguru` и `loguru`, без них фреймворк работает медленне и логи не настраиваемы. О возможностях этих модулей можно прочитать в их документации
+После установки `vkbottle` рекомендуется сразу же установить дополнительные модули `loguru` и `uvloop`, без них фреймворк работает медленне и логи не настраиваемы. О возможностях этих модулей можно прочитать в их документации
 
 <a href="https://github.com/Delgan/loguru"><img alt="downloads" src="https://img.shields.io/static/v1?label=powered%20by&message=loguru&color=orange"></a>
 <a href="https://github.com/MagicStack/uvloop"><img alt="downloads" src="https://img.shields.io/static/v1?label=powered%20by&message=uvloop&color=purple"></a>
@@ -87,6 +89,8 @@ pip install uvloop
 
 ### Longpoll
 
+Самый быстрый способ запустить бота. На сервер VK посылаются "долгие" запросы, на которые приходит ответ только при появлении события. При работе с longpoll проверьте что вы включили все нужные события в настройках группы и выставили последнюю версию API.
+
 ```python
 from vkbottle import Bot, Message
 
@@ -102,6 +106,8 @@ bot.run_polling(skip_updates=False)
 ```
 
 ### Callback
+
+События приходят на ваш сервер как запросы, на которые вы должны вернуть ответ "ok". При работе с callback проверьте что вы включили все нужные события в настройках группы и поставили последнюю версию API.
 
 ```python
 from vkbottle import Bot, Message
@@ -128,6 +134,8 @@ web.run_app(app=app)
 
 ### Rules
 
+Правила позволяют удобно настраивать ваши хендлеры, принимающие события.
+
 ```python
 from vkbottle import Bot, Message
 from vkbottle.rule import AttachmentRule
@@ -142,7 +150,9 @@ bot.run_polling()
 
 ```
 
-### User LongPoll
+### User-longpoll
+
+Интерфейс user-longpoll одинаковый с интерфейсом бота, поэтому код писать проще.
 
 ```python
 from vkbottle.user import User, Message
@@ -165,6 +175,8 @@ user.run_polling()
 [aiohttp](https://github.com/aio-libs/aiohttp) - longpoll и запросы к API  
 [pydantic](https://github.com/samuelcolvin/pydantic) - все датаклассы  
 [vbml](https://github.com/timoniq/vbml) - встроенная поддержка лучшего парсера сообщений
+
+Не забывайте что в vbml существует огромное количество отличных паттернов для использования, валидаторы и многое другое, изучите документацию.
 
 Для оптимальной работы фреймворка, рекомендуется использовать только [асинхронные библиотеки](https://github.com/timofurrer/awesome-asyncio)
 
