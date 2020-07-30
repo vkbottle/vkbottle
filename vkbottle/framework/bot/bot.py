@@ -201,7 +201,7 @@ class Bot(PollingAPI):
         logger.debug("Blueprints have been successfully loaded")
 
     @staticmethod
-    def get_id_by_token(token: str, throw_exc: bool = True) -> typing.Union[int, bool]:
+    def get_id_by_token(token: str, loop: asyncio.AbstractEventLoop, throw_exc: bool = True) -> typing.Union[int, bool]:
         """
         Get group id from token
         :param token:
@@ -303,7 +303,8 @@ class Bot(PollingAPI):
         :return:
         """
         self.loop_update(self.loop)
-        self.group_id = self.get_id_by_token(self.__tokens[0])
+        self.group_id = self.get_id_by_token(self.__tokens[0], self.loop) # FIXME
+        self.on.group_id = self.group_id # FIXME
         
         self._stop = False
         task = TaskManager(
