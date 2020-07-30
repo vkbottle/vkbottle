@@ -303,8 +303,6 @@ class Bot(PollingAPI):
         :return:
         """
         self.loop_update(self.loop)
-        self.group_id = self.get_id_by_token(self.__tokens[0], self.loop) # FIXME
-        self.on.group_id = self.group_id # FIXME
         
         self._stop = False
         task = TaskManager(
@@ -322,6 +320,9 @@ class Bot(PollingAPI):
         Can be manually stopped with:
         bot.stop()
         """
+        self.group_id = (await self.api.request("groups.getById", {}))[0].id
+        self.on.group_id = self.group_id # FIXME
+        
         self.__wait = wait
         logger.debug("Polling will be started. Is it OK?")
         if self.__secret is not None:
