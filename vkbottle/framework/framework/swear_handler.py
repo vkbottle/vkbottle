@@ -28,13 +28,14 @@ def swear(
                 if ignore:
                     return e
                 if exception_handler is not None:
-                    await exception_handler(e, *args, **kwargs)
+                    return await exception_handler(e, *args, **kwargs)
                 elif just_log:
                     logger.error(
                         "While {func} was handling error occurred \n\n{traceback}",
                         func=func.__name__,
                         traceback=traceback.format_exc(),
                     )
+                return
             finally:
                 logger.debug(f"{func.__name__} successfully handled with swear")
 
