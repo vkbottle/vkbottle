@@ -158,17 +158,19 @@ class LevenshteinDisRule(AbstractMessageRule):
 
 
 class CommandRule(AbstractMessageRule):
-    def __init__(self, message: typing.Union[str, typing.List[str]]):
+    def __init__(self, message: typing.Union[str, typing.List[str]], prefixes: typing.Tuple[str, ...] = ("/", "!")):
         if isinstance(message, dict):
             self.watch_context = message
             message = list(message.keys())
         elif not isinstance(message, list):
             message = [message]
-        self.data = {"message": ["/" + c for c in message]}
+        self.data = {"message": message, "prefixes": prefixes}
 
     async def check(self, message: Message) -> bool:
-        if message.text in self.data["message"]:
-            return True
+        if not message.text or len(message.text) < 2:
+            return
+        prefix, text = message.text[0], message.text[1:]
+        return prefix in self.data["prefixes"] and text in self.data["message"]
 
 
 class EventRule(AbstractRule):
