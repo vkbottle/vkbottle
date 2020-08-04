@@ -255,6 +255,8 @@ class User(PollingAPI):
     ):
         """ Run loop with bot.run() task with loop.run_forever()
         """
+        self.loop_update(self.loop)
+        
         self._stop = False
         task = TaskManager(
             self.loop,
