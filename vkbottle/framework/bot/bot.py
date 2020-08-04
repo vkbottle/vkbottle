@@ -109,8 +109,8 @@ class Bot(PollingAPI):
                 rotation="20 MB",
             )
 
-        self.group_id = group_id or self.get_id_by_token(self.__tokens[0])
-        self.loop = loop or asyncio.get_event_loop()
+        self.group_id = group_id
+        self.loop = loop
 
         # Sign assets
         self._api: Api = Api(self.__tokens, throw_errors=throw_errors)
@@ -201,7 +201,7 @@ class Bot(PollingAPI):
         logger.debug("Blueprints have been successfully loaded")
 
     @staticmethod
-    def get_id_by_token(token: str, throw_exc: bool = True) -> typing.Union[int, bool]:
+    def get_id_by_token(token: str, loop: asyncio.AbstractEventLoop, throw_exc: bool = True) -> typing.Union[int, bool]:
         """
         Get group id from token
         :param token:
@@ -302,6 +302,8 @@ class Bot(PollingAPI):
         """
         :return:
         """
+        self.loop_update(self.loop)
+        
         self._stop = False
         task = TaskManager(
             self.loop,
@@ -318,6 +320,9 @@ class Bot(PollingAPI):
         Can be manually stopped with:
         bot.stop()
         """
+        self.group_id = (await self.api.request("groups.getById", {}))[0].id
+        self.on.group_id = self.group_id # FIXME
+        
         self.__wait = wait
         logger.debug("Polling will be started. Is it OK?")
         if self.__secret is not None:
