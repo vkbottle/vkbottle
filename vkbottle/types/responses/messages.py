@@ -291,7 +291,7 @@ Send = int
 
 
 class SendModel(BaseModel):
-    response: Send = None
+    response: typing.Union[Send, typing.List[objects.messages.Message]] = None
 
 
 GetConversationsById.update_forward_refs()

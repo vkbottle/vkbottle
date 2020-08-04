@@ -66,7 +66,7 @@ class HTTPRequest:
         json_: dict = None,
         content_type: str = "application/json",
         read_content: bool = False,
-    ) -> typing.Union[dict]:
+    ) -> typing.Union[dict, bytes]:
         async with client.get(
             url,
             ssl=ssl.SSLContext(),

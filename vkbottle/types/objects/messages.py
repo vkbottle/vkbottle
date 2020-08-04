@@ -278,6 +278,7 @@ class Message(BaseModel):
     out: "base.BoolInt" = None
     payload: str = None
     peer_id: int = None
+    message_id: int = None
     random_id: int = None
     ref: str = None
     ref_source: str = None
