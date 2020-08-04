@@ -320,7 +320,8 @@ class Bot(PollingAPI):
         Can be manually stopped with:
         bot.stop()
         """
-        self.group_id = (await self.api.request("groups.getById", {}))[0].id
+        if not self.group_id:
+            self.group_id = (await self.api.request("groups.getById", {}))[0].id
         self.on.group_id = self.group_id # FIXME
         
         self.__wait = wait
