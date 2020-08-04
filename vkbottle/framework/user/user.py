@@ -71,7 +71,7 @@ class User(PollingAPI):
         if login and password:
             self.__tokens = self.get_tokens(login, password)
 
-        self.loop = loop or asyncio.get_event_loop()
+        self.loop = loop
         self.__debug: bool = debug
         self._api: UserApi = UserApi(self.__tokens)
         self.mode = mode
@@ -79,9 +79,7 @@ class User(PollingAPI):
         self._expand_models: bool = expand_models
         self._patcher: vbml.Patcher = vbml_patcher or vbml.Patcher(pattern="^{}$")
 
-        self.user_id: typing.Optional[int] = user_id or self.get_id_by_token(
-            self.__tokens[0]
-        )
+        self.user_id: typing.Optional[int] = user_id
 
         self._api.user_id = user_id
         self.error_handler: VKErrorHandler = DefaultErrorHandler()
@@ -126,14 +124,14 @@ class User(PollingAPI):
         )
 
     @staticmethod
-    def get_id_by_token(token: str) -> int:
+    def get_id_by_token(token: str, loop: asyncio.AbstractEventLoop) -> int:
         """
         Get group id from token
         :param token:
         :return:
         """
         logger.debug("Making API request users.get to get user_id")
-        response = asyncio.get_event_loop().run_until_complete(
+        response = loop.run_until_complete(
             request("users.get", {}, token)
         )
         if "error" in response:
@@ -201,6 +199,9 @@ class User(PollingAPI):
         Can be manually stopped with:
         >> user.stop()
         """
+        if not self.user_id:
+            self.user_id = (await self.api.request("users.get", {}))[0].id
+        
         self.wait = wait
         logger.info("Polling will be started. Is it OK?")
 
