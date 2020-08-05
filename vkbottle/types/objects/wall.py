@@ -106,6 +106,7 @@ class PostType(Enum):
     copy = "copy"
     reply = "reply"
     postpone = "postpone"
+    post_ads = "post_ads"
     suggest = "suggest"
 
 
