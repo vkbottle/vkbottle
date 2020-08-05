@@ -41,6 +41,7 @@ class LinkButtonAction(BaseModel):
 
 class LinkButtonActionType(Enum):
     open_url = "open_url"
+    join_group_and_open_url = "join_group_and_open_url"
 
 
 class LinkProduct(BaseModel):
