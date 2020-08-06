@@ -321,7 +321,7 @@ class Bot(PollingAPI):
         bot.stop()
         """
         if not self.group_id:
-            self.group_id = (await self.api.request("groups.getById", {}))[0].id
+            self.group_id = (await self.api.request("groups.getById", {}))[0]["id"]
         self.on.group_id = self.group_id # FIXME
         
         self.__wait = wait
