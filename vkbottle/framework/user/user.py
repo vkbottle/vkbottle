@@ -200,7 +200,7 @@ class User(PollingAPI):
         >> user.stop()
         """
         if not self.user_id:
-            self.user_id = (await self.api.request("users.get", {}))[0].id
+            self.user_id = (await self.api.request("users.get", {}))[0]["id"]
         
         self.wait = wait
         logger.info("Polling will be started. Is it OK?")
