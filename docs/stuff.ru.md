@@ -49,7 +49,7 @@ database: typing.Dict[int, str] = {}  # Наш прототип базы дан�
 
 @bot.middleware.middleware_handler()
 class RegistrationMiddleware(Middleware):
-    async def pre(self, message: Message):
+    async def pre(self, message: Message, *args):
         if message.from_id not in database:
             database[message.from_id] = message.text
         return database[message.from_id]
@@ -73,7 +73,7 @@ poor_statistics: typing.List[int] = []
 
 @bot.middleware.middleware_handler()
 class StatisticsMiddleware(Middleware):
-    async def pre(self, message: Message):
+    async def pre(self, message: Message, *args):
         user = (await bot.api.users.get(user_ids=message.from_id))[0]
         poor_statistics.append(user.sex)
 
