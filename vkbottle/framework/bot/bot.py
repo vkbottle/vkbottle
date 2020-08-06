@@ -179,7 +179,7 @@ class Bot(PollingAPI):
             except VKError:
                 continue
 
-    async def dispatch(self, bot: AnyBot):
+    def dispatch(self, bot: AnyBot):
         """
         Concatenate handlers to current bot object
         :param bot:
@@ -196,7 +196,7 @@ class Bot(PollingAPI):
         Add blueprints
         """
         for blueprint in blueprints:
-            self.loop.run_until_complete(self.dispatch(blueprint))
+            self.dispatch(blueprint)
             blueprint.create(familiar=(self.branch, self.extension, self.api))
         logger.debug("Blueprints have been successfully loaded")
 
@@ -321,7 +321,7 @@ class Bot(PollingAPI):
         bot.stop()
         """
         if not self.group_id:
-            self.group_id = (await self.api.request("groups.getById", {}))[0].id
+            self.group_id = (await self.api.request("groups.getById", {}))[0]["id"]
         self.on.group_id = self.group_id # FIXME
         
         self.__wait = wait

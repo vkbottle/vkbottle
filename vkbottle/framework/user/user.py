@@ -146,7 +146,7 @@ class User(PollingAPI):
         )
         return tokens
 
-    async def dispatch(self, user: AnyUser) -> None:
+    def dispatch(self, user: AnyUser) -> None:
         """
         Concatenate handlers to current user object
         :param user:
@@ -164,7 +164,7 @@ class User(PollingAPI):
         """
         for blueprint in blueprints:
             blueprint.create(familiar=(self.branch, self.api))
-            self.loop.run_until_complete(self.dispatch(blueprint))
+            self.dispatch(blueprint)
         logger.debug("Blueprints have been successfully loaded")
 
     async def get_server(self) -> dict:
@@ -200,7 +200,7 @@ class User(PollingAPI):
         >> user.stop()
         """
         if not self.user_id:
-            self.user_id = (await self.api.request("users.get", {}))[0].id
+            self.user_id = (await self.api.request("users.get", {}))[0]["id"]
         
         self.wait = wait
         logger.info("Polling will be started. Is it OK?")
