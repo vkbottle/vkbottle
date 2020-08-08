@@ -15,7 +15,7 @@ audio_uploader = AudioUploader(bot.api, generate_attachment_strings=True)
 async def photo_from_bytes(ans: Message):
     image = Image.new("RGB", (320, 320), (0, 0, 0))
     fp = BytesIO()
-    image.save(fp, "RGB")
+    image.save(fp, "PNG")
     setattr(fp, "name", "image.png")
     photo = await photo_uploader.upload_message_photo(fp)
     await ans(attachment=photo)
