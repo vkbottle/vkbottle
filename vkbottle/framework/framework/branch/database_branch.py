@@ -1,11 +1,13 @@
-from abc import abstractmethod
-from .abc import ABCBranchGenerator, Branch, AbstractBranch, GeneratorType
-from .cls import CoroutineBranch
-from vkbottle.utils.exceptions import BranchError
-from vkbottle.utils.json import json
-import typing
 import asyncio
 import inspect
+import typing
+from abc import abstractmethod
+
+from vkbottle.utils.exceptions import BranchError
+from vkbottle.utils.json import json
+
+from .abc import ABCBranchGenerator, AbstractBranch, Branch, GeneratorType
+from .cls import ClsBranch, CoroutineBranch
 
 
 class DatabaseBranch(ABCBranchGenerator):
@@ -53,7 +55,7 @@ class DatabaseBranch(ABCBranchGenerator):
         return from_function_branch
 
     def add_branch(
-        self, branch: AbstractBranch, name: str = None, **context
+        self, branch: ClsBranch, name: str = None, **context
     ) -> AbstractBranch:
         self.names[name or branch.__name__] = branch
         return branch
