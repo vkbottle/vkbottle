@@ -1,8 +1,9 @@
 from io import BytesIO
 
+from vkbottle import AudioUploader, Bot, DocUploader, Message, PhotoUploader
+
 from gtts import gTTS
 from PIL import Image
-from vkbottle import AudioUploader, Bot, DocUploader, Message, PhotoUploader
 
 bot = Bot("token")
 
@@ -15,18 +16,18 @@ audio_uploader = AudioUploader(bot.api, generate_attachment_strings=True)
 async def photo_from_bytes(ans: Message):
     image = Image.new("RGB", (320, 320), (0, 0, 0))
     fp = BytesIO()
-    image.save(fp, "RGB")
+    image.save(fp, "PNG")
     setattr(fp, "name", "image.png")
     photo = await photo_uploader.upload_message_photo(fp)
     await ans(attachment=photo)
 
 
 @bot.on.message_handler(text="doc_from_file", lower=True)
-async def photo_from_bytes(ans: Message):
-    image = Image.new("RGB", (320, 320), (0, 0, 0))
-    image.save("image.png", "RGB")
-    photo = await doc_uploader.upload_doc_to_message("image.png", ans.peer_id)
-    await ans(attachment=photo)
+async def doc_from_file(ans: Message):
+    doc = Image.new("RGB", (320, 320), (0, 0, 0))
+    doc.save("doc.png", "RGB")
+    doc_output = await doc_uploader.upload_doc_to_message("doc.png", ans.peer_id)
+    await ans(attachment=doc_output)
 
 
 @bot.on.message_handler(text="audio_message")

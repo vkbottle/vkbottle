@@ -1,10 +1,11 @@
 import typing
 
 from vkbottle.api.api import Api
-from ...utils.exceptions import VKError
 from vkbottle.framework.framework.branch import ABCBranchGenerator
 from vkbottle.framework.framework.extensions import AbstractExtension
 from vkbottle.framework.framework.handler.bot.handler import BotHandler
+
+from ...utils.exceptions import VKError
 from .abc import AbstractBlueprint
 
 Familiar = typing.Tuple[ABCBranchGenerator, AbstractExtension, Api]
@@ -28,7 +29,7 @@ class Blueprint(AbstractBlueprint):
             raise VKError(
                 0,
                 f"All blueprints should have the same branch generative type ({self.name} "
-                f"Blueprint, branch {self.branch.__name__} / familiar {branch.__name__}",
+                f"Blueprint, branch {self.branch} / familiar {branch}",
             )
         self.extension = extension
         self.api = api_instance

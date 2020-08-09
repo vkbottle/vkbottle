@@ -1,8 +1,10 @@
+from typing import Tuple
+
 from vkbottle.api import UserApi
 from vkbottle.framework.framework.branch import ABCBranchGenerator
 from vkbottle.framework.framework.handler.user.handler import UserHandler
 from vkbottle.utils.exceptions import VKError
-from typing import Tuple
+
 from .abc import AbstractBlueprint
 
 
@@ -20,6 +22,6 @@ class Blueprint(AbstractBlueprint):
             raise VKError(
                 0,
                 f"All blueprints should have the same branch generative type ({self.name} "
-                f"Blueprint, branch {self.branch.__name__} / familiar {branch.__name__}",
+                f"Blueprint, branch {self.branch} / familiar {branch}",
             )
         self.api = api_instance
