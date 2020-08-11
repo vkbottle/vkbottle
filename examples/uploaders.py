@@ -30,7 +30,7 @@ async def doc_from_file(ans: Message):
     await ans(attachment=doc_output)
 
 
-@bot.on.message_handler(text="audio_message")
+@bot.on.message_handler(text="audio_message", lower=True)
 async def audio(ans: Message):
     tts = gTTS(text="бокале монада", lang="ru")
     fp = BytesIO()
