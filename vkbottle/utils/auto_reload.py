@@ -13,10 +13,10 @@ def restart():
     :return:
     """
     args = sys.argv[:]
-    logger.debug("Restarting: %s" % " ".join(args))
+    logger.debug("Restarting: {0}".format(" ".join(args)))
     args.insert(0, sys.executable)
     if sys.platform == "win32":
-        args = ['"%s"' % arg for arg in args]
+        args = ['"{0}"'.format(arg for arg in args)]
 
     os.chdir(_startup_cwd)
     os.execv(sys.executable, args)
