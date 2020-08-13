@@ -23,7 +23,7 @@ class Registered(AbstractMessageRule):
 
 @bot.middleware.middleware_handler()
 class Register(Middleware):
-    async def pre(self, message: Message):
+    async def pre(self, message: Message, *args):
         if not await User.get_or_none(uid=message.from_id):
             await User.create(uid=message.from_id, time=current())
             await message("You are now registered")

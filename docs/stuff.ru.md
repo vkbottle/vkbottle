@@ -24,7 +24,7 @@ bot = Bot("token")
 
 @bot.middleware.middleware_handler()
 class NoBotMiddleware(Middleware):
-    async def pre(self, message: Message):
+    async def pre(self, message: Message. *args):
         if not message.from_user:
             return False
 
