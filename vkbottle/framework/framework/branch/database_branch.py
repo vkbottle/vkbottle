@@ -55,7 +55,7 @@ class DatabaseBranch(ABCBranchGenerator):
         return from_function_branch
 
     def add_branch(
-        self, branch: typing.TypeVar["T"], name: str = None, **context
+        self, branch: AbstractBranch, name: str = None, **context
     ) -> AbstractBranch:
         self.names[name or branch.__name__] = branch
         return branch
