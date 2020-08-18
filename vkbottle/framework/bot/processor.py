@@ -162,7 +162,10 @@ class BotProcessor(ABCProcessor):
                 break
 
         # FIXME
-        if edited is False and self.branch.__class__.generator is GeneratorType.DATABASE:
+        if (
+            edited is False
+            and self.branch.__class__.generator is GeneratorType.DATABASE
+        ):
             if branch_checkup_key in await self.branch.queue:
                 logger.debug("Updating branch context")
                 await self.branch.add(branch_checkup_key, branch.key, **branch.context)

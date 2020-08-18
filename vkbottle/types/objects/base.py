@@ -161,7 +161,9 @@ class Sticker(BaseModel):
         return hash((self.product_id, self.sticker_id))
 
     def __eq__(self, other):
-        return self.product_id == other.product_id and self.sticker_id == other.sticker_id
+        return (
+            self.product_id == other.product_id and self.sticker_id == other.sticker_id
+        )
 
 
 class UploadServer(BaseModel):

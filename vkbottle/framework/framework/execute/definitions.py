@@ -156,9 +156,13 @@ def for_cycle(d: ast.For):
 @converter(ast.If)
 def if_statement(d: ast.If):
     return (
-        "if(" + find(d.test) + "){" + "".join(find(li) for li in d.body) + "}else{" +
-        ("".join(find(e) for e in d.orelse) if len(d.orelse) else "") +
-        "};"
+        "if("
+        + find(d.test)
+        + "){"
+        + "".join(find(li) for li in d.body)
+        + "}else{"
+        + ("".join(find(e) for e in d.orelse) if len(d.orelse) else "")
+        + "};"
     )
 
 
@@ -188,7 +192,9 @@ def call(d: ast.Call):
         return find(d.func.value) + "." + CALL_REPLACEMENTS[calls[0]] + "(" + args + ")"
     elif calls[0] in CALL_STRING:
         return find(func) + "." + calls[0] + "(" + find(d.args[0]) + ")"
-    raise ConverterError(f"Call for {getattr(d.func, 'attr', d.func.__dict__)} is not referenced")
+    raise ConverterError(
+        f"Call for {getattr(d.func, 'attr', d.func.__dict__)} is not referenced"
+    )
 
 
 @converter(ast.Pass)

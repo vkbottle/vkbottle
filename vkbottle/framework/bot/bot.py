@@ -201,7 +201,9 @@ class Bot(PollingAPI):
         logger.debug("Blueprints have been successfully loaded")
 
     @staticmethod
-    def get_id_by_token(token: str, loop: asyncio.AbstractEventLoop, throw_exc: bool = True) -> typing.Union[int, bool]:
+    def get_id_by_token(
+        token: str, loop: asyncio.AbstractEventLoop, throw_exc: bool = True
+    ) -> typing.Union[int, bool]:
         """
         Get group id from token
         :param token:
@@ -303,7 +305,7 @@ class Bot(PollingAPI):
         :return:
         """
         self.loop_update(self.loop)
-        
+
         self._stop = False
         task = TaskManager(
             self.loop,
@@ -322,8 +324,8 @@ class Bot(PollingAPI):
         """
         if not self.group_id:
             self.group_id = (await self.api.request("groups.getById", {}))[0]["id"]
-        self.on.group_id = self.group_id # FIXME
-        
+        self.on.group_id = self.group_id  # FIXME
+
         self.__wait = wait
         logger.debug("Polling will be started. Is it OK?")
         if self.__secret is not None:

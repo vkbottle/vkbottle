@@ -2,4 +2,4 @@ aiohttp
 contextvars
 pydantic
 watchgod
-vbml
+vbml==0.5.93

@@ -1223,13 +1223,11 @@ class MessagesUnpin(BaseMethod):
             params,
             response_model=responses.ok_response.OkResponseModel,
         )
-    
-    
+
+
 class MessagesRecognizeAudioMessage(BaseMethod):
     kwargs: dict = {}
-    access_token_type: APIAccessibility = [
-        APIAccessibility.USER
-    ]
+    access_token_type: APIAccessibility = [APIAccessibility.USER]
 
     async def __call__(
         self, audio_message_id: str, message_id: int
@@ -1248,7 +1246,7 @@ class MessagesRecognizeAudioMessage(BaseMethod):
         return await self.request(
             "messages.recogniseAudioMessage",
             params,
-            response_model=responses.ok_response.OkResponseModel
+            response_model=responses.ok_response.OkResponseModel,
         )
 
 

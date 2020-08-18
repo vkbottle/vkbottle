@@ -81,8 +81,10 @@ class HTTPRequest:
     @property
     def proxy_params(self) -> dict:
         if self.proxy:
-            return {"proxy": self.proxy.get_proxy(),
-                    "proxy_auth": self.proxy.get_auth()}
+            return {
+                "proxy": self.proxy.get_proxy(),
+                "proxy_auth": self.proxy.get_auth(),
+            }
         return {}
 
     @property

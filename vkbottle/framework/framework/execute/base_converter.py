@@ -34,7 +34,9 @@ class Converter:
         args = [a.arg for a in code.args.args]
         args.pop(0)
         if any(v not in values for v in args):
-            raise ConverterError("All values should be passed to func. Predefined kwargs are not allowed")
+            raise ConverterError(
+                "All values should be passed to func. Predefined kwargs are not allowed"
+            )
         values_assignments = [f"var {k}={v!r};" for k, v in values.items()]
         return "".join(values_assignments) + "".join(
             self.find_definition(line) for line in code.body

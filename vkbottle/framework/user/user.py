@@ -131,9 +131,7 @@ class User(PollingAPI):
         :return:
         """
         logger.debug("Making API request users.get to get user_id")
-        response = loop.run_until_complete(
-            request("users.get", {}, token)
-        )
+        response = loop.run_until_complete(request("users.get", {}, token))
         if "error" in response:
             raise VKError(0, "Token is invalid")
         return response["response"][0]["id"]
@@ -201,7 +199,7 @@ class User(PollingAPI):
         """
         if not self.user_id:
             self.user_id = (await self.api.request("users.get", {}))[0]["id"]
-        
+
         self.wait = wait
         logger.info("Polling will be started. Is it OK?")
 
@@ -256,7 +254,7 @@ class User(PollingAPI):
         """ Run loop with bot.run() task with loop.run_forever()
         """
         self.loop_update(self.loop)
-        
+
         self._stop = False
         task = TaskManager(
             self.loop,
