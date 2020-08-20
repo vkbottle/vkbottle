@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from vkbottle.http import HTTP
 import typing
+import asyncio
 
 if typing.TYPE_CHECKING:
     from .bot.bot import AnyBot, Api
@@ -14,7 +15,7 @@ class PollingAPI(ABC, HTTP):
 
     @staticmethod
     @abstractmethod
-    def get_id_by_token(token: str) -> int:
+    def get_id_by_token(token: str, loop: asyncio.AbstractEventLoop) -> int:
         pass
 
     @abstractmethod

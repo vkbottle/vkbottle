@@ -207,6 +207,7 @@ class Bot(PollingAPI):
         """
         Get group id from token
         :param token:
+        :param loop:
         :param throw_exc:
         :return:
         """

@@ -242,6 +242,17 @@ class User(PollingAPI):
         for update in event.get("updates", []):
             update_code, update_fields = update[0], update[1:]
             await self.handle.parent_processor(update, update_code, update_fields)
+    
+    def loop_update(
+        self, loop: asyncio.AbstractEventLoop = None
+    ) -> asyncio.AbstractEventLoop:
+        """
+        Update event loop
+        :param loop:
+        :return:
+        """
+        self.loop = loop or asyncio.get_event_loop()
+        return self.loop
 
     def run_polling(
         self,
