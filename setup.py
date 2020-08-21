@@ -15,8 +15,8 @@ with open("vkbottle/const.py") as f:
 setuptools.setup(
     name="vkbottle",
     version=locals()["__version__"],
-    author="timoniq",
-    description="Homogenic!",
+    author=locals()["__author__"],
+    description="Homogenic! Customizable VK API framework implementing comfort and speed",
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",

@@ -214,7 +214,7 @@ class User(PollingAPI):
             try:
                 event = await self.make_long_request(self.long_poll_server)
                 if isinstance(event, dict) and event.get("ts"):
-                    self.loop.create_task(self.emulate(event))
+                    await self.emulate(event)
                     self.long_poll_server["ts"] = event["ts"]
                 else:
                     await self.get_server()
@@ -242,7 +242,7 @@ class User(PollingAPI):
         for update in event.get("updates", []):
             update_code, update_fields = update[0], update[1:]
             await self.handle.parent_processor(update, update_code, update_fields)
-    
+
     def loop_update(
         self, loop: asyncio.AbstractEventLoop = None
     ) -> asyncio.AbstractEventLoop:

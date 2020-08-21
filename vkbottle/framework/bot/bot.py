@@ -347,7 +347,7 @@ class Bot(PollingAPI):
         while not self._stop:
             event = await self.make_long_request(self.long_poll_server)
             if isinstance(event, dict) and event.get("ts"):
-                self.loop.create_task(self.emulate(event))
+                await self.emulate(event)
                 self.long_poll_server["ts"] = event["ts"]
             else:
                 await self.get_server()
