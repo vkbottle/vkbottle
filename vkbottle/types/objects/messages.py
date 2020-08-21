@@ -314,7 +314,7 @@ class Message(BaseModel):
     ) -> typing.Union[dict, None]:
         try:
             return json.loads(self.payload)
-        except json.decoder.JSONDecodeError as e:
+        except (json.decoder.JSONDecodeError, TypeError) as e:
             if throw_error:
                 raise e
         return unpack_failure(self.payload)
