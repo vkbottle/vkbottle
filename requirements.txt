@@ -2,5 +2,5 @@ aiohttp
 contextvars
 pydantic
 watchgod
-vbml==0.5.93
+vbml==1.0
 loguru
