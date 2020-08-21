@@ -3,3 +3,4 @@ contextvars
 pydantic
 watchgod
 vbml==0.5.93
+loguru
