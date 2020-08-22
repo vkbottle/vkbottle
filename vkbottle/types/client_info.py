@@ -11,11 +11,11 @@ class ButtonActions(enum.Enum):
     open_link = "open_link"
     open_photo = "open_photo"
     callback = "callback"
-    carousel = "carousel"
 
 
 class ClientInfo(BaseModel):
     button_actions: typing.List[ButtonActions] = None
     keyboard: bool = None
     inline_keyboard: bool = None
+    carousel: bool = None
     lang_id: int = None
