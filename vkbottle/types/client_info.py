@@ -11,6 +11,7 @@ class ButtonActions(enum.Enum):
     open_link = "open_link"
     open_photo = "open_photo"
     callback = "callback"
+    carousel = "carousel"
 
 
 class ClientInfo(BaseModel):
