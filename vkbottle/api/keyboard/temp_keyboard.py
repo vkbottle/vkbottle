@@ -82,10 +82,12 @@ class Keyboard:
     def create(self):
         buttons = []
         for row in self.buttons:
+            rows = []
             for btn in row:
                 action = dict(btn.__dict__)
                 action.pop('color')
-                buttons.append([{'action': action, 'color': btn.color}])
+                rows.append({'action': action, 'color': btn.color})
+            buttons.append(rows)
 
         keyboard = {
             'one_time': self.one_time,
