@@ -65,7 +65,7 @@ class CallbackButton:
 class Keyboard:
 
     def __init__(self, one_time=False, inline=False):
-        self.buttons = [[]]
+        self.buttons = []
         self.one_time = one_time
         self.inline = inline
 
