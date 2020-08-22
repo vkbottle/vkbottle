@@ -53,7 +53,7 @@ class API(ContextInstanceMixin, Categories, Constructor):
         """
         for k, v in params.items():
             if isinstance(v, (tuple, list)):
-                params[k] = ",".join(repr(i) for i in v)
+                params[k] = ",".join(str(i) for i in v)
 
         request = Request(self.token_generator, self.error_handler)
         return request(method, params, **kwargs)
