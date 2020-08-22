@@ -219,6 +219,7 @@ class MessagesEdit(BaseMethod):
         keep_snippets: bool = None,
         group_id: int = None,
         dont_parse_links: bool = None,
+        keyboard: str = None
     ) -> responses.messages.Edit:
         """ messages.edit
         From Vk Docs: Edits the message.
