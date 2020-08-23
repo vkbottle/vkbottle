@@ -73,11 +73,13 @@ class Keyboard:
         if len(self.buttons) and not len(self.buttons[-1]):
             raise KeyboardError('Last row is empty!')
         self.buttons.append([])
+        return self
 
     def add_button(self, *btns):
         if len(btns) > 5:
             raise KeyboardError('Exceeded the maximum size: "5 × 10" or "5 × 6"')
         self.buttons[-1].extend(btns)
+        return self
 
     def create(self):
         buttons = []
