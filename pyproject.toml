@@ -24,6 +24,8 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
+aiohttp = "^3.6.2"
+vbml = "^1.0"
 
 [tool.poetry.dev-dependencies]
 # Lint
