@@ -1,10 +1,14 @@
-from abc import ABC, abstractmethod
 import typing
+from abc import ABC, abstractmethod
+
 from vkbottle.http.middleware.abc import http_middleware_decorator, ABCHTTPMiddleware
 from vkbottle.http.middleware.justlog import JustLogHTTPMiddleware
 
 
 class ABCHTTPClient(ABC):
+    """ Abstract class for http-clients
+    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/http/http-client.md
+    """
 
     middleware: "ABCHTTPMiddleware" = JustLogHTTPMiddleware()
 

@@ -1,21 +1,23 @@
-from .abc import ABCHTTPClient
-from ssl import SSLContext
-import vkbottle.modules
 import asyncio
-import aiohttp
 import typing
+from ssl import SSLContext
+
+from aiohttp import ClientSession, TCPConnector
+
+from vkbottle.modules import json as json_module
+from .abc import ABCHTTPClient
 
 
 class AiohttpClient(ABCHTTPClient):
     def __init__(
         self,
         loop: typing.Optional[asyncio.AbstractEventLoop] = None,
-        session: typing.Optional[aiohttp.ClientSession] = None
+        session: typing.Optional[ClientSession] = None
     ):
         self.loop = loop or asyncio.get_event_loop()
-        self.session = session or aiohttp.ClientSession(
-            connector=aiohttp.TCPConnector(verify_ssl=False, ssl_context=SSLContext(), loop=self.loop,),
-            json_serialize=vkbottle.modules.json.dumps,
+        self.session = session or ClientSession(
+            connector=TCPConnector(verify_ssl=False, ssl_context=SSLContext(), loop=self.loop,),
+            json_serialize=json_module.dumps,
         )
 
     async def request_json(
@@ -26,7 +28,7 @@ class AiohttpClient(ABCHTTPClient):
         **kwargs
     ) -> dict:
         async with self.session.request(method, url, data=data, **kwargs) as response:
-            return await response.json(loads=vkbottle.modules.json.loads)
+            return await response.json(loads=json_module.loads)
 
     async def request_text(
         self,

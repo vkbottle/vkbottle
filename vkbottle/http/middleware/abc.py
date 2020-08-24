@@ -23,6 +23,9 @@ def http_middleware_decorator(
 
 
 class ABCHTTPMiddleware(ABC):
+    """ Abstract class for http-client middleware
+    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/http/http-middleware.md
+    """
 
     @abstractmethod
     async def pre(

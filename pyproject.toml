@@ -26,7 +26,7 @@ classifiers = [
 python = "^3.7"
 aiohttp = "^3.6.2"
 vbml = "^1.0"
-choicelib = "^0.1.0"
+choicelib = "^0.1.1"
 
 [tool.poetry.dev-dependencies]
 # Lint
