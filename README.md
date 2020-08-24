@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  [VKBottle 3.0] perfect vk-bot building and develop framework :heart: WIP
+  [VKBottle 3.0] perfect vk-bot building and development framework :heart: WIP
 </h1>
 <p align="center">
   <img alt="PyPI - License" src="https://img.shields.io/pypi/l/vkbottle?style=flat-square">
