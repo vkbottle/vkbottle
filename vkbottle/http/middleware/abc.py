@@ -7,10 +7,11 @@ if typing.TYPE_CHECKING:
 HTTPMiddlewareResponse = typing.NewType("HTTPMiddlewareResponse", bool)
 
 
-def http_middleware_decorator(
-        func: typing.Callable[[str, str, typing.Optional[dict]], typing.Any]
+def request_session_close(
+    func: typing.Callable[[str, str, typing.Optional[dict]], typing.Any]
 ) -> typing.Callable[["ABCHTTPClient", str, str, typing.Optional[dict]], typing.Any]:
-    """ Wrap request method running middlewares """
+    """ Wrap request method running middlewares, closing client session """
+
     async def wrapper(http_client: "ABCHTTPClient", *args, **kwargs) -> typing.Any:
         if await http_client.middleware.pre(*args, **kwargs) == HTTPMiddlewareResponse(False):
             return None
@@ -18,7 +19,9 @@ def http_middleware_decorator(
         response = await func(http_client, *args, **kwargs)
         await http_client.middleware.post(response)
 
+        await http_client.close()
         return response
+
     return wrapper
 
 
@@ -29,11 +32,7 @@ class ABCHTTPMiddleware(ABC):
 
     @abstractmethod
     async def pre(
-        self,
-        method: str,
-        url: str,
-        data: typing.Optional[dict] = None,
-        **kwargs
+        self, method: str, url: str, data: typing.Optional[dict] = None, **kwargs
     ) -> typing.Optional[HTTPMiddlewareResponse]:
         pass
 

@@ -1,2 +1,2 @@
-from .abc import ABCHTTPMiddleware, http_middleware_decorator, HTTPMiddlewareResponse
+from .abc import ABCHTTPMiddleware, request_session_close, HTTPMiddlewareResponse
 from .justlog import JustLogHTTPMiddleware
