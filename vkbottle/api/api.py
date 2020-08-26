@@ -26,6 +26,7 @@ class API(ABCAPI):
         self.http: ABCSessionManager = session_manager or SessionManager(AiohttpClient)
 
     async def request(self, method: str, data: dict) -> dict:
+        """ Makes a single request opening a session """
         async with self.http as session:
             response = await session.request_json(
                 "GET",
@@ -35,7 +36,10 @@ class API(ABCAPI):
             )
             return response
 
-    async def request_many(self, requests: typing.Iterable[APIRequest]) -> typing.AsyncIterator[dict]:
+    async def request_many(
+        self, requests: typing.Iterable[APIRequest]
+    ) -> typing.AsyncIterator[dict]:
+        """ Makes many requests opening one session """
         async with self.http as session:
             for request in requests:
                 yield await session.request_text(
@@ -44,3 +48,6 @@ class API(ABCAPI):
                     data=request.data,
                     params={"access_token": self.token, "v": self.API_VERSION},
                 )
+
+    async def validate_response(self, response: dict) -> typing.Any:
+        pass
