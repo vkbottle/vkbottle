@@ -6,7 +6,7 @@ api = API(os.environ["token"])
 
 
 async def main():
-    print(await api.request("users.get", {}))  # Single request
+    print(await api.request("users.get", {"user_ids": -1}))  # Single request
 
     # Multiple request for one session
     async for response in api.request_many(

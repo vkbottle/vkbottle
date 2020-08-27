@@ -1,5 +1,6 @@
 import asyncio
 import typing
+import types
 
 from vkbottle.modules import json as json_module
 from aiohttp import ClientSession, TCPConnector
@@ -15,11 +16,13 @@ class AiohttpClient(ABCHTTPClient):
         loop: typing.Optional[asyncio.AbstractEventLoop] = None,
         session: typing.Optional[ClientSession] = None,
         middleware: typing.Optional["ABCHTTPMiddleware"] = None,
+        json_processing_module: typing.Optional[types.ModuleType] = None,
     ):
         self.loop = loop or asyncio.get_event_loop()
+        self.json_processing_module = json_processing_module or json_module
         self.session = session or ClientSession(
             connector=TCPConnector(verify_ssl=False, loop=self.loop),
-            json_serialize=json_module.dumps,
+            json_serialize=self.json_processing_module.dumps,
         )
 
         if middleware is not None:
@@ -30,7 +33,7 @@ class AiohttpClient(ABCHTTPClient):
         self, method: str, url: str, data: typing.Optional[dict] = None, **kwargs
     ) -> dict:
         async with self.session.request(method, url, data=data, **kwargs) as response:
-            return await response.json(loads=json_module.loads)
+            return await response.json(loads=self.json_processing_module.loads)
 
     async def request_text(
         self, method: str, url: str, data: typing.Optional[dict] = None, **kwargs

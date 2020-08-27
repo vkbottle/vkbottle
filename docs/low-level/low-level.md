@@ -1,6 +1,8 @@
 # Low-level API
 
-* [Accessing API](api/api.md)
+* [API](api/)
+  + [Accessing API](api/api.md)
+  + [Response Validators](api/response-validator.md)
 * [Exception Handling](exception_factory/)
   + [Exception Factory](exception_factory/exception-factory.md)
   + [Error Handler](exception_factory/error-handler.md)

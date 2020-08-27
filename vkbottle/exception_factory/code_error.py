@@ -8,6 +8,12 @@ class CodeErrorFactory(ABCExceptionFactory):
     Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/exception-factory/exception-factory.md
     """
 
+    def __init__(
+        self, code: typing.Optional[int] = None, error_description: typing.Optional[str] = None
+    ):
+        self.code = code
+        self.error_description = error_description
+
     @classmethod
     def __call__(
         cls, code: typing.Optional[int] = None, error_description: typing.Optional[str] = None
@@ -42,3 +48,9 @@ class CodeErrorFactory(ABCExceptionFactory):
     def generate_exc_classname(cls, code: int) -> str:
         """ Generates unique exception classname based on error code """
         return f"{cls.__name__}_{code}"
+
+    def __str__(self):
+        return (
+            f"\n\t[{self.code}] {self.error_description}\n"
+            f"\tTip: Use Error({self.code}) to catch exception built in CodeErrorFactory"
+        )

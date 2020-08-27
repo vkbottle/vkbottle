@@ -13,6 +13,10 @@
   <img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/timoniq/vkbottle/bug?style=flat-square">
 </p>
 
+## Документация
+
+Читайте оглавление документации фреймворка в [/docs/index.md](/docs/index.md)
+
 ## Contributing
 
 ПР поддерживаются! Нам приятно видеть ваш вклад в развитие библиотеки  
