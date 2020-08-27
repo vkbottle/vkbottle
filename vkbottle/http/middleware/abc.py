@@ -8,7 +8,7 @@ HTTPMiddlewareResponse = typing.NewType("HTTPMiddlewareResponse", bool)
 
 
 def request_session_close(
-    func: typing.Callable[[str, str, typing.Optional[dict]], typing.Any]
+    func: typing.Callable,
 ) -> typing.Callable[["ABCHTTPClient", str, str, typing.Optional[dict]], typing.Any]:
     """ Wrap request method running middlewares, closing client session """
 

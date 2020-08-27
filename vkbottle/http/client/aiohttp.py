@@ -1,6 +1,5 @@
 import asyncio
 import typing
-import types
 
 from vkbottle.modules import json as json_module
 from aiohttp import ClientSession, TCPConnector
@@ -16,7 +15,7 @@ class AiohttpClient(ABCHTTPClient):
         loop: typing.Optional[asyncio.AbstractEventLoop] = None,
         session: typing.Optional[ClientSession] = None,
         middleware: typing.Optional["ABCHTTPMiddleware"] = None,
-        json_processing_module: typing.Optional[types.ModuleType] = None,
+        json_processing_module: typing.Optional[typing.Any] = None,
     ):
         self.loop = loop or asyncio.get_event_loop()
         self.json_processing_module = json_processing_module or json_module

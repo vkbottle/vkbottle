@@ -4,10 +4,12 @@ import typing
 
 class ABCExceptionFactory(ABC, BaseException):
     """ Abstract Exception Factory
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/exception-factory/exception-factory.md
+    Documentation: \
+    https://github.com/timoniq/vkbottle/tree/v3.0/docs/exception-factory/exception-factory.md
     """
 
     @classmethod
+    @abstractmethod
     def __call__(
         cls, *args, **kwargs
     ) -> typing.Union["ABCExceptionFactory", typing.Type["ABCExceptionFactory"]]:

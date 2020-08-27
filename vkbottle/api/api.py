@@ -36,21 +36,21 @@ class API(ABCAPI):
             response = await session.request_text(
                 "POST",
                 self.API_URL + method,
-                data=data,
+                data=data,  # type: ignore
                 params={"access_token": self.token, "v": self.API_VERSION},
             )
             return await self.validate_response(response)
 
     async def request_many(
-        self, requests: typing.Iterable[APIRequest]
+        self, requests: typing.Iterable[APIRequest]  # type: ignore
     ) -> typing.AsyncIterator[dict]:
         """ Makes many requests opening one session """
         async with self.http as session:
             for request in requests:
                 response = await session.request_text(
                     "POST",
-                    self.API_URL + request.method,
-                    data=request.data,
+                    self.API_URL + request.method,  # type: ignore
+                    data=request.data,  # type: ignore
                     params={"access_token": self.token, "v": self.API_VERSION},
                 )
                 yield await self.validate_response(response)

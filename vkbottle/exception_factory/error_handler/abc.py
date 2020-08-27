@@ -21,5 +21,9 @@ class ABCErrorHandler(ABC):
         pass
 
     @abstractmethod
-    def wraps_error_handler(self) -> 1:
+    def wraps_error_handler(
+        self,
+    ) -> typing.Callable[
+        [typing.Any], typing.Callable[[typing.Any, typing.Any], typing.Awaitable[typing.Any]]
+    ]:
         pass

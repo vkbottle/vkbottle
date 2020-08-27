@@ -37,12 +37,6 @@ flake8 = "^3.7.9"
 mypy_extensions = "^0.4.3"
 black = {version = "^19.0", allow-prereleases = true}
 
-# Docs
-mkdocs = "^1.1"
-mkdocs-material = "^4.6"
-mkautodoc = "^0.1.0"
-pymdown-extensions = "^6.1"
-
 # Tests
 pytest = "^5.4"
 pytest-cov = "^2.8"

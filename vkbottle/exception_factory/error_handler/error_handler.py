@@ -4,7 +4,7 @@ import typing
 
 class ErrorHandler(ABCErrorHandler):
     def __init__(self, redirect_arguments: bool = False):
-        self.error_handlers: typing.Dict[BaseException, ExceptionHandler] = {}
+        self.error_handlers: typing.Dict[typing.Type[BaseException], ExceptionHandler] = {}
         self.undefined_error_handler: typing.Optional[ExceptionHandler] = None
         self.redirect_arguments = redirect_arguments
 
@@ -16,7 +16,7 @@ class ErrorHandler(ABCErrorHandler):
 
         if exception_handler:
             self.error_handlers[exception_type] = exception_handler
-            return
+            return None
 
         def decorator(func: ExceptionHandler):
             self.error_handlers[exception_type] = func
@@ -30,7 +30,7 @@ class ErrorHandler(ABCErrorHandler):
 
         if undefined_error_handler:
             self.undefined_error_handler = undefined_error_handler
-            return
+            return None
 
         def decorator(func: ExceptionHandler):
             self.undefined_error_handler = func
@@ -42,8 +42,8 @@ class ErrorHandler(ABCErrorHandler):
         self, handler: ExceptionHandler, e: BaseException, *args, **kwargs
     ) -> typing.Awaitable[typing.Any]:
         if self.redirect_arguments:
-            return handler(e, *args, **kwargs)
-        return handler(e)
+            return handler(e, *args, **kwargs)  # type: ignore
+        return handler(e)  # type: ignore
 
     def wraps_error_handler(
         self,

@@ -5,7 +5,8 @@ import gc
 
 class CodeErrorFactory(ABCExceptionFactory):
     """ Code error factory
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/exception-factory/exception-factory.md
+    Documentation: \
+    https://github.com/timoniq/vkbottle/tree/v3.0/docs/exception-factory/exception-factory.md
     """
 
     def __init__(
@@ -15,24 +16,26 @@ class CodeErrorFactory(ABCExceptionFactory):
         self.error_description = error_description
 
     @classmethod
-    def __call__(
+    def __call__(  # type: ignore
         cls, code: typing.Optional[int] = None, error_description: typing.Optional[str] = None
     ) -> typing.Union["ABCExceptionFactory", typing.Type["ABCExceptionFactory"]]:
         """ Interactively chooses the factory was called for: if error_description
         """
         if error_description is not None:
-            return cls.exception_to_raise(code, error_description)
+            return cls.exception_to_raise(code, error_description)  # type: ignore
         return cls.exception_to_handle(code)
 
     @classmethod
-    def exception_to_raise(cls, code: int, error_description: str) -> "ABCExceptionFactory":
+    def exception_to_raise(  # type: ignore
+        cls, code: int, error_description: str
+    ) -> "ABCExceptionFactory":
         """ Returns an error with error code and error_description
         """
         exception_type = type(cls.generate_exc_classname(code), (cls,), {})
         return exception_type(code, error_description)
 
     @classmethod
-    def exception_to_handle(
+    def exception_to_handle(  # type: ignore
         cls, code: typing.Optional[int] = None
     ) -> typing.Type["ABCExceptionFactory"]:
         """ Returns error type from garbage compiler storage with error code.
@@ -45,7 +48,7 @@ class CodeErrorFactory(ABCExceptionFactory):
         return type(catch_exc_classname, (cls,), {})
 
     @classmethod
-    def generate_exc_classname(cls, code: int) -> str:
+    def generate_exc_classname(cls, code: typing.Optional[int]) -> str:  # type: ignore
         """ Generates unique exception classname based on error code """
         return f"{cls.__name__}_{code}"
 
