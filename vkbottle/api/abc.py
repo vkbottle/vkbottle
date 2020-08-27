@@ -13,5 +13,5 @@ class ABCAPI(ABC):
         pass
 
     @abstractmethod
-    async def validate_response(self, response: dict) -> typing.Any:
+    async def validate_response(self, response: typing.Any) -> typing.Any:
         pass

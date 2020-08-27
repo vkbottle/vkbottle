@@ -3,7 +3,7 @@ import typing
 
 from vkbottle.modules import json as json_module
 from aiohttp import ClientSession, TCPConnector
-from .abc import ABCHTTPClient, request_session_close
+from .abc import ABCHTTPClient
 
 if typing.TYPE_CHECKING:
     from vkbottle.http.middleware.abc import ABCHTTPMiddleware
@@ -27,7 +27,6 @@ class AiohttpClient(ABCHTTPClient):
         if middleware is not None:
             self.middleware = middleware
 
-    @request_session_close
     async def request_json(
         self, method: str, url: str, data: typing.Optional[dict] = None, **kwargs
     ) -> dict:

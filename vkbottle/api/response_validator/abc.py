@@ -8,5 +8,5 @@ class ABCResponseValidator(ABC):
     """
 
     @abstractmethod
-    async def validate(self, response: dict) -> typing.Union[typing.Any, typing.NoReturn]:
+    async def validate(self, response: typing.Any) -> typing.Union[typing.Any, typing.NoReturn]:
         pass

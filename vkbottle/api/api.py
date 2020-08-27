@@ -50,14 +50,14 @@ class API(ABCAPI):
                 response = await session.request_text(
                     "POST",
                     self.API_URL + request.method,  # type: ignore
-                    data=request.data,  # type: ignore
-                    params={"access_token": self.token, "v": self.API_VERSION},
+                    data=request.data,  # type: ignore # noqa
+                    params={"access_token": self.token, "v": self.API_VERSION},  # noqa
                 )
                 yield await self.validate_response(response)
 
-    async def validate_response(self, response: dict) -> typing.Union[dict, typing.NoReturn]:
+    async def validate_response(self, response: typing.Union[dict, str]) -> typing.Union[dict, typing.NoReturn]:
         """ Validates response from VK,
         to change validations change API.response_validators (list of ResponseValidator's) """
         for validator in self.response_validators:
             response = await validator.validate(response)
-        return response
+        return response  # type: ignore
