@@ -55,7 +55,9 @@ class API(ABCAPI):
                 )
                 yield await self.validate_response(response)
 
-    async def validate_response(self, response: typing.Union[dict, str]) -> typing.Union[dict, typing.NoReturn]:
+    async def validate_response(
+        self, response: typing.Union[dict, str]
+    ) -> typing.Union[dict, typing.NoReturn]:
         """ Validates response from VK,
         to change validations change API.response_validators (list of ResponseValidator's) """
         for validator in self.response_validators:

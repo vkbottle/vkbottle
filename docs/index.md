@@ -1,4 +1,4 @@
-# Welcome to VKBottle v3 documentation!
+# Добро пожаловать в документацию VKBottle v3!
 
 * [Low-level API](low-level/)
     * [API](api/)
