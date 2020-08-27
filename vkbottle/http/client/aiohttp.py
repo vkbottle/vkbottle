@@ -20,7 +20,7 @@ class AiohttpClient(ABCHTTPClient):
         self.loop = loop or asyncio.get_event_loop()
         self.json_processing_module = json_processing_module or json_module
         self.session = session or ClientSession(
-            connector=TCPConnector(verify_ssl=False, loop=self.loop),
+            connector=TCPConnector(ssl=False),
             json_serialize=self.json_processing_module.dumps,
         )
 

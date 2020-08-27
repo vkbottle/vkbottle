@@ -36,6 +36,12 @@ jobs:
         run: |
           poetry run flake8
           poetry run mypy vkbottle
+
+      - name: Set enviromental variables to run tests
+          uses: allenevans/set-env@v1.0.0
+          with:
+            TOKEN: ${{ secrets.test_token }}
+
       - name: Run tests
         run: |
           poetry run pytest
