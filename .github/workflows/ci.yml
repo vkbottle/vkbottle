@@ -23,6 +23,12 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Set enviromental variables to run tests
+        uses: allenevans/set-env@v1.1.0
+        with:
+          overwrite: false
+          TOKEN: ${{ secrets.test_token }}
+
       - name: Set up Python ${{ matrix.python-version }} on ${{ matrix.os }}
         uses: actions/setup-python@v1
         with:
@@ -32,15 +38,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip poetry
           poetry install
+
       - name: Lint code
         run: |
           poetry run flake8
           poetry run mypy vkbottle
-
-      - name: Set enviromental variables to run tests
-          uses: allenevans/set-env@v1.0.0
-          with:
-            TOKEN: ${{ secrets.test_token }}
 
       - name: Run tests
         run: |
