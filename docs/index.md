@@ -1,9 +1,11 @@
-# Добро пожаловать в документацию VKBottle v3!
+# Home
+
+## Добро пожаловать в документацию VKBottle v3!
 
 * [Low-level API](low-level/)
-    * [API](api/)
-      + [Accessing API](api/api.md)
-      + [Response Validators](api/response-validator.md)
+    * [API](low-level/api)
+      + [Accessing API](low-level/api/api.md)
+      + [Response Validators](low-level/api/response-validator.md)
     * [Exception Handling](low-level/exception_factory/)
       + [Exception Factory](low-level/exception_factory/exception-factory.md)
       + [Error Handler](low-level/exception_factory/error-handler.md)

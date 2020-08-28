@@ -40,6 +40,11 @@ black = {version = "^19.0", allow-prereleases = true}
 # Tests
 pytest = "^5.4"
 pytest-cov = "^2.8"
+pytest-asyncio = "^0.14.0"
+
+# Docs
+mkdocs = "^1.1.2"
+mkdocs-material = "^4.6.3"
 
 [tool.black]
 line-length = 99

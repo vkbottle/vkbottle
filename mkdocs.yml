@@ -1,0 +1,18 @@
+site_name: VKBottle
+site_description: Awesome VK framework
+site_author: timoniq
+repo_name: timoniq/vkbottle
+repo_url: https://github.com/timoniq/vkbottle
+edit_uri: edit/v3.0/docs/
+
+extra:
+  disqus: ""
+
+theme:
+  name: material
+  language: ru
+  palette:
+    scheme: preference
+    primary: blue grey
+    accent: deep orange
+  font: Roboto Mono
