@@ -8,7 +8,7 @@ class SessionManager(ABCSessionManager):
         self.http_client = http_client or AiohttpClient
         self._active_session: typing.Optional[ABCHTTPClient] = None
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> ABCHTTPClient:
         self._active_session = self.http_client()
         return self._active_session
 
