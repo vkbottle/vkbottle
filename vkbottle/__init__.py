@@ -3,6 +3,7 @@ from .tools import ABCStorage, CtxStorage, BaseContext
 from .exception_factory import (
     ABCExceptionFactory,
     CodeErrorFactory,
+    SingleError,
     VKAPIError,
     ABCErrorHandler,
     ErrorHandler,
