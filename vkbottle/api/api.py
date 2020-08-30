@@ -1,5 +1,6 @@
 from .abc import ABCAPI
 from .response_validator import ABCResponseValidator, DEFAULT_RESPONSE_VALIDATORS
+from .request_validator import ABCRequestValidator, DEFAULT_REQUEST_VALIDATORS
 from vkbottle.http import ABCSessionManager, SessionManager, AiohttpClient
 from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
 from vkbottle_types.categories import APICategories
@@ -30,6 +31,7 @@ class API(ABCAPI, APICategories):
         self.http: ABCSessionManager = session_manager or SessionManager(AiohttpClient)
         self.error_handler = error_handler or ErrorHandler(redirect_arguments=False)
         self.response_validators: typing.List[ABCResponseValidator] = DEFAULT_RESPONSE_VALIDATORS
+        self.request_validators: typing.List[ABCRequestValidator] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
 
     async def request(self, method: str, data: dict) -> dict:
         """ Makes a single request opening a session """
@@ -64,6 +66,13 @@ class API(ABCAPI, APICategories):
         for validator in self.response_validators:
             response = await validator.validate(response)
         return response  # type: ignore
+
+    async def validate_request(self, request: dict) -> dict:
+        """ Validates requests from VK,
+        to change validations change API.request_validators (list of RequestValidator's) """
+        for validator in self.request_validators:
+            request = await validator.validate(request)
+        return request  # type: ignore
 
     @property
     def api_instance(self) -> "API":
