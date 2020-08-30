@@ -7,5 +7,4 @@ TOKEN = os.getenv("TOKEN")
 
 @pytest.fixture()
 def api():
-    assert TOKEN
     return API(TOKEN)

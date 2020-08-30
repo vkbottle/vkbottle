@@ -2,13 +2,14 @@ from .abc import ABCAPI
 from .response_validator import ABCResponseValidator, DEFAULT_RESPONSE_VALIDATORS
 from vkbottle.http import ABCSessionManager, SessionManager, AiohttpClient
 from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
+from vkbottle_types.categories import APICategories
 import typing
 
 
 APIRequest = typing.NamedTuple("APIRequest", [("method", str), ("data", dict)])
 
 
-class API(ABCAPI):
+class API(ABCAPI, APICategories):
     """ Default API instance
     Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/api/api.md
     """
@@ -63,3 +64,7 @@ class API(ABCAPI):
         for validator in self.response_validators:
             response = await validator.validate(response)
         return response  # type: ignore
+
+    @property
+    def api_instance(self) -> "API":
+        return self

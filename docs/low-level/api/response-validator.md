@@ -12,10 +12,6 @@
 
 Вызывает `VKAPIError` от `CodeErrorFactory` при респонсе с ошибкой от вк
 
-### GetResponseValidator
-
-Получает `response` по его одноименному ключу
-
 ## Создание свего валидатора ответа
 
 Пример с `response_validators` из `API`:
