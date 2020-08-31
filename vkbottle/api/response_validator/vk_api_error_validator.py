@@ -3,7 +3,7 @@ from vkbottle.exception_factory import VKAPIError
 import typing
 
 
-class VKAPIErrorValidator(ABCResponseValidator):
+class VKAPIErrorResponseValidator(ABCResponseValidator):
     """ Default vk api error response validator
     Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/api/response-validator.md
     """

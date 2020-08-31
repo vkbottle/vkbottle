@@ -4,7 +4,7 @@ from vkbottle.modules import json
 import typing
 
 
-class JSONValidator(ABCResponseValidator):
+class JSONResponseValidator(ABCResponseValidator):
     """ Default response json-parse validator
     Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/api/response-validator.md
     """

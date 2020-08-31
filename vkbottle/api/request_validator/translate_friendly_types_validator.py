@@ -1,7 +1,7 @@
 from .abc import ABCRequestValidator
 
 
-class TranslateFriendlyTypesValidator(ABCRequestValidator):
+class TranslateFriendlyTypesRequestValidator(ABCRequestValidator):
     async def validate(self, response: dict) -> dict:
         for k, v in response.items():
             # translate python-list to vk array-like type

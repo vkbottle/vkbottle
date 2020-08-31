@@ -1,4 +1,4 @@
 from .abc import ABCRequestValidator
-from .translate_friendly_types_validator import TranslateFriendlyTypesValidator
+from .translate_friendly_types_validator import TranslateFriendlyTypesRequestValidator
 
-DEFAULT_REQUEST_VALIDATORS = [TranslateFriendlyTypesValidator()]
+DEFAULT_REQUEST_VALIDATORS = [TranslateFriendlyTypesRequestValidator()]
