@@ -23,4 +23,4 @@ async def test_api_response(api: API):
 async def test_api_typed_response(api: API):
     response = await api.users.get(1)
     assert isinstance(response, list)
-    assert response[0].first_name
+    assert response[0].first_name == "Павел"

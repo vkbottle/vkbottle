@@ -13,3 +13,7 @@
       + [Accessing Http Client](low-level/http/http-client.md)
       + [Http Middleware](low-level/http/http-middleware.md)
       + [Accessing Http Session Manager](low-level/http/http-session-manager.md)
+    * [Polling](low-level/polling/)
+      + [Accessing Polling](low-level/polling/polling.md)
+* [Tools](tools/)
+  * [Storages](tools/storage.md)

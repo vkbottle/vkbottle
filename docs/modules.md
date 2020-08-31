@@ -1,6 +1,6 @@
 # Dependencies customisation
 
-# JSON-Parser
+# JSON
 
 В порядке направо: `json`, `ujson`, `hyperjson`, `orjson`
 
