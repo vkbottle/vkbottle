@@ -8,6 +8,8 @@ from .api import (
 )
 from .tools import ABCStorage, CtxStorage, BaseContext
 from .polling import ABCPolling, BotPolling
+from .framework import ABCFramework, Bot
+from vkbottle_types import GroupTypes
 from .exception_factory import (
     ABCExceptionFactory,
     CodeErrorFactory,
@@ -24,3 +26,5 @@ from .http import (
     JustLogHTTPMiddleware,
     SessionManager,
 )
+
+types = GroupTypes

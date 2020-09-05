@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import AsyncIterator, Any
+from typing import AsyncGenerator, Any
+from vkbottle.api import ABCAPI
 
 
 class ABCPolling(ABC):
@@ -16,5 +17,18 @@ class ABCPolling(ABC):
         pass
 
     @abstractmethod
-    async def listen(self) -> AsyncIterator[dict]:
+    async def listen(self) -> AsyncGenerator[dict, None]:
+        pass
+
+    @property
+    @abstractmethod
+    def api(self) -> "ABCAPI":
+        pass
+
+    @api.setter
+    def api(self, new_api: "ABCAPI"):
+        pass
+
+    @abstractmethod
+    def construct(self, api: "ABCAPI") -> "ABCPolling":
         pass

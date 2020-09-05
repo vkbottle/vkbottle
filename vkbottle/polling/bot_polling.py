@@ -1,6 +1,6 @@
 from .abc import ABCPolling
 from vkbottle.api import ABCAPI
-from typing import Optional, AsyncIterator
+from typing import Optional, AsyncGenerator
 
 
 class BotPolling(ABCPolling):
@@ -10,14 +10,14 @@ class BotPolling(ABCPolling):
 
     def __init__(
         self,
-        api: "ABCAPI",
+        api: Optional[ABCAPI] = None,
         group_id: Optional[int] = None,
         wait: Optional[int] = None,
         rps_delay: Optional[int] = None,
     ):
-        self.api = api
+        self._api = api
         self.group_id = group_id
-        self.wait = wait or 25
+        self.wait = wait or 15
         self.rps_delay = rps_delay or 0
         self.stop = False
 
@@ -37,7 +37,7 @@ class BotPolling(ABCPolling):
             "response"
         ]
 
-    async def listen(self) -> AsyncIterator[dict]:  # type: ignore
+    async def listen(self) -> AsyncGenerator[dict, None]:  # type: ignore
         server = await self.get_server()
         while not self.stop:
             event = await self.get_event(server)
@@ -46,3 +46,19 @@ class BotPolling(ABCPolling):
                 continue
             server["ts"] = event["ts"]
             yield event
+
+    def construct(self, api: "ABCAPI") -> "BotPolling":
+        self._api = api
+        return self
+
+    @property
+    def api(self) -> "ABCAPI":
+        if self._api is None:
+            raise NotImplementedError(
+                "You must construct polling with API before try to access api property of Polling"
+            )
+        return self._api
+
+    @api.setter
+    def api(self, new_api: "ABCAPI"):
+        self._api = new_api
