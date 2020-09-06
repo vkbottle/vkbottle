@@ -1,7 +1,9 @@
 from ..abc import ABCView
-from vkbottle_types.events import GroupEventType, GroupTypes
+from vkbottle_types.events import GroupEventType
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware
+from vkbottle.api.abc import ABCAPI
+from vkbottle.tools.dev_tools import message_min
 from typing import Any, List
 
 
@@ -13,8 +15,8 @@ class MessageView(ABCView):
         if GroupEventType(event["type"]) == GroupEventType.MESSAGE_NEW:
             return True
 
-    async def handle_event(self, event: dict) -> Any:
-        message = GroupTypes.MessageNew(**event)
+    async def handle_event(self, event: dict, ctx_api: "ABCAPI") -> Any:
+        message = message_min(event, ctx_api)
 
         handle_responses = []
         for handler in self.handlers:

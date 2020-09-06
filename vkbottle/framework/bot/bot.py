@@ -1,8 +1,9 @@
-from .abc import ABCFramework
+from vkbottle.framework.abc import ABCFramework
 from vkbottle.api import ABCAPI, API
 from vkbottle.polling import ABCPolling, BotPolling
 from vkbottle.tools import LoopWrapper
 from vkbottle.dispatch import ABCRouter, BotRouter
+from .labeler import ABCBotLabeler, BotLabeler
 from asyncio import AbstractEventLoop, get_event_loop
 from typing import Optional
 
@@ -16,10 +17,12 @@ class Bot(ABCFramework):
         loop: Optional[AbstractEventLoop] = None,
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
+        labeler: Optional["ABCBotLabeler"] = None,
     ):
         self.api = API(token) if token is not None else api
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.router = router or BotRouter()
+        self.labeler = labeler or BotLabeler()
         self._polling = polling or BotPolling(self.api)
         self._loop = loop
 
@@ -27,10 +30,14 @@ class Bot(ABCFramework):
     def polling(self) -> "ABCPolling":
         return self._polling.construct(self.api)  # type: ignore
 
+    @property
+    def on(self) -> "ABCBotLabeler":
+        return self.labeler
+
     async def run_polling(self):
         async for event in self.polling.listen():
             for update in event["updates"]:
-                await self.router.route(update)
+                await self.router.route(update, self.api)
 
     @property
     def loop(self) -> AbstractEventLoop:

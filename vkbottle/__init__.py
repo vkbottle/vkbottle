@@ -6,7 +6,7 @@ from .api import (
     ABCRequestValidator,
     DEFAULT_REQUEST_VALIDATORS,
 )
-from .tools import ABCStorage, CtxStorage, BaseContext
+from .tools import ABCStorage, CtxStorage, BaseContext, BotTypes
 from .polling import ABCPolling, BotPolling
 from .framework import ABCFramework, Bot
 from vkbottle_types import GroupTypes
@@ -27,4 +27,4 @@ from .http import (
     SessionManager,
 )
 
-types = GroupTypes
+event_types = GroupTypes
