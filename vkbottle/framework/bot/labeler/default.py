@@ -1,5 +1,5 @@
 from .abc import ABCBotLabeler, LabeledMessageHandler
-from vkbottle.dispatch.rules import ABCRule
+from vkbottle.dispatch.rules import ABCRule, bot
 from vkbottle.dispatch.views import MessageView
 from vkbottle.dispatch.handlers import FromFuncHandler
 
@@ -11,7 +11,11 @@ class BotLabeler(ABCBotLabeler):
         self, *rules: "ABCRule", blocking: bool = False, **custom_rules
     ) -> LabeledMessageHandler:
         def decorator(func):
-            self.message_view.handlers.append(FromFuncHandler(func, *rules, blocking=blocking))
+            self.message_view.handlers.append(
+                FromFuncHandler(
+                    func, *rules, *self.get_custom_rules(custom_rules), blocking=blocking
+                )
+            )
             return func
 
         return decorator
@@ -20,7 +24,15 @@ class BotLabeler(ABCBotLabeler):
         self, *rules: "ABCRule", blocking: bool = False, **custom_rules
     ) -> LabeledMessageHandler:
         def decorator(func):
-            self.message_view.handlers.append(FromFuncHandler(func, *rules, blocking=blocking))
+            self.message_view.handlers.append(
+                FromFuncHandler(
+                    func,
+                    bot.PeerRule(True),
+                    *rules,
+                    *self.get_custom_rules(custom_rules),
+                    blocking=blocking,
+                )
+            )
             return func
 
         return decorator
@@ -29,7 +41,15 @@ class BotLabeler(ABCBotLabeler):
         self, *rules: "ABCRule", blocking: bool = False, **custom_rules
     ) -> LabeledMessageHandler:
         def decorator(func):
-            self.message_view.handlers.append(FromFuncHandler(func, *rules, blocking=blocking))
+            self.message_view.handlers.append(
+                FromFuncHandler(
+                    func,
+                    bot.PeerRule(False),
+                    *rules,
+                    *self.get_custom_rules(custom_rules),
+                    blocking=blocking,
+                )
+            )
             return func
 
         return decorator

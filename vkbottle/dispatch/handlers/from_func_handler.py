@@ -1,6 +1,6 @@
 from .abc import ABCHandler
 from vkbottle.dispatch.rules import ABCRule
-from typing import Tuple, Any, Callable
+from typing import Union, Any, Callable
 
 
 class FromFuncHandler(ABCHandler):
@@ -9,11 +9,16 @@ class FromFuncHandler(ABCHandler):
         self.rules = rules
         self.blocking = blocking
 
-    async def filter(self, event: Any) -> bool:
+    async def filter(self, event: Any) -> Union[dict, bool]:
+        rule_context = {}
         for rule in self.rules:
-            if not await rule.check(event):
+            result = await rule.check(event)
+            if not result:
                 return False
-        return True
+            elif result is True:
+                continue
+            rule_context.update(result)
+        return rule_context
 
-    async def handle(self, event: Any) -> Any:
-        return await self.handler(event)
+    async def handle(self, event: Any, **context) -> Any:
+        return await self.handler(event, **context)

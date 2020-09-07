@@ -5,7 +5,7 @@ from vkbottle.tools import LoopWrapper
 from vkbottle.dispatch import ABCRouter, BotRouter
 from .labeler import ABCBotLabeler, BotLabeler
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import Optional
+from typing import Optional, NoReturn
 
 
 class Bot(ABCFramework):
@@ -19,7 +19,7 @@ class Bot(ABCFramework):
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCBotLabeler"] = None,
     ):
-        self.api = API(token) if token is not None else api
+        self.api = API(token) if token is not None else api  # type: ignore
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.router = router or BotRouter()
         self.labeler = labeler or BotLabeler()
@@ -28,16 +28,20 @@ class Bot(ABCFramework):
 
     @property
     def polling(self) -> "ABCPolling":
-        return self._polling.construct(self.api)  # type: ignore
+        return self._polling.construct(self.api)
 
     @property
     def on(self) -> "ABCBotLabeler":
         return self.labeler
 
-    async def run_polling(self):
-        async for event in self.polling.listen():
+    async def run_polling(self) -> NoReturn:
+        async for event in self.polling.listen():  # type: ignore
             for update in event["updates"]:
                 await self.router.route(update, self.api)
+
+    def run_forever(self) -> NoReturn:
+        self.loop_wrapper.add_task(self.run_polling())
+        self.loop_wrapper.run_forever(self.loop)
 
     @property
     def loop(self) -> AbstractEventLoop:
@@ -48,7 +52,3 @@ class Bot(ABCFramework):
     @loop.setter
     def loop(self, new_loop: AbstractEventLoop):
         self._loop = new_loop
-
-    def run_forever(self):
-        self.loop_wrapper.add_task(self.run_polling())
-        self.loop_wrapper.run_forever(self.loop)

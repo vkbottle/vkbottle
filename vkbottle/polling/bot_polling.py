@@ -1,6 +1,6 @@
 from .abc import ABCPolling
 from vkbottle.api import ABCAPI
-from typing import Optional, AsyncGenerator
+from typing import Optional, AsyncIterator
 
 
 class BotPolling(ABCPolling):
@@ -37,7 +37,7 @@ class BotPolling(ABCPolling):
             "response"
         ]
 
-    async def listen(self) -> AsyncGenerator[dict, None]:  # type: ignore
+    async def listen(self) -> AsyncIterator[dict]:  # type: ignore
         server = await self.get_server()
         while not self.stop:
             event = await self.get_event(server)

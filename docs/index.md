@@ -2,6 +2,14 @@
 
 ## Добро пожаловать в документацию VKBottle v3!
 
+* [High-level API](high-level/)
+    * [Bot](high-level/bot/)
+      + [Access Bot](high-level/bot/bot.md)
+      + [Labeler](high-level/bot/labeler.md)
+    * [Handling](high-level/handling/)
+      + [Handler](high-level/handling/handler.md)
+      + [View](high-level/handling/view.md)
+    * [Routing](high-level/routing/)
 * [Low-level API](low-level/)
     * [API](low-level/api)
       + [Accessing API](low-level/api/api.md)

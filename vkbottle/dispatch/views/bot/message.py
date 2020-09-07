@@ -22,10 +22,12 @@ class MessageView(ABCView):
         for handler in self.handlers:
             result = await handler.filter(message)
 
-            if not result:
+            if result is False:
                 continue
+            elif not isinstance(result, dict):
+                result = {}
 
-            handle_responses.append(await handler.handle(message))
+            handle_responses.append(await handler.handle(message, **result))
             if handler.blocking:
                 return handle_responses
 

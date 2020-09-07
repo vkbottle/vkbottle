@@ -6,6 +6,10 @@ from vkbottle.api.abc import ABCAPI
 
 
 class ABCRouter(ABC):
+    """ Abstract Router
+    Documentation:
+    """
+
     views: Dict[str, "ABCView"]
     middlewares: List["BaseMiddleware"]
 
