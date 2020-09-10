@@ -24,7 +24,7 @@ def keyboard_gen(
                 {
                     k: v
                     for k, v in button.items()
-                    if k not in ("type", "text", "label", "color")
+                    if k not in ("type", "text", "color")
                 }
             )
 
