@@ -1,0 +1,22 @@
+# Bot
+
+Инстанс бота это аддон состоящий из стандартного апи и составляющих фреймворка, так же он умеет запускать лонгпол
+
+Аттрибуты:
+
+`bot.api` - [API документация](/docs/low-level/api/api.md)  
+`bot.router` - [Router документация](/docs/high-level/routing/index.md)  
+`bot.labeler`/`bot.on` - [Labeler документация](labeler.md)  
+`bot.polling` - [Polling документация](/docs/low-level/polling/polling.md)
+`bot.loop` - возвращает _event loop_ который был установлен или самостоятельно получает его
+
+Функции:
+
+## bot.run_polling()
+
+Асинхронный запуск longpoll
+
+## bot.run_forever()
+
+Синхронный запуск longpoll. Добавляет `run_polling` в таски `bot.loop_wrapper` и запускает луп в `run_forever`
+
