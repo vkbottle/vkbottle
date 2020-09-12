@@ -213,8 +213,8 @@ class FuncRule(ABCMessageRule):
 
     async def check(self, message: Message) -> bool:
         if inspect.iscoroutinefunction(self.func):
-            return await self.func(message)
-        return self.func(message)
+            return await self.func(message)  # type: ignore
+        return self.func(message)  # type: ignore
 
 
 __all__ = (

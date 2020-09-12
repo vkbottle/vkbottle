@@ -14,7 +14,7 @@ class ABCRouter(ABC):
     middlewares: List["BaseMiddleware"]
 
     @abstractmethod
-    async def route(self, event: dict, ctx_api: "ABCAPI") -> Any:
+    async def route(self, event: dict, ctx_api: "ABCAPI"):
         pass
 
     def add_view(self, name: str, view: "ABCView") -> NoReturn:

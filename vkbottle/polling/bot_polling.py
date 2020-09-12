@@ -1,6 +1,7 @@
 from .abc import ABCPolling
 from vkbottle.api import ABCAPI
 from typing import Optional, AsyncIterator
+from vkbottle.modules import logger
 
 
 class BotPolling(ABCPolling):
@@ -22,6 +23,7 @@ class BotPolling(ABCPolling):
         self.stop = False
 
     async def get_event(self, server: dict) -> dict:
+        logger.debug("Making long request to get event with longpoll...")
         async with self.api.http as session:
             return await session.request_json(
                 "POST",
@@ -31,6 +33,7 @@ class BotPolling(ABCPolling):
             )
 
     async def get_server(self) -> dict:
+        logger.debug("Getting polling server...")
         if self.group_id is None:
             self.group_id = (await self.api.request("groups.getById", {}))["response"][0]["id"]
         return (await self.api.request("groups.getLongPollServer", {"group_id": self.group_id}))[
@@ -39,6 +42,7 @@ class BotPolling(ABCPolling):
 
     async def listen(self) -> AsyncIterator[dict]:  # type: ignore
         server = await self.get_server()
+        logger.debug("Starting listening to longpoll")
         while not self.stop:
             event = await self.get_event(server)
             if not event.get("ts"):

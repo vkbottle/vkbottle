@@ -6,6 +6,7 @@ from vkbottle.dispatch import ABCRouter, BotRouter
 from .labeler import ABCBotLabeler, BotLabeler
 from asyncio import AbstractEventLoop, get_event_loop
 from typing import Optional, NoReturn
+from vkbottle.modules import logger
 
 
 class Bot(ABCFramework):
@@ -35,11 +36,14 @@ class Bot(ABCFramework):
         return self.labeler
 
     async def run_polling(self) -> NoReturn:
+        logger.info("Polling will be started")
         async for event in self.polling.listen():  # type: ignore
+            logger.debug(f"New event was received: {event}")
             for update in event["updates"]:
                 await self.router.route(update, self.api)
 
     def run_forever(self) -> NoReturn:
+        logger.info("Loop will be ran forever")
         self.loop_wrapper.add_task(self.run_polling())
         self.loop_wrapper.run_forever(self.loop)
 

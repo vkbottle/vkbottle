@@ -4,6 +4,7 @@ from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.api.abc import ABCAPI
 from vkbottle.tools.dev_tools import message_min
+from vkbottle.modules import logger
 from typing import Any, List
 
 
@@ -16,11 +17,13 @@ class MessageView(ABCView):
             return True
 
     async def handle_event(self, event: dict, ctx_api: "ABCAPI") -> Any:
+        logger.debug("Handling event ({}) with message view".format(event.get("event_id")))
         message = message_min(event, ctx_api)
 
         handle_responses = []
         for handler in self.handlers:
             result = await handler.filter(message)
+            logger.debug("Handler {} returned {}".format(handler, result))
 
             if result is False:
                 continue

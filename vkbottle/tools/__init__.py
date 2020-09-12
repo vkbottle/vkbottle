@@ -6,4 +6,5 @@ from .dev_tools import (
     BotTypes,
     message_min,
     vkscript,
+    run_in_task,
 )
