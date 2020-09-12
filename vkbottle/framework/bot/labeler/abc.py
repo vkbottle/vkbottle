@@ -1,6 +1,20 @@
 from abc import ABC, abstractmethod
 from vkbottle.dispatch.rules import ABCRule
-from vkbottle.dispatch.rules.bot import PeerRule, VBMLRule
+from vkbottle.dispatch.rules.bot import (
+    PeerRule,
+    VBMLRule,
+    CommandRule,
+    FromUserRule,
+    FromPeerRule,
+    StickerRule,
+    AttachmentTypeRule,
+    LevensteinRule,
+    MessageLengthRule,
+    ChatActionRule,
+    PayloadRule,
+    PayloadContainsRule,
+    PayloadMapRule,
+)
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
 from typing import Callable, Any, Dict, Optional, Type, List
 from vbml import Patcher
@@ -9,6 +23,18 @@ LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]
 
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "from_chat": PeerRule,
+    "command": CommandRule,
+    "from_user": FromUserRule,
+    "peer_ids": FromPeerRule,
+    "sticker": StickerRule,
+    "attachment": AttachmentTypeRule,
+    "levenstein": LevensteinRule,
+    "lev": LevensteinRule,
+    "length": MessageLengthRule,
+    "action": ChatActionRule,
+    "payload": PayloadRule,
+    "payload_contains": PayloadContainsRule,
+    "payload_map": PayloadMapRule,
 }
 
 
