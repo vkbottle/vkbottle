@@ -15,7 +15,7 @@
 
 ## Документация
 
-Читайте оглавление документации фреймворка в [/docs/index.md](/docs/index.md)
+https://vkbottle.readthedocs.io/ru/latest
 
 ## Contributing
 

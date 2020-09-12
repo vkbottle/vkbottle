@@ -34,6 +34,10 @@ class ABCBotLabeler(ABC):
     def private_message(self, *rules: "ABCRule", **custom_rules) -> LabeledMessageHandler:
         pass
 
+    @abstractmethod
+    def load(self, labeler: Any):
+        pass
+
     def get_custom_rules(self, custom_rules: Dict[str, Any]) -> List["ABCRule"]:
         return [self.custom_rules[k](v) for k, v in custom_rules.items()]  # type: ignore
 

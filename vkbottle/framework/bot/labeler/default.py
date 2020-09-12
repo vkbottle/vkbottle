@@ -53,3 +53,7 @@ class BotLabeler(ABCBotLabeler):
             return func
 
         return decorator
+
+    def load(self, labeler: "BotLabeler"):
+        self.message_view.handlers.extend(labeler.message_view.handlers)
+        self.message_view.middlewares.extend(labeler.message_view.middlewares)

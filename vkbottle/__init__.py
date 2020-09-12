@@ -26,5 +26,6 @@ from .http import (
     JustLogHTTPMiddleware,
     SessionManager,
 )
+from .vkscript_converter import vkscript
 
 event_types = GroupTypes
