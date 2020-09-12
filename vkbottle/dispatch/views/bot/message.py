@@ -9,7 +9,7 @@ from typing import Any, List
 
 class MessageView(ABCView):
     handlers: List["ABCHandler"] = []
-    middleware: List["BaseMiddleware"] = []
+    middlewares: List["BaseMiddleware"] = []
 
     async def process_event(self, event: dict) -> bool:
         if GroupEventType(event["type"]) == GroupEventType.MESSAGE_NEW:

@@ -25,3 +25,4 @@
       + [Accessing Polling](low-level/polling/polling.md)
 * [Tools](tools/)
   * [Storages](tools/storage.md)
+  * [VKScript](tools/vkscript.md)
