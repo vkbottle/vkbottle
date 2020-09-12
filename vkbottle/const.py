@@ -1,4 +1,4 @@
-__version__ = "2.7.11"
+__version__ = "2.7.12"
 
 __author__ = "timoniq"
 
