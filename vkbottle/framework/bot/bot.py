@@ -386,9 +386,9 @@ class Bot(PollingAPI):
             if not update.get("object"):
                 continue
             try:
-                await self.handle.parent_processor(update, obj=update["object"])
+                self.loop.create_task(self.handle.parent_processor(update, obj=update["object"]))
             except VKError as e:
-                await self.error_handler.handle_error(e)
+                self.loop.create_task(self.error_handler.handle_error(e))
 
         return "ok"
 
