@@ -1,8 +1,9 @@
 from .abc import ABCRule
 from abc import abstractmethod
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
-from typing import List, Optional, Union, Tuple
+from typing import List, Optional, Union, Tuple, Callable, Awaitable
 import vbml
+import inspect
 
 
 DEFAULT_PREFIXES = ["!", "/"]
@@ -206,6 +207,16 @@ class FromUserRule(ABCMessageRule):
         return False
 
 
+class FuncRule(ABCMessageRule):
+    def __init__(self, func: Union[Callable[[Message], Union[bool, Awaitable]]]):
+        self.func = func
+
+    async def check(self, message: Message) -> bool:
+        if inspect.iscoroutinefunction(self.func):
+            return await self.func(message)
+        return self.func(message)
+
+
 __all__ = (
     "ABCMessageRule",
     "PeerRule",
@@ -221,4 +232,5 @@ __all__ = (
     "PayloadContainsRule",
     "PayloadMapRule",
     "FromUserRule",
+    "FuncRule",
 )

@@ -14,6 +14,7 @@ from vkbottle.dispatch.rules.bot import (
     PayloadRule,
     PayloadContainsRule,
     PayloadMapRule,
+    FuncRule,
 )
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
 from typing import Callable, Any, Dict, Optional, Type, List
@@ -35,6 +36,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "payload": PayloadRule,
     "payload_contains": PayloadContainsRule,
     "payload_map": PayloadMapRule,
+    "func": FuncRule,
 }
 
 
