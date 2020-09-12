@@ -13,7 +13,7 @@ class FromFuncHandler(ABCHandler):
         rule_context = {}
         for rule in self.rules:
             result = await rule.check(event)
-            if not result:
+            if result is False:
                 return False
             elif result is True:
                 continue
