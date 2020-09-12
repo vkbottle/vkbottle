@@ -1,6 +1,4 @@
 import re
-import sys
-import time
 import typing
 from collections.abc import MutableMapping
 from typing import Sequence, List
@@ -12,24 +10,9 @@ if typing.TYPE_CHECKING:
     from vkbottle.types.methods.method import BaseMethod
 
 
-class Logger:
-    def __getattr__(self, item):
-        if item in ["remove", "add", "level"]:
-            return lambda *args, **kwargs: None
-        return Logger()
-
-    def __call__(self, message: str, *args, **kwargs):
-        t = time.strftime("%m-%d %H:%M:%S", time.localtime())
-        sys.stdout.write(
-            "\n[VKBottle] "
-            + str(message).format(*args, **kwargs)
-            + " [TIME {}]".format(t)
-        )
-
-
 def chunks(l, n):
     for i in range(0, len(l), n):
-        yield l[i : i + n]
+        yield l[i: i + n]
 
 
 def init_bot_mention(group_id: int, text: str):
@@ -98,7 +81,7 @@ def flatten(lis):
 
 
 def method_requested(
-    method: str, categoties: "Categories", request_instance
+        method: str, categoties: "Categories", request_instance
 ) -> "BaseMethod":
     return (
         from_attr(

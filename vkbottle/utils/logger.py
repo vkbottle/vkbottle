@@ -1,6 +1,6 @@
 try:
     from loguru import logger
 except ImportError:
-    from .tools import Logger
+    from ._custom_logger import Logger
 
     logger = Logger()
