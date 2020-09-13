@@ -1,7 +1,7 @@
 from vkbottle_types.objects import MessagesMessage, MessagesClientInfo
 from vkbottle_types.events.bot_events import MessageNew
-from vkbottle.api.abc import ABCAPI
-from typing import Optional, Any, List
+from vkbottle.api import ABCAPI, API
+from typing import Optional, Any, List, Union
 
 
 class MessageMin(MessagesMessage):
@@ -9,7 +9,7 @@ class MessageMin(MessagesMessage):
     unprepared_ctx_api: Optional[Any] = None
 
     @property
-    def ctx_api(self) -> "ABCAPI":
+    def ctx_api(self) -> Union["ABCAPI", "API"]:
         return getattr(self, "unprepared_ctx_api")
 
     async def answer(
