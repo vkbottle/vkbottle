@@ -40,12 +40,14 @@ class Bot(ABCFramework):
     def error(self) -> "ABCErrorHandler":
         return self.router.error_handler
 
-    async def run_polling(self) -> NoReturn:
+    async def run_polling(self, custom_polling: Optional[ABCPolling] = None) -> NoReturn:
+        polling = custom_polling or self.polling
         logger.info("Polling will be started")
-        async for event in self.polling.listen():  # type: ignore
+
+        async for event in polling.listen():  # type: ignore
             logger.debug(f"New event was received: {event}")
             for update in event["updates"]:
-                await self.router.route(update, self.api)
+                await self.router.route(update, polling.api)
 
     def run_forever(self) -> NoReturn:
         logger.info("Loop will be ran forever")

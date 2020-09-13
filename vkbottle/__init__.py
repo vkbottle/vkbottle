@@ -34,7 +34,8 @@ from .http import (
     ABCSessionManager,
     AiohttpClient,
     JustLogHTTPMiddleware,
-    SessionManager,
+    SingleSessionManager,
+    ManySessionManager,
 )
 from vkbottle.tools.dev_tools.vkscript_converter import vkscript
 

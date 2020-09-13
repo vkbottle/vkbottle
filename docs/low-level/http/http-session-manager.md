@@ -11,12 +11,12 @@
 ### async with
 
 ```python
-from vkbottle.http import SessionManager
+from vkbottle.http import ManySessionManager
 
 # ...
-session_manager = SessionManager()
+session_manager = ManySessionManager()
 async with session_manager as session:
-    await session.request_text("https://google.com")
+    await session.request_text("GET", "https://google.com")
 ```
 
 ## Создание кастомного менеджера сессий клиента

@@ -3,7 +3,7 @@ from vkbottle.http.client import ABCHTTPClient, AiohttpClient
 import typing
 
 
-class SessionManager(ABCSessionManager):
+class ManySessionManager(ABCSessionManager):
     def __init__(self, http_client: typing.Optional[typing.Type[ABCHTTPClient]] = None):
         self.http_client = http_client or AiohttpClient
         self._active_session: typing.Optional[ABCHTTPClient] = None

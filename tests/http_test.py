@@ -1,4 +1,4 @@
-from vkbottle import SessionManager, AiohttpClient
+from vkbottle import ManySessionManager, AiohttpClient
 import pytest
 
 @pytest.mark.asyncio
@@ -10,7 +10,7 @@ async def test_client():
 
 @pytest.mark.asyncio
 async def test_session_manager():
-    session_manager = SessionManager()
+    session_manager = ManySessionManager()
     async with session_manager as session:
         text = await session.request_text("GET", "https://google.com")
     assert text

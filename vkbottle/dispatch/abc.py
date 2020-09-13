@@ -8,7 +8,7 @@ from vkbottle.exception_factory.error_handler import ABCErrorHandler
 
 class ABCRouter(ABC):
     """ Abstract Router
-    Documentation:
+    Documentation: soon
     """
 
     views: Dict[str, "ABCView"]

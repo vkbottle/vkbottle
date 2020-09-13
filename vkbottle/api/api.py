@@ -1,7 +1,7 @@
 from .abc import ABCAPI
 from .response_validator import ABCResponseValidator, DEFAULT_RESPONSE_VALIDATORS
 from .request_validator import ABCRequestValidator, DEFAULT_REQUEST_VALIDATORS
-from vkbottle.http import ABCSessionManager, SessionManager, AiohttpClient
+from vkbottle.http import ABCSessionManager, AiohttpClient, SingleSessionManager
 from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
 from vkbottle_types.categories import APICategories
 from vkbottle.modules import logger
@@ -13,7 +13,7 @@ APIRequest = typing.NamedTuple("APIRequest", [("method", str), ("data", dict)])
 
 class API(ABCAPI, APICategories):
     """ Default API instance
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/api/api.md
+    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/low-level/api/api.md
     """
 
     API_URL = "https://api.vk.com/method/"
@@ -24,12 +24,12 @@ class API(ABCAPI, APICategories):
         self,
         token: str,
         ignore_errors: bool = False,
-        session_manager: typing.Optional[SessionManager] = None,
+        session_manager: typing.Optional[SingleSessionManager] = None,
         error_handler: typing.Optional[ABCErrorHandler] = None,
     ):
         self.token = token
         self.ignore_errors = ignore_errors
-        self.http: ABCSessionManager = session_manager or SessionManager(AiohttpClient)
+        self.http: ABCSessionManager = session_manager or SingleSessionManager(AiohttpClient)
         self.error_handler = error_handler or ErrorHandler(redirect_arguments=False)
         self.response_validators: typing.List[ABCResponseValidator] = DEFAULT_RESPONSE_VALIDATORS
         self.request_validators: typing.List[ABCRequestValidator] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
