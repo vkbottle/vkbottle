@@ -3,6 +3,7 @@ from .views import ABCView
 from .middlewares import BaseMiddleware
 from typing import List, Dict, Callable, Type, NoReturn, Any
 from vkbottle.api.abc import ABCAPI
+from vkbottle.exception_factory.error_handler import ABCErrorHandler
 
 
 class ABCRouter(ABC):
@@ -12,6 +13,7 @@ class ABCRouter(ABC):
 
     views: Dict[str, "ABCView"]
     middlewares: List["BaseMiddleware"]
+    error_handler: "ABCErrorHandler"
 
     @abstractmethod
     async def route(self, event: dict, ctx_api: "ABCAPI"):

@@ -3,6 +3,7 @@ from vkbottle.api import ABCAPI, API
 from vkbottle.polling import ABCPolling, BotPolling
 from vkbottle.tools import LoopWrapper
 from vkbottle.dispatch import ABCRouter, BotRouter
+from vkbottle.exception_factory import ABCErrorHandler
 from .labeler import ABCBotLabeler, BotLabeler
 from asyncio import AbstractEventLoop, get_event_loop
 from typing import Optional, NoReturn
@@ -34,6 +35,10 @@ class Bot(ABCFramework):
     @property
     def on(self) -> "ABCBotLabeler":
         return self.labeler
+
+    @property
+    def error(self) -> "ABCErrorHandler":
+        return self.router.error_handler
 
     async def run_polling(self) -> NoReturn:
         logger.info("Polling will be started")

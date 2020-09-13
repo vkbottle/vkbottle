@@ -17,6 +17,7 @@ from .exception_factory import (
     VKAPIError,
     ABCErrorHandler,
     ErrorHandler,
+    swear,
 )
 from .http import (
     ABCHTTPClient,

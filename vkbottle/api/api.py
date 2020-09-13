@@ -60,7 +60,7 @@ class API(ABCAPI, APICategories):
                 )
                 logger.debug(
                     "Request {} with {} data returned {}".format(
-                        request.method, request.data, response   # type: ignore
+                        request.method, request.data, response  # type: ignore
                     )
                 )
                 yield await self.validate_response(response)

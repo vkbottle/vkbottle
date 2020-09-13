@@ -8,7 +8,8 @@
 `bot.router` - [Router документация](/docs/high-level/routing/index.md)  
 `bot.labeler`/`bot.on` - [Labeler документация](labeler.md)  
 `bot.polling` - [Polling документация](/docs/low-level/polling/polling.md)
-`bot.loop` - возвращает _event loop_ который был установлен или самостоятельно получает его
+`bot.loop` - возвращает _event loop_ который был установлен или самостоятельно получает его  
+`bot.error` - возвращает `error handler` бота из `bot.router`. Добавлено для краткой записи
 
 Функции:
 
