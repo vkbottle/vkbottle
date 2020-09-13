@@ -26,7 +26,6 @@ def swear(
         exception = (exception,)
 
     def decorator(func: Callable):
-        
         async def asynchronous_wrapper(*args, **kwargs):
             try:
                 return await func(*args, **kwargs)

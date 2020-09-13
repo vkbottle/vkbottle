@@ -16,3 +16,6 @@ class ABCView(ABC):
     @abstractmethod
     async def handle_event(self, event: dict, ctx_api: "ABCAPI") -> Any:
         pass
+
+    def register_middleware(self, middleware: "BaseMiddleware"):
+        self.middlewares.append(middleware)

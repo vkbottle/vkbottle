@@ -9,6 +9,10 @@
 Во View рекомендуются 2 аттрибута:
 
 * **handlers** - список из ABCHandler
-* **middleware** - список из BaseMiddleware
+* **middlewares** - список из BaseMiddleware
 
 Эти аттрибуты впоследствии рекомендуется использовать в handle_event для запуска мидлварей и поиска хендлера
+
+## register_middleware(BaseMiddleware)
+
+Добавляет мидлварь в `view.middlewares`
