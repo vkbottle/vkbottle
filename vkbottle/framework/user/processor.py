@@ -100,7 +100,7 @@ class UserProcessor(ABCProcessor):
 
         # Executing middleware
         async for mr in self.middleware.run_middleware(
-            message, flag=MiddlewareFlags.PRE
+            message, MiddlewareFlags.PRE
         ):
             if self.status.middleware_expressions:
                 if mr is False:
@@ -131,7 +131,7 @@ class UserProcessor(ABCProcessor):
                 break
 
         async for mr in self.middleware.run_middleware(
-            message, flag=MiddlewareFlags.POST, *middleware_args
+            message, MiddlewareFlags.POST, *middleware_args
         ):
             logger.debug(f"POST Middleware handler returned: {mr}")
 
