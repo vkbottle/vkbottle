@@ -1,11 +1,14 @@
-from vkbottle import API
 import pytest
+
+from vkbottle import API
+
 
 def skippable_api_test(func):
     async def wrapper(api: API):
         if not api.token:
             return pytest.skip("TOKEN is not set as enviroment variable")
         return await func(api)
+
     return wrapper
 
 

@@ -1,8 +1,11 @@
 import asyncio
 import typing
 
+from aiohttp import ClientSession
+from aiohttp import TCPConnector
+
 from vkbottle.modules import json as json_module
-from aiohttp import ClientSession, TCPConnector
+
 from .abc import ABCHTTPClient
 
 if typing.TYPE_CHECKING:
