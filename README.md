@@ -19,11 +19,7 @@ https://vkbottle.readthedocs.io/ru/latest
 
 ## Contributing
 
-Желательно использование `pre-commit` и `pre-push` хуков
-
-Включить их можно через `pre-commit install -t=pre-commit -t=pre-push`
-
-ПР поддерживаются! Нам приятно видеть ваш вклад в развитие библиотеки  
+ПР поддерживаются! Перед созданиям пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE.md](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие библиотеки  
 Задавайте вопросы в блоке Issues и в чате Telegram/VK!
 
 ## Лицензия
