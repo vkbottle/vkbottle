@@ -1,0 +1,74 @@
+repos:
+    # Use pre-commit repo, v3.2.0
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: "v3.2.0"
+    hooks:
+      # Check for files that contain merge conflict strings.
+      - id: check-merge-conflict
+        stages: [commit, push]
+      # Simply check whether files parse as valid python.
+      - id: check-ast
+        stages: [commit]
+
+    # Use locally installed hooks
+  - repo: local
+
+    hooks:
+      - id: black
+        name: black
+        entry: black
+        language: system
+        types: [python]
+        stages: [commit]
+        # Black should use the config from the pyproject.toml file
+
+      - id: autoflake
+        name: autoflake
+        entry: autoflake
+        language: system
+        types: [python]
+        args: [--in-place, --exclude=__init__.py, --remove-all-unused-imports, --remove-duplicate-keys]
+        stages: [commit]
+
+      - id: autopep8
+        name: autopep8
+        entry: autopep8
+        language: system
+        types: [python]
+        args: [--in-place, --max-line-length=99]
+        stages: [commit]
+
+      - id: reorder-python-imports
+        name: reorder-python-imports
+        entry: reorder-python-imports
+        language: system
+        types: [python]
+        args:
+          - --separate-relative
+          - --py37-plus
+        stages: [commit]
+
+      - id: mypy
+        name: mypy check
+        entry: mypy
+        language: system
+        always_run: true
+        pass_filenames: false
+        args: [vkbottle]
+        stages: [commit]
+
+      - id: pytest
+        name: pytest
+        entry: pytest
+        language: system
+        always_run: true
+        pass_filenames: false
+        stages: [push]
+
+      - id: flake8
+        name: flake8 check
+        entry: flake8
+        language: system
+        always_run: true
+        pass_filenames: false
+        stages: [push]
