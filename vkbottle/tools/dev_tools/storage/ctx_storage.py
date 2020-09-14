@@ -1,6 +1,8 @@
-from .abc import ABCStorage
-from vkbottle.tools.dev_tools.ctx_tool import BaseContext
 import typing
+
+from vkbottle.tools.dev_tools.ctx_tool import BaseContext
+
+from .abc import ABCStorage
 
 
 class CtxStorage(ABCStorage, BaseContext):
@@ -13,7 +15,6 @@ class CtxStorage(ABCStorage, BaseContext):
     def __init__(
         self, default: dict = None, force_reset: bool = False,
     ):
-
         default = default or {}
         if not self.get_instance() or force_reset:
             self.storage = default

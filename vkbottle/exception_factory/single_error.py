@@ -1,5 +1,6 @@
-from .abc import ABCExceptionFactory
 import typing
+
+from .abc import ABCExceptionFactory
 
 
 class SingleError(ABCExceptionFactory):

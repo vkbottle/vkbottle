@@ -1,7 +1,10 @@
-from .abc import ABCBotLabeler, LabeledMessageHandler
-from vkbottle.dispatch.rules import ABCRule, bot
-from vkbottle.dispatch.views import MessageView
 from vkbottle.dispatch.handlers import FromFuncHandler
+from vkbottle.dispatch.rules import ABCRule
+from vkbottle.dispatch.rules import bot
+from vkbottle.dispatch.views import MessageView
+
+from .abc import ABCBotLabeler
+from .abc import LabeledMessageHandler
 
 
 class BotLabeler(ABCBotLabeler):

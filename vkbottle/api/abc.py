@@ -1,6 +1,8 @@
-from abc import ABC, abstractmethod
-from vkbottle.http import ABCSessionManager
 import typing
+from abc import ABC
+from abc import abstractmethod
+
+from vkbottle.http import ABCSessionManager
 
 
 class ABCAPI(ABC):
@@ -13,7 +15,6 @@ class ABCAPI(ABC):
     @abstractmethod
     async def request(self, method: str, data: dict) -> dict:
         """ Makes a single request opening a session """
-        pass
 
     @abstractmethod
     async def validate_response(self, response: typing.Any) -> typing.Any:
