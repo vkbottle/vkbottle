@@ -33,6 +33,10 @@ class MessageDeny(BaseEvent):
     object: EventsObjects.MessageAllow = None
 
 
+class MessageEvent(BaseEvent):
+    object: EventsObjects.MessageEvent = None
+
+
 class PhotoNew(BaseEvent):
     object: objects.photos.Photo = None
 

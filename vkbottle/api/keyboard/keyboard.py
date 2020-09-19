@@ -1,11 +1,11 @@
-from .action import Text
+from .action import Text, Action
 from vkbottle.utils.exceptions import KeyboardError
 from ...utils import except_none_self, json
 import typing
 
 
 class KeyboardButton:
-    def __init__(self, action: typing.Union[Text], color: str = None):
+    def __init__(self, action: Action, color: str = None):
         self.action = action or Text
         self.color = color or "default"
 
@@ -56,7 +56,7 @@ class Keyboard:
             raise KeyboardError("Last row is empty!")
         self.buttons.append([])
 
-    def add_button(self, action: typing.Union[Text], color: str = None):
+    def add_button(self, action: Action, color: str = None):
         if not len(self.buttons):
             raise KeyboardError("Firstly add row with keyboard.add_row()")
         button = KeyboardButton(action, color)

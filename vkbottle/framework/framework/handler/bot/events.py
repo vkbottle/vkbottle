@@ -4,6 +4,7 @@ from vkbottle.types.events.events_objects import (
     MessageDeny,
     MessageAllow,
     MessageTypingState,
+    MessageEvent,
     PhotoCommentDelete,
     WallReplyNew,
     VideoCommentDelete,
@@ -73,6 +74,15 @@ class BotEvents(ABCEvents):
         def decorator(func):
             rule = EventRule(EventList.MESSAGE_TYPING_STATE)
             rule.create(func, {"data": MessageTypingState})
+            self.rules.append(rule)
+            return func
+
+        return decorator
+
+    def message_event(self):
+        def decorator(func):
+            rule = EventRule(EventList.MESSAGE_EVENT)
+            rule.create(func, {"data": MessageEvent})
             self.rules.append(rule)
             return func
 

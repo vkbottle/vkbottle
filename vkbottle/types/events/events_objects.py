@@ -45,6 +45,14 @@ class MessageTypingState(BaseModel):
     api: list = None
 
 
+class MessageEvent(BaseModel):
+    user_id: int = None
+    peer_id: int = None
+    event_id: str = None
+    payload: dict = None
+    conversation_message_id: int = None
+
+
 class MessageDeny(BaseModel):
     user_id: int = None
 
