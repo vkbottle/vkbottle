@@ -1251,6 +1251,30 @@ class MessagesRecognizeAudioMessage(BaseMethod):
         )
 
 
+class SendMessageEventAnswer(BaseMethod):
+    kwargs: dict = {}
+    access_token_type: APIAccessibility = [APIAccessibility.GROUP]
+
+    async def __call__(
+        self,
+        event_id: str,
+        user_id: int,
+        peer_id: int,
+        event_data: str = None
+    ) -> responses.ok_response.OkResponse:
+
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in {**locals(), **self.kwargs}.items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "messages.sendMessageEventAnswer",
+            params,
+            response_model=responses.ok_response.OkResponseModel
+        )
+
+
 class Messages:
     def __init__(self, request):
         self.add_chat_user = MessagesAddChatUser(request)
@@ -1297,3 +1321,4 @@ class Messages:
         self.set_chat_photo = MessagesSetChatPhoto(request)
         self.unpin = MessagesUnpin(request)
         self.recognize_audio_message = MessagesRecognizeAudioMessage(request)
+        self.send_message_event_answer = SendMessageEventAnswer(request)

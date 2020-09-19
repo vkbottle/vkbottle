@@ -58,3 +58,9 @@ class VKApps(Action):
     payload: str = None
     label: str = None
     hash: str = None
+
+
+class Callback(Action):
+    type = "callback"
+    payload: str = None
+    label: str = None
