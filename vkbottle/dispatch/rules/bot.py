@@ -1,7 +1,7 @@
 from .abc import ABCRule
 from abc import abstractmethod
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
-from typing import List, Optional, Union, Tuple, Callable, Awaitable
+from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine
 import vbml
 import inspect
 
@@ -215,6 +215,14 @@ class FuncRule(ABCMessageRule):
         if inspect.iscoroutinefunction(self.func):
             return await self.func(message)  # type: ignore
         return self.func(message)  # type: ignore
+
+
+class CoroutineRule(ABCMessageRule):
+    def __init__(self, coroutine: Coroutine):
+        self.coro = coroutine
+
+    async def check(self, message: Message) -> bool:
+        return await self.coro
 
 
 __all__ = (

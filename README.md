@@ -17,6 +17,14 @@
 
 https://vkbottle.readthedocs.io/ru/latest
 
+## Установка
+
+Установить версию 3.0 до релиза можно этой командой:
+
+```shell script
+pip install -U https://github.com/timoniq/vkbottle/archive/v3.0.zip
+```
+
 ## Contributing
 
 ПР поддерживаются! Перед созданиям пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE.md](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие библиотеки. Задавайте вопросы в блоке Issues и в чате Telegram/VK! 

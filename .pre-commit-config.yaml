@@ -38,16 +38,6 @@ repos:
         args: [--in-place, --max-line-length=99]
         stages: [commit]
 
-      - id: reorder-python-imports
-        name: reorder-python-imports
-        entry: reorder-python-imports
-        language: system
-        types: [python]
-        args:
-          - --separate-relative
-          - --py37-plus
-        stages: [commit]
-
       - id: mypy
         name: mypy check
         entry: mypy
