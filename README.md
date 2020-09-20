@@ -92,7 +92,7 @@ pip install uvloop
 Самый быстрый способ запустить бота. На сервер VK посылаются "долгие" запросы, на которые приходит ответ только при появлении события. При работе с longpoll проверьте что вы включили все нужные события в настройках группы и выставили последнюю версию API.
 
 ```python
-from vkbottle import Bot, Message
+from vkbottle.bot import Bot, Message
 
 bot = Bot("my-token")
 
@@ -110,7 +110,7 @@ bot.run_polling(skip_updates=False)
 События приходят на ваш сервер как запросы, на которые вы должны вернуть ответ "ok". При работе с callback проверьте что вы включили все нужные события в настройках группы и поставили последнюю версию API.
 
 ```python
-from vkbottle import Bot, Message
+from vkbottle.bot import Bot, Message
 from aiohttp import web
 
 bot = Bot(token="my-token")
@@ -137,7 +137,7 @@ web.run_app(app=app)
 Правила позволяют удобно настраивать ваши хендлеры, принимающие события.
 
 ```python
-from vkbottle import Bot, Message
+from vkbottle.bot import Bot, Message
 from vkbottle.rule import AttachmentRule
 
 bot = Bot("my-token")
