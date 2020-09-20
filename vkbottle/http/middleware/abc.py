@@ -1,6 +1,5 @@
+from abc import ABC, abstractmethod
 import typing
-from abc import ABC
-from abc import abstractmethod
 
 HTTPMiddlewareResponse = typing.NewType("HTTPMiddlewareResponse", bool)
 

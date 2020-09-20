@@ -1,30 +1,24 @@
-from abc import ABC
-from abc import abstractmethod
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Type
-
-from vbml import Patcher
-
+from abc import ABC, abstractmethod
 from vkbottle.dispatch.rules import ABCRule
-from vkbottle.dispatch.rules.bot import AttachmentTypeRule
-from vkbottle.dispatch.rules.bot import ChatActionRule
-from vkbottle.dispatch.rules.bot import CommandRule
-from vkbottle.dispatch.rules.bot import FromPeerRule
-from vkbottle.dispatch.rules.bot import FromUserRule
-from vkbottle.dispatch.rules.bot import FuncRule
-from vkbottle.dispatch.rules.bot import LevensteinRule
-from vkbottle.dispatch.rules.bot import MessageLengthRule
-from vkbottle.dispatch.rules.bot import PayloadContainsRule
-from vkbottle.dispatch.rules.bot import PayloadMapRule
-from vkbottle.dispatch.rules.bot import PayloadRule
-from vkbottle.dispatch.rules.bot import PeerRule
-from vkbottle.dispatch.rules.bot import StickerRule
-from vkbottle.dispatch.rules.bot import VBMLRule
+from vkbottle.dispatch.rules.bot import (
+    PeerRule,
+    VBMLRule,
+    CommandRule,
+    FromUserRule,
+    FromPeerRule,
+    StickerRule,
+    AttachmentTypeRule,
+    LevensteinRule,
+    MessageLengthRule,
+    ChatActionRule,
+    PayloadRule,
+    PayloadContainsRule,
+    PayloadMapRule,
+    FuncRule,
+)
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
+from typing import Callable, Any, Dict, Optional, Type, List
+from vbml import Patcher
 
 LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]
 

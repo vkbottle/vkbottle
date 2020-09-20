@@ -1,11 +1,9 @@
 from abc import ABC
-from typing import Any
-from typing import List
-from typing import NewType
-from typing import TYPE_CHECKING
+from typing import NewType, List, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.views.abc import ABCView
+
 
 MiddlewareResponse = NewType("MiddlewareResponse", bool)
 

@@ -1,12 +1,7 @@
-import traceback
-from inspect import iscoroutinefunction
-from typing import Any
-from typing import Callable
-from typing import Optional
-from typing import Tuple
-from typing import Union
-
+from typing import Union, Tuple, Callable, Optional, Any
 from vkbottle.modules import logger
+from inspect import iscoroutinefunction
+import traceback
 
 
 def swear(

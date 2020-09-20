@@ -1,11 +1,10 @@
-from typing import Any
-from typing import NoReturn
-from typing import TypeVar
+from typing import TypeVar, Any, NoReturn
 
 try:
     import contextvars
 except ImportError:
     contextvars = None  # type: ignore
+
 
 T = TypeVar("T")
 

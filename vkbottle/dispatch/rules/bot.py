@@ -1,17 +1,10 @@
-import inspect
-from abc import abstractmethod
-from typing import Awaitable
-from typing import Callable
-from typing import List
-from typing import Optional
-from typing import Tuple
-from typing import Union
-
-import vbml
-
-from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
-
 from .abc import ABCRule
+from abc import abstractmethod
+from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
+from typing import List, Optional, Union, Tuple, Callable, Awaitable
+import vbml
+import inspect
+
 
 DEFAULT_PREFIXES = ["!", "/"]
 Message = MessageMin

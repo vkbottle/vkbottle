@@ -1,7 +1,4 @@
-from vkbottle import CodeErrorFactory
-from vkbottle import SingleError
-from vkbottle import swear
-
+from vkbottle import CodeErrorFactory, SingleError, swear
 
 def test_exc_manager_code_error():
     exc_manager = CodeErrorFactory()

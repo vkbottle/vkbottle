@@ -1,14 +1,7 @@
-from typing import Any
-from typing import List
-from typing import Optional
-from typing import Union
-
+from vkbottle_types.objects import MessagesMessage, MessagesClientInfo
 from vkbottle_types.events.bot_events import MessageNew
-from vkbottle_types.objects import MessagesClientInfo
-from vkbottle_types.objects import MessagesMessage
-
-from vkbottle.api import ABCAPI
-from vkbottle.api import API
+from vkbottle.api import ABCAPI, API
+from typing import Optional, Any, List, Union
 
 
 class MessageMin(MessagesMessage):

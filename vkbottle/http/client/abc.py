@@ -1,6 +1,5 @@
 import typing
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 from vkbottle.http.middleware.abc import ABCHTTPMiddleware
 from vkbottle.http.middleware.justlog import JustLogHTTPMiddleware

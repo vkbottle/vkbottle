@@ -19,8 +19,7 @@ https://vkbottle.readthedocs.io/ru/latest
 
 ## Contributing
 
-ПР поддерживаются! Перед созданиям пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE.md](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие библиотеки  
-Задавайте вопросы в блоке Issues и в чате Telegram/VK!
+ПР поддерживаются! Перед созданиям пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE.md](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие библиотеки. Задавайте вопросы в блоке Issues и в чате Telegram/VK! 
 
 ## Лицензия
 

@@ -1,9 +1,7 @@
-import typing
-
+from .abc import ABCResponseValidator
 from vkbottle.exception_factory import VKBottleError
 from vkbottle.modules import json
-
-from .abc import ABCResponseValidator
+import typing
 
 
 class JSONResponseValidator(ABCResponseValidator):
