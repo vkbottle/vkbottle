@@ -8,7 +8,7 @@ class BotLabeler(ABCBotLabeler):
     message_view = MessageView()
 
     def message(
-        self, *rules: "ABCRule", blocking: bool = False, **custom_rules
+        self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> LabeledMessageHandler:
         def decorator(func):
             self.message_view.handlers.append(
@@ -21,7 +21,7 @@ class BotLabeler(ABCBotLabeler):
         return decorator
 
     def chat_message(
-        self, *rules: "ABCRule", blocking: bool = False, **custom_rules
+        self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> LabeledMessageHandler:
         def decorator(func):
             self.message_view.handlers.append(
@@ -38,7 +38,7 @@ class BotLabeler(ABCBotLabeler):
         return decorator
 
     def private_message(
-        self, *rules: "ABCRule", blocking: bool = False, **custom_rules
+        self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> LabeledMessageHandler:
         def decorator(func):
             self.message_view.handlers.append(
