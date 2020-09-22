@@ -22,7 +22,7 @@ class ABCBlueprint(ABCFramework):
         pass
 
     @abstractmethod
-    def load(self, framework: Any):
+    def load(self, framework: Any) -> "ABCBlueprint":
         pass
 
     @property
