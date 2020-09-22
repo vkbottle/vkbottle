@@ -347,6 +347,11 @@ class UserSettings(UserMin, UserSettingsXtr):
     pass
 
 
+class UserIsMember(BaseModel):
+    user_id: int = None
+    member: bool = None
+
+
 Career.update_forward_refs()
 CropPhoto.update_forward_refs()
 CropPhotoCrop.update_forward_refs()
@@ -371,3 +376,4 @@ UserXtrLists.update_forward_refs()
 UserXtrPhone.update_forward_refs()
 UserXtrType.update_forward_refs()
 UsersArray.update_forward_refs()
+UserIsMember.update_forward_refs()
