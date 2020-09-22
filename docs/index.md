@@ -7,6 +7,7 @@
       + [Access Bot](high-level/bot/bot.md)
       + [Labeler](high-level/bot/labeler.md)
       + [Multibot](high-level/bot/multibot.md)
+      + [Blueprint](high-level/bot/blueprint.md)
     * [Handling](high-level/handling/index.md)
       + [Handler](high-level/handling/handler.md)
       + [View](high-level/handling/view.md)

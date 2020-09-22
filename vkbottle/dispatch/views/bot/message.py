@@ -1,16 +1,19 @@
-from ..abc import ABCView
+from typing import Any, List
+
 from vkbottle_types.events import GroupEventType
+
+from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
-from vkbottle.api.abc import ABCAPI
-from vkbottle.tools.dev_tools import message_min
 from vkbottle.modules import logger
-from typing import Any, List
+from vkbottle.tools.dev_tools import message_min
+from ..abc import ABCView
 
 
 class MessageView(ABCView):
-    handlers: List["ABCHandler"] = []
-    middlewares: List["BaseMiddleware"] = []
+    def __init__(self):
+        self.handlers: List["ABCHandler"] = []
+        self.middlewares: List["BaseMiddleware"] = []
 
     async def process_event(self, event: dict) -> bool:
         if GroupEventType(event["type"]) == GroupEventType.MESSAGE_NEW:

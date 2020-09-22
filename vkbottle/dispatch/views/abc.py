@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
+from typing import Any, List
+
+from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware
-from vkbottle.api.abc import ABCAPI
-from typing import Any, List
 
 
 class ABCView(ABC):

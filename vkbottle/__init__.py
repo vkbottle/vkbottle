@@ -1,3 +1,6 @@
+from vkbottle_types import GroupTypes
+
+from vkbottle.tools.dev_tools.vkscript_converter import vkscript
 from .api import (
     API,
     ABCAPI,
@@ -6,8 +9,6 @@ from .api import (
     ABCRequestValidator,
     DEFAULT_REQUEST_VALIDATORS,
 )
-from .tools import ABCStorage, CtxStorage, BaseContext, BotTypes
-from .polling import ABCPolling, BotPolling
 from .dispatch import (
     ABCHandler,
     BaseMiddleware,
@@ -17,8 +18,6 @@ from .dispatch import (
     ABCRouter,
     BotRouter,
 )
-from .framework import ABCFramework, Bot
-from vkbottle_types import GroupTypes
 from .exception_factory import (
     ABCExceptionFactory,
     CodeErrorFactory,
@@ -28,6 +27,7 @@ from .exception_factory import (
     ErrorHandler,
     swear,
 )
+from .framework import ABCFramework, ABCBlueprint, Bot, BotBlueprint
 from .http import (
     ABCHTTPClient,
     ABCHTTPMiddleware,
@@ -37,6 +37,7 @@ from .http import (
     SingleSessionManager,
     ManySessionManager,
 )
-from vkbottle.tools.dev_tools.vkscript_converter import vkscript
+from .polling import ABCPolling, BotPolling
+from .tools import ABCStorage, CtxStorage, BaseContext, BotTypes
 
 event_types = GroupTypes

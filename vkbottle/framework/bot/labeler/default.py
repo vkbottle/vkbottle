@@ -1,11 +1,12 @@
-from .abc import ABCBotLabeler, LabeledMessageHandler
+from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule, bot
 from vkbottle.dispatch.views import MessageView
-from vkbottle.dispatch.handlers import FromFuncHandler
+from .abc import ABCBotLabeler, LabeledMessageHandler
 
 
 class BotLabeler(ABCBotLabeler):
-    message_view = MessageView()
+    def __init__(self):
+        self.message_view: MessageView = MessageView()
 
     def message(
         self, *rules: "ABCRule", blocking: bool = True, **custom_rules
