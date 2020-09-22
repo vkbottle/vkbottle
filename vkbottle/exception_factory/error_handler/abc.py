@@ -6,6 +6,8 @@ ExceptionHandler = typing.Optional[typing.Callable[[BaseException], typing.Await
 
 
 class ABCErrorHandler(ABC):
+    error_handlers: typing.Any
+
     @abstractmethod
     def register_error_handler(
         self,

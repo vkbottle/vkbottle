@@ -11,12 +11,16 @@ class ABCRouter(ABC):
     Documentation: soon
     """
 
-    views: Dict[str, "ABCView"]
+    views: Dict[str, "ABCView"] = {}
     middlewares: List["BaseMiddleware"]
     error_handler: "ABCErrorHandler"
 
     @abstractmethod
     async def route(self, event: dict, ctx_api: "ABCAPI"):
+        pass
+
+    @abstractmethod
+    def construct(self, views: Dict[str, "ABCView"]) -> "ABCRouter":
         pass
 
     def add_view(self, name: str, view: "ABCView") -> NoReturn:

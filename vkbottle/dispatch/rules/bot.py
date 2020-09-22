@@ -241,4 +241,5 @@ __all__ = (
     "PayloadMapRule",
     "FromUserRule",
     "FuncRule",
+    "CoroutineRule",
 )

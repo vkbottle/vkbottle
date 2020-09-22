@@ -1,14 +1,13 @@
 from .abc import ABCRouter
-from .views import bot
 from vkbottle.dispatch.middlewares import BaseMiddleware
+from vkbottle.dispatch.views import ABCView
 from vkbottle.api.abc import ABCAPI
 from vkbottle.modules import logger
 from vkbottle.exception_factory.error_handler import ErrorHandler
-from typing import List
+from typing import List, Dict
 
 
 class BotRouter(ABCRouter):
-    views = {"message": bot.MessageView()}
     middlewares: List["BaseMiddleware"] = []
     error_handler = ErrorHandler(redirect_arguments=True)
 
@@ -19,3 +18,7 @@ class BotRouter(ABCRouter):
             if not await view.process_event(event):
                 continue
             await view.handle_event(event, ctx_api)
+
+    def construct(self, views: Dict[str, "ABCView"]) -> "BotRouter":
+        self.views = views
+        return self

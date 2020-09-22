@@ -23,14 +23,22 @@ class Bot(ABCFramework):
     ):
         self.api = API(token) if token is not None else api  # type: ignore
         self.loop_wrapper = loop_wrapper or LoopWrapper()
-        self.router = router or BotRouter()
         self.labeler = labeler or BotLabeler()
         self._polling = polling or BotPolling(self.api)
+        self._router = router or BotRouter()
         self._loop = loop
 
     @property
     def polling(self) -> "ABCPolling":
         return self._polling.construct(self.api)
+
+    @property
+    def router(self) -> "ABCRouter":
+        return self._router.construct(views=self.labeler.views())
+
+    @router.setter
+    def router(self, new_router: "ABCRouter"):
+        self._router = new_router
 
     @property
     def on(self) -> "ABCBotLabeler":

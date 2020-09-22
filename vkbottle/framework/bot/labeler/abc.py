@@ -4,6 +4,7 @@ from typing import Callable, Any, Dict, Type, List
 from vbml import Patcher
 
 from vkbottle.dispatch.rules import ABCRule
+from vkbottle.dispatch.views import ABCView
 from vkbottle.dispatch.rules.bot import (
     PeerRule,
     VBMLRule,
@@ -61,6 +62,10 @@ class ABCBotLabeler(ABC):
 
     @abstractmethod
     def private_message(self, *rules: "ABCRule", **custom_rules) -> LabeledMessageHandler:
+        pass
+
+    @abstractmethod
+    def views(self) -> Dict[str, "ABCView"]:
         pass
 
     @abstractmethod

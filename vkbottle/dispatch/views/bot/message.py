@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Callable
 
 from vkbottle_types.events import GroupEventType
 
@@ -7,6 +7,7 @@ from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
 from vkbottle.modules import logger
 from vkbottle.tools.dev_tools import message_min
+from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
 from ..abc import ABCView
 
 
@@ -14,6 +15,7 @@ class MessageView(ABCView):
     def __init__(self):
         self.handlers: List["ABCHandler"] = []
         self.middlewares: List["BaseMiddleware"] = []
+        self.default_text_approximators: List[Callable[[MessageMin], str]] = []
 
     async def process_event(self, event: dict) -> bool:
         if GroupEventType(event["type"]) == GroupEventType.MESSAGE_NEW:
@@ -23,6 +25,9 @@ class MessageView(ABCView):
         logger.debug("Handling event ({}) with message view".format(event.get("event_id")))
         context_variables = {}
         message = message_min(event, ctx_api)
+
+        for text_ax in self.default_text_approximators:
+            message.text = text_ax(message)
 
         for middleware in self.middlewares:
             response = await middleware.pre(message)
