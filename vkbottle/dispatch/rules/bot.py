@@ -56,7 +56,7 @@ class VBMLRule(ABCMessageRule):
     async def check(self, message: Message) -> bool:
         for pattern in self.patterns:
             result = self.patcher.check(pattern, message.text)
-            if result is not None:
+            if result not in (None, False):
                 return result
         return False
 
