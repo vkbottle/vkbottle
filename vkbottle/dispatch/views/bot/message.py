@@ -46,7 +46,7 @@ class MessageView(ABCView):
             elif not isinstance(result, dict):
                 result = {}
 
-            handle_responses.append(await handler.handle(message, **result))
+            handle_responses.append(await handler.handle(message, **result, **context_variables))
             if handler.blocking:
                 return handle_responses
 

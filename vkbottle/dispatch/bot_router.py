@@ -8,7 +8,6 @@ from typing import List, Dict
 
 
 class BotRouter(ABCRouter):
-    middlewares: List["BaseMiddleware"] = []
     error_handler = ErrorHandler(redirect_arguments=True)
 
     @error_handler.wraps_error_handler()

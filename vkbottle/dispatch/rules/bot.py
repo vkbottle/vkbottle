@@ -90,7 +90,7 @@ class FromPeerRule(ABCMessageRule):
 
 class AttachmentTypeRule(ABCMessageRule):
     def __init__(self, attachment_types: Union[List[str], str]):
-        if isinstance(attachment_types, str):
+        if not isinstance(attachment_types, list):
             attachment_types = [attachment_types]
         self.attachment_types = attachment_types
 
