@@ -1,12 +1,13 @@
 from ...utils import except_none_self
 from vkbottle.utils.exceptions import KeyboardError
+from typing import Union
 
 
 class Action:
     def __init__(
         cls,
         label: str = None,
-        payload: str = None,
+        payload: Union[str, dict] = None,
         link: str = None,
         hash: str = None,
         app_id: int = None,
