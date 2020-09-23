@@ -28,7 +28,6 @@ class BotBlueprint(ABCBlueprint):
         return self
 
     def load(self, framework: "Bot") -> "BotBlueprint":
-        framework.router.load(self.router)
         framework.labeler.load(self.labeler)  # type: ignore
         return self.construct(framework.api, framework.polling)
 
