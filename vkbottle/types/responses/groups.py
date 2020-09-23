@@ -195,7 +195,7 @@ class GetModel(BaseModel):
     response: Get = None
 
 
-IsMember = objects.base.BoolInt
+IsMember = typing.Union[objects.base.BoolInt, typing.List[objects.users.UserIsMember]]
 
 
 class IsMemberModel(BaseModel):
