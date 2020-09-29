@@ -40,6 +40,7 @@ class AttachedNote(BaseModel):
 
 
 class CommentAttachment(BaseModel):
+    type: "CommentAttachmentType" = None
     audio: "audio.Audio" = None
     doc: "docs.Doc" = None
     link: "link.Link" = None
@@ -49,7 +50,7 @@ class CommentAttachment(BaseModel):
     page: "pages.WikipageFull" = None
     photo: "photos.Photo" = None
     sticker: "base.Sticker" = None
-    type: "CommentAttachmentType" = None
+    graffiti: "Graffiti" = None
     video: "video.Video" = None
 
 
@@ -64,6 +65,7 @@ class CommentAttachmentType(Enum):
     market_market_album = "market_market_album"
     market = "market"
     sticker = "sticker"
+    graffiti = "graffiti"
 
 
 class Geo(BaseModel):
@@ -76,6 +78,10 @@ class Geo(BaseModel):
 class Graffiti(BaseModel):
     id: int = None
     owner_id: int = None
+    url: str = None
+    width: int = None
+    height: int = None
+    access_key: str = None
     photo_200: str = None
     photo_586: str = None
 
