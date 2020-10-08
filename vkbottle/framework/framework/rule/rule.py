@@ -158,7 +158,11 @@ class LevenshteinDisRule(AbstractMessageRule):
 
 
 class CommandRule(AbstractMessageRule):
-    def __init__(self, message: typing.Union[str, typing.List[str]], prefixes: typing.Tuple[str, ...] = ("/", "!")):
+    def __init__(
+        self,
+        message: typing.Union[str, typing.List[str]],
+        prefixes: typing.Tuple[str, ...] = ("/", "!"),
+    ):
         if isinstance(message, dict):
             self.watch_context = message
             message = list(message.keys())
@@ -223,14 +227,14 @@ class PrivateMessage(AbstractMessageRule):
 
 class VBML(AbstractMessageRule):
     def __init__(
-            self,
-            pattern: typing.Union[
-                str,
-                Pattern,
-                typing.List[typing.Union[str, Pattern]],
-                typing.Dict[typing.Union[str, Pattern], typing.Union[list, dict]],
-            ],
-            lower: bool = None,
+        self,
+        pattern: typing.Union[
+            str,
+            Pattern,
+            typing.List[typing.Union[str, Pattern]],
+            typing.Dict[typing.Union[str, Pattern], typing.Union[list, dict]],
+        ],
+        lower: bool = None,
     ):
         if isinstance(pattern, dict):
             self.watch_context = pattern
@@ -286,7 +290,7 @@ class AttachmentRule(UnionMixin):
 
 class ChatActionRule(AbstractMessageRule):
     def __init__(
-            self, chat_action: typing.Union[str, typing.List[str]], rules: dict = None
+        self, chat_action: typing.Union[str, typing.List[str]], rules: dict = None
     ):
         if isinstance(chat_action, str):
             chat_action = [chat_action]
@@ -328,3 +332,34 @@ class PayloadRule(AbstractMessageRule):
                 # CONTAIN
                 if {**payload, **self.data["payload"]} == payload:
                     return True
+
+
+class ReplyMessage(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.reply_message:
+            return True
+
+
+class ReplyAttachments(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.reply_message and message.reply_message.attachments:
+            return True
+
+
+class ReplyPhoto(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.reply_message and message.reply_message.attachments and message.reply_message.attachments[0].photo:
+            return True
+
+
+class FromUser(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.from_id > 0:
+            return True
+
+
+class FromGroup(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.from_id < 0:
+            return True
+
