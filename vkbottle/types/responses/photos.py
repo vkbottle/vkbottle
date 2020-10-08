@@ -75,7 +75,7 @@ class GetAllModel(BaseModel):
     response: GetAll = None
 
 
-GetById = typing.List[objects.photos.Photo]
+GetById = typing.List[objects.photos.PhotoFull]
 
 
 class GetByIdModel(BaseModel):

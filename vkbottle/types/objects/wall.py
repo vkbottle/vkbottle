@@ -101,6 +101,7 @@ class PostSource(BaseModel):
 
 class PostSourceType(Enum):
     vk = "vk"
+    mvk = "mvk"
     widget = "widget"
     api = "api"
     rss = "rss"
