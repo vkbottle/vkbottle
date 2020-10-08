@@ -332,3 +332,34 @@ class PayloadRule(AbstractMessageRule):
                 # CONTAIN
                 if {**payload, **self.data["payload"]} == payload:
                     return True
+
+
+class ReplyMessage(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.reply_message:
+            return True
+
+
+class ReplyAttachments(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.reply_message and message.reply_message.attachments:
+            return True
+
+
+class ReplyPhoto(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.reply_message and message.reply_message.attachments and message.reply_message.attachments[0].photo:
+            return True
+
+
+class FromUser(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.from_id > 0:
+            return True
+
+
+class FromGroup(AbstractMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.from_id < 0:
+            return True
+
