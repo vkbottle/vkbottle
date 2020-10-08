@@ -125,10 +125,11 @@ class PhotoAlbumFull(BaseModel):
         return self.owner_id == other.owner_id and self.id == other.id
 
 
-class PhotoFull(BaseModel):
+class PhotoFull(Photo):
     access_key: str = None
     album_id: int = None
     can_comment: "base.BoolInt" = None
+    can_repost: "base.BoolInt" = None
     comments: "base.ObjectCount" = None
     date: int = None
     height: int = None

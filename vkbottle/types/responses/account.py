@@ -39,7 +39,8 @@ class GetAppPermissionsModel(BaseModel):
 
 class GetBanned(BaseModel):
     count: int = None
-    items: typing.List[objects.users.User] = None
+    items: typing.List[int] = None
+    profiles: typing.List[objects.users.User] = None
 
 
 class GetBannedModel(BaseModel):
