@@ -28,3 +28,4 @@
 * [Tools](tools/index.md)
   * [Storages](tools/storage.md)
   * [VKScript](tools/vkscript.md)
+  * [Loop Wrapper](tools/loop-wrapper.md)
