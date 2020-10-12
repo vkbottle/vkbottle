@@ -15,7 +15,7 @@ class ABCRouter(ABC):
     error_handler: "ABCErrorHandler"
 
     @abstractmethod
-    async def route(self, event: dict, ctx_api: "ABCAPI"):
+    async def route(self, event: dict, ctx_api: "ABCAPI") -> NoReturn:
         pass
 
     @abstractmethod

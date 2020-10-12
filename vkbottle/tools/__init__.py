@@ -3,6 +3,7 @@ from .dev_tools import (
     CtxStorage,
     BaseContext,
     LoopWrapper,
+    DelayedTask,
     BotTypes,
     message_min,
     vkscript,

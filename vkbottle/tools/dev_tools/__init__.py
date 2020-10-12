@@ -1,5 +1,5 @@
 from .storage import ABCStorage, CtxStorage
-from .loop_wrapper import LoopWrapper
+from .loop_wrapper import LoopWrapper, DelayedTask
 from .ctx_tool import BaseContext
 from .mini_types import BotTypes, message_min
 from .vkscript_converter import vkscript

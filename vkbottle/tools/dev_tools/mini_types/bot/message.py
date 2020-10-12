@@ -34,11 +34,11 @@ class MessageMin(MessagesMessage):
         disable_mentions: Optional[bool] = None,
         template: Optional[dict] = None,
         intent: Optional[str] = None,
-    ):
+    ) -> int:
         data = {k: v for k, v in locals().items() if k != "self" and v is not None}
         data["peer_id"] = self.peer_id
 
-        return await self.ctx_api.request("messages.send", data)
+        return (await self.ctx_api.request("messages.send", data))["response"]
 
 
 MessageMin.update_forward_refs()
