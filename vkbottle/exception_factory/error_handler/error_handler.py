@@ -10,9 +10,9 @@ class ErrorHandler(ABCErrorHandler):
         self.redirect_arguments = redirect_arguments
 
     def register_error_handler(
-            self,
-            exception_type: typing.Type[BaseException],
-            exception_handler: typing.Optional[ExceptionHandler] = None,
+        self,
+        exception_type: typing.Type[BaseException],
+        exception_handler: typing.Optional[ExceptionHandler] = None,
     ) -> typing.Optional[typing.Callable[[ExceptionHandler], typing.Any]]:
 
         if exception_handler:
@@ -26,7 +26,7 @@ class ErrorHandler(ABCErrorHandler):
         return decorator
 
     def register_undefined_error_handler(
-            self, undefined_error_handler: typing.Optional[ExceptionHandler] = None,
+        self, undefined_error_handler: typing.Optional[ExceptionHandler] = None,
     ) -> typing.Optional[typing.Callable[[ExceptionHandler], typing.Any]]:
 
         if undefined_error_handler:
@@ -40,14 +40,14 @@ class ErrorHandler(ABCErrorHandler):
         return decorator
 
     def call_handler(
-            self, handler: ExceptionHandler, e: BaseException, *args, **kwargs
+        self, handler: ExceptionHandler, e: BaseException, *args, **kwargs
     ) -> typing.Awaitable[typing.Any]:
         if self.redirect_arguments:
             return handler(e, *args, **kwargs)  # type: ignore
         return handler(e)  # type: ignore
 
     def wraps_error_handler(
-            self,
+        self,
     ) -> typing.Callable[
         [typing.Any], typing.Callable[[typing.Any, typing.Any], typing.Awaitable[typing.Any]]
     ]:
