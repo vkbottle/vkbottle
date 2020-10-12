@@ -38,6 +38,6 @@ from .http import (
     ManySessionManager,
 )
 from .polling import ABCPolling, BotPolling
-from .tools import ABCStorage, CtxStorage, BaseContext, BotTypes, LoopWrapper, RepeatedTask
+from .tools import ABCStorage, CtxStorage, BaseContext, BotTypes, LoopWrapper, DelayedTask
 
 event_types = GroupTypes
