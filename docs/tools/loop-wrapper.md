@@ -57,7 +57,7 @@ from vkbottle import LoopWrapper
 
 lw = LoopWrapper()
 
-@lw.interval(seconds=10)
+@lw.timer(seconds=10)
 async def delayed_task():
     print("I'll print this after 10 seconds!")
 ```
