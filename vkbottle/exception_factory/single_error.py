@@ -3,7 +3,7 @@ import typing
 
 
 class SingleError(ABCExceptionFactory):
-    """ Sinle error factory
+    """ Single error factory
     Documentation: \
     https://github.com/timoniq/vkbottle/tree/v3.0/docs/exception-factory/exception-factory.md
     """
