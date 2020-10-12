@@ -1,11 +1,11 @@
-from typing import Union, Tuple, Callable, Optional, Any
+from typing import Union, Tuple, Callable, Optional, Any, Type
 from vkbottle.modules import logger
 from inspect import iscoroutinefunction
 import traceback
 
 
 def swear(
-    exception: Union[BaseException, Tuple[BaseException, ...]],
+    exception: Union[BaseException, Type[BaseException], Tuple[Union[BaseException, Type[BaseException]], ...]],
     exception_handler: Optional[Callable] = None,
     just_log: bool = False,
     just_return: bool = False,

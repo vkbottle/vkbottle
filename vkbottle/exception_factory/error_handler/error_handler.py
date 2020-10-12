@@ -1,6 +1,6 @@
-from .abc import ABCErrorHandler, ExceptionHandler
-from vkbottle.modules import logger
 import typing
+
+from .abc import ABCErrorHandler, ExceptionHandler
 
 
 class ErrorHandler(ABCErrorHandler):
@@ -51,7 +51,7 @@ class ErrorHandler(ABCErrorHandler):
     ) -> typing.Callable[
         [typing.Any], typing.Callable[[typing.Any, typing.Any], typing.Awaitable[typing.Any]]
     ]:
-        def decorator(func: typing.Any):
+        def decorator(func: typing.Union[typing.NoReturn, typing.Any]):
             async def wrapper(*args, **kwargs):
                 try:
                     return await func(*args, **kwargs)
