@@ -20,7 +20,7 @@ def dispatch_keywords(keywords: dict, assigner: str = ":", sep: str = ","):
 
 
 def random_string(length: int) -> str:
-    return "".join(random.choice(string.ascii_lowercase) for i in range(length))
+    return "".join(random.choice(string.ascii_lowercase) for _ in range(length))
 
 
 @converter(ast.Assign)
@@ -39,93 +39,93 @@ def assign(d: ast.Assign):
 
 @converter(ast.Add)
 @converter(ast.UAdd)
-def add_operator(d: ast.Add):
+def add_operator(_: ast.Add):
     return "+"
 
 
 @converter(ast.Sub)
 @converter(ast.USub)
-def sub_operator(d: ast.Sub):
+def sub_operator(_: ast.Sub):
     return "-"
 
 
 @converter(ast.Mult)
-def mult_operator(d: ast.Mult):
+def mult_operator(_: ast.Mult):
     return "*"
 
 
 @converter(ast.Div)
-def div_operator(d: ast.Div):
+def div_operator(_: ast.Div):
     return "/"
 
 
 @converter(ast.Pow)
-def pow_operator(d: ast.Pow):
+def pow_operator(_: ast.Pow):
     return "**"
 
 
 @converter(ast.RShift)
-def rshift_operator(d: ast.RShift):
+def rshift_operator(_: ast.RShift):
     return ">>"
 
 
 @converter(ast.LShift)
-def lshift_operator(d: ast.LShift):
+def lshift_operator(_: ast.LShift):
     return "<<"
 
 
 @converter(ast.BitAnd)
-def bitand_operator(d: ast.BitAnd):
+def bitand_operator(_: ast.BitAnd):
     return "&"
 
 
 @converter(ast.BitOr)
-def bitor_operator(d: ast.BitOr):
+def bitor_operator(_: ast.BitOr):
     return "|"
 
 
 @converter(ast.Mod)
-def mod_operator(d: ast.Mod):
+def mod_operator(_: ast.Mod):
     return "%"
 
 
 @converter(ast.Gt)
-def gt_operator(d: ast.Gt):
+def gt_operator(_: ast.Gt):
     return ">"
 
 
 @converter(ast.Lt)
-def lt_operator(d: ast.Lt):
+def lt_operator(_: ast.Lt):
     return "<"
 
 
 @converter(ast.GtE)
-def gt_operator_1(d: ast.GtE):
+def gt_operator_1(_: ast.GtE):
     return ">="
 
 
 @converter(ast.LtE)
-def gt_operator_2(d: ast.LtE):
+def gt_operator_2(_: ast.LtE):
     return "<="
 
 
 @converter(ast.Eq)
-def gt_operator_3(d: ast.Eq):
+def gt_operator_3(_: ast.Eq):
     return "=="
 
 
 @converter(ast.NotEq)
-def gt_operator_4(d: ast.Gt):
+def gt_operator_4(_: ast.Gt):
     return "!="
 
 
 @converter(ast.And)
-def and_operator(d: ast.And):
+def and_operator(_: ast.And):
     return "&&"
 
 
 @converter(ast.Or)
-def or_operator(d: ast.Or):
+def or_operator(_: ast.Or):
     return "||"
 
 
@@ -208,7 +208,7 @@ def call(d: ast.Call):
 
 
 @converter(ast.Pass)
-def pass_expr(d: ast.Pass):
+def pass_expr(_: ast.Pass):
     return ""
 
 

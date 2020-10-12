@@ -1,6 +1,6 @@
-from .abc import ABCErrorHandler, ExceptionHandler
-from vkbottle.modules import logger
 import typing
+
+from .abc import ABCErrorHandler, ExceptionHandler
 
 
 class ErrorHandler(ABCErrorHandler):

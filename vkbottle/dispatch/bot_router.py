@@ -11,7 +11,7 @@ class BotRouter(ABCRouter):
     error_handler = ErrorHandler(redirect_arguments=True)
 
     @error_handler.wraps_error_handler()
-    async def route(self, event: dict, ctx_api: "ABCAPI"):  # type: ignore
+    async def route(self, event: dict, ctx_api: "ABCAPI") -> None:  # type: ignore
         logger.debug("Routing update {}".format(event))
         for view in self.views.values():
             if not await view.process_event(event):

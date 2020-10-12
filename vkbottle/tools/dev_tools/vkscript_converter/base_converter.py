@@ -15,7 +15,7 @@ class Converter:
     def __init__(self):
         self.definitions: typing.Dict[ast.AST, ast] = {}
 
-    def __call__(self, for_definition: ast.AST):
+    def __call__(self, for_definition: typing.Union[typing.Type[ast.AST], ast.AST]):
         def decorator(func):
             self.definitions[for_definition] = func
             return func
