@@ -6,7 +6,7 @@
 from vkbottle import vkscript
 
 @vkscript
-def my_execute(api, user_ids=[]):
+def my_execute(api, user_ids=()):
     message_ids = []
     for user_id in user_ids:
         user = api.users.get(user_ids=user_id)[0]

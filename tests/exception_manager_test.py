@@ -1,5 +1,6 @@
 from vkbottle import CodeErrorFactory, SingleError, swear
 
+
 def test_exc_manager_code_error():
     exc_manager = CodeErrorFactory()
 
@@ -21,7 +22,7 @@ def test_exc_manager_single_error():
         raise SomeError("Some error occurred")
     except SomeError:
         pass
-    except BaseException as e:
+    except BaseException:
         assert False
 
 
