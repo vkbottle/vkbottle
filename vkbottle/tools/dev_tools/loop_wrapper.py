@@ -37,6 +37,8 @@ class LoopWrapper:
                 loop.create_task(task)
 
             loop.run_forever()
+        except KeyboardInterrupt:
+            logger.info("Keyboard Interrupt")
         finally:
             [loop.run_until_complete(shutdown_task) for shutdown_task in self.on_shutdown]
             if loop.is_running():
