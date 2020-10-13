@@ -126,7 +126,7 @@ class UserProcessor(ABCProcessor):
                         continue
                     args, kwargs = check
 
-                task = await rule.call(message, *args, **kwargs)
+                task = await rule.call(message, *args, *middleware_args, **kwargs)
                 await self.handler_return(task, data)
                 break
 
