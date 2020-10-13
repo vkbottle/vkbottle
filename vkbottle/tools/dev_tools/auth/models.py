@@ -2,6 +2,14 @@ from pydantic import BaseModel
 from typing import List
 
 
+class RequestTokenError(BaseModel):
+    error: str
+    error_description: str
+
+    def __str__(self):
+        return f"{self.error}: {self.error_description}"
+
+
 class UserCodeFlowResponse(BaseModel):
     access_token: str
     expires_in: int
