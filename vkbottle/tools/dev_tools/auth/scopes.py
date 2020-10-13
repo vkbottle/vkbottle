@@ -1,6 +1,6 @@
 """
 App authorization scope constants
-vk.com/dev/permissions
+Documentation: vk.com/dev/permissions
 """
 
 from enum import IntEnum

@@ -1,23 +1,23 @@
 from typing import Union, List, Optional
 
-from .abc import ABCImplicitFlow, ABCAuthCodeFlow
+from .abc import ABCImplicitFlow, ABCAuthorizationCodeFlow
 from ..models import GroupCodeFlowResponse
 
 
 class GroupImplicitFlow(ABCImplicitFlow):
     """
     Group Implicit Flow class
-    vk.com/dev/implicit_flow_group
+    Documentation: vk.com/dev/implicit_flow_group
     """
 
     def __init__(
-            self,
-            client_id: Union[int],
-            redirect_uri: str,
-            v: str,
-            display: Optional[str] = None,
-            scope: Optional[Union[int, List[int]]] = None,
-            state: Optional[str] = None
+        self,
+        client_id: int,
+        redirect_uri: str,
+        v: str,
+        display: Optional[str] = None,
+        scope: Optional[Union[int, List[int]]] = None,
+        state: Optional[str] = None,
     ):
         self.client_id = client_id
         self.redirect_uri = redirect_uri
@@ -28,21 +28,21 @@ class GroupImplicitFlow(ABCImplicitFlow):
         self.response_type = "token"
 
 
-class GroupAuthorizationCodeFlow(ABCAuthCodeFlow):
+class GroupAuthorizationCodeFlow(ABCAuthorizationCodeFlow):
     """
     Group Authorization Code Flow class
-    vk.com/dev/authcode_flow_group
+    Documentation: vk.com/dev/authcode_flow_group
     """
 
     def __init__(
-            self,
-            client_id: Union[int],
-            redirect_uri: str,
-            group_ids: Union[str, List[Union[int, str]]],
-            v: str,
-            display: Optional[str] = None,
-            scope: Optional[Union[int, List[int]]] = None,
-            state: Optional[str] = None
+        self,
+        client_id: int,
+        redirect_uri: str,
+        group_ids: Union[str, List[Union[int, str]]],
+        v: str,
+        display: Optional[str] = None,
+        scope: Optional[Union[int, List[int]]] = None,
+        state: Optional[str] = None,
     ):
         self.client_id = client_id
         self.redirect_uri = redirect_uri
@@ -63,9 +63,11 @@ class GroupAuthorizationCodeFlow(ABCAuthCodeFlow):
     def get_model():
         return GroupCodeFlowResponse
 
-    def get_validation_link(self, client_secret, code):
-        return f"{self._OAUTH_URL}access_token?" \
-               f"client_id={self.client_id}&" \
-               f"client_secret={client_secret}&" \
-               f"redirect_uri={self.redirect_uri}&" \
-               f"code={code}"
+    def get_token_request_link(self, client_secret, code):
+        return (
+            f"{self._OAUTH_URL}access_token?"
+            f"client_id={self.client_id}&"
+            f"client_secret={client_secret}&"
+            f"redirect_uri={self.redirect_uri}&"
+            f"code={code}"
+        )

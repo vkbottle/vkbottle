@@ -12,11 +12,16 @@ class GroupCodeFlowResponse(BaseModel):
     """
     Ignoring access_token_XXXXXX keys
     Unable to parse them with pydantic and they are already in 'groups'
-    vk.com/dev/authcode_flow_group
+    Documentation: vk.com/dev/authcode_flow_group
     """
+
     class Group(BaseModel):
         group_id: int
         access_token: str
 
     groups: List[Group]
     expires_in: int
+
+
+class CredentialsFlowResponse(BaseModel):
+    access_token: str
