@@ -43,7 +43,7 @@ class API(ABCAPI, APICategories):
                 data=data,  # type: ignore
                 params={"access_token": self.token, "v": self.API_VERSION},
             )
-            logger.debug("Request {} with {} data returned {}".format(method, data, response))
+            logger.debug(f"Request {method} with {data} data returned {response}")
             return await self.validate_response(response)
 
     async def request_many(
@@ -59,9 +59,7 @@ class API(ABCAPI, APICategories):
                     params={"access_token": self.token, "v": self.API_VERSION},  # noqa
                 )
                 logger.debug(
-                    "Request {} with {} data returned {}".format(
-                        request.method, request.data, response  # type: ignore
-                    )
+                    f"Request {request.method} with {request.data} data returned {response}"
                 )
                 yield await self.validate_response(response)
 

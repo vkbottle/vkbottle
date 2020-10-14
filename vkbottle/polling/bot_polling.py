@@ -27,9 +27,8 @@ class BotPolling(ABCPolling):
         async with self.api.http as session:
             return await session.request_json(
                 "POST",
-                "{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
-                    server["server"], server["key"], server["ts"], self.wait, self.rps_delay,
-                ),
+                f"{server['server']}?act=a_check&key={server['key']}"
+                f"&ts={server['ts']}&wait={self.wait}&rps_delay={self.rps_delay}",
             )
 
     async def get_server(self) -> dict:

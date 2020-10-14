@@ -12,7 +12,7 @@ class BotRouter(ABCRouter):
 
     @error_handler.wraps_error_handler()
     async def route(self, event: dict, ctx_api: "ABCAPI") -> NoReturn:  # type: ignore
-        logger.debug("Routing update {}".format(event))
+        logger.debug(f"Routing update {event}")
         for view in self.views.values():
             if not await view.process_event(event):
                 continue
