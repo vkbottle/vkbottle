@@ -8,4 +8,5 @@
 * [Handling](handling/index.md)
   + [Handler](handling/handler.md)
   + [View](handling/view.md)
+  + [Return Manager](handling/return-manager.md)
 * [Routing](routing/index.md)

@@ -11,6 +11,7 @@
     * [Handling](high-level/handling/index.md)
       + [Handler](high-level/handling/handler.md)
       + [View](high-level/handling/view.md)
+      + [Return Manager](high-level/handling/return-manager.md)
     * [Routing](high-level/routing/index.md)
 * [Low-level API](low-level/index.md)
     * [API](low-level/api/index.md)
@@ -29,3 +30,4 @@
   * [Storages](tools/storage.md)
   * [VKScript](tools/vkscript.md)
   * [Loop Wrapper](tools/loop-wrapper.md)
+  * [Auth Flows](tools/auth.md)
