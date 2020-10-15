@@ -12,7 +12,7 @@ class SearchModel(BaseModel):
     response: Search = None
 
 
-Copy = typing.Dict
+Copy = int
 
 
 class CopyModel(BaseModel):
