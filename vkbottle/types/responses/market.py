@@ -28,7 +28,7 @@ class AddModel(BaseModel):
     response: Add = None
 
 
-CreateComment = typing.Dict
+CreateComment = int
 
 
 class CreateCommentModel(BaseModel):
