@@ -52,6 +52,23 @@ class GeoCoordinates(BaseModel):
     longitude: float = None
 
 
+class Graffiti(BaseModel):
+    id: int = None
+    owner_id: int = None
+    url: str = None
+    width: int = None
+    height: int = None
+    access_key: str = None
+    photo_200: str = None
+    photo_586: str = None
+
+    def __hash__(self):
+        return hash((self.owner_id, self.id))
+
+    def __eq__(self, other):
+        return self.owner_id == other.owner_id and self.id == other.id
+
+
 class Image(BaseModel):
     height: int = None
     url: str = None
@@ -283,6 +300,7 @@ Country.update_forward_refs()
 Error.update_forward_refs()
 Geo.update_forward_refs()
 GeoCoordinates.update_forward_refs()
+Graffiti.update_forward_refs()
 Image.update_forward_refs()
 Likes.update_forward_refs()
 LikesInfo.update_forward_refs()

@@ -1,3 +1,5 @@
+from typing import List
+
 from . import base
 from ..base import BaseModel
 
@@ -13,6 +15,8 @@ class Note(BaseModel):
     text_wiki: str = None
     title: str = None
     view_url: str = None
+    privacy_view: List[str] = None
+    privacy_comment: List[str] = None
 
     def __hash__(self):
         return hash((self.owner_id, self.id))

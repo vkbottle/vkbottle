@@ -92,7 +92,7 @@ class GetModel(BaseModel):
     response: Get = None
 
 
-SaveList = typing.Dict
+SaveList = int
 
 
 class SaveListModel(BaseModel):

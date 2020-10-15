@@ -167,21 +167,6 @@ class ForeignMessage(BaseModel):
         return self.from_id == other.from_id and self.id == other.id
 
 
-class Graffiti(BaseModel):
-    access_key: str = None
-    height: int = None
-    id: int = None
-    owner_id: int = None
-    url: str = None
-    width: int = None
-
-    def __hash__(self):
-        return hash((self.owner_id, self.id))
-
-    def __eq__(self, other):
-        return self.owner_id == other.owner_id and self.id == other.id
-
-
 class HistoryAttachment(BaseModel):
     attachment: "HistoryMessageAttachment" = None
     message_id: int = None
@@ -198,7 +183,7 @@ class HistoryMessageAttachment(BaseModel):
     audio: "audio.Audio" = None
     audio_message: "AudioMessage" = None
     doc: "docs.Doc" = None
-    graffiti: "Graffiti" = None
+    graffiti: "base.Graffiti" = None
     link: "link.Link" = None
     market: "link.Link" = None
     photo: "photos.Photo" = None
@@ -355,7 +340,7 @@ class MessageAttachment(BaseModel):
     doc: "docs.Doc" = None
     poll: "polls.Poll" = None
     gift: "gifts.Layout" = None
-    graffiti: "Graffiti" = None
+    graffiti: "base.Graffiti" = None
     link: "link.Link" = None
     market: "market.MarketItem" = None
     market_market_album: "market.MarketAlbum" = None
@@ -425,7 +410,6 @@ ConversationMember.update_forward_refs()
 ConversationPeer.update_forward_refs()
 ConversationWithMessage.update_forward_refs()
 ForeignMessage.update_forward_refs()
-Graffiti.update_forward_refs()
 HistoryAttachment.update_forward_refs()
 HistoryMessageAttachment.update_forward_refs()
 Keyboard.update_forward_refs()

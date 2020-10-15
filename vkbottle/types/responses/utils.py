@@ -32,7 +32,7 @@ class GetLinkStatsModel(BaseModel):
     response: GetLinkStats = None
 
 
-GetServerTime = typing.Dict
+GetServerTime = int
 
 
 class GetServerTimeModel(BaseModel):

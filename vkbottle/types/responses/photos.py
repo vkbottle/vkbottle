@@ -12,7 +12,7 @@ class SearchModel(BaseModel):
     response: Search = None
 
 
-Copy = typing.Dict
+Copy = int
 
 
 class CopyModel(BaseModel):
@@ -26,7 +26,7 @@ class CreateAlbumModel(BaseModel):
     response: CreateAlbum = None
 
 
-CreateComment = typing.Dict
+CreateComment = int
 
 
 class CreateCommentModel(BaseModel):

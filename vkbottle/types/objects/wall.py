@@ -50,7 +50,7 @@ class CommentAttachment(BaseModel):
     page: "pages.WikipageFull" = None
     photo: "photos.Photo" = None
     sticker: "base.Sticker" = None
-    graffiti: "Graffiti" = None
+    graffiti: "base.Graffiti" = None
     video: "video.Video" = None
 
 
@@ -73,23 +73,6 @@ class Geo(BaseModel):
     place: "base.Place" = None
     showmap: int = None
     type: str = None
-
-
-class Graffiti(BaseModel):
-    id: int = None
-    owner_id: int = None
-    url: str = None
-    width: int = None
-    height: int = None
-    access_key: str = None
-    photo_200: str = None
-    photo_586: str = None
-
-    def __hash__(self):
-        return hash((self.owner_id, self.id))
-
-    def __eq__(self, other):
-        return self.owner_id == other.owner_id and self.id == other.id
 
 
 class PostSource(BaseModel):
@@ -190,7 +173,7 @@ class WallpostAttachment(BaseModel):
     audio: "audio.Audio" = None
     doc: "docs.Doc" = None
     event: "events.EventAttach" = None
-    graffiti: "Graffiti" = None
+    graffiti: "base.Graffiti" = None
     link: "link.Link" = None
     market: "market.MarketItem" = None
     market_album: "market.MarketAlbum" = None
@@ -257,7 +240,6 @@ AppPost.update_forward_refs()
 AttachedNote.update_forward_refs()
 CommentAttachment.update_forward_refs()
 Geo.update_forward_refs()
-Graffiti.update_forward_refs()
 PostSource.update_forward_refs()
 PostedPhoto.update_forward_refs()
 Views.update_forward_refs()

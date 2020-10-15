@@ -55,7 +55,7 @@ class Save(BaseModel):
     type: objects.docs.DocAttachmentType = None
     audio_message: objects.messages.AudioMessage = None
     doc: objects.docs.Doc = None
-    graffiti: objects.messages.Graffiti = None
+    graffiti: objects.base.Graffiti = None
 
 
 class SaveModel(BaseModel):
