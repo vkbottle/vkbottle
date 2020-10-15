@@ -5,21 +5,21 @@ from vkbottle.types import objects
 
 class Get(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.notes.Note] = None
 
 
 class GetModel(BaseModel):
     response: Get = None
 
 
-Add = typing.Dict
+Add = int
 
 
 class AddModel(BaseModel):
     response: Add = None
 
 
-CreateComment = typing.Dict
+CreateComment = int
 
 
 class CreateCommentModel(BaseModel):
@@ -35,7 +35,7 @@ class GetByIdModel(BaseModel):
 
 class GetComments(BaseModel):
     count: int = None
-    items: typing.List = None
+    items: typing.List[objects.notes.NoteComment] = None
 
 
 class GetCommentsModel(BaseModel):
