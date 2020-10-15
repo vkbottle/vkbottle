@@ -1,7 +1,8 @@
 import typing
 from ..base import BaseModel
+from vkbottle.types.objects import storage
 
-Get = typing.Dict
+Get = typing.Union[typing.List[storage.Value], str]
 
 
 class GetModel(BaseModel):
