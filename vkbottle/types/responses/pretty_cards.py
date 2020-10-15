@@ -47,7 +47,7 @@ class GetByIdModel(BaseModel):
     response: GetById = None
 
 
-GetUploadURL = typing.Dict
+GetUploadURL = str
 
 
 class GetUploadURLModel(BaseModel):

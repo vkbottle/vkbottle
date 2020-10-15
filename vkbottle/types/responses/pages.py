@@ -2,7 +2,7 @@ import typing
 from ..base import BaseModel
 from vkbottle.types import objects
 
-Save = typing.Dict
+Save = int
 
 
 class SaveModel(BaseModel):
@@ -37,14 +37,14 @@ class GetModel(BaseModel):
     response: Get = None
 
 
-ParseWiki = typing.Dict
+ParseWiki = str
 
 
 class ParseWikiModel(BaseModel):
     response: ParseWiki = None
 
 
-SaveAccess = typing.Dict
+SaveAccess = int
 
 
 class SaveAccessModel(BaseModel):

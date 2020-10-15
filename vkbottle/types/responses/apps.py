@@ -2,7 +2,7 @@ import typing
 from ..base import BaseModel
 from vkbottle.types import objects
 
-SendRequest = typing.Dict
+SendRequest = int
 
 
 class SendRequestModel(BaseModel):
@@ -50,7 +50,7 @@ class GetScopesModel(BaseModel):
     response: GetScopes = None
 
 
-GetScore = typing.Dict
+GetScore = int
 
 
 class GetScoreModel(BaseModel):
