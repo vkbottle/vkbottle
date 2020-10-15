@@ -63,7 +63,7 @@ class GetByIdModel(BaseModel):
 
 
 class GetChatPreview(BaseModel):
-    preview: dict = None
+    preview: objects.message.ChatPreview = None
     profiles: typing.List[objects.message.ChatPreview] = None
 
 
