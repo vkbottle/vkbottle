@@ -20,7 +20,7 @@ class AddAlbumModel(BaseModel):
     response: AddAlbum = None
 
 
-CreateComment = typing.Dict
+CreateComment = int
 
 
 class CreateCommentModel(BaseModel):
