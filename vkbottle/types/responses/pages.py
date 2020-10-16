@@ -2,7 +2,7 @@ import typing
 from ..base import BaseModel
 from vkbottle.types import objects
 
-Save = id
+Save = int
 
 
 class SaveModel(BaseModel):
