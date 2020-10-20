@@ -5,6 +5,7 @@ from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager import BaseReturnManager
+from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 
 
 class ABCView(ABC):
@@ -17,7 +18,9 @@ class ABCView(ABC):
         pass
 
     @abstractmethod
-    async def handle_event(self, event: dict, ctx_api: "ABCAPI") -> Any:
+    async def handle_event(
+        self, event: dict, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+    ) -> Any:
         pass
 
     def register_middleware(self, middleware: "BaseMiddleware"):

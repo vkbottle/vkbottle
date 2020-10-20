@@ -1,6 +1,7 @@
 from .abc import ABCRule
 from abc import abstractmethod
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
+from vkbottle_types import BaseStateGroup
 from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine
 import vbml
 import inspect
@@ -225,6 +226,18 @@ class CoroutineRule(ABCMessageRule):
         return await self.coro
 
 
+class StateRule(ABCMessageRule):
+    def __init__(self, state: Union[List[BaseStateGroup], BaseStateGroup]):
+        if not isinstance(state, list):
+            state = [state]
+        self.state = state
+
+    async def check(self, message: Message) -> bool:
+        if message.state_peer is None:
+            return False
+        return message.state_peer.state in self.state
+
+
 __all__ = (
     "ABCMessageRule",
     "PeerRule",
@@ -242,4 +255,5 @@ __all__ = (
     "FromUserRule",
     "FuncRule",
     "CoroutineRule",
+    "StateRule",
 )

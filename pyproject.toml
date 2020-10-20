@@ -27,7 +27,7 @@ python = "^3.7"
 aiohttp = "^3.6.2"
 vbml = "^1.0"
 choicelib = "^0.1.1"
-vkbottle-types = "^0.1.12"
+vkbottle-types = "^0.1.16"
 
 [tool.poetry.dev-dependencies]
 # Lint

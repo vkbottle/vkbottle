@@ -1,4 +1,4 @@
-from vkbottle_types import GroupTypes
+from vkbottle_types import GroupTypes, BaseStateGroup, StatePeer
 
 from vkbottle.tools.dev_tools.vkscript_converter import vkscript
 from .api import (
@@ -18,6 +18,8 @@ from .dispatch import (
     ABCRouter,
     BotRouter,
     BaseReturnManager,
+    ABCStateDispenser,
+    BuiltinStateDispenser,
 )
 from .exception_factory import (
     ABCExceptionFactory,

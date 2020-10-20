@@ -21,6 +21,7 @@ from vkbottle.dispatch.rules.bot import (
     PayloadMapRule,
     FuncRule,
     CoroutineRule,
+    StateRule,
 )
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
 
@@ -43,6 +44,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "func": FuncRule,
     "coro": CoroutineRule,
     "coroutine": CoroutineRule,
+    "state": StateRule,
 }
 
 

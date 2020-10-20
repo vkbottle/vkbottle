@@ -1,5 +1,6 @@
 from vkbottle_types.objects import MessagesMessage, MessagesClientInfo
 from vkbottle_types.events.bot_events import MessageNew
+from vkbottle_types import StatePeer
 from vkbottle.api import ABCAPI, API
 from typing import Optional, Any, List, Union
 
@@ -7,6 +8,7 @@ from typing import Optional, Any, List, Union
 class MessageMin(MessagesMessage):
     client_info: Optional["MessagesClientInfo"] = None
     unprepared_ctx_api: Optional[Any] = None
+    state_peer: Optional[StatePeer] = None
 
     @property
     def ctx_api(self) -> Union["ABCAPI", "API"]:
@@ -47,7 +49,7 @@ MessageMin.update_forward_refs()
 def message_min(event: dict, ctx_api: "ABCAPI") -> "MessageMin":
     update = MessageNew(**event)
     message = MessageMin(
-        **update.object.message.dict(), client_info=update.object.client_info.dict()
+        **update.object.message.dict(), client_info=update.object.client_info.dict(),
     )
     setattr(message, "unprepared_ctx_api", ctx_api)
     return message
