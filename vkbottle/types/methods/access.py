@@ -8,3 +8,4 @@ class APIAccessibility(Enum):
     OPEN = "open"
     VKME = "vkme"
     COVID = "covid"
+    QUIZ = "quiz"
