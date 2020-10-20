@@ -53,7 +53,30 @@ class StatusSet(BaseMethod):
         )
 
 
+class StatusSetImage(BaseMethod):
+    kwargs: dict = {}
+    access_token_type: APIAccessibility = [APIAccessibility.QUIZ]
+
+    async def __call__(
+        self, status_id: int = None
+    ) -> responses.ok_response.OkResponse:
+        """
+        Set special Quiz emoji
+        :param status_id: special status ID
+        """
+
+        params = {
+            k if not k.endswith("_") else k[:-1]: v
+            for k, v in {**locals(), **self.kwargs}.items()
+            if k not in ["self"] and v is not None
+        }
+        return await self.request(
+            "status.setImage", params, response_model=responses.ok_response.OkResponseModel,
+        )
+
+
 class Status:
     def __init__(self, request):
         self.get = StatusGet(request)
         self.set = StatusSet(request)
+        self.set_image = StatusSetImage(request)
