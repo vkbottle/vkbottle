@@ -8,6 +8,7 @@ from .labeler import ABCBotLabeler, BotLabeler
 from asyncio import AbstractEventLoop, get_event_loop
 from typing import Optional, NoReturn
 from vkbottle.modules import logger
+from typing import Union
 
 
 class Bot(ABCFramework):
@@ -21,7 +22,7 @@ class Bot(ABCFramework):
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCBotLabeler"] = None,
     ):
-        self.api = API(token) if token is not None else api  # type: ignore
+        self.api: Union[ABCAPI, API] = API(token) if token is not None else api  # type: ignore
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.labeler = labeler or BotLabeler()
         self.state_dispenser = BuiltinStateDispenser()
