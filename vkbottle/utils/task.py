@@ -53,7 +53,6 @@ class TaskManager:
 
         except KeyboardInterrupt:
             logger.info("Keyboard Interrupt")
-            self.close()
 
         finally:
             if self.on_shutdown is not None:
