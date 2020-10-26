@@ -6,6 +6,7 @@ from typing import Optional, Any, List, Union
 
 
 class MessageMin(MessagesMessage):
+    group_id: Optional[int] = None
     client_info: Optional["MessagesClientInfo"] = None
     unprepared_ctx_api: Optional[Any] = None
     state_peer: Optional[StatePeer] = None
@@ -49,7 +50,9 @@ MessageMin.update_forward_refs()
 def message_min(event: dict, ctx_api: "ABCAPI") -> "MessageMin":
     update = MessageNew(**event)
     message = MessageMin(
-        **update.object.message.dict(), client_info=update.object.client_info.dict(),
+        **update.object.message.dict(),
+        client_info=update.object.client_info.dict(),
+        group_id=update.group_id,
     )
     setattr(message, "unprepared_ctx_api", ctx_api)
     return message

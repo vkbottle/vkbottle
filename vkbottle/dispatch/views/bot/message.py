@@ -50,19 +50,17 @@ class MessageView(ABCView):
 
             if result is False:
                 continue
-            elif not isinstance(result, dict):
-                result = {}
 
-            handler_response = await handler.handle(message, **result, **context_variables)
+            elif isinstance(result, dict):
+                context_variables.update(result)
+
+            handler_response = await handler.handle(message, **context_variables)
             handle_responses.append(handler_response)
 
             return_handler = self.handler_return_manager.get_handler(handler_response)
             if return_handler is not None:
                 await return_handler(
-                    self.handler_return_manager,
-                    handler_response,
-                    message,
-                    {**result, **context_variables},
+                    self.handler_return_manager, handler_response, message, context_variables
                 )
 
             if handler.blocking:

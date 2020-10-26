@@ -53,7 +53,4 @@ class CodeErrorFactory(ABCExceptionFactory):
         return f"{cls.__name__}_{code}"
 
     def __str__(self):
-        return (
-            f"\n\t[{self.code}] {self.error_description}\n"
-            f"\tTip: Use Error({self.code}) to catch exception built in CodeErrorFactory"
-        )
+        return f"[{self.code}] {self.error_description}\n"

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Any, Dict, Type, List
+from typing import Callable, Any, Dict, Type, List, Union
 
 from vbml import Patcher
 
@@ -26,6 +26,7 @@ from vkbottle.dispatch.rules.bot import (
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
 
 LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]
+LabeledHandler = Callable[..., Callable[[Any], Any]]
 
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "from_chat": PeerRule,
@@ -64,6 +65,16 @@ class ABCBotLabeler(ABC):
 
     @abstractmethod
     def private_message(self, *rules: "ABCRule", **custom_rules) -> LabeledMessageHandler:
+        pass
+
+    @abstractmethod
+    def raw_event(
+        self,
+        event: Union[str, List[str]],
+        dataclass: Callable = dict,
+        *rules: "ABCRule",
+        **custom_rules,
+    ) -> LabeledHandler:
         pass
 
     @abstractmethod
