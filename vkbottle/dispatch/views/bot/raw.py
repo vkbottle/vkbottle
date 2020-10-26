@@ -40,7 +40,7 @@ class RawEventView(ABCView):
         for middleware in self.middlewares:
             response = await middleware.pre(event_model)
             if response == MiddlewareResponse(False):
-                return []
+                return
             elif isinstance(response, dict):
                 context_variables.update(response)
 
@@ -61,7 +61,7 @@ class RawEventView(ABCView):
                 self.handler_return_manager,
                 handler_response,
                 event_model,
-                {**result, **context_variables},
+                context_variables,
             )
 
         for middleware in self.middlewares:
