@@ -26,7 +26,7 @@ class LoopWrapper:
         """ Runs startup tasks and makes the loop running forever """
 
         if not len(self.tasks):
-            logger.warn("You ran loop with 0 tasks. Is it ok?")
+            logger.warning("You ran loop with 0 tasks. Is it ok?")
 
         loop = loop or get_event_loop()
 
