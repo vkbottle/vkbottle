@@ -22,7 +22,7 @@ class Bot(ABCFramework):
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCBotLabeler"] = None,
     ):
-        self.api: Union[ABCAPI, API] = API(token) if token is not None else api  # type: ignore
+        self.api: Union[ABCAPI, API] = API(token) if token is not None else api
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.labeler = labeler or BotLabeler()
         self.state_dispenser = BuiltinStateDispenser()
@@ -58,7 +58,7 @@ class Bot(ABCFramework):
 
         async for event in polling.listen():  # type: ignore
             logger.debug(f"New event was received: {event}")
-            for update in event["updates"]:
+            for update in event.get("updates", []):
                 await self.router.route(update, polling.api)
 
     def run_forever(self) -> NoReturn:

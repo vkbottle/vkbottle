@@ -41,7 +41,7 @@ from .http import (
     SingleSessionManager,
     ManySessionManager,
 )
-from .polling import ABCPolling, BotPolling
+from .polling import ABCPolling, BotPolling, UserPolling
 from .tools import *
 
 event_types = GroupTypes

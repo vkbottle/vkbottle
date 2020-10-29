@@ -1,46 +1,44 @@
-from .abc import ABCPolling
-from vkbottle.api import ABCAPI
 from typing import Optional, AsyncIterator
-from vkbottle.modules import logger
+from ..modules import logger
+from .abc import ABCPolling
+from .. import ABCAPI
+
+URL = "https://{}?act=a_check&key={}&ts={}&wait={}&mode={}&version={}"
 
 
-class BotPolling(ABCPolling):
-    """ Bot Polling class
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/polling/polling.md
-    """
+class UserPolling(ABCPolling):
+    """ User Polling class """
 
     def __init__(
         self,
         api: Optional[ABCAPI] = None,
-        group_id: Optional[int] = None,
+        user_id: Optional[int] = None,
         wait: Optional[int] = None,
-        rps_delay: Optional[int] = None,
+        version: Optional[int] = None,
+        mode: Optional[int] = None
     ):
         self._api = api
-        self.group_id = group_id
+        self.user_id = user_id
         self.wait = wait or 15
-        self.rps_delay = rps_delay or 0
+        self.version = version or 3
+        self.mode = mode or 128
         self.stop = False
-
-    async def get_event(self, server: dict) -> dict:
-        logger.debug("Making long request to get event with Bots Long Poll API...")
-        async with self.api.http as session:
-            return await session.request_json(
-                "POST",
-                "{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
-                    server["server"], server["key"], server["ts"], self.wait, self.rps_delay,
-                )
-            )
 
     async def get_server(self) -> dict:
         logger.debug("Getting polling server...")
-        if self.group_id is None:
-            self.group_id = (await self.api.request("groups.getById", {}))["response"][0]["id"]
-        return (await self.api.request("groups.getLongPollServer", {"group_id": self.group_id}))[
-            "response"
-        ]
+        return (await self.api.request("messages.getLongPollServer", {}))["response"]
 
-    async def listen(self) -> AsyncIterator[dict]:  # type: ignore
+    async def get_event(self, server: dict) -> dict:
+        logger.debug("Making long request to get event with User Long Poll API...")
+        async with self.api.http as session:
+            return await session.request_json(
+                "POST",
+                URL.format(
+                    server["server"], server["key"], server["ts"], self.wait, self.mode, self.version
+                )
+            )
+
+    async def listen(self) -> AsyncIterator[dict]:
         server = await self.get_server()
         logger.debug("Start listening to LongPoll...")
         while not self.stop:
@@ -48,10 +46,11 @@ class BotPolling(ABCPolling):
             if not event.get("ts"):
                 server = await self.get_server()
                 continue
+
             server["ts"] = event["ts"]
             yield event
 
-    def construct(self, api: "ABCAPI") -> "BotPolling":
+    def construct(self, api: "ABCAPI") -> "ABCPolling":
         self._api = api
         return self
 
@@ -66,3 +65,4 @@ class BotPolling(ABCPolling):
     @api.setter
     def api(self, new_api: "ABCAPI"):
         self._api = new_api
+
