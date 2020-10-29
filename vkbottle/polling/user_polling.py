@@ -65,4 +65,3 @@ class UserPolling(ABCPolling):
     @api.setter
     def api(self, new_api: "ABCAPI"):
         self._api = new_api
-
