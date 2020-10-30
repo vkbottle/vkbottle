@@ -26,17 +26,17 @@ from vkbottle.types import GroupJoin
 
 @bot.on.event.group_join()
 async def wrapper(event: GroupJoin):
-    print("User id{} just joined the group".format(event.user_id))
+    print(f"User id{event.user_id} just joined the group")
 
 
 @bot.on.chat_action("chat_title_update")
 async def wrapper(ans: Message):
-    await ans("New chat name: {}".format(ans.action.text))
+    await ans(f"New chat name: {ans.action.text}")
 
 
-@bot.on.message("my name is <name>")
+@bot.on.message(text="my name is <name>", lower=True)
 async def wrapper(ans: Message, name):
-    await ans("your name is {}".format(name))
+    await ans(f"your name is {name}")
 
 
 @bot.on.message(text="+<country_code:int>(<state_code:int>)<number:int>")
