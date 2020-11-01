@@ -1055,6 +1055,7 @@ class MessagesSend(BaseMethod):
         user_id: int = None,
         random_id: int = None,
         peer_id: int = None,
+        peer_ids: typing.List = None,
         domain: str = None,
         chat_id: int = None,
         user_ids: typing.List = None,
