@@ -210,7 +210,7 @@ class MessagesEdit(BaseMethod):
     async def __call__(
         self,
         peer_id: int,
-        message_id: int,
+        conversation_message_id: int,
         message: str = None,
         lat: typing.Any = None,
         long: typing.Any = None,
@@ -226,7 +226,7 @@ class MessagesEdit(BaseMethod):
         Access from user, group token(s)
         :param peer_id: Destination ID. "For user: 'User ID', e.g. '12345'. For chat: '2000000000' + 'chat_id', e.g. '2000000001'. For community: '- community ID', e.g. '-12345'. "
         :param message: (Required if 'attachments' is not set.) Text of the message.
-        :param message_id: 
+        :param conversation_message_id: 
         :param lat: Geographical latitude of a check-in, in degrees (from -90 to 90).
         :param long: Geographical longitude of a check-in, in degrees (from -180 to 180).
         :param attachment: (Required if 'message' is not set.) List of objects attached to the message, separated by commas, in the following format: "<owner_id>_<media_id>", '' — Type of media attachment: 'photo' — photo, 'video' — video, 'audio' — audio, 'doc' — document, 'wall' — wall post, '<owner_id>' — ID of the media attachment owner. '<media_id>' — media attachment ID. Example: "photo100172_166443618"
