@@ -32,7 +32,7 @@ vkbottle-types = "^0.1.18"
 [tool.poetry.dev-dependencies]
 # Lint
 lxml = "^4.5.0"
-mypy = "^0.770"
+mypy = "^0.790"
 isort = "^4.3"
 flake8 = "^3.7.9"
 mypy_extensions = "^0.4.3"
