@@ -13,6 +13,10 @@ class ABCHTTPClient(ABC):
     middleware: "ABCHTTPMiddleware" = JustLogHTTPMiddleware()
 
     @abstractmethod
+    def __init__(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
     async def request_text(
         self, method: str, url: str, data: typing.Optional[dict] = None, **kwargs
     ) -> str:

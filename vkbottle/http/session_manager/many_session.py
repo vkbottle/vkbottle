@@ -5,6 +5,7 @@ import typing
 
 class ManySessionManager(ABCSessionManager):
     def __init__(self, http_client: typing.Optional[typing.Type[ABCHTTPClient]] = None):
+        super().__init__()
         self.http_client = http_client or AiohttpClient
         self._active_session: typing.Optional[ABCHTTPClient] = None
 

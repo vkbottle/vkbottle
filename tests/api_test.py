@@ -108,7 +108,7 @@ async def test_abc_error_handler(api: API):
             assert data["ctx_api"] == api
             assert data["method"] == "some.cool_method"
             assert data["data"]["a"] == 1
-            assert handler(VKAPIError(code, description), data)
+            assert await handler(VKAPIError(code, description), data)
 
     api.api_error_handler = CustomErrHandler()
 

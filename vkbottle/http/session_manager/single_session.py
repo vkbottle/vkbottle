@@ -5,6 +5,7 @@ import typing
 
 class SingleSessionManager(ABCSessionManager):
     def __init__(self, http_client: typing.Optional[typing.Type[ABCHTTPClient]] = None, **kwargs):
+        super().__init__()
         self.http_client: typing.Type[ABCHTTPClient] = http_client or AiohttpClient
         self.http_client_settings = kwargs
         self._session: typing.Optional[ABCHTTPClient] = None
@@ -12,9 +13,7 @@ class SingleSessionManager(ABCSessionManager):
     @property
     def session(self) -> ABCHTTPClient:
         if not self._session:
-            self._session = self.http_client(  # type: ignore
-                **self.http_client_settings  # type: ignore
-            )
+            self._session = self.http_client(**self.http_client_settings)
         return self._session
 
     async def __aenter__(self) -> ABCHTTPClient:
