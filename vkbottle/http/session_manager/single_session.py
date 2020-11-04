@@ -12,7 +12,7 @@ class SingleSessionManager(ABCSessionManager):
     @property
     def session(self) -> ABCHTTPClient:
         if not self._session:
-            self._session = self.http_client(
+            self._session = self.http_client(  # type: ignore
                 **self.http_client_settings  # type: ignore
             )
         return self._session

@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  [VKBottle 3.0] perfect vk-bot building and development framework :heart: WIP
+  [VKBottle 3.0] perfect vk-bot building and development framework :heart:
 </h1>
 <p align="center">
   <img alt="PyPI - License" src="https://img.shields.io/pypi/l/vkbottle?style=flat-square">
@@ -19,7 +19,7 @@ https://vkbottle.readthedocs.io/ru/latest
 
 ## Установка
 
-Установить версию 3.0 до релиза можно этой командой:
+Установить версию 3.0 можно этой командой:
 
 ```shell script
 pip install -U https://github.com/timoniq/vkbottle/archive/v3.0.zip
