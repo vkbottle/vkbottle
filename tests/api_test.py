@@ -4,7 +4,7 @@ import pytest
 import typing
 
 
-USERS_GET_RESPONSE = '{"response":[{"first_name":"Павел","id":1,"last_name":"Дуров","can_access_closed":true,"is_closed":false}]}'
+USERS_GET_RESPONSE = ('{"response":[{"first_name":"Павел","id":1,"last_name":"Дуров","can_access_closed":true,"is_closed":false}]}')
 ctx_storage = CtxStorage()
 
 

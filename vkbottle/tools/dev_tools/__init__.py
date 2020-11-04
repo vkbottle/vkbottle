@@ -5,3 +5,4 @@ from .mini_types import BotTypes, message_min
 from .keyboard import *
 from .vkscript_converter import vkscript
 from .utils import run_in_task
+from . import auth

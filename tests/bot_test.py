@@ -1,4 +1,5 @@
-from vkbottle import Bot, API
+from vkbottle import Bot, API, GroupTypes, GroupEventType
+from vkbottle.bot import Message
 from vkbottle.tools.test_utils import with_mocked_api, MockedClient
 import pytest
 import typing
@@ -23,6 +24,29 @@ EXAMPLE_EVENT = {
                 "comments": {"count": 0},
             },
             "group_id": 123456,
+        },
+        {
+            "type": "message_new",
+            "object": {
+                "client_info": {
+                    "button_actions": [
+                        "text",
+                        "vkpay",
+                        "open_app",
+                        "location",
+                        "open_link",
+                        "callback"
+                    ],
+                    "keyboard": True,
+                    "inline_keyboard": True,
+                    "carousel": False,
+                    "lang_id": 0
+                },
+                "message": {
+                    "id": 100,
+                    "from_id": 1,
+                }
+            }
         }
     ],
 }
@@ -41,9 +65,22 @@ async def test_bot_polling():
             return {"response": {"ts": 1, "server": "!SERVER!", "key": ""}}
         elif "!SERVER!" in data["url"]:
             return EXAMPLE_EVENT
+        elif "messages.send" in data["url"]:
+            return json.dumps({"response": 100})
 
     bot = Bot("token")
     set_http_callback(bot.api, callback)
+
+    @bot.labeler.raw_event(GroupEventType.WALL_POST_NEW, GroupTypes.WallPostNew)
+    async def wall_post_handler(post: GroupTypes.WallPostNew):
+        assert post.object.owner_id == -123456
+        assert post.ctx_api == bot.api
+
+    @bot.labeler.message()
+    async def message_handler(message: Message):
+        assert message.id == 100
+        assert message.from_id == 1
+        assert await message.answer() == 100
 
     async for event in bot.polling.listen():
         assert event.get("updates")
