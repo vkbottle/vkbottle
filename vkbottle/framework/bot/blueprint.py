@@ -1,10 +1,11 @@
 from vkbottle.framework.abc_blueprint import ABCBlueprint
 from vkbottle.framework.bot.labeler import BotLabeler
 from vkbottle.framework.bot.bot import Bot
-from vkbottle.api import ABCAPI
+from vkbottle.api import ABCAPI, API
 from vkbottle.polling import ABCPolling
+from vkbottle.modules import logger
 from vkbottle.dispatch import BotRouter
-from typing import Optional
+from typing import Optional, Union
 
 
 class BotBlueprint(ABCBlueprint):
@@ -29,6 +30,7 @@ class BotBlueprint(ABCBlueprint):
 
     def load(self, framework: "Bot") -> "BotBlueprint":
         framework.labeler.load(self.labeler)  # type: ignore
+        logger.debug(f"Blueprint {self.name!r} loaded")
         return self.construct(framework.api, framework.polling)
 
     @property

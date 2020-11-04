@@ -42,7 +42,10 @@ class ABCBlueprint(ABCFramework):
     @property  # type: ignore
     def api(self) -> ABCAPI:  # type: ignore
         if not self._api:
-            raise RuntimeError("You need to construct blueprint firstly")
+            raise RuntimeError(
+                "You need to construct blueprint firstly. "
+                "Beware: if you use multibot, api can only be accessed with event.ctx_api"
+            )
         return self._api
 
     @api.setter

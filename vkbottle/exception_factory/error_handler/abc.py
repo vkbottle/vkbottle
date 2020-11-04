@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import typing
 
 
-ExceptionHandler = typing.Optional[typing.Callable[[BaseException], typing.Awaitable[typing.Any]]]
+ExceptionHandler = typing.Callable[[BaseException], typing.Awaitable[typing.Any]]
 
 
 class ABCErrorHandler(ABC):
@@ -23,9 +23,20 @@ class ABCErrorHandler(ABC):
         pass
 
     @abstractmethod
+    async def handle(self, e: BaseException) -> typing.Any:
+        pass
+
+    @abstractmethod
     def wraps_error_handler(
         self,
     ) -> typing.Callable[
         [typing.Any], typing.Callable[[typing.Any, typing.Any], typing.Awaitable[typing.Any]]
     ]:
+        pass
+
+    @property
+    @abstractmethod
+    def handling_exceptions(
+        self,
+    ) -> typing.Union[typing.Type[BaseException], typing.Tuple[typing.Type[BaseException], ...]]:
         pass

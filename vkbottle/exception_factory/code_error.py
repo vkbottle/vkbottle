@@ -40,11 +40,15 @@ class CodeErrorFactory(ABCExceptionFactory):
     ) -> typing.Type["ABCExceptionFactory"]:
         """ Returns error type from garbage compiler storage with error code.
         If code is not specified returns self type to handle exception with any code """
+        if code is None:
+            return cls
+
         catch_exc_classname = cls.generate_exc_classname(code)
 
         for obj in gc.get_objects():
             if obj.__class__.__name__ == catch_exc_classname:
                 return obj.__class__
+
         return type(catch_exc_classname, (cls,), {})
 
     @classmethod

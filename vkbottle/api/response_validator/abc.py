@@ -1,5 +1,9 @@
 from abc import ABC, abstractmethod
+from vkbottle.api.request_rescheduler.abc import ABCRequestRescheduler
 import typing
+
+if typing.TYPE_CHECKING:
+    from vkbottle.api import ABCAPI, API
 
 
 class ABCResponseValidator(ABC):
@@ -8,5 +12,11 @@ class ABCResponseValidator(ABC):
     """
 
     @abstractmethod
-    async def validate(self, response: typing.Any) -> typing.Union[typing.Any, typing.NoReturn]:
+    async def validate(
+        self,
+        method: str,
+        data: dict,
+        response: typing.Any,
+        ctx_api: typing.Union["ABCAPI", "API"],
+    ) -> typing.Union[typing.Any, typing.NoReturn]:
         pass

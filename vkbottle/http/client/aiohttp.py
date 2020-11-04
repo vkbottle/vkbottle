@@ -16,11 +16,20 @@ class AiohttpClient(ABCHTTPClient):
         session: typing.Optional[ClientSession] = None,
         middleware: typing.Optional["ABCHTTPMiddleware"] = None,
         json_processing_module: typing.Optional[typing.Any] = None,
+        optimize: bool = False,
+        **kwargs,
     ):
         self.loop = loop or asyncio.get_event_loop()
         self.json_processing_module = json_processing_module or json_module
+
+        if optimize:
+            kwargs["skip_auto_headers"] = {"User-Agent"}
+            kwargs["raise_for_status"] = True
+
         self.session = session or ClientSession(
-            connector=TCPConnector(ssl=False), json_serialize=self.json_processing_module.dumps
+            connector=TCPConnector(ssl=False),
+            json_serialize=self.json_processing_module.dumps,
+            **kwargs,
         )
 
         if middleware is not None:

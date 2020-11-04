@@ -1,18 +1,18 @@
 from vkbottle import ManySessionManager, AiohttpClient
+from vkbottle.tools.test_utils import MockedClient
 import pytest
 
 
 @pytest.mark.asyncio
 async def test_client():
-    client = AiohttpClient()
-    text = await client.request_text("GET", "https://google.com")
+    client = MockedClient("some text")
+    text = await client.request_text("GET", "https://example.com")
     await client.close()
-    assert text
+    assert text == "some text"
 
 
 @pytest.mark.asyncio
 async def test_session_manager():
-    session_manager = ManySessionManager()
+    session_manager = ManySessionManager(lambda: MockedClient("some text"))
     async with session_manager as session:
-        text = await session.request_text("GET", "https://google.com")
-    assert text
+        assert await session.request_text("GET", "https://example.com") == "some text"

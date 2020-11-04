@@ -9,7 +9,7 @@ def test_exc_manager_code_error():
     except exc_manager(6):
         assert False
     except exc_manager(7):
-        assert True
+        return
     except exc_manager():
         assert False
 

@@ -56,16 +56,20 @@ class ErrorHandler(ABCErrorHandler):
                 try:
                     return await func(*args, **kwargs)
                 except BaseException as e:
-                    if e.__class__ in self.error_handlers:
-                        return await self.call_handler(
-                            self.error_handlers[e.__class__], e, *args, **kwargs
-                        )
-                    elif self.undefined_error_handler:
-                        return await self.call_handler(
-                            self.undefined_error_handler, e, *args, **kwargs
-                        )
-                    raise e
+                    return self.handle(e, *args, **kwargs)
 
             return wrapper
 
         return decorator
+
+    async def handle(self, e: BaseException, *args, **kwargs) -> typing.Any:
+        if e.__class__ in self.error_handlers:
+            return await self.call_handler(self.error_handlers[e.__class__], e, *args, **kwargs)
+        elif self.undefined_error_handler:
+            return await self.call_handler(self.undefined_error_handler, e, *args, **kwargs)
+        raise e
+
+    def handling_exceptions(
+        self,
+    ) -> typing.Union[typing.Type[BaseException], typing.Tuple[typing.Type[BaseException], ...]]:
+        return tuple(k for k, _ in self.error_handlers.items())
