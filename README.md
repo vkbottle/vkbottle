@@ -7,10 +7,10 @@
   [VKBottle 3.0] perfect vk-bot building and development framework :heart:
 </h1>
 <p align="center">
-  <img alt="PyPI - License" src="https://img.shields.io/pypi/l/vkbottle?style=flat-square">
-  <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dw/vkbottle?style=flat-square">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/timoniq/vkbottle/CI?style=flat-square">
   <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/timoniq/vkbottle?style=flat-square">
   <img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/timoniq/vkbottle/bug?style=flat-square">
+  <img alt="PyPI" src="https://img.shields.io/pypi/v/vkbottle?color=green&label=PyPI&style=flat-square">
 </p>
 
 ## Документация

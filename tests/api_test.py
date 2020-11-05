@@ -1,10 +1,11 @@
-from vkbottle import API, VKAPIError, ABCRequestRescheduler, CtxStorage, ABCAPIErrorHandler
+from vkbottle import API, VKAPIError, ABCRequestRescheduler, CtxStorage, ABCAPIErrorHandler, ABCAPI
 from vkbottle.tools.test_utils import with_mocked_api
 import pytest
 import typing
 
 
-USERS_GET_RESPONSE = ('{"response":[{"first_name":"Павел","id":1,"last_name":"Дуров","can_access_closed":true,"is_closed":false}]}')
+USERS_GET_RESPONSE = ('{"response":[{"first_name":"Павел","id":1,"last_name":"Дуров",'
+                      '"can_access_closed":true,"is_closed":false}]}')
 ctx_storage = CtxStorage()
 
 
@@ -117,3 +118,9 @@ async def test_abc_error_handler(api: API):
         return True
 
     await api.request("some.cool_method", {"a": 1})
+
+
+@pytest.mark.asyncio
+async def test_types_translator():
+    api = API("token")
+    assert await api.validate_request({"a": [1, 2, 3, 4, "hi!"]}) == {"a": "1,2,3,4,hi!"}

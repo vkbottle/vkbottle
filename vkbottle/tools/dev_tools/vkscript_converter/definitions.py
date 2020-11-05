@@ -8,6 +8,7 @@ import random
 
 CALL_REPLACEMENTS = {
     "append": "push",
+    "pop": "pop",
 }
 CALL_STRING = ["join", "strip", "split"]
 

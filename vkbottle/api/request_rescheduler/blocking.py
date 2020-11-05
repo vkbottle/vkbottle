@@ -34,5 +34,5 @@ class BlockingRequestRescheduler(ABCRequestRescheduler):
             attempt_number += 1
             logger.debug(f"Attempt succeed? - {isinstance(recent_response, dict)}")
 
-        logger.info(f"Finally succeed after {self.delay ^ attempt_number} seconds")
+        logger.info(f"Finally succeed after {self.delay ** attempt_number} seconds")
         return recent_response

@@ -88,4 +88,4 @@ class API(ABCAPI, APICategories):
         return self
 
     def __repr__(self) -> str:
-        return f"<API token={self.token[:5]}...>"
+        return f"<API token={self.token[:5] if self.token else '?'}...>"

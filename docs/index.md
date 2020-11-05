@@ -29,6 +29,7 @@
       + [Accessing Polling](low-level/polling/polling.md)
 * [Tools](tools/index.md)
   * [Storages](tools/storage.md)
+  * [Keyboard](tools/keyboard.md)
   * [VKScript](tools/vkscript.md)
   * [Loop Wrapper](tools/loop-wrapper.md)
   * [Auth Flows](tools/auth.md)

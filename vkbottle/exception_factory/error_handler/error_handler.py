@@ -39,12 +39,12 @@ class ErrorHandler(ABCErrorHandler):
 
         return decorator
 
-    def call_handler(
+    async def call_handler(
         self, handler: ExceptionHandler, e: BaseException, *args, **kwargs
     ) -> typing.Awaitable[typing.Any]:
         if self.redirect_arguments:
-            return handler(e, *args, **kwargs)  # type: ignore
-        return handler(e)  # type: ignore
+            return await handler(e, *args, **kwargs)  # type: ignore
+        return await handler(e)  # type: ignore
 
     def wraps_error_handler(
         self,
@@ -56,7 +56,7 @@ class ErrorHandler(ABCErrorHandler):
                 try:
                     return await func(*args, **kwargs)
                 except BaseException as e:
-                    return self.handle(e, *args, **kwargs)
+                    return await self.handle(e, *args, **kwargs)
 
             return wrapper
 

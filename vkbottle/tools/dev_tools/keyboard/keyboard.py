@@ -24,13 +24,17 @@ class Keyboard:
         return self
 
     def get_json(self) -> str:
-        return json.dumps(
+        data = json.dumps(
             {
                 "one_time": self.one_time,
                 "inline": self.inline,
                 "buttons": [[button.get_data() for button in row] for row in self.buttons],
             }
         )
+
+        if isinstance(data, bytes):
+            return data.decode("utf-8")
+        return data.encode("utf-8").decode("utf-8")
 
     def __str__(self) -> str:
         return self.get_json()
