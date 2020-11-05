@@ -1,4 +1,4 @@
-from vkbottle import Bot, API, GroupTypes, GroupEventType
+from vkbottle import Bot, API, GroupTypes, GroupEventType, AndFilter, OrFilter
 from vkbottle.bot import Message, rules
 from vkbottle.tools.test_utils import with_mocked_api, MockedClient
 from vkbottle.tools.dev_tools import message_min
@@ -129,3 +129,10 @@ async def test_rules(api: API):
     assert await rules.StickerRule(sticker_ids=[1, 2]).check(
         fake_message(api, attachments=[{"type": "sticker", "sticker": {"sticker_id": 2}}])
     )
+
+    assert await AndFilter(rules.FromPeerRule(123), rules.FromPeerRule([1, 123])).check(
+        fake_message(api, peer_id=123)
+    ) is not False
+    assert await OrFilter(rules.FromPeerRule(123), rules.FromPeerRule([1, 123])).check(
+        fake_message(api, peer_id=1)
+    ) is not False

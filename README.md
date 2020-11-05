@@ -25,6 +25,23 @@ https://vkbottle.readthedocs.io/ru/latest
 pip install -U https://github.com/timoniq/vkbottle/archive/v3.0.zip
 ```
 
+## Hello World
+
+[Смотреть больше примеров!](https://github.com/timoniq/vkbottle/tree/master/examples)  
+[Почему VKBottle?](https://github.com/timoniq/vkbottle/blob/master/docs/why_vkbottle.md)
+
+```python
+from vkbottle.bot import Bot, Message
+
+bot = Bot("GroupToken")
+
+@bot.on.message()
+async def handler(_) -> str:
+    return "Hello world!"
+
+bot.run_forever()
+```
+
 ## Contributing
 
 ПР поддерживаются! Перед созданием пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE.md](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие библиотеки. Задавайте вопросы в блоке Issues и в [**чате Telegram**](https://t.me/vkbottle_ru) / [**чате VK**](https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj)! 
