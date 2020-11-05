@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from typing import Any, List
 
 from vkbottle.api.abc import ABCAPI
+from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager import BaseReturnManager
-from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 
 
 class ABCView(ABC):

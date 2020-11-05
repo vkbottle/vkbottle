@@ -1,14 +1,15 @@
-from vkbottle.framework.abc import ABCFramework
-from vkbottle.api import ABCAPI, API
-from vkbottle.polling import ABCPolling, BotPolling
-from vkbottle.tools import LoopWrapper
-from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
-from vkbottle.exception_factory import ABCErrorHandler
-from .labeler import ABCBotLabeler, BotLabeler
 from asyncio import AbstractEventLoop, get_event_loop
 from typing import Optional, NoReturn
-from vkbottle.modules import logger
 from typing import Union
+
+from vkbottle.api import ABCAPI, API
+from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
+from vkbottle.exception_factory import ABCErrorHandler
+from vkbottle.framework.abc import ABCFramework
+from vkbottle.modules import logger
+from vkbottle.polling import ABCPolling, BotPolling
+from vkbottle.tools import LoopWrapper
+from .labeler import ABCBotLabeler, BotLabeler
 
 
 class Bot(ABCFramework):

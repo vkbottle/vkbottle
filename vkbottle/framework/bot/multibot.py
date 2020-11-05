@@ -1,9 +1,10 @@
-from .bot import Bot
-from vkbottle.api import ABCAPI
-from vkbottle.polling import ABCPolling, BotPolling
-from vkbottle.modules import logger
 from typing import Iterable, Type
+
+from vkbottle.api import ABCAPI
 from vkbottle.http import SingleSessionManager, AiohttpClient
+from vkbottle.modules import logger
+from vkbottle.polling import ABCPolling, BotPolling
+from .bot import Bot
 
 
 def run_multibot(bot: Bot, apis: Iterable[ABCAPI], polling_type: Type[ABCPolling] = BotPolling):

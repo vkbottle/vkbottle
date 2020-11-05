@@ -1,8 +1,9 @@
+from typing import Dict, Union, List, Callable
+
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule, bot
 from vkbottle.dispatch.views import MessageView, ABCView, RawEventView, HandlerBasement
 from .abc import ABCBotLabeler, LabeledMessageHandler, LabeledHandler
-from typing import Dict, Union, List, Callable
 
 
 class BotLabeler(ABCBotLabeler):

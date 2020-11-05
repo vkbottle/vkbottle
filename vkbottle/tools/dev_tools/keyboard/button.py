@@ -1,6 +1,7 @@
-from .color import KeyboardButtonColor
-from .action import ABCAction
 from typing import Optional
+
+from .action import ABCAction
+from .color import KeyboardButtonColor
 
 
 class KeyboardButton:

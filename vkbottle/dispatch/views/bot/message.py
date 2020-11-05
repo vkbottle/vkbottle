@@ -3,10 +3,10 @@ from typing import Any, List, Callable
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.api.abc import ABCAPI
+from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
-from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.modules import logger
 from vkbottle.tools.dev_tools import message_min
 from vkbottle.tools.dev_tools.mini_types.bot import MessageMin

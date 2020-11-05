@@ -1,10 +1,11 @@
 # type: ignore
 
 import ast
-import typing
-from .base_converter import Converter, ConverterError
-import string
 import random
+import string
+import typing
+
+from .base_converter import Converter, ConverterError
 
 CALL_REPLACEMENTS = {
     "append": "push",

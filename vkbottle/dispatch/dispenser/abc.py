@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Optional
+
 from vkbottle_types import StatePeer, BaseStateGroup
+
 from vkbottle.modules import logger
 
 

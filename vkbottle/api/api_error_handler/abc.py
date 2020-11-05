@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from vkbottle.exception_factory import VKAPIError
 from typing import Callable, Awaitable, Union, Iterable, NoReturn, Any
+
+from vkbottle.exception_factory import VKAPIError
 
 
 class ABCAPIErrorHandler(ABC):

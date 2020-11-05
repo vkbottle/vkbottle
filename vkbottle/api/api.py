@@ -1,13 +1,14 @@
-from .abc import ABCAPI
-from .api_error_handler import ABCAPIErrorHandler, BuiltinAPIErrorHandler
-from .response_validator import ABCResponseValidator, DEFAULT_RESPONSE_VALIDATORS
-from .request_validator import ABCRequestValidator, DEFAULT_REQUEST_VALIDATORS
-from .request_rescheduler import ABCRequestRescheduler, BlockingRequestRescheduler
-from vkbottle.http import ABCSessionManager, AiohttpClient, SingleSessionManager
-from vkbottle_types.categories import APICategories
-from vkbottle.modules import logger
 import typing
 
+from vkbottle_types.categories import APICategories
+
+from vkbottle.http import ABCSessionManager, AiohttpClient, SingleSessionManager
+from vkbottle.modules import logger
+from .abc import ABCAPI
+from .api_error_handler import ABCAPIErrorHandler, BuiltinAPIErrorHandler
+from .request_rescheduler import ABCRequestRescheduler, BlockingRequestRescheduler
+from .request_validator import ABCRequestValidator, DEFAULT_REQUEST_VALIDATORS
+from .response_validator import ABCResponseValidator, DEFAULT_RESPONSE_VALIDATORS
 
 APIRequest = typing.NamedTuple("APIRequest", [("method", str), ("data", dict)])
 

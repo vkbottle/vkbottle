@@ -4,7 +4,6 @@ from typing import Callable, Any, Dict, Type, List, Union
 from vbml import Patcher
 
 from vkbottle.dispatch.rules import ABCRule
-from vkbottle.dispatch.views import ABCView
 from vkbottle.dispatch.rules.bot import (
     PeerRule,
     VBMLRule,
@@ -23,6 +22,7 @@ from vkbottle.dispatch.rules.bot import (
     CoroutineRule,
     StateRule,
 )
+from vkbottle.dispatch.views import ABCView
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
 
 LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]

@@ -5,8 +5,8 @@ from typing import Union, List, Optional
 
 from pydantic.error_wrappers import ValidationError
 
-from vkbottle.http import AiohttpClient
 from vkbottle.exception_factory import VKAPIError
+from vkbottle.http import AiohttpClient
 from ..models import UserCodeFlowResponse, RequestTokenError
 
 

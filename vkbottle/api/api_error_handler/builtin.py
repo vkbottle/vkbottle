@@ -1,6 +1,7 @@
-from .abc import ABCAPIErrorHandler
-from vkbottle.exception_factory import VKAPIError
 import typing
+
+from vkbottle.exception_factory import VKAPIError
+from .abc import ABCAPIErrorHandler
 
 
 class BuiltinAPIErrorHandler(ABCAPIErrorHandler):

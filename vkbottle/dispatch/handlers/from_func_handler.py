@@ -1,6 +1,7 @@
-from .abc import ABCHandler
-from vkbottle.dispatch.rules import ABCRule
 from typing import Union, Any, Callable
+
+from vkbottle.dispatch.rules import ABCRule
+from .abc import ABCHandler
 
 
 class FromFuncHandler(ABCHandler):

@@ -3,13 +3,12 @@ from typing import Any, List, Dict, NamedTuple, Type
 from vkbottle_types.events import GroupEventType, BaseGroupEvent
 
 from vkbottle.api.abc import ABCAPI
+from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
-from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.modules import logger
 from ..abc import ABCView
-
 
 HandlerBasement = NamedTuple(
     "HandlerBasement", [("dataclass", Type[BaseGroupEvent]), ("handler", ABCHandler)]

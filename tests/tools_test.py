@@ -1,9 +1,14 @@
 from vkbottle.tools import Keyboard, KeyboardButtonColor, Text, Callback, CtxStorage, LoopWrapper
+from vkbottle.modules import json
 
-KEYBOARD_JSON = ('{"one_time":true,"inline":false,"buttons":[[{"action":'
-                 '{"label":"I love nuggets","payload":{"love":"nuggets"},'
-                 '"type":"text"}}],[{"action":{"label":"Eat nuggets",'
-                 '"payload":{"eat":"nuggets"},"type":"callback"}}]]}')
+KEYBOARD_JSON = json.dumps({
+    "one_time": True,
+    "inline": False,
+    "buttons": [
+        [{"action": {"label": "I love nuggets", "payload": {"love": "nuggets"}, "type": "text"}}],
+        [{"action": {"label": "Eat nuggets", "payload": {"eat": "nuggets"}, "type": "callback"}}],
+    ],
+})
 
 ctx_storage = CtxStorage()
 
@@ -36,16 +41,24 @@ def test_keyboard_non_builder():
 
 
 def test_keyboard_builder():
-    assert (Keyboard(one_time=True)
-            .add(Text("I love nuggets", {"love": "nuggets"}))
-            .row()
-            .add(Callback("Eat nuggets", {"eat": "nuggets"}), color=KeyboardButtonColor.POSITIVE)
-            .get_json()) == KEYBOARD_JSON
+    assert (
+        Keyboard(one_time=True)
+        .add(Text("I love nuggets", {"love": "nuggets"}))
+        .row()
+        .add(Callback("Eat nuggets", {"eat": "nuggets"}), color=KeyboardButtonColor.POSITIVE)
+        .get_json()
+    ) == KEYBOARD_JSON
+
 
 def test_loop_wrapper():
-    async def task1(): pass
-    async def task2(): pass
-    async def task3(): pass
+    async def task1():
+        pass
+
+    async def task2():
+        pass
+
+    async def task3():
+        pass
 
     lw = LoopWrapper(tasks=[task1])
     lw.on_startup.append(task2)
@@ -54,5 +67,8 @@ def test_loop_wrapper():
     lw.run_forever(MockedLoop())
 
     assert ctx_storage.get("checked-test-lw-create-task") == task1.__name__
-    assert ctx_storage.get("checked-test-lw-run-until-complete") == [task2.__name__, task3.__name__]
+    assert ctx_storage.get("checked-test-lw-run-until-complete") == [
+        task2.__name__,
+        task3.__name__,
+    ]
     assert ctx_storage.get("checked-test-lw-run-forever")

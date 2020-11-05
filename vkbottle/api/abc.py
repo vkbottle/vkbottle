@@ -1,6 +1,7 @@
-from abc import ABC, abstractmethod
-from vkbottle.http import ABCSessionManager
 import typing
+from abc import ABC, abstractmethod
+
+from vkbottle.http import ABCSessionManager
 
 if typing.TYPE_CHECKING:
     from .api_error_handler import ABCAPIErrorHandler

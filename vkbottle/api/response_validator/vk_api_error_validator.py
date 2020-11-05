@@ -1,5 +1,6 @@
-from .abc import ABCResponseValidator
 import typing
+
+from .abc import ABCResponseValidator
 
 if typing.TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API

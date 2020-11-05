@@ -1,11 +1,11 @@
-from .abc import ABCFramework
-from vkbottle.api import ABCAPI
-from vkbottle.polling import ABCPolling
-from vkbottle.dispatch import ABCRouter
-from typing import Optional, NoReturn, Any
-from abc import abstractmethod
-
 import asyncio
+from abc import abstractmethod
+from typing import Optional, NoReturn, Any
+
+from vkbottle.api import ABCAPI
+from vkbottle.dispatch import ABCRouter
+from vkbottle.polling import ABCPolling
+from .abc import ABCFramework
 
 
 class ABCBlueprint(ABCFramework):

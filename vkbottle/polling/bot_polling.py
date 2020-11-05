@@ -1,7 +1,8 @@
-from .abc import ABCPolling
-from vkbottle.api import ABCAPI
 from typing import Optional, AsyncIterator
+
+from vkbottle.api import ABCAPI
 from vkbottle.modules import logger
+from .abc import ABCPolling
 
 
 class BotPolling(ABCPolling):

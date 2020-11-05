@@ -1,5 +1,6 @@
-from vkbottle import ABCHTTPClient, API
 from typing import Any, Optional, NoReturn, Callable
+
+from vkbottle import ABCHTTPClient, API
 
 
 class MockedClient(ABCHTTPClient):

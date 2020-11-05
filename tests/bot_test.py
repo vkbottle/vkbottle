@@ -37,19 +37,16 @@ EXAMPLE_EVENT = {
                         "open_app",
                         "location",
                         "open_link",
-                        "callback"
+                        "callback",
                     ],
                     "keyboard": True,
                     "inline_keyboard": True,
                     "carousel": False,
-                    "lang_id": 0
+                    "lang_id": 0,
                 },
-                "message": {
-                    "id": 100,
-                    "from_id": 1,
-                }
-            }
-        }
+                "message": {"id": 100, "from_id": 1,},
+            },
+        },
     ],
 }
 
@@ -101,7 +98,17 @@ async def test_bot_scopes():
 
 
 def fake_message(ctx_api: API, **data: typing.Any) -> Message:
-    return message_min({"object": {"message": data, "client_info": data.get("client_info", EXAMPLE_EVENT["updates"][1]["object"]["client_info"])}}, ctx_api)
+    return message_min(
+        {
+            "object": {
+                "message": data,
+                "client_info": data.get(
+                    "client_info", EXAMPLE_EVENT["updates"][1]["object"]["client_info"]
+                ),
+            }
+        },
+        ctx_api,
+    )
 
 
 @pytest.mark.asyncio
@@ -109,8 +116,16 @@ def fake_message(ctx_api: API, **data: typing.Any) -> Message:
 async def test_rules(api: API):
     assert await rules.FromPeerRule(123).check(fake_message(api, peer_id=123))
     assert not await rules.FromUserRule().check(fake_message(api, from_id=-1))
-    assert await rules.VBMLRule("i am in love with <whom>", vbml.Patcher()).check(fake_message(api, text="i am in love with you")) == {"whom": "you"}
-    assert await rules.FuncRule(lambda m: m.text.endswith("!")).check(fake_message(api, text="yes!"))
+    assert await rules.VBMLRule("i am in love with <whom>", vbml.Patcher()).check(
+        fake_message(api, text="i am in love with you")
+    ) == {"whom": "you"}
+    assert await rules.FuncRule(lambda m: m.text.endswith("!")).check(
+        fake_message(api, text="yes!")
+    )
     assert not await rules.PeerRule(from_chat=True).check(fake_message(api, peer_id=1, from_id=1))
-    assert await rules.PayloadMapRule([("a", int), ("b", str)]).check(fake_message(api, payload=json.dumps({"a": 1, "b": ""})))
-    assert await rules.StickerRule(sticker_ids=[1, 2]).check(fake_message(api, attachments=[{"type": "sticker", "sticker": {"sticker_id": 2}}]))
+    assert await rules.PayloadMapRule([("a", int), ("b", str)]).check(
+        fake_message(api, payload=json.dumps({"a": 1, "b": ""}))
+    )
+    assert await rules.StickerRule(sticker_ids=[1, 2]).check(
+        fake_message(api, attachments=[{"type": "sticker", "sticker": {"sticker_id": 2}}])
+    )

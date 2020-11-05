@@ -1,8 +1,10 @@
-from vkbottle_types.objects import MessagesMessage, MessagesClientInfo
-from vkbottle_types.events.bot_events import MessageNew
-from vkbottle_types import StatePeer
-from vkbottle.api import ABCAPI, API
 from typing import Optional, Any, List, Union
+
+from vkbottle_types import StatePeer
+from vkbottle_types.events.bot_events import MessageNew
+from vkbottle_types.objects import MessagesMessage, MessagesClientInfo
+
+from vkbottle.api import ABCAPI, API
 
 
 class MessageMin(MessagesMessage):

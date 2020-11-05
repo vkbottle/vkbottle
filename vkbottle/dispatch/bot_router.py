@@ -1,10 +1,11 @@
-from .abc import ABCRouter
-from vkbottle.dispatch.views import ABCView
-from vkbottle.dispatch.dispenser import ABCStateDispenser
-from vkbottle.api.abc import ABCAPI
-from vkbottle.modules import logger
-from vkbottle.exception_factory.error_handler import ErrorHandler
 from typing import Dict, NoReturn
+
+from vkbottle.api.abc import ABCAPI
+from vkbottle.dispatch.dispenser import ABCStateDispenser
+from vkbottle.dispatch.views import ABCView
+from vkbottle.exception_factory.error_handler import ErrorHandler
+from vkbottle.modules import logger
+from .abc import ABCRouter
 
 
 class BotRouter(ABCRouter):

@@ -1,11 +1,12 @@
-from .abc import ABCRule
-from abc import abstractmethod
-from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
-from vkbottle_types import BaseStateGroup
-from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine
-import vbml
 import inspect
+from abc import abstractmethod
+from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine
 
+import vbml
+from vkbottle_types import BaseStateGroup
+
+from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
+from .abc import ABCRule
 
 DEFAULT_PREFIXES = ["!", "/"]
 Message = MessageMin

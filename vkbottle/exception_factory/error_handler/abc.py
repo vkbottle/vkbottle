@@ -1,6 +1,5 @@
-from abc import ABC, abstractmethod
 import typing
-
+from abc import ABC, abstractmethod
 
 ExceptionHandler = typing.Callable[[BaseException], typing.Awaitable[typing.Any]]
 

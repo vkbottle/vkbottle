@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
 import typing
+from abc import ABC, abstractmethod
 
 if typing.TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
