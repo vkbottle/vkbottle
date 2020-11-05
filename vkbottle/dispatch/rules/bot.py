@@ -63,7 +63,7 @@ class VBMLRule(ABCMessageRule):
 
 
 class StickerRule(ABCMessageRule):
-    def __init__(self, sticker_ids: Union[List[int], int]):
+    def __init__(self, sticker_ids: Union[List[int], int] = None):
         if isinstance(sticker_ids, int):
             sticker_ids = [sticker_ids]
         self.sticker_ids = sticker_ids
@@ -73,8 +73,12 @@ class StickerRule(ABCMessageRule):
             return False
         elif not message.attachments[0].sticker:
             return False
-        elif message.attachments[0].sticker.sticker_id in self.sticker_ids:
-            return True
+        else:
+            if self.sticker_ids is None:
+                if message.attachments[0].sticker.sticker_id:
+                    return True
+            elif message.attachments[0].sticker.sticker_id in self.sticker_ids:
+                return True
         return False
 
 
