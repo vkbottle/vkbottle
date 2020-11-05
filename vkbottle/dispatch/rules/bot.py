@@ -65,6 +65,7 @@ class VBMLRule(ABCMessageRule):
 
 class StickerRule(ABCMessageRule):
     def __init__(self, sticker_ids: Union[List[int], int] = None):
+        sticker_ids = sticker_ids or []
         if isinstance(sticker_ids, int):
             sticker_ids = [sticker_ids]
         self.sticker_ids = sticker_ids
@@ -104,7 +105,7 @@ class AttachmentTypeRule(ABCMessageRule):
         if not message.attachments:
             return False
         for attachment in message.attachments:
-            if attachment.type not in self.attachment_types:
+            if attachment.type.value not in self.attachment_types:
                 return False
         return True
 
