@@ -104,9 +104,9 @@ class AttachmentTypeRule(ABCMessageRule):
         if not message.attachments:
             return False
         for attachment in message.attachments:
-            if attachment.type not in self.attachment_types:
-                return False
-        return True
+            if attachment.type in self.attachment_types:
+                return True
+        return False
 
 
 class LevensteinRule(ABCMessageRule):
