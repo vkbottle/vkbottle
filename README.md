@@ -16,11 +16,6 @@
 ## Установка
 1) С помощью установщика pip из PyPi:
    
-   Новейшая версия:
-   ```sh
-   pip install vkbottle
-   ```
-   
    Последний стабильный релиз:
    ```sh
    pip install vkbottle==2.7.8
@@ -29,7 +24,7 @@
 2) С помощью установщика pip из GitHub: 
    
    ```sh
-   pip install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
+   pip install https://github.com/timoniq/vkbottle/archive/v2.0.zip --upgrade
    ```
 
 > Минимальная версия python для комфортной работы с библиотекой - 3.7
