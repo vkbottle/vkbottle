@@ -1,11 +1,10 @@
+import re
 from typing import Dict, Union, List, Callable, Tuple, Set, Any, Type
+
+import vbml
 
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule
-from vkbottle.dispatch.views import MessageView, ABCView, RawEventView, HandlerBasement
-from vkbottle.tools.dev_tools.utils import convert_shorten_filter
-from .abc import ABCBotLabeler, LabeledMessageHandler, LabeledHandler
-
 from vkbottle.dispatch.rules.bot import (
     PeerRule,
     VBMLRule,
@@ -25,10 +24,9 @@ from vkbottle.dispatch.rules.bot import (
     StateRule,
     RegexRule,
 )
-
-import re
-import vbml
-
+from vkbottle.dispatch.views import MessageView, ABCView, RawEventView, HandlerBasement
+from vkbottle.tools.dev_tools.utils import convert_shorten_filter
+from .abc import ABCBotLabeler, LabeledMessageHandler, LabeledHandler
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
@@ -50,18 +48,65 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "coroutine": CoroutineRule,
     "state": StateRule,
     "regexp": RegexRule,
+    "text": VBMLRule,
 }
 
 
 class BotLabeler(ABCBotLabeler):
+    """ BotLabeler - shortcut manager for router
+    Can be loaded to other BotLabeler
+    >>> bl = BotLabeler()
+    >>> ...
+    >>> bl.load(BotLabeler())
+    Views are fixed. Custom rules can be set locally (they are
+    not inherited to other labelers). Rule config is accessible from
+    all custom rules from ABCRule.config
+    """
+
     def __init__(self, **kwargs):
+        # Default views are fixed in BotLabeler,
+        # if you need to create your own implement
+        # custom labeler
         self.message_view = MessageView()
         self.raw_event_view = RawEventView()
-        self.patcher = kwargs.get("patcher") or vbml.Patcher()
+
         self.custom_rules = kwargs.get("custom_rules") or DEFAULT_CUSTOM_RULES
-        self.custom_rules["text"] = lambda x: self.get_vbml_rule(self, x)
-        self.ignore_case = False
-        self.default_flags = re.MULTILINE
+
+        # Rule config is accessible from every single custom rule
+        self.rule_config: Dict[str, Any] = {
+            "vbml_flags": re.MULTILINE,  # Flags for VBMLRule
+            "vbml_patcher": vbml.Patcher(),  # Patcher for VBMLRule
+        }
+
+    @property
+    def vbml_ignore_case(self) -> bool:
+        """ Gets ignore case flag from rule config flags """
+        return re.IGNORECASE in self.rule_config["flags"]
+
+    @vbml_ignore_case.setter
+    def vbml_ignore_case(self, ignore_case: bool):
+        """ Adds ignore case flag to rule config flags or removes it
+        """
+        if not ignore_case:
+            self.rule_config["flags"] ^= re.IGNORECASE
+        else:
+            self.rule_config["flags"] |= re.IGNORECASE
+
+    @property
+    def vbml_patcher(self) -> vbml.Patcher:
+        return self.rule_config["patcher"]
+
+    @vbml_patcher.setter
+    def vbml_patcher(self, patcher: vbml.Patcher):
+        self.rule_config["patcher"] = patcher
+
+    @property
+    def vbml_flags(self) -> re.RegexFlag:
+        return self.rule_config["flags"]
+
+    @vbml_flags.setter
+    def vbml_flags(self, flags: re.RegexFlag):
+        self.rule_config["flags"] = flags
 
     def message(
         self, *rules: ShortenRule, blocking: bool = True, **custom_rules
@@ -120,6 +165,7 @@ class BotLabeler(ABCBotLabeler):
         *rules: ShortenRule,
         **custom_rules,
     ) -> LabeledHandler:
+
         if not isinstance(event, list):
             event = [event]
 
@@ -143,21 +189,8 @@ class BotLabeler(ABCBotLabeler):
         self.raw_event_view.handlers.update(labeler.raw_event_view.handlers)
         self.raw_event_view.middlewares.extend(labeler.raw_event_view.middlewares)
 
-    @staticmethod
-    def get_vbml_rule(labeler: "BotLabeler", pattern: Any) -> "VBMLRule":
-        """ Cast a vbml rule with patcher and flags, needed to simplify
-        VBMLRule setup.
-        """
-        return VBMLRule(
-            pattern,
-            labeler.patcher,
-            flags=(
-                labeler.default_flags if not labeler.ignore_case else re.MULTILINE | re.IGNORECASE
-            ),
-        )
-
     def get_custom_rules(self, custom_rules: Dict[str, Any]) -> List["ABCRule"]:
-        return [self.custom_rules[k](v) for k, v in custom_rules.items()]  # type: ignore
+        return [self.custom_rules[k].with_config(self.rule_config)(v) for k, v in custom_rules.items()]  # type: ignore
 
     def views(self) -> Dict[str, "ABCView"]:
         return {"message": self.message_view, "raw": self.raw_event_view}
