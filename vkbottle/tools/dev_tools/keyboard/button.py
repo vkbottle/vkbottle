@@ -6,10 +6,7 @@ from .color import KeyboardButtonColor
 
 class KeyboardButton:
     def __init__(
-        self,
-        action: ABCAction,
-        color: KeyboardButtonColor,
-        data: dict,
+        self, action: ABCAction, color: KeyboardButtonColor, data: dict,
     ):
         self.action = action
         self.color = color
