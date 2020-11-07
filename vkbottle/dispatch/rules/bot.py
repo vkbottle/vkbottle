@@ -265,7 +265,7 @@ class StateRule(ABCMessageRule):
 
     async def check(self, message: Message) -> Union[dict, bool]:
         if message.state_peer is None:
-            return False
+            return bool(self.state)
         return message.state_peer.state in self.state
 
 

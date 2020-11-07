@@ -54,6 +54,7 @@ class SpamState(BaseStateGroup):
     GOOD = 1
     BAD = 2
 
+
 # Lets add some handlers
 @bot.on.chat_message(spam=["!", ".", "?", "$", "#", "@", "%"])
 async def spam_handler(message: Message):
@@ -74,5 +75,6 @@ async def spam_handler(message: Message):
 async def forgive_handler(message: Message):
     await bot.state_dispenser.set(message.from_id, SpamState.GOOD)
     return "You are forgiven, my dear!"
+
 
 bot.run_forever()
