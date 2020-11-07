@@ -71,6 +71,7 @@ class BotLabeler(ABCBotLabeler):
         self.raw_event_view = RawEventView()
 
         self.custom_rules = kwargs.get("custom_rules") or DEFAULT_CUSTOM_RULES
+        self.auto_rules: List["ABCRule"] = []
 
         # Rule config is accessible from every single custom rule
         self.rule_config: Dict[str, Any] = {
@@ -88,25 +89,25 @@ class BotLabeler(ABCBotLabeler):
         """ Adds ignore case flag to rule config flags or removes it
         """
         if not ignore_case:
-            self.rule_config["flags"] ^= re.IGNORECASE
+            self.rule_config["vbml_flags"] ^= re.IGNORECASE
         else:
-            self.rule_config["flags"] |= re.IGNORECASE
+            self.rule_config["vbml_flags"] |= re.IGNORECASE
 
     @property
     def vbml_patcher(self) -> vbml.Patcher:
-        return self.rule_config["patcher"]
+        return self.rule_config["vbml_patcher"]
 
     @vbml_patcher.setter
     def vbml_patcher(self, patcher: vbml.Patcher):
-        self.rule_config["patcher"] = patcher
+        self.rule_config["vbml_patcher"] = patcher
 
     @property
     def vbml_flags(self) -> re.RegexFlag:
-        return self.rule_config["flags"]
+        return self.rule_config["vbml_flags"]
 
     @vbml_flags.setter
     def vbml_flags(self, flags: re.RegexFlag):
-        self.rule_config["flags"] = flags
+        self.rule_config["vbml_flags"] = flags
 
     def message(
         self, *rules: ShortenRule, blocking: bool = True, **custom_rules
@@ -116,6 +117,7 @@ class BotLabeler(ABCBotLabeler):
                 FromFuncHandler(
                     func,
                     *map(convert_shorten_filter, rules),
+                    *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
                     blocking=blocking,
                 )
@@ -133,6 +135,7 @@ class BotLabeler(ABCBotLabeler):
                     func,
                     PeerRule(True),
                     *map(convert_shorten_filter, rules),
+                    *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
                     blocking=blocking,
                 )
@@ -150,6 +153,7 @@ class BotLabeler(ABCBotLabeler):
                     func,
                     PeerRule(False),
                     *map(convert_shorten_filter, rules),
+                    *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
                     blocking=blocking,
                 )
@@ -176,6 +180,7 @@ class BotLabeler(ABCBotLabeler):
                     FromFuncHandler(
                         func,
                         *map(convert_shorten_filter, rules),
+                        *self.auto_rules,
                         *self.get_custom_rules(custom_rules),
                     ),
                 )

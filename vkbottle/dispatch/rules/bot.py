@@ -49,17 +49,17 @@ class VBMLRule(ABCMessageRule):
         patcher: Optional["vbml.Patcher"] = None,
         flags: Optional[re.RegexFlag] = None,
     ):
-        flags = flags or self.config.get("flags")
+        flags = flags or self.config.get("vbml_flags")
 
         if isinstance(pattern, str):
-            pattern = [vbml.Pattern(pattern, flags=flags or self.config["flags"])]
+            pattern = [vbml.Pattern(pattern, flags=flags or self.config.get("vbml_flags"))]
         elif isinstance(pattern, vbml.Pattern):
             pattern = [pattern]
         elif isinstance(pattern, list):
             pattern = [p if isinstance(p, vbml.Pattern) else vbml.Pattern(p) for p in pattern]
 
         self.patterns = pattern
-        self.patcher = patcher or self.config["patcher"]
+        self.patcher = patcher or self.config["vbml_patcher"]
 
     async def check(self, message: Message) -> Union[dict, bool]:
         for pattern in self.patterns:

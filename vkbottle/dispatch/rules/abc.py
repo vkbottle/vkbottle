@@ -5,7 +5,7 @@ from vkbottle_types.events import BaseUserEvent, BaseGroupEvent
 
 
 class ABCRule(ABC):
-    config: dict
+    config: dict = {}
 
     @classmethod
     def with_config(cls, config: dict) -> Type["ABCRule"]:
