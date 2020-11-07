@@ -20,8 +20,15 @@ class Keyboard:
     def add(self, action: ABCAction, color: Optional[KeyboardButtonColor] = None) -> "Keyboard":
         if not len(self.buttons):
             self.row()
-        button = KeyboardButton(action, color)
+        button = KeyboardButton.from_typed(action, color)
         self.buttons[-1].append(button)
+        return self
+
+    def schema(self, rows: List[List[dict]]):
+        for row in rows:
+            self.row()
+            for button in row:
+                self.buttons[-1].append(KeyboardButton.from_dict(button))
         return self
 
     def get_json(self) -> str:
