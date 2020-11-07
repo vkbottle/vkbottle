@@ -17,4 +17,4 @@ class ABCRule(ABC):
         pass
 
     def __repr__(self):
-        return f"<{self.__class__.__qualname__}>"
+        return f"<{self.__class__.__qualname__} config={self.config}>"

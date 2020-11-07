@@ -1,5 +1,5 @@
 from vkbottle import Bot, API, GroupTypes, GroupEventType, AndFilter, OrFilter
-from vkbottle.bot import Message, rules
+from vkbottle.bot import Message, rules, BotLabeler
 from vkbottle.tools.test_utils import with_mocked_api, MockedClient
 from vkbottle.tools.dev_tools import message_min
 import pytest
@@ -139,3 +139,9 @@ async def test_rules(api: API):
     assert await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi bro")) == {"match": ()}
     assert await rules.RegexRule("Hi (.*?)$").check(fake_message(api, text="Hi bro")) == {"match": ("bro",)}
     assert not await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) == {"match": ()}
+
+    labeler = BotLabeler()
+    labeler.vbml_ignore_case = True
+    assert await labeler.get_custom_rules({"text": "privet"})[0].check(fake_message(api, text="Privet")) == {}
+    labeler.vbml_ignore_case = False
+    assert not await labeler.get_custom_rules({"text": "privet"})[0].check(fake_message(api, text="Private"))
