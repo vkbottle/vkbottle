@@ -66,7 +66,7 @@ class VKApps(ABCAction):
 class Callback(ABCAction):
     type = "callback"
 
-    def __init__(self, label: str, payload: str):
+    def __init__(self, label: str, payload: Payload):
         self.label = label
         self.payload = payload
 
