@@ -32,17 +32,17 @@ def convert_shorten_filter(
     return shorten
 
 
-def load_blueprints_from_folder(module_name: str) -> typing.Iterator["ABCBlueprint"]:
+def load_blueprints_from_package(package_name: str) -> typing.Iterator["ABCBlueprint"]:
     """ Gets blueprints from package
-    >>> for bp in load_blueprints_from_folder("blueprints"):
+    >>> for bp in load_blueprints_from_package("blueprints"):
     >>>     bp.load(...)
     """
     bp_paths = []
-    for filename in os.listdir(module_name):
+    for filename in os.listdir(package_name):
         if not filename.endswith(".py") or filename.startswith("__"):
             continue
 
-        with open(os.path.join(module_name, filename)) as file:
+        with open(os.path.join(package_name, filename)) as file:
             bp_names = re.findall(
                 r"^(\w+) = (?:Bot|User|)Blueprint\(", file.read(), flags=re.MULTILINE
             )
@@ -51,5 +51,5 @@ def load_blueprints_from_folder(module_name: str) -> typing.Iterator["ABCBluepri
 
     for bp_path in bp_paths:
         module, bp_name = bp_path
-        bp_module = importlib.import_module(module_name + "." + module)
+        bp_module = importlib.import_module(package_name + "." + module)
         yield getattr(bp_module, bp_name)
