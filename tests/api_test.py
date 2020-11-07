@@ -1,4 +1,4 @@
-from vkbottle import API, VKAPIError, ABCRequestRescheduler, CtxStorage, ABCAPIErrorHandler, ABCAPI
+from vkbottle import API, VKAPIError, ABCRequestRescheduler, CtxStorage
 from vkbottle.tools.test_utils import with_mocked_api
 import pytest
 import typing
@@ -66,21 +66,6 @@ async def test_response_validators(api: API):
 
 @pytest.mark.asyncio
 @with_mocked_api('{"error":{"error_code":5,"error_msg":"Some error occurred!"}}')
-async def test_api_error_handler(api: API):
-    async def error_handler(e: VKAPIError, data: dict):
-        ctx_storage.set("error_handler_checked", True)
-        assert e.code == 5
-        assert data["method"] == "some.method"
-        assert data["ctx_api"] == api
-
-    api.api_error_handler.register_api_error_handler(5, error_handler)
-
-    await api.request("some.method", {})
-    assert ctx_storage.get("error_handler_checked")
-
-
-@pytest.mark.asyncio
-@with_mocked_api('{"error":{"error_code":5,"error_msg":"Some error occurred!"}}')
 async def test_ignore_errors(api: API):
     api.ignore_errors = True
     assert await api.request("some.method", {}) is None
@@ -96,30 +81,6 @@ async def test_request_many(api: API):
         assert response == {"response": 1}
         i += 1
     assert i == 2
-
-
-@pytest.mark.asyncio
-@with_mocked_api('{"error":{"error_code":6,"error_msg":"Whoops"}}')
-async def test_abc_error_handler(api: API):
-    class CustomErrHandler(ABCAPIErrorHandler):
-        def register_api_error_handler(self, code: int, error_handler):
-            ctx_storage.set(f"error-{code}", error_handler)
-
-        async def handle_error(self, code: int, description: str, data: dict):
-            handler = ctx_storage.get(f"error-{code}")
-            assert handler
-            assert data["ctx_api"] == api
-            assert data["method"] == "some.cool_method"
-            assert data["data"]["a"] == 1
-            assert await handler(VKAPIError(code, description), data)
-
-    api.api_error_handler = CustomErrHandler()
-
-    @api.api_error_handler.api_error_handler(6)
-    async def error_handler(e: VKAPIError, data: dict):
-        return True
-
-    await api.request("some.cool_method", {"a": 1})
 
 
 @pytest.mark.asyncio

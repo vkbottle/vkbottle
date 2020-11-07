@@ -1,5 +1,7 @@
 import typing
+import traceback
 
+from vkbottle.modules import logger
 from .abc import ABCErrorHandler, ExceptionHandler
 
 
@@ -67,8 +69,9 @@ class ErrorHandler(ABCErrorHandler):
             return await self.call_handler(self.error_handlers[e.__class__], e, *args, **kwargs)
         elif self.undefined_error_handler:
             return await self.call_handler(self.undefined_error_handler, e, *args, **kwargs)
-        raise e
+        logger.error("\n" + traceback.format_exc())
 
+    @property
     def handling_exceptions(
         self,
     ) -> typing.Union[typing.Type[BaseException], typing.Tuple[typing.Type[BaseException], ...]]:

@@ -11,8 +11,6 @@ from .api import (
     DEFAULT_REQUEST_VALIDATORS,
     ABCRequestRescheduler,
     BlockingRequestRescheduler,
-    ABCAPIErrorHandler,
-    BuiltinAPIErrorHandler,
 )
 from .dispatch import (
     ABCHandler,

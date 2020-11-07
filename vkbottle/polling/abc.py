@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import AsyncIterator, Any
+from typing import AsyncIterator, Any, Optional
+from vkbottle.exception_factory import ABCErrorHandler
 
 from vkbottle.api import ABCAPI
 
@@ -31,5 +32,7 @@ class ABCPolling(ABC):
         pass
 
     @abstractmethod
-    def construct(self, api: "ABCAPI") -> "ABCPolling":
+    def construct(
+        self, api: "ABCAPI", error_handler: Optional["ABCErrorHandler"] = None
+    ) -> "ABCPolling":
         pass

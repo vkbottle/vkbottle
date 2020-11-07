@@ -13,7 +13,6 @@ class ABCRouter(ABC):
     """
 
     views: Dict[str, "ABCView"] = {}
-    error_handler: "ABCErrorHandler"
     state_dispenser: ABCStateDispenser
 
     @abstractmethod

@@ -1,4 +1,5 @@
 from typing import Optional, AsyncIterator
+from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
 
 from vkbottle.api import ABCAPI
 from vkbottle.modules import logger
@@ -16,8 +17,10 @@ class BotPolling(ABCPolling):
         group_id: Optional[int] = None,
         wait: Optional[int] = None,
         rps_delay: Optional[int] = None,
+        error_handler: Optional[ABCErrorHandler] = None,
     ):
         self._api = api
+        self.error_handler = error_handler or ErrorHandler()
         self.group_id = group_id
         self.wait = wait or 15
         self.rps_delay = rps_delay or 0
@@ -45,15 +48,22 @@ class BotPolling(ABCPolling):
         server = await self.get_server()
         logger.debug("Starting listening to longpoll")
         while not self.stop:
-            event = await self.get_event(server)
-            if not event.get("ts"):
-                server = await self.get_server()
-                continue
-            server["ts"] = event["ts"]
-            yield event
+            try:
+                event = await self.get_event(server)
+                if not event.get("ts"):
+                    server = await self.get_server()
+                    continue
+                server["ts"] = event["ts"]
+                yield event
+            except self.error_handler.handling_exceptions as e:
+                yield await self.error_handler.handle(e)
 
-    def construct(self, api: "ABCAPI") -> "BotPolling":
+    def construct(
+        self, api: "ABCAPI", error_handler: Optional["ABCErrorHandler"] = None
+    ) -> "BotPolling":
         self._api = api
+        if error_handler is not None:
+            self.error_handler = error_handler
         return self
 
     @property

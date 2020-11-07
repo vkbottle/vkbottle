@@ -5,7 +5,6 @@ from vkbottle_types.categories import APICategories
 from vkbottle.http import ABCSessionManager, AiohttpClient, SingleSessionManager
 from vkbottle.modules import logger
 from .abc import ABCAPI
-from .api_error_handler import ABCAPIErrorHandler, BuiltinAPIErrorHandler
 from .request_rescheduler import ABCRequestRescheduler, BlockingRequestRescheduler
 from .request_validator import ABCRequestValidator, DEFAULT_REQUEST_VALIDATORS
 from .response_validator import ABCResponseValidator, DEFAULT_RESPONSE_VALIDATORS
@@ -27,13 +26,11 @@ class API(ABCAPI, APICategories):
         token: str,
         ignore_errors: bool = False,
         session_manager: typing.Optional[SingleSessionManager] = None,
-        api_error_handler: typing.Optional[ABCAPIErrorHandler] = None,
         request_rescheduler: typing.Optional[ABCRequestRescheduler] = None,
     ):
         self.token = token
         self.ignore_errors = ignore_errors
         self.http: ABCSessionManager = session_manager or SingleSessionManager(AiohttpClient)
-        self.api_error_handler = api_error_handler or BuiltinAPIErrorHandler()
         self.request_rescheduler = request_rescheduler or BlockingRequestRescheduler()
         self.response_validators: typing.List[ABCResponseValidator] = DEFAULT_RESPONSE_VALIDATORS
         self.request_validators: typing.List[ABCRequestValidator] = DEFAULT_REQUEST_VALIDATORS  # type: ignore

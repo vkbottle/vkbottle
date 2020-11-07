@@ -8,7 +8,7 @@ class ABCAction(ABC):
     type: str
 
     def get_data(self) -> dict:
-        data = vars(self)
+        data = {k: v for k, v in vars(self).items() if v is not None}
         data["type"] = self.type
         return data
 

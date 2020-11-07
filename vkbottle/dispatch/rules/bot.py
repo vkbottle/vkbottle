@@ -1,8 +1,10 @@
 import inspect
 from abc import abstractmethod
 from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine
+import typing
 
 import vbml
+import re
 from vkbottle_types import BaseStateGroup
 
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
@@ -14,7 +16,7 @@ Message = MessageMin
 
 class ABCMessageRule(ABCRule):
     @abstractmethod
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message) -> Union[dict, bool]:
         pass
 
 
@@ -45,13 +47,15 @@ class VBMLRule(ABCMessageRule):
         self,
         pattern: Union[str, "vbml.Pattern", List[Union[str, "vbml.Pattern"]]],
         patcher: "vbml.Patcher",
+        flags: Optional[re.RegexFlag] = None,
     ):
         if isinstance(pattern, str):
-            pattern = [vbml.Pattern(pattern)]
+            pattern = [vbml.Pattern(pattern, flags=flags)]
         elif isinstance(pattern, vbml.Pattern):
             pattern = [pattern]
         elif isinstance(pattern, list):
             pattern = [p if isinstance(p, vbml.Pattern) else vbml.Pattern(p) for p in pattern]
+
         self.patterns = pattern
         self.patcher = patcher
 
@@ -60,6 +64,25 @@ class VBMLRule(ABCMessageRule):
             result = self.patcher.check(pattern, message.text)
             if result not in (None, False):
                 return result
+        return False
+
+
+class RegexRule(ABCMessageRule):
+    def __init__(self, regexp: Union[str, List[str], typing.Pattern, List[typing.Pattern]]):
+        if isinstance(regexp, typing.Pattern):
+            regexp = [regexp]
+        elif isinstance(regexp, str):
+            regexp = [re.compile(regexp)]
+        elif isinstance(regexp, list):
+            regexp = [re.compile(exp) for exp in regexp]
+
+        self.regexp = regexp
+
+    async def check(self, message: Message) -> Union[dict, bool]:
+        for regexp in self.regexp:
+            match = re.match(regexp, message.text)
+            if match:
+                return {"match": match.groups()}
         return False
 
 
@@ -262,4 +285,5 @@ __all__ = (
     "FuncRule",
     "CoroutineRule",
     "StateRule",
+    "RegexRule",
 )

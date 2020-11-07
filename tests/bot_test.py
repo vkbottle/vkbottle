@@ -136,3 +136,6 @@ async def test_rules(api: API):
     assert await OrFilter(rules.FromPeerRule(123), rules.FromPeerRule([1, 123])).check(
         fake_message(api, peer_id=1)
     ) is not False
+    assert await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi bro")) == {"match": ()}
+    assert await rules.RegexRule("Hi (.*?)$").check(fake_message(api, text="Hi bro")) == {"match": ("bro",)}
+    assert not await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) == {"match": ()}
