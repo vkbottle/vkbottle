@@ -130,18 +130,43 @@ async def test_rules(api: API):
         fake_message(api, attachments=[{"type": "sticker", "sticker": {"sticker_id": 2}}])
     )
 
-    assert await AndFilter(rules.FromPeerRule(123), rules.FromPeerRule([1, 123])).check(
-        fake_message(api, peer_id=123)
-    ) is not False
-    assert await OrFilter(rules.FromPeerRule(123), rules.FromPeerRule([1, 123])).check(
-        fake_message(api, peer_id=1)
-    ) is not False
-    assert await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi bro")) == {"match": ()}
-    assert await rules.RegexRule("Hi (.*?)$").check(fake_message(api, text="Hi bro")) == {"match": ("bro",)}
-    assert not await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) == {"match": ()}
+    assert (
+        await AndFilter(rules.FromPeerRule(123), rules.FromPeerRule([1, 123])).check(
+            fake_message(api, peer_id=123)
+        )
+        is not False
+    )
+    assert (
+        await OrFilter(rules.FromPeerRule(123), rules.FromPeerRule([1, 123])).check(
+            fake_message(api, peer_id=1)
+        )
+        is not False
+    )
+    assert await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi bro")) == {
+        "match": ()
+    }
+    assert await rules.RegexRule("Hi (.*?)$").check(fake_message(api, text="Hi bro")) == {
+        "match": ("bro",)
+    }
+    assert not await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) == {
+        "match": ()
+    }
 
     labeler = BotLabeler()
     labeler.vbml_ignore_case = True
-    assert await labeler.get_custom_rules({"text": "privet"})[0].check(fake_message(api, text="Privet")) == {}
+    assert (
+        await labeler.get_custom_rules({"text": "privet"})[0].check(
+            fake_message(api, text="Privet")
+        )
+        == {}
+    )
     labeler.vbml_ignore_case = False
-    assert not await labeler.get_custom_rules({"text": "privet"})[0].check(fake_message(api, text="Private"))
+    assert not await labeler.get_custom_rules({"text": "privet"})[0].check(
+        fake_message(api, text="Private")
+    )
+    assert await rules.PayloadRule({"cmd": "text"}).check(
+        fake_message(api, payload='{"cmd":"text"}')
+    )
+    assert await rules.PayloadRule([{"cmd": "text"}, {"cmd": "ne text"}]).check(
+        fake_message(api, payload='{"cmd":"text"}')
+    )

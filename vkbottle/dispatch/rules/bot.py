@@ -196,11 +196,13 @@ class ChatActionRule(ABCMessageRule):
 
 
 class PayloadRule(ABCMessageRule):
-    def __init__(self, payload: dict):
+    def __init__(self, payload: Union[dict, List[dict]]):
+        if isinstance(payload, dict):
+            payload = [payload]
         self.payload = payload
 
     async def check(self, message: Message) -> Union[dict, bool]:
-        return message.get_payload_json() == self.payload
+        return message.get_payload_json() in self.payload
 
 
 class PayloadContainsRule(ABCMessageRule):
