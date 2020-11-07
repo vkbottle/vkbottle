@@ -22,7 +22,7 @@ https://vkbottle.readthedocs.io/ru/latest
 Установить версию 3.0 можно этой командой:
 
 ```shell script
-pip install -U https://github.com/timoniq/vkbottle/archive/v3.0.zip
+pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
 ```
 
 Если вы ищите старые версии (`2.x`) - [вам сюда](https://github.com/timoniq/vkbottle/tree/v2.0)
