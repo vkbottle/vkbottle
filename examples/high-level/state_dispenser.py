@@ -15,6 +15,8 @@ class MenuState(BaseStateGroup):
     INFO = 2
 
 
+# <state = None> handles all events with no state;
+# you can add StateRule to auto_rules in blueprint for example
 @bot.on.private_message(state=None)
 async def start_handler(message: Message):
     await message.answer(
@@ -26,6 +28,8 @@ async def start_handler(message: Message):
             .get_json()
         ),
     )
+    # If you handle chats you can set state dispenser key to from_id
+    # or you can implement custom state dispenser and base on other features
     await bot.state_dispenser.set(message.peer_id, MenuState.START)
 
 
