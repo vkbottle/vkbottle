@@ -6,6 +6,7 @@ import pytest
 import vbml
 import typing
 import json
+import enum
 
 EXAMPLE_EVENT = {
     "ts": 1,
@@ -49,6 +50,10 @@ EXAMPLE_EVENT = {
         },
     ],
 }
+
+
+class MockIntEnum(enum.IntEnum):
+    MOCK = 1
 
 
 def set_http_callback(api: API, callback: typing.Callable[[dict], typing.Any]):
@@ -170,3 +175,5 @@ async def test_rules(api: API):
     assert await rules.PayloadRule([{"cmd": "text"}, {"cmd": "ne text"}]).check(
         fake_message(api, payload='{"cmd":"text"}')
     )
+    assert await rules.StateRule(state=None).check(fake_message(api))
+    assert not await rules.StateRule(state=MockIntEnum.MOCK).check(fake_message(api))

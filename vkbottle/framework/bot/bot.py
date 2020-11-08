@@ -40,7 +40,9 @@ class Bot(ABCFramework):
     @property
     def router(self) -> "ABCRouter":
         return self._router.construct(
-            views=self.labeler.views(), state_dispenser=self.state_dispenser
+            views=self.labeler.views(),
+            state_dispenser=self.state_dispenser,
+            error_handler=self.error_handler,
         )
 
     @router.setter
@@ -56,12 +58,9 @@ class Bot(ABCFramework):
         logger.info(f"Starting polling for {polling.api!r}")
 
         async for event in polling.listen():  # type: ignore
-            try:
-                logger.debug(f"New event was received: {event}")
-                for update in event["updates"]:
-                    await self.router.route(update, polling.api)
-            except self.error_handler.handling_exceptions as e:
-                await self.error_handler.handle(e)
+            logger.debug(f"New event was received: {event}")
+            for update in event["updates"]:
+                await self.router.route(update, polling.api)
 
     def run_forever(self) -> NoReturn:
         logger.info("Loop will be ran forever")

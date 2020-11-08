@@ -14,6 +14,7 @@ class ABCRouter(ABC):
 
     views: Dict[str, "ABCView"] = {}
     state_dispenser: ABCStateDispenser
+    error_handler: ABCErrorHandler
 
     @abstractmethod
     async def route(self, event: dict, ctx_api: "ABCAPI") -> NoReturn:
@@ -21,7 +22,10 @@ class ABCRouter(ABC):
 
     @abstractmethod
     def construct(
-        self, views: Dict[str, "ABCView"], state_dispenser: ABCStateDispenser
+        self,
+        views: Dict[str, "ABCView"],
+        state_dispenser: ABCStateDispenser,
+        error_handler: ABCErrorHandler,
     ) -> "ABCRouter":
         pass
 
