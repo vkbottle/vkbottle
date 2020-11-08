@@ -20,8 +20,8 @@ async def send_callback_button(message: Message):
 
 @bot.on.raw_event(GroupEventType.MESSAGE_EVENT, dataclass=GroupTypes.MessageEvent)
 async def handle_message_event(event: GroupTypes.MessageEvent):
-    # The event_data parameter accepts three object types
-    # In this example we will consider "show_snackbar" type
+    # event_data parameter accepts three object types
+    # "show_snackbar" type
 
     await bot.api.messages.send_message_event_answer(
         event_id=event.object.event_id,
