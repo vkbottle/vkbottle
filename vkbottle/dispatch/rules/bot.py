@@ -137,18 +137,26 @@ class AttachmentTypeRule(ABCMessageRule):
 
 class ForwardMessagesRule(ABCMessageRule):
     async def check(self, message: Message) -> bool:
-        if message.fwd_messages:
-            return True
+        if not message.fwd_messages:
+            return False
 
-        return False
+        return True
 
 
 class ReplyMessageRule(ABCMessageRule):
     async def check(self, message: Message) -> bool:
-        if message.reply_message:
-            return True
+        if not message.reply_message:
+            return False
 
-        return False
+        return True
+
+
+class GeoRule(ABCMessageRule):
+    async def check(self, message: Message) -> bool:
+        if not message.geo:
+            return False
+
+        return True
 
 
 class LevensteinRule(ABCMessageRule):
