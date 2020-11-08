@@ -286,7 +286,7 @@ class CoroutineRule(ABCMessageRule):
 class StateRule(ABCMessageRule):
     def __init__(self, state: Union[List[BaseStateGroup], BaseStateGroup]):
         if not isinstance(state, list):
-            state = [state]
+            state = [] if state is None else [state]
         self.state = state
 
     async def check(self, message: Message) -> Union[dict, bool]:
