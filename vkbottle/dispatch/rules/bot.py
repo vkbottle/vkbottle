@@ -101,7 +101,7 @@ class StickerRule(ABCMessageRule):
         elif not message.attachments[0].sticker:
             return False
         else:
-            if self.sticker_ids is None:
+            if not self.sticker_ids:
                 if message.attachments[0].sticker.sticker_id:
                     return True
             elif message.attachments[0].sticker.sticker_id in self.sticker_ids:
@@ -132,6 +132,30 @@ class AttachmentTypeRule(ABCMessageRule):
         for attachment in message.attachments:
             if attachment.type.value not in self.attachment_types:
                 return False
+        return True
+
+
+class ForwardMessagesRule(ABCMessageRule):
+    async def check(self, message: Message) -> bool:
+        if not message.fwd_messages:
+            return False
+
+        return True
+
+
+class ReplyMessageRule(ABCMessageRule):
+    async def check(self, message: Message) -> bool:
+        if not message.reply_message:
+            return False
+
+        return True
+
+
+class GeoRule(ABCMessageRule):
+    async def check(self, message: Message) -> bool:
+        if not message.geo:
+            return False
+
         return True
 
 
