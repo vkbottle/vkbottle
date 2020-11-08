@@ -101,7 +101,7 @@ class StickerRule(ABCMessageRule):
         elif not message.attachments[0].sticker:
             return False
         else:
-            if self.sticker_ids is None:
+            if not self.sticker_ids:
                 if message.attachments[0].sticker.sticker_id:
                     return True
             elif message.attachments[0].sticker.sticker_id in self.sticker_ids:
@@ -133,6 +133,22 @@ class AttachmentTypeRule(ABCMessageRule):
             if attachment.type.value not in self.attachment_types:
                 return False
         return True
+
+
+class ForwardMessagesRule(ABCMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.fwd_messages:
+            return True
+
+        return False
+
+
+class ReplyMessageRule(ABCMessageRule):
+    async def check(self, message: Message) -> bool:
+        if message.reply_message:
+            return True
+
+        return False
 
 
 class LevensteinRule(ABCMessageRule):
