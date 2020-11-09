@@ -10,4 +10,5 @@
   + [View](handling/view.md)
   + [Return Manager](handling/return-manager.md)
   + [State Dispenser](handling/state-dispenser.md)
+  + [Middleware](handling/middleware.md)
 * [Routing](routing/index.md)

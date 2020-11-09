@@ -13,6 +13,7 @@
       + [View](high-level/handling/view.md)
       + [Return Manager](high-level/handling/return-manager.md)
       + [State Dispenser](high-level/handling/state-dispenser.md)
+      + [Middleware](high-level/handling/middleware.md)
     * [Routing](high-level/routing/index.md)
 * [Low-level API](low-level/index.md)
     * [API](low-level/api/index.md)
