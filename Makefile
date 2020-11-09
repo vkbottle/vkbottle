@@ -1,6 +1,6 @@
 fix:
 	black .
-	autoflake --recursive --in-place --exclude=__init__.py,venv --remove-all-unused-imports --remove-duplicate-keys .
+	autoflake --recursive --in-place --exclude=__init__.py,bot.py,venv --remove-all-unused-imports --remove-duplicate-keys .
 
 test:
 	poetry run pytest --cov vkbottle tests

@@ -29,7 +29,7 @@ repos:
         types: [ python ]
         args:
           - --in-place
-          - --exclude=__init__.py,venv
+          - --exclude=__init__.py,bot.py,venv
           - --remove-all-unused-imports
           - --remove-duplicate-keys
         stages: [ commit ]
