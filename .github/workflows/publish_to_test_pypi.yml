@@ -1,0 +1,18 @@
+name: Publish Package to TestPyPI with poetry
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-test-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Build and publish to pypi
+        uses: JRubics/poetry-publish@v1.2
+        with:
+          repository_name: testpypi
+          repository_url: https://test.pypi.org/legacy/
+          pypi_token: ${{ secrets.test_pypi_password }}
