@@ -10,7 +10,11 @@ from vkbottle.bot import Bot, Message
 bot = Bot(os.environ["TOKEN"])
 logging.basicConfig(level=logging.INFO)
 
-KEYBOARD = Keyboard(one_time=False).add(Callback("Callback-кнопка", payload={"cmd": "callback"})).get_json()
+KEYBOARD = (
+    Keyboard(one_time=False)
+    .add(Callback("Callback-кнопка", payload={"cmd": "callback"}))
+    .get_json()
+)
 
 
 @bot.on.private_message(text="/callback")
@@ -27,7 +31,7 @@ async def handle_message_event(event: GroupTypes.MessageEvent):
         event_id=event.object.event_id,
         user_id=event.object.user_id,
         peer_id=event.object.peer_id,
-        event_data='{"type":"show_snackbar", "text":"Сейчас я исчезну"}'
+        event_data='{"type":"show_snackbar", "text":"Сейчас я исчезну"}',
     )
 
 

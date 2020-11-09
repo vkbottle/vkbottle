@@ -65,4 +65,6 @@ class RawEventView(ABCView):
             )
 
         for middleware in self.middlewares:
-            await middleware.post(event_model, self, [handler_response])
+            await middleware.post(
+                event_model, self, [handler_response], [handler_basement.handler]
+            )
