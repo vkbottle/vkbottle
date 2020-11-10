@@ -56,7 +56,7 @@ class BotPolling(ABCPolling):
                 server["ts"] = event["ts"]
                 yield event
             except BaseException as e:
-                yield await self.error_handler.handle(e)
+                await self.error_handler.handle(e)
 
     def construct(
         self, api: "ABCAPI", error_handler: Optional["ABCErrorHandler"] = None
