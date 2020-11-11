@@ -1,14 +1,32 @@
 from vkbottle.tools import Keyboard, KeyboardButtonColor, Text, Callback, CtxStorage, LoopWrapper
 from vkbottle.modules import json
 
-KEYBOARD_JSON = json.dumps({
-    "one_time": True,
-    "inline": False,
-    "buttons": [
-        [{"action": {"label": "I love nuggets", "payload": {"love": "nuggets"}, "type": "text"}}],
-        [{"action": {"label": "Eat nuggets", "payload": {"eat": "nuggets"}, "type": "callback"}}],
-    ],
-})
+KEYBOARD_JSON = json.dumps(
+    {
+        "one_time": True,
+        "inline": False,
+        "buttons": [
+            [
+                {
+                    "action": {
+                        "label": "I love nuggets",
+                        "payload": {"love": "nuggets"},
+                        "type": "text",
+                    }
+                }
+            ],
+            [
+                {
+                    "action": {
+                        "label": "Eat nuggets",
+                        "payload": {"eat": "nuggets"},
+                        "type": "callback",
+                    }
+                }
+            ],
+        ],
+    }
+)
 
 ctx_storage = CtxStorage()
 

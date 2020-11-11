@@ -33,7 +33,7 @@ pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
 [Почему VKBottle?](https://github.com/timoniq/vkbottle/blob/master/docs/why_vkbottle.md)
 
 ```python
-from vkbottle.bot import Bot, Message
+from vkbottle.bot import Bot
 
 bot = Bot("GroupToken")
 

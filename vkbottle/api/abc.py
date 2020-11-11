@@ -21,7 +21,6 @@ class ABCAPI(ABC):
     @abstractmethod
     async def request(self, method: str, data: dict) -> dict:
         """ Makes a single request opening a session """
-        pass
 
     @abstractmethod
     async def validate_response(self, method: str, data: dict, response: typing.Any) -> typing.Any:

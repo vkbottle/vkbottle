@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Any, Dict, Type, List, Union
+from typing import Any, Callable, Dict, List, Union
 
 from vkbottle.dispatch.rules import ABCRule
 from vkbottle.dispatch.views import ABCView
