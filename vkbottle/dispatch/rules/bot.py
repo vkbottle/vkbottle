@@ -116,8 +116,7 @@ class FromPeerRule(ABCMessageRule):
         self.peer_ids = peer_ids
 
     async def check(self, message: Message) -> Union[dict, bool]:
-        if message.peer_id in self.peer_ids:
-            return True
+        return message.peer_id in self.peer_ids
 
 
 class AttachmentTypeRule(ABCMessageRule):
