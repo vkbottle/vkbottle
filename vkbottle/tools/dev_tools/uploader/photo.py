@@ -15,7 +15,7 @@ class PhotoUploader(BaseUploader, ABC):
 class PhotoToAlbumUploader(PhotoUploader):
     async def upload(
         self, album_id: int, paths_like: Union[List[Union[str, bytes]], str, bytes], **params
-    ) -> Union[str, List[dict]]:
+    ) -> Union[str, List[Union[str, dict]]]:
         if not isinstance(paths_like, list):
             paths_like = [paths_like]
 

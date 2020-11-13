@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import Optional, Callable, Union, List
+from typing import Optional, Callable, Union, Any
 
 from vkbottle.api import ABCAPI
 from vkbottle.modules import json
@@ -19,15 +19,11 @@ class BaseUploader(ABC):
         generate_attachment_strings: bool = True,
     ):
         assert api_getter is not None or api is not None, "api or api_getter should be set"
-        self._get_api: Callable[[], ABCAPI] = api_getter or (lambda: api)
+        self._get_api = api_getter or (lambda: api)  # type: ignore
         self.generate_attachment_strings = generate_attachment_strings
 
     @abstractmethod
     async def get_server(self, **kwargs) -> dict:
-        pass
-
-    @abstractmethod
-    async def upload(self, *args, **kwargs) -> Union[str, dict, List[Union[str, dict]]]:
         pass
 
     @property
@@ -37,7 +33,7 @@ class BaseUploader(ABC):
 
     @property
     def api(self) -> ABCAPI:
-        return self._get_api()
+        return self._get_api()  # type: ignore
 
     async def upload_files(self, upload_url: str, files: dict, params: dict) -> dict:
         async with self.api.http as session:

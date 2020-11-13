@@ -25,7 +25,9 @@ class AudioUploader(BaseUploader):
         )["response"]
 
         if self.generate_attachment_strings:
-            return self.generate_attachment_string("audio", params, audio["id"])
+            return self.generate_attachment_string(
+                "audio", await self.get_owner_id(params), audio["id"]
+            )
         return audio
 
     @property
