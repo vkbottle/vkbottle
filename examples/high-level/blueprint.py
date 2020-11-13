@@ -17,7 +17,8 @@ for bp in bps:
     bp.load(bot)
 
 # Moreover you can use:
-# import vkbottle import load_blueprints_from_package
+# import vkbottle
+# import load_blueprints_from_package
 # for bp in load_blueprints_from_package("blueprints"):
 #     bp.load(bot)
 
