@@ -56,7 +56,12 @@ class VBMLRule(ABCMessageRule):
         elif isinstance(pattern, vbml.Pattern):
             pattern = [pattern]
         elif isinstance(pattern, list):
-            pattern = [p if isinstance(p, vbml.Pattern) else vbml.Pattern(p) for p in pattern]
+            pattern = [
+                p
+                if isinstance(p, vbml.Pattern)
+                else vbml.Pattern(p, flags=flags or self.config.get("vbml_flags"))
+                for p in pattern
+            ]
 
         self.patterns = pattern
         self.patcher = patcher or self.config["vbml_patcher"]
