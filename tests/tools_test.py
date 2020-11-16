@@ -21,7 +21,8 @@ KEYBOARD_JSON = json.dumps(
                         "label": "Eat nuggets",
                         "payload": {"eat": "nuggets"},
                         "type": "callback",
-                    }
+                    },
+                    "color": "positive"
                 }
             ],
         ],
