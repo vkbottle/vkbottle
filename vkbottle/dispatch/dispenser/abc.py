@@ -12,7 +12,7 @@ class ABCStateDispenser(ABC):
         pass
 
     @abstractmethod
-    async def set(self, peer_id: int, state: BaseStateGroup):
+    async def set(self, peer_id: int, state: BaseStateGroup, **payload):
         pass
 
     @abstractmethod
