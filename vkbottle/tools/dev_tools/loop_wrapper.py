@@ -4,7 +4,7 @@ from typing import Optional, List, Coroutine, Any, Union, Callable
 
 from vkbottle.modules import logger
 from .delayed_task import DelayedTask
-from .auto_reload import _auto_reload
+from .auto_reload import watch_to_reload
 
 Task = Coroutine[Any, Any, Any]
 
@@ -40,7 +40,7 @@ class LoopWrapper:
             [loop.run_until_complete(startup_task) for startup_task in self.on_startup]
 
             if self.auto_reload:
-                loop.create_task(_auto_reload(self.auto_reload_dir))
+                loop.create_task(watch_to_reload(self.auto_reload_dir))
 
             for task in self.tasks:
                 loop.create_task(task)

@@ -8,9 +8,7 @@ _startup_cwd = os.getcwd()
 
 
 def restart():
-    """
-    Author: https://github.com/cherrypy/cherrypy/blob/0857fa81eb0ab647c7b59a019338bab057f7748b/cherrypy/process/wspbus.py#L305
-    :return:
+    """ https://github.com/cherrypy/cherrypy/blob/0857fa81eb0ab647c7b59a019338bab057f7748b/cherrypy/process/wspbus.py#L305
     """
     args = sys.argv[:]
     logger.debug("Restarting: %s" % " ".join(args))
@@ -22,7 +20,7 @@ def restart():
     os.execv(sys.executable, args)
 
 
-async def _auto_reload(check_dir):
+async def watch_to_reload(check_dir: str):
     """
     Coro which see changes in your code and restart him.
     :return:
