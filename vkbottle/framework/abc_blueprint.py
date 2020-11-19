@@ -1,8 +1,8 @@
 import asyncio
 from abc import abstractmethod
-from typing import Optional, NoReturn, Any
+from typing import Optional, NoReturn, Any, Union
 
-from vkbottle.api import ABCAPI
+from vkbottle.api import ABCAPI, API
 from vkbottle.dispatch import ABCRouter
 from vkbottle.polling import ABCPolling
 from .abc import ABCFramework
@@ -40,7 +40,7 @@ class ABCBlueprint(ABCFramework):
         return asyncio.get_running_loop()
 
     @property  # type: ignore
-    def api(self) -> ABCAPI:  # type: ignore
+    def api(self) -> Union[ABCAPI, API]:  # type: ignore
         if not self._api:
             raise RuntimeError(
                 "You need to construct blueprint firstly. "

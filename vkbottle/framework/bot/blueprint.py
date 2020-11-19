@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Optional, Union
 
-from vkbottle.api import ABCAPI
+from vkbottle.api import ABCAPI, API
 from vkbottle.dispatch import BotRouter
 from vkbottle.framework.abc_blueprint import ABCBlueprint
 from vkbottle.framework.bot.bot import Bot
@@ -23,7 +23,7 @@ class BotBlueprint(ABCBlueprint):
         self.router: BotRouter = router or BotRouter()
         self.constructed = False
 
-    def construct(self, api: ABCAPI, polling: ABCPolling) -> "BotBlueprint":
+    def construct(self, api: Union[ABCAPI, API], polling: ABCPolling) -> "BotBlueprint":
         self.api = api
         self.polling = polling
         self.constructed = True
