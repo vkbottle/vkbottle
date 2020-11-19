@@ -1,6 +1,6 @@
 import inspect
 from abc import abstractmethod
-from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine
+from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine, Type
 import typing
 
 import vbml
@@ -299,6 +299,18 @@ class StateRule(ABCMessageRule):
         return message.state_peer.state in self.state
 
 
+class StateGroupRule(ABCMessageRule):
+    def __init__(self, state_group: Union[List[Type[BaseStateGroup]], Type[BaseStateGroup]]):
+        if not isinstance(state_group, list):
+            state_group = [] if state_group is None else [state_group]
+        self.state_group = state_group
+
+    async def check(self, message: Message) -> Union[dict, bool]:
+        if message.state_peer is None:
+            return not self.state_group
+        return type(message.state_peer.state) in self.state_group
+
+
 __all__ = (
     "ABCMessageRule",
     "PeerRule",
@@ -317,5 +329,6 @@ __all__ = (
     "FuncRule",
     "CoroutineRule",
     "StateRule",
+    "StateGroupRule",
     "RegexRule",
 )
