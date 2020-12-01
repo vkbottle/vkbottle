@@ -218,7 +218,7 @@ class ChatActionRule(ABCMessageRule):
     async def check(self, message: Message) -> Union[dict, bool]:
         if not message.action:
             return False
-        elif message.action.type in self.chat_action_types:
+        elif message.action.type.value in self.chat_action_types:
             return True
         return False
 
