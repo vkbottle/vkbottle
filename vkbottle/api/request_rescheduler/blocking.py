@@ -1,7 +1,8 @@
-from .abc import ABCRequestRescheduler
-from vkbottle.modules import logger
-from time import sleep as blocking_sleep
 import typing
+from time import sleep as blocking_sleep
+
+from vkbottle.modules import logger
+from .abc import ABCRequestRescheduler
 
 if typing.TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
@@ -34,5 +35,5 @@ class BlockingRequestRescheduler(ABCRequestRescheduler):
             attempt_number += 1
             logger.debug(f"Attempt succeed? - {isinstance(recent_response, dict)}")
 
-        logger.info(f"Finally succeed after {self.delay ^ attempt_number} seconds")
+        logger.info(f"Finally succeed after {self.delay ** attempt_number} seconds")
         return recent_response

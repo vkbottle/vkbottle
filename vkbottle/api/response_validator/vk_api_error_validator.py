@@ -1,5 +1,7 @@
-from .abc import ABCResponseValidator
 import typing
+
+from .abc import ABCResponseValidator
+from vkbottle.exception_factory import VKAPIError
 
 if typing.TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
@@ -21,10 +23,8 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
             return response
 
         code, msg = response["error"].get("error_code"), response["error"].get("error_msg")
-        return (
-            await ctx_api.api_error_handler.handle_error(
-                code, msg, {"method": method, "data": data, "ctx_api": ctx_api}
-            )
-            if not ctx_api.ignore_errors
-            else None
-        )
+
+        if ctx_api.ignore_errors:
+            return None
+
+        raise VKAPIError(code, msg)

@@ -13,6 +13,6 @@ theme:
   language: ru
   palette:
     scheme: preference
-    primary: blue grey
-    accent: deep orange
+    primary: black
+    accent: blue
   font: Roboto Mono

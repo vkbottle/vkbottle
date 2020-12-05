@@ -1,6 +1,7 @@
-from abc import ABC, abstractmethod
-from vkbottle.http.client import ABCHTTPClient
 import typing
+from abc import ABC, abstractmethod
+
+from vkbottle.http.client import ABCHTTPClient
 
 HttpClient = typing.Type[ABCHTTPClient]
 

@@ -1,13 +1,13 @@
-from .abc import ABCAPI
-from .api_error_handler import ABCAPIErrorHandler, BuiltinAPIErrorHandler
-from .response_validator import ABCResponseValidator, DEFAULT_RESPONSE_VALIDATORS
-from .request_validator import ABCRequestValidator, DEFAULT_REQUEST_VALIDATORS
-from .request_rescheduler import ABCRequestRescheduler, BlockingRequestRescheduler
-from vkbottle.http import ABCSessionManager, AiohttpClient, SingleSessionManager
-from vkbottle_types.categories import APICategories
-from vkbottle.modules import logger
 import typing
 
+from vkbottle_types.categories import APICategories
+
+from vkbottle.http import ABCSessionManager, AiohttpClient, SingleSessionManager
+from vkbottle.modules import logger
+from .abc import ABCAPI
+from .request_rescheduler import ABCRequestRescheduler, BlockingRequestRescheduler
+from .request_validator import ABCRequestValidator, DEFAULT_REQUEST_VALIDATORS
+from .response_validator import ABCResponseValidator, DEFAULT_RESPONSE_VALIDATORS
 
 APIRequest = typing.NamedTuple("APIRequest", [("method", str), ("data", dict)])
 
@@ -26,19 +26,19 @@ class API(ABCAPI, APICategories):
         token: str,
         ignore_errors: bool = False,
         session_manager: typing.Optional[SingleSessionManager] = None,
-        api_error_handler: typing.Optional[ABCAPIErrorHandler] = None,
         request_rescheduler: typing.Optional[ABCRequestRescheduler] = None,
     ):
         self.token = token
         self.ignore_errors = ignore_errors
         self.http: ABCSessionManager = session_manager or SingleSessionManager(AiohttpClient)
-        self.api_error_handler = api_error_handler or BuiltinAPIErrorHandler()
         self.request_rescheduler = request_rescheduler or BlockingRequestRescheduler()
         self.response_validators: typing.List[ABCResponseValidator] = DEFAULT_RESPONSE_VALIDATORS
         self.request_validators: typing.List[ABCRequestValidator] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
 
     async def request(self, method: str, data: dict) -> dict:
         """ Makes a single request opening a session """
+        data = await self.validate_request(data)
+
         async with self.http as session:
             response = await session.request_text(
                 "POST",
@@ -55,7 +55,7 @@ class API(ABCAPI, APICategories):
         """ Makes many requests opening one session """
         async with self.http as session:
             for request in requests:
-                method, data = request.method, request.data  # type: ignore
+                method, data = request.method, await self.validate_request(request.data)  # type: ignore
                 response = await session.request_text(
                     "POST",
                     self.API_URL + method,
@@ -88,4 +88,4 @@ class API(ABCAPI, APICategories):
         return self
 
     def __repr__(self) -> str:
-        return f"<API token={self.token[:5]}...>"
+        return f"<API token={self.token[:5] if self.token else '?'}...>"

@@ -3,13 +3,12 @@ from typing import Any, List, Dict, NamedTuple, Type
 from vkbottle_types.events import GroupEventType, BaseGroupEvent
 
 from vkbottle.api.abc import ABCAPI
+from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
-from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.modules import logger
 from ..abc import ABCView
-
 
 HandlerBasement = NamedTuple(
     "HandlerBasement", [("dataclass", Type[BaseGroupEvent]), ("handler", ABCHandler)]
@@ -36,10 +35,10 @@ class RawEventView(ABCView):
 
         event_model = handler_basement.dataclass(**event)
 
-        if not hasattr(event_model, "unprepared_ctx_api"):
-            setattr(event_model, "unprepared_ctx_api", ctx_api)
-        elif isinstance(event_model, dict):
+        if isinstance(event_model, dict):
             event_model["ctx_api"] = ctx_api
+        else:
+            setattr(event_model, "unprepared_ctx_api", ctx_api)
 
         for middleware in self.middlewares:
             response = await middleware.pre(event_model)
@@ -66,4 +65,6 @@ class RawEventView(ABCView):
             )
 
         for middleware in self.middlewares:
-            await middleware.post(event_model, self, [handler_response])
+            await middleware.post(
+                event_model, self, [handler_response], [handler_basement.handler]
+            )

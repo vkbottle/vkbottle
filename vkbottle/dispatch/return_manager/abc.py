@@ -30,3 +30,6 @@ class BaseReturnManager(ABC):
             return HandlerProperty(types, func)
 
         return decorator
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}>"

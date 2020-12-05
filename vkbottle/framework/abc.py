@@ -1,8 +1,9 @@
-from vkbottle.api import ABCAPI
 from abc import ABC, abstractmethod
-from vkbottle.polling import ABCPolling
-from typing import NoReturn
 from asyncio import AbstractEventLoop
+from typing import NoReturn
+
+from vkbottle.api import ABCAPI
+from vkbottle.polling import ABCPolling
 
 
 class ABCFramework(ABC):

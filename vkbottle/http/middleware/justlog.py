@@ -1,6 +1,7 @@
-from .abc import ABCHTTPMiddleware
-from vkbottle.modules import logger
 import typing
+
+from vkbottle.modules import logger
+from .abc import ABCHTTPMiddleware
 
 
 class JustLogHTTPMiddleware(ABCHTTPMiddleware):

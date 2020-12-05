@@ -1,6 +1,5 @@
-from abc import ABC, abstractmethod
-from vkbottle.api.request_rescheduler.abc import ABCRequestRescheduler
 import typing
+from abc import ABC, abstractmethod
 
 if typing.TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API

@@ -1,6 +1,7 @@
+from typing import Union
+
 from vkbottle.dispatch.return_manager.abc import BaseReturnManager
 from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
-from typing import Union
 
 
 class BotMessageReturnHandler(BaseReturnManager):

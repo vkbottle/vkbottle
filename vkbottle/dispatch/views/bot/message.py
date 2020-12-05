@@ -3,10 +3,10 @@ from typing import Any, List, Callable
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.api.abc import ABCAPI
+from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
-from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.modules import logger
 from vkbottle.tools.dev_tools import message_min
 from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
@@ -44,6 +44,8 @@ class MessageView(ABCView):
                 context_variables.update(response)
 
         handle_responses = []
+        handlers = []
+
         for handler in self.handlers:
             result = await handler.filter(message)
             logger.debug("Handler {} returned {}".format(handler, result))
@@ -56,6 +58,7 @@ class MessageView(ABCView):
 
             handler_response = await handler.handle(message, **context_variables)
             handle_responses.append(handler_response)
+            handlers.append(handler)
 
             return_handler = self.handler_return_manager.get_handler(handler_response)
             if return_handler is not None:
@@ -64,7 +67,7 @@ class MessageView(ABCView):
                 )
 
             if handler.blocking:
-                return
+                break
 
         for middleware in self.middlewares:
-            await middleware.post(message, self, handle_responses)
+            await middleware.post(message, self, handle_responses, handlers)

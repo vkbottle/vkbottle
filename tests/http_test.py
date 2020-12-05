@@ -1,4 +1,4 @@
-from vkbottle import ManySessionManager, AiohttpClient
+from vkbottle import ManySessionManager
 from vkbottle.tools.test_utils import MockedClient
 import pytest
 

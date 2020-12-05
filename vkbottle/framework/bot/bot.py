@@ -1,14 +1,15 @@
-from vkbottle.framework.abc import ABCFramework
-from vkbottle.api import ABCAPI, API
-from vkbottle.polling import ABCPolling, BotPolling
-from vkbottle.tools import LoopWrapper
-from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
-from vkbottle.exception_factory import ABCErrorHandler
-from .labeler import ABCBotLabeler, BotLabeler
 from asyncio import AbstractEventLoop, get_event_loop
 from typing import Optional, NoReturn
-from vkbottle.modules import logger
 from typing import Union
+
+from vkbottle.api import ABCAPI, API
+from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
+from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
+from vkbottle.framework.abc import ABCFramework
+from vkbottle.modules import logger
+from vkbottle.polling import ABCPolling, BotPolling
+from vkbottle.tools import LoopWrapper
+from .labeler import ABCBotLabeler, BotLabeler
 
 
 class Bot(ABCFramework):
@@ -21,8 +22,10 @@ class Bot(ABCFramework):
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCBotLabeler"] = None,
+        error_handler: Optional["ABCErrorHandler"] = None,
     ):
         self.api: Union[ABCAPI, API] = API(token) if token is not None else api  # type: ignore
+        self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.labeler = labeler or BotLabeler()
         self.state_dispenser = BuiltinStateDispenser()
@@ -32,12 +35,14 @@ class Bot(ABCFramework):
 
     @property
     def polling(self) -> "ABCPolling":
-        return self._polling.construct(self.api)
+        return self._polling.construct(self.api, self.error_handler)
 
     @property
     def router(self) -> "ABCRouter":
         return self._router.construct(
-            views=self.labeler.views(), state_dispenser=self.state_dispenser
+            views=self.labeler.views(),
+            state_dispenser=self.state_dispenser,
+            error_handler=self.error_handler,
         )
 
     @router.setter
@@ -48,21 +53,14 @@ class Bot(ABCFramework):
     def on(self) -> "ABCBotLabeler":
         return self.labeler
 
-    @property
-    def error(self) -> "ABCErrorHandler":
-        return self.router.error_handler
-
     async def run_polling(self, custom_polling: Optional[ABCPolling] = None) -> NoReturn:
         polling = custom_polling or self.polling
         logger.info(f"Starting polling for {polling.api!r}")
 
         async for event in polling.listen():  # type: ignore
-            try:
-                logger.debug(f"New event was received: {event}")
-                for update in event["updates"]:
-                    await self.router.route(update, polling.api)
-            except self.error.handling_exceptions as e:
-                await self.error.handle(e)
+            logger.debug(f"New event was received: {event}")
+            for update in event["updates"]:
+                await self.router.route(update, polling.api)
 
     def run_forever(self) -> NoReturn:
         logger.info("Loop will be ran forever")

@@ -1,6 +1,7 @@
-from abc import ABC, abstractmethod
-from vkbottle.http import ABCSessionManager
 import typing
+from abc import ABC, abstractmethod
+
+from vkbottle.http import ABCSessionManager
 
 if typing.TYPE_CHECKING:
     from .api_error_handler import ABCAPIErrorHandler
@@ -20,7 +21,6 @@ class ABCAPI(ABC):
     @abstractmethod
     async def request(self, method: str, data: dict) -> dict:
         """ Makes a single request opening a session """
-        pass
 
     @abstractmethod
     async def validate_response(self, method: str, data: dict, response: typing.Any) -> typing.Any:

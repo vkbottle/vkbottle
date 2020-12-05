@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Optional
+
 from vkbottle_types import StatePeer, BaseStateGroup
+
 from vkbottle.modules import logger
 
 
@@ -10,7 +12,7 @@ class ABCStateDispenser(ABC):
         pass
 
     @abstractmethod
-    async def set(self, peer_id: int, state: BaseStateGroup):
+    async def set(self, peer_id: int, state: BaseStateGroup, **payload):
         pass
 
     @abstractmethod

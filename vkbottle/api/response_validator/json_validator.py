@@ -1,7 +1,7 @@
-from .abc import ABCResponseValidator
-from vkbottle.api.request_rescheduler.abc import ABCRequestRescheduler
-from vkbottle.modules import json, logger
 import typing
+
+from vkbottle.modules import json, logger
+from .abc import ABCResponseValidator
 
 if typing.TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
