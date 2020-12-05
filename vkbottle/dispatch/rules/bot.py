@@ -203,9 +203,7 @@ class FromUserRule(ABCMessageRule):
         self.from_user = from_user
 
     async def check(self, message: Message) -> bool:
-        if message.from_id > 0:
-            return True
-        return False
+        return self.from_user is (message.from_id > 0)
 
 
 class FuncRule(ABCMessageRule):
