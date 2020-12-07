@@ -263,10 +263,8 @@ class FromUserRule(ABCMessageRule):
     def __init__(self, from_user: bool = True):
         self.from_user = from_user
 
-    async def check(self, message: Message) -> Union[dict, bool]:
-        if message.from_id > 0:
-            return True
-        return False
+    async def check(self, message: Message) -> bool:
+        return self.from_user is (message.from_id > 0)
 
 
 class FuncRule(ABCMessageRule):
