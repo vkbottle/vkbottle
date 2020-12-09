@@ -10,9 +10,7 @@ class DocUploader(BaseUploader, ABC):
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("docs.getUploadServer", kwargs))["response"]
 
-    async def upload(
-        self, title: str, path_like: Union[str, bytes], **params
-    ) -> Union[str, dict]:
+    async def upload(self, title: str, path_like: Union[str, bytes], **params) -> Union[str, dict]:
         server = await self.get_server()
         data = await self.read(path_like)
         file = self.get_bytes_io(data)
@@ -21,7 +19,52 @@ class DocUploader(BaseUploader, ABC):
 
         doc = (
             await self.api.request(
-                "docs.save", {"title": title, **uploader, **params},
+                "docs.save",
+                {"title": title, **uploader, **params},
+            )
+        )["response"]
+
+        if self.generate_attachment_strings:
+            return self.generate_attachment_string(
+                "doc", await self.get_owner_id(params), doc["id"]
+            )
+        return doc
+
+    async def upload_doc_to_wall(
+        self, title: str, path_like: Union[str, bytes], **params
+    ) -> Union[str, dict]:
+        server = (await self.api.request("docs.getMessagesUploadServer", params))["response"]
+        data = await self.read(path_like)
+        file = self.get_bytes_io(data)
+
+        uploader = await self.upload_files(server["upload_url"], {"file": file}, params)
+
+        doc = (
+            await self.api.request(
+                "docs.save",
+                {"title": title, **uploader, **params},
+            )
+        )["response"]
+
+        if self.generate_attachment_strings:
+            return self.generate_attachment_string(
+                "doc", await self.get_owner_id(params), doc["id"]
+            )
+        return doc
+
+    async def upload_doc_to_message(
+        self, title: str, path_like: Union[str, bytes], **params
+    ) -> Union[str, dict]:
+        server = (await self.api.request("docs.getMessagesUploadServer", params))["response"]
+        data = await self.read(path_like)
+        file = self.get_bytes_io(data)
+
+        uploader = await self.upload_files(server["upload_url"], {"file": file}, params)
+
+        doc = (
+            await self.api.request(
+                "docs.save",
+                {"title": title, **uploader, **params},
             )
         )["response"]
 
@@ -36,18 +79,4 @@ class DocUploader(BaseUploader, ABC):
         return self.NAME
 
 
-class DocWallUploader(DocUploader):
-    async def get_server(self, **kwargs) -> dict:
-        return (await self.api.request("docs.getMessagesUploadServer", kwargs))["response"]
-
-
-class DocMessagesUploader(DocUploader):
-    async def get_server(self, **kwargs) -> dict:
-        return (await self.api.request("photos.getMessagesUploadServer", kwargs))["response"]
-
-
-__all__ = (
-    "DocUploader",
-    "DocWallUploader",
-    "DocMessagesUploader",
-)
+__all__ = ("DocUploader",)

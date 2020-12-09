@@ -1,4 +1,4 @@
-from .audio import *
+from .audio import AudioUploader
 from .base import BaseUploader
-from .doc import *
-from .photo import *
+from .doc import DocUploader
+from .photo import PhotoUploader

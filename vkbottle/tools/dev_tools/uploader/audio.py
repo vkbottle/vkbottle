@@ -20,7 +20,8 @@ class AudioUploader(BaseUploader):
 
         audio = (
             await self.api.request(
-                "audio.save", {"artist": artist, "title": title, **uploader, **params},
+                "audio.save",
+                {"artist": artist, "title": title, **uploader, **params},
             )
         )["response"]
 
@@ -29,6 +30,30 @@ class AudioUploader(BaseUploader):
                 "audio", await self.get_owner_id(params), audio["id"]
             )
         return audio
+
+    async def upload_voice_message(
+        self, peer_id: int, path_like: Union[str, bytes], **params
+    ) -> Union[str, dict]:
+        server = await self.api.request(
+            "docs.getMessagesUploadServer", {"type": "audio_message", "peer_id": peer_id, **params}
+        )
+        data = await self.read(path_like)
+        file = self.get_bytes_io(data)
+
+        uploader = await self.upload_files(server["upload_url"], {"file": file}, params)
+
+        doc = (
+            await self.api.request(
+                "docs.save",
+                {**uploader, **params},
+            )
+        )["response"]
+
+        if self.generate_attachment_strings:
+            return self.generate_attachment_string(
+                "doc", await self.get_owner_id(params), doc["id"]
+            )
+        return doc
 
     @property
     def attachment_name(self) -> str:

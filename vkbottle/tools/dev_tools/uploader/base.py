@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import Optional, Callable, Union, Any
+from typing import Optional, Callable, Union
 
 from vkbottle.api import ABCAPI
 from vkbottle.modules import json
@@ -48,6 +48,12 @@ class BaseUploader(ABC):
         bytes_io.seek(0)  # To avoid errors with image generators (such as pillow)
         bytes_io.name = self.attachment_name  # To guarantee VK API file extension recognition
         return bytes_io
+
+    async def get_data_from_link(
+        self, link: str, ext: Optional[str] = None, **kwargs
+    ) -> BytesIO:
+        async with self.api.http as session:
+            return self.get_bytes_io(await session.request_content("GET", link, **kwargs))
 
     async def get_owner_id(self, upload_params: dict) -> int:
         if "group_id" in upload_params:
