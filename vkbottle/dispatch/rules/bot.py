@@ -1,6 +1,6 @@
 import inspect
 from abc import abstractmethod
-from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine
+from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine, Type
 import typing
 
 import vbml
@@ -56,7 +56,12 @@ class VBMLRule(ABCMessageRule):
         elif isinstance(pattern, vbml.Pattern):
             pattern = [pattern]
         elif isinstance(pattern, list):
-            pattern = [p if isinstance(p, vbml.Pattern) else vbml.Pattern(p) for p in pattern]
+            pattern = [
+                p
+                if isinstance(p, vbml.Pattern)
+                else vbml.Pattern(p, flags=flags or self.config.get("vbml_flags"))
+                for p in pattern
+            ]
 
         self.patterns = pattern
         self.patcher = patcher or self.config["vbml_patcher"]
@@ -116,8 +121,7 @@ class FromPeerRule(ABCMessageRule):
         self.peer_ids = peer_ids
 
     async def check(self, message: Message) -> Union[dict, bool]:
-        if message.peer_id in self.peer_ids:
-            return True
+        return message.peer_id in self.peer_ids
 
 
 class AttachmentTypeRule(ABCMessageRule):
@@ -214,7 +218,7 @@ class ChatActionRule(ABCMessageRule):
     async def check(self, message: Message) -> Union[dict, bool]:
         if not message.action:
             return False
-        elif message.action.type in self.chat_action_types:
+        elif message.action.type.value in self.chat_action_types:
             return True
         return False
 
@@ -259,10 +263,8 @@ class FromUserRule(ABCMessageRule):
     def __init__(self, from_user: bool = True):
         self.from_user = from_user
 
-    async def check(self, message: Message) -> Union[dict, bool]:
-        if message.from_id > 0:
-            return True
-        return False
+    async def check(self, message: Message) -> bool:
+        return self.from_user is (message.from_id > 0)
 
 
 class FuncRule(ABCMessageRule):
@@ -295,6 +297,18 @@ class StateRule(ABCMessageRule):
         return message.state_peer.state in self.state
 
 
+class StateGroupRule(ABCMessageRule):
+    def __init__(self, state_group: Union[List[Type[BaseStateGroup]], Type[BaseStateGroup]]):
+        if not isinstance(state_group, list):
+            state_group = [] if state_group is None else [state_group]
+        self.state_group = state_group
+
+    async def check(self, message: Message) -> Union[dict, bool]:
+        if message.state_peer is None:
+            return not self.state_group
+        return type(message.state_peer.state) in self.state_group
+
+
 __all__ = (
     "ABCMessageRule",
     "PeerRule",
@@ -313,5 +327,6 @@ __all__ = (
     "FuncRule",
     "CoroutineRule",
     "StateRule",
+    "StateGroupRule",
     "RegexRule",
 )

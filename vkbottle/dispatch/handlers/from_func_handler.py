@@ -14,7 +14,7 @@ class FromFuncHandler(ABCHandler):
         rule_context = {}
         for rule in self.rules:
             result = await rule.check(event)
-            if result is False:
+            if result is False or result is None:
                 return False
             elif result is True:
                 continue

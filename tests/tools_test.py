@@ -1,4 +1,13 @@
-from vkbottle.tools import Keyboard, KeyboardButtonColor, Text, Callback, CtxStorage, LoopWrapper
+from vkbottle.tools import (
+    Keyboard,
+    KeyboardButtonColor,
+    Text,
+    Callback,
+    CtxStorage,
+    LoopWrapper,
+    template_gen,
+    TemplateElement,
+)
 from vkbottle.modules import json
 
 KEYBOARD_JSON = json.dumps(
@@ -21,12 +30,29 @@ KEYBOARD_JSON = json.dumps(
                         "label": "Eat nuggets",
                         "payload": {"eat": "nuggets"},
                         "type": "callback",
-                    }
+                    },
+                    "color": "positive",
                 }
             ],
         ],
     }
 )
+
+TEMPLATE_DICT = {
+    "type": "carousel",
+    "elements": [
+        {
+            "photo_id": "-109837093_457242811",
+            "action": {"type": "open_photo"},
+            "buttons": [{"action": {"type": "text", "label": "text", "payload": "{}"}}],
+        },
+        {
+            "photo_id": "-109837093_457242811",
+            "action": {"type": "open_photo"},
+            "buttons": [{"action": {"type": "text", "label": "text 2", "payload": "{}"}}],
+        },
+    ],
+}
 
 ctx_storage = CtxStorage()
 
@@ -66,6 +92,26 @@ def test_keyboard_builder():
         .add(Callback("Eat nuggets", {"eat": "nuggets"}), color=KeyboardButtonColor.POSITIVE)
         .get_json()
     ) == KEYBOARD_JSON
+
+
+def test_template_generator():
+    assert (
+        json.loads(
+            template_gen(
+                TemplateElement(
+                    photo_id="-109837093_457242811",
+                    action={"type": "open_photo"},
+                    buttons=[{"action": {"type": "text", "label": "text", "payload": "{}"}}],
+                ),
+                TemplateElement(
+                    photo_id="-109837093_457242811",
+                    action={"type": "open_photo"},
+                    buttons=[{"action": {"type": "text", "label": "text 2", "payload": "{}"}}],
+                ),
+            )
+        )
+        == TEMPLATE_DICT
+    )
 
 
 def test_loop_wrapper():
