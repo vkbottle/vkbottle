@@ -37,7 +37,7 @@ class MessageMin(MessagesMessage):
         payload: Optional[str] = None,
         dont_parse_links: Optional[bool] = None,
         disable_mentions: Optional[bool] = None,
-        template: Optional[dict] = None,
+        template: Optional[str] = None,
         intent: Optional[str] = None,
     ) -> int:
         data = {k: v for k, v in locals().items() if k != "self" and v is not None}
