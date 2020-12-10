@@ -14,7 +14,7 @@ class TemplateElement:
         action: Optional[dict] = None,
     ):
         assert buttons, "Buttons are required"
-        assert photo_id and (title or description), "photo_id or title is required"
+        assert photo_id or title, "photo_id or title is required"
 
         if isinstance(buttons, str):
             buttons = json.loads(buttons)
