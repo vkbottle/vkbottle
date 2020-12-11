@@ -11,7 +11,8 @@ class ButtonActions(enum.Enum):
     open_link = "open_link"
     open_photo = "open_photo"
     callback = "callback"
-
+    INTENT_SUBSCRIBE = "intent_subscribe"
+    INTENT_UNSUBSCRIBE = "intent_unsubscribe"
 
 class ClientInfo(BaseModel):
     button_actions: typing.List[ButtonActions] = None
