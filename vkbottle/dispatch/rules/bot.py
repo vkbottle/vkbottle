@@ -25,9 +25,7 @@ class PeerRule(ABCMessageRule):
         self.from_chat = from_chat
 
     async def check(self, message: Message) -> bool:
-        if message.peer_id != message.from_id:
-            return self.from_chat
-        return not self.from_chat
+        return self.from_chat is (message.peer_id != message.from_id)
 
 
 class CommandRule(ABCMessageRule):
