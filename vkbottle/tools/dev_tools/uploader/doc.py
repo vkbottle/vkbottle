@@ -34,12 +34,12 @@ class DocUploader(BaseUploader, ABC):
 
 class DocWallUploader(DocUploader):
     async def get_server(self, **kwargs) -> dict:
-        return (await self.api.request("docs.getMessagesUploadServer", kwargs))["response"]
+        return (await self.api.request("docs.getWallUploadServer", kwargs))["response"]
 
 
 class DocMessagesUploader(DocUploader):
     async def get_server(self, **kwargs) -> dict:
-        return (await self.api.request("photos.getMessagesUploadServer", kwargs))["response"]
+        return (await self.api.request("docs.getMessagesUploadServer", kwargs))["response"]
 
 
 __all__ = (
