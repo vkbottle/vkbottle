@@ -82,6 +82,15 @@ class VideoCommentDelete(BaseModel):
 
 
 class WallPostNew(Wallpost):
+    attachments: list = None
+    date: int = None
+    from_id: int = None
+    id: int = None
+    is_favorite: bool = None
+    owner_id: int = None
+    post_type: str = None
+    text: str = None
+    geo: dict = None
     postponed_id: int = None
 
 
