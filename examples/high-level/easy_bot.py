@@ -12,7 +12,7 @@ bot = Bot(os.environ["token"])
 # but if you use loguru the instruction is different.
 # ---
 # If you use loguru you need to remove default logger and add new with
-# level specified logging level, visit https://github.com/Delgan/issues/128
+# level specified logging level, visit https://github.com/Delgan/loguru/issues/138
 logging.basicConfig(level=logging.INFO)
 
 # Documentation for keyboard builder > tools/keyboard

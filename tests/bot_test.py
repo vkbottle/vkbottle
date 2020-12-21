@@ -1,4 +1,4 @@
-from vkbottle import Bot, API, GroupTypes, GroupEventType, AndFilter, OrFilter
+from vkbottle import Bot, API, GroupTypes, GroupEventType, AndFilter, OrFilter, StatePeer
 from vkbottle.bot import Message, rules, BotLabeler
 from vkbottle.tools.test_utils import with_mocked_api, MockedClient
 from vkbottle.tools.dev_tools import message_min
@@ -177,3 +177,7 @@ async def test_rules(api: API):
     )
     assert await rules.StateRule(state=None).check(fake_message(api))
     assert not await rules.StateRule(state=MockIntEnum.MOCK).check(fake_message(api))
+    assert await rules.StateGroupRule(state_group=None).check(fake_message(api))
+    sg_mock_message = fake_message(api)
+    sg_mock_message.state_peer = StatePeer(peer_id=1, state=MockIntEnum.MOCK, payload={})
+    assert await rules.StateGroupRule(state_group=MockIntEnum).check(sg_mock_message)

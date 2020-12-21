@@ -37,6 +37,8 @@ class API(ABCAPI, APICategories):
 
     async def request(self, method: str, data: dict) -> dict:
         """ Makes a single request opening a session """
+        data = await self.validate_request(data)
+
         async with self.http as session:
             response = await session.request_text(
                 "POST",
@@ -53,7 +55,7 @@ class API(ABCAPI, APICategories):
         """ Makes many requests opening one session """
         async with self.http as session:
             for request in requests:
-                method, data = request.method, request.data  # type: ignore
+                method, data = request.method, await self.validate_request(request.data)  # type: ignore
                 response = await session.request_text(
                     "POST",
                     self.API_URL + method,
