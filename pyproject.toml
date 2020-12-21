@@ -28,7 +28,7 @@ aiohttp = "^3.6.2"
 vbml = "^1.0"
 choicelib = "^0.1.1"
 vkbottle-types = "^0.1.21"
-watchdog = "^0.10.3"
+watchdog = "^1.0.2"
 
 [tool.poetry.dev-dependencies]
 # Lint
