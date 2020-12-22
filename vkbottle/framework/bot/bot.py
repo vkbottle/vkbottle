@@ -2,7 +2,7 @@ from asyncio import AbstractEventLoop, get_event_loop
 from typing import Optional, NoReturn
 from typing import Union
 
-from vkbottle.api import ABCAPI, API
+from vkbottle.api import ABCAPI, API, Token
 from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
 from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
 from vkbottle.framework.abc import ABCFramework
@@ -15,7 +15,7 @@ from .labeler import ABCBotLabeler, BotLabeler
 class Bot(ABCFramework):
     def __init__(
         self,
-        token: Optional[str] = None,
+        token: Optional[Token] = None,
         api: Optional[ABCAPI] = None,
         polling: Optional[ABCPolling] = None,
         loop: Optional[AbstractEventLoop] = None,
