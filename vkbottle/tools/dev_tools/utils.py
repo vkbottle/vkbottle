@@ -1,6 +1,8 @@
 from asyncio import get_running_loop
 from vkbottle.dispatch.rules import ABCRule
 from vkbottle.dispatch.filter import AndFilter, OrFilter
+from vkbottle.api.token_generator.single import SingleTokenGenerator
+from vkbottle.api.token_generator.consistent import ConsistentTokenGenerator
 import importlib
 import typing
 import os
@@ -8,6 +10,7 @@ import re
 
 if typing.TYPE_CHECKING:
     from vkbottle.framework.abc_blueprint import ABCBlueprint
+    from vkbottle.api.token_generator import ABCTokenGenerator, Token
 
 
 # This feature is not used in production

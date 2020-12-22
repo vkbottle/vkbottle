@@ -96,7 +96,7 @@ async def test_bot_polling():
 @pytest.mark.asyncio
 async def test_bot_scopes():
     bot = Bot(token="some token")
-    assert bot.api.token == "some token"
+    assert await bot.api.token_generator.get_token() == "some token"
     assert bot.api == bot.polling.api
     assert bot.labeler.message_view is bot.router.views["message"]
     assert bot.labeler.raw_event_view is bot.router.views["raw"]

@@ -5,6 +5,7 @@ from vkbottle_types.categories import APICategories
 from vkbottle.http import ABCSessionManager, AiohttpClient, SingleSessionManager
 from vkbottle.modules import logger
 from .abc import ABCAPI
+from .token_generator import Token, get_token_generator
 from .request_rescheduler import ABCRequestRescheduler, BlockingRequestRescheduler
 from .request_validator import ABCRequestValidator, DEFAULT_REQUEST_VALIDATORS
 from .response_validator import ABCResponseValidator, DEFAULT_RESPONSE_VALIDATORS
@@ -23,12 +24,12 @@ class API(ABCAPI, APICategories):
 
     def __init__(
         self,
-        token: str,
+        token: Token,
         ignore_errors: bool = False,
         session_manager: typing.Optional[SingleSessionManager] = None,
         request_rescheduler: typing.Optional[ABCRequestRescheduler] = None,
     ):
-        self.token = token
+        self.token_generator = get_token_generator(token)
         self.ignore_errors = ignore_errors
         self.http: ABCSessionManager = session_manager or SingleSessionManager(AiohttpClient)
         self.request_rescheduler = request_rescheduler or BlockingRequestRescheduler()
@@ -40,12 +41,13 @@ class API(ABCAPI, APICategories):
         data = await self.validate_request(data)
 
         async with self.http as session:
-            response = await session.request_text(
-                "POST",
-                self.API_URL + method,
-                data=data,  # type: ignore
-                params={"access_token": self.token, "v": self.API_VERSION},
-            )
+            async with self.token_generator as token:
+                response = await session.request_text(
+                    "POST",
+                    self.API_URL + method,
+                    data=data,  # type: ignore
+                    params={"access_token": token, "v": self.API_VERSION},
+                )
             logger.debug("Request {} with {} data returned {}".format(method, data, response))
             return await self.validate_response(method, data, response)
 
@@ -56,12 +58,13 @@ class API(ABCAPI, APICategories):
         async with self.http as session:
             for request in requests:
                 method, data = request.method, await self.validate_request(request.data)  # type: ignore
-                response = await session.request_text(
-                    "POST",
-                    self.API_URL + method,
-                    data=data,  # noqa
-                    params={"access_token": self.token, "v": self.API_VERSION},  # noqa
-                )
+                async with self.token_generator as token:
+                    response = await session.request_text(
+                        "POST",
+                        self.API_URL + method,
+                        data=data,  # noqa
+                        params={"access_token": token, "v": self.API_VERSION},  # noqa
+                    )
                 logger.debug("Request {} with {} data returned {}".format(method, data, response))
                 yield await self.validate_response(method, data, response)
 
@@ -88,4 +91,4 @@ class API(ABCAPI, APICategories):
         return self
 
     def __repr__(self) -> str:
-        return f"<API token={self.token[:5] if self.token else '?'}...>"
+        return f"<API token_generator={self.token_generator}...>"
