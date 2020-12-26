@@ -217,7 +217,7 @@ class ChatActionRule(ABCMessageRule):
         return False
 
 
-class PayloadRule:
+class PayloadRule(ABCMessageRule):
     def __init__(
         self,
         payload_map: Union[dict, typing.Sequence[dict]],
