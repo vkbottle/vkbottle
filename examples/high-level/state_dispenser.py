@@ -48,7 +48,7 @@ async def info_handler(message: Message):
     await bot.state_dispenser.set(message.peer_id, MenuState.INFO)
 
 
-@bot.on.private_message(state=MenuState.INFO, payload_map=[("item", str)])
+@bot.on.private_message(state=MenuState.INFO, payload={"item": str})
 async def info_item_handler(message: Message):
     await message.answer(f"Cool! I am too interested in {message.get_payload_json()['item']}!")
     await start_handler(message)
