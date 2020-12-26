@@ -70,7 +70,7 @@ async def test_bot_polling():
         elif "!SERVER!" in data["url"]:
             return EXAMPLE_EVENT
         elif "messages.send" in data["url"]:
-            return json.dumps({"response": 100})
+            return json.dumps({"response": {**data, **{"r": 1}}})
 
     bot = Bot("token")
     set_http_callback(bot.api, callback)
@@ -84,7 +84,10 @@ async def test_bot_polling():
     async def message_handler(message: Message):
         assert message.id == 100
         assert message.from_id == 1
-        assert await message.answer() == 100
+        assert await message.answer() == {"peer_id": message.peer_id, "r": 1}
+        assert await message.answer(some_unsigned_param="test") == {"peer_id": message.peer_id,
+                                                                    "some_unsigned_param": "test",
+                                                                    "r": 1}
 
     async for event in bot.polling.listen():
         assert event.get("updates")
