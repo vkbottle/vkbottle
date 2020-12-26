@@ -17,9 +17,12 @@ class MessageMin(MessagesMessage):
     def ctx_api(self) -> Union["ABCAPI", "API"]:
         return getattr(self, "unprepared_ctx_api")
 
-    async def get_user(self) -> "UsersUser":
+    async def get_user(self, **kwargs) -> "UsersUser":
         return UsersUser(
-            **(await self.ctx_api.request("users.get", {"user_ids": self.from_id}))["response"][0]
+            **(await self.ctx_api.request(
+                "users.get",
+                {"user_ids": self.from_id, **kwargs}
+            ))["response"][0]
         )
 
     async def answer(
