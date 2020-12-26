@@ -271,9 +271,9 @@ class PayloadRule(ABCMessageRule):
     async def check(self, message: Message) -> bool:
         payload = message.get_payload_json()
         for payload_map in self.payload_map:
-            if not self.check_dict(payload_map, payload):
-                return False
-        return True
+            if self.check_dict(payload_map, payload):
+                return True
+        return False
 
 
 class FromUserRule(ABCMessageRule):
