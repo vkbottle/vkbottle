@@ -131,9 +131,6 @@ async def test_rules(api: API):
         fake_message(api, text="yes!")
     )
     assert not await rules.PeerRule(from_chat=True).check(fake_message(api, peer_id=1, from_id=1))
-    assert await rules.PayloadMapRule([("a", int), ("b", str)]).check(
-        fake_message(api, payload=json.dumps({"a": 1, "b": ""}))
-    )
     assert await rules.StickerRule(sticker_ids=[1, 2]).check(
         fake_message(api, attachments=[{"type": "sticker", "sticker": {"sticker_id": 2}}])
     )
@@ -172,11 +169,11 @@ async def test_rules(api: API):
     assert not await labeler.get_custom_rules({"text": "privet"})[0].check(
         fake_message(api, text="Private")
     )
-    assert await rules.PayloadRule({"cmd": "text"}).check(
-        fake_message(api, payload='{"cmd":"text"}')
-    )
     assert await rules.PayloadRule([{"cmd": "text"}, {"cmd": "ne text"}]).check(
         fake_message(api, payload='{"cmd":"text"}')
+    )
+    assert await rules.PayloadRule({"a": {"b": [int], "c": {"d": "test"}}}).check(
+        fake_message(api, payload='{"a": {"b": [1, 2, 3]}, "c": {"d": "test"}}')
     )
     assert await rules.StateRule(state=None).check(fake_message(api))
     assert not await rules.StateRule(state=MockIntEnum.MOCK).check(fake_message(api))

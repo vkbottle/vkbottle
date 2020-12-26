@@ -217,38 +217,61 @@ class ChatActionRule(ABCMessageRule):
         return False
 
 
-class PayloadRule(ABCMessageRule):
-    def __init__(self, payload: Union[dict, List[dict]]):
-        if isinstance(payload, dict):
-            payload = [payload]
-        self.payload = payload
+class PayloadRule:
+    def __init__(
+        self,
+        payload_map: Union[dict, typing.Sequence[dict]],
+        fullmatch: Optional[bool] = None,
+        list_strict_mode: Optional[bool] = None,
+    ):
+        self.payload_map = [payload_map] if isinstance(payload_map, dict) else payload_map
+        self.fullmatch = fullmatch or False
+        self.list_strict_mode = list_strict_mode or False
 
-    async def check(self, message: Message) -> bool:
-        return message.get_payload_json() in self.payload
+    def check_field(self, field: typing.Any, value: typing.Any) -> bool:
+        if type(field) is type(value):
+            if isinstance(value, dict):
+                if not self.check_dict(value, field):
+                    return False
+            elif isinstance(value, list):
+                if not self.check_list(value, field):
+                    return False
+            elif field != value:
+                return False
+        elif isinstance(value, type):
+            if not isinstance(field, value):
+                return False
+        else:
+            return False
+        return True
 
-
-class PayloadContainsRule(ABCMessageRule):
-    def __init__(self, payload_particular_part: dict):
-        self.payload_particular_part = payload_particular_part
-
-    async def check(self, message: Message) -> bool:
-        payload = message.get_payload_json(unpack_failure=lambda p: {})
-        for k, v in self.payload_particular_part.items():
-            if payload.get(k) != v:
+    def check_dict(self, dict_map: dict, dict_: dict) -> bool:
+        if self.fullmatch and len(dict_map) != len(dict_):
+            return False
+        for key in dict_map:
+            if key not in dict_:
+                return False
+            if not self.check_field(dict_[key], dict_map[key]):
                 return False
         return True
 
-
-class PayloadMapRule(ABCMessageRule):
-    def __init__(self, payload_map: List[Tuple[str, type]]):
-        self.payload_map = payload_map
+    def check_list(self, list_map: list, list_: list) -> bool:
+        if not self.list_strict_mode and len(list_map) == 1:
+            for field in list_:
+                if not self.check_field(field, list_map[0]):
+                    return False
+        else:
+            if len(list_map) != len(list_):
+                return False
+            for field, value in zip(list_, list_map):
+                if not self.check_field(field, value):
+                    return False
+        return True
 
     async def check(self, message: Message) -> bool:
-        payload = message.get_payload_json(unpack_failure=lambda p: {})
-        for (k, v_type) in self.payload_map:
-            if k not in payload:
-                return False
-            elif not isinstance(payload[k], v_type):
+        payload = message.get_payload_json()
+        for payload_map in self.payload_map:
+            if not self.check_dict(payload_map, payload):
                 return False
         return True
 
@@ -315,8 +338,6 @@ __all__ = (
     "MessageLengthRule",
     "ChatActionRule",
     "PayloadRule",
-    "PayloadContainsRule",
-    "PayloadMapRule",
     "FromUserRule",
     "FuncRule",
     "CoroutineRule",

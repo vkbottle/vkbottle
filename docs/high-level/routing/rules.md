@@ -11,9 +11,7 @@
 `levenstein` и `lev` - от `LevensteinRule`  
 `length` - от `MessageLengthRule`  
 `action` - от `ChatActionRule`  
-`payload` - от `PayloadRule`  
-`payload_contains` - от `PayloadContainsRule`  
-`payload_map` - от `PayloadMapRule`  
+`payload` - от `PayloadRule`   
 `func` - от `FuncRule`  
 
 Посмотреть логику рулзов можно здесь: [тык](https://github.com/timoniq/vkbottle/blob/master/vkbottle/dispatch/rules/bot.py)
