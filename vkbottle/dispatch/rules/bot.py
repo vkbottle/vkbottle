@@ -228,52 +228,37 @@ class PayloadRule(ABCMessageRule):
         self.fullmatch = fullmatch or False
         self.list_strict_mode = list_strict_mode or False
 
-    def check_field(self, field: typing.Any, value: typing.Any) -> bool:
-        if type(field) is type(value):
-            if isinstance(value, dict):
-                if not self.check_dict(value, field):
-                    return False
-            elif isinstance(value, list):
-                if not self.check_list(value, field):
-                    return False
-            elif field != value:
-                return False
-        elif isinstance(value, type):
-            if not isinstance(field, value):
-                return False
-        else:
-            return False
-        return True
+    def parse_field(self, value: typing.Any, field: typing.Any) -> bool:
+        return (
+            type(field) is type(value)
+            and (
+                isinstance(value, dict)
+                and self.check_dict(value, field)
+                or isinstance(value, list)
+                and self.check_list(value, field)
+                or field == value
+            )
+            or isinstance(value, type)
+            and isinstance(field, value)
+        )
 
     def check_dict(self, dict_map: dict, dict_: dict) -> bool:
-        if self.fullmatch and len(dict_map) != len(dict_):
-            return False
-        for key in dict_map:
-            if key not in dict_:
-                return False
-            if not self.check_field(dict_[key], dict_map[key]):
-                return False
-        return True
+        return not (self.fullmatch and len(dict_map) != len(dict_)) and all(
+            key in dict_ and self.parse_field(dict_map[key], dict_[key]) for key in dict_map
+        )
 
     def check_list(self, list_map: list, list_: list) -> bool:
-        if not self.list_strict_mode and len(list_map) == 1:
-            for field in list_:
-                if not self.check_field(field, list_map[0]):
-                    return False
-        else:
-            if len(list_map) != len(list_):
-                return False
-            for field, value in zip(list_, list_map):
-                if not self.check_field(field, value):
-                    return False
-        return True
+        return (
+            not self.list_strict_mode
+            and len(list_map) == 1
+            and all(self.parse_field(list_map[0], field) for field in list_)
+            or len(list_map) == len(list_)
+            and all(self.parse_field(value, field) for field, value in zip(list_, list_map))
+        )
 
     async def check(self, message: Message) -> bool:
         payload = message.get_payload_json()
-        for payload_map in self.payload_map:
-            if self.check_dict(payload_map, payload):
-                return True
-        return False
+        return any(self.check_dict(payload_map, payload) for payload_map in self.payload_map)
 
 
 class FromUserRule(ABCMessageRule):

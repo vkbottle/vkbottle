@@ -45,7 +45,10 @@ EXAMPLE_EVENT = {
                     "carousel": False,
                     "lang_id": 0,
                 },
-                "message": {"id": 100, "from_id": 1,},
+                "message": {
+                    "id": 100,
+                    "from_id": 1,
+                },
             },
         },
     ],
@@ -85,9 +88,11 @@ async def test_bot_polling():
         assert message.id == 100
         assert message.from_id == 1
         assert await message.answer() == {"peer_id": message.peer_id, "r": 1}
-        assert await message.answer(some_unsigned_param="test") == {"peer_id": message.peer_id,
-                                                                    "some_unsigned_param": "test",
-                                                                    "r": 1}
+        assert await message.answer(some_unsigned_param="test") == {
+            "peer_id": message.peer_id,
+            "some_unsigned_param": "test",
+            "r": 1,
+        }
 
     async for event in bot.polling.listen():
         assert event.get("updates")
@@ -169,11 +174,14 @@ async def test_rules(api: API):
     assert not await labeler.get_custom_rules({"text": "privet"})[0].check(
         fake_message(api, text="Private")
     )
-    assert await rules.PayloadRule([{"cmd": "text"}, {"cmd": "ne text"}]).check(
-        fake_message(api, payload='{"cmd":"text"}')
+    assert not await rules.PayloadRule([{"a": {"b": 1}}, {"a": [int]}]).check(
+        fake_message(api, payload='{"a": [1, "2", 3]}')
     )
-    assert await rules.PayloadRule({"a": {"b": [int], "c": {"d": "test"}}}).check(
-        fake_message(api, payload='{"a": {"b": [1, 2, 3]}, "c": {"d": "test"}}')
+    assert await rules.PayloadRule({"a": 4, "b": dict}).check(
+        fake_message(api, payload='{"a": 4, "b": {"c": "tst"}}')
+    )
+    assert await rules.PayloadRule({"a": {"b": [str], "c": [bool, float]}}).check(
+        fake_message(api, payload='{"a": {"b": ["ts1", "tst2", "tst3"], "c": [true, 3.14]}}')
     )
     assert await rules.StateRule(state=None).check(fake_message(api))
     assert not await rules.StateRule(state=MockIntEnum.MOCK).check(fake_message(api))
