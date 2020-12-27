@@ -17,9 +17,12 @@ class DocUploader(BaseUploader, ABC):
 
         uploader = await self.upload_files(server["upload_url"], {"file": file}, params)
 
-        doc = (await self.api.request("docs.save", {"title": title, **uploader, **params},))[
-            "response"
-        ]
+        doc = (
+            await self.api.request(
+                "docs.save",
+                {"title": title, **uploader, **params},
+            )
+        )["response"]
 
         if self.generate_attachment_strings:
             return self.generate_attachment_string(
@@ -42,8 +45,26 @@ class DocMessagesUploader(DocUploader):
         return (await self.api.request("docs.getMessagesUploadServer", kwargs))["response"]
 
 
+class VoiceMessageUploader(DocUploader):
+    async def get_server(self, **kwargs) -> dict:
+        return (
+            await self.api.request(
+                "docs.getMessagesUploadServer", {"type": "audio_message", **kwargs}
+            )
+        )["response"]
+
+
+class GraffitiUploader(DocUploader):
+    async def get_server(self, **kwargs) -> dict:
+        return (
+            await self.api.request("docs.getMessagesUploadServer", {"type": "graffiti", **kwargs})
+        )["response"]
+
+
 __all__ = (
     "DocUploader",
     "DocWallUploader",
     "DocMessagesUploader",
+    "VoiceMessageUploader",
+    "GraffitiUploader",
 )
