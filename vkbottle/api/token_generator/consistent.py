@@ -9,5 +9,5 @@ class ConsistentTokenGenerator(ABCTokenGenerator):
 
     async def get_token(self) -> str:
         i = self.index
-        self.index = i + 1 if i < len(self.tokens) + 1 else 0
+        self.index = i + 1 if i + 1 < len(self.tokens) else 0
         return self.tokens[i]
