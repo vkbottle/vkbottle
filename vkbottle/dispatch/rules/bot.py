@@ -1,17 +1,27 @@
-import inspect
 from abc import abstractmethod
-from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine, Type
+from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine, Type, Dict
 import typing
+import types
+import inspect
 
 import vbml
 import re
 from vkbottle_types import BaseStateGroup
 
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
+from vkbottle.tools.validator import (
+    ABCValidator,
+    IsInstanceValidator,
+    EqualsValidator,
+    CallableValidator,
+)
 from .abc import ABCRule
 
 DEFAULT_PREFIXES = ["!", "/"]
 Message = MessageMin
+PayloadMap = List[Tuple[str, Union[type, Callable[[typing.Any], bool], ABCValidator, typing.Any]]]
+PayloadMapStrict = List[Tuple[str, ABCValidator]]
+PayloadMapDict = Dict[str, Union[dict, type]]
 
 
 class ABCMessageRule(ABCRule):
@@ -240,17 +250,54 @@ class PayloadContainsRule(ABCMessageRule):
 
 
 class PayloadMapRule(ABCMessageRule):
-    def __init__(self, payload_map: List[Tuple[str, type]]):
-        self.payload_map = payload_map
+    def __init__(self, payload_map: Union[PayloadMap, PayloadMapDict]):
+        if isinstance(payload_map, dict):
+            payload_map = self.transform_to_map(payload_map)
+        self.payload_map = self.transform_to_callbacks(payload_map)
+
+    @classmethod
+    def transform_to_map(cls, payload_map_dict: PayloadMapDict) -> PayloadMap:
+        """ Transforms PayloadMapDict to PayloadMap """
+        payload_map = []
+        for (k, v) in payload_map_dict.items():
+            if isinstance(v, dict):
+                v = cls.transform_to_map(v)  # type: ignore
+            payload_map.append((k, v))
+        return payload_map  # type: ignore
+
+    @classmethod
+    def transform_to_callbacks(cls, payload_map: PayloadMap) -> PayloadMapStrict:
+        """ Transforms PayloadMap to PayloadMapStrict """
+        for i, (key, value) in enumerate(payload_map):
+            if isinstance(value, type):
+                value = IsInstanceValidator(value)
+            elif isinstance(value, list):
+                value = cls.transform_to_callbacks(value)
+            elif isinstance(value, types.FunctionType):
+                value = CallableValidator(value)
+            elif not isinstance(value, ABCValidator):
+                value = EqualsValidator(value)
+            payload_map[i] = (key, value)
+        return payload_map  # type: ignore
+
+    @classmethod
+    async def match(cls, payload: dict, payload_map: PayloadMapStrict):
+        """ Matches payload with payload_map recursively """
+        for (k, validator) in payload_map:
+            if k not in payload:
+                return False
+            elif isinstance(validator, list):
+                if not isinstance(payload[k], dict):
+                    return False
+                elif not await cls.match(payload[k], validator):
+                    return False
+            elif not await validator.check(payload[k]):
+                return False
+        return True
 
     async def check(self, message: Message) -> bool:
         payload = message.get_payload_json(unpack_failure=lambda p: {})
-        for (k, v_type) in self.payload_map:
-            if k not in payload:
-                return False
-            elif not isinstance(payload[k], v_type):
-                return False
-        return True
+        return await self.match(payload, self.payload_map)
 
 
 class FromUserRule(ABCMessageRule):

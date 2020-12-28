@@ -45,7 +45,7 @@ EXAMPLE_EVENT = {
                     "carousel": False,
                     "lang_id": 0,
                 },
-                "message": {"id": 100, "from_id": 1,},
+                "message": {"id": 100, "from_id": 1},
             },
         },
     ],
@@ -134,6 +134,12 @@ async def test_rules(api: API):
     assert await rules.PayloadMapRule([("a", int), ("b", str)]).check(
         fake_message(api, payload=json.dumps({"a": 1, "b": ""}))
     )
+    assert await rules.PayloadMapRule([("a", int), ("b", [("c", str), ("d", dict)])]).check(
+        fake_message(api, payload=json.dumps({"a": 1, "b": {"c": "", "d": {}}}))
+    )
+    assert await rules.PayloadMapRule({"a": int, "b": {"c": str, "d": dict}}).check(
+        fake_message(api, payload=json.dumps({"a": 1, "b": {"c": "", "d": {}}}))
+    )
     assert await rules.StickerRule(sticker_ids=[1, 2]).check(
         fake_message(api, attachments=[{"type": "sticker", "sticker": {"sticker_id": 2}}])
     )
@@ -159,6 +165,9 @@ async def test_rules(api: API):
     assert not await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) == {
         "match": ()
     }
+    assert rules.PayloadMapRule.transform_to_map({"a": int, "b": {"c": str, "d": dict}}) == [
+        ("a", int), ("b", [("c", str), ("d", dict)])
+    ]
 
     labeler = BotLabeler()
     labeler.vbml_ignore_case = True
