@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import Optional, Callable, Union, Any
+from typing import Callable, Optional, Union
 
 from vkbottle.api import ABCAPI
 from vkbottle.modules import json
@@ -43,8 +43,8 @@ class BaseUploader(ABC):
             response = json.loads(raw_response)
         return response
 
-    def get_bytes_io(self, data: bytes) -> BytesIO:
-        bytes_io = BytesIO(data)
+    def get_bytes_io(self, data: Union[BytesIO, bytes]) -> BytesIO:
+        bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)
         bytes_io.seek(0)  # To avoid errors with image generators (such as pillow)
         bytes_io.name = self.attachment_name  # To guarantee VK API file extension recognition
         return bytes_io
