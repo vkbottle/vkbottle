@@ -19,4 +19,5 @@ class BotMessageReturnHandler(BaseReturnManager):
 
     @BaseReturnManager.instance_of(object)
     async def any_handler(self, value: object, message: MessageMin, _: dict):
-        await message.answer(str(value))
+        if value is not None:
+            await message.answer(str(value))
