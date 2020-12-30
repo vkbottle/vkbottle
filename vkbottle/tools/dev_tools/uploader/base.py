@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import Optional, Callable, Union, Any
+from typing import Callable, Optional, Union
 
 from vkbottle.api import ABCAPI
 from vkbottle.modules import json
@@ -9,6 +9,9 @@ try:
     import aiofiles
 except ImportError:
     aiofiles = None
+
+
+Bytes = Union[bytes, BytesIO]
 
 
 class BaseUploader(ABC):
@@ -43,8 +46,8 @@ class BaseUploader(ABC):
             response = json.loads(raw_response)
         return response
 
-    def get_bytes_io(self, data: bytes) -> BytesIO:
-        bytes_io = BytesIO(data)
+    def get_bytes_io(self, data: Bytes) -> BytesIO:
+        bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)
         bytes_io.seek(0)  # To avoid errors with image generators (such as pillow)
         bytes_io.name = self.attachment_name  # To guarantee VK API file extension recognition
         return bytes_io
@@ -59,7 +62,7 @@ class BaseUploader(ABC):
         return f"{attachment_type}{owner_id}_{item_id}"
 
     @staticmethod
-    async def read(path_like: Union[str, bytes]) -> bytes:
+    async def read(path_like: Union[str, Bytes]) -> Bytes:
         if isinstance(path_like, str):
             assert aiofiles is not None, "to use default files opener aiofiles should be installed"
             async with aiofiles.open(path_like, "rb") as file:
