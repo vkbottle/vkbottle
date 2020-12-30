@@ -1,6 +1,7 @@
-from vkbottle.bot import Bot, Message
-from vkbottle import template_gen, TemplateElement, Keyboard, Text
 import os
+
+from vkbottle import Keyboard, TemplateElement, Text, template_gen
+from vkbottle.bot import Bot, Message
 
 bot = Bot(os.environ["TOKEN"])
 

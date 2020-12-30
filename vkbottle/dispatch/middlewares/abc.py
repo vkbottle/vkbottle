@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import NewType, List, Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, List, NewType
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.views.abc import ABCView

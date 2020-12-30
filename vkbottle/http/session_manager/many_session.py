@@ -1,6 +1,7 @@
 import typing
 
 from vkbottle.http.client import ABCHTTPClient, AiohttpClient
+
 from .abc import ABCSessionManager
 
 

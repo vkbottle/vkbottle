@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import AsyncIterator, Any, Optional
-from vkbottle.exception_factory import ABCErrorHandler
+from typing import Any, AsyncIterator, Optional
 
 from vkbottle.api import ABCAPI
+from vkbottle.exception_factory import ABCErrorHandler
 
 
 class ABCPolling(ABC):

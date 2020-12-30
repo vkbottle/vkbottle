@@ -1,8 +1,8 @@
-from typing import Optional, Any, List, Union
+from typing import Any, List, Optional, Union
 
 from vkbottle_types import StatePeer
 from vkbottle_types.events.bot_events import MessageNew
-from vkbottle_types.objects import MessagesMessage, MessagesClientInfo, UsersUser
+from vkbottle_types.objects import MessagesClientInfo, MessagesMessage, UsersUser
 
 from vkbottle.api import ABCAPI, API
 

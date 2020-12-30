@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Callable, Type, NoReturn
+from typing import Callable, Dict, NoReturn, Type
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.exception_factory.error_handler import ABCErrorHandler
+
 from .dispenser.abc import ABCStateDispenser
 from .views import ABCView
 

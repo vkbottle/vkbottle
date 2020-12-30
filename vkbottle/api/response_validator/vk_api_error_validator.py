@@ -1,7 +1,8 @@
 import typing
 
-from .abc import ABCResponseValidator
 from vkbottle.exception_factory import VKAPIError
+
+from .abc import ABCResponseValidator
 
 if typing.TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API

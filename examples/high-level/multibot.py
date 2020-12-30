@@ -1,6 +1,7 @@
-from vkbottle.bot import Bot, Message, run_multibot
-from vkbottle.api import API
 import logging
+
+from vkbottle.api import API
+from vkbottle.bot import Bot, Message, run_multibot
 
 # API for bot used in multibot is not required and may be
 # forbidden later to avoid user-side mistakes with it's usage

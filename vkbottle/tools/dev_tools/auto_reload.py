@@ -2,6 +2,7 @@ import os
 import sys
 
 from watchgod import awatch
+
 from vkbottle.modules import logger
 
 _startup_cwd = os.getcwd()

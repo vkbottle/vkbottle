@@ -1,33 +1,34 @@
 import re
-from typing import Dict, Union, List, Callable, Tuple, Set, Any, Type
+from typing import Any, Callable, Dict, List, Set, Tuple, Type, Union
 
 import vbml
 
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule
 from vkbottle.dispatch.rules.bot import (
-    PeerRule,
-    VBMLRule,
-    CommandRule,
-    FromUserRule,
-    FromPeerRule,
-    StickerRule,
     AttachmentTypeRule,
+    ChatActionRule,
+    CommandRule,
+    CoroutineRule,
+    FromPeerRule,
+    FromUserRule,
+    FuncRule,
     LevensteinRule,
     MessageLengthRule,
-    ChatActionRule,
-    PayloadRule,
     PayloadContainsRule,
     PayloadMapRule,
-    FuncRule,
-    CoroutineRule,
-    StateRule,
-    StateGroupRule,
+    PayloadRule,
+    PeerRule,
     RegexRule,
+    StateGroupRule,
+    StateRule,
+    StickerRule,
+    VBMLRule,
 )
-from vkbottle.dispatch.views import MessageView, ABCView, RawEventView, HandlerBasement
+from vkbottle.dispatch.views import ABCView, HandlerBasement, MessageView, RawEventView
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
-from .abc import ABCBotLabeler, LabeledMessageHandler, LabeledHandler
+
+from .abc import ABCBotLabeler, LabeledHandler, LabeledMessageHandler
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {

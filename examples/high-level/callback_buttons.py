@@ -1,10 +1,10 @@
 # Example of sending and receiving an event after pressing the Callback button
 # Documentation: https://vk.cc/aC9JG2
 
-import os
 import logging
+import os
 
-from vkbottle import Keyboard, Callback, GroupTypes, GroupEventType
+from vkbottle import Callback, GroupEventType, GroupTypes, Keyboard
 from vkbottle.bot import Bot, Message
 
 bot = Bot(os.environ["TOKEN"])

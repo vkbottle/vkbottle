@@ -1,6 +1,7 @@
-from vkbottle.bot import Bot, Message
-from vkbottle import BaseStateGroup, Keyboard, Text
 import os
+
+from vkbottle import BaseStateGroup, Keyboard, Text
+from vkbottle.bot import Bot, Message
 
 # Create a simple bot
 bot = Bot(os.environ["token"])

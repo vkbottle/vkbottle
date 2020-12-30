@@ -1,12 +1,12 @@
 import asyncio
 from abc import abstractmethod
-from typing import Optional, NoReturn, Any, Union
+from typing import Any, NoReturn, Optional, Union
 
 from vkbottle.api import ABCAPI, API
 from vkbottle.dispatch import ABCRouter, ABCStateDispenser
 from vkbottle.polling import ABCPolling
-from .abc import ABCFramework
 
+from .abc import ABCFramework
 
 CONSTRUCT_BLUEPRINT = "You need to construct blueprint firstly"
 

@@ -1,4 +1,4 @@
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from vkbottle.dispatch.return_manager.abc import BaseReturnManager
 

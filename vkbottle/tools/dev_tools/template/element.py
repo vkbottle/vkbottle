@@ -1,5 +1,6 @@
+from typing import List, Optional
+
 from vkbottle.modules import json
-from typing import Optional, List
 
 
 class TemplateElement:

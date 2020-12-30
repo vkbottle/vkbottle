@@ -1,6 +1,7 @@
-from vkbottle.api import API
 import asyncio
 import os
+
+from vkbottle.api import API
 
 api = API(os.environ["token"])
 

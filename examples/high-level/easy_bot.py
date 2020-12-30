@@ -3,7 +3,7 @@ import os
 import random
 from typing import Optional
 
-from vkbottle import Keyboard, Text, GroupTypes, GroupEventType, VKAPIError
+from vkbottle import GroupEventType, GroupTypes, Keyboard, Text, VKAPIError
 from vkbottle.bot import Bot, Message
 
 bot = Bot(os.environ["token"])

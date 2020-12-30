@@ -1,13 +1,13 @@
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from functools import reduce
-from typing import Union, List, Optional
+from typing import List, Optional, Union
 
 from pydantic.error_wrappers import ValidationError
 
 from vkbottle.exception_factory import VKAPIError
 from vkbottle.http import AiohttpClient
-from ..models import UserCodeFlowResponse, RequestTokenError
+
+from ..models import RequestTokenError, UserCodeFlowResponse
 
 
 class ABCAuthFlow(ABC):

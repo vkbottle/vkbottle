@@ -1,7 +1,9 @@
-from vkbottle import Bot
-from .blueprints import bps
 import logging
 import os
+
+from vkbottle import Bot
+
+from .blueprints import bps
 
 # You should provide API to bot before
 # constructing blueprints otherwise they won't

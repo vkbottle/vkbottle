@@ -1,7 +1,8 @@
-import typing
 import traceback
+import typing
 
 from vkbottle.modules import logger
+
 from .abc import ABCErrorHandler, ExceptionHandler
 
 

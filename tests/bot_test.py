@@ -1,12 +1,14 @@
-from vkbottle import Bot, API, GroupTypes, GroupEventType, AndFilter, OrFilter, StatePeer
-from vkbottle.bot import Message, rules, BotLabeler
-from vkbottle.tools.test_utils import with_mocked_api, MockedClient
-from vkbottle.tools.dev_tools import message_min
+import enum
+import json
+import typing
+
 import pytest
 import vbml
-import typing
-import json
-import enum
+
+from vkbottle import API, AndFilter, Bot, GroupEventType, GroupTypes, OrFilter, StatePeer
+from vkbottle.bot import BotLabeler, Message, rules
+from vkbottle.tools.dev_tools import message_min
+from vkbottle.tools.test_utils import MockedClient, with_mocked_api
 
 EXAMPLE_EVENT = {
     "ts": 1,

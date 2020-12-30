@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Union, Tuple, Callable
+from typing import Any, Callable, Tuple, Union
 
 
 class ABCValidator(ABC):

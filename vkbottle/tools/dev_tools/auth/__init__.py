@@ -1,8 +1,8 @@
 from ._flows import (
-    UserImplicitFlow,
-    UserAuthorizationCodeFlow,
-    GroupImplicitFlow,
-    GroupAuthorizationCodeFlow,
     ClientCredentialsFlow,
+    GroupAuthorizationCodeFlow,
+    GroupImplicitFlow,
+    UserAuthorizationCodeFlow,
+    UserImplicitFlow,
 )
 from .scopes import UserScope

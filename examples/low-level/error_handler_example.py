@@ -1,5 +1,6 @@
-from vkbottle import ErrorHandler
 import asyncio
+
+from vkbottle import ErrorHandler
 
 error_handler = ErrorHandler()
 

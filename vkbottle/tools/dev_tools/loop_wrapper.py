@@ -1,10 +1,11 @@
 import asyncio
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import Optional, List, Coroutine, Any, Union, Callable
+from typing import Any, Callable, Coroutine, List, Optional, Union
 
 from vkbottle.modules import logger
-from .delayed_task import DelayedTask
+
 from .auto_reload import watch_to_reload
+from .delayed_task import DelayedTask
 
 Task = Coroutine[Any, Any, Any]
 

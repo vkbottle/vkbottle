@@ -1,6 +1,7 @@
+import pytest
+
 from vkbottle import ManySessionManager
 from vkbottle.tools.test_utils import MockedClient
-import pytest
 
 
 @pytest.mark.asyncio

@@ -1,4 +1,4 @@
-from vkbottle import Keyboard, Text, KeyboardButtonColor
+from vkbottle import Keyboard, KeyboardButtonColor, Text
 
 # Simplest way of generating keyboard is non-builder interface
 # Use <.raw()> to add raw

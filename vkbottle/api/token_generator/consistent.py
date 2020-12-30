@@ -1,5 +1,6 @@
-from .abc import ABCTokenGenerator
 from typing import List
+
+from .abc import ABCTokenGenerator
 
 
 class ConsistentTokenGenerator(ABCTokenGenerator):

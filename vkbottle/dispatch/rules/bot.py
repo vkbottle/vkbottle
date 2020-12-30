@@ -1,20 +1,21 @@
-from abc import abstractmethod
-from typing import List, Optional, Union, Tuple, Callable, Awaitable, Coroutine, Type, Dict
-import typing
-import types
 import inspect
+import re
+import types
+import typing
+from abc import abstractmethod
+from typing import Awaitable, Callable, Coroutine, Dict, List, Optional, Tuple, Type, Union
 
 import vbml
-import re
 from vkbottle_types import BaseStateGroup
 
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
 from vkbottle.tools.validator import (
     ABCValidator,
-    IsInstanceValidator,
-    EqualsValidator,
     CallableValidator,
+    EqualsValidator,
+    IsInstanceValidator,
 )
+
 from .abc import ABCRule
 
 DEFAULT_PREFIXES = ["!", "/"]

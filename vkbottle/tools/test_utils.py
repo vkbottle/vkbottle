@@ -1,6 +1,6 @@
-from typing import Any, Optional, NoReturn, Callable
+from typing import Any, Callable, NoReturn, Optional
 
-from vkbottle import ABCHTTPClient, API
+from vkbottle import API, ABCHTTPClient
 
 
 class MockedClient(ABCHTTPClient):

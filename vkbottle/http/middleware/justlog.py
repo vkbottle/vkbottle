@@ -1,6 +1,7 @@
 import typing
 
 from vkbottle.modules import logger
+
 from .abc import ABCHTTPMiddleware
 
 

@@ -1,6 +1,5 @@
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import Optional, NoReturn
-from typing import Union
+from typing import NoReturn, Optional, Union
 
 from vkbottle.api import ABCAPI, API, Token
 from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
@@ -9,6 +8,7 @@ from vkbottle.framework.abc import ABCFramework
 from vkbottle.modules import logger
 from vkbottle.polling import ABCPolling, BotPolling
 from vkbottle.tools import LoopWrapper
+
 from .labeler import ABCBotLabeler, BotLabeler
 
 

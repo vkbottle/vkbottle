@@ -2,6 +2,7 @@ import typing
 from time import sleep as blocking_sleep
 
 from vkbottle.modules import logger
+
 from .abc import ABCRequestRescheduler
 
 if typing.TYPE_CHECKING:

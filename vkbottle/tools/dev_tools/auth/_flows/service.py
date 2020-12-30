@@ -2,6 +2,7 @@ from pydantic.error_wrappers import ValidationError
 
 from vkbottle.exception_factory import VKAPIError
 from vkbottle.http import AiohttpClient
+
 from ..models import CredentialsFlowResponse, RequestTokenError
 
 
