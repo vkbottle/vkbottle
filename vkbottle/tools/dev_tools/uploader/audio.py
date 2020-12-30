@@ -1,6 +1,6 @@
 from typing import Union
 
-from .base import BaseUploader
+from .base import BaseUploader, Bytes
 
 
 class AudioUploader(BaseUploader):
@@ -10,7 +10,7 @@ class AudioUploader(BaseUploader):
         return (await self.api.request("audio.getUploadServer", {}))["response"]
 
     async def upload(
-        self, artist: str, title: str, path_like: Union[str, bytes], **params
+        self, artist: str, title: str, path_like: Union[str, Bytes], **params
     ) -> Union[str, dict]:
         server = await self.get_server()
         data = await self.read(path_like)

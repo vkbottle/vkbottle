@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Union
 
-from .base import BaseUploader
+from .base import BaseUploader, Bytes
 
 
 class DocUploader(BaseUploader, ABC):
@@ -10,7 +10,7 @@ class DocUploader(BaseUploader, ABC):
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("docs.getUploadServer", kwargs))["response"]
 
-    async def upload(self, title: str, path_like: Union[str, bytes], **params) -> Union[str, dict]:
+    async def upload(self, title: str, path_like: Union[str, Bytes], **params) -> Union[str, dict]:
         server = await self.get_server()
         data = await self.read(path_like)
         file = self.get_bytes_io(data)
