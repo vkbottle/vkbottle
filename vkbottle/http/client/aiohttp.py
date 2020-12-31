@@ -57,9 +57,3 @@ class AiohttpClient(ABCHTTPClient):
 
     async def close(self) -> typing.NoReturn:
         await self.session.close()
-
-    async def __aenter__(self) -> "AiohttpClient":
-        return self
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> typing.NoReturn:
-        await self.close()

@@ -39,7 +39,7 @@ class ABCHTTPClient(ABC):
         pass
 
     async def __aenter__(self) -> "ABCHTTPClient":
-        pass
+        return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> typing.NoReturn:
-        pass
+        await self.close()
