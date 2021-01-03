@@ -34,7 +34,7 @@ watchgod = "^0.6"
 # Lint
 lxml = "^4.5.0"
 mypy = "^0.770"
-isort = "^4.3"
+isort = "^5.7"
 flake8 = "^3.7.9"
 mypy_extensions = "^0.4.3"
 black = {version = "^19.0", allow-prereleases = true}
