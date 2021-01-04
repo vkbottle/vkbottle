@@ -1,4 +1,4 @@
-from typing import Any, List, Callable
+from typing import Any, Callable, List
 
 from vkbottle_types.events import GroupEventType
 
@@ -10,6 +10,7 @@ from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.modules import logger
 from vkbottle.tools.dev_tools import message_min
 from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
+
 from ..abc import ABCView
 
 

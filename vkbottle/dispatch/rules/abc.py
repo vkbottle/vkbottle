@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Union, Type
+from typing import Type, Union
 
-from vkbottle_types.events import BaseUserEvent, BaseGroupEvent
+from vkbottle_types.events import BaseGroupEvent, BaseUserEvent
 
 
 class ABCRule(ABC):

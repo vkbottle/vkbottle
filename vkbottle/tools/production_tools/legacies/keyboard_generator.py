@@ -3,8 +3,9 @@
 # copied from vkbottle 2.x without quality insurance
 
 from typing import List
-from vkbottle.modules import json
 from warnings import warn
+
+from vkbottle.modules import json
 
 
 def keyboard_gen(pattern: List[List[dict]], one_time: bool = False, inline: bool = False):

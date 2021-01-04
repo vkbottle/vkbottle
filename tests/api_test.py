@@ -1,8 +1,9 @@
-from vkbottle import API, VKAPIError, ABCRequestRescheduler, CtxStorage
-from vkbottle.tools.test_utils import with_mocked_api
-import pytest
 import typing
 
+import pytest
+
+from vkbottle import API, ABCRequestRescheduler, CtxStorage, VKAPIError
+from vkbottle.tools.test_utils import with_mocked_api
 
 USERS_GET_RESPONSE = (
     '{"response":[{"first_name":"Павел","id":1,"last_name":"Дуров",'

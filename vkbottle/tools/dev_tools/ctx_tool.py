@@ -1,4 +1,4 @@
-from typing import TypeVar, Any, NoReturn
+from typing import Any, NoReturn, TypeVar
 
 try:
     import contextvars

@@ -1,6 +1,6 @@
 import traceback
 from inspect import iscoroutinefunction
-from typing import Union, Tuple, Callable, Optional, Any, Type
+from typing import Any, Callable, Optional, Tuple, Type, Union
 
 from vkbottle.modules import logger
 

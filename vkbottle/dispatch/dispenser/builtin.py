@@ -1,6 +1,6 @@
-from typing import Optional, Dict
+from typing import Dict, Optional
 
-from vkbottle_types import StatePeer, BaseStateGroup
+from vkbottle_types import BaseStateGroup, StatePeer
 
 from .abc import ABCStateDispenser
 

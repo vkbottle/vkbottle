@@ -1,6 +1,7 @@
 import typing
 
 from vkbottle.modules import json, logger
+
 from .abc import ABCResponseValidator
 
 if typing.TYPE_CHECKING:

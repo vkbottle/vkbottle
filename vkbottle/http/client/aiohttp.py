@@ -4,6 +4,7 @@ import typing
 from aiohttp import ClientSession, TCPConnector
 
 from vkbottle.modules import json as json_module
+
 from .abc import ABCHTTPClient
 
 if typing.TYPE_CHECKING:

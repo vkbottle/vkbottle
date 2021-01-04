@@ -1,7 +1,8 @@
-from vkbottle.bot import Bot, Message, BotLabeler
-from vkbottle import ABCRule, BaseStateGroup, VKAPIError
-from typing import List
 import os
+from typing import List
+
+from vkbottle import ABCRule, BaseStateGroup, VKAPIError
+from vkbottle.bot import Bot, BotLabeler, Message
 
 
 # A simple rule to demonstrate labeler

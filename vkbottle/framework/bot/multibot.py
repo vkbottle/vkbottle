@@ -1,9 +1,10 @@
 from typing import Iterable, Type
 
 from vkbottle.api import ABCAPI
-from vkbottle.http import SingleSessionManager, AiohttpClient
+from vkbottle.http import AiohttpClient, SingleSessionManager
 from vkbottle.modules import logger
 from vkbottle.polling import ABCPolling, BotPolling
+
 from .bot import Bot
 
 

@@ -1,7 +1,7 @@
 from typing import Optional, Union
 
 from vkbottle.api import ABCAPI, API
-from vkbottle.dispatch import BotRouter, ABCStateDispenser
+from vkbottle.dispatch import ABCStateDispenser, BotRouter
 from vkbottle.framework.abc_blueprint import ABCBlueprint
 from vkbottle.framework.bot.bot import Bot
 from vkbottle.framework.bot.labeler import BotLabeler

@@ -3,8 +3,9 @@
 # converted to the OrFilter and set is converted to
 # the AndFilter.
 
-from vkbottle.bot import Bot, Message, rules
 import os
+
+from vkbottle.bot import Bot, Message, rules
 
 bot = Bot(os.environ["token"])
 

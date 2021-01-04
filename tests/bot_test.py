@@ -1,12 +1,14 @@
-from vkbottle import Bot, API, GroupTypes, GroupEventType, AndFilter, OrFilter, StatePeer
-from vkbottle.bot import Message, rules, BotLabeler
-from vkbottle.tools.test_utils import with_mocked_api, MockedClient
-from vkbottle.tools.dev_tools import message_min
+import enum
+import json
+import typing
+
 import pytest
 import vbml
-import typing
-import json
-import enum
+
+from vkbottle import API, AndFilter, Bot, GroupEventType, GroupTypes, OrFilter, StatePeer
+from vkbottle.bot import BotLabeler, Message, rules
+from vkbottle.tools.dev_tools import message_min
+from vkbottle.tools.test_utils import MockedClient, with_mocked_api
 
 EXAMPLE_EVENT = {
     "ts": 1,
@@ -45,7 +47,7 @@ EXAMPLE_EVENT = {
                     "carousel": False,
                     "lang_id": 0,
                 },
-                "message": {"id": 100, "from_id": 1,},
+                "message": {"id": 100, "from_id": 1},
             },
         },
     ],
@@ -70,7 +72,7 @@ async def test_bot_polling():
         elif "!SERVER!" in data["url"]:
             return EXAMPLE_EVENT
         elif "messages.send" in data["url"]:
-            return json.dumps({"response": 100})
+            return json.dumps({"response": {**data, **{"r": 1}}})
 
     bot = Bot("token")
     set_http_callback(bot.api, callback)
@@ -84,7 +86,10 @@ async def test_bot_polling():
     async def message_handler(message: Message):
         assert message.id == 100
         assert message.from_id == 1
-        assert await message.answer() == 100
+        assert await message.answer() == {"peer_id": message.peer_id, "r": 1}
+        assert await message.answer(some_unsigned_param="test") == {"peer_id": message.peer_id,
+                                                                    "some_unsigned_param": "test",
+                                                                    "r": 1}
 
     async for event in bot.polling.listen():
         assert event.get("updates")
@@ -96,7 +101,7 @@ async def test_bot_polling():
 @pytest.mark.asyncio
 async def test_bot_scopes():
     bot = Bot(token="some token")
-    assert bot.api.token == "some token"
+    assert await bot.api.token_generator.get_token() == "some token"
     assert bot.api == bot.polling.api
     assert bot.labeler.message_view is bot.router.views["message"]
     assert bot.labeler.raw_event_view is bot.router.views["raw"]
@@ -131,6 +136,12 @@ async def test_rules(api: API):
     assert await rules.PayloadMapRule([("a", int), ("b", str)]).check(
         fake_message(api, payload=json.dumps({"a": 1, "b": ""}))
     )
+    assert await rules.PayloadMapRule([("a", int), ("b", [("c", str), ("d", dict)])]).check(
+        fake_message(api, payload=json.dumps({"a": 1, "b": {"c": "", "d": {}}}))
+    )
+    assert await rules.PayloadMapRule({"a": int, "b": {"c": str, "d": dict}}).check(
+        fake_message(api, payload=json.dumps({"a": 1, "b": {"c": "", "d": {}}}))
+    )
     assert await rules.StickerRule(sticker_ids=[1, 2]).check(
         fake_message(api, attachments=[{"type": "sticker", "sticker": {"sticker_id": 2}}])
     )
@@ -156,6 +167,9 @@ async def test_rules(api: API):
     assert not await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) == {
         "match": ()
     }
+    assert rules.PayloadMapRule.transform_to_map({"a": int, "b": {"c": str, "d": dict}}) == [
+        ("a", int), ("b", [("c", str), ("d", dict)])
+    ]
 
     labeler = BotLabeler()
     labeler.vbml_ignore_case = True

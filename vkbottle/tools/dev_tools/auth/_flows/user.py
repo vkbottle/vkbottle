@@ -1,7 +1,7 @@
-from typing import Union, List, Optional
+from typing import List, Optional, Union
 
-from .abc import ABCImplicitFlow, ABCAuthorizationCodeFlow
 from ..models import UserCodeFlowResponse
+from .abc import ABCAuthorizationCodeFlow, ABCImplicitFlow
 
 
 class UserImplicitFlow(ABCImplicitFlow):

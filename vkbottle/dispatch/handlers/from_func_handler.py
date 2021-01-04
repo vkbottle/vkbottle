@@ -1,6 +1,7 @@
-from typing import Union, Any, Callable
+from typing import Any, Callable, Union
 
 from vkbottle.dispatch.rules import ABCRule
+
 from .abc import ABCHandler
 
 

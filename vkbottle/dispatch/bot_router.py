@@ -2,9 +2,10 @@ from typing import Dict, NoReturn
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser import ABCStateDispenser
-from vkbottle.exception_factory import ABCErrorHandler
 from vkbottle.dispatch.views import ABCView
+from vkbottle.exception_factory import ABCErrorHandler
 from vkbottle.modules import logger
+
 from .abc import ABCRouter
 
 

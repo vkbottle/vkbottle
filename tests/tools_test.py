@@ -1,14 +1,14 @@
+from vkbottle.modules import json
 from vkbottle.tools import (
-    Keyboard,
-    KeyboardButtonColor,
-    Text,
     Callback,
     CtxStorage,
+    Keyboard,
+    KeyboardButtonColor,
     LoopWrapper,
-    template_gen,
     TemplateElement,
+    Text,
+    template_gen,
 )
-from vkbottle.modules import json
 
 KEYBOARD_JSON = json.dumps(
     {

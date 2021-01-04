@@ -1,21 +1,21 @@
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import Optional, NoReturn
-from typing import Union
+from typing import NoReturn, Optional, Union
 
-from vkbottle.api import ABCAPI, API
+from vkbottle.api import ABCAPI, API, Token
 from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
 from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
 from vkbottle.framework.abc import ABCFramework
 from vkbottle.modules import logger
 from vkbottle.polling import ABCPolling, BotPolling
 from vkbottle.tools import LoopWrapper
+
 from .labeler import ABCBotLabeler, BotLabeler
 
 
 class Bot(ABCFramework):
     def __init__(
         self,
-        token: Optional[str] = None,
+        token: Optional[Token] = None,
         api: Optional[ABCAPI] = None,
         polling: Optional[ABCPolling] = None,
         loop: Optional[AbstractEventLoop] = None,
@@ -23,6 +23,7 @@ class Bot(ABCFramework):
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCBotLabeler"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
+        task_each_event: bool = False,
     ):
         self.api: Union[ABCAPI, API] = API(token) if token is not None else api  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
@@ -32,6 +33,7 @@ class Bot(ABCFramework):
         self._polling = polling or BotPolling(self.api)
         self._router = router or BotRouter()
         self._loop = loop
+        self.task_each_event = task_each_event
 
     @property
     def polling(self) -> "ABCPolling":
@@ -60,7 +62,10 @@ class Bot(ABCFramework):
         async for event in polling.listen():  # type: ignore
             logger.debug(f"New event was received: {event}")
             for update in event["updates"]:
-                await self.router.route(update, polling.api)
+                if not self.task_each_event:
+                    await self.router.route(update, polling.api)
+                else:
+                    self.loop.create_task(self.router.route(update, polling.api))
 
     def run_forever(self) -> NoReturn:
         logger.info("Loop will be ran forever")
