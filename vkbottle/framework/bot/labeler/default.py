@@ -25,7 +25,7 @@ from vkbottle.dispatch.rules.bot import (
     StickerRule,
     VBMLRule,
 )
-from vkbottle.dispatch.views import ABCView, HandlerBasement, MessageView, RawEventView
+from vkbottle.dispatch.views import ABCView, BotHandlerBasement, BotMessageView, BotRawEventView
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
 
 from .abc import ABCBotLabeler, LabeledHandler, LabeledMessageHandler
@@ -70,8 +70,8 @@ class BotLabeler(ABCBotLabeler):
         # Default views are fixed in BotLabeler,
         # if you need to create your own implement
         # custom labeler
-        self.message_view = MessageView()
-        self.raw_event_view = RawEventView()
+        self.message_view = BotMessageView()
+        self.raw_event_view = BotRawEventView()
 
         self.custom_rules = kwargs.get("custom_rules") or DEFAULT_CUSTOM_RULES
         self.auto_rules: List["ABCRule"] = []
@@ -178,7 +178,7 @@ class BotLabeler(ABCBotLabeler):
 
         def decorator(func):
             for e in event:
-                self.raw_event_view.handlers[e] = HandlerBasement(
+                self.raw_event_view.handlers[e] = BotHandlerBasement(
                     dataclass,
                     FromFuncHandler(
                         func,

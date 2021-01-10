@@ -58,7 +58,7 @@ class MessageMin(MessagesMessage):
 MessageMin.update_forward_refs()
 
 
-def message_min(event: dict, ctx_api: "ABCAPI") -> "MessageMin":
+def bot_message_min(event: dict, ctx_api: "ABCAPI") -> "MessageMin":
     update = MessageNew(**event)
     message = MessageMin(
         **update.object.message.dict(),

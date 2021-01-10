@@ -1,1 +1,1 @@
-from .message import MessageMin, message_min
+from .message import MessageMin, bot_message_min

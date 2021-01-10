@@ -8,7 +8,7 @@ from vkbottle.polling import ABCPolling, BotPolling
 from .bot import Bot
 
 
-def run_multibot(bot: Bot, apis: Iterable[ABCAPI], polling_type: Type[ABCPolling] = BotPolling):
+def bot_run_multibot(bot: Bot, apis: Iterable[ABCAPI], polling_type: Type[ABCPolling] = BotPolling):
     """ Add run_polling with polling constructed from derived apis
     :param bot: Bot main instance (api is not required)
     :param apis: Iterable of apis
