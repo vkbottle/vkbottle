@@ -11,7 +11,7 @@ class DocUploader(BaseUploader, ABC):
         return (await self.api.request("docs.getUploadServer", kwargs))["response"]
 
     async def upload(self, title: str, path_like: Union[str, Bytes], **params) -> Union[str, dict]:
-        server = await self.get_server()
+        server = await self.get_server(**params)
         data = await self.read(path_like)
         file = self.get_bytes_io(data)
 

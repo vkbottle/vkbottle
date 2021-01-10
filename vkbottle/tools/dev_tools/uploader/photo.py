@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Union, List
+from typing import List, Union
 
 from .base import BaseUploader, Bytes
 
@@ -19,7 +19,7 @@ class PhotoToAlbumUploader(PhotoUploader):
         if not isinstance(paths_like, list):
             paths_like = [paths_like]
 
-        server = await self.get_server()
+        server = await self.get_server(album_id=album_id, **params)
         files = dict()
 
         for i, path_like in enumerate(paths_like):
@@ -46,7 +46,7 @@ class PhotoToAlbumUploader(PhotoUploader):
 
 class PhotoWallUploader(PhotoUploader):
     async def upload(self, path_like: Union[str, Bytes], **params) -> Union[str, List[dict]]:
-        server = await self.get_server()
+        server = await self.get_server(**params)
         data = await self.read(path_like)
         file = self.get_bytes_io(data)
 
