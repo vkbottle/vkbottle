@@ -38,11 +38,9 @@ class BaseUploader(ABC):
     def api(self) -> ABCAPI:
         return self._get_api()  # type: ignore
 
-    async def upload_files(self, upload_url: str, files: dict, params: dict) -> dict:
+    async def upload_files(self, upload_url: str, files: dict) -> dict:
         async with self.api.http as session:
-            raw_response = await session.request_text(
-                "POST", upload_url, data=files, params=params
-            )
+            raw_response = await session.request_text("POST", upload_url, data=files)
             response = json.loads(raw_response)
         return response
 

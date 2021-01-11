@@ -15,7 +15,7 @@ class DocUploader(BaseUploader, ABC):
         data = await self.read(path_like)
         file = self.get_bytes_io(data, name=title)
 
-        uploader = await self.upload_files(server["upload_url"], {"file": file}, {})
+        uploader = await self.upload_files(server["upload_url"], {"file": file})
 
         doc = (
             await self.api.request(
@@ -23,10 +23,11 @@ class DocUploader(BaseUploader, ABC):
                 {"title": title, **uploader, **params},
             )
         )["response"]
+        doc_type = doc["type"]
 
         if self.generate_attachment_strings:
             return self.generate_attachment_string(
-                "doc", await self.get_owner_id(params), doc["id"]
+                doc_type, doc[doc_type]["owner_id"], doc[doc_type]["id"]
             )
         return doc
 
