@@ -15,7 +15,7 @@ class DocUploader(BaseUploader, ABC):
         data = await self.read(path_like)
         file = self.get_bytes_io(data)
 
-        uploader = await self.upload_files(server["upload_url"], {"file": file}, params)
+        uploader = await self.upload_files(server["upload_url"], {"file": file}, {})
 
         doc = (
             await self.api.request(
