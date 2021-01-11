@@ -46,10 +46,12 @@ class BaseUploader(ABC):
             response = json.loads(raw_response)
         return response
 
-    def get_bytes_io(self, data: Bytes) -> BytesIO:
+    def get_bytes_io(self, data: Bytes, name: str = None) -> BytesIO:
         bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)
         bytes_io.seek(0)  # To avoid errors with image generators (such as pillow)
-        bytes_io.name = self.attachment_name  # To guarantee VK API file extension recognition
+        bytes_io.name = (
+            name or self.attachment_name
+        )  # To guarantee VK API file extension recognition
         return bytes_io
 
     async def get_owner_id(self, upload_params: dict) -> int:

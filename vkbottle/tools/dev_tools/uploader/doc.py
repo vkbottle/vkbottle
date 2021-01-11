@@ -13,7 +13,7 @@ class DocUploader(BaseUploader, ABC):
     async def upload(self, title: str, path_like: Union[str, Bytes], **params) -> Union[str, dict]:
         server = await self.get_server(**params)
         data = await self.read(path_like)
-        file = self.get_bytes_io(data)
+        file = self.get_bytes_io(data, name=title)
 
         uploader = await self.upload_files(server["upload_url"], {"file": file}, {})
 
