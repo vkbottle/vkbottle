@@ -38,18 +38,18 @@ class BaseUploader(ABC):
     def api(self) -> ABCAPI:
         return self._get_api()  # type: ignore
 
-    async def upload_files(self, upload_url: str, files: dict, params: dict) -> dict:
+    async def upload_files(self, upload_url: str, files: dict) -> dict:
         async with self.api.http as session:
-            raw_response = await session.request_text(
-                "POST", upload_url, data=files, params=params
-            )
+            raw_response = await session.request_text("POST", upload_url, data=files)
             response = json.loads(raw_response)
         return response
 
-    def get_bytes_io(self, data: Bytes) -> BytesIO:
+    def get_bytes_io(self, data: Bytes, name: str = None) -> BytesIO:
         bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)
         bytes_io.seek(0)  # To avoid errors with image generators (such as pillow)
-        bytes_io.name = self.attachment_name  # To guarantee VK API file extension recognition
+        bytes_io.name = (
+            name or self.attachment_name
+        )  # To guarantee VK API file extension recognition
         return bytes_io
 
     async def get_owner_id(self, upload_params: dict) -> int:

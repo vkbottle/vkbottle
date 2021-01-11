@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Union, List
+from typing import List, Union
 
 from .base import BaseUploader, Bytes
 
@@ -19,23 +19,21 @@ class PhotoToAlbumUploader(PhotoUploader):
         if not isinstance(paths_like, list):
             paths_like = [paths_like]
 
-        server = await self.get_server()
+        server = await self.get_server(album_id=album_id, **params)
         files = dict()
 
         for i, path_like in enumerate(paths_like):
             data = await self.read(path_like)
             files[f"file{i+1}"] = self.get_bytes_io(data)
 
-        uploader = await self.upload_files(server["upload_url"], files, params)
+        uploader = await self.upload_files(server["upload_url"], files)
         photos = (
             await self.api.request("photos.save", {"album_id": album_id, **uploader, **params})
         )["response"]
 
         if self.generate_attachment_strings:
             return [
-                self.generate_attachment_string(
-                    "photo", await self.get_owner_id(params), photo["id"]
-                )
+                self.generate_attachment_string("photo", photo["owner_id"], photo["id"])
                 for photo in photos
             ]
         return photos
@@ -46,11 +44,11 @@ class PhotoToAlbumUploader(PhotoUploader):
 
 class PhotoWallUploader(PhotoUploader):
     async def upload(self, path_like: Union[str, Bytes], **params) -> Union[str, List[dict]]:
-        server = await self.get_server()
+        server = await self.get_server(**params)
         data = await self.read(path_like)
         file = self.get_bytes_io(data)
 
-        uploader = await self.upload_files(server["upload_url"], {"photo": file}, params)
+        uploader = await self.upload_files(server["upload_url"], {"photo": file})
         photos = (await self.api.request("photos.saveWallPhoto", {**uploader, **params}))[
             "response"
         ]
@@ -69,15 +67,13 @@ class PhotoFaviconUploader(PhotoUploader):
         data = await self.read(path_like)
         file = self.get_bytes_io(data)
 
-        uploader = await self.upload_files(server["upload_url"], {"photo": file}, params)
+        uploader = await self.upload_files(server["upload_url"], {"photo": file})
         photo = (await self.api.request("photos.saveOwnerPhoto", {**uploader, **params}))[
             "response"
         ]
 
         if self.generate_attachment_strings:
-            return self.generate_attachment_string(
-                "photo", await self.get_owner_id(params), photo["id"]
-            )
+            return self.generate_attachment_string("photo", photo["owner_id"], photo["id"])
         return photo
 
     async def get_server(self, **kwargs) -> dict:
@@ -90,7 +86,7 @@ class PhotoMessageUploader(PhotoUploader):
         data = await self.read(path_like)
         file = self.get_bytes_io(data)
 
-        uploader = await self.upload_files(server["upload_url"], {"photo": file}, params)
+        uploader = await self.upload_files(server["upload_url"], {"photo": file})
         photo = (await self.api.request("photos.saveMessagesPhoto", {**uploader, **params}))[
             "response"
         ]
@@ -109,7 +105,7 @@ class PhotoChatFaviconUploader(PhotoUploader):
         data = await self.read(path_like)
         file = self.get_bytes_io(data)
 
-        uploader = await self.upload_files(server["upload_url"], {"photo": file}, params)
+        uploader = await self.upload_files(server["upload_url"], {"photo": file})
         return uploader["response"]
 
     async def get_server(self, **kwargs) -> dict:
@@ -122,7 +118,7 @@ class PhotoMarketUploader(PhotoUploader):
         data = await self.read(path_like)
         file = self.get_bytes_io(data)
 
-        uploader = await self.upload_files(server["upload_url"], {"file": file}, params)
+        uploader = await self.upload_files(server["upload_url"], {"file": file})
         photo = (await self.api.request("photos.saveMarketPhoto", {**uploader, **params}))[
             "response"
         ]

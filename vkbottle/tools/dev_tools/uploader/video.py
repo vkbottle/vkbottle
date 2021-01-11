@@ -26,7 +26,7 @@ class VideoUploader(BaseUploader):
 
         data = await self.read(path_like)  # type: ignore
         file = self.get_bytes_io(data)
-        video = await self.upload_files(server["upload_url"], {"video_file": file}, params)
+        video = await self.upload_files(server["upload_url"], {"video_file": file})
 
         if self.generate_attachment_strings:
             return self.generate_attachment_string("video", video["owner_id"], video["id"])
