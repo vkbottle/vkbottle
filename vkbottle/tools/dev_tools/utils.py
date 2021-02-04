@@ -2,7 +2,7 @@ import importlib
 import os
 import re
 import typing
-from asyncio import get_running_loop
+import asyncio
 
 from vkbottle.api.token_generator.consistent import ConsistentTokenGenerator
 from vkbottle.api.token_generator.single import SingleTokenGenerator
@@ -19,7 +19,7 @@ if typing.TYPE_CHECKING:
 # purposes
 def run_in_task(coroutine: typing.Coroutine) -> typing.NoReturn:
     """ Gets loop and runs add makes task from the given coroutine """
-    loop = get_running_loop()
+    loop = asyncio.get_running_loop()
     loop.create_task(coroutine)
 
 
@@ -43,7 +43,10 @@ def load_blueprints_from_package(package_name: str) -> typing.Iterator["ABCBluep
     """
     bp_paths = []
     for filename in os.listdir(package_name):
-        if not filename.endswith(".py") or filename.startswith("__"):
+        if filename.startswith("__"):
+            continue
+        elif not filename.endswith(".py"):
+            yield from load_blueprints_from_package(os.path.join(package_name, filename))
             continue
 
         with open(os.path.join(package_name, filename)) as file:
@@ -55,5 +58,6 @@ def load_blueprints_from_package(package_name: str) -> typing.Iterator["ABCBluep
 
     for bp_path in bp_paths:
         module, bp_name = bp_path
-        bp_module = importlib.import_module(package_name + "." + module)
+        module_name = package_name.replace("." + os.sep, ".").replace(os.sep, ".")
+        bp_module = importlib.import_module(module_name + "." + module)
         yield getattr(bp_module, bp_name)

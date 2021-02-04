@@ -31,7 +31,9 @@ def keyboard_gen(pattern: List[List[dict]], one_time: bool = False, inline: bool
 
             if action["type"] == "text":
                 action["label"] = button.get("text", button.get("label"))
-                fields["color"] = button.get("color", "default")
+
+            if button.get("color"):
+                fields["color"] = button["color"]
 
             row_button = {"action": action, **fields}
 
@@ -39,7 +41,7 @@ def keyboard_gen(pattern: List[List[dict]], one_time: bool = False, inline: bool
         buttons.append(row_buttons)
 
     keyboard = str(
-        json.dumps(dict(one_time=one_time, buttons=buttons, inline=inline))
+        json.dumps(dict(one_time=one_time, inline=inline, buttons=buttons))
         .encode("utf-8")
         .decode("utf-8")
     )
