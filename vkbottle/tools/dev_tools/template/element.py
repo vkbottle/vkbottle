@@ -11,7 +11,7 @@ class TemplateElement:
         title: Optional[str] = None,
         description: Optional[str] = None,
         photo_id: Optional[str] = None,
-        buttons: Optional[List[dict]] = None,
+        buttons: Optional[Union[List[dict], str]] = None,
         action: Optional[dict] = None,
     ):
         assert buttons, "Buttons are required"
