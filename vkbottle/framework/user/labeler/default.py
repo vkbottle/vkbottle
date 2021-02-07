@@ -29,7 +29,7 @@ from vkbottle.tools.dev_tools.utils import convert_shorten_filter
 from .abc import ABCUserLabeler, LabeledHandler, LabeledMessageHandler
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
-DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
+CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "from_chat": PeerRule,
     "from_me": FromMeRule,
     "command": CommandRule,
@@ -69,7 +69,9 @@ class UserLabeler(ABCUserLabeler):
         self.message_view = UserMessageView()
         self.raw_event_view = UserRawEventView()
 
-        self.custom_rules = kwargs.get("custom_rules") or DEFAULT_CUSTOM_RULES
+        CUSTOM_RULES.update(kwargs.get("custom_rules", {}))
+
+        self.custom_rules = CUSTOM_RULES
         self.auto_rules: List["ABCRule"] = []
 
         # Rule config is accessible from every single custom rule
