@@ -3,8 +3,10 @@ name: CI
 on:
   push:
     branches: [ master, v3.0 ]
+    paths-ignore: ['docs/**']
   pull_request:
     branches: [ master, v3.0 ]
+    paths-ignore: ['docs/**']
 
 jobs:
   build:
