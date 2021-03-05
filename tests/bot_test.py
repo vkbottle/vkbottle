@@ -87,9 +87,11 @@ async def test_bot_polling():
         assert message.id == 100
         assert message.from_id == 1
         assert await message.answer() == {"peer_id": message.peer_id, "r": 1}
-        assert await message.answer(some_unsigned_param="test") == {"peer_id": message.peer_id,
-                                                                    "some_unsigned_param": "test",
-                                                                    "r": 1}
+        assert await message.answer(some_unsigned_param="test") == {
+            "peer_id": message.peer_id,
+            "some_unsigned_param": "test",
+            "r": 1,
+        }
 
     async for event in bot.polling.listen():
         assert event.get("updates")
@@ -168,7 +170,8 @@ async def test_rules(api: API):
         "match": ()
     }
     assert rules.PayloadMapRule.transform_to_map({"a": int, "b": {"c": str, "d": dict}}) == [
-        ("a", int), ("b", [("c", str), ("d", dict)])
+        ("a", int),
+        ("b", [("c", str), ("d", dict)]),
     ]
 
     labeler = BotLabeler()

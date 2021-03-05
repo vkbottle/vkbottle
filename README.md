@@ -25,7 +25,7 @@ https://vkbottle.readthedocs.io/ru/latest
 pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
 ```
 
-Если вы ищите старые версии (`2.x`) - [вам сюда](https://github.com/timoniq/vkbottle/tree/v2.0)
+Если вы ищете старые версии (`2.x`) - [вам сюда](https://github.com/timoniq/vkbottle/tree/v2.0)
 
 ## Hello World
 
