@@ -1,4 +1,4 @@
-from typing import Dict, NoReturn
+from typing import Dict
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser import ABCStateDispenser
@@ -10,7 +10,7 @@ from .abc import ABCRouter
 
 
 class BotRouter(ABCRouter):
-    async def route(self, event: dict, ctx_api: "ABCAPI") -> NoReturn:  # type: ignore
+    async def route(self, event: dict, ctx_api: "ABCAPI") -> None:
         logger.debug("Routing update {}".format(event))
 
         for view in self.views.values():

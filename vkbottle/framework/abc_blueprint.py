@@ -72,7 +72,7 @@ class ABCBlueprint(ABCFramework):
     def run_forever(self) -> NoReturn:
         raise RuntimeError("You are not allowed to run polling with blueprint")
 
-    def assert_constructed(self) -> NoReturn:
+    def assert_constructed(self) -> Union[None, NoReturn]:
         if not self.constructed:
             raise RuntimeError(CONSTRUCT_BLUEPRINT)
 

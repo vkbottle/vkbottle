@@ -19,7 +19,7 @@ class JSONResponseValidator(ABCResponseValidator):
         data: dict,
         response: typing.Any,
         ctx_api: typing.Union["ABCAPI", "API"],
-    ) -> typing.Union[typing.Any, typing.NoReturn]:
+    ) -> typing.Any:
         if isinstance(response, dict):
             return response
         elif isinstance(response, str):
