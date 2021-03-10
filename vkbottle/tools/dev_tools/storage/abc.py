@@ -12,11 +12,11 @@ class ABCStorage(ABC):
         pass
 
     @abstractmethod
-    def set(self, key: str, value: typing.Any) -> typing.NoReturn:
+    def set(self, key: str, value: typing.Any) -> None:
         pass
 
     @abstractmethod
-    def delete(self, key: str) -> typing.NoReturn:
+    def delete(self, key: str) -> None:
         pass
 
     @abstractmethod

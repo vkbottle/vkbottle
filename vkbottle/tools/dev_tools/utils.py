@@ -17,7 +17,7 @@ if typing.TYPE_CHECKING:
 # This feature is not used in production
 # but can be useful for customization
 # purposes
-def run_in_task(coroutine: typing.Coroutine) -> typing.NoReturn:
+def run_in_task(coroutine: typing.Coroutine) -> None:
     """ Gets loop and runs add makes task from the given coroutine """
     loop = get_running_loop()
     loop.create_task(coroutine)

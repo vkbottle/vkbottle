@@ -55,5 +55,5 @@ class AiohttpClient(ABCHTTPClient):
         async with self.session.request(method, url, data=data, **kwargs) as response:
             return await response.content.read()
 
-    async def close(self) -> typing.NoReturn:
+    async def close(self) -> None:
         await self.session.close()
