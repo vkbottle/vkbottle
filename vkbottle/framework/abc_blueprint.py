@@ -32,7 +32,7 @@ class ABCBlueprint(ABCFramework):
         pass
 
     @property
-    def polling(self) -> Optional[ABCPolling]:
+    def polling(self) -> ABCPolling:
         self.assert_constructed()
         return self._polling
 
@@ -41,7 +41,7 @@ class ABCBlueprint(ABCFramework):
         self._polling = new_polling
 
     @property
-    def state_dispenser(self) -> Optional[ABCStateDispenser]:
+    def state_dispenser(self) -> ABCStateDispenser:
         self.assert_constructed()
         return self._state_dispenser
 
@@ -72,7 +72,7 @@ class ABCBlueprint(ABCFramework):
     def run_forever(self) -> NoReturn:
         raise RuntimeError("You are not allowed to run polling with blueprint")
 
-    def assert_constructed(self) -> Union[None, NoReturn]:
+    def assert_constructed(self) -> Optional[NoReturn]:
         if not self.constructed:
             raise RuntimeError(CONSTRUCT_BLUEPRINT)
 

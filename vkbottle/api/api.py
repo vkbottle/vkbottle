@@ -71,7 +71,7 @@ class API(ABCAPI, APICategories):
 
     async def validate_response(
         self, method: str, data: dict, response: typing.Union[dict, str]
-    ) -> dict:
+    ) -> typing.Union[typing.Any, typing.NoReturn]:
         """ Validates response from VK,
         to change validations change API.response_validators (list of ResponseValidator's) """
         for validator in self.response_validators:
