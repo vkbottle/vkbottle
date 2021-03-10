@@ -32,7 +32,7 @@ class ABCBlueprint(ABCFramework):
         pass
 
     @property
-    def polling(self) -> ABCPolling:
+    def polling(self) -> Optional[ABCPolling]:
         self.assert_constructed()
         return self._polling
 
@@ -41,7 +41,7 @@ class ABCBlueprint(ABCFramework):
         self._polling = new_polling
 
     @property
-    def state_dispenser(self) -> ABCStateDispenser:
+    def state_dispenser(self) -> Optional[ABCStateDispenser]:
         self.assert_constructed()
         return self._state_dispenser
 
