@@ -37,5 +37,5 @@ class ABCErrorHandler(ABC):
     @abstractmethod
     def handling_exceptions(
         self,
-    ) -> typing.Union[typing.Type[BaseException], typing.Tuple[typing.Type[BaseException], ...]]:
+    ) -> typing.Union[str, typing.Tuple[str, ...]]:
         pass

@@ -8,7 +8,7 @@ from .abc import ABCErrorHandler, ExceptionHandler
 
 class ErrorHandler(ABCErrorHandler):
     def __init__(self, redirect_arguments: bool = False):
-        self.error_handlers: typing.Dict[typing.Type[BaseException], ExceptionHandler] = {}
+        self.error_handlers: typing.Dict[str, ExceptionHandler] = {}
         self.undefined_error_handler: typing.Optional[ExceptionHandler] = None
         self.redirect_arguments = redirect_arguments
 
@@ -19,11 +19,11 @@ class ErrorHandler(ABCErrorHandler):
     ) -> typing.Optional[typing.Callable[[ExceptionHandler], typing.Any]]:
 
         if exception_handler:
-            self.error_handlers[exception_type] = exception_handler
+            self.error_handlers[exception_type.__name__] = exception_handler
             return None
 
         def decorator(func: ExceptionHandler):
-            self.error_handlers[exception_type] = func
+            self.error_handlers[exception_type.__name__] = func
             return func
 
         return decorator
@@ -66,8 +66,10 @@ class ErrorHandler(ABCErrorHandler):
         return decorator
 
     async def handle(self, e: BaseException, *args, **kwargs) -> typing.Any:
-        if e.__class__ in self.error_handlers:
-            return await self.call_handler(self.error_handlers[e.__class__], e, *args, **kwargs)
+        if e.__class__.__name__ in self.error_handlers:
+            return await self.call_handler(
+                self.error_handlers[e.__class__.__name__], e, *args, **kwargs
+            )
         elif self.undefined_error_handler:
             return await self.call_handler(self.undefined_error_handler, e, *args, **kwargs)
         logger.error("\n" + traceback.format_exc())
@@ -75,5 +77,5 @@ class ErrorHandler(ABCErrorHandler):
     @property
     def handling_exceptions(
         self,
-    ) -> typing.Union[typing.Type[BaseException], typing.Tuple[typing.Type[BaseException], ...]]:
-        return tuple(k for k, _ in self.error_handlers.items())
+    ) -> typing.Union[str, typing.Tuple[str, ...]]:
+        return tuple(k for k in self.error_handlers.keys())
