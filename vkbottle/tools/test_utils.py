@@ -1,4 +1,4 @@
-from typing import Any, Callable, NoReturn, Optional
+from typing import Any, Callable, Optional
 
 from vkbottle import API, ABCHTTPClient
 
@@ -24,7 +24,7 @@ class MockedClient(ABCHTTPClient):
     ) -> bytes:
         return self.return_value or self.callback(locals())
 
-    async def close(self) -> NoReturn:
+    async def close(self) -> None:
         pass
 
 

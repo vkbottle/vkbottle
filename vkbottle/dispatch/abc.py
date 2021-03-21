@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Dict, NoReturn, Type
+from typing import Callable, Dict, Type
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.exception_factory.error_handler import ABCErrorHandler
@@ -18,7 +18,7 @@ class ABCRouter(ABC):
     error_handler: ABCErrorHandler
 
     @abstractmethod
-    async def route(self, event: dict, ctx_api: "ABCAPI") -> NoReturn:
+    async def route(self, event: dict, ctx_api: "ABCAPI") -> None:
         pass
 
     @abstractmethod
@@ -30,7 +30,7 @@ class ABCRouter(ABC):
     ) -> "ABCRouter":
         pass
 
-    def add_view(self, name: str, view: "ABCView") -> NoReturn:
+    def add_view(self, name: str, view: "ABCView") -> None:
         self.views[name] = view
 
     def view(self, name: str) -> Callable[..., Type["ABCView"]]:
