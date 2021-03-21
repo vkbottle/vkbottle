@@ -77,5 +77,5 @@ class ErrorHandler(ABCErrorHandler):
     @property
     def handling_exceptions(
         self,
-    ) -> typing.Union[typing.Type[BaseException], typing.Tuple[typing.Type[BaseException], ...]]:
+    ) -> typing.Union[str, typing.Tuple[str, ...]]:
         return tuple(k for k in self.error_handlers.keys())
