@@ -55,7 +55,7 @@ from vkbottle.bot import rules
 from typing import Union
 
 class MyRule(rules.ABCMessageRule):
-    async def check(self, message: Message) -> Union[dict, bool]:
+    async def check(self, message: Message) -> bool:
         return len(message.text) < 100
 ```
 
@@ -73,7 +73,7 @@ class MyRule(rules.ABCMessageRule):
     def __init__(self, lt: int = 100):
         self.lt = lt
     
-    async def check(self, message: Message) -> Union[dict, bool]:
+    async def check(self, message: Message) -> bool:
         return len(message.text) < self.lt
 ```
 
