@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 
 # Documentation for keyboard builder > tools/keyboard
 KEYBOARD = Keyboard(one_time=True).add(Text("Съесть еще", {"cmd": "eat"})).get_json()
-EATABLE = ["мороженое", "штаны", "пальто"]
+EATABLE = ["мороженое", "макароны", "суп"]
 
 
 # If you need to make handler respond for 2 different rule set you can

@@ -64,18 +64,18 @@ async def spam_handler(message: Message):
     if state_peer and state_peer.state == SpamState.BAD:
         try:
             await bot.api.messages.remove_chat_user(message.peer_id - 2e9, message.from_id)
-            return "He dares to ignore me!"
+            return "Как можно игнорировать мои просьбы"
         except VKAPIError(15):
-            return "I hate myself"
+            return "Где мои права администратора?"
 
-    await message.answer("Pleease stop spamming..((")
+    await message.answer("Пожалуйста перестаньте спамить")
     await bot.state_dispenser.set(message.from_id, SpamState.BAD)
 
 
-@bot.on.message(text="forgive me")
+@bot.on.message(text="прости меня")
 async def forgive_handler(message: Message):
     await bot.state_dispenser.set(message.from_id, SpamState.GOOD)
-    return "You are forgiven, my dear!"
+    return "Ладно, извинения приняты"
 
 
 bot.run_forever()
