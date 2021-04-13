@@ -15,7 +15,7 @@
 
 ## Документация
 
-[Туториал для новичков](/docs/tutorial/index.md)
+[Туториал для новичков](/docs/tutorial/index.md)  
 [Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
 
 ## Установка
