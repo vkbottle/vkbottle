@@ -33,7 +33,7 @@ class DocUploader(BaseUploader, ABC):
 
     @property
     def attachment_name(self) -> str:
-        return self.NAME
+        return self.with_name or self.NAME
 
 
 class DocWallUploader(DocUploader):

@@ -33,7 +33,7 @@ class AudioUploader(BaseUploader):
 
     @property
     def attachment_name(self) -> str:
-        return self.NAME
+        return self.with_name or self.NAME
 
 
 __all__ = ("AudioUploader",)

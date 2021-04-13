@@ -20,10 +20,12 @@ class BaseUploader(ABC):
         api: Optional[ABCAPI] = None,
         api_getter: Optional[Callable[[], ABCAPI]] = None,
         generate_attachment_strings: bool = True,
+        with_name: Optional[str] = None,
     ):
         assert api_getter is not None or api is not None, "api or api_getter should be set"
         self._get_api = api_getter or (lambda: api)  # type: ignore
         self.generate_attachment_strings = generate_attachment_strings
+        self.with_name = with_name
 
     @abstractmethod
     async def get_server(self, **kwargs) -> dict:

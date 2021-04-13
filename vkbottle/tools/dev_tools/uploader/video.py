@@ -9,7 +9,7 @@ class VideoUploader(BaseUploader):
 
     @property
     def attachment_name(self) -> str:
-        return self.NAME
+        return self.with_name or self.NAME
 
     async def upload(
         self, path_like: Optional[Union[str, bytes]] = None, **params

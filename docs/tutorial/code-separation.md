@@ -100,3 +100,6 @@ async def halt(_):
     exit(0)
 ```
 
+## Экзамплы по этой части туториала
+
+* [blueprint](/examples/high-level/blueprint.py)
