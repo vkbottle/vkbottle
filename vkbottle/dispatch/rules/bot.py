@@ -360,6 +360,28 @@ class StateGroupRule(ABCMessageRule):
         return type(message.state_peer.state) in self.state_group
 
 
+try:
+    import macro
+except ImportError:
+    macro = None
+
+class MacroRule(ABCMessageRule):
+    def __init__(self, pattern: Union[str, List[str]]):
+        if macro is None:
+            raise RuntimeError("macro must be installed to use MacroRule")
+
+        if isinstance(pattern, str):
+            pattern = [pattern]
+        self.patterns = list(map(macro.Pattern, pattern))
+
+    async def check(self, message: Message) -> Union[dict, bool]:
+        for pattern in self.patterns:
+            result = pattern.check(message.text)
+            if result is not None:
+                return result
+        return False
+
+
 __all__ = (
     "ABCMessageRule",
     "PeerRule",
@@ -380,4 +402,5 @@ __all__ = (
     "StateRule",
     "StateGroupRule",
     "RegexRule",
+    "MacroRule",
 )

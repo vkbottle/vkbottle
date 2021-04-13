@@ -23,6 +23,7 @@ from vkbottle.dispatch.rules.bot import (
     StateGroupRule,
     StateRule,
     StickerRule,
+    MacroRule,
     VBMLRule,
 )
 from vkbottle.dispatch.views import ABCView, HandlerBasement, MessageView, RawEventView
@@ -51,6 +52,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "state": StateRule,
     "state_group": StateGroupRule,
     "regexp": RegexRule,
+    "macro": MacroRule,
     "text": VBMLRule,
 }
 
