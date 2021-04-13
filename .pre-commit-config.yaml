@@ -1,7 +1,7 @@
 repos:
   # Use pre-commit repo, v3.2.0
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: "v3.2.0"
+    rev: "v3.4.0"
     hooks:
       # Check for files that contain merge conflict strings.
       - id: check-merge-conflict
@@ -16,45 +16,38 @@ repos:
     hooks:
       - id: black
         name: black
-        entry: black
+        entry: poetry run black
         language: system
         types: [ python ]
         stages: [ commit ]
         # Black should use the config from the pyproject.toml file
 
-      - id: autoflake
-        name: autoflake
-        entry: autoflake
+      - id: isort
+        name: isort
+        entry: poetry run isort
         language: system
         types: [ python ]
-        args:
-          - --in-place
-          - --exclude=__init__.py,bot.py,venv
-          - --remove-all-unused-imports
-          - --remove-duplicate-keys
         stages: [ commit ]
+        # Isort should use the config from the pyproject.toml file
 
       - id: mypy
         name: mypy check
-        entry: mypy
+        entry: poetry run mypy vkbottle
         language: system
-        always_run: true
         pass_filenames: false
-        args: [ vkbottle ]
         stages: [ commit ]
 
       - id: pytest
         name: pytest
-        entry: pytest
+        entry: poetry run pytest vkbottle tests
         language: system
-        always_run: true
+        always_run: false
         pass_filenames: false
         stages: [ push ]
 
       - id: flake8
         name: flake8 check
-        entry: flake8
+        entry: poetry run flake8
         language: system
-        always_run: true
-        pass_filenames: false
+        types: [ python ]
         stages: [ push ]

@@ -9,6 +9,7 @@ bot = Bot(os.environ["token"])
 # StateDispenser can be accessed / set with
 # bot.state_dispenser
 
+
 # Lets make a group of states
 # State group is IntEnum
 class MenuState(BaseStateGroup):

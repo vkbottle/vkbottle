@@ -7,7 +7,18 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/timoniq/vkbottle"
 repository = "https://github.com/timoniq/vkbottle"
-keywords = ["vk", "vk-api", "vkbottle", "user-longpoll", "async", "asyncio", "bot", "longpoll-api", "callback", "middleware"]
+keywords = [
+  "vk",
+  "vk-api",
+  "vkbottle",
+  "user-longpoll",
+  "async",
+  "asyncio",
+  "bot",
+  "longpoll-api",
+  "callback",
+  "middleware",
+]
 classifiers = [
   "Environment :: Console",
   "Intended Audience :: Developers",
@@ -37,7 +48,7 @@ mypy = "^0.770"
 isort = "^5.7"
 flake8 = "^3.7.9"
 mypy_extensions = "^0.4.3"
-black = {version = "^19.0", allow-prereleases = true}
+black = { version = "^19.0", allow-prereleases = true }
 
 # Tests
 pytest = "^6.2"
@@ -50,10 +61,7 @@ mkdocs = "^1.1.2"
 mkdocs-material = "^7.0.0"
 
 # Pre-commit
-pre-commit = "^2.7.1"
-autoflake = "^1.4"
-autopep8 = "^1.5.4"
-reorder-python-imports = "^2.3.5"
+pre-commit = "^2.12.0"
 
 [tool.black]
 line-length = 99
