@@ -17,6 +17,20 @@ def types(api):
     a = 5.1
     b = 5 * a
     results = [b, b - 2]
+    _ = {"a": 1, "b": 2}
+    _ = True
+    _ = 3 - 3.3 + 3.0 * 0.3 / 33 % 3
+    _ = "string"
+
+    if a < 5:
+        pass
+    elif b > 25:
+        a += 1
+        a -= 1
+    else:
+        while a < b:
+            a *= 1.1
+
     for i in results:
         results.append(i ** 2)
     results.pop()

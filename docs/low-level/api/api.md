@@ -10,6 +10,6 @@ api = API(token="token")
 
 ## Параметры
 
-* **token** - токен сообщества/пользователя
+* **token** - токен сообщества/пользователя или [генератор токенов](token-generator.md)
 * **ignore_error** - игнорировать ошибки VK API
 * **session_manager** - менеджер сессий (читать документацию `http-session-manager`)

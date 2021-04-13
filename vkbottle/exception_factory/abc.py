@@ -2,7 +2,7 @@ import typing
 from abc import ABC, abstractmethod
 
 
-class ABCExceptionFactory(ABC, BaseException):
+class ABCExceptionFactory(ABC, Exception):
     """ Abstract Exception Factory
     Documentation: \
     https://github.com/timoniq/vkbottle/tree/v3.0/docs/exception-factory/exception-factory.md

@@ -21,7 +21,7 @@ class CtxStorage(ABCStorage, BaseContext):
             self.storage = default
             self.set_instance(self)
 
-    def set(self, key: str, value: typing.Any) -> typing.NoReturn:
+    def set(self, key: str, value: typing.Any) -> None:
         current_storage = self.get_instance().storage
         current_storage[key] = value
         self.set_instance(CtxStorage(current_storage, True))
@@ -29,7 +29,7 @@ class CtxStorage(ABCStorage, BaseContext):
     def get(self, key: str) -> typing.Any:
         return self.get_instance().storage.get(key)
 
-    def delete(self, key: str) -> typing.NoReturn:
+    def delete(self, key: str) -> None:
         new_storage = self.get_instance().storage
         new_storage.pop(key)
         self.set_instance(CtxStorage(new_storage, True))

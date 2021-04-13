@@ -40,14 +40,23 @@ class PeerRule(ABCMessageRule):
 
 
 class CommandRule(ABCMessageRule):
-    def __init__(self, command_text: str, prefixes: Optional[List[str]] = None):
+    def __init__(self, command_text: Union[str, Tuple[str, int]], prefixes: Optional[List[str]] = None, args_count: int = 0, sep: str = " "):
         self.prefixes = prefixes or DEFAULT_PREFIXES
-        self.command_text = command_text
+        self.command_text = command_text if isinstance(command_text, str) else command_text[0]
+        self.args_count = args_count if isinstance(command_text, str) else command_text[1]
+        self.sep = sep
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message) -> Union[dict, bool]:
         for prefix in self.prefixes:
-            if message.text == prefix + self.command_text:
+            if self.args_count == 0 and message.text == prefix + self.command_text:
                 return True
+            if self.args_count > 0 and message.text.startswith(prefix + self.command_text + " "):
+                args = message.text[len(prefix + self.command_text) + 1:].split(self.sep)
+                if len(args) != self.args_count:
+                    return False
+                elif any(len(arg) == 0 for arg in args):
+                    return False
+                return {"args": tuple(args)}
         return False
 
 
