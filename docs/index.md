@@ -41,5 +41,6 @@
 * [VKScript](tools/vkscript.md)
 * [Loop Wrapper](tools/loop-wrapper.md)
 * [Auth Flows](tools/auth.md)
+* [Uploaders](tools/uploaders.md)
 
 # [Tutorial](tutorial/index.md)
