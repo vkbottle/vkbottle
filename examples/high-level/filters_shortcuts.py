@@ -9,6 +9,7 @@ from vkbottle.bot import Bot, Message, rules
 
 bot = Bot(os.environ["token"])
 
+
 # (1) StickerRule() handles all stickers. (2) MessageLengthRule
 # handles all messages longer than or equal to 5 symbols. (3)
 # FromUserRule handles messages sent from users.

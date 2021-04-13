@@ -1,64 +1,45 @@
 # Treat these arguments not as files, but as recipes
-.PHONY: help minimal init check fix publish
+.PHONY: venv venv-no-dev githooks check fix publish
 
 # Used to execute all in one shell
 .ONESHELL:
 
 # Default recipe
-.DEFAULT: help
+DEFAULT: help
 help:
-	@echo "make minimal"
-	@echo "	   install minimal dependencies"
-	@echo "make init"
-	@echo "	   install all dependencies and dev hooks"
-	@echo "make check"
-	@echo "	   run tests and linters"
-	@echo "make fix"
-	@echo "	   fix code with black and autoflake"
-	@echo "make publish"
-	@echo "	   publish to PyPi using PYPI_TOKEN"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-# Define canned (reusable) recipe for installing poetry and virtualenv
-define install =
-	@echo;
-	@echo "Installing poetry"
-	@echo "=================";
-	@pip install poetry
-	@echo;
-	@echo "Installing virtualenv"
-	@echo "=====================";
-	@pip install virtualenv --use-feature=2020-resolver
-endef
+# Use poetry or activated venv
+interpreter := $(shell poetry env info --path > /dev/null 2>&1 && echo "poetry run")
 
-minimal:
-	$(install)
-	@echo;
-	@echo "Installing dependencies"
-	@echo "=======================";
-	@poetry install --no-dev
+check-venv:
+	$(if $(interpreter),, $(error No poetry environment found, either run "make venv"))
 
-init:
-	$(install)
-	@echo;
-	@echo "Installing dependencies"
-	@echo "=======================";
-	@poetry install
-	@echo;
-	@echo "Installing pre-commit and pre-push hooks"
-	@echo "========================================";
-	@pre-commit install -t=pre-commit -t=pre-push
+venv: ## Create virtual environment and install all dependencies
+	@python3 -m pip install poetry
+	@poetry install && \
+	echo; echo "Poetry created virtual environment and installed all dependencies"
 
-check:
-	@poetry run mypy vkbottle
-	@poetry run flake8
-	@poetry run pytest --cov vkbottle tests
+venv-no-dev: ## Create virtual environment and install only prod dependencies
+	@python3 -m pip install poetry
+	@poetry install --no-dev && \
+	echo; echo "Poetry created virtual environment and installed only prod dependencies"
 
-fix:
-	@black .
-	@autoflake --recursive --in-place --exclude=__init__.py,bot.py,venv --remove-all-unused-imports --remove-duplicate-keys .
+githooks: check-venv  ## Install git hooks
+	@$(interpreter) pre-commit install -t=pre-commit -t=pre-push
 
-publish:
+check: check-venv ## Run tests and linters
+	@$(interpreter) mypy vkbottle
+	@$(interpreter) flake8
+	@$(interpreter) pytest --cov vkbottle tests
+
+fix: check-venv ## Fix code with black and autoflake
+	@$(interpreter) black .
+	@$(interpreter) isort .
+
+publish: ## Publish to PyPi using PYPI_TOKEN
 	poetry build
-	poetry config pypi-token.pypi ${PYPI_TOKEN}
-	poetry publish; true # "; true" is used to ignore command exit code so that rm -rf can execute anyway
+	@poetry config pypi-token.pypi ${PYPI_TOKEN}
+	@# "; true" is used to ignore command exit code so that rm -rf can execute anyway
+	poetry publish; true
 	rm -rf dist/

@@ -48,6 +48,7 @@ bot.labeler.load(BotLabeler())  # Labeler can be loaded in another labeler
 # Patcher for vbml rule shortcut can be set:
 # <bot.labeler.patcher = ...>
 
+
 # We will add some states
 # The comments for states are skipped because
 # we have another topic of the example
