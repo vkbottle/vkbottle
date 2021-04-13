@@ -365,6 +365,7 @@ try:
 except ImportError:
     macro = None
 
+
 class MacroRule(ABCMessageRule):
     def __init__(self, pattern: Union[str, List[str]]):
         if macro is None:
