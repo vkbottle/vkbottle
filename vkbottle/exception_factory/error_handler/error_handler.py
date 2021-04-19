@@ -1,3 +1,4 @@
+import sys
 import traceback
 import typing
 
@@ -46,6 +47,15 @@ class ErrorHandler(ABCErrorHandler):
         self, handler: ExceptionHandler, e: BaseException, *args, **kwargs
     ) -> typing.Awaitable[typing.Any]:
         if self.redirect_arguments:
+            frame = sys.exc_info()[2]
+            while frame:
+                loc = frame.tb_frame.f_locals
+                frame = frame.tb_next
+                if not loc:
+                    continue
+                if loc.get("e"):
+                    loc.pop("e")
+                kwargs.update(loc)
             return await handler(e, *args, **kwargs)  # type: ignore
         return await handler(e)  # type: ignore
 
