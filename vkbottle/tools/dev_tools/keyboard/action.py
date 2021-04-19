@@ -76,6 +76,7 @@ __all__ = (
     "Text",
     "OpenLink",
     "Location",
+    "VKPay",
     "VKApps",
     "Callback",
 )
