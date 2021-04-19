@@ -1,4 +1,5 @@
 import typing
+from typing import Optional
 
 from vkbottle.tools.dev_tools.ctx_tool import BaseContext
 
@@ -21,18 +22,18 @@ class CtxStorage(ABCStorage, BaseContext):
             self.storage = default
             self.set_instance(self)
 
-    def set(self, key: str, value: typing.Any) -> None:
+    def set(self, key: Optional[str, int, tuple], value: typing.Any) -> None:
         current_storage = self.get_instance().storage
         current_storage[key] = value
         self.set_instance(CtxStorage(current_storage, True))
 
-    def get(self, key: str) -> typing.Any:
+    def get(self, key: Optional[str, int, tuple]) -> typing.Any:
         return self.get_instance().storage.get(key)
 
-    def delete(self, key: str) -> None:
+    def delete(self, key: Optional[str, int, tuple]) -> None:
         new_storage = self.get_instance().storage
         new_storage.pop(key)
         self.set_instance(CtxStorage(new_storage, True))
 
-    def contains(self, key: str) -> bool:
+    def contains(self, key: Optional[str, int, tuple]) -> bool:
         return key in self.get_instance().storage
