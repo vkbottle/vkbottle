@@ -6,10 +6,10 @@ import vbml
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule, rules
 from vkbottle.dispatch.views import ABCView
-from vkbottle.dispatch.views.bot import HandlerBasement, MessageView, RawEventView
+from vkbottle.dispatch.views.user import HandlerBasement, MessageView, RawEventView
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
 
-from .abc import ABCBotLabeler, LabeledHandler, LabeledMessageHandler
+from .abc import ABCUserLabeler, LabeledHandler, LabeledMessageHandler
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
@@ -23,9 +23,6 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "lev": rules.LevensteinRule,
     "length": rules.MessageLengthRule,
     "action": rules.ChatActionRule,
-    "payload": rules.PayloadRule,
-    "payload_contains": rules.PayloadContainsRule,
-    "payload_map": rules.PayloadMapRule,
     "func": rules.FuncRule,
     "coro": rules.CoroutineRule,
     "coroutine": rules.CoroutineRule,
@@ -37,19 +34,19 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
 }
 
 
-class BotLabeler(ABCBotLabeler):
-    """ BotLabeler - shortcut manager for router
-    Can be loaded to other BotLabeler
-    >>> bl = BotLabeler()
+class UserLabeler(ABCUserLabeler):
+    """ UserLabeler - shortcut manager for router
+    Can be loaded to other UserLabeler
+    >>> bl = UserLabeler()
     >>> ...
-    >>> bl.load(BotLabeler())
+    >>> bl.load(UserLabeler())
     Views are fixed. Custom rules can be set locally (they are
     not inherited to other labelers). Rule config is accessible from
     all custom rules from ABCRule.config
     """
 
     def __init__(self, **kwargs):
-        # Default views are fixed in BotLabeler,
+        # Default views are fixed in UserLabeler,
         # if you need to create your own implement
         # custom labeler
         self.message_view = MessageView()
@@ -173,7 +170,7 @@ class BotLabeler(ABCBotLabeler):
 
         return decorator
 
-    def load(self, labeler: "BotLabeler"):
+    def load(self, labeler: "UserLabeler"):
         self.message_view.handlers.extend(labeler.message_view.handlers)
         self.message_view.middlewares.extend(labeler.message_view.middlewares)
         self.raw_event_view.handlers.update(labeler.raw_event_view.handlers)
