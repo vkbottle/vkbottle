@@ -8,7 +8,7 @@ from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager import BaseReturnManager
 
 if TYPE_CHECKING:
-    from vkbottle.tools.dev_tools.mini_types import MessageMin
+    from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
 
 
 class ABCView(ABC):

@@ -5,7 +5,7 @@ from vkbottle_types.events import BaseGroupEvent, GroupEventType
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
-from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
+from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.modules import logger
 
@@ -32,7 +32,7 @@ class RawEventView(ABCView):
         logger.debug("Handling event ({}) with message view".format(event.get("event_id")))
 
         handler_basement = self.handlers[GroupEventType(event["type"])]
-        context_variables = {}
+        context_variables: dict = {}
 
         event_model = handler_basement.dataclass(**event)
 

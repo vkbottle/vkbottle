@@ -6,7 +6,7 @@ from vkbottle_types.events import GroupEventType
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
-from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
+from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.modules import logger
 from vkbottle.tools.dev_tools import message_min
@@ -33,7 +33,7 @@ class ABCMessageView(ABCDispenseView, ABC):
     ) -> Any:
 
         logger.debug("Handling event ({}) with message view".format(event.get("event_id")))
-        context_variables = {}
+        context_variables: dict = {}
         message = message_min(event, ctx_api)
         message.state_peer = await state_dispenser.cast(self.get_state_key(event))
 

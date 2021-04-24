@@ -4,25 +4,26 @@ from typing import TYPE_CHECKING, Any, Hashable, List, NewType, NoReturn, Option
 if TYPE_CHECKING:
     from vkbottle.dispatch.handlers.abc import ABCHandler
     from vkbottle.dispatch.views.abc import ABCView
-    from vkbottle.tools.dev_tools.mini_types import MessageMin
+    from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
 
 
-MiddlewareError = NewType("MiddlewareError", Exception)
+class MiddlewareError(Exception):
+    pass
 
 
 class BaseMiddleware(ABC):
     def __init__(self, event: "MessageMin"):
         self.event = event
-        self._new_context = {}
-        self._error = None
+        self._new_context: dict = {}
+        self.error: Optional[Exception] = None
 
-        self.send = self.catch_all(self.send)
-        self.error = self.catch_all(self.error)
+        self.pre = self.catch_all(self.pre)  # type: ignore
+        self.post = self.catch_all(self.post)  # type: ignore
 
     @property
     def can_forward(self) -> bool:
         """Check if the event can be further processed"""
-        return not self._error
+        return not self.error
 
     @property
     def context_update(self) -> dict:
@@ -35,11 +36,11 @@ class BaseMiddleware(ABC):
             try:
                 return await func(*args, **kwargs)
             except Exception as e:
-                self._error = e
+                self.error = e
 
         return wrapper
 
-    def error(self, description: Any) -> NoReturn:
+    def stop(self, description: Any) -> NoReturn:
         """Wrapper for exception raise"""
         raise MiddlewareError(description)
 
