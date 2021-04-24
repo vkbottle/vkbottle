@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, Type
 
 from vkbottle_types.events import GroupEventType
 
@@ -14,7 +14,6 @@ from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
 
 from ..abc_dispense import ABCDispenseView
 
-
 DEFAULT_STATE_KEY = "peer_id"
 
 
@@ -22,7 +21,7 @@ class ABCMessageView(ABCDispenseView, ABC):
     def __init__(self):
         self.state_source_key = DEFAULT_STATE_KEY
         self.handlers: List["ABCHandler"] = []
-        self.middlewares: List["BaseMiddleware"] = []
+        self.middlewares: List[Type["BaseMiddleware"]] = []
         self.default_text_approximators: List[Callable[[MessageMin], str]] = []
         self.handler_return_manager = BotMessageReturnHandler()
 
@@ -41,12 +40,7 @@ class ABCMessageView(ABCDispenseView, ABC):
         for text_ax in self.default_text_approximators:
             message.text = text_ax(message)
 
-        for middleware in self.middlewares:
-            response = await middleware.pre(message)
-            if response == MiddlewareResponse(False):
-                return []
-            elif isinstance(response, dict):
-                context_variables.update(response)
+        await self.pre_middleware(message, context_variables)
 
         handle_responses = []
         handlers = []
@@ -74,8 +68,7 @@ class ABCMessageView(ABCDispenseView, ABC):
             if handler.blocking:
                 break
 
-        for middleware in self.middlewares:
-            await middleware.post(message, self, handle_responses, handlers)
+        await self.post_middleware(self, handle_responses, handlers)
 
 
 class MessageView(ABCMessageView):

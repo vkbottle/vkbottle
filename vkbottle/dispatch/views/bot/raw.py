@@ -41,12 +41,7 @@ class RawEventView(ABCView):
         else:
             setattr(event_model, "unprepared_ctx_api", ctx_api)
 
-        for middleware in self.middlewares:
-            response = await middleware.pre(event_model)
-            if response == MiddlewareResponse(False):
-                return
-            elif isinstance(response, dict):
-                context_variables.update(response)
+        await self.pre_middleware(event_model, context_variables)
 
         result = await handler_basement.handler.filter(event_model)
         logger.debug("Handler {} returned {}".format(handler_basement.handler, result))
@@ -62,10 +57,10 @@ class RawEventView(ABCView):
         return_handler = self.handler_return_manager.get_handler(handler_response)
         if return_handler is not None:
             await return_handler(
-                self.handler_return_manager, handler_response, event_model, context_variables,
+                self.handler_return_manager,
+                handler_response,
+                event_model,
+                context_variables,
             )
 
-        for middleware in self.middlewares:
-            await middleware.post(
-                event_model, self, [handler_response], [handler_basement.handler]
-            )
+        await self.post_middleware(self, [handler_response], [handler_basement.handler])
