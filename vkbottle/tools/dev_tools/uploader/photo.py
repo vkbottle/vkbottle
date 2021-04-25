@@ -22,8 +22,8 @@ class PhotoToAlbumUploader(PhotoUploader):
         server = await self.get_server(album_id=album_id, **params)
         files = dict()
 
-        for i, path_like in enumerate(paths_like):
-            data = await self.read(path_like)
+        for i, file_source in enumerate(paths_like):
+            data = await self.read(file_source)
             files[f"file{i+1}"] = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], files)
@@ -43,9 +43,9 @@ class PhotoToAlbumUploader(PhotoUploader):
 
 
 class PhotoWallUploader(PhotoUploader):
-    async def upload(self, path_like: Union[str, Bytes], **params) -> Union[str, List[dict]]:
+    async def upload(self, file_source: Union[str, Bytes], **params) -> Union[str, List[dict]]:
         server = await self.get_server(**params)
-        data = await self.read(path_like)
+        data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"photo": file})
@@ -62,9 +62,9 @@ class PhotoWallUploader(PhotoUploader):
 
 
 class PhotoFaviconUploader(PhotoUploader):
-    async def upload(self, path_like: Union[str, Bytes], **params) -> Union[str, dict]:
+    async def upload(self, file_source: Union[str, Bytes], **params) -> Union[str, dict]:
         server = await self.get_server(owner_id=await self.get_owner_id(params))
-        data = await self.read(path_like)
+        data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"photo": file})
@@ -81,9 +81,9 @@ class PhotoFaviconUploader(PhotoUploader):
 
 
 class PhotoMessageUploader(PhotoUploader):
-    async def upload(self, path_like: Union[str, Bytes], **params) -> Union[str, List[dict]]:
+    async def upload(self, file_source: Union[str, Bytes], **params) -> Union[str, List[dict]]:
         server = await self.get_server(**params)
-        data = await self.read(path_like)
+        data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"photo": file})
@@ -100,9 +100,9 @@ class PhotoMessageUploader(PhotoUploader):
 
 
 class PhotoChatFaviconUploader(PhotoUploader):
-    async def upload(self, chat_id: int, path_like: Union[str, Bytes], **params) -> str:
+    async def upload(self, chat_id: int, file_source: Union[str, Bytes], **params) -> str:
         server = await self.get_server(chat_id=chat_id, **params)
-        data = await self.read(path_like)
+        data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"photo": file})
@@ -113,9 +113,9 @@ class PhotoChatFaviconUploader(PhotoUploader):
 
 
 class PhotoMarketUploader(PhotoUploader):
-    async def upload(self, path_like: Union[str, Bytes], **params) -> dict:
+    async def upload(self, file_source: Union[str, Bytes], **params) -> dict:
         server = await self.get_server(**params)
-        data = await self.read(path_like)
+        data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"file": file})
