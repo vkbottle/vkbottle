@@ -34,7 +34,7 @@ class ABCMessageView(ABCDispenseView, ABC):
 
         logger.debug("Handling event ({}) with message view".format(event[0]))
         context_variables = {}
-        message = await message_min(event, ctx_api)
+        message = await message_min(event[1], ctx_api)
         message.state_peer = await state_dispenser.cast(self.get_state_key(message))
 
         for text_ax in self.default_text_approximators:
