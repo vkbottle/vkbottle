@@ -15,7 +15,7 @@
 
 ## Документация
 
-[Туториал для новичков](/docs/tutorial/index.md)  
+[Туториал для новичков](/docs/tutorial/index.md)
 [Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
 
 ## Установка
@@ -30,7 +30,7 @@ pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
 
 ## Hello World
 
-[Смотреть больше примеров!](https://github.com/timoniq/vkbottle/tree/master/examples)  
+[Смотреть больше примеров!](https://github.com/timoniq/vkbottle/tree/master/examples)
 [Почему VKBottle?](https://github.com/timoniq/vkbottle/blob/master/docs/why_vkbottle.md)
 
 ```python
@@ -47,9 +47,9 @@ bot.run_forever()
 
 ## Contributing
 
-ПР поддерживаются! Перед созданием пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE.md](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие библиотеки. Задавайте вопросы в блоке Issues и в [**чате Telegram**](https://t.me/vkbottle_ru) / [**чате VK**](https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj)! 
+ПР поддерживаются! Перед созданием пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE.md](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие библиотеки. Задавайте вопросы в блоке Issues и в [**чате Telegram**](https://t.me/vkbottle_ru) / [**чате VK**](https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj)!
 
 ## Лицензия
 
-Copyright © 2019-2020 [timoniq](https://github.com/timoniq).  
+Copyright © 2019-2020 [timoniq](https://github.com/timoniq).
 Этот проект имеет [MIT](./LICENSE) лицензию.
