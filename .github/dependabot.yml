@@ -1,0 +1,16 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "22:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: black
+    versions:
+    - 21.4b1
+  - dependency-name: mypy
+    versions:
+    - "0.800"
+    - "0.812"
