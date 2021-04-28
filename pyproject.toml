@@ -48,7 +48,7 @@ mypy = "^0.770"
 isort = "^5.7"
 flake8 = "^3.7.9"
 mypy_extensions = "^0.4.3"
-black = { version = "^19.0", allow-prereleases = true }
+black = { version = "^21.4b0", allow-prereleases = true }
 
 # Tests
 pytest = "^6.2"
