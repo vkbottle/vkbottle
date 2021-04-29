@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  [VKBottle 3.0] perfect vk-bot building and development framework :heart:
+  VKBottle 3.x
 </h1>
 <p align="center">
   <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/timoniq/vkbottle/CI?style=flat-square">
@@ -12,6 +12,8 @@
   <img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/timoniq/vkbottle/bug?style=flat-square">
   <img alt="PyPI" src="https://img.shields.io/pypi/v/vkbottle?color=green&label=PyPI&style=flat-square">
 </p>
+
+> Кастомизируемый, быстрый и удобный фреймворк для работы с VK API
 
 ## Документация
 
