@@ -21,6 +21,7 @@ nav:
       - Разделение кода: tutorial/code-separation.md
       - Клавиатуры и вложения: tutorial/keyboards-attachments.md
       - Мидлвари и return менеджеры: tutorial/middlewares-return-managers.md
+      - Обработка ошибок: tutorial/error-handling.md
   - Документация:
       - High-Level: high-level/index.md
       - Low-Level: low-level/index.md
