@@ -15,7 +15,7 @@
 
 ## Документация
 
-[Туториал для новичков](/docs/tutorial/index.md)
+[Туториал для новичков](/docs/tutorial/index.md)\
 [Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
 
 ## Установка
@@ -30,7 +30,7 @@ pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
 
 ## Hello World
 
-[Смотреть больше примеров!](https://github.com/timoniq/vkbottle/tree/master/examples)
+[Смотреть больше примеров!](https://github.com/timoniq/vkbottle/tree/master/examples)\
 [Почему VKBottle?](https://github.com/timoniq/vkbottle/blob/master/docs/why_vkbottle.md)
 
 ```python
@@ -51,5 +51,5 @@ bot.run_forever()
 
 ## Лицензия
 
-Copyright © 2019-2020 [timoniq](https://github.com/timoniq).
+Copyright © 2019-2020 [timoniq](https://github.com/timoniq).\
 Этот проект имеет [MIT](./LICENSE) лицензию.
