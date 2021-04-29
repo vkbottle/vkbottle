@@ -43,4 +43,6 @@
 * [Auth Flows](tools/auth.md)
 * [Uploaders](tools/uploaders.md)
 
-# [Tutorial](tutorial/index.md)
+## Другие разделы
+* [Tutorial](tutorial/index.md)
+* [Dependency Кастомизация](modules.md)
