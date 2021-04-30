@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 class ABCStorage(ABC):
     """ Abstract storage class
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/tools/storage.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/tools/storage.md
     """
 
     @abstractmethod
