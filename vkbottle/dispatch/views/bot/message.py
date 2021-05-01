@@ -25,6 +25,7 @@ class ABCMessageView(ABCDispenseView, ABC):
         self.middlewares: Set[Type["BaseMiddleware"]] = []
         self.default_text_approximators: List[Callable[[MessageMin], str]] = []
         self.handler_return_manager = BotMessageReturnHandler()
+        self.middleware_instances = []
 
     async def process_event(self, event: dict) -> bool:
         return GroupEventType(event["type"]) == GroupEventType.MESSAGE_NEW

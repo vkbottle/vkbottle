@@ -22,6 +22,7 @@ class RawEventView(ABCView):
         self.handlers: Dict[GroupEventType, HandlerBasement] = {}
         self.middlewares: Set[Type["BaseMiddleware"]] = []
         self.handler_return_manager = BotMessageReturnHandler()
+        self.middleware_instances = []
 
     async def process_event(self, event: dict) -> bool:
         if GroupEventType(event["type"]) in self.handlers:
