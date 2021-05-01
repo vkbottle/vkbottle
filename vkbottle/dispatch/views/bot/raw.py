@@ -20,7 +20,8 @@ class RawEventView(ABCView):
     def __init__(self):
         super().__init__()
         self.handlers: Dict[GroupEventType, HandlerBasement] = {}
-        self.middlewares: Set[Type["BaseMiddleware"]] = []
+        self.middlewares: Set[Type["BaseMiddleware"]] = set()
+        self.middleware_instances: List["BaseMiddleware"] = []
         self.handler_return_manager = BotMessageReturnHandler()
 
     async def process_event(self, event: dict) -> bool:
@@ -59,7 +60,10 @@ class RawEventView(ABCView):
         return_handler = self.handler_return_manager.get_handler(handler_response)
         if return_handler is not None:
             await return_handler(
-                self.handler_return_manager, handler_response, event_model, context_variables,
+                self.handler_return_manager,
+                handler_response,
+                event_model,
+                context_variables,
             )
 
         await self.post_middleware(self, [handler_response], [handler_basement.handler])

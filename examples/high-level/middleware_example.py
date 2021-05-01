@@ -11,23 +11,22 @@ dummy_db = CtxStorage()
 
 
 class NoBotMiddleware(BaseMiddleware):
-    async def pre(self, message: Message):
-        return message.from_id > 0  # True / False
+    async def pre(self):
+        return self.event.from_id > 0  # True / False
 
 
 class RegistrationMiddleware(BaseMiddleware):
-    async def pre(self, message: Message):
-        user = dummy_db.get(message.from_id)
+    async def pre(self):
+        user = dummy_db.get(self.event.from_id)
         if user is None:
-            user = (await bot.api.users.get(message.from_id))[0]
-            dummy_db.set(message.from_id, user)
+            user = (await bot.api.users.get(self.event.from_id))[0]
+            dummy_db.set(self.event.from_id, user)
         return {"info": user}
 
 
 class InfoMiddleware(BaseMiddleware):
     async def post(
         self,
-        message: Message,
         view: "ABCView",
         handle_responses: List[Any],
         handlers: List["ABCHandler"],
@@ -35,7 +34,7 @@ class InfoMiddleware(BaseMiddleware):
         if not handlers:
             return
 
-        await message.answer(
+        await self.event.answer(
             "Сообщение было обработано:\n\n" f"View - {view}\n\n" f"Handlers - {handlers}"
         )
 
