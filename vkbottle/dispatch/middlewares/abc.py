@@ -42,6 +42,8 @@ class BaseMiddleware(ABC):
 
     def stop(self, description: Any) -> NoReturn:
         """Wrapper for exception raise"""
+        if issubclass(type(description), (Exception,)):
+            raise description
         raise MiddlewareError(description)
 
     def send(self, context_update: Optional[dict] = None) -> None:

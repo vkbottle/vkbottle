@@ -1,0 +1,1 @@
+from tests.fixtures.middlewares import empty_middleware_class, empty_middleware_instance
