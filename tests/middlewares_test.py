@@ -1,6 +1,7 @@
 import pytest
 
 from vkbottle.dispatch.middlewares.abc import BaseMiddleware, MiddlewareError
+from vkbottle.dispatch.views.bot.message import MessageView
 
 
 def test_middleware_send(empty_middleware_instance: BaseMiddleware):
@@ -56,3 +57,10 @@ async def test_cant_forward_on_error(empty_middleware_class, empty_event):
 
     await middleware.pre()
     assert middleware.can_forward is False
+
+
+@pytest.mark.asyncio
+async def test_view_middleware_utils_run(empty_event):
+    view = MessageView()
+    await view.pre_middleware(empty_event, {})
+    await view.post_middleware(empty_event, [], [])

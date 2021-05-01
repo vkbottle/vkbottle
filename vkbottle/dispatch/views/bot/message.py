@@ -22,7 +22,8 @@ class ABCMessageView(ABCDispenseView, ABC):
         super().__init__()
         self.state_source_key = DEFAULT_STATE_KEY
         self.handlers: List["ABCHandler"] = []
-        self.middlewares: Set[Type["BaseMiddleware"]] = []
+        self.middlewares: Set[Type["BaseMiddleware"]] = set()
+        self.middleware_instances: List["BaseMiddleware"] = []
         self.default_text_approximators: List[Callable[[MessageMin], str]] = []
         self.handler_return_manager = BotMessageReturnHandler()
         self.middleware_instances = []
