@@ -1,1 +1,5 @@
-from tests.fixtures.middlewares import empty_middleware_class, empty_middleware_instance
+from tests.fixtures.middlewares import (
+    empty_event,
+    empty_middleware_class,
+    empty_middleware_instance,
+)

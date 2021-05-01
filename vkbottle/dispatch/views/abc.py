@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, List, Type
+from typing import TYPE_CHECKING, Any, List, Set, Type
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class ABCView(ABC):
     handlers: List["ABCHandler"]
-    middlewares: List[Type["BaseMiddleware"]]
+    middlewares: Set[Type["BaseMiddleware"]]
     middleware_instances: List["BaseMiddleware"]
     handler_return_manager: BaseReturnManager
 
@@ -50,7 +50,7 @@ class ABCView(ABC):
                 raise ValueError("Argument is not a subclass of BaseMiddleware")
         except TypeError:
             raise ValueError("Argument is not a class")
-        self.middlewares.append(middleware)
+        self.middlewares.add(middleware)
 
     def __repr__(self) -> str:
         return (

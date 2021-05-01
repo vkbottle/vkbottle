@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, Callable, List, Optional, Type
+from typing import Any, Callable, List, Optional, Set, Type
 
 from vkbottle_types.events import GroupEventType
 
@@ -19,9 +19,10 @@ DEFAULT_STATE_KEY = "peer_id"
 
 class ABCMessageView(ABCDispenseView, ABC):
     def __init__(self):
+        super().__init__()
         self.state_source_key = DEFAULT_STATE_KEY
         self.handlers: List["ABCHandler"] = []
-        self.middlewares: List[Type["BaseMiddleware"]] = []
+        self.middlewares: Set[Type["BaseMiddleware"]] = []
         self.default_text_approximators: List[Callable[[MessageMin], str]] = []
         self.handler_return_manager = BotMessageReturnHandler()
 

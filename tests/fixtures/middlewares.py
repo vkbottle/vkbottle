@@ -21,5 +21,10 @@ def empty_middleware_class():
 
 
 @pytest.fixture
-def empty_middleware_instance():
-    return EmptyMiddleware(MessageMin())
+def empty_event():
+    return MessageMin()
+
+
+@pytest.fixture
+def empty_middleware_instance(empty_middleware_class, empty_event):
+    return empty_middleware_class(empty_event)
