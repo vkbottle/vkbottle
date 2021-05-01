@@ -7,7 +7,7 @@ def test_middleware_send(empty_middleware_instance: BaseMiddleware):
     with pytest.raises(ValueError):
         empty_middleware_instance.send("not_a_dict")
 
-    assert empty_middleware_instance.send() == None
+    assert empty_middleware_instance.send() is None
 
 
 def test_middleware_stop(empty_middleware_instance: BaseMiddleware):
@@ -55,4 +55,4 @@ async def test_cant_forward_on_error(empty_middleware_class, empty_event):
     middleware = SomeMiddleware(empty_event)
 
     await middleware.pre()
-    assert middleware.can_forward == False
+    assert middleware.can_forward is False

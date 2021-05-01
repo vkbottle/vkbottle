@@ -14,6 +14,7 @@ from vkbottle.dispatch.rules.bot import (
     FromUserRule,
     FuncRule,
     LevensteinRule,
+    MacroRule,
     MessageLengthRule,
     PayloadContainsRule,
     PayloadMapRule,
@@ -23,7 +24,6 @@ from vkbottle.dispatch.rules.bot import (
     StateGroupRule,
     StateRule,
     StickerRule,
-    MacroRule,
     VBMLRule,
 )
 from vkbottle.dispatch.views import ABCView, HandlerBasement, MessageView, RawEventView
