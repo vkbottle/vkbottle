@@ -45,7 +45,7 @@ async def who_i_am_handler(message: Message, info: UsersUserXtrCounters):
     await message.answer(f"Ты - {info.first_name}")
 
 
-bot.labeler.message_view.register_middleware(NoBotMiddleware())
-bot.labeler.message_view.register_middleware(RegistrationMiddleware())
-bot.labeler.message_view.register_middleware(InfoMiddleware())
+bot.labeler.message_view.register_middleware(NoBotMiddleware)
+bot.labeler.message_view.register_middleware(RegistrationMiddleware)
+bot.labeler.message_view.register_middleware(InfoMiddleware)
 bot.run_forever()

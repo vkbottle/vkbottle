@@ -1,8 +1,8 @@
+import asyncio
 import importlib
 import os
 import re
 import typing
-import asyncio
 
 from vkbottle.api.token_generator.consistent import ConsistentTokenGenerator
 from vkbottle.api.token_generator.single import SingleTokenGenerator
@@ -10,8 +10,8 @@ from vkbottle.dispatch.filter import AndFilter, OrFilter
 from vkbottle.dispatch.rules import ABCRule
 
 if typing.TYPE_CHECKING:
-    from vkbottle.framework.abc_blueprint import ABCBlueprint
     from vkbottle.api.token_generator import ABCTokenGenerator, Token
+    from vkbottle.framework.abc_blueprint import ABCBlueprint
 
 
 # This feature is not used in production
