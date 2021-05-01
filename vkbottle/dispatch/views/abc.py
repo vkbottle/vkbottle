@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, List, Set, Type
+from typing import TYPE_CHECKING, Any, List, Optional, Set, Type
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager import BaseReturnManager
+from vkbottle.modules import logger
 
 if TYPE_CHECKING:
     from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
@@ -21,13 +22,17 @@ class ABCView(ABC):
     async def process_event(self, event: dict) -> bool:
         pass
 
-    async def pre_middleware(self, event: "MessageMin", context_variables: dict):
+    async def pre_middleware(
+        self, event: "MessageMin", context_variables: dict
+    ) -> Optional[Exception]:
+        """Run all of the pre middleware methods and return an exception if any error occurs"""
         self.middleware_instances.clear()
         for middleware in self.middlewares:
             mw_instance = middleware(event)
             await mw_instance.pre()
             if not mw_instance.can_forward:
-                return
+                logger.debug(f"{mw_instance} returned error {mw_instance.error}")
+                return mw_instance.error
 
             self.middleware_instances.append(mw_instance)
             context_variables.update(mw_instance.context_update)

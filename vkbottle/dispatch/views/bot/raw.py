@@ -42,7 +42,8 @@ class RawEventView(ABCView):
         else:
             setattr(event_model, "unprepared_ctx_api", ctx_api)
 
-        await self.pre_middleware(event_model, context_variables)
+        if await self.pre_middleware(event_model, context_variables):
+            return logger.info("Handling stopped, pre_middleware returned error")
 
         result = await handler_basement.handler.filter(event_model)
         logger.debug("Handler {} returned {}".format(handler_basement.handler, result))
