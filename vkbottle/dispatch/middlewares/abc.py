@@ -53,11 +53,9 @@ class BaseMiddleware(ABC):
                 raise ValueError("Context update value should be an instance of dict")
             self._new_context.update(context_update)
 
-    @abstractmethod
     async def pre(self) -> None:
         ...
 
-    @abstractmethod
     async def post(
         self, view: "ABCView", handle_responses: List[Any], handlers: List["ABCHandler"]
     ):
