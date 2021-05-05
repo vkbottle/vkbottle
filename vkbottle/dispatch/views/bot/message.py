@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, Callable, List, Optional, Set, Type
+from typing import TYPE_CHECKING, Any, Callable, List, Optional, Set, Type
 
 from vkbottle_types.events import GroupEventType
 
@@ -13,6 +13,9 @@ from vkbottle.tools.dev_tools import message_min
 from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
 
 from ..abc_dispense import ABCDispenseView
+
+if TYPE_CHECKING:
+    from vkbottle_types.events import Event
 
 DEFAULT_STATE_KEY = "peer_id"
 
@@ -28,11 +31,11 @@ class ABCMessageView(ABCDispenseView, ABC):
         self.handler_return_manager = BotMessageReturnHandler()
         self.middleware_instances = []
 
-    async def process_event(self, event: dict) -> bool:
+    async def process_event(self, event: "Event") -> bool:
         return GroupEventType(event["type"]) == GroupEventType.MESSAGE_NEW
 
     async def handle_event(
-        self, event: dict, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self, event: "Event", ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
     ) -> Any:
 
         logger.debug("Handling event ({}) with message view".format(event.get("event_id")))
@@ -76,5 +79,5 @@ class ABCMessageView(ABCDispenseView, ABC):
 
 
 class MessageView(ABCMessageView):
-    def get_state_key(self, event: dict) -> Optional[int]:
+    def get_state_key(self, event: "Event") -> Optional[int]:
         return event["object"]["message"].get(self.state_source_key)

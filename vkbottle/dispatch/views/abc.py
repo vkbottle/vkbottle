@@ -9,7 +9,7 @@ from vkbottle.dispatch.return_manager import BaseReturnManager
 from vkbottle.modules import logger
 
 if TYPE_CHECKING:
-    from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
+    from vkbottle_types.events import Event
 
 
 class ABCView(ABC):
@@ -19,12 +19,10 @@ class ABCView(ABC):
     handler_return_manager: BaseReturnManager
 
     @abstractmethod
-    async def process_event(self, event: dict) -> bool:
+    async def process_event(self, event: "Event") -> bool:
         pass
 
-    async def pre_middleware(
-        self, event: "MessageMin", context_variables: dict
-    ) -> Optional[Exception]:
+    async def pre_middleware(self, event: "Event", context_variables: dict) -> Optional[Exception]:
         """Run all of the pre middleware methods and return an exception if any error occurs"""
         self.middleware_instances.clear()
         for middleware in self.middlewares:
@@ -45,7 +43,7 @@ class ABCView(ABC):
 
     @abstractmethod
     async def handle_event(
-        self, event: dict, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self, event: "Event", ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
     ) -> Any:
         pass
 

@@ -1,10 +1,6 @@
-from typing import Any, List, Type
-
 import pytest
 
-from vkbottle.dispatch.middlewares.abc import BaseMiddleware, MiddlewareError
-from vkbottle.dispatch.views.abc_dispense import ABCDispenseView
-from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
+from vkbottle.dispatch.middlewares.abc import BaseMiddleware
 
 
 class EmptyMiddleware(BaseMiddleware):
@@ -22,7 +18,7 @@ def empty_middleware_class():
 
 @pytest.fixture
 def empty_event():
-    return MessageMin()
+    return dict()
 
 
 @pytest.fixture

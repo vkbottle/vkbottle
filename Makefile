@@ -32,16 +32,16 @@ check: check-venv ## Run tests and linters
 	@echo "flake8"
 	@echo "======"
 	@$(interpreter) flake8
-	@echo -e "\nblack"
+	@echo; echo "black"
 	@echo "====="
 	@$(interpreter) black --check .
-	@echo -e "\nisort"
+	@echo; echo "isort"
 	@echo "====="
 	@$(interpreter) isort --check-only .
-	@echo -e "\nmypy"
+	@echo; echo "mypy"
 	@echo "===="
 	@$(interpreter) mypy vkbottle
-	@echo -e "\npytest"
+	@echo; echo "pytest"
 	@echo "======"
 	@$(interpreter) pytest --cov vkbottle tests
 
@@ -49,7 +49,7 @@ fix: check-venv ## Fix code with black and autoflake
 	@echo "black"
 	@echo "====="
 	@$(interpreter) black .
-	@echo -e "\nisort"
+	@echo; echo "isort"
 	@echo "====="
 	@$(interpreter) isort .
 

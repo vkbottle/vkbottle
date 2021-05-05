@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, NamedTuple, Set, Type
+from typing import TYPE_CHECKING, Any, Dict, List, NamedTuple, Set, Type
 
 from vkbottle_types.events import BaseGroupEvent, GroupEventType
 
@@ -11,6 +11,8 @@ from vkbottle.modules import logger
 
 from ..abc import ABCView
 
+if TYPE_CHECKING:
+    from vkbottle_types.events import Event
 HandlerBasement = NamedTuple(
     "HandlerBasement", [("dataclass", Type[BaseGroupEvent]), ("handler", ABCHandler)]
 )
@@ -25,12 +27,12 @@ class RawEventView(ABCView):
         self.handler_return_manager = BotMessageReturnHandler()
         self.middleware_instances = []
 
-    async def process_event(self, event: dict) -> bool:
+    async def process_event(self, event: "Event") -> bool:
         if GroupEventType(event["type"]) in self.handlers:
             return True
 
     async def handle_event(
-        self, event: dict, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self, event: "Event", ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
     ) -> Any:
         logger.debug("Handling event ({}) with message view".format(event.get("event_id")))
 

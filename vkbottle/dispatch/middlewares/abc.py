@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Hashable, List, NewType, NoReturn, Optional
+from typing import TYPE_CHECKING, Any, Hashable, List, NewType, NoReturn, Optional, Union
 
 if TYPE_CHECKING:
+    from vkbottle_types.events import Event
+
     from vkbottle.dispatch.handlers.abc import ABCHandler
     from vkbottle.dispatch.views.abc import ABCView
-    from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
 
 
 class MiddlewareError(Exception):
@@ -12,7 +13,7 @@ class MiddlewareError(Exception):
 
 
 class BaseMiddleware(ABC):
-    def __init__(self, event: "MessageMin"):
+    def __init__(self, event: "Event"):
         self.event = event
         self._new_context: dict = {}
         self.error: Optional[Exception] = None
