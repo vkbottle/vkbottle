@@ -1,12 +1,12 @@
 from abc import ABC
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, Set, Type
 
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
-from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
+from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.modules import logger
 from vkbottle.tools.dev_tools import message_min
@@ -14,15 +14,16 @@ from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
 
 from ..abc_dispense import ABCDispenseView
 
-
 DEFAULT_STATE_KEY = "peer_id"
 
 
 class ABCMessageView(ABCDispenseView, ABC):
     def __init__(self):
+        super().__init__()
         self.state_source_key = DEFAULT_STATE_KEY
         self.handlers: List["ABCHandler"] = []
-        self.middlewares: List["BaseMiddleware"] = []
+        self.middlewares: Set[Type["BaseMiddleware"]] = set()
+        self.middleware_instances: List["BaseMiddleware"] = []
         self.default_text_approximators: List[Callable[[MessageMin], str]] = []
         self.handler_return_manager = BotMessageReturnHandler()
 
@@ -34,19 +35,15 @@ class ABCMessageView(ABCDispenseView, ABC):
     ) -> Any:
 
         logger.debug("Handling event ({}) with message view".format(event.get("event_id")))
-        context_variables = {}
+        context_variables: dict = {}
         message = message_min(event, ctx_api)
         message.state_peer = await state_dispenser.cast(self.get_state_key(event))
 
         for text_ax in self.default_text_approximators:
             message.text = text_ax(message)
 
-        for middleware in self.middlewares:
-            response = await middleware.pre(message)
-            if response == MiddlewareResponse(False):
-                return
-            elif isinstance(response, dict):
-                context_variables.update(response)
+        if await self.pre_middleware(message, context_variables) is False:
+            return logger.info("Handling stopped, pre_middleware returned error")
 
         handle_responses = []
         handlers = []
@@ -74,8 +71,7 @@ class ABCMessageView(ABCDispenseView, ABC):
             if handler.blocking:
                 break
 
-        for middleware in self.middlewares:
-            await middleware.post(message, self, handle_responses, handlers)
+        await self.post_middleware(self, handle_responses, handlers)
 
 
 class MessageView(ABCMessageView):

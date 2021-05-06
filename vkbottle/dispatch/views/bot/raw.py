@@ -1,11 +1,11 @@
-from typing import Any, Dict, List, NamedTuple, Callable
+from typing import Any, Dict, List, NamedTuple, Set, Type, Callable
 
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
-from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
+from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.modules import logger
 
@@ -16,8 +16,10 @@ HandlerBasement = NamedTuple("HandlerBasement", [("dataclass", Callable), ("hand
 
 class RawEventView(ABCView):
     def __init__(self):
+        super().__init__()
         self.handlers: Dict[GroupEventType, HandlerBasement] = {}
-        self.middlewares: List["BaseMiddleware"] = []
+        self.middlewares: Set[Type["BaseMiddleware"]] = set()
+        self.middleware_instances: List["BaseMiddleware"] = []
         self.handler_return_manager = BotMessageReturnHandler()
 
     async def process_event(self, event: dict) -> bool:
@@ -30,7 +32,7 @@ class RawEventView(ABCView):
         logger.debug("Handling event ({}) with message view".format(event.get("event_id")))
 
         handler_basement = self.handlers[GroupEventType(event["type"])]
-        context_variables = {}
+        context_variables: dict = {}
 
         event_model = handler_basement.dataclass(**event)
 
@@ -39,12 +41,8 @@ class RawEventView(ABCView):
         else:
             setattr(event_model, "unprepared_ctx_api", ctx_api)
 
-        for middleware in self.middlewares:
-            response = await middleware.pre(event_model)
-            if response == MiddlewareResponse(False):
-                return
-            elif isinstance(response, dict):
-                context_variables.update(response)
+        if await self.pre_middleware(event_model, context_variables):
+            return logger.info("Handling stopped, pre_middleware returned error")
 
         result = await handler_basement.handler.filter(event_model)
         logger.debug("Handler {} returned {}".format(handler_basement.handler, result))
@@ -60,10 +58,10 @@ class RawEventView(ABCView):
         return_handler = self.handler_return_manager.get_handler(handler_response)
         if return_handler is not None:
             await return_handler(
-                self.handler_return_manager, handler_response, event_model, context_variables,
+                self.handler_return_manager,
+                handler_response,
+                event_model,
+                context_variables,
             )
 
-        for middleware in self.middlewares:
-            await middleware.post(
-                event_model, self, [handler_response], [handler_basement.handler]
-            )
+        await self.post_middleware(self, [handler_response], [handler_basement.handler])
