@@ -1,7 +1,7 @@
 from typing import Optional, Union
 
 from vkbottle.api import ABCAPI, API
-from vkbottle.dispatch import ABCStateDispenser, BotRouter
+from vkbottle.dispatch import ABCStateDispenser, Router
 from vkbottle.framework.abc_blueprint import ABCBlueprint
 from vkbottle.framework.bot.bot import Bot
 from vkbottle.framework.bot.labeler import BotLabeler
@@ -14,13 +14,13 @@ class BotBlueprint(ABCBlueprint):
         self,
         name: Optional[str] = None,
         labeler: Optional[BotLabeler] = None,
-        router: Optional[BotRouter] = None,
+        router: Optional[Router] = None,
     ):
         if name is not None:
             self.name = name
 
         self.labeler = labeler or BotLabeler()
-        self.router: BotRouter = router or BotRouter()
+        self.router: Router = router or Router()
         self.constructed = False
 
     def construct(

@@ -14,12 +14,12 @@ class ABCView(ABC):
     handler_return_manager: BaseReturnManager
 
     @abstractmethod
-    async def process_event(self, event: dict) -> bool:
+    async def process_event(self, event: Any) -> bool:
         pass
 
     @abstractmethod
     async def handle_event(
-        self, event: dict, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self, event: Any, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
     ) -> Any:
         pass
 

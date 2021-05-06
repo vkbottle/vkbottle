@@ -1,5 +1,5 @@
-from typing import Any, List, Optional, Union
 from random import randint
+from typing import Any, List, Optional, Union
 
 from vkbottle_types import StatePeer
 from vkbottle_types.objects import MessagesMessage, UsersUser
@@ -29,7 +29,6 @@ class MessageMin(MessagesMessage):
         user_id: Optional[int] = None,
         domain: Optional[str] = None,
         chat_id: Optional[int] = None,
-        random_id: Optional[int] = 0,
         user_ids: Optional[List[int]] = None,
         lat: Optional[float] = None,
         long: Optional[float] = None,
@@ -57,9 +56,9 @@ MessageMin.update_forward_refs()
 
 
 async def message_min(message_id: int, ctx_api: "ABCAPI") -> "MessageMin":
-    message_object = (await ctx_api.request(
-        'messages.getById', {'message_ids': message_id}
-    ))['response']['items'][0]
+    message_object = (await ctx_api.request("messages.getById", {"message_ids": message_id}))[
+        "response"
+    ]["items"][0]
     message = MessageMin(**message_object)
     setattr(message, "unprepared_ctx_api", ctx_api)
     return message

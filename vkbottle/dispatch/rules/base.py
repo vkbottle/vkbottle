@@ -3,12 +3,23 @@ import re
 import types
 import typing
 from abc import abstractmethod
-from typing import Awaitable, Callable, Coroutine, Dict, List, Optional, Tuple, Type, Union
+from typing import (
+    Awaitable,
+    Callable,
+    Coroutine,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+)
 
 import vbml
 from vkbottle_types import BaseStateGroup
 
-from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
 from vkbottle.tools.validator import (
     ABCValidator,
     CallableValidator,
@@ -19,19 +30,20 @@ from vkbottle.tools.validator import (
 from .abc import ABCRule
 
 DEFAULT_PREFIXES = ["!", "/"]
-Message = MessageMin
 PayloadMap = List[Tuple[str, Union[type, Callable[[typing.Any], bool], ABCValidator, typing.Any]]]
 PayloadMapStrict = List[Tuple[str, ABCValidator]]
 PayloadMapDict = Dict[str, Union[dict, type]]
 
+Message = TypeVar("Message", bound="typing.Any")
 
-class ABCMessageRule(ABCRule):
+
+class ABCMessageRule(ABCRule, Generic[Message]):
     @abstractmethod
     async def check(self, message: Message) -> Union[dict, bool]:
         pass
 
 
-class PeerRule(ABCMessageRule):
+class PeerRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, from_chat: bool = True):
         self.from_chat = from_chat
 
@@ -39,8 +51,14 @@ class PeerRule(ABCMessageRule):
         return self.from_chat is (message.peer_id != message.from_id)
 
 
-class CommandRule(ABCMessageRule):
-    def __init__(self, command_text: Union[str, Tuple[str, int]], prefixes: Optional[List[str]] = None, args_count: int = 0, sep: str = " "):
+class CommandRule(ABCMessageRule[Message], Generic[Message]):
+    def __init__(
+        self,
+        command_text: Union[str, Tuple[str, int]],
+        prefixes: Optional[List[str]] = None,
+        args_count: int = 0,
+        sep: str = " ",
+    ):
         self.prefixes = prefixes or DEFAULT_PREFIXES
         self.command_text = command_text if isinstance(command_text, str) else command_text[0]
         self.args_count = args_count if isinstance(command_text, str) else command_text[1]
@@ -60,7 +78,7 @@ class CommandRule(ABCMessageRule):
         return False
 
 
-class VBMLRule(ABCMessageRule):
+class VBMLRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(
         self,
         pattern: Union[str, "vbml.Pattern", List[Union[str, "vbml.Pattern"]]],
@@ -92,7 +110,7 @@ class VBMLRule(ABCMessageRule):
         return False
 
 
-class RegexRule(ABCMessageRule):
+class RegexRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, regexp: Union[str, List[str], typing.Pattern, List[typing.Pattern]]):
         if isinstance(regexp, typing.Pattern):
             regexp = [regexp]
@@ -111,7 +129,7 @@ class RegexRule(ABCMessageRule):
         return False
 
 
-class StickerRule(ABCMessageRule):
+class StickerRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, sticker_ids: Union[List[int], int] = None):
         sticker_ids = sticker_ids or []
         if isinstance(sticker_ids, int):
@@ -132,7 +150,7 @@ class StickerRule(ABCMessageRule):
         return False
 
 
-class FromPeerRule(ABCMessageRule):
+class FromPeerRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, peer_ids: Union[List[int], int]):
         if isinstance(peer_ids, int):
             peer_ids = [peer_ids]
@@ -142,7 +160,7 @@ class FromPeerRule(ABCMessageRule):
         return message.peer_id in self.peer_ids
 
 
-class AttachmentTypeRule(ABCMessageRule):
+class AttachmentTypeRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, attachment_types: Union[List[str], str]):
         if not isinstance(attachment_types, list):
             attachment_types = [attachment_types]
@@ -157,7 +175,7 @@ class AttachmentTypeRule(ABCMessageRule):
         return True
 
 
-class ForwardMessagesRule(ABCMessageRule):
+class ForwardMessagesRule(ABCMessageRule[Message], Generic[Message]):
     async def check(self, message: Message) -> bool:
         if not message.fwd_messages:
             return False
@@ -165,21 +183,21 @@ class ForwardMessagesRule(ABCMessageRule):
         return True
 
 
-class ReplyMessageRule(ABCMessageRule):
+class ReplyMessageRule(ABCMessageRule[Message], Generic[Message]):
     async def check(self, message: Message) -> bool:
         if not message.reply_message:
             return False
         return True
 
 
-class GeoRule(ABCMessageRule):
+class GeoRule(ABCMessageRule[Message], Generic[Message]):
     async def check(self, message: Message) -> bool:
         if not message.geo:
             return False
         return True
 
 
-class LevensteinRule(ABCMessageRule):
+class LevensteinRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, levenstein_texts: Union[List[str], str], max_distance: int = 1):
         if isinstance(levenstein_texts, str):
             levenstein_texts = [levenstein_texts]
@@ -215,7 +233,7 @@ class LevensteinRule(ABCMessageRule):
         return False
 
 
-class MessageLengthRule(ABCMessageRule):
+class MessageLengthRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, min_length: int):
         self.min_length = min_length
 
@@ -223,7 +241,7 @@ class MessageLengthRule(ABCMessageRule):
         return len(message.text) >= self.min_length
 
 
-class ChatActionRule(ABCMessageRule):
+class ChatActionRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, chat_action_types: Union[List[str], str]):
         if isinstance(chat_action_types, str):
             chat_action_types = [chat_action_types]
@@ -237,7 +255,7 @@ class ChatActionRule(ABCMessageRule):
         return False
 
 
-class PayloadRule(ABCMessageRule):
+class PayloadRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, payload: Union[dict, List[dict]]):
         if isinstance(payload, dict):
             payload = [payload]
@@ -247,7 +265,7 @@ class PayloadRule(ABCMessageRule):
         return message.get_payload_json() in self.payload
 
 
-class PayloadContainsRule(ABCMessageRule):
+class PayloadContainsRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, payload_particular_part: dict):
         self.payload_particular_part = payload_particular_part
 
@@ -259,7 +277,7 @@ class PayloadContainsRule(ABCMessageRule):
         return True
 
 
-class PayloadMapRule(ABCMessageRule):
+class PayloadMapRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, payload_map: Union[PayloadMap, PayloadMapDict]):
         if isinstance(payload_map, dict):
             payload_map = self.transform_to_map(payload_map)
@@ -310,7 +328,7 @@ class PayloadMapRule(ABCMessageRule):
         return await self.match(payload, self.payload_map)
 
 
-class FromUserRule(ABCMessageRule):
+class FromUserRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, from_user: bool = True):
         self.from_user = from_user
 
@@ -318,7 +336,7 @@ class FromUserRule(ABCMessageRule):
         return self.from_user is (message.from_id > 0)
 
 
-class FuncRule(ABCMessageRule):
+class FuncRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, func: Union[Callable[[Message], Union[bool, Awaitable]]]):
         self.func = func
 
@@ -328,7 +346,7 @@ class FuncRule(ABCMessageRule):
         return self.func(message)  # type: ignore
 
 
-class CoroutineRule(ABCMessageRule):
+class CoroutineRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, coroutine: Coroutine):
         self.coro = coroutine
 
@@ -336,7 +354,7 @@ class CoroutineRule(ABCMessageRule):
         return await self.coro
 
 
-class StateRule(ABCMessageRule):
+class StateRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, state: Union[List[BaseStateGroup], BaseStateGroup]):
         if not isinstance(state, list):
             state = [] if state is None else [state]
@@ -348,7 +366,7 @@ class StateRule(ABCMessageRule):
         return message.state_peer.state in self.state
 
 
-class StateGroupRule(ABCMessageRule):
+class StateGroupRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, state_group: Union[List[Type[BaseStateGroup]], Type[BaseStateGroup]]):
         if not isinstance(state_group, list):
             state_group = [] if state_group is None else [state_group]
@@ -366,7 +384,7 @@ except ImportError:
     macro = None
 
 
-class MacroRule(ABCMessageRule):
+class MacroRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, pattern: Union[str, List[str]]):
         if macro is None:
             raise RuntimeError("macro must be installed to use MacroRule")

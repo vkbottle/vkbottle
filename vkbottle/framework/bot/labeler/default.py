@@ -4,7 +4,7 @@ from typing import Any, Callable, Dict, List, Set, Tuple, Type, Union
 import vbml
 
 from vkbottle.dispatch.handlers import FromFuncHandler
-from vkbottle.dispatch.rules import ABCRule, rules
+from vkbottle.dispatch.rules import ABCRule, bot
 from vkbottle.dispatch.views import ABCView
 from vkbottle.dispatch.views.bot import HandlerBasement, MessageView, RawEventView
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
@@ -13,27 +13,27 @@ from .abc import ABCBotLabeler, LabeledHandler, LabeledMessageHandler
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
-    "from_chat": rules.PeerRule,
-    "command": rules.CommandRule,
-    "from_user": rules.FromUserRule,
-    "peer_ids": rules.FromPeerRule,
-    "sticker": rules.StickerRule,
-    "attachment": rules.AttachmentTypeRule,
-    "levenstein": rules.LevensteinRule,
-    "lev": rules.LevensteinRule,
-    "length": rules.MessageLengthRule,
-    "action": rules.ChatActionRule,
-    "payload": rules.PayloadRule,
-    "payload_contains": rules.PayloadContainsRule,
-    "payload_map": rules.PayloadMapRule,
-    "func": rules.FuncRule,
-    "coro": rules.CoroutineRule,
-    "coroutine": rules.CoroutineRule,
-    "state": rules.StateRule,
-    "state_group": rules.StateGroupRule,
-    "regexp": rules.RegexRule,
-    "macro": rules.MacroRule,
-    "text": rules.VBMLRule,
+    "from_chat": bot.PeerRule,
+    "command": bot.CommandRule,
+    "from_user": bot.FromUserRule,
+    "peer_ids": bot.FromPeerRule,
+    "sticker": bot.StickerRule,
+    "attachment": bot.AttachmentTypeRule,
+    "levenstein": bot.LevensteinRule,
+    "lev": bot.LevensteinRule,
+    "length": bot.MessageLengthRule,
+    "action": bot.ChatActionRule,
+    "payload": bot.PayloadRule,
+    "payload_contains": bot.PayloadContainsRule,
+    "payload_map": bot.PayloadMapRule,
+    "func": bot.FuncRule,
+    "coro": bot.CoroutineRule,
+    "coroutine": bot.CoroutineRule,
+    "state": bot.StateRule,
+    "state_group": bot.StateGroupRule,
+    "regexp": bot.RegexRule,
+    "macro": bot.MacroRule,
+    "text": bot.VBMLRule,
 }
 
 
@@ -118,7 +118,7 @@ class BotLabeler(ABCBotLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    PeerRule(True),
+                    bot.PeerRule(True),
                     *map(convert_shorten_filter, rules),
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
@@ -136,7 +136,7 @@ class BotLabeler(ABCBotLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    PeerRule(False),
+                    bot.PeerRule(False),
                     *map(convert_shorten_filter, rules),
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),

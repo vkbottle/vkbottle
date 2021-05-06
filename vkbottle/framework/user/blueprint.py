@@ -1,10 +1,10 @@
 from typing import Optional, Union
 
 from vkbottle.api import ABCAPI, API
-from vkbottle.dispatch import ABCStateDispenser, UserRouter
+from vkbottle.dispatch import ABCStateDispenser, Router
 from vkbottle.framework.abc_blueprint import ABCBlueprint
-from vkbottle.framework.user.user import User
 from vkbottle.framework.user.labeler import UserLabeler
+from vkbottle.framework.user.user import User
 from vkbottle.modules import logger
 from vkbottle.polling import ABCPolling
 
@@ -14,13 +14,13 @@ class UserBlueprint(ABCBlueprint):
         self,
         name: Optional[str] = None,
         labeler: Optional[UserLabeler] = None,
-        router: Optional[UserRouter] = None,
+        router: Optional[Router] = None,
     ):
         if name is not None:
             self.name = name
 
         self.labeler = labeler or UserLabeler()
-        self.router: UserRouter = router or UserRouter()
+        self.router: Router = router or Router()
         self.constructed = False
 
     def construct(

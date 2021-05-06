@@ -4,7 +4,7 @@ from typing import Any, Callable, Dict, List, Set, Tuple, Type, Union
 import vbml
 
 from vkbottle.dispatch.handlers import FromFuncHandler
-from vkbottle.dispatch.rules import ABCRule, rules
+from vkbottle.dispatch.rules import ABCRule, user
 from vkbottle.dispatch.views import ABCView
 from vkbottle.dispatch.views.user import HandlerBasement, MessageView, RawEventView
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
@@ -13,24 +13,24 @@ from .abc import ABCUserLabeler, LabeledHandler, LabeledMessageHandler
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
-    "from_chat": rules.PeerRule,
-    "command": rules.CommandRule,
-    "from_user": rules.FromUserRule,
-    "peer_ids": rules.FromPeerRule,
-    "sticker": rules.StickerRule,
-    "attachment": rules.AttachmentTypeRule,
-    "levenstein": rules.LevensteinRule,
-    "lev": rules.LevensteinRule,
-    "length": rules.MessageLengthRule,
-    "action": rules.ChatActionRule,
-    "func": rules.FuncRule,
-    "coro": rules.CoroutineRule,
-    "coroutine": rules.CoroutineRule,
-    "state": rules.StateRule,
-    "state_group": rules.StateGroupRule,
-    "regexp": rules.RegexRule,
-    "macro": rules.MacroRule,
-    "text": rules.VBMLRule,
+    "from_chat": user.PeerRule,
+    "command": user.CommandRule,
+    "from_user": user.FromUserRule,
+    "peer_ids": user.FromPeerRule,
+    "sticker": user.StickerRule,
+    "attachment": user.AttachmentTypeRule,
+    "levenstein": user.LevensteinRule,
+    "lev": user.LevensteinRule,
+    "length": user.MessageLengthRule,
+    "action": user.ChatActionRule,
+    "func": user.FuncRule,
+    "coro": user.CoroutineRule,
+    "coroutine": user.CoroutineRule,
+    "state": user.StateRule,
+    "state_group": user.StateGroupRule,
+    "regexp": user.RegexRule,
+    "macro": user.MacroRule,
+    "text": user.VBMLRule,
 }
 
 
@@ -115,7 +115,7 @@ class UserLabeler(ABCUserLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    PeerRule(True),
+                    user.PeerRule(True),
                     *map(convert_shorten_filter, rules),
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
@@ -133,7 +133,7 @@ class UserLabeler(ABCUserLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    PeerRule(False),
+                    user.PeerRule(False),
                     *map(convert_shorten_filter, rules),
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),

@@ -9,13 +9,13 @@ from vkbottle.modules import logger
 from .abc import ABCRouter
 
 
-class UserRouter(ABCRouter):
+class Router(ABCRouter):
     async def route(self, event: dict, ctx_api: "ABCAPI") -> None:
         logger.debug("Routing update {}".format(event))
 
         for view in self.views.values():
             try:
-                if not await view.process_event(event[0]):
+                if not await view.process_event(event):
                     continue
                 await view.handle_event(event, ctx_api, self.state_dispenser)
             except BaseException as e:
@@ -26,7 +26,7 @@ class UserRouter(ABCRouter):
         views: Dict[str, "ABCView"],
         state_dispenser: ABCStateDispenser,
         error_handler: ABCErrorHandler,
-    ) -> "UserRouter":
+    ) -> "Router":
         self.views = views
         self.state_dispenser = state_dispenser
         self.error_handler = error_handler

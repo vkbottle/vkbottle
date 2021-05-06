@@ -2,8 +2,8 @@ from abc import ABC
 from typing import TYPE_CHECKING, Any, List, NewType
 
 if TYPE_CHECKING:
-    from vkbottle.dispatch.views.abc import ABCView
     from vkbottle.dispatch.handlers.abc import ABCHandler
+    from vkbottle.dispatch.views.abc import ABCView
 
 
 MiddlewareResponse = NewType("MiddlewareResponse", bool)
