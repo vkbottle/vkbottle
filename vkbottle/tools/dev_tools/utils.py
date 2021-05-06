@@ -4,13 +4,10 @@ import os
 import re
 import typing
 
-from vkbottle.api.token_generator.consistent import ConsistentTokenGenerator
-from vkbottle.api.token_generator.single import SingleTokenGenerator
 from vkbottle.dispatch.filter import AndFilter, OrFilter
 from vkbottle.dispatch.rules import ABCRule
 
 if typing.TYPE_CHECKING:
-    from vkbottle.api.token_generator import ABCTokenGenerator, Token
     from vkbottle.framework.abc_blueprint import ABCBlueprint
 
 
@@ -18,7 +15,7 @@ if typing.TYPE_CHECKING:
 # but can be useful for customization
 # purposes
 def run_in_task(coroutine: typing.Coroutine) -> None:
-    """ Gets loop and runs add makes task from the given coroutine """
+    """Gets loop and runs add makes task from the given coroutine"""
     loop = asyncio.get_running_loop()
     loop.create_task(coroutine)
 
@@ -26,7 +23,7 @@ def run_in_task(coroutine: typing.Coroutine) -> None:
 def convert_shorten_filter(
     shorten: typing.Union[ABCRule, typing.Tuple[ABCRule, ...], typing.Set[ABCRule]]
 ) -> "ABCRule":
-    """ Shortener. Converts tuple/list of rules to OrFilter and set of rules to AndFilter
+    """Shortener. Converts tuple/list of rules to OrFilter and set of rules to AndFilter
     :param shorten: list/tuple/set of rules or a single rule
     """
     if isinstance(shorten, set):
@@ -37,7 +34,7 @@ def convert_shorten_filter(
 
 
 def load_blueprints_from_package(package_name: str) -> typing.Iterator["ABCBlueprint"]:
-    """ Gets blueprints from package
+    """Gets blueprints from package
     >>> for bp in load_blueprints_from_package("blueprints"):
     >>>     bp.load(...)
     """

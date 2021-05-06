@@ -12,8 +12,14 @@ repos:
 
     # Use locally installed hooks
   - repo: local
-
     hooks:
+      - id: autoflake
+        name: autoflake
+        entry: poetry run autoflake -i --remove-all-unused-imports --exclude bot.py,conftest.py,__init__.py
+        language: system
+        types: [ python ]
+        stages: [ commit ]
+
       - id: black
         name: black
         entry: poetry run black

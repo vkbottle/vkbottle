@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
-from types import ModuleType
 from typing import Callable, Optional, Union
 
 from vkbottle.api import ABCAPI

@@ -46,6 +46,9 @@ check: check-venv ## Run tests and linters
 	@$(interpreter) pytest --cov vkbottle tests
 
 fix: check-venv ## Fix code with black and autoflake
+	@echo "autoflake"
+	@echo "========="
+	@$(interpreter) autoflake -ri --remove-all-unused-imports --exclude bot.py,conftest.py,__init__.py .
 	@echo "black"
 	@echo "====="
 	@$(interpreter) black .
