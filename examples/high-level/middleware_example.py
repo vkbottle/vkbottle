@@ -21,7 +21,7 @@ class RegistrationMiddleware(BaseMiddleware):
         if user is None:
             user = (await bot.api.users.get(self.event.from_id))[0]
             dummy_db.set(self.event.from_id, user)
-        return {"info": user}
+        self.send({"info": user})
 
 
 class InfoMiddleware(BaseMiddleware):
