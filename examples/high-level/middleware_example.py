@@ -12,7 +12,8 @@ dummy_db = CtxStorage()
 
 class NoBotMiddleware(BaseMiddleware):
     async def pre(self):
-        return self.event.from_id > 0  # True / False
+        if self.event.from_id < 0:
+            self.stop("Groups are not allowed to use bot")
 
 
 class RegistrationMiddleware(BaseMiddleware):
