@@ -57,7 +57,7 @@ class CommandRule(ABCMessageRule):
             if self.args_count == 0 and message.text == prefix + self.command_text:
                 return True
             if self.args_count > 0 and message.text.startswith(prefix + self.command_text + " "):
-                args = message.text[len(prefix + self.command_text) + 1 :].split(self.sep)
+                args = message.text[len(prefix + self.command_text) + 1:].split(self.sep)
                 if len(args) != self.args_count:
                     return False
                 elif any(len(arg) == 0 for arg in args):

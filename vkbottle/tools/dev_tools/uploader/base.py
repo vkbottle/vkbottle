@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
-from types import ModuleType
 from typing import Callable, Optional, Union
 
 from vkbottle.api import ABCAPI
@@ -9,7 +8,7 @@ from vkbottle.modules import json
 try:
     import aiofiles
 except ImportError:
-    aiofiles = None  # type: ignore
+    aiofiles = None
 
 
 Bytes = Union[bytes, BytesIO]

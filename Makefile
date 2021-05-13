@@ -29,28 +29,12 @@ githooks: check-venv  ## Install git hooks
 	@$(interpreter) pre-commit install -t=pre-commit -t=pre-push
 
 check: check-venv ## Run tests and linters
-	@echo "flake8"
-	@echo "======"
-	@$(interpreter) flake8
-	@echo -e "\nblack"
-	@echo "====="
-	@$(interpreter) black --check .
-	@echo -e "\nisort"
-	@echo "====="
-	@$(interpreter) isort --check-only .
-	@echo -e "\nmypy"
-	@echo "===="
 	@$(interpreter) mypy vkbottle
-	@echo -e "\npytest"
-	@echo "======"
+	@$(interpreter) flake8
 	@$(interpreter) pytest --cov vkbottle tests
 
 fix: check-venv ## Fix code with black and autoflake
-	@echo "black"
-	@echo "====="
 	@$(interpreter) black .
-	@echo -e "\nisort"
-	@echo "====="
 	@$(interpreter) isort .
 
 publish: ## Publish to PyPi using PYPI_TOKEN

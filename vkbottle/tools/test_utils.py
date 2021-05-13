@@ -1,4 +1,4 @@
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional
 
 from vkbottle import API, ABCHTTPClient
 
@@ -11,17 +11,17 @@ class MockedClient(ABCHTTPClient):
 
     async def request_text(
         self, method: str, url: str, data: Optional[dict] = None, **kwargs
-    ) -> Union[str, Any]:
+    ) -> str:
         return self.return_value or self.callback(locals())
 
     async def request_json(
         self, method: str, url: str, data: Optional[dict] = None, **kwargs
-    ) -> Union[dict, Any]:
+    ) -> dict:
         return self.return_value or self.callback(locals())
 
     async def request_content(
         self, method: str, url: str, data: Optional[dict] = None, **kwargs
-    ) -> Union[bytes, Any]:
+    ) -> bytes:
         return self.return_value or self.callback(locals())
 
     async def close(self) -> None:
@@ -29,7 +29,8 @@ class MockedClient(ABCHTTPClient):
 
 
 def with_mocked_api(return_value: Any):
-    """Just changes http standard api client to mocked client which returns return_value"""
+    """ Just changes http standard api client to mocked client which returns return_value
+    """
 
     def decorator(func: Any):
         async def wrapper(*args, **kwargs):

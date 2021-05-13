@@ -1,30 +1,30 @@
 import os
+import pytest
 from io import StringIO
 
-import pytest
 from pytest_mock import MockerFixture
 
-from vkbottle import API
-from vkbottle.bot import Bot, run_multibot
-from vkbottle.dispatch import ABCRule, AndFilter, OrFilter
 from vkbottle.modules import json
 from vkbottle.tools import (
-    CallableValidator,
     Callback,
     CtxStorage,
-    EqualsValidator,
-    IsInstanceValidator,
     Keyboard,
     KeyboardButtonColor,
     LoopWrapper,
     TemplateElement,
     Text,
-    convert_shorten_filter,
-    keyboard_gen,
     load_blueprints_from_package,
-    run_in_task,
     template_gen,
+    EqualsValidator,
+    IsInstanceValidator,
+    CallableValidator,
+    keyboard_gen,
+    run_in_task,
+    convert_shorten_filter,
 )
+from vkbottle.dispatch import ABCRule, OrFilter, AndFilter
+from vkbottle.bot import run_multibot, Bot
+from vkbottle import API
 
 KEYBOARD_JSON = json.dumps(
     {
@@ -115,23 +115,22 @@ def test_keyboard_builder():
 
 
 def test_keyboard_generator():
-    with pytest.deprecated_call():
-        assert json.loads(
-            keyboard_gen(
+    assert json.loads(
+        keyboard_gen(
+            [
+                [{"label": "I love nuggets", "payload": {"love": "nuggets"}}],
                 [
-                    [{"label": "I love nuggets", "payload": {"love": "nuggets"}}],
-                    [
-                        {
-                            "type": "callback",
-                            "label": "Eat nuggets",
-                            "payload": {"eat": "nuggets"},
-                            "color": "positive",
-                        }
-                    ],
+                    {
+                        "type": "callback",
+                        "label": "Eat nuggets",
+                        "payload": {"eat": "nuggets"},
+                        "color": "positive",
+                    }
                 ],
-                one_time=True,
-            )
-        ) == json.loads(KEYBOARD_JSON)
+            ],
+            one_time=True,
+        )
+    ) == json.loads(KEYBOARD_JSON)
 
 
 def test_bp_importer(mocker: MockerFixture):
@@ -220,7 +219,6 @@ def test_loop_wrapper():
 
 
 @pytest.mark.asyncio
-@pytest.mark.filterwarnings("ignore:coroutine")
 async def test_utils(mocker: MockerFixture):
     async def task_to_run(s, y: int):
         return s.x == y

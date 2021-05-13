@@ -1,7 +1,6 @@
 from abc import abstractmethod
-from typing import Optional
-
 from .abc import ABCView
+from typing import Optional
 
 
 class ABCDispenseView(ABCView):

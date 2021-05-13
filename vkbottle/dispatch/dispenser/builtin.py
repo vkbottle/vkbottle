@@ -7,7 +7,6 @@ from .abc import ABCStateDispenser
 
 class BuiltinStateDispenser(ABCStateDispenser):
     def __init__(self):
-        super().__init__()
         self.dictionary: Dict[int, StatePeer] = {}
 
     async def get(self, peer_id: int) -> Optional[StatePeer]:
