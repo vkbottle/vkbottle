@@ -1,5 +1,5 @@
 import json
-from typing import List, Optional, Union
+from typing import Union, List, Optional
 
 from .base import BaseUploader
 

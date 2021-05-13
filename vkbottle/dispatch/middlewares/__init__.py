@@ -1,1 +1,1 @@
-from .abc import BaseMiddleware, MiddlewareError
+from .abc import BaseMiddleware, MiddlewareResponse

@@ -1,2 +1,2 @@
-from .message import ABCMessageView, MessageView
+from .message import MessageView, ABCMessageView
 from .raw import HandlerBasement, RawEventView

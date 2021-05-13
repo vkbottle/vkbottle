@@ -18,11 +18,12 @@ class MiddlewareName(BaseMiddleware):
 
 Middleware без методов `pre` или/и `post` бесполезен, нужно разобраться как реализировать каждый из них
 
-### async def pre(self)
+### async def pre(self, event)
 
-`pre` получает имеет доступен к ивенту (например сообщение) через `self` и может вернуть вызвать ошибку через `self.stop` или обновить констекст через `self.send`
+`pre` получает только ивент (например сообщение) и может вернуть `vkbottle.MiddlewareResponse` или `dict`
 
-[техническая документация](/docs/high-level/handling/middleware.md)
+В этом акторе (в этой вами имплементированной функции) можно делать какие-то проверки. Если из pre вернется `MiddlewareResponse(False)` то обработка ивента на всех уровнях срочно прекратится, так можно например отсеивать какие-то спам сообщения или сообщения от игнорируемых пользователей.  
+Если из мидлваря вернуть `dict`, то он будет распаковываться ВО ВСЕ ХЕНДЛЕРЫ (`await your_handler(event, **dict)`)
 
 Вот так например можно отсеивать все сообщения от ботов:
 
@@ -31,12 +32,12 @@ from vkbottle.bot import Message
 from vkbottle import BaseMiddleware, MiddlewareResponse
 
 class NoBotMiddleware(BaseMiddleware):
-    async def pre(self):
-        if self.event.from_id < 0:
-            self.stop("from_id меньше 0")
+    async def pre(self, message: Message):
+        if message.from_id < 0:
+            return MiddlewareResponse(False)
 ```
 
-### async def post(self, view, handle_responses, handlers)
+### async def post(self, event, view, handle_responses, handlers)
 
 `post` получает гораздо больше информации в отличии от `pre`, но он уже никак не может повлиять на обработку ивента. Обычно его используют для статистики и логов
 
@@ -48,6 +49,7 @@ from typing import List, Any
 class LogMiddleware(BaseMiddleware):
     async def post(
         self,
+        message: Message,
         view: "ABCView",
         handle_responses: List[Any],
         handlers: List["ABCHandler"],
@@ -73,8 +75,8 @@ class LogMiddleware(BaseMiddleware):
 У каждого view есть метод `register_middleware`, воспользуемся им:
 
 ```python
-bot.labeler.message_view.register_middleware(NoBotMiddleware)
-bot.labeler.message_view.register_middleware(LogMiddleware)
+bot.labeler.message_view.register_middleware(NoBotMiddleware())
+bot.labeler.message_view.register_middleware(LogMiddleware())
 ```
 
 Кстати методом `register_middleware` можно пользоваться и как декоратором.
