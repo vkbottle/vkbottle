@@ -3,7 +3,7 @@ from typing import Any, List
 
 from vkbottle_types.objects import UsersUserXtrCounters
 
-from vkbottle import ABCHandler, ABCView, BaseMiddleware, CtxStorage
+from vkbottle import ABCHandler, ABCView, BaseMiddleware, MiddlewareResponse, CtxStorage
 from vkbottle.bot import Bot, Message
 
 bot = Bot(os.environ["token"])
@@ -12,7 +12,7 @@ dummy_db = CtxStorage()
 
 class NoBotMiddleware(BaseMiddleware):
     async def pre(self, message: Message):
-        return message.from_id > 0  # True / False
+        return MiddlewareResponse(message.from_id > 0)
 
 
 class RegistrationMiddleware(BaseMiddleware):
