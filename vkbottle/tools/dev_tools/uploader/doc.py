@@ -10,7 +10,9 @@ class DocUploader(BaseUploader, ABC):
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("docs.getUploadServer", kwargs))["response"]
 
-    async def upload(self, title: str, file_source: Union[str, Bytes], **params) -> Union[str, dict]:
+    async def upload(
+        self, title: str, file_source: Union[str, Bytes], **params
+    ) -> Union[str, dict]:
         server = await self.get_server(**params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data, name=title)

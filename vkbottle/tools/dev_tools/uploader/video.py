@@ -15,7 +15,9 @@ class VideoUploader(BaseUploader):
         self, file_source: Optional[Union[str, bytes]] = None, **params
     ) -> Union[str, List[dict], dict]:
         server = await self.get_server()
-        assert file_source is not None or "link" in params, "file_source or link to video must be set"
+        assert (
+            file_source is not None or "link" in params
+        ), "file_source or link to video must be set"
 
         if "link" in params and not file_source:
             async with self.api.http as session:

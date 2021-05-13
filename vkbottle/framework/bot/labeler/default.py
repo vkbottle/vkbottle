@@ -2,6 +2,7 @@ import re
 from typing import Any, Callable, Dict, List, Set, Tuple, Type, Union
 
 import vbml
+from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule
@@ -29,7 +30,7 @@ from vkbottle.dispatch.rules.bot import (
 from vkbottle.dispatch.views import ABCView, HandlerBasement, MessageView, RawEventView
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
 
-from .abc import ABCBotLabeler, LabeledHandler, LabeledMessageHandler
+from .abc import ABCBotLabeler, LabeledHandler, LabeledMessageHandler, EventName
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
@@ -169,7 +170,7 @@ class BotLabeler(ABCBotLabeler):
 
     def raw_event(
         self,
-        event: Union[str, List[str]],
+        event: Union[EventName, List[EventName]],
         dataclass: Callable = dict,
         *rules: ShortenRule,
         **custom_rules,
@@ -180,6 +181,10 @@ class BotLabeler(ABCBotLabeler):
 
         def decorator(func):
             for e in event:
+
+                if isinstance(e, str):
+                    e = GroupEventType(e)
+
                 self.raw_event_view.handlers[e] = HandlerBasement(
                     dataclass,
                     FromFuncHandler(
