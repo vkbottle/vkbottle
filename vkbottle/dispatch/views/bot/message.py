@@ -44,7 +44,7 @@ class ABCMessageView(ABCDispenseView, ABC):
         for middleware in self.middlewares:
             response = await middleware.pre(message)
             if response == MiddlewareResponse(False):
-                return []
+                return
             elif isinstance(response, dict):
                 context_variables.update(response)
 
