@@ -3,7 +3,7 @@ from typing import Any, List
 
 from vkbottle_types.objects import UsersUserXtrCounters
 
-from vkbottle import ABCHandler, ABCView, BaseMiddleware, MiddlewareResponse, CtxStorage
+from vkbottle import ABCHandler, ABCView, BaseMiddleware, CtxStorage
 from vkbottle.bot import Bot, Message
 
 bot = Bot(os.environ["token"])
@@ -12,7 +12,8 @@ dummy_db = CtxStorage()
 
 class NoBotMiddleware(BaseMiddleware):
     async def pre(self, message: Message):
-        return MiddlewareResponse(message.from_id > 0)
+        if self.event.from_id < 0:
+            self.stop("Groups are not allowed to use bot")
 
 
 class RegistrationMiddleware(BaseMiddleware):
@@ -21,7 +22,7 @@ class RegistrationMiddleware(BaseMiddleware):
         if user is None:
             user = (await bot.api.users.get(self.event.from_id))[0]
             dummy_db.set(self.event.from_id, user)
-        return {"info": user}
+        self.send({"info": user})
 
 
 class InfoMiddleware(BaseMiddleware):
@@ -32,7 +33,7 @@ class InfoMiddleware(BaseMiddleware):
         handlers: List["ABCHandler"],
     ):
         if not handlers:
-            return
+            self.stop("Сообщение не было обработано")
 
         await self.event.answer(
             "Сообщение было обработано:\n\n" f"View - {view}\n\n" f"Handlers - {handlers}"

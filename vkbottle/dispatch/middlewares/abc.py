@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Hashable, List, NewType, NoReturn, Optional
+from abc import ABC
+from typing import TYPE_CHECKING, Any, List, NoReturn, Optional
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.handlers.abc import ABCHandler
@@ -40,7 +40,7 @@ class BaseMiddleware(ABC):
 
         return wrapper
 
-    def stop(self, description: Any) -> NoReturn:
+    def stop(self, description: Any = "") -> NoReturn:
         """Wrapper for exception raise"""
         if issubclass(type(description), (Exception,)):
             raise description
@@ -53,11 +53,9 @@ class BaseMiddleware(ABC):
                 raise ValueError("Context update value should be an instance of dict")
             self._new_context.update(context_update)
 
-    @abstractmethod
     async def pre(self) -> None:
         ...
 
-    @abstractmethod
     async def post(
         self, view: "ABCView", handle_responses: List[Any], handlers: List["ABCHandler"]
     ):

@@ -7,7 +7,7 @@
 # Default recipe
 DEFAULT: help
 help:
-	@grep ; echo 'a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 # Use poetry or activated venv
 interpreter := $(shell poetry env info --path > /dev/null 2>&1 && echo "poetry run")

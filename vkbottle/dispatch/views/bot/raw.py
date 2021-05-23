@@ -1,11 +1,10 @@
-from typing import Any, Dict, List, NamedTuple, Set, Type, Callable
+from typing import Any, Callable, Dict, NamedTuple
 
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
-from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.modules import logger
 
@@ -18,8 +17,6 @@ class RawEventView(ABCView):
     def __init__(self):
         super().__init__()
         self.handlers: Dict[GroupEventType, HandlerBasement] = {}
-        self.middlewares: Set[Type["BaseMiddleware"]] = set()
-        self.middleware_instances: List["BaseMiddleware"] = []
         self.handler_return_manager = BotMessageReturnHandler()
 
     async def process_event(self, event: dict) -> bool:
@@ -41,7 +38,8 @@ class RawEventView(ABCView):
         else:
             setattr(event_model, "unprepared_ctx_api", ctx_api)
 
-        if await self.pre_middleware(event_model, context_variables):
+        error = await self.pre_middleware(event_model, context_variables)
+        if error:
             return logger.info("Handling stopped, pre_middleware returned error")
 
         result = await handler_basement.handler.filter(event_model)

@@ -19,11 +19,18 @@ class ABCView(ABC):
     handler_return_manager: BaseReturnManager
 
     @abstractmethod
+    def __init__(self):
+        self.handlers = []
+        self.middlewares = set()
+        self.middleware_instances = []
+        self.handler_return_manager = None
+
+    @abstractmethod
     async def process_event(self, event: dict) -> bool:
         pass
 
     async def pre_middleware(
-        self, event: "MessageMin", context_variables: dict
+        self, event: "MessageMin", context_variables: Optional[dict] = None
     ) -> Optional[Exception]:
         """Run all of the pre middleware methods and return an exception if any error occurs"""
         self.middleware_instances.clear()
@@ -31,17 +38,21 @@ class ABCView(ABC):
             mw_instance = middleware(event)
             await mw_instance.pre()
             if not mw_instance.can_forward:
-                logger.debug(f"{mw_instance} returned error {mw_instance.error}")
+                logger.debug(f"{mw_instance} pre returned error {mw_instance.error}")
                 return mw_instance.error
 
             self.middleware_instances.append(mw_instance)
-            context_variables.update(mw_instance.context_update)
+            if context_variables is not None:
+                context_variables.update(mw_instance.context_update)
 
     async def post_middleware(
         self, view: "ABCView", handle_responses: List[Any], handlers: List["ABCHandler"]
     ):
         for middleware in self.middleware_instances:
             await middleware.post(view, handle_responses, handlers)
+            if not middleware.can_forward:
+                logger.debug(f"{middleware} post returned error {middleware.error}")
+                return middleware.error
 
     @abstractmethod
     async def handle_event(

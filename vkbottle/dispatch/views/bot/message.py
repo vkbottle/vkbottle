@@ -1,12 +1,10 @@
 from abc import ABC
-from typing import Any, Callable, List, Optional, Set, Type
+from typing import Any, Callable, List, Optional
 
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
-from vkbottle.dispatch.handlers import ABCHandler
-from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.modules import logger
 from vkbottle.tools.dev_tools import message_min
@@ -21,9 +19,6 @@ class ABCMessageView(ABCDispenseView, ABC):
     def __init__(self):
         super().__init__()
         self.state_source_key = DEFAULT_STATE_KEY
-        self.handlers: List["ABCHandler"] = []
-        self.middlewares: Set[Type["BaseMiddleware"]] = set()
-        self.middleware_instances: List["BaseMiddleware"] = []
         self.default_text_approximators: List[Callable[[MessageMin], str]] = []
         self.handler_return_manager = BotMessageReturnHandler()
 
@@ -42,7 +37,8 @@ class ABCMessageView(ABCDispenseView, ABC):
         for text_ax in self.default_text_approximators:
             message.text = text_ax(message)
 
-        if await self.pre_middleware(message, context_variables) is False:
+        error = await self.pre_middleware(message, context_variables)
+        if error:
             return logger.info("Handling stopped, pre_middleware returned error")
 
         handle_responses = []

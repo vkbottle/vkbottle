@@ -13,18 +13,20 @@ def test_middleware_send(empty_middleware_instance: BaseMiddleware):
 
 def test_middleware_stop(empty_middleware_instance: BaseMiddleware):
     with pytest.raises(MiddlewareError):
+        empty_middleware_instance.stop()
+
+    with pytest.raises(MiddlewareError):
         empty_middleware_instance.stop("some_middleware_error")
 
     with pytest.raises(ValueError):
         empty_middleware_instance.stop(ValueError("some_value_error"))
 
 
-def test_constructor_raises_without_pre_and_post():
+def test_middleware_constructs_without_pre_and_post(empty_event):
     class IncompleteMiddleware(BaseMiddleware):
         pass
 
-    with pytest.raises(TypeError):
-        IncompleteMiddleware()
+    IncompleteMiddleware(empty_event)
 
 
 @pytest.mark.asyncio
