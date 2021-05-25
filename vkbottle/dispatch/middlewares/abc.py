@@ -22,7 +22,6 @@ class BaseMiddleware(ABC):
         self, event: Union["BaseGroupEvent", "BaseUserEvent"], view: Optional["ABCView"] = None
     ):
         self.event = event
-
         self.view = view
 
         self.handle_responses = []
@@ -34,7 +33,7 @@ class BaseMiddleware(ABC):
         self.pre = self.catch_all(self.pre)  # type: ignore
         self.post = self.catch_all(self.post)  # type: ignore
 
-    def get_handle_reponse(self, handler) -> Optional[Any]:
+    def get_handle_response(self, handler) -> Optional[Any]:
         """Get handle response value for handler"""
         for handler_, response in zip(self.handlers, self.handle_responses):
             if handler_ == handler:

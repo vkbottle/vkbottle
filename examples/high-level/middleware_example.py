@@ -17,6 +17,8 @@ class NoBotMiddleware(BaseMiddleware):
 
 
 class RegistrationMiddleware(BaseMiddleware):
+    call_count = 0
+
     def __init__(self, event, view):
         super().__init__(event, view)
         self.cached = False
@@ -34,8 +36,12 @@ class RegistrationMiddleware(BaseMiddleware):
     async def post(self):
         # Если ответ был обработан who_i_am_handler хендлером
         if who_i_am_handler in self.handlers:
+            # Явно обращаемся к классовым атрибутам при изменении, что бы избежать переопределения
+            self.__class__.call_count += 1
             cached_str = "был" if self.cached else "не был"
-            await self.event.answer(f"Ответ {cached_str} взят из кеша")
+            await self.event.answer(
+                f"Ответ {cached_str} взят из кеша. Количество вызовов: {self.call_count}"
+            )
 
 
 class InfoMiddleware(BaseMiddleware):

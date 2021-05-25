@@ -53,7 +53,7 @@ class ABCView(ABC):
         handlers: Optional[List["ABCHandler"]] = None,
     ):
         for middleware in self.middleware_instances:
-            # Update or remain value
+            # Update or leave value
             middleware.handle_responses = handle_responses or middleware.handle_responses
             middleware.handlers = handlers or middleware.handlers
 
