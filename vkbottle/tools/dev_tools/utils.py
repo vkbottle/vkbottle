@@ -8,7 +8,6 @@ from vkbottle.dispatch.filter import AndFilter, OrFilter
 from vkbottle.dispatch.rules import ABCRule
 
 if typing.TYPE_CHECKING:
-    from vkbottle.api.token_generator import ABCTokenGenerator, Token
     from vkbottle.framework.abc_blueprint import ABCBlueprint
 
 

@@ -62,4 +62,4 @@ class RawEventView(ABCView):
                 context_variables,
             )
 
-        await self.post_middleware(self, [handler_response], [handler_basement.handler])
+        await self.post_middleware([handler_response], [handler_basement.handler])

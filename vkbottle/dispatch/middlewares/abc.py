@@ -1,10 +1,11 @@
 from abc import ABC
-from typing import TYPE_CHECKING, Any, List, NoReturn, Optional
+from typing import TYPE_CHECKING, Any, List, NoReturn, Optional, Union
 
 if TYPE_CHECKING:
+    from vkbottle_types.events import BaseGroupEvent, BaseUserEvent
+
     from vkbottle.dispatch.handlers.abc import ABCHandler
     from vkbottle.dispatch.views.abc import ABCView
-    from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
 
 
 class MiddlewareError(Exception):
@@ -12,13 +13,32 @@ class MiddlewareError(Exception):
 
 
 class BaseMiddleware(ABC):
-    def __init__(self, event: "MessageMin"):
+    event: Union["BaseGroupEvent", "BaseUserEvent"]
+    view: Optional["ABCView"]
+    handle_responses: List
+    handlers: List["ABCHandler"]
+
+    def __init__(
+        self, event: Union["BaseGroupEvent", "BaseUserEvent"], view: Optional["ABCView"] = None
+    ):
         self.event = event
+
+        self.view = view
+
+        self.handle_responses = []
+        self.handlers = []
+
         self._new_context: dict = {}
         self.error: Optional[Exception] = None
 
         self.pre = self.catch_all(self.pre)  # type: ignore
         self.post = self.catch_all(self.post)  # type: ignore
+
+    def get_handle_reponse(self, handler) -> Optional[Any]:
+        """Get handle response value for handler"""
+        for handler_, response in zip(self.handlers, self.handle_responses):
+            if handler_ == handler:
+                return response
 
     @property
     def can_forward(self) -> bool:
@@ -56,9 +76,7 @@ class BaseMiddleware(ABC):
     async def pre(self) -> None:
         ...
 
-    async def post(
-        self, view: "ABCView", handle_responses: List[Any], handlers: List["ABCHandler"]
-    ):
+    async def post(self) -> None:
         ...
 
     def __repr__(self) -> str:

@@ -67,7 +67,7 @@ class ABCMessageView(ABCDispenseView, ABC):
             if handler.blocking:
                 break
 
-        await self.post_middleware(self, handle_responses, handlers)
+        await self.post_middleware(handle_responses, handlers)
 
 
 class MessageView(ABCMessageView):

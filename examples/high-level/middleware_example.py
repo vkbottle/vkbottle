@@ -11,32 +11,42 @@ dummy_db = CtxStorage()
 
 
 class NoBotMiddleware(BaseMiddleware):
-    async def pre(self, message: Message):
+    async def pre(self):
         if self.event.from_id < 0:
             self.stop("Groups are not allowed to use bot")
 
 
 class RegistrationMiddleware(BaseMiddleware):
+    def __init__(self, event, view):
+        super().__init__(event, view)
+        self.cached = False
+
     async def pre(self):
         user = dummy_db.get(self.event.from_id)
         if user is None:
             user = (await bot.api.users.get(self.event.from_id))[0]
             dummy_db.set(self.event.from_id, user)
+            self.cached = False
+        else:
+            self.cached = True
         self.send({"info": user})
+
+    async def post(self):
+        # Если ответ был обработан who_i_am_handler хендлером
+        if who_i_am_handler in self.handlers:
+            cached_str = "был" if self.cached else "не был"
+            await self.event.answer(f"Ответ {cached_str} взят из кеша")
 
 
 class InfoMiddleware(BaseMiddleware):
-    async def post(
-        self,
-        view: "ABCView",
-        handle_responses: List[Any],
-        handlers: List["ABCHandler"],
-    ):
-        if not handlers:
+    async def post(self):
+        if not self.handlers:
             self.stop("Сообщение не было обработано")
 
         await self.event.answer(
-            "Сообщение было обработано:\n\n" f"View - {view}\n\n" f"Handlers - {handlers}"
+            "Сообщение было обработано:\n\n"
+            f"View - {self.view}\n\n"
+            f"Handlers - {self.handlers}"
         )
 
 

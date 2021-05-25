@@ -34,10 +34,10 @@ async def test_raise_in_pre_sets_error(empty_middleware_class, empty_event):
     expected_Exception = Exception("some_exception")
 
     class SomeMiddleware(empty_middleware_class):
-        async def pre(self, *args, **kwargs):
+        async def pre(self):
             raise expected_Exception
 
-        async def post(self, *args, **kwargs):
+        async def post(self):
             raise expected_Exception
 
     middleware = SomeMiddleware(empty_event)
@@ -65,4 +65,4 @@ async def test_cant_forward_on_error(empty_middleware_class, empty_event):
 async def test_view_middleware_utils_run(empty_event):
     view = MessageView()
     await view.pre_middleware(empty_event, {})
-    await view.post_middleware(empty_event, [], [])
+    await view.post_middleware()

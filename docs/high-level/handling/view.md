@@ -77,7 +77,7 @@ class VoteView(ABCView):
                 break
                 
         # Запуск post-мидлварей
-        await self.post_middleware(self, handle_responses, handlers)
+        await self.post_middleware(handle_responses, handlers)
 ```
 
 Поздравляю вы написали свой view! Теперь можно перейти к регистрации хендлеров, но для этого потребуется их создать, можно воспользоваться `FromFuncHandler`:

@@ -20,12 +20,12 @@ class SomeView(ABCView):
 async def test_pre_post_middleware_returns_exception(empty_event):
     expected_error = Exception()
 
-    def construct_exception_middleware(event=empty_event):
-        instance = BaseMiddleware(event)
+    def construct_exception_middleware(event, view=None):
+        instance = BaseMiddleware(event, view=view)
         instance.error = expected_error
         return instance
 
-    middleware = construct_exception_middleware()
+    middleware = construct_exception_middleware(empty_event)
     assert middleware.error == expected_error
     assert middleware.can_forward is False
 
@@ -33,6 +33,3 @@ async def test_pre_post_middleware_returns_exception(empty_event):
     error = await view.pre_middleware(empty_event)
     assert error == expected_error
     assert view.middleware_instances == []
-
-    error = await view.post_middleware(empty_event, [], [])
-    assert error is None

@@ -25,5 +25,18 @@ class FromFuncHandler(ABCHandler):
     async def handle(self, event: Any, **context) -> Any:
         return await self.handler(event, **context)
 
+    def __eq__(self, obj: object) -> bool:
+        """
+        Sugar to easily check if the function is actual handler.
+
+        >>> my_handler = lambda *args, **kwargs: None
+        >>> middleware_handlers = [FromFuncHandler(my_handler)]
+        >>> my_handler in middleware_handlers
+        True
+        """
+        if callable(obj):
+            return self.handler == obj
+        return super().__eq__(obj)
+
     def __repr__(self):
         return f"<FromFuncHandler {self.handler.__name__} blocking={self.blocking} rules={self.rules}>"

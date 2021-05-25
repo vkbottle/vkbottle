@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, List, Optional, Set, Type
+from typing import TYPE_CHECKING, Any, List, Optional, Set, Type, Union
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
@@ -9,7 +9,7 @@ from vkbottle.dispatch.return_manager import BaseReturnManager
 from vkbottle.modules import logger
 
 if TYPE_CHECKING:
-    from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
+    from vkbottle_types.events import BaseGroupEvent, BaseUserEvent
 
 
 class ABCView(ABC):
@@ -30,12 +30,14 @@ class ABCView(ABC):
         pass
 
     async def pre_middleware(
-        self, event: "MessageMin", context_variables: Optional[dict] = None
+        self,
+        event: Union["BaseGroupEvent", "BaseUserEvent"],
+        context_variables: Optional[dict] = None,
     ) -> Optional[Exception]:
         """Run all of the pre middleware methods and return an exception if any error occurs"""
         self.middleware_instances.clear()
         for middleware in self.middlewares:
-            mw_instance = middleware(event)
+            mw_instance = middleware(event, view=self)
             await mw_instance.pre()
             if not mw_instance.can_forward:
                 logger.debug(f"{mw_instance} pre returned error {mw_instance.error}")
@@ -46,10 +48,16 @@ class ABCView(ABC):
                 context_variables.update(mw_instance.context_update)
 
     async def post_middleware(
-        self, view: "ABCView", handle_responses: List[Any], handlers: List["ABCHandler"]
+        self,
+        handle_responses: Optional[List] = None,
+        handlers: Optional[List["ABCHandler"]] = None,
     ):
         for middleware in self.middleware_instances:
-            await middleware.post(view, handle_responses, handlers)
+            # Update or remain value
+            middleware.handle_responses = handle_responses or middleware.handle_responses
+            middleware.handlers = handlers or middleware.handlers
+
+            await middleware.post()
             if not middleware.can_forward:
                 logger.debug(f"{middleware} post returned error {middleware.error}")
                 return middleware.error
