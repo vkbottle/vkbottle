@@ -22,10 +22,16 @@
 
 ## Установка
 
-Установить версию 3.0 можно этой командой:
+Установить новейшую версию можно командой:
 
-```shell script
+```shell
 pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
+```
+
+Установить версию 3.0 с PyPI можно командой:
+
+```shell
+pip install vkbottle==3.0
 ```
 
 Если вы ищете старые версии (`2.x`) - [вам сюда](https://github.com/timoniq/vkbottle/tree/v2.0)
