@@ -17,7 +17,7 @@
 
 ## Документация
 
-[Туториал для новичков](/docs/tutorial/index.md)\
+[Туториал для новичков](https://github.com/timoniq/vkbottle/blob/master/docs/tutorial/index.md)\
 [Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
 
 ## Установка
@@ -53,5 +53,5 @@ bot.run_forever()
 
 ## Лицензия
 
-Copyright © 2019-2020 [timoniq](https://github.com/timoniq).\
-Этот проект имеет [MIT](./LICENSE) лицензию.
+Copyright © 2019-2021 [timoniq](https://github.com/timoniq).\
+Этот проект имеет [MIT](https://github.com/timoniq/vkbottle/blob/master/LICENSE) лицензию.
