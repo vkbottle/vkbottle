@@ -38,7 +38,7 @@ python = "^3.7"
 aiohttp = "^3.6.2"
 vbml = "^1.0"
 choicelib = "^0.1.1"
-vkbottle-types = "^0.1.21"
+vkbottle-types = ">=0.1.21,<5.131.0"
 watchgod = "^0.7"
 
 [tool.poetry.dev-dependencies]
