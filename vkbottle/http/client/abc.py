@@ -7,7 +7,7 @@ from vkbottle.http.middleware.justlog import JustLogHTTPMiddleware
 
 class ABCHTTPClient(ABC):
     """ Abstract class for http-clients
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/http/http-client.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/http/http-client.md
     """
 
     middleware: "ABCHTTPMiddleware" = JustLogHTTPMiddleware()
@@ -35,5 +35,11 @@ class ABCHTTPClient(ABC):
         pass
 
     @abstractmethod
-    async def close(self) -> typing.NoReturn:
+    async def close(self) -> None:
         pass
+
+    async def __aenter__(self) -> "ABCHTTPClient":
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+        await self.close()

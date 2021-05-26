@@ -1,11 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import AsyncIterator, Any
+from typing import Any, AsyncIterator, Optional
+
 from vkbottle.api import ABCAPI
+from vkbottle.exception_factory import ABCErrorHandler
 
 
 class ABCPolling(ABC):
     """ Abstract Polling class
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/polling/polling.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/polling/polling.md
     """
 
     @abstractmethod
@@ -30,5 +32,7 @@ class ABCPolling(ABC):
         pass
 
     @abstractmethod
-    def construct(self, api: "ABCAPI") -> "ABCPolling":
+    def construct(
+        self, api: "ABCAPI", error_handler: Optional["ABCErrorHandler"] = None
+    ) -> "ABCPolling":
         pass

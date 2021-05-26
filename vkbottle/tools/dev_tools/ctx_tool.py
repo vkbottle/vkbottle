@@ -1,4 +1,4 @@
-from typing import TypeVar, Any, NoReturn
+from typing import Any, TypeVar
 
 try:
     import contextvars
@@ -28,5 +28,5 @@ class BaseContext:
         return cls.ctx_instance.get()
 
     @classmethod
-    def set_instance(cls, value: "T") -> NoReturn:
+    def set_instance(cls, value: "T") -> None:
         cls.ctx_instance.set(value)

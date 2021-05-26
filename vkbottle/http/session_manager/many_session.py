@@ -1,6 +1,8 @@
-from .abc import ABCSessionManager
-from vkbottle.http.client import ABCHTTPClient, AiohttpClient
 import typing
+
+from vkbottle.http.client import ABCHTTPClient, AiohttpClient
+
+from .abc import ABCSessionManager
 
 
 class ManySessionManager(ABCSessionManager):

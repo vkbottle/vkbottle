@@ -1,12 +1,12 @@
-from abc import ABC, abstractmethod
 import typing
+from abc import ABC, abstractmethod
 
 HTTPMiddlewareResponse = typing.NewType("HTTPMiddlewareResponse", bool)
 
 
 class ABCHTTPMiddleware(ABC):
     """ Abstract class for http-client middleware
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/http/http-middleware.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/http/http-middleware.md
     """
 
     @abstractmethod

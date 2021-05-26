@@ -1,3 +1,3 @@
-from . import greetings, goodbyes
+from . import goodbyes, greetings
 
 bps = [greetings.bp, goodbyes.bp]

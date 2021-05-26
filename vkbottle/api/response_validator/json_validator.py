@@ -1,7 +1,8 @@
-from .abc import ABCResponseValidator
-from vkbottle.api.request_rescheduler.abc import ABCRequestRescheduler
-from vkbottle.modules import json, logger
 import typing
+
+from vkbottle.modules import json, logger
+
+from .abc import ABCResponseValidator
 
 if typing.TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
@@ -9,7 +10,7 @@ if typing.TYPE_CHECKING:
 
 class JSONResponseValidator(ABCResponseValidator):
     """ Default response json-parse validator
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/api/response-validator.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/response-validator.md
     """
 
     async def validate(

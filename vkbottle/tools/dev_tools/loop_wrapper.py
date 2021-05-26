@@ -1,8 +1,11 @@
 import asyncio
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import Optional, List, Coroutine, Any, Union, Callable
-from .delayed_task import DelayedTask
+from typing import Any, Callable, Coroutine, List, Optional, Union
+
 from vkbottle.modules import logger
+
+from .auto_reload import watch_to_reload
+from .delayed_task import DelayedTask
 
 Task = Coroutine[Any, Any, Any]
 
@@ -16,10 +19,14 @@ class LoopWrapper:
         *,
         on_startup: Optional[List[Task]] = None,
         on_shutdown: Optional[List[Task]] = None,
+        auto_reload: Optional[bool] = None,
+        auto_reload_dir: Optional[str] = None,
         tasks: Optional[List[Task]] = None,
     ):
         self.on_startup = on_startup or []
         self.on_shutdown = on_shutdown or []
+        self.auto_reload = auto_reload or False
+        self.auto_reload_dir = auto_reload_dir or "."
         self.tasks = tasks or []
 
     def run_forever(self, loop: Optional[AbstractEventLoop] = None):
@@ -32,6 +39,9 @@ class LoopWrapper:
 
         try:
             [loop.run_until_complete(startup_task) for startup_task in self.on_startup]
+
+            if self.auto_reload:
+                loop.create_task(watch_to_reload(self.auto_reload_dir))
 
             for task in self.tasks:
                 loop.create_task(task)

@@ -1,8 +1,10 @@
-from vkbottle_types.objects import MessagesMessage, MessagesClientInfo
-from vkbottle_types.events.bot_events import MessageNew
+from typing import Any, List, Optional, Union
+
 from vkbottle_types import StatePeer
+from vkbottle_types.events.bot_events import MessageNew
+from vkbottle_types.objects import MessagesClientInfo, MessagesMessage, UsersUser
+
 from vkbottle.api import ABCAPI, API
-from typing import Optional, Any, List, Union
 
 
 class MessageMin(MessagesMessage):
@@ -14,6 +16,12 @@ class MessageMin(MessagesMessage):
     @property
     def ctx_api(self) -> Union["ABCAPI", "API"]:
         return getattr(self, "unprepared_ctx_api")
+
+    async def get_user(self, raw_mode: bool = False, **kwargs) -> Union["UsersUser", dict]:
+        raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
+            "response"
+        ][0]
+        return raw_user if raw_mode else UsersUser(**raw_user)
 
     async def answer(
         self,
@@ -35,9 +43,12 @@ class MessageMin(MessagesMessage):
         payload: Optional[str] = None,
         dont_parse_links: Optional[bool] = None,
         disable_mentions: Optional[bool] = None,
-        template: Optional[dict] = None,
+        template: Optional[str] = None,
         intent: Optional[str] = None,
+        **kwargs,
     ) -> int:
+        locals().update(kwargs)
+        locals().pop("kwargs")
         data = {k: v for k, v in locals().items() if k != "self" and v is not None}
         data["peer_id"] = self.peer_id
 

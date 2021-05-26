@@ -2,7 +2,7 @@
 
 Мультибот запускает несколько лонгполов на переданных вами API и обрабатывает получаемые ивенты со всех лонгполов с помощью одного основного бота. Эта идея встречается например в чат-менеджере с их субменеджерами и может быть использована в разных целях
 
-Пример мультибота: https://github.com/timoniq/vkbottle/blob/v3.0/examples/high-level/multibot.py
+Пример мультибота можно увидеть [здесь](https://github.com/timoniq/vkbottle/blob/master/examples/high-level/multibot.py)
 
 # run_multibot(bot, apis, polling_type=BotPolling)
 

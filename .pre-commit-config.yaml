@@ -1,14 +1,14 @@
 repos:
-    # Use pre-commit repo, v3.2.0
+  # Use pre-commit repo, v3.2.0
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: "v3.2.0"
+    rev: "v3.4.0"
     hooks:
       # Check for files that contain merge conflict strings.
       - id: check-merge-conflict
-        stages: [commit, push]
+        stages: [ commit, push ]
       # Simply check whether files parse as valid python.
       - id: check-ast
-        stages: [commit]
+        stages: [ commit ]
 
     # Use locally installed hooks
   - repo: local
@@ -16,49 +16,38 @@ repos:
     hooks:
       - id: black
         name: black
-        entry: black
+        entry: poetry run black
         language: system
-        types: [python]
-        stages: [commit]
+        types: [ python ]
+        stages: [ commit ]
         # Black should use the config from the pyproject.toml file
 
-      - id: autoflake
-        name: autoflake
-        entry: autoflake
+      - id: isort
+        name: isort
+        entry: poetry run isort
         language: system
-        types: [python]
-        args: [--in-place, --exclude=__init__.py, --remove-all-unused-imports, --remove-duplicate-keys]
-        stages: [commit]
-
-      - id: autopep8
-        name: autopep8
-        entry: autopep8
-        language: system
-        types: [python]
-        args: [--in-place, --max-line-length=99]
-        stages: [commit]
+        types: [ python ]
+        stages: [ commit ]
+        # Isort should use the config from the pyproject.toml file
 
       - id: mypy
         name: mypy check
-        entry: mypy
+        entry: poetry run mypy vkbottle
         language: system
-        always_run: true
         pass_filenames: false
-        args: [vkbottle]
-        stages: [commit]
+        stages: [ commit ]
 
       - id: pytest
         name: pytest
-        entry: pytest
+        entry: poetry run pytest vkbottle tests
         language: system
-        always_run: true
+        always_run: false
         pass_filenames: false
-        stages: [push]
+        stages: [ push ]
 
       - id: flake8
         name: flake8 check
-        entry: flake8
+        entry: poetry run flake8
         language: system
-        always_run: true
-        pass_filenames: false
-        stages: [push]
+        types: [ python ]
+        stages: [ push ]

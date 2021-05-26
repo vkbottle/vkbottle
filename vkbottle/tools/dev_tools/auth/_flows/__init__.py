@@ -3,6 +3,6 @@ App authorization flows
 vk.com/dev/access_token
 """
 
-from .user import UserImplicitFlow, UserAuthorizationCodeFlow
-from .group import GroupImplicitFlow, GroupAuthorizationCodeFlow
+from .group import GroupAuthorizationCodeFlow, GroupImplicitFlow
 from .service import ClientCredentialsFlow
+from .user import UserAuthorizationCodeFlow, UserImplicitFlow

@@ -1,11 +1,11 @@
-from abc import ABC, abstractmethod
 import typing
+from abc import ABC, abstractmethod
 
 
-class ABCExceptionFactory(ABC, BaseException):
+class ABCExceptionFactory(ABC, Exception):
     """ Abstract Exception Factory
     Documentation: \
-    https://github.com/timoniq/vkbottle/tree/v3.0/docs/exception-factory/exception-factory.md
+    https://github.com/timoniq/vkbottle/blob/master/docs/low-level/exception_factory/exception-factory.md
     """
 
     @classmethod

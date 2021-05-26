@@ -1,5 +1,6 @@
-from vkbottle.http import AiohttpClient
 import asyncio
+
+from vkbottle.http import AiohttpClient
 
 
 async def main():

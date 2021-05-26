@@ -7,12 +7,36 @@ edit_uri: edit/v3.0/docs/
 
 extra:
   disqus: ""
+  social:
+    - icon: fontawesome/brands/telegram
+      link: https://t.me/vkbottle_ru
+      name: our chat
+
+nav:
+  - Хаб: index.md
+  - Туториал:
+      - Хаб: tutorial/index.md
+      - Первый бот: tutorial/first-bot.md
+      - Правила: tutorial/rules.md
+      - Разделение кода: tutorial/code-separation.md
+      - Клавиатуры и вложения: tutorial/keyboards-attachments.md
+      - Мидлвари и return менеджеры: tutorial/middlewares-return-managers.md
+      - Обработка ошибок: tutorial/error-handling.md
+  - Документация:
+      - High-Level: high-level/index.md
+      - Low-Level: low-level/index.md
 
 theme:
   name: material
   language: ru
+
   palette:
     scheme: preference
-    primary: blue grey
-    accent: deep orange
-  font: Roboto Mono
+    primary: black
+    accent: blue
+
+  font:
+    text: Roboto Mono
+    code: Monaco
+
+  favicon: logo.jpg

@@ -1,9 +1,17 @@
 from abc import ABC, abstractmethod
-from vkbottle_types.events import BaseUserEvent, BaseGroupEvent
-from typing import Union
+from typing import Type, Union
+
+from vkbottle_types.events import BaseGroupEvent, BaseUserEvent
 
 
 class ABCRule(ABC):
+    config: dict = {}
+
+    @classmethod
+    def with_config(cls, config: dict) -> Type["ABCRule"]:
+        cls.config = config
+        return cls
+
     @abstractmethod
     async def check(self, event: Union[BaseUserEvent, BaseGroupEvent]):
         pass

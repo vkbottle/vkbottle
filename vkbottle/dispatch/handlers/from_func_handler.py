@@ -1,6 +1,8 @@
-from .abc import ABCHandler
+from typing import Any, Callable, Union
+
 from vkbottle.dispatch.rules import ABCRule
-from typing import Union, Any, Callable
+
+from .abc import ABCHandler
 
 
 class FromFuncHandler(ABCHandler):
@@ -13,7 +15,7 @@ class FromFuncHandler(ABCHandler):
         rule_context = {}
         for rule in self.rules:
             result = await rule.check(event)
-            if result is False:
+            if result is False or result is None:
                 return False
             elif result is True:
                 continue

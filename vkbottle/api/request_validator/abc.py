@@ -1,10 +1,10 @@
-from abc import ABC, abstractmethod
 import typing
+from abc import ABC, abstractmethod
 
 
 class ABCRequestValidator(ABC):
     """ Abstract Response Validator class
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/low-level/api/response-validator.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/response-validator.md
     """
 
     @abstractmethod

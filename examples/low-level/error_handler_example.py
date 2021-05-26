@@ -1,7 +1,14 @@
-from vkbottle import ErrorHandler
 import asyncio
 
+from vkbottle import ErrorHandler
+
 error_handler = ErrorHandler()
+
+# You can set redirect_arguments to error_handler and they
+# will be passed after exception to exception handler
+# ---
+# async def f(a, b): raise RuntimeError
+# async def exc_h(exc: RuntimeError, a, b): ...
 
 
 async def exc_handler(exc: RuntimeError):

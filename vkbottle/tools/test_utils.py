@@ -1,9 +1,11 @@
-from vkbottle import ABCHTTPClient, API
-from typing import Any, Optional, NoReturn, Callable
+from typing import Any, Callable, Optional
+
+from vkbottle import API, ABCHTTPClient
 
 
 class MockedClient(ABCHTTPClient):
     def __init__(self, return_value: Optional[Any] = None, callback: Optional[Callable] = None):
+        super().__init__()
         self.return_value = return_value
         self.callback = callback or (lambda data: None)
 
@@ -22,7 +24,7 @@ class MockedClient(ABCHTTPClient):
     ) -> bytes:
         return self.return_value or self.callback(locals())
 
-    async def close(self) -> NoReturn:
+    async def close(self) -> None:
         pass
 
 
@@ -32,7 +34,7 @@ def with_mocked_api(return_value: Any):
 
     def decorator(func: Any):
         async def wrapper(*args, **kwargs):
-            api = API(None)
+            api = API("token")
             api.http._session = MockedClient(return_value)
             return await func(*args, **kwargs, api=api)
 

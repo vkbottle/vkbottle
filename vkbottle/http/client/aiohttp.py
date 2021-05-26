@@ -1,8 +1,10 @@
 import asyncio
 import typing
 
-from vkbottle.modules import json as json_module
 from aiohttp import ClientSession, TCPConnector
+
+from vkbottle.modules import json as json_module
+
 from .abc import ABCHTTPClient
 
 if typing.TYPE_CHECKING:
@@ -53,5 +55,5 @@ class AiohttpClient(ABCHTTPClient):
         async with self.session.request(method, url, data=data, **kwargs) as response:
             return await response.content.read()
 
-    async def close(self) -> typing.NoReturn:
+    async def close(self) -> None:
         await self.session.close()

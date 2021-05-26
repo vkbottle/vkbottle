@@ -1,43 +1,50 @@
+from asyncio import AbstractEventLoop, get_event_loop
+from typing import NoReturn, Optional, Union
+
+from vkbottle.api import ABCAPI, API, Token
+from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
+from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
 from vkbottle.framework.abc import ABCFramework
-from vkbottle.api import ABCAPI, API
+from vkbottle.modules import logger
 from vkbottle.polling import ABCPolling, BotPolling
 from vkbottle.tools import LoopWrapper
-from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
-from vkbottle.exception_factory import ABCErrorHandler
+
 from .labeler import ABCBotLabeler, BotLabeler
-from asyncio import AbstractEventLoop, get_event_loop
-from typing import Optional, NoReturn
-from vkbottle.modules import logger
-from typing import Union
 
 
 class Bot(ABCFramework):
     def __init__(
         self,
-        token: Optional[str] = None,
+        token: Optional[Token] = None,
         api: Optional[ABCAPI] = None,
         polling: Optional[ABCPolling] = None,
         loop: Optional[AbstractEventLoop] = None,
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCBotLabeler"] = None,
+        error_handler: Optional["ABCErrorHandler"] = None,
+        task_each_event: bool = False,
     ):
         self.api: Union[ABCAPI, API] = API(token) if token is not None else api  # type: ignore
+        self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.labeler = labeler or BotLabeler()
         self.state_dispenser = BuiltinStateDispenser()
         self._polling = polling or BotPolling(self.api)
         self._router = router or BotRouter()
         self._loop = loop
+        self.task_each_event = task_each_event
 
     @property
     def polling(self) -> "ABCPolling":
-        return self._polling.construct(self.api)
+        return self._polling.construct(self.api, self.error_handler)
 
     @property
     def router(self) -> "ABCRouter":
         return self._router.construct(
-            views=self.labeler.views(), state_dispenser=self.state_dispenser
+            views=self.labeler.views(),
+            state_dispenser=self.state_dispenser,
+            error_handler=self.error_handler,
         )
 
     @router.setter
@@ -48,21 +55,17 @@ class Bot(ABCFramework):
     def on(self) -> "ABCBotLabeler":
         return self.labeler
 
-    @property
-    def error(self) -> "ABCErrorHandler":
-        return self.router.error_handler
-
     async def run_polling(self, custom_polling: Optional[ABCPolling] = None) -> NoReturn:
         polling = custom_polling or self.polling
         logger.info(f"Starting polling for {polling.api!r}")
 
         async for event in polling.listen():  # type: ignore
-            try:
-                logger.debug(f"New event was received: {event}")
-                for update in event["updates"]:
+            logger.debug(f"New event was received: {event}")
+            for update in event["updates"]:
+                if not self.task_each_event:
                     await self.router.route(update, polling.api)
-            except self.error.handling_exceptions as e:
-                await self.error.handle(e)
+                else:
+                    self.loop.create_task(self.router.route(update, polling.api))
 
     def run_forever(self) -> NoReturn:
         logger.info("Loop will be ran forever")

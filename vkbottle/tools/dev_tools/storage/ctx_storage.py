@@ -1,11 +1,13 @@
-from .abc import ABCStorage
-from vkbottle.tools.dev_tools.ctx_tool import BaseContext
 import typing
+
+from vkbottle.tools.dev_tools.ctx_tool import BaseContext
+
+from .abc import ABCStorage
 
 
 class CtxStorage(ABCStorage, BaseContext):
     """ Context storage
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/tools/storage.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/tools/storage.md
     """
 
     storage: dict = {}
@@ -19,18 +21,18 @@ class CtxStorage(ABCStorage, BaseContext):
             self.storage = default
             self.set_instance(self)
 
-    def set(self, key: str, value: typing.Any) -> typing.NoReturn:
+    def set(self, key: typing.Hashable, value: typing.Any) -> None:
         current_storage = self.get_instance().storage
         current_storage[key] = value
         self.set_instance(CtxStorage(current_storage, True))
 
-    def get(self, key: str) -> typing.Any:
+    def get(self, key: typing.Hashable) -> typing.Any:
         return self.get_instance().storage.get(key)
 
-    def delete(self, key: str) -> typing.NoReturn:
+    def delete(self, key: typing.Hashable) -> None:
         new_storage = self.get_instance().storage
         new_storage.pop(key)
         self.set_instance(CtxStorage(new_storage, True))
 
-    def contains(self, key: str) -> bool:
+    def contains(self, key: typing.Hashable) -> bool:
         return key in self.get_instance().storage

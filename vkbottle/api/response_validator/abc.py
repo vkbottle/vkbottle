@@ -1,6 +1,5 @@
-from abc import ABC, abstractmethod
-from vkbottle.api.request_rescheduler.abc import ABCRequestRescheduler
 import typing
+from abc import ABC, abstractmethod
 
 if typing.TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
@@ -8,7 +7,7 @@ if typing.TYPE_CHECKING:
 
 class ABCResponseValidator(ABC):
     """ Abstract Response Validator class
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/api/low-level/response-validator.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/api/low-level/response-validator.md
     """
 
     @abstractmethod

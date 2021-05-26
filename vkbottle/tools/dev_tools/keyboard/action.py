@@ -8,7 +8,7 @@ class ABCAction(ABC):
     type: str
 
     def get_data(self) -> dict:
-        data = vars(self)
+        data = {k: v for k, v in vars(self).items() if v is not None}
         data["type"] = self.type
         return data
 
@@ -66,7 +66,7 @@ class VKApps(ABCAction):
 class Callback(ABCAction):
     type = "callback"
 
-    def __init__(self, label: str, payload: str):
+    def __init__(self, label: str, payload: Payload):
         self.label = label
         self.payload = payload
 
@@ -76,6 +76,7 @@ __all__ = (
     "Text",
     "OpenLink",
     "Location",
+    "VKPay",
     "VKApps",
     "Callback",
 )

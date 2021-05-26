@@ -1,6 +1,5 @@
 from abc import ABC
-from typing import Dict, Callable, Coroutine, Any, Union, Tuple, Optional, NamedTuple
-
+from typing import Any, Callable, Coroutine, Dict, NamedTuple, Optional, Tuple, Union
 
 HandlerProperty = NamedTuple(
     "HandlerProperty", (("types", Union[type, Tuple[type, ...]]), ("handler", Callable))
@@ -30,3 +29,6 @@ class BaseReturnManager(ABC):
             return HandlerProperty(types, func)
 
         return decorator
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}>"

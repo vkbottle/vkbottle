@@ -1,6 +1,7 @@
-from vkbottle import ManySessionManager, AiohttpClient
-from vkbottle.tools.test_utils import MockedClient
 import pytest
+
+from vkbottle import ManySessionManager
+from vkbottle.tools.test_utils import MockedClient
 
 
 @pytest.mark.asyncio

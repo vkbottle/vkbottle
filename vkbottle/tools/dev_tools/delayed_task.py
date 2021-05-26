@@ -1,5 +1,5 @@
 from asyncio import sleep
-from typing import Callable, Coroutine, Any
+from typing import Any, Callable, Coroutine
 
 Handler = Callable[..., Coroutine[Any, Any, Any]]
 
