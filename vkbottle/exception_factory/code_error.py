@@ -46,7 +46,7 @@ class CodeErrorFactory(ABCExceptionFactory):
     def exception_to_handle(  # type: ignore
         cls, code: typing.Optional[int] = None
     ) -> typing.Type["ABCExceptionFactory"]:
-        """ Returns error type from garbage compiler storage with error code.
+        """ Returns error type from garbage collector storage with error code.
         If code is not specified returns self type to handle exception with any code """
         if code is None:
             return cls

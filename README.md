@@ -25,7 +25,7 @@
 Установить версию 3.0 можно этой командой:
 
 ```shell script
-pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
+pip install -U https://github.com/timoniq/vkbottle/archive/v3.0.zip
 ```
 
 Если вы ищете старые версии (`2.x`) - [вам сюда](https://github.com/timoniq/vkbottle/tree/v2.0)
@@ -53,5 +53,5 @@ bot.run_forever()
 
 ## Лицензия
 
-Copyright © 2019-2020 [timoniq](https://github.com/timoniq).\
+Copyright © 2019-2021 [timoniq](https://github.com/timoniq).\
 Этот проект имеет [MIT](./LICENSE) лицензию.

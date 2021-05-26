@@ -41,7 +41,7 @@ class InfoMiddleware(BaseMiddleware):
 
 
 @bot.on.message(lev="кто я")
-async def who_i_am_handler(message: Message, info: UsersUserXtrCounters):
+async def who_am_i_handler(message: Message, info: UsersUserXtrCounters):
     await message.answer(f"Ты - {info.first_name}")
 
 
