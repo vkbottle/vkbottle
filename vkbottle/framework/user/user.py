@@ -6,13 +6,13 @@ from vkbottle.dispatch import ABCRouter, BuiltinStateDispenser, Router
 from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
 from vkbottle.framework.abc import ABCFramework
 from vkbottle.modules import logger
-from vkbottle.polling import ABCPolling, BotPolling
+from vkbottle.polling import ABCPolling, UserPolling
 from vkbottle.tools import LoopWrapper
 
-from .labeler import ABCBotLabeler, BotLabeler
+from .labeler import ABCUserLabeler, UserLabeler
 
 
-class Bot(ABCFramework):
+class User(ABCFramework):
     def __init__(
         self,
         token: Optional[Token] = None,
@@ -21,16 +21,16 @@ class Bot(ABCFramework):
         loop: Optional[AbstractEventLoop] = None,
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
-        labeler: Optional["ABCBotLabeler"] = None,
+        labeler: Optional["ABCUserLabeler"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
         task_each_event: bool = False,
     ):
         self.api: Union[ABCAPI, API] = API(token) if token is not None else api  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
-        self.labeler = labeler or BotLabeler()
+        self.labeler = labeler or UserLabeler()
         self.state_dispenser = BuiltinStateDispenser()
-        self._polling = polling or BotPolling(self.api)
+        self._polling = polling or UserPolling(self.api)
         self._router = router or Router()
         self._loop = loop
         self.task_each_event = task_each_event
@@ -52,7 +52,7 @@ class Bot(ABCFramework):
         self._router = new_router
 
     @property
-    def on(self) -> "ABCBotLabeler":
+    def on(self) -> "ABCUserLabeler":
         return self.labeler
 
     async def run_polling(self, custom_polling: Optional[ABCPolling] = None) -> NoReturn:

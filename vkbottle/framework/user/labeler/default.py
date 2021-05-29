@@ -2,55 +2,51 @@ import re
 from typing import Any, Callable, Dict, List, Set, Tuple, Type, Union
 
 import vbml
-from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.handlers import FromFuncHandler
-from vkbottle.dispatch.rules import ABCRule, bot
+from vkbottle.dispatch.rules import ABCRule, user
 from vkbottle.dispatch.views import ABCView
-from vkbottle.dispatch.views.bot import HandlerBasement, MessageView, RawEventView
+from vkbottle.dispatch.views.user import HandlerBasement, MessageView, RawEventView
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
 
-from .abc import ABCBotLabeler, LabeledHandler, LabeledMessageHandler, EventName
+from .abc import ABCUserLabeler, LabeledHandler, LabeledMessageHandler
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
-    "from_chat": bot.PeerRule,
-    "command": bot.CommandRule,
-    "from_user": bot.FromUserRule,
-    "peer_ids": bot.FromPeerRule,
-    "sticker": bot.StickerRule,
-    "attachment": bot.AttachmentTypeRule,
-    "levenstein": bot.LevensteinRule,
-    "lev": bot.LevensteinRule,
-    "length": bot.MessageLengthRule,
-    "action": bot.ChatActionRule,
-    "payload": bot.PayloadRule,
-    "payload_contains": bot.PayloadContainsRule,
-    "payload_map": bot.PayloadMapRule,
-    "func": bot.FuncRule,
-    "coro": bot.CoroutineRule,
-    "coroutine": bot.CoroutineRule,
-    "state": bot.StateRule,
-    "state_group": bot.StateGroupRule,
-    "regexp": bot.RegexRule,
-    "macro": bot.MacroRule,
-    "text": bot.VBMLRule,
+    "from_chat": user.PeerRule,
+    "command": user.CommandRule,
+    "from_user": user.FromUserRule,
+    "peer_ids": user.FromPeerRule,
+    "sticker": user.StickerRule,
+    "attachment": user.AttachmentTypeRule,
+    "levenstein": user.LevensteinRule,
+    "lev": user.LevensteinRule,
+    "length": user.MessageLengthRule,
+    "action": user.ChatActionRule,
+    "func": user.FuncRule,
+    "coro": user.CoroutineRule,
+    "coroutine": user.CoroutineRule,
+    "state": user.StateRule,
+    "state_group": user.StateGroupRule,
+    "regexp": user.RegexRule,
+    "macro": user.MacroRule,
+    "text": user.VBMLRule,
 }
 
 
-class BotLabeler(ABCBotLabeler):
-    """ BotLabeler - shortcut manager for router
-    Can be loaded to other BotLabeler
-    >>> bl = BotLabeler()
+class UserLabeler(ABCUserLabeler):
+    """ UserLabeler - shortcut manager for router
+    Can be loaded to other UserLabeler
+    >>> bl = UserLabeler()
     >>> ...
-    >>> bl.load(BotLabeler())
+    >>> bl.load(UserLabeler())
     Views are fixed. Custom rules can be set locally (they are
     not inherited to other labelers). Rule config is accessible from
     all custom rules from ABCRule.config
     """
 
     def __init__(self, **kwargs):
-        # Default views are fixed in BotLabeler,
+        # Default views are fixed in UserLabeler,
         # if you need to create your own implement
         # custom labeler
         self.message_view = MessageView()
@@ -119,7 +115,7 @@ class BotLabeler(ABCBotLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    bot.PeerRule(True),
+                    user.PeerRule(True),
                     *map(convert_shorten_filter, rules),
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
@@ -137,7 +133,7 @@ class BotLabeler(ABCBotLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    bot.PeerRule(False),
+                    user.PeerRule(False),
                     *map(convert_shorten_filter, rules),
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
@@ -150,7 +146,7 @@ class BotLabeler(ABCBotLabeler):
 
     def raw_event(
         self,
-        event: Union[EventName, List[EventName]],
+        event: Union[str, List[str]],
         dataclass: Callable = dict,
         *rules: ShortenRule,
         **custom_rules,
@@ -161,10 +157,6 @@ class BotLabeler(ABCBotLabeler):
 
         def decorator(func):
             for e in event:
-
-                if isinstance(e, str):
-                    e = GroupEventType(e)
-
                 self.raw_event_view.handlers[e] = HandlerBasement(
                     dataclass,
                     FromFuncHandler(
@@ -178,7 +170,7 @@ class BotLabeler(ABCBotLabeler):
 
         return decorator
 
-    def load(self, labeler: "BotLabeler"):
+    def load(self, labeler: "UserLabeler"):
         self.message_view.handlers.extend(labeler.message_view.handlers)
         self.message_view.middlewares.extend(labeler.message_view.middlewares)
         self.raw_event_view.handlers.update(labeler.raw_event_view.handlers)

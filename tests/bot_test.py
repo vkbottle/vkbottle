@@ -7,7 +7,7 @@ import vbml
 
 from vkbottle import API, AndFilter, Bot, GroupEventType, GroupTypes, OrFilter, StatePeer
 from vkbottle.bot import BotLabeler, Message, rules
-from vkbottle.tools.dev_tools import message_min
+from vkbottle.tools.dev_tools.mini_types.bot import message_min
 from vkbottle.tools.test_utils import MockedClient, with_mocked_api
 
 EXAMPLE_EVENT = {
@@ -173,15 +173,24 @@ async def test_rules(api: API):
         ("a", int),
         ("b", [("c", str), ("d", dict)]),
     ]
-    assert await rules.CommandRule("cmd", ["!", "."], 2).check(fake_message(api, text="!cmd test bar")) == {
-        "args": ("test", "bar")
-    }
-    assert await rules.CommandRule("cmd", ["!", "."], 2).check(fake_message(api, text="cmd test bar")) is False
+    assert await rules.CommandRule("cmd", ["!", "."], 2).check(
+        fake_message(api, text="!cmd test bar")
+    ) == {"args": ("test", "bar")}
+    assert (
+        await rules.CommandRule("cmd", ["!", "."], 2).check(fake_message(api, text="cmd test bar"))
+        is False
+    )
 
     # todo: if args are more than args_count do join excess args with last
-    assert await rules.CommandRule("cmd", ["!", "."], 1).check(fake_message(api, text="cmd test bar")) is False
+    assert (
+        await rules.CommandRule("cmd", ["!", "."], 1).check(fake_message(api, text="cmd test bar"))
+        is False
+    )
 
-    assert await rules.CommandRule("cmd", ["!", "."], 3).check(fake_message(api, text="cmd test bar")) is False
+    assert (
+        await rules.CommandRule("cmd", ["!", "."], 3).check(fake_message(api, text="cmd test bar"))
+        is False
+    )
 
     labeler = BotLabeler()
     labeler.vbml_ignore_case = True
