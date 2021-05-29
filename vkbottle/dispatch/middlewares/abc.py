@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING, Any, List, NoReturn, Optional, Union
 
 if TYPE_CHECKING:
     from vkbottle_types.events import BaseGroupEvent, BaseUserEvent
-
     from vkbottle.dispatch.handlers.abc import ABCHandler
     from vkbottle.dispatch.views.abc import ABCView
 

@@ -30,12 +30,12 @@ from .dispatch import (
     AndFilter,
     BaseMiddleware,
     BaseReturnManager,
-    BotRouter,
     BuiltinStateDispenser,
     MessageView,
     MiddlewareError,
     OrFilter,
     RawEventView,
+    Router,
 )
 from .exception_factory import (
     ABCErrorHandler,

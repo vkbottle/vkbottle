@@ -1,5 +1,5 @@
 from .abc import ABCRouter
-from .bot_router import BotRouter
+from .base import Router
 from .dispenser import ABCStateDispenser, BuiltinStateDispenser
 from .filter import ABCFilter, AndFilter, OrFilter
 from .handlers import ABCHandler

@@ -64,7 +64,7 @@ class ABCView(ABC):
 
     @abstractmethod
     async def handle_event(
-        self, event: dict, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self, event: Any, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
     ) -> Any:
         pass
 
