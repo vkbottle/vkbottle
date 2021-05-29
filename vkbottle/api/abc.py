@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
 
 class ABCAPI(ABC):
     """ Abstract API class
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/low-level/api/api.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/api.md
     """
 
     http: "ABCSessionManager"

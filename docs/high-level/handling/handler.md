@@ -13,7 +13,7 @@ bot = Bot("token")
 async def any_message(message: Message):
     await message.answer("Привет я бот")
 
-bot.run_polling()
+bot.run_forever()
 ```
 
 ## Хендлеры ботов

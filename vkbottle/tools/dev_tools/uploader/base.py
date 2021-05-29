@@ -64,12 +64,12 @@ class BaseUploader(ABC):
         return f"{attachment_type}{owner_id}_{item_id}"
 
     @staticmethod
-    async def read(path_like: Union[str, Bytes]) -> Bytes:
-        if isinstance(path_like, str):
+    async def read(file_source: Union[str, Bytes]) -> Bytes:
+        if isinstance(file_source, str):
             assert aiofiles is not None, "to use default files opener aiofiles should be installed"
-            async with aiofiles.open(path_like, "rb") as file:
+            async with aiofiles.open(file_source, "rb") as file:
                 return await file.read()
-        return path_like
+        return file_source
 
     def __repr__(self) -> str:
         return f"<Uploader {self.__class__.__name__} with api {self.api!r}"

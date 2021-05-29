@@ -1,6 +1,6 @@
-from typing import Any, Dict, List, NamedTuple, Type
+from typing import Any, Dict, List, NamedTuple, Callable
 
-from vkbottle_types.events import BaseGroupEvent, GroupEventType
+from vkbottle_types.events import GroupEventType
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
@@ -11,9 +11,7 @@ from vkbottle.modules import logger
 
 from ..abc import ABCView
 
-HandlerBasement = NamedTuple(
-    "HandlerBasement", [("dataclass", Type[BaseGroupEvent]), ("handler", ABCHandler)]
-)
+HandlerBasement = NamedTuple("HandlerBasement", [("dataclass", Callable), ("handler", ABCHandler)])
 
 
 class RawEventView(ABCView):

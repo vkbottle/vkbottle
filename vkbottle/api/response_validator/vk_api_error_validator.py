@@ -10,7 +10,7 @@ if typing.TYPE_CHECKING:
 
 class VKAPIErrorResponseValidator(ABCResponseValidator):
     """ Default vk api error response validator
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/api/response-validator.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/response-validator.md
     """
 
     async def validate(
@@ -28,4 +28,4 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         if ctx_api.ignore_errors:
             return None
 
-        raise VKAPIError(code, msg)
+        raise VKAPIError(code, msg, response)

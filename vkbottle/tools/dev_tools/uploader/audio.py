@@ -10,10 +10,10 @@ class AudioUploader(BaseUploader):
         return (await self.api.request("audio.getUploadServer", {}))["response"]
 
     async def upload(
-        self, artist: str, title: str, path_like: Union[str, Bytes], **params
+        self, artist: str, title: str, file_source: Union[str, Bytes], **params
     ) -> Union[str, dict]:
         server = await self.get_server()
-        data = await self.read(path_like)
+        data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"file": file})

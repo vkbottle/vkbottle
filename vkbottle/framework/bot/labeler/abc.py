@@ -1,12 +1,15 @@
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, List, Union
 
+from vkbottle_types.events import GroupEventType
+
 from vkbottle.dispatch.rules import ABCRule
 from vkbottle.dispatch.views import ABCView
 from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
 
 LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]
 LabeledHandler = Callable[..., Callable[[Any], Any]]
+EventName = Union[GroupEventType, str]
 
 
 class ABCBotLabeler(ABC):
@@ -25,7 +28,7 @@ class ABCBotLabeler(ABC):
     @abstractmethod
     def raw_event(
         self,
-        event: Union[str, List[str]],
+        event: Union[EventName, List[EventName]],
         dataclass: Callable = dict,
         *rules: "ABCRule",
         **custom_rules,

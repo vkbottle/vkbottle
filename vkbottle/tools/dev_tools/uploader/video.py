@@ -12,19 +12,21 @@ class VideoUploader(BaseUploader):
         return self.with_name or self.NAME
 
     async def upload(
-        self, path_like: Optional[Union[str, bytes]] = None, **params
+        self, file_source: Optional[Union[str, bytes]] = None, **params
     ) -> Union[str, List[dict], dict]:
         server = await self.get_server()
-        assert path_like is not None or "link" in params, "path_like or link to video must be set"
+        assert (
+            file_source is not None or "link" in params
+        ), "file_source or link to video must be set"
 
-        if "link" in params and not path_like:
+        if "link" in params and not file_source:
             async with self.api.http as session:
                 raw_response = await session.request_text(
                     "GET", server["upload_url"], params=params
                 )
                 return json.loads(raw_response)
 
-        data = await self.read(path_like)  # type: ignore
+        data = await self.read(file_source)  # type: ignore
         file = self.get_bytes_io(data)
         video = await self.upload_files(server["upload_url"], {"video_file": file})
 

@@ -4,23 +4,23 @@ from abc import ABC, abstractmethod
 
 class ABCStorage(ABC):
     """ Abstract storage class
-    Documentation: https://github.com/timoniq/vkbottle/tree/v3.0/docs/tools/storage.md
+    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/tools/storage.md
     """
 
     @abstractmethod
-    def get(self, key: str) -> typing.Any:
+    def get(self, key: typing.Hashable) -> typing.Any:
         pass
 
     @abstractmethod
-    def set(self, key: str, value: typing.Any) -> None:
+    def set(self, key: typing.Hashable, value: typing.Any) -> None:
         pass
 
     @abstractmethod
-    def delete(self, key: str) -> None:
+    def delete(self, key: typing.Hashable) -> None:
         pass
 
     @abstractmethod
-    def contains(self, key: str) -> bool:
+    def contains(self, key: typing.Hashable) -> bool:
         pass
 
     def __repr__(self):
@@ -29,8 +29,8 @@ class ABCStorage(ABC):
     def __contains__(self, item: str) -> bool:
         return self.contains(item)
 
-    def __setitem__(self, key: str, value: typing.Any) -> None:
+    def __setitem__(self, key: typing.Hashable, value: typing.Any) -> None:
         self.set(key, value)
 
-    def __getitem__(self, item: str) -> typing.Any:
-        return self.get(item)
+    def __getitem__(self, key: typing.Hashable) -> typing.Any:
+        return self.get(key)
