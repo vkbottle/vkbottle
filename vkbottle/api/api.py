@@ -1,6 +1,6 @@
 import typing
 
-from vkbottle_types import API_URL, API_VERSION
+import vkbottle_types
 from vkbottle_types.categories import APICategories
 
 from vkbottle.http import ABCSessionManager, AiohttpClient, SingleSessionManager
@@ -20,6 +20,8 @@ class API(ABCAPI, APICategories):
     Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/api.md
     """
 
+    API_URL = vkbottle_types.API_URL
+    API_VERSION = vkbottle_types.API_VERSION
     APIRequest = APIRequest
 
     def __init__(
@@ -44,9 +46,9 @@ class API(ABCAPI, APICategories):
             async with self.token_generator as token:
                 response = await session.request_text(
                     "POST",
-                    API_URL + method,
+                    self.API_URL + method,
                     data=data,  # type: ignore
-                    params={"access_token": token, "v": API_VERSION},
+                    params={"access_token": token, "v": self.API_VERSION},
                 )
             logger.debug("Request {} with {} data returned {}".format(method, data, response))
             return await self.validate_response(method, data, response)
@@ -61,9 +63,9 @@ class API(ABCAPI, APICategories):
                 async with self.token_generator as token:
                     response = await session.request_text(
                         "POST",
-                        API_URL + method,
+                        self.API_URL + method,
                         data=data,  # noqa
-                        params={"access_token": token, "v": API_VERSION},  # noqa
+                        params={"access_token": token, "v": self.API_VERSION},  # noqa
                     )
                 logger.debug("Request {} with {} data returned {}".format(method, data, response))
                 yield await self.validate_response(method, data, response)
