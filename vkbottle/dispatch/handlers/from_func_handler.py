@@ -1,8 +1,11 @@
-from typing import Any, Callable, Union
+from typing import TYPE_CHECKING, Any, Callable, Union
 
 from vkbottle.dispatch.rules import ABCRule
 
 from .abc import ABCHandler
+
+if TYPE_CHECKING:
+    from vkbottle_types.events import Event
 
 
 class FromFuncHandler(ABCHandler):
@@ -11,7 +14,7 @@ class FromFuncHandler(ABCHandler):
         self.rules = rules
         self.blocking = blocking
 
-    async def filter(self, event: Any) -> Union[dict, bool]:
+    async def filter(self, event: "Event") -> Union[dict, bool]:
         rule_context = {}
         for rule in self.rules:
             result = await rule.check(event)
@@ -22,7 +25,7 @@ class FromFuncHandler(ABCHandler):
             rule_context.update(result)
         return rule_context
 
-    async def handle(self, event: Any, **context) -> Any:
+    async def handle(self, event: "Event", **context) -> Any:
         return await self.handler(event, **context)
 
     def __eq__(self, obj: object) -> bool:

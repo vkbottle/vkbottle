@@ -1,8 +1,8 @@
 from abc import ABC
-from typing import TYPE_CHECKING, Any, List, NoReturn, Optional, Union
+from typing import TYPE_CHECKING, Any, List, NoReturn, Optional
 
 if TYPE_CHECKING:
-    from vkbottle_types.events import BaseGroupEvent, BaseUserEvent
+    from vkbottle_types.events import Event
 
     from vkbottle.dispatch.handlers.abc import ABCHandler
     from vkbottle.dispatch.views.abc import ABCView
@@ -13,14 +13,12 @@ class MiddlewareError(Exception):
 
 
 class BaseMiddleware(ABC):
-    event: Union["BaseGroupEvent", "BaseUserEvent"]
+    event: "Event"
     view: Optional["ABCView"]
     handle_responses: List
     handlers: List["ABCHandler"]
 
-    def __init__(
-        self, event: Union["BaseGroupEvent", "BaseUserEvent"], view: Optional["ABCView"] = None
-    ):
+    def __init__(self, event: "Event", view: Optional["ABCView"] = None):
         self.event = event
         self.view = view
 

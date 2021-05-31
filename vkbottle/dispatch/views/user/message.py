@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, Optional
+from typing import Optional
 
 from vkbottle_types.events import UserEventType
 
@@ -20,10 +20,10 @@ class ABCMessageView(ABCDispenseView, ABC):
     async def process_event(self, event: int) -> bool:
         return UserEventType(event) == UserEventType.NEW_MESSAGE
 
+    # TODO: List[???]
     async def handle_event(
         self, event: list, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
-    ) -> Any:
-
+    ) -> None:
         logger.debug("Handling event ({}) with message view".format(event[0]))
         context_variables: dict = {}
         message = await message_min(event[1], ctx_api)
@@ -34,7 +34,8 @@ class ABCMessageView(ABCDispenseView, ABC):
 
         error = await self.pre_middleware(message, context_variables)
         if error:
-            return logger.info("Handling stopped, pre_middleware returned error")
+            logger.info("Handling stopped, pre_middleware returned error")
+            return
 
         handle_responses = []
         handlers = []
