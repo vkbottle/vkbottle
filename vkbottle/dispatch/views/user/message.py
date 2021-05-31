@@ -25,7 +25,7 @@ class ABCMessageView(ABCDispenseView, ABC):
         self.handler_return_manager = UserMessageReturnHandler()
 
     async def process_event(self, event: int) -> bool:
-        return UserEventType(event) == UserEventType.NEW_MESSAGE
+        return UserEventType(event[0]) == UserEventType.NEW_MESSAGE
 
     async def handle_event(
         self, event: list, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"

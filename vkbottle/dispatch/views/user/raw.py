@@ -23,7 +23,7 @@ class RawEventView(ABCView):
         self.handler_return_manager = UserMessageReturnHandler()
 
     async def process_event(self, event: int) -> bool:
-        if UserEventType(event) in self.handlers:
+        if UserEventType(event[0]) in self.handlers:
             return True
 
     async def handle_event(
