@@ -35,7 +35,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
 
 
 class UserLabeler(ABCUserLabeler):
-    """ UserLabeler - shortcut manager for router
+    """UserLabeler - shortcut manager for router
     Can be loaded to other UserLabeler
     >>> bl = UserLabeler()
     >>> ...
@@ -63,13 +63,12 @@ class UserLabeler(ABCUserLabeler):
 
     @property
     def vbml_ignore_case(self) -> bool:
-        """ Gets ignore case flag from rule config flags """
+        """Gets ignore case flag from rule config flags"""
         return re.IGNORECASE in self.rule_config["flags"]
 
     @vbml_ignore_case.setter
     def vbml_ignore_case(self, ignore_case: bool):
-        """ Adds ignore case flag to rule config flags or removes it
-        """
+        """Adds ignore case flag to rule config flags or removes it"""
         if not ignore_case:
             self.rule_config["vbml_flags"] ^= re.IGNORECASE
         else:

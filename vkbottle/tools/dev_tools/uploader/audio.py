@@ -20,7 +20,8 @@ class AudioUploader(BaseUploader):
 
         audio = (
             await self.api.request(
-                "audio.save", {"artist": artist, "title": title, **uploader, **params},
+                "audio.save",
+                {"artist": artist, "title": title, **uploader, **params},
             )
         )["response"]
 

@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, Callable, List, Optional
+from typing import Any, Optional
 
 from vkbottle_types.events import GroupEventType
 
@@ -7,18 +7,14 @@ from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.modules import logger
-from vkbottle.tools.dev_tools.mini_types.bot import MessageMin, message_min
+from vkbottle.tools.dev_tools.mini_types.bot import message_min
 
 from ..abc_dispense import ABCDispenseView
-
-DEFAULT_STATE_KEY = "peer_id"
 
 
 class ABCMessageView(ABCDispenseView, ABC):
     def __init__(self):
         super().__init__()
-        self.state_source_key = DEFAULT_STATE_KEY
-        self.default_text_approximators: List[Callable[[MessageMin], str]] = []
         self.handler_return_manager = BotMessageReturnHandler()
 
     async def process_event(self, event: dict) -> bool:

@@ -15,7 +15,7 @@ APIRequest = typing.NamedTuple("APIRequest", [("method", str), ("data", dict)])
 
 
 class API(ABCAPI, APICategories):
-    """ Default API instance
+    """Default API instance
     Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/api.md
     """
 
@@ -38,7 +38,7 @@ class API(ABCAPI, APICategories):
         self.request_validators: typing.List[ABCRequestValidator] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
 
     async def request(self, method: str, data: dict) -> dict:
-        """ Makes a single request opening a session """
+        """Makes a single request opening a session"""
         data = await self.validate_request(data)
 
         async with self.http as session:
@@ -55,7 +55,7 @@ class API(ABCAPI, APICategories):
     async def request_many(
         self, requests: typing.Iterable[APIRequest]  # type: ignore
     ) -> typing.AsyncIterator[dict]:
-        """ Makes many requests opening one session """
+        """Makes many requests opening one session"""
         async with self.http as session:
             for request in requests:
                 method, data = request.method, await self.validate_request(request.data)  # type: ignore
@@ -72,16 +72,16 @@ class API(ABCAPI, APICategories):
     async def validate_response(
         self, method: str, data: dict, response: typing.Union[dict, str]
     ) -> typing.Union[typing.Any, typing.NoReturn]:
-        """ Validates response from VK,
-        to change validations change API.response_validators (list of ResponseValidator's) """
+        """Validates response from VK,
+        to change validations change API.response_validators (list of ResponseValidator's)"""
         for validator in self.response_validators:
             response = await validator.validate(method, data, response, self)
         logger.debug("API response was validated")
         return response  # type: ignore
 
     async def validate_request(self, request: dict) -> dict:
-        """ Validates requests from VK,
-        to change validations change API.request_validators (list of RequestValidator's) """
+        """Validates requests from VK,
+        to change validations change API.request_validators (list of RequestValidator's)"""
         for validator in self.request_validators:
             request = await validator.validate(request)
         logger.debug("API request was validated")

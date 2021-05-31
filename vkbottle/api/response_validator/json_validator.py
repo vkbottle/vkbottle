@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
 
 
 class JSONResponseValidator(ABCResponseValidator):
-    """ Default response json-parse validator
+    """Default response json-parse validator
     Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/response-validator.md
     """
 

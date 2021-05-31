@@ -5,11 +5,9 @@ import vbml
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.handlers import FromFuncHandler
-
 from vkbottle.dispatch.rules import ABCRule, bot
 from vkbottle.dispatch.views import ABCView
 from vkbottle.dispatch.views.bot import HandlerBasement, MessageView, RawEventView
-
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
 
 from .abc import ABCBotLabeler, EventName, LabeledHandler, LabeledMessageHandler

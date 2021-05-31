@@ -10,7 +10,7 @@ T = TypeVar("T")
 
 
 class BaseContext:
-    """ Parent BaseContext class. Idea taken from aiogram """
+    """Parent BaseContext class. Idea taken from aiogram"""
 
     ctx_instance: Any
 

@@ -9,7 +9,7 @@ from vkbottle.modules import json
 
 
 def keyboard_gen(pattern: List[List[dict]], one_time: bool = False, inline: bool = False):
-    """ Simple keyboard generator
+    """Simple keyboard generator
     :param pattern: Keyboard simple pattern, check github readme
     :param one_time: Should keyboard be hidden after first use?
     :param inline: Should keyboard be inline?

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, List, Optional, Set, Type, Union
+from typing import TYPE_CHECKING, Any, Callable, List, Optional, Set, Type, Union
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
@@ -7,9 +7,12 @@ from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager import BaseReturnManager
 from vkbottle.modules import logger
+from vkbottle.tools.dev_tools.mini_types.user.message import MessageMin
 
 if TYPE_CHECKING:
     from vkbottle_types.events import BaseGroupEvent, BaseUserEvent
+
+DEFAULT_STATE_KEY = "peer_id"
 
 
 class ABCView(ABC):
@@ -17,6 +20,8 @@ class ABCView(ABC):
     middlewares: Set[Type["BaseMiddleware"]]
     middleware_instances: List["BaseMiddleware"]
     handler_return_manager: BaseReturnManager
+    state_source_key: str
+    default_text_approximators: List[Callable[[MessageMin], str]]
 
     @abstractmethod
     def __init__(self):
@@ -24,9 +29,11 @@ class ABCView(ABC):
         self.middlewares = set()
         self.middleware_instances = []
         self.handler_return_manager = None
+        self.state_source_key = DEFAULT_STATE_KEY
+        self.default_text_approximators = []
 
     @abstractmethod
-    async def process_event(self, event: dict) -> bool:
+    async def process_event(self, event: Any) -> bool:
         pass
 
     async def pre_middleware(

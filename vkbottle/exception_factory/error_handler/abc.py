@@ -17,7 +17,8 @@ class ABCErrorHandler(ABC):
 
     @abstractmethod
     def register_undefined_error_handler(
-        self, exception_handler: typing.Optional[ExceptionHandler] = None,
+        self,
+        exception_handler: typing.Optional[ExceptionHandler] = None,
     ) -> typing.Optional[typing.Callable[[ExceptionHandler], typing.Any]]:
         pass
 
@@ -35,5 +36,7 @@ class ABCErrorHandler(ABC):
 
     @property
     @abstractmethod
-    def handling_exceptions(self,) -> typing.Union[str, typing.Tuple[str, ...]]:
+    def handling_exceptions(
+        self,
+    ) -> typing.Union[str, typing.Tuple[str, ...]]:
         pass

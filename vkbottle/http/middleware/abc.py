@@ -5,7 +5,7 @@ HTTPMiddlewareResponse = typing.NewType("HTTPMiddlewareResponse", bool)
 
 
 class ABCHTTPMiddleware(ABC):
-    """ Abstract class for http-client middleware
+    """Abstract class for http-client middleware
     Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/http/http-middleware.md
     """
 

@@ -9,7 +9,7 @@ from .user import User
 
 
 def run_multibot(user: User, apis: Iterable[ABCAPI], polling_type: Type[ABCPolling] = UserPolling):
-    """ Add run_polling with polling constructed from derived apis
+    """Add run_polling with polling constructed from derived apis
     :param user: User main instance (api is not required)
     :param apis: Iterable of apis
     :param polling_type: polling type to be ran

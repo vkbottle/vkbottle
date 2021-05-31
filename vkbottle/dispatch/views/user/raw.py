@@ -1,11 +1,10 @@
-from typing import Any, Dict, List, NamedTuple, Type
+from typing import Any, Dict, NamedTuple, Type
 
 from vkbottle_types.events import BaseUserEvent, UserEventType
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
-from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
 from vkbottle.dispatch.return_manager.user import UserMessageReturnHandler
 from vkbottle.modules import logger
 
@@ -18,8 +17,8 @@ HandlerBasement = NamedTuple(
 
 class RawEventView(ABCView):
     def __init__(self):
+        super().__init__()
         self.handlers: Dict[UserEventType, HandlerBasement] = {}
-        self.middlewares: List["BaseMiddleware"] = []
         self.handler_return_manager = UserMessageReturnHandler()
 
     async def process_event(self, event: int) -> bool:
@@ -32,7 +31,7 @@ class RawEventView(ABCView):
         logger.debug("Handling event ({}) with message view".format(event[0]))
 
         handler_basement = self.handlers[UserEventType(event[0])]
-        context_variables = {}
+        context_variables: dict = {}
 
         event_model = handler_basement.dataclass(event[1])
 
@@ -41,12 +40,9 @@ class RawEventView(ABCView):
         else:
             setattr(event_model, "unprepared_ctx_api", ctx_api)
 
-        for middleware in self.middlewares:
-            response = await middleware.pre(event_model)
-            if response == MiddlewareResponse(False):
-                return
-            elif isinstance(response, dict):
-                context_variables.update(response)
+        error = await self.pre_middleware(event_model, context_variables)
+        if error:
+            return logger.info("Handling stopped, pre_middleware returned error")
 
         result = await handler_basement.handler.filter(event_model)
         logger.debug("Handler {} returned {}".format(handler_basement.handler, result))
@@ -62,10 +58,10 @@ class RawEventView(ABCView):
         return_handler = self.handler_return_manager.get_handler(handler_response)
         if return_handler is not None:
             await return_handler(
-                self.handler_return_manager, handler_response, event_model, context_variables,
+                self.handler_return_manager,
+                handler_response,
+                event_model,
+                context_variables,
             )
 
-        for middleware in self.middlewares:
-            await middleware.post(
-                event_model, self, [handler_response], [handler_basement.handler]
-            )
+        await self.post_middleware([handler_response], [handler_basement.handler])

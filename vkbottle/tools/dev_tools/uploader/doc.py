@@ -19,9 +19,12 @@ class DocUploader(BaseUploader, ABC):
 
         uploader = await self.upload_files(server["upload_url"], {"file": file})
 
-        doc = (await self.api.request("docs.save", {"title": title, **uploader, **params},))[
-            "response"
-        ]
+        doc = (
+            await self.api.request(
+                "docs.save",
+                {"title": title, **uploader, **params},
+            )
+        )["response"]
         doc_type = doc["type"]
 
         if self.generate_attachment_strings:
