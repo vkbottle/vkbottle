@@ -24,7 +24,7 @@ class ABCMessageView(ABCDispenseView, ABC):
         self.default_text_approximators: List[Callable[[MessageMin], str]] = []
         self.handler_return_manager = UserMessageReturnHandler()
 
-    async def process_event(self, event: int) -> bool:
+    async def process_event(self, event: list) -> bool:
         return UserEventType(event[0]) == UserEventType.NEW_MESSAGE
 
     async def handle_event(

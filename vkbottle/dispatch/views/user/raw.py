@@ -22,7 +22,7 @@ class RawEventView(ABCView):
         self.middlewares: List["BaseMiddleware"] = []
         self.handler_return_manager = UserMessageReturnHandler()
 
-    async def process_event(self, event: int) -> bool:
+    async def process_event(self, event: list) -> bool:
         if UserEventType(event[0]) in self.handlers:
             return True
 
