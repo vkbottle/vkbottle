@@ -23,7 +23,7 @@ class Bot(ABCFramework):
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCBotLabeler"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
-        task_each_event: bool = False,
+        task_each_event: bool = True,
     ):
         self.api: Union[ABCAPI, API] = API(token) if token is not None else api  # type: ignore
         self.error_handler = error_handler or ErrorHandler()

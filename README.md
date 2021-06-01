@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/tesseradecade/vbml">
-    <img src="/docs/logo.jpg" width="200px" style="display: inline-block;">
+    <img src="https://github.com/timoniq/vkbottle/blob/master/docs/logo.jpg" width="200px" style="display: inline-block;">
   </a>
 </p>
 <h1 align="center">
@@ -31,7 +31,7 @@ pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
 Установить версию 3.0 с PyPI можно командой:
 
 ```shell
-pip install vkbottle==3.0
+pip install vkbottle
 ```
 
 Если вы ищете старые версии (`2.x`) - [вам сюда](https://github.com/timoniq/vkbottle/tree/v2.0)
