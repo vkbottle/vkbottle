@@ -2,14 +2,14 @@ from typing import Any, List, Optional, Union
 
 from vkbottle_types import StatePeer
 from vkbottle_types.events.bot_events import MessageNew
-from vkbottle_types.objects import MessagesClientInfo, MessagesMessage, UsersUser
+from vkbottle_types.objects import ClientInfoForBots, MessagesMessage, UsersUser
 
 from vkbottle.api import ABCAPI, API
 
 
 class MessageMin(MessagesMessage):
     group_id: Optional[int] = None
-    client_info: Optional["MessagesClientInfo"] = None
+    client_info: Optional["ClientInfoForBots"] = None
     unprepared_ctx_api: Optional[Any] = None
     state_peer: Optional[StatePeer] = None
 
