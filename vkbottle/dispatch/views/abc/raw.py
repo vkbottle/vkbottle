@@ -19,15 +19,13 @@ class ABCRawEventView(ABCView):
 
     @staticmethod
     @abstractmethod
-    def get_logger_event_value(event):
+    def get_event_type(event):
         ...
 
     async def handle_event(
         self, event: Union[list, dict], ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
     ) -> Any:
-        logger.debug(
-            "Handling event ({}) with message view".format(self.get_logger_event_value(event))
-        )
+        logger.debug("Handling event ({}) with message view".format(self.get_event_type(event)))
 
         handler_basement = self.get_handler_basement(event)
         context_variables: dict = {}

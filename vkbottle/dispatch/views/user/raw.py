@@ -18,14 +18,14 @@ class RawEventView(ABCRawEventView):
         self.handler_return_manager = UserMessageReturnHandler()
 
     def get_handler_basement(self, event):
-        return self.handlers[UserEventType(event[0])]
+        return self.handlers[UserEventType(self.get_event_type(event))]
 
     def get_event_model(self, handler_basement, event):
         return handler_basement.dataclass(event[1])
 
     @staticmethod
-    def get_logger_event_value(event):
+    def get_event_type(event: list) -> int:
         return event[0]
 
-    async def process_event(self, event: int) -> bool:
-        return UserEventType(event) in self.handlers
+    async def process_event(self, event: list) -> bool:
+        return UserEventType(self.get_event_type(event)) in self.handlers

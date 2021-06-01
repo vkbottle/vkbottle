@@ -1,3 +1,4 @@
+from abc import ABC
 from typing import Optional
 
 from vkbottle_types.events import UserEventType
@@ -7,21 +8,21 @@ from vkbottle.dispatch.views.abc.message import ABCMessageView
 from vkbottle.tools.dev_tools.mini_types.user import MessageMin, message_min
 
 
-class ABCUserMessageView(ABCMessageView):
+class ABCUserMessageView(ABCMessageView, ABC):
     def __init__(self):
         super().__init__()
         self.handler_return_manager = UserMessageReturnHandler()
 
     @staticmethod
-    def get_logger_event_value(event):
+    def get_event_type(event):
         return event[0]
 
     @staticmethod
     async def get_message(event, ctx_api):
         return await message_min(event[1], ctx_api)
 
-    async def process_event(self, event: int) -> bool:
-        return UserEventType(event) == UserEventType.NEW_MESSAGE
+    async def process_event(self, event: list) -> bool:
+        return UserEventType(self.get_event_type(event)) == UserEventType.NEW_MESSAGE
 
 
 class MessageView(ABCUserMessageView):

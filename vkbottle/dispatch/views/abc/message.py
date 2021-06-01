@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, List, Optional
+from typing import Callable, List
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
@@ -22,7 +22,7 @@ class ABCMessageView(ABCDispenseView, ABC):
 
     @staticmethod
     @abstractmethod
-    def get_logger_event_value(event):
+    def get_event_type(event):
         ...
 
     @staticmethod
@@ -35,9 +35,7 @@ class ABCMessageView(ABCDispenseView, ABC):
     ) -> None:
         # For user event mapping, consider checking out
         # https://vk.com/dev/using_longpoll?f=3.%20Event%20Structure
-        logger.debug(
-            "Handling event ({}) with message view".format(self.get_logger_event_value(event))
-        )
+        logger.debug("Handling event ({}) with message view".format(self.get_event_type(event)))
         context_variables: dict = {}
         message = await self.get_message(event, ctx_api)
         message.state_peer = await state_dispenser.cast(self.get_state_key(message))
@@ -77,8 +75,3 @@ class ABCMessageView(ABCDispenseView, ABC):
                 break
 
         await self.post_middleware(handle_responses, handlers)
-
-
-class MessageView(ABCMessageView):
-    def get_state_key(self, message: MessageMin) -> Optional[int]:
-        return getattr(message, self.state_source_key, None)

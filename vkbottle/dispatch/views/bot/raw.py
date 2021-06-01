@@ -16,14 +16,14 @@ class RawEventView(ABCRawEventView):
         self.handler_return_manager = BotMessageReturnHandler()
 
     def get_handler_basement(self, event):
-        return self.handlers[GroupEventType(event["type"])]
+        return self.handlers[GroupEventType(self.get_event_type(event))]
 
     def get_event_model(self, handler_basement, event):
         return handler_basement.dataclass(**event)
 
     @staticmethod
-    def get_logger_event_value(event):
-        return event.get("event_id")
+    def get_event_type(event: dict) -> str:
+        return event["type"]
 
     async def process_event(self, event: dict) -> bool:
-        return GroupEventType(event["type"]) in self.handlers
+        return GroupEventType(self.get_event_type(event)) in self.handlers

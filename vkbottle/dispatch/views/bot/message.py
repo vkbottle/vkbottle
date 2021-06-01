@@ -1,3 +1,4 @@
+from abc import ABC
 from typing import Optional
 
 from vkbottle_types.events import GroupEventType
@@ -7,13 +8,13 @@ from vkbottle.dispatch.views.abc import ABCMessageView
 from vkbottle.tools.dev_tools.mini_types.bot import message_min
 
 
-class ABCBotMessageView(ABCMessageView):
+class ABCBotMessageView(ABCMessageView, ABC):
     def __init__(self):
         super().__init__()
         self.handler_return_manager = BotMessageReturnHandler()
 
     @staticmethod
-    def get_logger_event_value(event):
+    def get_event_type(event):
         return event.get("event_id")
 
     @staticmethod
