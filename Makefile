@@ -43,7 +43,7 @@ check: check-venv ## Run tests and linters
 	@$(interpreter) mypy vkbottle
 	@echo ; echo "pytest"
 	@echo "======"
-	@$(interpreter) pytest --cov vkbottle tests
+	@$(interpreter) pytest --cov vkbottle vkbottle
 
 fix: check-venv ## Fix code with black and autoflake
 	@echo "autoflake"

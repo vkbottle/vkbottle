@@ -45,7 +45,7 @@ repos:
 
       - id: pytest
         name: pytest
-        entry: poetry run pytest vkbottle tests
+        entry: poetry run pytest vkbottle
         language: system
         always_run: false
         pass_filenames: false
