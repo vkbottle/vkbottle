@@ -5,7 +5,7 @@ from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.modules import logger
 
-from ..abc import ABCView
+from .view import ABCView
 
 
 class ABCRawEventView(ABCView):
@@ -17,8 +17,8 @@ class ABCRawEventView(ABCView):
     def get_event_model(self, handler_basement, event):
         ...
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def get_logger_event_value(event):
         ...
 

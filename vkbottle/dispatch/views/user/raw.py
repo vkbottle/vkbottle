@@ -4,7 +4,7 @@ from vkbottle_types.events import BaseUserEvent, UserEventType
 
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.return_manager.user import UserMessageReturnHandler
-from vkbottle.dispatch.views.abc_raw import ABCRawEventView
+from vkbottle.dispatch.views.abc import ABCRawEventView
 
 HandlerBasement = NamedTuple(
     "HandlerBasement", [("dataclass", Type[BaseUserEvent]), ("handler", ABCHandler)]

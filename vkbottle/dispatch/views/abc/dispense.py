@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Optional
 
-from .abc import ABCView
+from .view import ABCView
 
 if TYPE_CHECKING:
     from vkbottle_types.events import Event
