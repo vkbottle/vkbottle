@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/tesseradecade/vbml">
-    <img src="https://github.com/timoniq/vkbottle/blob/master/docs/logo.jpg" width="200px" style="display: inline-block;">
+  <a href="https://github.com/timoniq/vkbottle">
+    <img src="https://raw.githubusercontent.com/timoniq/vkbottle/master/docs/logo.jpg" width="200px" style="display: inline-block; border-radius: 5px">
   </a>
 </p>
 <h1 align="center">
