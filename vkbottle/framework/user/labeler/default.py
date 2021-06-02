@@ -6,7 +6,7 @@ import vbml
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule, user
 from vkbottle.dispatch.views import ABCView
-from vkbottle.dispatch.views.user import HandlerBasement, MessageView, RawEventView
+from vkbottle.dispatch.views.user import HandlerBasement, RawUserEventView, UserMessageView
 from vkbottle.tools.dev.utils import convert_shorten_filter
 
 from .abc import ABCUserLabeler, LabeledHandler, LabeledMessageHandler
@@ -49,8 +49,8 @@ class UserLabeler(ABCUserLabeler):
         # Default views are fixed in UserLabeler,
         # if you need to create your own implement
         # custom labeler
-        self.message_view = MessageView()
-        self.raw_event_view = RawEventView()
+        self.message_view = UserMessageView()
+        self.raw_event_view = RawUserEventView()
 
         self.custom_rules = kwargs.get("custom_rules") or DEFAULT_CUSTOM_RULES
         self.auto_rules: List["ABCRule"] = []

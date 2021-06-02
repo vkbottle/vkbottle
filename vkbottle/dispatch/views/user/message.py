@@ -25,6 +25,6 @@ class ABCUserMessageView(ABCMessageView, ABC):
         return UserEventType(self.get_event_type(event)) == UserEventType.NEW_MESSAGE
 
 
-class MessageView(ABCUserMessageView):
+class UserMessageView(ABCUserMessageView):
     def get_state_key(self, message: MessageMin) -> Optional[int]:
         return getattr(message, self.state_source_key, None)

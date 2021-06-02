@@ -25,6 +25,6 @@ class ABCBotMessageView(ABCMessageView, ABC):
         return GroupEventType(event["type"]) == GroupEventType.MESSAGE_NEW
 
 
-class MessageView(ABCBotMessageView):
+class BotMessageView(ABCBotMessageView):
     def get_state_key(self, event: dict) -> Optional[int]:
         return event["object"]["message"].get(self.state_source_key)
