@@ -15,7 +15,7 @@ repos:
     hooks:
       - id: autoflake
         name: autoflake
-        entry: poetry run autoflake -i --remove-all-unused-imports --exclude bot.py,conftest.py,__init__.py
+        entry: bash -c 'make autoflake_fix filename=$@' --
         language: system
         types: [ python ]
         stages: [ commit ]
