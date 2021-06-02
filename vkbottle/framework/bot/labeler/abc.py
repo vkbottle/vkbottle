@@ -5,7 +5,7 @@ from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.rules import ABCRule
 from vkbottle.dispatch.views import ABCView
-from vkbottle.tools.dev_tools.mini_types.bot.message import MessageMin
+from vkbottle.tools.dev.mini_types.bot.message import MessageMin
 
 LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]
 LabeledHandler = Callable[..., Callable[[Any], Any]]

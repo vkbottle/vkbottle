@@ -7,7 +7,7 @@ from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule, user
 from vkbottle.dispatch.views import ABCView
 from vkbottle.dispatch.views.user import HandlerBasement, MessageView, RawEventView
-from vkbottle.tools.dev_tools.utils import convert_shorten_filter
+from vkbottle.tools.dev.utils import convert_shorten_filter
 
 from .abc import ABCUserLabeler, LabeledHandler, LabeledMessageHandler
 

@@ -5,7 +5,7 @@ from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.dispatch.views.abc import ABCMessageView
-from vkbottle.tools.dev_tools.mini_types.bot import message_min
+from vkbottle.tools.dev.mini_types.bot import message_min
 
 
 class ABCBotMessageView(ABCMessageView, ABC):

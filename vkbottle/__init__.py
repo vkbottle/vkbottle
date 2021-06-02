@@ -1,7 +1,7 @@
 from vkbottle_types import BaseStateGroup, GroupTypes, StatePeer
 from vkbottle_types.events import GroupEventType
 
-from vkbottle.tools.dev_tools.vkscript_converter import vkscript
+from vkbottle.tools.dev.vkscript_converter import vkscript
 
 from .api import (
     ABCAPI,
