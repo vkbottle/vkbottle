@@ -9,7 +9,7 @@ _startup_cwd = os.getcwd()
 
 
 def restart():
-    """ https://github.com/cherrypy/cherrypy/blob/0857fa81eb0ab647c7b59a019338bab057f7748b/cherrypy/process/wspbus.py#L305 """
+    """https://github.com/cherrypy/cherrypy/blob/0857fa81eb0ab647c7b59a019338bab057f7748b/cherrypy/process/wspbus.py#L305"""
     args = sys.argv[:]
     logger.debug("Restarting: %s" % " ".join(args))
     args.insert(0, sys.executable)

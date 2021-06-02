@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
 
 
 class VKAPIErrorResponseValidator(ABCResponseValidator):
-    """ Default vk api error response validator
+    """Default vk api error response validator
     Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/response-validator.md
     """
 

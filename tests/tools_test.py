@@ -115,22 +115,26 @@ def test_keyboard_builder():
 
 
 def test_keyboard_generator():
-    assert json.loads(
-        keyboard_gen(
-            [
-                [{"label": "I love nuggets", "payload": {"love": "nuggets"}}],
-                [
-                    {
-                        "type": "callback",
-                        "label": "Eat nuggets",
-                        "payload": {"eat": "nuggets"},
-                        "color": "positive",
-                    }
-                ],
-            ],
-            one_time=True,
+    with pytest.deprecated_call():
+        assert (
+            json.loads(
+                keyboard_gen(
+                    [
+                        [{"label": "I love nuggets", "payload": {"love": "nuggets"}}],
+                        [
+                            {
+                                "type": "callback",
+                                "label": "Eat nuggets",
+                                "payload": {"eat": "nuggets"},
+                                "color": "positive",
+                            }
+                        ],
+                    ],
+                    one_time=True,
+                )
+            )
+            == json.loads(KEYBOARD_JSON)
         )
-    ) == json.loads(KEYBOARD_JSON)
 
 
 def test_bp_importer(mocker: MockerFixture):
@@ -219,6 +223,7 @@ def test_loop_wrapper():
 
 
 @pytest.mark.asyncio
+@pytest.mark.filterwarnings("ignore:coroutine")
 async def test_utils(mocker: MockerFixture):
     async def task_to_run(s, y: int):
         return s.x == y
@@ -232,8 +237,18 @@ async def test_utils(mocker: MockerFixture):
         "c_rule", (ABCRule,), {"check": task_to_run, "__init__": lambda s, i: setattr(s, "x", i)}
     )
 
-    assert convert_shorten_filter((c_rule(None),)).__class__ == OrFilter(c_rule(None),).__class__
-    assert convert_shorten_filter({c_rule(None)}).__class__ == AndFilter(c_rule(None),).__class__
+    assert (
+        convert_shorten_filter((c_rule(None),)).__class__
+        == OrFilter(
+            c_rule(None),
+        ).__class__
+    )
+    assert (
+        convert_shorten_filter({c_rule(None)}).__class__
+        == AndFilter(
+            c_rule(None),
+        ).__class__
+    )
 
     assert_rule(await convert_shorten_filter((c_rule(1), c_rule(2))).check(2))
     assert_rule(await convert_shorten_filter((c_rule(1), c_rule(2))).check(4), True)

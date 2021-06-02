@@ -8,7 +8,7 @@ if typing.TYPE_CHECKING:
 
 
 class ABCAPI(ABC):
-    """ Abstract API class
+    """Abstract API class
     Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/api.md
     """
 
@@ -18,7 +18,7 @@ class ABCAPI(ABC):
 
     @abstractmethod
     async def request(self, method: str, data: dict) -> dict:
-        """ Makes a single request opening a session """
+        """Makes a single request opening a session"""
 
     @abstractmethod
     async def validate_response(self, method: str, data: dict, response: typing.Any) -> typing.Any:

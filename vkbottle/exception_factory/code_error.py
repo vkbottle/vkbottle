@@ -27,8 +27,7 @@ class CodeErrorFactory(ABCExceptionFactory):
         error_description: typing.Optional[str] = None,
         raw_error: typing.Optional[dict] = None,
     ) -> typing.Union["ABCExceptionFactory", typing.Type["ABCExceptionFactory"]]:
-        """ Interactively chooses the factory was called for: if error_description
-        """
+        """Interactively chooses the factory was called for: if error_description"""
         if error_description is not None:
             return cls.exception_to_raise(code, error_description, raw_error)  # type: ignore
         return cls.exception_to_handle(code)
@@ -37,8 +36,7 @@ class CodeErrorFactory(ABCExceptionFactory):
     def exception_to_raise(  # type: ignore
         cls, code: int, error_description: str, raw_error: dict
     ) -> "ABCExceptionFactory":
-        """ Returns an error with error code and error_description
-        """
+        """Returns an error with error code and error_description"""
         exception_type = type(cls.generate_exc_classname(code), (cls,), {})
         return exception_type(code, error_description, raw_error)
 
@@ -46,8 +44,8 @@ class CodeErrorFactory(ABCExceptionFactory):
     def exception_to_handle(  # type: ignore
         cls, code: typing.Optional[int] = None
     ) -> typing.Type["ABCExceptionFactory"]:
-        """ Returns error type from garbage compiler storage with error code.
-        If code is not specified returns self type to handle exception with any code """
+        """Returns error type from garbage compiler storage with error code.
+        If code is not specified returns self type to handle exception with any code"""
         if code is None:
             return cls
 
@@ -61,7 +59,7 @@ class CodeErrorFactory(ABCExceptionFactory):
 
     @classmethod
     def generate_exc_classname(cls, code: typing.Optional[int]) -> str:  # type: ignore
-        """ Generates unique exception classname based on error code """
+        """Generates unique exception classname based on error code"""
         return f"{cls.__name__}_{code}"
 
     def __str__(self):

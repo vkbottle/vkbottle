@@ -30,6 +30,7 @@ from .dispatch import (
     BaseMiddleware,
     BaseReturnManager,
     BuiltinStateDispenser,
+    MiddlewareError,
     OrFilter,
     Router,
 )

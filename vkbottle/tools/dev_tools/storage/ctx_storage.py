@@ -6,14 +6,16 @@ from .abc import ABCStorage
 
 
 class CtxStorage(ABCStorage, BaseContext):
-    """ Context storage
+    """Context storage
     Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/tools/storage.md
     """
 
     storage: dict = {}
 
     def __init__(
-        self, default: dict = None, force_reset: bool = False,
+        self,
+        default: dict = None,
+        force_reset: bool = False,
     ):
 
         default = default or {}

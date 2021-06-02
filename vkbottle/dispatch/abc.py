@@ -9,7 +9,7 @@ from .views import ABCView
 
 
 class ABCRouter(ABC):
-    """ Abstract Router
+    """Abstract Router
     Documentation: soon
     """
 

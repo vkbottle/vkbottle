@@ -11,8 +11,8 @@ Task = Coroutine[Any, Any, Any]
 
 
 class LoopWrapper:
-    """ Loop Wrapper for vkbottle manages startup, shutdown and main tasks,
-    creates loop and runs it forever """
+    """Loop Wrapper for vkbottle manages startup, shutdown and main tasks,
+    creates loop and runs it forever"""
 
     def __init__(
         self,
@@ -30,7 +30,7 @@ class LoopWrapper:
         self.tasks = tasks or []
 
     def run_forever(self, loop: Optional[AbstractEventLoop] = None):
-        """ Runs startup tasks and makes the loop running forever """
+        """Runs startup tasks and makes the loop running forever"""
 
         if not len(self.tasks):
             logger.warning("You ran loop with 0 tasks. Is it ok?")
@@ -55,7 +55,7 @@ class LoopWrapper:
                 loop.close()
 
     def add_task(self, task: Union[Task, Callable[..., Task]]):
-        """ Adds tasks to be ran in run_forever
+        """Adds tasks to be ran in run_forever
         :param task: coroutine / coroutine function with zero arguments
         """
 
@@ -69,7 +69,7 @@ class LoopWrapper:
     def interval(
         self, seconds: int = 0, minutes: int = 0, hours: int = 0, days: int = 0
     ) -> Callable[[Callable], Callable]:
-        """ A tiny template to wrap repeated tasks with decorator
+        """A tiny template to wrap repeated tasks with decorator
         >>> lw = LoopWrapper()
         >>> @lw.interval(seconds=5)
         >>> async def repeated_function():
@@ -90,7 +90,7 @@ class LoopWrapper:
     def timer(
         self, seconds: int = 0, minutes: int = 0, hours: int = 0, days: int = 0
     ) -> Callable[[Callable], Callable]:
-        """ A tiny template to wrap tasks with timer
+        """A tiny template to wrap tasks with timer
         >>> lw = LoopWrapper()
         >>> @lw.timer(seconds=5)
         >>> async def delayed_function():

@@ -8,7 +8,7 @@ from vkbottle.modules import json
 try:
     import aiofiles
 except ImportError:
-    aiofiles = None
+    aiofiles = None  # type: ignore
 
 
 Bytes = Union[bytes, BytesIO]

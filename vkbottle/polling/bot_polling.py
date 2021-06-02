@@ -8,7 +8,7 @@ from .abc import ABCPolling
 
 
 class BotPolling(ABCPolling):
-    """ Bot Polling class
+    """Bot Polling class
     Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/polling/polling.md
     """
 
@@ -33,7 +33,11 @@ class BotPolling(ABCPolling):
             return await session.request_json(
                 "POST",
                 "{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
-                    server["server"], server["key"], server["ts"], self.wait, self.rps_delay,
+                    server["server"],
+                    server["key"],
+                    server["ts"],
+                    self.wait,
+                    self.rps_delay,
                 ),
             )
 

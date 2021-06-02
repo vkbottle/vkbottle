@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Type, Union
+from typing import TYPE_CHECKING, Type
 
-from vkbottle_types.events import BaseGroupEvent, BaseUserEvent
+if TYPE_CHECKING:
+    from vkbottle_types.events import Event
 
 
 class ABCRule(ABC):
@@ -13,7 +14,7 @@ class ABCRule(ABC):
         return cls
 
     @abstractmethod
-    async def check(self, event: Union[BaseUserEvent, BaseGroupEvent]):
+    async def check(self, event: "Event"):
         pass
 
     def __repr__(self):

@@ -10,7 +10,7 @@ from vkbottle.dispatch.views import ABCView
 from vkbottle.dispatch.views.bot import HandlerBasement, MessageView, RawEventView
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
 
-from .abc import ABCBotLabeler, LabeledHandler, LabeledMessageHandler, EventName
+from .abc import ABCBotLabeler, EventName, LabeledHandler, LabeledMessageHandler
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
@@ -39,7 +39,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
 
 
 class BotLabeler(ABCBotLabeler):
-    """ BotLabeler - shortcut manager for router
+    """BotLabeler - shortcut manager for router
     Can be loaded to other BotLabeler
     >>> bl = BotLabeler()
     >>> ...
@@ -67,13 +67,12 @@ class BotLabeler(ABCBotLabeler):
 
     @property
     def vbml_ignore_case(self) -> bool:
-        """ Gets ignore case flag from rule config flags """
+        """Gets ignore case flag from rule config flags"""
         return re.IGNORECASE in self.rule_config["flags"]
 
     @vbml_ignore_case.setter
     def vbml_ignore_case(self, ignore_case: bool):
-        """ Adds ignore case flag to rule config flags or removes it
-        """
+        """Adds ignore case flag to rule config flags or removes it"""
         if not ignore_case:
             self.rule_config["vbml_flags"] ^= re.IGNORECASE
         else:
@@ -180,9 +179,9 @@ class BotLabeler(ABCBotLabeler):
 
     def load(self, labeler: "BotLabeler"):
         self.message_view.handlers.extend(labeler.message_view.handlers)
-        self.message_view.middlewares.extend(labeler.message_view.middlewares)
+        self.message_view.middlewares.update(labeler.message_view.middlewares)
         self.raw_event_view.handlers.update(labeler.raw_event_view.handlers)
-        self.raw_event_view.middlewares.extend(labeler.raw_event_view.middlewares)
+        self.raw_event_view.middlewares.update(labeler.raw_event_view.middlewares)
 
     def get_custom_rules(self, custom_rules: Dict[str, Any]) -> List["ABCRule"]:
         return [self.custom_rules[k].with_config(self.rule_config)(v) for k, v in custom_rules.items()]  # type: ignore

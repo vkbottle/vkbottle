@@ -4,7 +4,7 @@ from vkbottle.modules import json
 
 
 class TemplateElement:
-    """ Easy template element generator """
+    """Easy template element generator"""
 
     def __init__(
         self,

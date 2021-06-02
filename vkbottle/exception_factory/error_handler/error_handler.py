@@ -29,7 +29,8 @@ class ErrorHandler(ABCErrorHandler):
         return decorator
 
     def register_undefined_error_handler(
-        self, undefined_error_handler: typing.Optional[ExceptionHandler] = None,
+        self,
+        undefined_error_handler: typing.Optional[ExceptionHandler] = None,
     ) -> typing.Optional[typing.Callable[[ExceptionHandler], typing.Any]]:
 
         if undefined_error_handler:
@@ -75,5 +76,7 @@ class ErrorHandler(ABCErrorHandler):
         logger.error("\n" + traceback.format_exc())
 
     @property
-    def handling_exceptions(self,) -> typing.Union[str, typing.Tuple[str, ...]]:
+    def handling_exceptions(
+        self,
+    ) -> typing.Union[str, typing.Tuple[str, ...]]:
         return tuple(k for k in self.error_handlers.keys())
