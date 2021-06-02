@@ -29,6 +29,7 @@ classifiers = [
   "Topic :: Software Development :: Quality Assurance",
   "Typing :: Typed",
 ]
+exclude = ["**/tests/*", "**/test_*"]
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/timoniq/vkbottle/issues"
