@@ -4,7 +4,7 @@ from typing import Callable, List
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.modules import logger
-from vkbottle.tools.dev_tools.mini_types.user import MessageMin
+from vkbottle.tools.dev.mini_types.user import MessageMin
 
 from .dispense import ABCDispenseView
 

@@ -9,7 +9,7 @@ from vkbottle.dispatch.views.abc import ABCRawEventView
 HandlerBasement = NamedTuple("HandlerBasement", [("dataclass", Callable), ("handler", ABCHandler)])
 
 
-class RawEventView(ABCRawEventView):
+class RawBotEventView(ABCRawEventView):
     def __init__(self):
         super().__init__()
         self.handlers: Dict[GroupEventType, HandlerBasement] = {}

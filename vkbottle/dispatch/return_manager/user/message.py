@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Union
 from vkbottle.dispatch.return_manager.abc import BaseReturnManager
 
 if TYPE_CHECKING:
-    from vkbottle.tools.dev_tools.mini_types.user import MessageMin
+    from vkbottle.tools.dev.mini_types.user import MessageMin
 
 
 class UserMessageReturnHandler(BaseReturnManager):

@@ -7,7 +7,7 @@ import vbml
 
 from vkbottle import API, AndFilter, Bot, GroupEventType, GroupTypes, OrFilter, StatePeer
 from vkbottle.bot import BotLabeler, Message, rules
-from vkbottle.tools.dev_tools.mini_types.bot import message_min
+from vkbottle.tools.dev.mini_types.bot import message_min
 from vkbottle.tools.test_utils import MockedClient, with_mocked_api
 
 EXAMPLE_EVENT = {

@@ -5,7 +5,7 @@ from vkbottle_types.events import UserEventType
 
 from vkbottle.dispatch.return_manager.user import UserMessageReturnHandler
 from vkbottle.dispatch.views.abc.message import ABCMessageView
-from vkbottle.tools.dev_tools.mini_types.user import MessageMin, message_min
+from vkbottle.tools.dev.mini_types.user import MessageMin, message_min
 
 
 class ABCUserMessageView(ABCMessageView, ABC):
@@ -25,6 +25,6 @@ class ABCUserMessageView(ABCMessageView, ABC):
         return UserEventType(self.get_event_type(event)) == UserEventType.NEW_MESSAGE
 
 
-class MessageView(ABCUserMessageView):
+class UserMessageView(ABCUserMessageView):
     def get_state_key(self, message: MessageMin) -> Optional[int]:
         return getattr(message, self.state_source_key, None)

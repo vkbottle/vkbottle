@@ -262,7 +262,7 @@ def test_run_multibot(mocker: MockerFixture):
     mocker.patch("vkbottle.bot.Bot.run_polling", lambda s, custom_polling: s.api)
     mocker.patch("asyncio.iscoroutine", lambda _: True)
     mocker.patch(
-        "vkbottle.tools.dev_tools.loop_wrapper.LoopWrapper.run_forever",
+        "vkbottle.tools.dev.loop_wrapper.LoopWrapper.run_forever",
         lambda s, l: bot_apis.extend(s.tasks),
     )
 

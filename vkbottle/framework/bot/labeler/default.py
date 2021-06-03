@@ -7,8 +7,8 @@ from vkbottle_types.events import GroupEventType
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule, bot
 from vkbottle.dispatch.views import ABCView
-from vkbottle.dispatch.views.bot import HandlerBasement, MessageView, RawEventView
-from vkbottle.tools.dev_tools.utils import convert_shorten_filter
+from vkbottle.dispatch.views.bot import BotMessageView, HandlerBasement, RawBotEventView
+from vkbottle.tools.dev.utils import convert_shorten_filter
 
 from .abc import ABCBotLabeler, EventName, LabeledHandler, LabeledMessageHandler
 
@@ -53,8 +53,8 @@ class BotLabeler(ABCBotLabeler):
         # Default views are fixed in BotLabeler,
         # if you need to create your own implement
         # custom labeler
-        self.message_view = MessageView()
-        self.raw_event_view = RawEventView()
+        self.message_view = BotMessageView()
+        self.raw_event_view = RawBotEventView()
 
         self.custom_rules = kwargs.get("custom_rules") or DEFAULT_CUSTOM_RULES
         self.auto_rules: List["ABCRule"] = []

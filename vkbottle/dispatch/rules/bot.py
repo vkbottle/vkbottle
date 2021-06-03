@@ -1,4 +1,4 @@
-from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
+from vkbottle.tools.dev.mini_types.bot import MessageMin
 
 from . import base
 

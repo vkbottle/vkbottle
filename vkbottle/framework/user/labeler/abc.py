@@ -3,7 +3,7 @@ from typing import Any, Callable, Dict, List, Union
 
 from vkbottle.dispatch.rules import ABCRule
 from vkbottle.dispatch.views import ABCView
-from vkbottle.tools.dev_tools.mini_types.user.message import MessageMin
+from vkbottle.tools.dev.mini_types.user.message import MessageMin
 
 LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]
 LabeledHandler = Callable[..., Callable[[Any], Any]]
