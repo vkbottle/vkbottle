@@ -5,7 +5,7 @@ from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.dispatch.views.abc import ABCMessageView
-from vkbottle.tools.dev.mini_types.bot import message_min
+from vkbottle.tools.dev.mini_types.bot import MessageMin, message_min
 
 
 class ABCBotMessageView(ABCMessageView, ABC):
@@ -26,5 +26,5 @@ class ABCBotMessageView(ABCMessageView, ABC):
 
 
 class BotMessageView(ABCBotMessageView):
-    def get_state_key(self, event: dict) -> Optional[int]:
-        return event["object"]["message"].get(self.state_source_key)
+    def get_state_key(self, message: MessageMin) -> Optional[int]:
+        return getattr(message, self.state_source_key, None)

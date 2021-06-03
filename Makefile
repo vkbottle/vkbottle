@@ -13,8 +13,6 @@ help:
 interpreter := $(shell poetry env info --path > /dev/null 2>&1 && echo "poetry run")
 extract_ignores = $(shell awk '/.*.py/{split($$1,a,":"); print a[1]}' .flake8 | tr '\n' ',')
 
-flake_ignores:
-	@echo -n $(extract_ignores)
 
 check-venv:
 	$(if $(interpreter),, $(error No poetry environment found, either run "make venv"))
