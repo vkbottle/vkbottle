@@ -171,9 +171,9 @@ class UserLabeler(ABCUserLabeler):
 
     def load(self, labeler: "UserLabeler"):
         self.message_view.handlers.extend(labeler.message_view.handlers)
-        self.message_view.middlewares.extend(labeler.message_view.middlewares)
+        self.message_view.middlewares.update(labeler.message_view.middlewares)
         self.raw_event_view.handlers.update(labeler.raw_event_view.handlers)
-        self.raw_event_view.middlewares.extend(labeler.raw_event_view.middlewares)
+        self.raw_event_view.middlewares.update(labeler.raw_event_view.middlewares)
 
     def get_custom_rules(self, custom_rules: Dict[str, Any]) -> List["ABCRule"]:
         return [self.custom_rules[k].with_config(self.rule_config)(v) for k, v in custom_rules.items()]  # type: ignore
