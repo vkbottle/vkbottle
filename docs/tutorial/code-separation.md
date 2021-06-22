@@ -102,4 +102,4 @@ async def halt(_):
 
 ## Экзамплы по этой части туториала
 
-* [blueprint](/examples/high-level/blueprint.py)
+* [blueprint](https://github.com/timoniq/vkbottle/blob/master/examples/high-level/blueprint.py)
