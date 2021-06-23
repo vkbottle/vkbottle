@@ -30,7 +30,7 @@ repos:
 
       - id: isort
         name: isort
-        entry: poetry run isort
+        entry: poetry run isort --filter-files
         language: system
         types: [ python ]
         stages: [ commit ]
