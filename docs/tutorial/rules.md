@@ -8,7 +8,7 @@
     ```python
     from vkbottle.bot import rules
     from typing import Tuple
-    
+
     @bot.on.message(rules.CommandRule("say", ["!", "/"], 1))
     async def say_handler(message: Message, args: Tuple[str]):
         await message.answer(f"<<{args[0]}>>")
@@ -20,7 +20,7 @@
     async def say_handler(message: Message, args: Tuple[str]):
         await message.answer(f"<<{args[0]}>>")
     ```
-   
+
 Правил может быть любое количество, как первого, так и второго метода распаковки
 
 ## Создание собственных правил
@@ -72,7 +72,7 @@ class MyRule(rules.ABCMessageRule):
 class MyRule(rules.ABCMessageRule):
     def __init__(self, lt: int = 100):
         self.lt = lt
-    
+
     async def check(self, message: Message) -> bool:
         return len(message.text) < self.lt
 ```
@@ -117,5 +117,5 @@ bot.labeler.custom_rules["my_rule"] = MyRule
 
 ## Экзамплы по этой части туториала
 
-* [labeler-setup](/examples/high-level/labeler_setup.py)
-* [filters-shortcuts](/examples/high-level/filters_shortcuts.py)
+* [labeler-setup](https://github.com/timoniq/vkbottle/blob/master/examples/high-level/labeler_setup.py)
+* [filters-shortcuts](https://github.com/timoniq/vkbottle/blob/master/examples/high-level/filters_shortcuts.py)
