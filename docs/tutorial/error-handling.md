@@ -2,9 +2,9 @@
 
 Иногда при запросах к api вконтакте возникают ошибки, для их обработки во фреймворке предусмотрено несколько инструментов
 
-## try ... except VKAPIError
+## try ... except VKAPIError()
 
-Для начала разъясним что такое `VKAPIError`, это объект `CodeErrorFactory`, особенность которого заключается в том, чтобы ошибка идентифицировалась в except и без указанного кода (`try except VKAPIError`) и при указании кода (`try except VKAPIError(code)`)
+Для начала разъясним что такое `VKAPIError`, это объект `CodeErrorFactory`, особенность которого заключается в том, чтобы ошибка идентифицировалась в except и без указанного кода (`try except VKAPIError()`) и при указании кода (`try except VKAPIError(code)`)
 
 В `VKAPIError` есть три поля:
 
@@ -23,7 +23,7 @@ from vkbottle import VKAPIError
 ```python
 try:
     await api.wall.post()
-except VKAPIError as e:
+except VKAPIError() as e:
     print("Возникла ошибка", e.code)
 ```
 
