@@ -60,6 +60,10 @@ MessageMin.update_forward_refs()
 
 def message_min(event: dict, ctx_api: "ABCAPI") -> "MessageMin":
     update = MessageNew(**event)
+
+    if update.object.message is None:
+        raise RuntimeError("Please set longpoll to latest version")
+
     message = MessageMin(
         **update.object.message.dict(),
         client_info=update.object.client_info.dict(),
