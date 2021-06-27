@@ -29,7 +29,7 @@ class ErrorHandler(ABCErrorHandler):
         return decorator
 
     def register_undefined_error_handler(
-        self, undefined_error_handler: typing.Optional[ExceptionHandler] = None,
+        self, undefined_error_handler: typing.Optional[ExceptionHandler] = None
     ) -> typing.Optional[typing.Callable[[ExceptionHandler], typing.Any]]:
 
         if undefined_error_handler:

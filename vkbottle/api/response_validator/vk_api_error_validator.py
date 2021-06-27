@@ -14,11 +14,7 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
     """
 
     async def validate(
-        self,
-        method: str,
-        data: dict,
-        response: typing.Any,
-        ctx_api: typing.Union["ABCAPI", "API"],
+        self, method: str, data: dict, response: typing.Any, ctx_api: typing.Union["ABCAPI", "API"]
     ) -> typing.Union[typing.Any, typing.NoReturn]:
         if "error" not in response:
             return response

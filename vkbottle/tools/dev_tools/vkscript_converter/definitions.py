@@ -7,10 +7,7 @@ import typing
 
 from .base_converter import Converter, ConverterError
 
-CALL_REPLACEMENTS = {
-    "append": "push",
-    "pop": "pop",
-}
+CALL_REPLACEMENTS = {"append": "push", "pop": "pop"}
 CALL_STRING = ["join", "strip", "split"]
 
 converter = Converter()

@@ -1,30 +1,30 @@
 import os
-import pytest
 from io import StringIO
 
+import pytest
 from pytest_mock import MockerFixture
 
+from vkbottle import API
+from vkbottle.bot import Bot, run_multibot
+from vkbottle.dispatch import ABCRule, AndFilter, OrFilter
 from vkbottle.modules import json
 from vkbottle.tools import (
+    CallableValidator,
     Callback,
     CtxStorage,
+    EqualsValidator,
+    IsInstanceValidator,
     Keyboard,
     KeyboardButtonColor,
     LoopWrapper,
     TemplateElement,
     Text,
-    load_blueprints_from_package,
-    template_gen,
-    EqualsValidator,
-    IsInstanceValidator,
-    CallableValidator,
-    keyboard_gen,
-    run_in_task,
     convert_shorten_filter,
+    keyboard_gen,
+    load_blueprints_from_package,
+    run_in_task,
+    template_gen,
 )
-from vkbottle.dispatch import ABCRule, OrFilter, AndFilter
-from vkbottle.bot import run_multibot, Bot
-from vkbottle import API
 
 KEYBOARD_JSON = json.dumps(
     {
@@ -232,8 +232,8 @@ async def test_utils(mocker: MockerFixture):
         "c_rule", (ABCRule,), {"check": task_to_run, "__init__": lambda s, i: setattr(s, "x", i)}
     )
 
-    assert convert_shorten_filter((c_rule(None),)).__class__ == OrFilter(c_rule(None),).__class__
-    assert convert_shorten_filter({c_rule(None)}).__class__ == AndFilter(c_rule(None),).__class__
+    assert convert_shorten_filter((c_rule(None),)).__class__ == OrFilter(c_rule(None)).__class__
+    assert convert_shorten_filter({c_rule(None)}).__class__ == AndFilter(c_rule(None)).__class__
 
     assert_rule(await convert_shorten_filter((c_rule(1), c_rule(2))).check(2))
     assert_rule(await convert_shorten_filter((c_rule(1), c_rule(2))).check(4), True)

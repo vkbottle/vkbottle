@@ -3,7 +3,7 @@ from typing import Any, List
 
 from vkbottle_types.objects import UsersUserXtrCounters
 
-from vkbottle import ABCHandler, ABCView, BaseMiddleware, MiddlewareResponse, CtxStorage
+from vkbottle import ABCHandler, ABCView, BaseMiddleware, CtxStorage, MiddlewareResponse
 from vkbottle.bot import Bot, Message
 
 bot = Bot(os.environ["token"])

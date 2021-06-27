@@ -15,6 +15,7 @@ from vkbottle.dispatch.rules.bot import (
     FromUserRule,
     FuncRule,
     LevensteinRule,
+    MacroRule,
     MessageLengthRule,
     PayloadContainsRule,
     PayloadMapRule,
@@ -24,13 +25,12 @@ from vkbottle.dispatch.rules.bot import (
     StateGroupRule,
     StateRule,
     StickerRule,
-    MacroRule,
     VBMLRule,
 )
 from vkbottle.dispatch.views import ABCView, HandlerBasement, MessageView, RawEventView
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
 
-from .abc import ABCBotLabeler, LabeledHandler, LabeledMessageHandler, EventName
+from .abc import ABCBotLabeler, EventName, LabeledHandler, LabeledMessageHandler
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
@@ -205,7 +205,9 @@ class BotLabeler(ABCBotLabeler):
         self.raw_event_view.middlewares.extend(labeler.raw_event_view.middlewares)
 
     def get_custom_rules(self, custom_rules: Dict[str, Any]) -> List["ABCRule"]:
-        return [self.custom_rules[k].with_config(self.rule_config)(v) for k, v in custom_rules.items()]  # type: ignore
+        return [
+            self.custom_rules[k].with_config(self.rule_config)(v) for k, v in custom_rules.items()
+        ]  # type: ignore
 
     def views(self) -> Dict[str, "ABCView"]:
         return {"message": self.message_view, "raw": self.raw_event_view}

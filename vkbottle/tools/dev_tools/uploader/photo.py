@@ -119,11 +119,9 @@ class PhotoMarketUploader(PhotoUploader):
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"file": file})
-        return (
-            await self.api.request(
-                "photos.saveMarketPhoto", {**uploader, **params}
-            )
-        )["response"]
+        return (await self.api.request("photos.saveMarketPhoto", {**uploader, **params}))[
+            "response"
+        ]
 
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("photos.getMarketUploadServer", kwargs))["response"]

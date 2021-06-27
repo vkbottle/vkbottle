@@ -14,7 +14,6 @@ from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
 
 from ..abc_dispense import ABCDispenseView
 
-
 DEFAULT_STATE_KEY = "peer_id"
 
 

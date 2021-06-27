@@ -5,9 +5,7 @@ from .color import KeyboardButtonColor
 
 
 class KeyboardButton:
-    def __init__(
-        self, action: ABCAction, color: KeyboardButtonColor, data: dict,
-    ):
+    def __init__(self, action: ABCAction, color: KeyboardButtonColor, data: dict):
         self.action = action
         self.color = color
         self.data = data
@@ -30,6 +28,6 @@ class KeyboardButton:
             return self.data
 
         data = {"action": self.action.get_data()}
-        if self.action.type in ("text", "callback",) and self.color:
+        if self.action.type in ("text", "callback") and self.color:
             data["color"] = self.color.value
         return data

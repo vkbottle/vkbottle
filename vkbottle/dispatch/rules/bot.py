@@ -57,7 +57,7 @@ class CommandRule(ABCMessageRule):
             if self.args_count == 0 and message.text == prefix + self.command_text:
                 return True
             if self.args_count > 0 and message.text.startswith(prefix + self.command_text + " "):
-                args = message.text[len(prefix + self.command_text) + 1:].split(self.sep)
+                args = message.text[len(prefix + self.command_text) + 1 :].split(self.sep)
                 if len(args) != self.args_count:
                     return False
                 elif any(len(arg) == 0 for arg in args):
@@ -158,8 +158,7 @@ class AttachmentTypeRule(ABCMessageRule):
         if not message.attachments:
             return False
         return all(
-            attachment.type.value in self.attachment_types
-            for attachment in message.attachments
+            attachment.type.value in self.attachment_types for attachment in message.attachments
         )
 
 
@@ -252,9 +251,7 @@ class PayloadContainsRule(ABCMessageRule):
 
     async def check(self, message: Message) -> bool:
         payload = message.get_payload_json(unpack_failure=lambda p: {})
-        return all(
-            payload.get(k) == v for k, v in self.payload_particular_part.items()
-        )
+        return all(payload.get(k) == v for k, v in self.payload_particular_part.items())
 
 
 class PayloadMapRule(ABCMessageRule):

@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, NamedTuple, Callable
+from typing import Any, Callable, Dict, List, NamedTuple
 
 from vkbottle_types.events import GroupEventType
 
@@ -60,7 +60,7 @@ class RawEventView(ABCView):
         return_handler = self.handler_return_manager.get_handler(handler_response)
         if return_handler is not None:
             await return_handler(
-                self.handler_return_manager, handler_response, event_model, context_variables,
+                self.handler_return_manager, handler_response, event_model, context_variables
             )
 
         for middleware in self.middlewares:

@@ -19,7 +19,7 @@ class DocUploader(BaseUploader, ABC):
 
         uploader = await self.upload_files(server["upload_url"], {"file": file})
 
-        doc = (await self.api.request("docs.save", {"title": title, **uploader, **params},))[
+        doc = (await self.api.request("docs.save", {"title": title, **uploader, **params}))[
             "response"
         ]
         doc_type = doc["type"]

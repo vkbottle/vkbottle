@@ -71,12 +71,4 @@ class Callback(ABCAction):
         self.payload = payload
 
 
-__all__ = (
-    "ABCAction",
-    "Text",
-    "OpenLink",
-    "Location",
-    "VKPay",
-    "VKApps",
-    "Callback",
-)
+__all__ = ("ABCAction", "Text", "OpenLink", "Location", "VKPay", "VKApps", "Callback")

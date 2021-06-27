@@ -12,9 +12,7 @@ class CtxStorage(ABCStorage, BaseContext):
 
     storage: dict = {}
 
-    def __init__(
-        self, default: dict = None, force_reset: bool = False,
-    ):
+    def __init__(self, default: dict = None, force_reset: bool = False):
 
         if not self.get_instance() or force_reset:
             default = default or {}

@@ -166,23 +166,30 @@ async def test_rules(api: API):
     assert await rules.RegexRule("Hi (.*?)$").check(fake_message(api, text="Hi bro")) == {
         "match": ("bro",)
     }
-    assert await rules.RegexRule(r"Hi .*?").check(
-        fake_message(api, text="Hi")
-    ) != {"match": ()}
+    assert await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) != {"match": ()}
 
     assert rules.PayloadMapRule.transform_to_map({"a": int, "b": {"c": str, "d": dict}}) == [
         ("a", int),
         ("b", [("c", str), ("d", dict)]),
     ]
-    assert await rules.CommandRule("cmd", ["!", "."], 2).check(fake_message(api, text="!cmd test bar")) == {
-        "args": ("test", "bar")
-    }
-    assert await rules.CommandRule("cmd", ["!", "."], 2).check(fake_message(api, text="cmd test bar")) is False
+    assert await rules.CommandRule("cmd", ["!", "."], 2).check(
+        fake_message(api, text="!cmd test bar")
+    ) == {"args": ("test", "bar")}
+    assert (
+        await rules.CommandRule("cmd", ["!", "."], 2).check(fake_message(api, text="cmd test bar"))
+        is False
+    )
 
     # todo: if args are more than args_count do join excess args with last
-    assert await rules.CommandRule("cmd", ["!", "."], 1).check(fake_message(api, text="cmd test bar")) is False
+    assert (
+        await rules.CommandRule("cmd", ["!", "."], 1).check(fake_message(api, text="cmd test bar"))
+        is False
+    )
 
-    assert await rules.CommandRule("cmd", ["!", "."], 3).check(fake_message(api, text="cmd test bar")) is False
+    assert (
+        await rules.CommandRule("cmd", ["!", "."], 3).check(fake_message(api, text="cmd test bar"))
+        is False
+    )
 
     labeler = BotLabeler()
     labeler.vbml_ignore_case = True

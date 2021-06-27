@@ -36,7 +36,9 @@ class API(ABCAPI, APICategories):
         self.http: ABCSessionManager = session_manager or SingleSessionManager(AiohttpClient)
         self.request_rescheduler = request_rescheduler or BlockingRequestRescheduler()
         self.response_validators: typing.List[ABCResponseValidator] = DEFAULT_RESPONSE_VALIDATORS
-        self.request_validators: typing.List[ABCRequestValidator] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
+        self.request_validators: typing.List[
+            ABCRequestValidator
+        ] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
 
     async def request(self, method: str, data: dict) -> dict:
         """ Makes a single request opening a session """
@@ -59,7 +61,10 @@ class API(ABCAPI, APICategories):
         """ Makes many requests opening one session """
         async with self.http as session:
             for request in requests:
-                method, data = request.method, await self.validate_request(request.data)  # type: ignore
+                method, data = (
+                    request.method,
+                    await self.validate_request(request.data),
+                )  # type: ignore
                 async with self.token_generator as token:
                     response = await session.request_text(
                         "POST",

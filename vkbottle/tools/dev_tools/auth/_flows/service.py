@@ -12,9 +12,7 @@ class ClientCredentialsFlow:
     Documentation: vk.com/dev/client_cred_flow
     """
 
-    def __init__(
-        self, client_id: int, client_secret: str, v: str,
-    ):
+    def __init__(self, client_id: int, client_secret: str, v: str):
         self.client_id = client_id
         self.client_secret = client_secret
         self.grant_type = "client_credentials"
