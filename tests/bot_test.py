@@ -166,9 +166,10 @@ async def test_rules(api: API):
     assert await rules.RegexRule("Hi (.*?)$").check(fake_message(api, text="Hi bro")) == {
         "match": ("bro",)
     }
-    assert not await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) == {
-        "match": ()
-    }
+    assert await rules.RegexRule(r"Hi .*?").check(
+        fake_message(api, text="Hi")
+    ) != {"match": ()}
+
     assert rules.PayloadMapRule.transform_to_map({"a": int, "b": {"c": str, "d": dict}}) == [
         ("a", int),
         ("b", [("c", str), ("d", dict)]),

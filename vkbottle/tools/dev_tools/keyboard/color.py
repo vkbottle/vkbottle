@@ -1,8 +1,3 @@
-from enum import Enum
+from vkbottle_types.objects import ButtonColor
 
-
-class KeyboardButtonColor(Enum):
-    PRIMARY = "primary"
-    SECONDARY = "secondary"
-    NEGATIVE = "negative"
-    POSITIVE = "positive"
+KeyboardButtonColor = ButtonColor

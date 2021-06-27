@@ -16,8 +16,8 @@ class CtxStorage(ABCStorage, BaseContext):
         self, default: dict = None, force_reset: bool = False,
     ):
 
-        default = default or {}
         if not self.get_instance() or force_reset:
+            default = default or {}
             self.storage = default
             self.set_instance(self)
 

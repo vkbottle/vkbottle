@@ -20,7 +20,7 @@ class PhotoToAlbumUploader(PhotoUploader):
             paths_like = [paths_like]
 
         server = await self.get_server(album_id=album_id, **params)
-        files = dict()
+        files = {}
 
         for i, file_source in enumerate(paths_like):
             data = await self.read(file_source)
@@ -119,10 +119,11 @@ class PhotoMarketUploader(PhotoUploader):
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"file": file})
-        photo = (await self.api.request("photos.saveMarketPhoto", {**uploader, **params}))[
-            "response"
-        ]
-        return photo
+        return (
+            await self.api.request(
+                "photos.saveMarketPhoto", {**uploader, **params}
+            )
+        )["response"]
 
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("photos.getMarketUploadServer", kwargs))["response"]

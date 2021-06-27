@@ -18,13 +18,13 @@ def keyboard_gen(pattern: List[List[dict]], one_time: bool = False, inline: bool
     warn("keyboard_gen generator is obsolete, use Keyboard instead", DeprecationWarning)
 
     rows = pattern
-    buttons = list()
+    buttons = []
 
     for row in rows:
-        row_buttons = list()
+        row_buttons = []
         for button in row:
-            action = dict()
-            fields = dict()
+            action = {}
+            fields = {}
 
             action["type"] = button.get("type", "text")
             action.update({k: v for k, v in button.items() if k not in ("type", "text", "color")})
@@ -40,10 +40,8 @@ def keyboard_gen(pattern: List[List[dict]], one_time: bool = False, inline: bool
             row_buttons.append(row_button)
         buttons.append(row_buttons)
 
-    keyboard = str(
+    return (
         json.dumps(dict(one_time=one_time, inline=inline, buttons=buttons))
         .encode("utf-8")
         .decode("utf-8")
     )
-
-    return keyboard
