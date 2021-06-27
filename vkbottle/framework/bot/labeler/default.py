@@ -53,6 +53,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "state": StateRule,
     "state_group": StateGroupRule,
     "regexp": RegexRule,
+    "regex": RegexRule,
     "macro": MacroRule,
     "text": VBMLRule,
 }
