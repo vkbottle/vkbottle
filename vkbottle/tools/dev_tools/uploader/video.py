@@ -12,7 +12,7 @@ class VideoUploader(BaseUploader):
         return self.with_name or self.NAME
 
     async def upload(
-        self, 
+        self,
         file_source: Optional[Union[str, bytes]] = None,
         group_id: Optional[int] = None,
         **params
