@@ -1,4 +1,4 @@
-from typing import Type, TypeVar, no_type_check, cast, overload, Tuple, Union, Dict, Any, TYPE_CHECKING
+from typing import Type, TypeVar, cast, overload, Tuple, Union, Dict, Any, TYPE_CHECKING
 
 
 T = TypeVar("T", bound="CodeExceptionMeta")
@@ -11,8 +11,7 @@ class CodeExceptionMeta(type):
         cls.__code_specified__ = False
         cls.code: int
 
-    @no_type_check
-    def __call__(cls: T, *args, **kwargs):
+    def __call__(cls: T, *args: Any, **kwargs: Any) -> Any:
         if cls.__code_specified__ is False:
             raise TypeError("exception code is not specified")
 
