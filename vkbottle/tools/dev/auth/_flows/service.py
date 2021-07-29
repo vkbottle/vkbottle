@@ -43,4 +43,4 @@ class ClientCredentialsFlow:
             return CredentialsFlowResponse(**response)
         except ValidationError:
             error = RequestTokenError(**response)
-            raise VKAPIError[AUTH_ERROR_CODE](str(error))
+            raise VKAPIError[AUTH_ERROR_CODE](str(error), response)
