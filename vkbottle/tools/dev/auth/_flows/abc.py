@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import reduce
-from typing import List, Optional, Union, Final
+from typing import List, Optional, Union
 
 from pydantic.error_wrappers import ValidationError
 
@@ -10,7 +10,7 @@ from vkbottle.http import AiohttpClient
 from ..models import RequestTokenError, UserCodeFlowResponse
 
 
-AUTH_ERROR_CODE: Final = 5
+AUTH_ERROR_CODE = 5
 
 
 class ABCAuthFlow(ABC):
