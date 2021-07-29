@@ -28,4 +28,4 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         if ctx_api.ignore_errors:
             return None
 
-        raise VKAPIError[code](msg)
+        raise VKAPIError[code](msg, response)
