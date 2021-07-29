@@ -35,7 +35,7 @@ async def exc_handler_zero_division(e: ZeroDivisionError):
     print("Oops i caught a ZeroDivisionError", e)
 
 # from vkbottle import VKAPIError
-@error_handler.register_error_handler(VKAPIError(6)) # Не забывайте про возможность пользоваться этой фишкой фабрики исключений
+@error_handler.register_error_handler(VKAPIError[6]) # Не забывайте про возможность пользоваться этой фишкой фабрики исключений
 async def exc_handler_vk_api_6(e: VKAPIError):
     print("Oops i caught a VKAPIError with code 6:", e)
 

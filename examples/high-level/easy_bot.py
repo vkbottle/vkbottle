@@ -45,8 +45,8 @@ async def group_join_handler(event: GroupTypes.GroupJoin):
         )
 
     # Read more about exception handling in documentation
-    # low-level/exception_factory/exception_factory
-    except VKAPIError(901):
+    # low-level/exception_handling/exception_handling
+    except VKAPIError[901]:
         pass
 
 

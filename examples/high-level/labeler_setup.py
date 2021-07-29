@@ -66,7 +66,7 @@ async def spam_handler(message: Message):
         try:
             await bot.api.messages.remove_chat_user(message.peer_id - 2e9, message.from_id)
             return "Как можно игнорировать мои просьбы"
-        except VKAPIError(15):
+        except VKAPIError[15]:
             return "Где мои права администратора?"
 
     await message.answer("Пожалуйста перестаньте спамить")

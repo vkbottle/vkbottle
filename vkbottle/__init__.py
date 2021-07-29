@@ -36,10 +36,8 @@ from .dispatch import (
 )
 from .exception_factory import (
     ABCErrorHandler,
-    ABCExceptionFactory,
-    CodeErrorFactory,
+    CodeException,
     ErrorHandler,
-    SingleError,
     VKAPIError,
     swear,
 )
