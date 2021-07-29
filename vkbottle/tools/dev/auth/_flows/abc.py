@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import reduce
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Final
 
 from pydantic.error_wrappers import ValidationError
 
@@ -8,6 +8,9 @@ from vkbottle.exception_factory import VKAPIError
 from vkbottle.http import AiohttpClient
 
 from ..models import RequestTokenError, UserCodeFlowResponse
+
+
+AUTH_ERROR_CODE: Final = 5
 
 
 class ABCAuthFlow(ABC):
@@ -54,4 +57,4 @@ class ABCAuthorizationCodeFlow(ABCAuthFlow):
             return self.get_model()(**response)
         except ValidationError:
             error = RequestTokenError(**response)
-            raise VKAPIError(error_description=str(error))
+            raise VKAPIError[AUTH_ERROR_CODE](str(error), response)

@@ -2,6 +2,7 @@ from pydantic.error_wrappers import ValidationError
 
 from vkbottle.exception_factory import VKAPIError
 from vkbottle.http import AiohttpClient
+from .abc import AUTH_ERROR_CODE
 
 from ..models import CredentialsFlowResponse, RequestTokenError
 
@@ -42,4 +43,4 @@ class ClientCredentialsFlow:
             return CredentialsFlowResponse(**response)
         except ValidationError:
             error = RequestTokenError(**response)
-            raise VKAPIError(error_description=str(error))
+            raise VKAPIError[AUTH_ERROR_CODE](str(error))
