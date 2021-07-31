@@ -42,7 +42,7 @@ class CodeExceptionMeta(type):
 
     def _register_exception(cls: T, code: int) -> T:
         name = f"{cls.__name__}_{code}"
-        exception = cls.__class__(name, (cls,), cls.__dict__)
+        exception = cls.__class__(name, (cls,), dict(cls.__dict__))
 
         exception.code = code
         exception.__code_specified__ = True
