@@ -14,7 +14,10 @@ class ClientCredentialsFlow:
     """
 
     def __init__(
-        self, client_id: int, client_secret: str, v: str,
+        self,
+        client_id: int,
+        client_secret: str,
+        v: str,
     ):
         self.client_id = client_id
         self.client_secret = client_secret
@@ -40,4 +43,4 @@ class ClientCredentialsFlow:
             return CredentialsFlowResponse(**response)
         except ValidationError:
             error = RequestTokenError(**response)
-            raise VKAPIError[AUTH_ERROR_CODE](str(error), response)
+            raise VKAPIError[AUTH_ERROR_CODE](error_msg=error)
