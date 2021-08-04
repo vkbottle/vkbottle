@@ -1,29 +1,18 @@
-from vkbottle import CodeErrorFactory, SingleError, swear
+from vkbottle import CodeException, swear
 
 
 def test_exc_manager_code_error():
-    exc_manager = CodeErrorFactory()
-
-    try:
-        raise exc_manager(7)
-    except exc_manager(6):
-        assert False
-    except exc_manager(7):
-        return
-    except exc_manager():
-        assert False
-
-
-def test_exc_manager_single_error():
-    class SomeError(SingleError):
+    class CodeError(CodeException):
         pass
 
     try:
-        raise SomeError("Some error occurred")
-    except SomeError:
-        pass
-    except BaseException:
+        raise CodeError[1]()
+    except CodeError[2]:
         assert False
+    except CodeError[3, 4]:
+        assert False
+    except CodeError[1, 2, 5] as e:
+        assert e.code == 1
 
 
 def test_swear_sync():

@@ -45,7 +45,7 @@ async def test_api_typed_response(api: API):
 async def test_api_error_handling(api: API):
     try:
         await api.request("some.method", {})
-    except VKAPIError(0):
+    except VKAPIError[0]:
         return True
     raise AssertionError
 

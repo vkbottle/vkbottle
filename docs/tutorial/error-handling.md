@@ -4,13 +4,13 @@
 
 ## try ... except VKAPIError
 
-Для начала разъясним что такое `VKAPIError`, это объект `CodeErrorFactory`, особенность которого заключается в том, чтобы ошибка идентифицировалась в except и без указанного кода (`try except VKAPIError`) и при указании кода (`try except VKAPIError(code)`)
+Для начала разъясним что такое `VKAPIError`, это подтип `CodeException`, особенность которого заключается в том, чтобы ошибка идентифицировалась в except и без указанного кода (`try except VKAPIError`) и при указании кода (`try except VKAPIError[code]`)
 
 В `VKAPIError` есть три поля:
 
 * `code` - код ошибки, int
 * `error_description` - описание ошибки, str
-* `raw_error` - то что вернуло vk в качестве ошибки (нужно например для обработки капчи), dict
+* `raw_error` - то, что вернул VK в качестве ошибки (нужно, например, для обработки капчи), dict
 
 Чтобы использовать `VKAPIError` нужно импортировать его:
 
@@ -29,9 +29,9 @@ except VKAPIError as e:
 
 При исполнении этого кода vk вернет ошибку, из-за того что не были переданы нужные параметры
 
-## try ... except VKAPIError(code)
+## try ... except VKAPIError[code]
 
-Кроме более общего способа для обработки всех ошибок vk в одном блоке except, вы можете воспользоваться более конкретным `VKAPIError(code)`
+Кроме более общего способа для обработки всех ошибок vk в одном блоке except, вы можете воспользоваться более конкретным `VKAPIError[code]`
 
 > Список всех ошибок с их кодами вы можете найти [здесь](https://vk.com/dev/errors)
 
@@ -40,7 +40,7 @@ except VKAPIError as e:
 ```python
 try:
     await api.messages.send(peer_id=1, message="привет!", random_id=0)
-except VKAPIError(902) as e:
+except VKAPIError[902] as e:
     print("не могу отправить сообщение из-за настроек приватности")
 except VKAPIError as e:
     print("не могу отправить:", e.error_description)
@@ -50,7 +50,7 @@ except VKAPIError as e:
 
 > Инструмент будет рассматриваться конкретно с ботом, хоть это и отдельный объект, так как это - туториал - упрощенный вариант документации
 
-> Техническая документация по хендлеру ошибок [здесь](/docs/low-level/exception_factory/error-handler.md)
+> Техническая документация по хендлеру ошибок [здесь](/docs/low-level/exception_handling/error-handler.md)
 
 У хендлера ошибок есть три основных метода:
 
@@ -70,7 +70,7 @@ async def unable_to_write_handler(e: VKAPIError):
     print("человек не разрешил отправлять сообщения", e)
 
 bot.error_handler.register_error_handler(RuntimeError, runtime_error_handler)
-bot.error_handler.register_error_handler(VKAPIError(902), unable_to_write_handler)
+bot.error_handler.register_error_handler(VKAPIError[902], unable_to_write_handler)
 
 # ...
 ```

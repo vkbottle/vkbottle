@@ -10,6 +10,9 @@ from vkbottle.http import AiohttpClient
 from ..models import RequestTokenError, UserCodeFlowResponse
 
 
+AUTH_ERROR_CODE = 5
+
+
 class ABCAuthFlow(ABC):
     """Abstract auth flow class"""
 
@@ -54,4 +57,4 @@ class ABCAuthorizationCodeFlow(ABCAuthFlow):
             return self.get_model()(**response)
         except ValidationError:
             error = RequestTokenError(**response)
-            raise VKAPIError(error_description=str(error))
+            raise VKAPIError[AUTH_ERROR_CODE](str(error), response)
