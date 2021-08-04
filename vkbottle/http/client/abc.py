@@ -7,7 +7,7 @@ from vkbottle.http.middleware.justlog import JustLogHTTPMiddleware
 
 class ABCHTTPClient(ABC):
     """Abstract class for http-clients
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/http/http-client.md
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/http/http-client.md
     """
 
     middleware: "ABCHTTPMiddleware" = JustLogHTTPMiddleware()

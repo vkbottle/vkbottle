@@ -7,7 +7,7 @@ from .abc import ABCStorage
 
 class CtxStorage(ABCStorage, BaseContext):
     """Context storage
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/tools/storage.md
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/tools/storage.md
     """
 
     storage: dict = {}

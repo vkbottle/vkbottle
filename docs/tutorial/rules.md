@@ -14,7 +14,7 @@
         await message.answer(f"<<{args[0]}>>")
     ```
 
-2. Использовать автораспаковщики рулзов из коробки, список с названиями можно найти [здесь](https://github.com/timoniq/vkbottle/blob/master/vkbottle/framework/bot/labeler/default.py#L34), в этом случае некоторые второстепенные параметры контролировать будет нельзя
+2. Использовать автораспаковщики рулзов из коробки, список с названиями можно найти [здесь](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/framework/bot/labeler/default.py#L34), в этом случае некоторые второстепенные параметры контролировать будет нельзя
     ```python
     @bot.on.message(command=("say", 1))
     async def say_handler(message: Message, args: Tuple[str, ...]):
@@ -103,7 +103,7 @@ bot.labeler.custom_rules["my_rule"] = MyRule
 
 `FuncRule` принимает корутину.
 
-> Еще существуют фильтры, они могут помочь контролировать какие-то множества рулзов которые могут исполняться выборочно. В vkbottle [существует](https://github.com/timoniq/vkbottle/blob/master/vkbottle/tools/dev_tools/utils.py#L26) автоматическая распаковка и трансформация некоторых инстансов в фильтры (стоит заметить что рекурсивно это не работает), а именно:
+> Еще существуют фильтры, они могут помочь контролировать какие-то множества рулзов которые могут исполняться выборочно. В vkbottle [существует](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/tools/dev_tools/utils.py#L26) автоматическая распаковка и трансформация некоторых инстансов в фильтры (стоит заметить что рекурсивно это не работает), а именно:
 > * сет (`set`) из рулзов конвертируется в фильтр `AndFilter`
 > * кортеж (`tuple`) из рулзов конвертируется в фильтр `OrFilter`
 >

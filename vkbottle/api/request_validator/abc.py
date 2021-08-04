@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 class ABCRequestValidator(ABC):
     """Abstract Response Validator class
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/response-validator.md
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/response-validator.md
     """
 
     @abstractmethod

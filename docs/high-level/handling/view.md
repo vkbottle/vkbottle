@@ -16,7 +16,7 @@ View являются блокирующими менеджерами хендл
 
 Кастомные view нужны обычно для создания среды обработки какого-то ивента или группы ивентов
 
-Посмотреть пример view для сообщений [можно здесь](https://github.com/timoniq/vkbottle/blob/master/vkbottle/dispatch/views/bot/message.py)
+Посмотреть пример view для сообщений [можно здесь](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/dispatch/views/bot/message.py)
 
 У каждого view существует минимум **4** атрибута:
 

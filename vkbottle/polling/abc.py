@@ -7,7 +7,7 @@ from vkbottle.exception_factory import ABCErrorHandler
 
 class ABCPolling(ABC):
     """Abstract Polling class
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/polling/polling.md
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/polling/polling.md
     """
 
     @abstractmethod

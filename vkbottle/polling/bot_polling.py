@@ -9,7 +9,7 @@ from .abc import ABCPolling
 
 class BotPolling(ABCPolling):
     """Bot Polling class
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/polling/polling.md
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/polling/polling.md
     """
 
     def __init__(

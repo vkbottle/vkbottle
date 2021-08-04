@@ -22,4 +22,4 @@
 
 Более того, это не все атрибуты и функции `BaseMiddleware`
 
-[Примеры смотреть здесь](https://github.com/timoniq/vkbottle/blob/master/examples/high-level/middleware_example.py)
+[Примеры смотреть здесь](https://github.com/vkbottle/vkbottle/blob/master/examples/high-level/middleware_example.py)

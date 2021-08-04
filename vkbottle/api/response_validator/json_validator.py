@@ -10,7 +10,7 @@ if typing.TYPE_CHECKING:
 
 class JSONResponseValidator(ABCResponseValidator):
     """Default response json-parse validator
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/response-validator.md
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/response-validator.md
     """
 
     async def validate(

@@ -16,7 +16,7 @@ APIRequest = typing.NamedTuple("APIRequest", [("method", str), ("data", dict)])
 
 class API(ABCAPI, APICategories):
     """Default API instance
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/api.md
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/api.md
     """
 
     API_URL = "https://api.vk.com/method/"

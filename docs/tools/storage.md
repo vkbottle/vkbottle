@@ -11,7 +11,7 @@
 
 ## CtxStorage
 
-Контекстное хранилище как и любое другое хранилище удобно тем что его можно открыть и изменить из любого места в коде, а главное оно доступно из-коробки, [смотрите пример](https://github.com/timoniq/vkbottle/blob/master/examples/low-level/ctx_storage_example.py)
+Контекстное хранилище как и любое другое хранилище удобно тем что его можно открыть и изменить из любого места в коде, а главное оно доступно из-коробки, [смотрите пример](https://github.com/vkbottle/vkbottle/blob/master/examples/low-level/ctx_storage_example.py)
 
 ## Создание своего хранилища
 

@@ -16,4 +16,4 @@
 `payload_map` - от `PayloadMapRule`  
 `func` - от `FuncRule`  
 
-Посмотреть логику рулзов можно здесь: [тык](https://github.com/timoniq/vkbottle/blob/master/vkbottle/dispatch/rules/bot.py)
+Посмотреть логику рулзов можно здесь: [тык](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/dispatch/rules/bot.py)

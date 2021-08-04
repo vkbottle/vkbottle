@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/tesseradecade/vbml">
-    <img src="https://github.com/timoniq/vkbottle/blob/master/docs/logo.jpg" width="200px" style="display: inline-block;">
+    <img src="https://github.com/vkbottle/vkbottle/blob/master/docs/logo.jpg" width="200px" style="display: inline-block;">
   </a>
 </p>
 <h1 align="center">
@@ -25,15 +25,15 @@
 Установить версию 3.0 можно этой командой:
 
 ```shell script
-pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
+pip install -U https://github.com/vkbottle/vkbottle/archive/master.zip
 ```
 
-Если вы ищете старые версии (`2.x`) - [вам сюда](https://github.com/timoniq/vkbottle/tree/v2.0)
+Если вы ищете старые версии (`2.x`) - [вам сюда](https://github.com/vkbottle/vkbottle/tree/v2.0)
 
 ## Hello World
 
-[Смотреть больше примеров!](https://github.com/timoniq/vkbottle/tree/master/examples)\
-[Почему VKBottle?](https://github.com/timoniq/vkbottle/blob/master/docs/why_vkbottle.md)
+[Смотреть больше примеров!](https://github.com/vkbottle/vkbottle/tree/master/examples)\
+[Почему VKBottle?](https://github.com/vkbottle/vkbottle/blob/master/docs/why_vkbottle.md)
 
 ```python
 from vkbottle.bot import Bot

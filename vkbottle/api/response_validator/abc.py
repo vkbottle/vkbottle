@@ -7,7 +7,7 @@ if typing.TYPE_CHECKING:
 
 class ABCResponseValidator(ABC):
     """Abstract Response Validator class
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/api/low-level/response-validator.md
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/api/low-level/response-validator.md
     """
 
     @abstractmethod

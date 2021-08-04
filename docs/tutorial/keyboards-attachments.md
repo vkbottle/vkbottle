@@ -28,7 +28,7 @@ from vkbottle import Keyboard
 
 ### Старый генератор клавиатуры `keyboard_gen`
 
-Он считается устаревшим, но многим почему-то нужен, поэтому [оставим это здесь](https://github.com/timoniq/vkbottle/blob/v2.0/docs/api.ru.md#генератор-keyboard_gen)
+Он считается устаревшим, но многим почему-то нужен, поэтому [оставим это здесь](https://github.com/vkbottle/vkbottle/blob/v2.0/docs/api.ru.md#генератор-keyboard_gen)
 
 ## Вложения
 
