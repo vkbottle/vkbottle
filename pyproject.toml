@@ -44,7 +44,7 @@ watchgod = "^0.7"
 [tool.poetry.dev-dependencies]
 # Lint
 lxml = "^4.5.0"
-mypy = "^0.770"
+mypy = "^0.910"
 isort = "^5.7"
 flake8 = "^3.7.9"
 mypy_extensions = "^0.4.3"
