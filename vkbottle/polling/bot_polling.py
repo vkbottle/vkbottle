@@ -33,11 +33,7 @@ class BotPolling(ABCPolling):
             return await session.request_json(
                 "POST",
                 "{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
-                    server["server"],
-                    server["key"],
-                    server["ts"],
-                    self.wait,
-                    self.rps_delay,
+                    server["server"], server["key"], server["ts"], self.wait, self.rps_delay,
                 ),
             )
 

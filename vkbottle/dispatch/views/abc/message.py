@@ -43,8 +43,8 @@ class ABCMessageView(ABCDispenseView, ABC):
         for text_ax in self.default_text_approximators:
             message.text = text_ax(message)
 
-        error = await self.pre_middleware(message, context_variables)
-        if error:
+        mw_instances = await self.pre_middleware(message, context_variables)
+        if mw_instances is None:
             logger.info("Handling stopped, pre_middleware returned error")
             return
 
@@ -74,4 +74,4 @@ class ABCMessageView(ABCDispenseView, ABC):
             if handler.blocking:
                 break
 
-        await self.post_middleware(handle_responses, handlers)
+        await self.post_middleware(mw_instances, handle_responses, handlers)

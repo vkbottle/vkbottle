@@ -9,7 +9,6 @@ from vkbottle.http import AiohttpClient
 
 from ..models import RequestTokenError, UserCodeFlowResponse
 
-
 AUTH_ERROR_CODE = 5
 
 

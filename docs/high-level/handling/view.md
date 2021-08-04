@@ -58,8 +58,8 @@ class VoteView(ABCView):
         # Здесь можно имплементировать стандартное поведение мидлварей
         # Например, если `pre_middleware` вернул что либо, то в одном из
         # мидлварей был вызван `self.stop(...)` - обработка сразу останавливается
-        error = await self.pre_middleware(vote)
-        if error:
+        mw_instances = await self.pre_middleware(vote)
+        if mw_instances is None:
             return logger.info("Обработка остановлена, pre_middleware вернул ошибку")
         
         # `handlers` и `handle_responses` нужны для post мидлварей
@@ -77,7 +77,7 @@ class VoteView(ABCView):
                 break
                 
         # Запуск post-мидлварей
-        await self.post_middleware(handle_responses, handlers)
+        await self.post_middleware(mw_instances, handler_responses, handlers)
 ```
 
 Поздравляю вы написали свой view! Теперь можно перейти к регистрации хендлеров, но для этого потребуется их создать, можно воспользоваться `FromFuncHandler`:

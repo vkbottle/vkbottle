@@ -17,44 +17,45 @@ DEFAULT_STATE_KEY = "peer_id"
 class ABCView(ABC):
     handlers: List["ABCHandler"]
     middlewares: Set[Type["BaseMiddleware"]]
-    middleware_instances: List["BaseMiddleware"]
     handler_return_manager: BaseReturnManager
 
     @abstractmethod
     def __init__(self):
         self.handlers = []
         self.middlewares = set()
-        self.middleware_instances = []
-        self.handler_return_manager = None
+        self.handler_return_manager = None  # type: ignore
 
     @abstractmethod
     async def process_event(self, event: "Event") -> bool:
         pass
 
     async def pre_middleware(
-        self,
-        event: "Event",
-        context_variables: Optional[dict] = None,
-    ) -> Optional[Exception]:
+        self, event: "Event", context_variables: Optional[dict] = None,
+    ) -> Optional[List[BaseMiddleware]]:
         """Run all of the pre middleware methods and return an exception if any error occurs"""
-        self.middleware_instances.clear()
+        mw_instances = []
+
         for middleware in self.middlewares:
             mw_instance = middleware(event, view=self)
             await mw_instance.pre()
             if not mw_instance.can_forward:
                 logger.debug(f"{mw_instance} pre returned error {mw_instance.error}")
-                return mw_instance.error
+                return None
 
-            self.middleware_instances.append(mw_instance)
+            mw_instances.append(mw_instance)
+
             if context_variables is not None:
                 context_variables.update(mw_instance.context_update)
 
+        return mw_instances
+
     async def post_middleware(
         self,
+        mw_instances: List[BaseMiddleware],
         handle_responses: Optional[List] = None,
         handlers: Optional[List["ABCHandler"]] = None,
     ):
-        for middleware in self.middleware_instances:
+        for middleware in mw_instances:
             # Update or leave value
             middleware.handle_responses = handle_responses or middleware.handle_responses
             middleware.handlers = handlers or middleware.handlers
@@ -66,10 +67,7 @@ class ABCView(ABC):
 
     @abstractmethod
     async def handle_event(
-        self,
-        event: "Event",
-        ctx_api: "ABCAPI",
-        state_dispenser: "ABCStateDispenser",
+        self, event: "Event", ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser",
     ) -> None:
         pass
 

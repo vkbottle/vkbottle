@@ -37,8 +37,8 @@ class ABCRawEventView(ABCView):
         else:
             setattr(event_model, "unprepared_ctx_api", ctx_api)
 
-        error = await self.pre_middleware(event_model, context_variables)
-        if error:
+        mw_instances = await self.pre_middleware(event_model, context_variables)
+        if mw_instances is None:
             return logger.info("Handling stopped, pre_middleware returned error")
 
         result = await handler_basement.handler.filter(event_model)
@@ -55,10 +55,7 @@ class ABCRawEventView(ABCView):
         return_handler = self.handler_return_manager.get_handler(handler_response)
         if return_handler is not None:
             await return_handler(
-                self.handler_return_manager,
-                handler_response,
-                event_model,
-                context_variables,
+                self.handler_return_manager, handler_response, event_model, context_variables,
             )
 
-        await self.post_middleware([handler_response], [handler_basement.handler])
+        await self.post_middleware(mw_instances, [handler_response], [handler_basement.handler])

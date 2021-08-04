@@ -64,5 +64,5 @@ async def test_cant_forward_on_error(empty_middleware_class, empty_event):
 @pytest.mark.asyncio
 async def test_view_middleware_utils_run(empty_event):
     view = BotMessageView()
-    await view.pre_middleware(empty_event, {})
-    await view.post_middleware()
+    mw_instances = await view.pre_middleware(empty_event, {})
+    await view.post_middleware(mw_instances)

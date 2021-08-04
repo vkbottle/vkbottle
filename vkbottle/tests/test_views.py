@@ -30,6 +30,5 @@ async def test_pre_post_middleware_returns_exception(empty_event):
     assert middleware.can_forward is False
 
     view = SomeView([construct_exception_middleware])
-    error = await view.pre_middleware(empty_event)
-    assert error == expected_error
-    assert view.middleware_instances == []
+    mw_instances = await view.pre_middleware(empty_event)
+    assert mw_instances is None

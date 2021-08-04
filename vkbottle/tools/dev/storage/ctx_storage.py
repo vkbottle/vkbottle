@@ -13,9 +13,7 @@ class CtxStorage(ABCStorage, BaseContext):
     storage: dict = {}
 
     def __init__(
-        self,
-        default: dict = None,
-        force_reset: bool = False,
+        self, default: dict = None, force_reset: bool = False,
     ):
 
         default = default or {}

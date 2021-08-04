@@ -2,9 +2,9 @@ from pydantic.error_wrappers import ValidationError
 
 from vkbottle.exception_factory import VKAPIError
 from vkbottle.http import AiohttpClient
-from .abc import AUTH_ERROR_CODE
 
 from ..models import CredentialsFlowResponse, RequestTokenError
+from .abc import AUTH_ERROR_CODE
 
 
 class ClientCredentialsFlow:
@@ -14,10 +14,7 @@ class ClientCredentialsFlow:
     """
 
     def __init__(
-        self,
-        client_id: int,
-        client_secret: str,
-        v: str,
+        self, client_id: int, client_secret: str, v: str,
     ):
         self.client_id = client_id
         self.client_secret = client_secret
