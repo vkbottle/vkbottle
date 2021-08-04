@@ -4,7 +4,7 @@
 
 ## Клавиатура
 
-Все генераторы вы можете увидеть [здесь](/examples/high-level/generate_keyboard.py) в использовании
+Все генераторы вы можете увидеть [здесь](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/generate_keyboard.py) в использовании
 
 Генераторы, как и их составляющие, импортируются из корневого пакета `vkbottle` либо из `vkbottle.tools`
 
@@ -34,14 +34,14 @@ from vkbottle import Keyboard
 
 Для того чтобы отправить вложение вконтакте вам нужно иметь его вида `"type{OWNER_ID}_{ITEM_ID}"`, например `"photo-41629685_457239401"`
 
-Строку такого вида можно передать в метод отправки сообщения как `attachment` и вложение отправится ([пример \[первый хендлер\]](/examples/high-level/photo_upload_example.py)),
+Строку такого вида можно передать в метод отправки сообщения как `attachment` и вложение отправится ([пример \[первый хендлер\]](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/photo_upload_example.py)),
 
 но такую ссылку вы можете получить только загрузив картинку на сервера вконтакте, что делать если картинку нужно загружать на сервера вконтакте прямо во время выполнения хендлера?
 
 Для этого есть аплоадеры!
 
 [Подробная документация по аплоадерам](/docs/tools/uploaders.md)
-[Пример с аплоадером \[второй хендлер\]](/examples/high-level/photo_upload_example.py)
+[Пример с аплоадером \[второй хендлер\]](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/photo_upload_example.py)
 
 Все аплоадеры импортируются из корневого пакета `vkbottle` или из `vkbottle.tools`
 
@@ -78,5 +78,5 @@ message.answer("Отправляю темплейт", template=my_template)
 
 ## Экзамплы по этой части туториала
 
-* [клавиатура](/examples/high-level/generate_keyboard.py)
-* [вложения](/examples/high-level/photo_upload_example.py)
+* [клавиатура](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/generate_keyboard.py)
+* [вложения](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/photo_upload_example.py)

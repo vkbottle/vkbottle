@@ -79,7 +79,7 @@ bot.labeler.message_view.register_middleware(LogMiddleware)
 
 Кстати методом `register_middleware` можно пользоваться и как декоратором.
 
-Полный код с мидлварями вы можете найти [в этом экзампле](/examples/high-level/middleware_example.py)
+Полный код с мидлварями вы можете найти [в этом экзампле](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/middleware_example.py)
 
 ## Return менеджеры
 
@@ -99,4 +99,4 @@ dict | словарь распакуется как непозиционные �
 
 ## Экзамплы по этой части туториала
 
-* [middleware](/examples/high-level/middleware_example.py)
+* [middleware](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/middleware_example.py)

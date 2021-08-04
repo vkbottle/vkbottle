@@ -5,8 +5,8 @@ description = "Homogenic! Customizable asynchronous VK API framework implementin
 authors = ["timoniq"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/timoniq/vkbottle"
-repository = "https://github.com/timoniq/vkbottle"
+homepage = "https://github.com/vkbottle/vkbottle"
+repository = "https://github.com/vkbottle/vkbottle"
 keywords = [
   "vk",
   "vk-api",
@@ -32,7 +32,7 @@ classifiers = [
 exclude = ["**/tests/*", "**/test_*"]
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/timoniq/vkbottle/issues"
+"Bug Tracker" = "https://github.com/vkbottle/vkbottle/issues"
 
 [tool.poetry.dependencies]
 python = "^3.7"

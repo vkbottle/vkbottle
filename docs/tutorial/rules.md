@@ -117,5 +117,5 @@ bot.labeler.custom_rules["my_rule"] = MyRule
 
 ## Экзамплы по этой части туториала
 
-* [labeler-setup](/examples/high-level/labeler_setup.py)
-* [filters-shortcuts](/examples/high-level/filters_shortcuts.py)
+* [labeler-setup](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/labeler_setup.py)
+* [filters-shortcuts](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/filters_shortcuts.py)
