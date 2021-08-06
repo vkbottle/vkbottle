@@ -169,32 +169,24 @@ class AttachmentTypeRule(ABCMessageRule[Message], Generic[Message]):
     async def check(self, message: Message) -> bool:
         if not message.attachments:
             return False
-        for attachment in message.attachments:
-            if attachment.type.value not in self.attachment_types:
-                return False
-        return True
+        return all(
+            attachment.type.value in self.attachment_types for attachment in message.attachments
+        )
 
 
 class ForwardMessagesRule(ABCMessageRule[Message], Generic[Message]):
     async def check(self, message: Message) -> bool:
-        if not message.fwd_messages:
-            return False
-
-        return True
+        return bool(message.fwd_messages)
 
 
 class ReplyMessageRule(ABCMessageRule[Message], Generic[Message]):
     async def check(self, message: Message) -> bool:
-        if not message.reply_message:
-            return False
-        return True
+        return bool(message.reply_message)
 
 
 class GeoRule(ABCMessageRule[Message], Generic[Message]):
     async def check(self, message: Message) -> bool:
-        if not message.geo:
-            return False
-        return True
+        return bool(message.geo)
 
 
 class LevensteinRule(ABCMessageRule[Message], Generic[Message]):
@@ -227,10 +219,10 @@ class LevensteinRule(ABCMessageRule[Message], Generic[Message]):
         return current_row[n]
 
     async def check(self, message: Message) -> bool:
-        for levenstein_text in self.levenstein_texts:
-            if self.distance(message.text, levenstein_text) <= self.max_distance:
-                return True
-        return False
+        return any(
+            self.distance(message.text, levenstein_text) <= self.max_distance
+            for levenstein_text in self.levenstein_texts
+        )
 
 
 class MessageLengthRule(ABCMessageRule[Message], Generic[Message]):
@@ -271,10 +263,7 @@ class PayloadContainsRule(ABCMessageRule[Message], Generic[Message]):
 
     async def check(self, message: Message) -> bool:
         payload = message.get_payload_json(unpack_failure=lambda p: {})
-        for k, v in self.payload_particular_part.items():
-            if payload.get(k) != v:
-                return False
-        return True
+        return all(payload.get(k) == v for k, v in self.payload_particular_part.items())
 
 
 class PayloadMapRule(ABCMessageRule[Message], Generic[Message]):
