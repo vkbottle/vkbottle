@@ -1,4 +1,4 @@
-from typing import Callable, Dict, NamedTuple
+from typing import Callable, Dict, List, NamedTuple
 
 from vkbottle_types.events import GroupEventType
 
@@ -12,10 +12,10 @@ HandlerBasement = NamedTuple("HandlerBasement", [("dataclass", Callable), ("hand
 class RawBotEventView(ABCRawEventView):
     def __init__(self):
         super().__init__()
-        self.handlers: Dict[GroupEventType, HandlerBasement] = {}
+        self.handlers: Dict[GroupEventType, List[HandlerBasement]] = {}
         self.handler_return_manager = BotMessageReturnHandler()
 
-    def get_handler_basement(self, event):
+    def get_handler_basements(self, event):
         return self.handlers[GroupEventType(self.get_event_type(event))]
 
     def get_event_model(self, handler_basement, event):

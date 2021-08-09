@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Type
+from typing import Dict, List, NamedTuple, Type
 
 from vkbottle_types.events import BaseUserEvent, UserEventType
 
@@ -14,10 +14,10 @@ HandlerBasement = NamedTuple(
 class RawUserEventView(ABCRawEventView):
     def __init__(self):
         super().__init__()
-        self.handlers: Dict[UserEventType, HandlerBasement] = {}
+        self.handlers: Dict[UserEventType, List[HandlerBasement]] = {}
         self.handler_return_manager = UserMessageReturnHandler()
 
-    def get_handler_basement(self, event):
+    def get_handler_basements(self, event):
         return self.handlers[UserEventType(self.get_event_type(event))]
 
     def get_event_model(self, handler_basement, event):

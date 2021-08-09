@@ -10,7 +10,7 @@ from .view import ABCView
 
 class ABCRawEventView(ABCView):
     @abstractmethod
-    def get_handler_basement(self, event):
+    def get_handler_basements(self, event):
         ...
 
     @abstractmethod
@@ -27,35 +27,47 @@ class ABCRawEventView(ABCView):
     ) -> Any:
         logger.debug("Handling event ({}) with message view".format(self.get_event_type(event)))
 
-        handler_basement = self.get_handler_basement(event)
         context_variables: dict = {}
+        handle_responses = []
+        handlers = []
 
-        event_model = self.get_event_model(handler_basement, event)
-
-        if isinstance(event_model, dict):
-            event_model["ctx_api"] = ctx_api
-        else:
-            setattr(event_model, "unprepared_ctx_api", ctx_api)
-
-        mw_instances = await self.pre_middleware(event_model, context_variables)
+        mw_instances = await self.pre_middleware(event, context_variables)
         if mw_instances is None:
             return logger.info("Handling stopped, pre_middleware returned error")
 
-        result = await handler_basement.handler.filter(event_model)
-        logger.debug("Handler {} returned {}".format(handler_basement.handler, result))
+        for handler_basement in self.get_handler_basements(event):
+            event_model = self.get_event_model(handler_basement, event)
 
-        if result is False:
-            return
+            if isinstance(event_model, dict):
+                event_model["ctx_api"] = ctx_api
+            else:
+                setattr(event_model, "unprepared_ctx_api", ctx_api)
 
-        elif isinstance(result, dict):
-            context_variables.update(result)
+            result = await handler_basement.handler.filter(event_model)
+            logger.debug("Handler {} returned {}".format(handler_basement.handler, result))
 
-        handler_response = await handler_basement.handler.handle(event_model, **context_variables)
+            if result is False:
+                return
 
-        return_handler = self.handler_return_manager.get_handler(handler_response)
-        if return_handler is not None:
-            await return_handler(
-                self.handler_return_manager, handler_response, event_model, context_variables,
+            elif isinstance(result, dict):
+                context_variables.update(result)
+
+            handler_response = await handler_basement.handler.handle(
+                event_model, **context_variables
             )
+            handle_responses.append(handler_response)
+            handlers.append(handler_basement.handler)
 
-        await self.post_middleware(mw_instances, [handler_response], [handler_basement.handler])
+            return_handler = self.handler_return_manager.get_handler(handler_response)
+            if return_handler is not None:
+                await return_handler(
+                    self.handler_return_manager,
+                    handler_response,
+                    event_model,
+                    context_variables,
+                )
+
+            if handler_basement.handler.blocking:
+                break
+
+        await self.post_middleware(mw_instances, handle_responses, handlers)
