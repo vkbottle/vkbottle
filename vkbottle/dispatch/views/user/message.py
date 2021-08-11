@@ -14,11 +14,11 @@ class ABCUserMessageView(ABCMessageView, ABC):
         self.handler_return_manager = UserMessageReturnHandler()
 
     @staticmethod
-    def get_event_type(event):
+    def get_event_type(event: list) -> int:
         return event[0]
 
     @staticmethod
-    async def get_message(event, ctx_api):
+    async def get_message(event, ctx_api) -> MessageMin:
         return await message_min(event[1], ctx_api)
 
     async def process_event(self, event: list) -> bool:

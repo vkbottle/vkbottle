@@ -187,7 +187,12 @@ class BotLabeler(ABCBotLabeler):
     def load(self, labeler: "BotLabeler"):
         self.message_view.handlers.extend(labeler.message_view.handlers)
         self.message_view.middlewares.update(labeler.message_view.middlewares)
-        self.raw_event_view.handlers.update(labeler.raw_event_view.handlers)
+        for event, handler_basements in labeler.raw_event_view.handlers:
+            event_handlers = self.raw_event_view.handlers.get(event)
+            if event_handlers:
+                event_handlers.extend(handler_basements)
+            else:
+                self.raw_event_view.handlers[event] = handler_basements
         self.raw_event_view.middlewares.update(labeler.raw_event_view.middlewares)
 
     def get_custom_rules(self, custom_rules: Dict[str, Any]) -> List["ABCRule"]:

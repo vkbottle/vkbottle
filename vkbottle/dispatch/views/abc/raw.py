@@ -33,7 +33,8 @@ class ABCRawEventView(ABCView):
 
         mw_instances = await self.pre_middleware(event, context_variables)
         if mw_instances is None:
-            return logger.info("Handling stopped, pre_middleware returned error")
+            logger.info("Handling stopped, pre_middleware returned error")
+            return
 
         for handler_basement in self.get_handler_basements(event):
             event_model = self.get_event_model(handler_basement, event)
