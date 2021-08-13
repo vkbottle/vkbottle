@@ -31,7 +31,7 @@ class VideoUploader(BaseUploader):
         video = await self.upload_files(server["upload_url"], {"video_file": file})
 
         if self.generate_attachment_strings:
-            return self.generate_attachment_string("video", video["owner_id"], video["id"])
+            return self.generate_attachment_string("video", video["owner_id"], video["video_id"])
         return video
 
     async def get_server(self, **kwargs) -> dict:
