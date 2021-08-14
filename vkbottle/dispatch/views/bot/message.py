@@ -14,15 +14,15 @@ class ABCBotMessageView(ABCMessageView, ABC):
         self.handler_return_manager = BotMessageReturnHandler()
 
     @staticmethod
-    def get_event_type(event):
-        return event.get("event_id")
+    def get_event_type(event: dict) -> str:
+        return event["type"]
 
     @staticmethod
-    async def get_message(event, ctx_api):
+    async def get_message(event, ctx_api) -> MessageMin:
         return message_min(event, ctx_api)
 
     async def process_event(self, event: dict) -> bool:
-        return GroupEventType(event["type"]) == GroupEventType.MESSAGE_NEW
+        return GroupEventType(self.get_event_type(event)) == GroupEventType.MESSAGE_NEW
 
 
 class BotMessageView(ABCBotMessageView):

@@ -152,6 +152,7 @@ class BotLabeler(ABCBotLabeler):
         event: Union[EventName, List[EventName]],
         dataclass: Callable = dict,
         *rules: ShortenRule,
+        blocking: bool = True,
         **custom_rules,
     ) -> LabeledHandler:
 
@@ -164,15 +165,21 @@ class BotLabeler(ABCBotLabeler):
                 if isinstance(e, str):
                     e = GroupEventType(e)
 
-                self.raw_event_view.handlers[e] = HandlerBasement(
+                event_handlers = self.raw_event_view.handlers.get(e)
+                handler_basement = HandlerBasement(
                     dataclass,
                     FromFuncHandler(
                         func,
                         *map(convert_shorten_filter, rules),
                         *self.auto_rules,
                         *self.get_custom_rules(custom_rules),
+                        blocking=blocking,
                     ),
                 )
+                if not event_handlers:
+                    self.raw_event_view.handlers[e] = [handler_basement]
+                else:
+                    self.raw_event_view.handlers[e].append(handler_basement)
             return func
 
         return decorator
@@ -180,7 +187,12 @@ class BotLabeler(ABCBotLabeler):
     def load(self, labeler: "BotLabeler"):
         self.message_view.handlers.extend(labeler.message_view.handlers)
         self.message_view.middlewares.update(labeler.message_view.middlewares)
-        self.raw_event_view.handlers.update(labeler.raw_event_view.handlers)
+        for event, handler_basements in labeler.raw_event_view.handlers:
+            event_handlers = self.raw_event_view.handlers.get(event)
+            if event_handlers:
+                event_handlers.extend(handler_basements)
+            else:
+                self.raw_event_view.handlers[event] = handler_basements
         self.raw_event_view.middlewares.update(labeler.raw_event_view.middlewares)
 
     def get_custom_rules(self, custom_rules: Dict[str, Any]) -> List["ABCRule"]:
