@@ -30,7 +30,9 @@ class ABCView(ABC):
         pass
 
     async def pre_middleware(
-        self, event: "Event", context_variables: Optional[dict] = None,
+        self,
+        event: "Event",
+        context_variables: Optional[dict] = None,
     ) -> Optional[List[BaseMiddleware]]:
         """Run all of the pre middleware methods and return an exception if any error occurs"""
         mw_instances = []
@@ -67,7 +69,10 @@ class ABCView(ABC):
 
     @abstractmethod
     async def handle_event(
-        self, event: "Event", ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser",
+        self,
+        event: "Event",
+        ctx_api: "ABCAPI",
+        state_dispenser: "ABCStateDispenser",
     ) -> None:
         pass
 
