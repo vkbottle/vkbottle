@@ -2,7 +2,7 @@ import typing
 
 import pytest
 
-from vkbottle import API, ABCRequestRescheduler, CtxStorage, VKAPIError
+from vkbottle import API, ABCRequestRescheduler, CaptchaError, CtxStorage, VKAPIError
 from vkbottle.tools.test_utils import with_mocked_api
 
 USERS_GET_RESPONSE = (
@@ -42,12 +42,26 @@ async def test_api_typed_response(api: API):
 
 @pytest.mark.asyncio
 @with_mocked_api('{"error":{"error_code":0,"error_msg":"Some Error!"}}')
-async def test_api_error_handling(api: API):
+async def test_vk_api_error_handling(api: API):
     try:
         await api.request("some.method", {})
     except VKAPIError[0]:
         return True
     raise AssertionError
+
+
+@pytest.mark.asyncio
+@with_mocked_api(
+    '{"error":{"error_code":14,"error_msg":"Captcha needed","captcha_sid":"239633676097",'
+    '"captcha_img":"https://api.vk.com/captcha.php?sid=239633676097&s=1"}}'
+)
+async def test_captcha_error_handling(api: API):
+    try:
+        await api.request("some.method", {})
+    except VKAPIError as e:
+        assert isinstance(e, CaptchaError)
+        assert e.code == 14
+        assert e.sid == 239633676097
 
 
 @pytest.mark.asyncio

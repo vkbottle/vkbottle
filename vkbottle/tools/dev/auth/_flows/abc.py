@@ -56,4 +56,4 @@ class ABCAuthorizationCodeFlow(ABCAuthFlow):
             return self.get_model()(**response)
         except ValidationError:
             error = RequestTokenError(**response)
-            raise VKAPIError[AUTH_ERROR_CODE](str(error), response)
+            raise VKAPIError[AUTH_ERROR_CODE](error_msg=error)

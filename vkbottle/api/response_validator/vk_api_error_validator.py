@@ -1,11 +1,14 @@
 import typing
 
-from vkbottle.exception_factory import VKAPIError
+from vkbottle.exception_factory import CaptchaError, VKAPIError
 
 from .abc import ABCResponseValidator
 
 if typing.TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
+
+
+SPECIFIC_ERRORS: typing.Dict[int, typing.Type[VKAPIError]] = {14: CaptchaError}
 
 
 class VKAPIErrorResponseValidator(ABCResponseValidator):
@@ -23,9 +26,11 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         if "error" not in response:
             return response
 
-        code, msg = response["error"].get("error_code"), response["error"].get("error_msg")
-
         if ctx_api.ignore_errors:
             return None
 
-        raise VKAPIError[code](msg, response)
+        error = response["error"]
+        code = error["error_code"]
+
+        exception = SPECIFIC_ERRORS.get(code, VKAPIError[code])
+        raise exception(**error)
