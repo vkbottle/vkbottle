@@ -1,31 +1,30 @@
-from typing import TYPE_CHECKING, Any, Dict, Tuple, Type, TypeVar, Union, overload
+from typing import Dict, Tuple, Type, TypeVar, Union, cast, no_type_check, overload
 
-T = TypeVar("T", bound="CodeExceptionMeta")
+T = TypeVar("T", bound=Type["CodeException"])
 
 
-class CodeExceptionMeta(type):
-    def __init__(cls: T, name: str, bases: Tuple[Type[Any], ...], attrs: Dict[str, Any]):
-        super().__init__(name, bases, attrs)
-        cls.code: int
-        cls.__exceptions__: Dict[int, T] = {}
-        cls.__code_specified__ = False
+class CodeException(Exception):
+    code: int
+    __code_specified__: bool = False
+    __exceptions__: Dict[int, Type["CodeException"]] = {}
 
-    def __call__(cls: T, *args: Any, **kwargs: Any) -> Any:
-        if cls.__code_specified__ is False:
+    @no_type_check
+    def __new__(cls, *args, **kwargs):
+        if not cls.__code_specified__:
             raise TypeError("exception code is not specified")
 
-        return super().__call__(*args, **kwargs)
+        return super().__new__(cls, *args, **kwargs)
 
     @overload
-    def __getitem__(cls: T, code: int) -> T:
+    def __class_getitem__(cls: T, code: int) -> T:
         ...
 
     @overload
-    def __getitem__(cls: T, code: Tuple[int, ...]) -> Tuple[T, ...]:
+    def __class_getitem__(cls: T, code: Tuple[int, ...]) -> Tuple[T, ...]:
         ...
 
-    def __getitem__(cls: T, code: Union[int, Tuple[int, ...]]) -> Union[T, Tuple[T, ...]]:
-        if cls.__code_specified__ is True:
+    def __class_getitem__(cls: T, code: Union[int, Tuple[int, ...]]) -> Union[T, Tuple[T, ...]]:
+        if cls.__code_specified__:
             raise TypeError("exception code already specified")
 
         if isinstance(code, tuple):
@@ -33,23 +32,20 @@ class CodeExceptionMeta(type):
 
         return cls._get_exception(code)
 
+    @classmethod
     def _get_exception(cls: T, code: int) -> T:
         if code in cls.__exceptions__:
-            return cls.__exceptions__[code]
+            return cast(T, cls.__exceptions__[code])
 
         return cls._register_exception(code)
 
+    @classmethod
     def _register_exception(cls: T, code: int) -> T:
         name = f"{cls.__name__}_{code}"
-        exception = cls.__class__(name, (cls,), dict(cls.__dict__))
+        exception = cast(T, type(name, (cls,), {}))
 
         exception.code = code
         exception.__code_specified__ = True
         cls.__exceptions__[code] = exception
 
         return exception
-
-
-class CodeException(Exception, metaclass=CodeExceptionMeta):
-    if TYPE_CHECKING:
-        code: int
