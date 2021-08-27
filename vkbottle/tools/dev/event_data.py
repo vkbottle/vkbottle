@@ -19,21 +19,21 @@ class ABCEventData(ABC):
         return self.get_json()
 
 
-class ShowSnackbar(ABCEventData):
+class ShowSnackbarEvent(ABCEventData):
     type: str = "show_snackbar"
 
     def __init__(self, text: str):
         self.text = text
 
 
-class OpenLink(ABCEventData):
+class OpenLinkEvent(ABCEventData):
     type: str = "open_link"
 
     def __init__(self, link: str):
         self.link = link
 
 
-class OpenApp(ABCEventData):
+class OpenAppEvent(ABCEventData):
     type: str = "open_app"
 
     def __init__(self, app_id: int, hash: str, owner_id: Optional[int] = None):
@@ -42,4 +42,4 @@ class OpenApp(ABCEventData):
         self.owner_id = owner_id
 
 
-__all__ = ("ABCEventData", "ShowSnackbar", "OpenLink", "OpenApp")
+__all__ = ("ABCEventData", "ShowSnackbarEvent", "OpenLinkEvent", "OpenAppEvent")
