@@ -34,7 +34,14 @@ from .dispatch import (
     OrFilter,
     Router,
 )
-from .exception_factory import ABCErrorHandler, CodeException, ErrorHandler, VKAPIError, swear
+from .exception_factory import (
+    ABCErrorHandler,
+    CaptchaError,
+    CodeException,
+    ErrorHandler,
+    VKAPIError,
+    swear,
+)
 from .framework import ABCBlueprint, ABCFramework, Bot, BotBlueprint
 from .http import (
     ABCHTTPClient,

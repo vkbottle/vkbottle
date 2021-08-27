@@ -1,7 +1,7 @@
 from vkbottle import CodeException, swear
 
 
-def test_exc_manager_code_error():
+def test_code_exception():
     class CodeError(CodeException):
         pass
 

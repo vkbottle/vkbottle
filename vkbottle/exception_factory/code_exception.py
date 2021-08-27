@@ -7,8 +7,8 @@ class CodeExceptionMeta(type):
     def __init__(cls: T, name: str, bases: Tuple[Type[Any], ...], attrs: Dict[str, Any]):
         super().__init__(name, bases, attrs)
         cls.code: int
-        cls.__exceptions__: Dict[int, T] = {}
-        cls.__code_specified__ = False
+        cls.__exceptions__: Dict[int, T] = getattr(cls, "__exceptions__", {})
+        cls.__code_specified__: bool = getattr(cls, "__code_specified__", False)
 
     def __call__(cls: T, *args: Any, **kwargs: Any) -> Any:
         if cls.__code_specified__ is False:
@@ -41,7 +41,7 @@ class CodeExceptionMeta(type):
 
     def _register_exception(cls: T, code: int) -> T:
         name = f"{cls.__name__}_{code}"
-        exception = cls.__class__(name, (cls,), dict(cls.__dict__))
+        exception = cls.__class__(name, (cls,), {})
 
         exception.code = code
         exception.__code_specified__ = True

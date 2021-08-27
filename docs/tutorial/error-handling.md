@@ -6,11 +6,10 @@
 
 Для начала разъясним что такое `VKAPIError`, это подтип `CodeException`, особенность которого заключается в том, чтобы ошибка идентифицировалась в except и без указанного кода (`try except VKAPIError`) и при указании кода (`try except VKAPIError[code]`)
 
-В `VKAPIError` есть три поля:
+В `VKAPIError` есть два поля:
 
 * `code` - код ошибки, int
-* `error_description` - описание ошибки, str
-* `raw_error` - то, что вернул VK в качестве ошибки (нужно, например, для обработки капчи), dict
+* `description` - описание ошибки, str
 
 Чтобы использовать `VKAPIError` нужно импортировать его:
 
@@ -45,6 +44,14 @@ except VKAPIError[902] as e:
 except VKAPIError as e:
     print("не могу отправить:", e.error_description)
 ```
+
+## Специфичные ошибки
+
+Некоторые ошибки vk имеют дополнительные поля, которые могут понадобиться вам для их обработки:
+
+* `CaptchaError`:
+  * `sid` - идентификатор captcha, int
+  * `img` - ссылка на изображение, str
 
 ## error handler
 
