@@ -4,9 +4,8 @@
 import logging
 import os
 
-from vkbottle import Callback, GroupEventType, GroupTypes, Keyboard
+from vkbottle import Callback, GroupEventType, GroupTypes, Keyboard, ShowSnackbar
 from vkbottle.bot import Bot, Message
-from vkbottle.modules import json
 
 bot = Bot(os.environ["TOKEN"])
 logging.basicConfig(level=logging.INFO)
@@ -32,7 +31,7 @@ async def handle_message_event(event: GroupTypes.MessageEvent):
         event_id=event.object.event_id,
         user_id=event.object.user_id,
         peer_id=event.object.peer_id,
-        event_data=json.dumps({"type": "show_snackbar", "text": "Сейчас я исчезну"}),
+        event_data=ShowSnackbar("Сейчас я исчезну").get_json(),
     )
 
 
