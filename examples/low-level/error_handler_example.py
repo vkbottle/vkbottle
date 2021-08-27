@@ -11,14 +11,14 @@ error_handler = ErrorHandler()
 # async def exc_h(exc: RuntimeError, a, b): ...
 
 
+@error_handler.register_error_handler(RuntimeError)
 async def exc_handler(exc: RuntimeError):
     print("Oops error:", exc)
 
 
-@error_handler.wraps_error_handler()
+@error_handler.catch
 async def main():
     raise RuntimeError("Oh my god i am an exception")
 
 
-error_handler.register_error_handler(RuntimeError, exception_handler=exc_handler)
 asyncio.run(main())
