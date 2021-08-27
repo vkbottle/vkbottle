@@ -1,5 +1,6 @@
 from . import auth
 from .ctx_tool import BaseContext
+from .event_data import *
 from .keyboard import *
 from .loop_wrapper import DelayedTask, LoopWrapper
 from .mini_types import BotTypes, UserTypes
