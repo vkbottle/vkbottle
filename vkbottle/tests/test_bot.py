@@ -64,14 +64,14 @@ def set_http_callback(api: API, callback: typing.Callable[[dict], typing.Any]):
 
 @pytest.mark.asyncio
 async def test_bot_polling():
-    def callback(data: dict):
-        if "groups.getById" in data["url"]:
+    def callback(method: str, url: str, data: dict):
+        if "groups.getById" in url:
             return {"response": [{"id": 1}]}
-        elif "groups.getLongPollServer" in data["url"]:
+        elif "groups.getLongPollServer" in url:
             return {"response": {"ts": 1, "server": "!SERVER!", "key": ""}}
-        elif "!SERVER!" in data["url"]:
+        elif "!SERVER!" in url:
             return EXAMPLE_EVENT
-        elif "messages.send" in data["url"]:
+        elif "messages.send" in url:
             return json.dumps({"response": {**data, **{"r": 1}}})
 
     bot = Bot("token")
@@ -86,9 +86,10 @@ async def test_bot_polling():
     async def message_handler(message: Message):
         assert message.id == 100
         assert message.from_id == 1
-        assert await message.answer() == {"peer_id": message.peer_id, "r": 1}
+        assert await message.answer() == {"peer_id": message.peer_id, "r": 1, "random_id": 0}
         assert await message.answer(some_unsigned_param="test") == {
             "peer_id": message.peer_id,
+            "random_id": 0,
             "some_unsigned_param": "test",
             "r": 1,
         }

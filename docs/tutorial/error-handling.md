@@ -53,40 +53,58 @@ except VKAPIError as e:
   * `sid` - идентификатор captcha, int
   * `img` - ссылка на изображение, str
 
-## error handler
+## ErrorHandler
 
 > Инструмент будет рассматриваться конкретно с ботом, хоть это и отдельный объект, так как это - туториал - упрощенный вариант документации
 
 > Техническая документация по хендлеру ошибок [здесь](/docs/low-level/exception_handling/error-handler.md)
 
-У хендлера ошибок есть три основных метода:
+У `ErrorHandler` есть 4 метода:
 
-* `register_error_handler`, который принимает саму ошибку и асинхронную функцию хендлер. Теперь если возникнет указанная ошибка, исполнится указанный хендлер
-*  `register_undefined_error_handler`, который принимает асинхронную функцию хендлер. Теперь если возникнет неизвестная ошибка исполнится этот хендлер
-* `wraps_error_handler` - используется мануально как декоратор, теперь декорированная функция будет обернута этим хендлером ошибок (не нужно декорировать все функции подряд, все функции которые исполняются внутри встроенного поллинга оборачиваются хендлером ошибок по умолчанию)
+* `register_error_handler` - декоратор, принимающий типы ошибок и асинхронную функцию-хендлер. Если возникнет одна из указанных ошибок (или её подтипа), исполнится указанный хендлер.
+* `register_undefined_error_handler` - декоратор, принимающий тип ошибки и асинхронную функцию-хендлер. Если возникнет неизвестная ошибка, исполнится этот хендлер.
+* `handle`, принимающий экземляр ошибки. Передаёт ошибку в соответствующий хендлер, зарегистрированный с помощью выше описанных декораторов. Если для данной ошибки нет хендлера, поднимает её.
+* `catch` - декоратор. Ловит ошибки из декорированной функции и передаёт их методу `handle`.
 
 ```python
 from vkbottle import Bot, VKAPIError
 
 bot = Bot("token")
 
+
+@bot.error_handler.register_error_handler(RuntimeError)
 async def runtime_error_handler(e: RuntimeError):
     print("возникла ошибка runtime", e)
 
+
+@bot.error_handler.register_error_handler(VKAPIError[902])
 async def unable_to_write_handler(e: VKAPIError):
     print("человек не разрешил отправлять сообщения", e)
-
-bot.error_handler.register_error_handler(RuntimeError, runtime_error_handler)
-bot.error_handler.register_error_handler(VKAPIError[902], unable_to_write_handler)
-
-# ...
 ```
 
-В примере создано для хендлера ошибок: для `RuntimeError` и конкретизированного `VKAPIError`
+В примере создано 2 хендлера ошибок: для `RuntimeError` и конкретизированного `VKAPIError`
 
-Еще у хендлера ошибок есть атрибут `redirect_argument`, который в данном случае позволяет передать в асинхронную функцию хендлер не только саму ошибку но и контекстные аргументы из правил и мидлварей которые вернулись в исполняемый фреймворком хендлер (который и вызвал ошибку)
+Также можно регистрировать хендлеры сразу для нескольких типов ошибок:
 
-Он принимает `bool`ean значение
+```python
+from typing import Union
+
+from vkbottle import Bot, VKAPIError
+
+bot = Bot("token")
+
+
+@bot.error_handler.register_error_handler(TypeError, ValueError)
+async def type_or_value_error_handler(e: Union[TypeError, ValueError]):
+    print("возникла ошибка type или value", e)
+
+    
+@bot.error_handler.register_error_handler(*VKAPIError[6, 9])
+async def limit_reached_write_handler(e: VKAPIError):
+    print("ой, слишком много запросов", e)
+```
+
+Ещё у `ErrorHandler` есть параметр `redirect_arguments: bool`, который позволяет передавать в хендлер аргументы из задекорированной с помощью `catch` функции. В связке с ботом позволяет передать в хендлер контекстные аргументы из правил и мидлварей.
 
 ## swear
 

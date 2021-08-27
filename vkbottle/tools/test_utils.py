@@ -7,22 +7,22 @@ class MockedClient(ABCHTTPClient):
     def __init__(self, return_value: Optional[Any] = None, callback: Optional[Callable] = None):
         super().__init__()
         self.return_value = return_value
-        self.callback = callback or (lambda data: None)
+        self.callback = callback or (lambda method, url, data: None)
 
     async def request_text(
         self, method: str, url: str, data: Optional[dict] = None, **kwargs
     ) -> Union[str, Any]:
-        return self.return_value or self.callback(locals())
+        return self.return_value or self.callback(method, url, data)
 
     async def request_json(
         self, method: str, url: str, data: Optional[dict] = None, **kwargs
     ) -> Union[dict, Any]:
-        return self.return_value or self.callback(locals())
+        return self.return_value or self.callback(method, url, data)
 
     async def request_content(
         self, method: str, url: str, data: Optional[dict] = None, **kwargs
     ) -> Union[bytes, Any]:
-        return self.return_value or self.callback(locals())
+        return self.return_value or self.callback(method, url, data)
 
     async def close(self) -> None:
         pass
