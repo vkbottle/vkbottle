@@ -48,8 +48,8 @@ class MessageMin(MessagesMessage):
         **kwargs,
     ) -> int:
         locals().update(kwargs)
-        locals().pop("kwargs")
-        data = {k: v for k, v in locals().items() if k != "self" and v is not None}
+
+        data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
         data["peer_id"] = self.peer_id
 
         return (await self.ctx_api.request("messages.send", data))["response"]
