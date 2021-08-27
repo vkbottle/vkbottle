@@ -15,6 +15,11 @@ class CodeException(Exception):
 
         return super().__new__(cls, *args, **kwargs)
 
+    @no_type_check
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        cls.__exceptions__ = {}
+
     @overload
     def __class_getitem__(cls: T, code: int) -> T:
         ...
