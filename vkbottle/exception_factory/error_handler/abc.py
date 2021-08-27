@@ -1,39 +1,27 @@
-import typing
 from abc import ABC, abstractmethod
+from typing import Any, Awaitable, Callable, Dict, Optional, Type
 
-ExceptionHandler = typing.Callable[[BaseException], typing.Awaitable[typing.Any]]
+AsyncFunc = Callable[..., Awaitable[Any]]
 
 
 class ABCErrorHandler(ABC):
-    error_handlers: typing.Any
+    error_handlers: Dict[Type[BaseException], AsyncFunc]
+    undefined_error_handler: Optional[AsyncFunc]
 
     @abstractmethod
     def register_error_handler(
-        self,
-        exception_type: typing.Type[BaseException],
-        exception_handler: ExceptionHandler = None,
-    ) -> typing.Optional[typing.Callable[[ExceptionHandler], typing.Any]]:
+        self, *error_types: Type[BaseException]
+    ) -> Callable[[AsyncFunc], AsyncFunc]:
         pass
 
     @abstractmethod
-    def register_undefined_error_handler(
-        self, exception_handler: typing.Optional[ExceptionHandler] = None,
-    ) -> typing.Optional[typing.Callable[[ExceptionHandler], typing.Any]]:
+    def register_undefined_error_handler(self, handler: AsyncFunc) -> AsyncFunc:
         pass
 
     @abstractmethod
-    async def handle(self, e: BaseException) -> typing.Any:
+    async def handle(self, error: BaseException) -> Any:
         pass
 
     @abstractmethod
-    def wraps_error_handler(
-        self,
-    ) -> typing.Callable[
-        [typing.Any], typing.Callable[[typing.Any, typing.Any], typing.Awaitable[typing.Any]]
-    ]:
-        pass
-
-    @property
-    @abstractmethod
-    def handling_exceptions(self,) -> typing.Union[str, typing.Tuple[str, ...]]:
+    def catch(self, func: AsyncFunc) -> AsyncFunc:
         pass
