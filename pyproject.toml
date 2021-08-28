@@ -41,6 +41,7 @@ vbml = "^1.0"
 choicelib = "^0.1.1"
 vkbottle-types = "0.1.24"
 watchgod = "^0.7"
+pydantic = "^1.8.2"
 
 [tool.poetry.dev-dependencies]
 # Lint
