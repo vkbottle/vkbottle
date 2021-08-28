@@ -1,4 +1,4 @@
-from vkbottle import ShowSnackbarEvent, OpenAppEvent, OpenLinkEvent
+from vkbottle import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
 
 
 def test_event_data_constructor():
