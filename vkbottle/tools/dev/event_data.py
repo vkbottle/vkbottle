@@ -1,45 +1,22 @@
-from abc import ABC
+from pydantic import BaseModel, Field
 from typing import Optional
 
-from vkbottle.modules import json
+
+class ShowSnackbarEvent(BaseModel):
+    type: str = Field("show_snackbar", const=True)
+    text: str
 
 
-class ABCEventData(ABC):
-    type: str
-
-    def get_data(self) -> dict:
-        data = {k: v for k, v in vars(self).items() if v is not None}
-        data["type"] = self.type
-        return data
-
-    def get_json(self) -> str:
-        return json.dumps(self.get_data())
-
-    def __str__(self):
-        return self.get_json()
+class OpenLinkEvent(BaseModel):
+    type: str = Field("open_link", const=True)
+    link: str
 
 
-class ShowSnackbarEvent(ABCEventData):
-    type: str = "show_snackbar"
-
-    def __init__(self, text: str):
-        self.text = text
-
-
-class OpenLinkEvent(ABCEventData):
-    type: str = "open_link"
-
-    def __init__(self, link: str):
-        self.link = link
+class OpenAppEvent(BaseModel):
+    type: str = Field("open_app", const=True)
+    owner_id: Optional[int] = None
+    app_id: int
+    hash: str
 
 
-class OpenAppEvent(ABCEventData):
-    type: str = "open_app"
-
-    def __init__(self, app_id: int, hash: str, owner_id: Optional[int] = None):
-        self.app_id = app_id
-        self.hash = hash
-        self.owner_id = owner_id
-
-
-__all__ = ("ABCEventData", "ShowSnackbarEvent", "OpenLinkEvent", "OpenAppEvent")
+__all__ = ("ShowSnackbarEvent", "OpenLinkEvent", "OpenAppEvent")

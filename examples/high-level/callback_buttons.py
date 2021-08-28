@@ -31,7 +31,7 @@ async def handle_message_event(event: GroupTypes.MessageEvent):
         event_id=event.object.event_id,
         user_id=event.object.user_id,
         peer_id=event.object.peer_id,
-        event_data=ShowSnackbarEvent("Сейчас я исчезну").get_json(),
+        event_data=ShowSnackbarEvent(text="Сейчас я исчезну").json(),
     )
 
 
