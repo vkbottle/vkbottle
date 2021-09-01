@@ -62,7 +62,7 @@ class User(ABCFramework):
 
         async for event in polling.listen():  # type: ignore
             logger.debug(f"New event was received: {event}")
-            for update in event["updates"]:
+            for update in event.get("updates", []):
                 if not self.task_each_event:
                     await self.router.route(update, polling.api)
                 else:
