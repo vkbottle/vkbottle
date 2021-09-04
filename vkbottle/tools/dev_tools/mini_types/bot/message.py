@@ -2,7 +2,7 @@ from typing import Any, List, Optional, Union
 
 from vkbottle_types import StatePeer
 from vkbottle_types.events.bot_events import MessageNew
-from vkbottle_types.objects import ClientInfoForBots, MessagesMessage, UsersUser
+from vkbottle_types.objects import ClientInfoForBots, MessagesMessage, UsersUser, MessagesForward
 
 from vkbottle.api import ABCAPI, API
 
@@ -54,6 +54,36 @@ class MessageMin(MessagesMessage):
 
         return (await self.ctx_api.request("messages.send", data))["response"]
 
+    async def reply(
+        self,
+        message: Optional[str] = None,
+        attachment: Optional[str] = None,
+        user_id: Optional[int] = None,
+        domain: Optional[str] = None,
+        random_id: Optional[int] = 0,
+        user_ids: Optional[List[int]] = None,
+        lat: Optional[float] = None,
+        long: Optional[float] = None,
+        sticker_id: Optional[int] = None,
+        group_id: Optional[int] = None,
+        keyboard: Optional[str] = None,
+        payload: Optional[str] = None,
+        dont_parse_links: Optional[bool] = None,
+        disable_mentions: Optional[bool] = None,
+        template: Optional[str] = None,
+        intent: Optional[str] = None,
+        **kwargs,
+    ) -> int:
+        locals().update(kwargs)
+        locals().pop("kwargs")
+        data = {k: v for k, v in locals().items() if k != "self" and v is not None}
+        data["forward"] = MessagesForward(
+            conversation_message_ids=[message.conversation_message_id],
+            peer_id=message.peer_id,
+            is_reply=True
+        ).json()
+
+        return (await self.ctx_api.request("messages.send", data))["response"]
 
 MessageMin.update_forward_refs()
 
