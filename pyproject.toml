@@ -39,7 +39,7 @@ python = "^3.7"
 aiohttp = "^3.6.2"
 vbml = "^1.0"
 choicelib = "^0.1.1"
-vkbottle-types = "0.1.24"
+vkbottle-types = "^5.131"
 watchgod = "^0.7"
 pydantic = "^1.8.2"
 
