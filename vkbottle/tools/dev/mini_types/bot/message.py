@@ -2,7 +2,7 @@ from typing import Any, List, Optional, Union
 
 from vkbottle_types import StatePeer
 from vkbottle_types.events.bot_events import MessageNew
-from vkbottle_types.objects import ClientInfoForBots, MessagesForward, MessagesMessage, UsersUser
+from vkbottle_types.objects import MessagesClientInfo, MessagesForward, MessagesMessage, UsersUser
 
 from vkbottle.api import ABCAPI, API
 
@@ -61,6 +61,7 @@ class MessageMin(MessagesMessage):
         user_id: Optional[int] = None,
         domain: Optional[str] = None,
         chat_id: Optional[int] = None,
+        random_id: Optional[int] = 0,
         user_ids: Optional[List[int]] = None,
         lat: Optional[float] = None,
         long: Optional[float] = None,
@@ -73,11 +74,13 @@ class MessageMin(MessagesMessage):
         payload: Optional[str] = None,
         dont_parse_links: Optional[bool] = None,
         disable_mentions: Optional[bool] = None,
+        template: Optional[str] = None,
+        intent: Optional[str] = None,
         **kwargs,
     ) -> int:
         locals().update(kwargs)
-        locals().pop("kwargs")
-        data = {k: v for k, v in locals().items() if k != "self" and v is not None}
+
+        data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
         data["peer_id"] = self.peer_id
         data["forward"] = MessagesForward(
             conversation_message_ids=[self.conversation_message_id],
@@ -95,6 +98,7 @@ class MessageMin(MessagesMessage):
         user_id: Optional[int] = None,
         domain: Optional[str] = None,
         chat_id: Optional[int] = None,
+        random_id: Optional[int] = 0,
         user_ids: Optional[List[int]] = None,
         lat: Optional[float] = None,
         long: Optional[float] = None,
@@ -107,11 +111,13 @@ class MessageMin(MessagesMessage):
         payload: Optional[str] = None,
         dont_parse_links: Optional[bool] = None,
         disable_mentions: Optional[bool] = None,
+        template: Optional[str] = None,
+        intent: Optional[str] = None,
         **kwargs,
     ) -> int:
         locals().update(kwargs)
-        locals().pop("kwargs")
-        data = {k: v for k, v in locals().items() if k != "self" and v is not None}
+
+        data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
         required_params = ("peer_id", "user_id", "domain", "chat_id", "user_ids")
         if not any(data.get(param) for param in required_params):
             data["peer_id"] = self.peer_id
