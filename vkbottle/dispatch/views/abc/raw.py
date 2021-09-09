@@ -48,7 +48,7 @@ class ABCRawEventView(ABCView):
             logger.debug("Handler {} returned {}".format(handler_basement.handler, result))
 
             if result is False:
-                return
+                continue
 
             elif isinstance(result, dict):
                 context_variables.update(result)
