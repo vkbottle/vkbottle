@@ -54,7 +54,7 @@ class LogMiddleware(BaseMiddleware):
     ):
         if not handlers:
             return
-        
+
         print(f"{len(handlers)} хендлеров сработало на сообщение. "
               f"Они вернули {handle_responses}, "
               f"все они принадлежали к view {view}")

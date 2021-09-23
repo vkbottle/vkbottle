@@ -2,7 +2,7 @@
 
 Иногда при запросах к api вконтакте возникают ошибки, для их обработки во фреймворке предусмотрено несколько инструментов
 
-## try ... except VKAPIError
+## try ... except VKAPIError()
 
 Для начала разъясним что такое `VKAPIError`, это подтип `CodeException`, особенность которого заключается в том, чтобы ошибка идентифицировалась в except и без указанного кода (`try except VKAPIError`) и при указании кода (`try except VKAPIError[code]`)
 
@@ -22,7 +22,7 @@ from vkbottle import VKAPIError
 ```python
 try:
     await api.wall.post()
-except VKAPIError as e:
+except VKAPIError() as e:
     print("Возникла ошибка", e.code)
 ```
 
@@ -98,7 +98,7 @@ bot = Bot("token")
 async def type_or_value_error_handler(e: Union[TypeError, ValueError]):
     print("возникла ошибка type или value", e)
 
-    
+
 @bot.error_handler.register_error_handler(*VKAPIError[6, 9])
 async def limit_reached_write_handler(e: VKAPIError):
     print("ой, слишком много запросов", e)
@@ -131,4 +131,3 @@ def my_func():
 
 my_func() # RuntimeError("error")
 ```
-

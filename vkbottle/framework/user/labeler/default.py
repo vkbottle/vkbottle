@@ -29,6 +29,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "state": user.StateRule,
     "state_group": user.StateGroupRule,
     "regexp": user.RegexRule,
+    "regex": user.RegexRule,
     "macro": user.MacroRule,
     "text": user.VBMLRule,
 }

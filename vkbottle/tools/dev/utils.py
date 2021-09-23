@@ -4,8 +4,7 @@ import os
 import re
 import typing
 
-from vkbottle.dispatch.filter import AndFilter, OrFilter
-from vkbottle.dispatch.rules import ABCRule
+from vkbottle.dispatch.rules import ABCRule, AndFilter, OrFilter
 
 if typing.TYPE_CHECKING:
     from vkbottle.framework.abc_blueprint import ABCBlueprint

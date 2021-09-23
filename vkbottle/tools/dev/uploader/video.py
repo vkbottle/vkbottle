@@ -12,9 +12,12 @@ class VideoUploader(BaseUploader):
         return self.with_name or self.NAME
 
     async def upload(
-        self, file_source: Optional[Union[str, bytes]] = None, **params
+        self,
+        file_source: Optional[Union[str, bytes]] = None,
+        group_id: Optional[int] = None,
+        **params
     ) -> Union[str, List[dict], dict]:
-        server = await self.get_server()
+        server = await self.get_server(group_id=group_id)
         assert (
             file_source is not None or "link" in params
         ), "file_source or link to video must be set"

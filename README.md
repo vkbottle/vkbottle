@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/tesseradecade/vbml">
-    <img src="https://github.com/vkbottle/vkbottle/blob/master/docs/logo.jpg" width="200px" style="display: inline-block;">
+  <a href="https://github.com/timoniq/vkbottle">
+    <img src="https://raw.githubusercontent.com/timoniq/vkbottle/master/docs/logo.jpg" width="200px" style="display: inline-block; border-radius: 5px">
   </a>
 </p>
 <h1 align="center">
@@ -17,18 +17,24 @@
 
 ## Документация
 
-[Туториал для новичков](/docs/tutorial/index.md)\
+[Туториал для новичков](https://github.com/timoniq/vkbottle/blob/master/docs/tutorial/index.md)\
 [Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
 
 ## Установка
 
-Установить версию 3.0 можно этой командой:
+Установить новейшую версию можно командой:
 
-```shell script
-pip install -U https://github.com/vkbottle/vkbottle/archive/master.zip
+```shell
+pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
 ```
 
-Если вы ищете старые версии (`2.x`) - [вам сюда](https://github.com/vkbottle/vkbottle/tree/v2.0)
+Установить версию 3.0 с PyPI можно командой:
+
+```shell
+pip install vkbottle
+```
+
+Если вы ищете старые версии (`2.x`) - [вам сюда](https://github.com/timoniq/vkbottle/tree/v2.0)
 
 ## Hello World
 
@@ -53,5 +59,5 @@ bot.run_forever()
 
 ## Лицензия
 
-Copyright © 2019-2020 [timoniq](https://github.com/timoniq).\
-Этот проект имеет [MIT](./LICENSE) лицензию.
+Copyright © 2019-2021 [timoniq](https://github.com/timoniq).\
+Этот проект имеет [MIT](https://github.com/timoniq/vkbottle/blob/master/LICENSE) лицензию.

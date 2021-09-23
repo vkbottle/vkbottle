@@ -8,19 +8,19 @@
     ```python
     from vkbottle.bot import rules
     from typing import Tuple
-    
+
     @bot.on.message(rules.CommandRule("say", ["!", "/"], 1))
-    async def say_handler(message: Message, args: Tuple[str, ...]):
+    async def say_handler(message: Message, args: Tuple[str]):
         await message.answer(f"<<{args[0]}>>")
     ```
 
 2. Использовать автораспаковщики рулзов из коробки, список с названиями можно найти [здесь](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/framework/bot/labeler/default.py#L34), в этом случае некоторые второстепенные параметры контролировать будет нельзя
     ```python
     @bot.on.message(command=("say", 1))
-    async def say_handler(message: Message, args: Tuple[str, ...]):
+    async def say_handler(message: Message, args: Tuple[str]):
         await message.answer(f"<<{args[0]}>>")
     ```
-   
+
 Правил может быть любое количество, как первого, так и второго метода распаковки
 
 ## Создание собственных правил
@@ -72,7 +72,7 @@ class MyRule(rules.ABCMessageRule):
 class MyRule(rules.ABCMessageRule):
     def __init__(self, lt: int = 100):
         self.lt = lt
-    
+
     async def check(self, message: Message) -> bool:
         return len(message.text) < self.lt
 ```

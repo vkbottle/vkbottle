@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vkbottle"
-version = "3.0"
+version = "3.0.2"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
 authors = ["timoniq"]
 license = "MIT"
@@ -69,7 +69,7 @@ autoflake = "^1.4"
 [tool.black]
 line-length = 99
 target-version = ['py37', 'py38']
-exclude = '''
+force-exclude = '''
 (
     \.eggs
   | \.git
