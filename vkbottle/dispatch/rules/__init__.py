@@ -1,1 +1,1 @@
-from .abc import ABCFilter, ABCRule, AndFilter, OrFilter
+from .abc import ABCFilter, ABCRule, AndFilter, NotFilter, OrFilter

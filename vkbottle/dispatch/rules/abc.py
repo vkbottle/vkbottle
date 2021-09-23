@@ -20,6 +20,9 @@ class ABCRule(ABC):
     def __and__(self, other: "ABCRule") -> "ABCFilter":
         return AndFilter(self, other)
 
+    def __invert__(self) -> "ABCFilter":
+        return NotFilter(self)
+
     def __or__(self, other: "ABCRule") -> "ABCFilter":
         return OrFilter(self, other)
 
@@ -49,6 +52,22 @@ class AndFilter(ABCFilter):
                 context.update(check_response)
 
         return context
+
+    @property
+    def rules(self) -> Iterable[ABCRule]:
+        return self._rules
+
+
+class NotFilter(ABCFilter):
+    def __init__(self, *rules: ABCRule):
+        self._rules = rules
+
+    async def check(self, event: Any):
+        for rule in self.rules:
+            check_response = await rule.check(event)
+            if check_response is False:
+                return True
+        return False
 
     @property
     def rules(self) -> Iterable[ABCRule]:
