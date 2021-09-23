@@ -4,8 +4,6 @@ import os
 import re
 import typing
 
-from vkbottle.dispatch.rules import ABCRule, AndFilter, OrFilter
-
 if typing.TYPE_CHECKING:
     from vkbottle.framework.abc_blueprint import ABCBlueprint
 
@@ -17,19 +15,6 @@ def run_in_task(coroutine: typing.Coroutine) -> None:
     """Gets loop and runs add makes task from the given coroutine"""
     loop = asyncio.get_running_loop()
     loop.create_task(coroutine)
-
-
-def convert_shorten_filter(
-    shorten: typing.Union[ABCRule, typing.Tuple[ABCRule, ...], typing.Set[ABCRule]]
-) -> "ABCRule":
-    """Shortener. Converts tuple/list of rules to OrFilter and set of rules to AndFilter
-    :param shorten: list/tuple/set of rules or a single rule
-    """
-    if isinstance(shorten, set):
-        return AndFilter(*shorten)
-    elif isinstance(shorten, tuple):
-        return OrFilter(*shorten)
-    return shorten
 
 
 def load_blueprints_from_package(package_name: str) -> typing.Iterator["ABCBlueprint"]:

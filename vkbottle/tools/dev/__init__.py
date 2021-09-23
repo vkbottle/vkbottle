@@ -7,5 +7,5 @@ from .mini_types import BotTypes, UserTypes
 from .storage import ABCStorage, CtxStorage
 from .template import TemplateElement, template_gen
 from .uploader import *
-from .utils import convert_shorten_filter, load_blueprints_from_package, run_in_task
+from .utils import load_blueprints_from_package, run_in_task
 from .vkscript_converter import vkscript

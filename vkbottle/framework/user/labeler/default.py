@@ -7,7 +7,6 @@ from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule, user
 from vkbottle.dispatch.views import ABCView
 from vkbottle.dispatch.views.user import HandlerBasement, RawUserEventView, UserMessageView
-from vkbottle.tools.dev.utils import convert_shorten_filter
 
 from .abc import ABCUserLabeler, LabeledHandler, LabeledMessageHandler
 
@@ -98,7 +97,7 @@ class UserLabeler(ABCUserLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    *map(convert_shorten_filter, rules),
+                    *rules,
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
                     blocking=blocking,
@@ -116,7 +115,7 @@ class UserLabeler(ABCUserLabeler):
                 FromFuncHandler(
                     func,
                     user.PeerRule(True),
-                    *map(convert_shorten_filter, rules),
+                    *rules,
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
                     blocking=blocking,
@@ -134,7 +133,7 @@ class UserLabeler(ABCUserLabeler):
                 FromFuncHandler(
                     func,
                     user.PeerRule(False),
-                    *map(convert_shorten_filter, rules),
+                    *rules,
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
                     blocking=blocking,
@@ -163,7 +162,7 @@ class UserLabeler(ABCUserLabeler):
                     dataclass,
                     FromFuncHandler(
                         func,
-                        *map(convert_shorten_filter, rules),
+                        *rules,
                         *self.auto_rules,
                         *self.get_custom_rules(custom_rules),
                         blocking=blocking,

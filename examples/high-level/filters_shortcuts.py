@@ -15,7 +15,7 @@ bot = Bot(os.environ["token"])
 # FromUserRule handles messages sent from users.
 # If (1) or (2) is confirmed and (3) is confirmed check is
 # satisfied
-@bot.on.message((rules.StickerRule(), rules.MessageLengthRule(5)), rules.FromUserRule())
+@bot.on.message(rules.StickerRule() | rules.MessageLengthRule(5), rules.FromUserRule())
 async def greeting(message: Message):
     await message.answer("Привет!")
 

@@ -19,7 +19,6 @@ from vkbottle.tools import (
     LoopWrapper,
     TemplateElement,
     Text,
-    convert_shorten_filter,
     keyboard_gen,
     load_blueprints_from_package,
     run_in_task,
@@ -237,23 +236,17 @@ async def test_utils(mocker: MockerFixture):
         "c_rule", (ABCRule,), {"check": task_to_run, "__init__": lambda s, i: setattr(s, "x", i)}
     )
 
-    assert (
-        convert_shorten_filter((c_rule(None),)).__class__
-        == OrFilter(
-            c_rule(None),
-        ).__class__
-    )
-    assert (
-        convert_shorten_filter({c_rule(None)}).__class__
-        == AndFilter(
-            c_rule(None),
-        ).__class__
-    )
+    assert (c_rule(None) | c_rule(None)).__class__ == OrFilter(
+        c_rule(None),
+    ).__class__
+    assert (c_rule(None) & c_rule(None)).__class__ == AndFilter(
+        c_rule(None),
+    ).__class__
 
-    assert_rule(await convert_shorten_filter((c_rule(1), c_rule(2))).check(2))
-    assert_rule(await convert_shorten_filter((c_rule(1), c_rule(2))).check(4), True)
-    assert_rule(await convert_shorten_filter({c_rule(4), c_rule(4)}).check(4))
-    assert_rule(await convert_shorten_filter({c_rule(2), c_rule(4)}).check(4), True)
+    assert_rule(await (c_rule(1) | c_rule(2)).check(2))
+    assert_rule(await (c_rule(1) | c_rule(2)).check(4), True)
+    assert_rule(await (c_rule(4) & c_rule(4)).check(4))
+    assert_rule(await (c_rule(2) & c_rule(4)).check(4), True)
 
 
 def test_run_multibot(mocker: MockerFixture):

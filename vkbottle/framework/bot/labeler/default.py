@@ -1,5 +1,5 @@
 import re
-from typing import Any, Callable, Dict, List, Set, Tuple, Type, Union
+from typing import Any, Callable, Dict, List, Type, Union
 
 import vbml
 from vkbottle_types.events import GroupEventType
@@ -8,11 +8,8 @@ from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule, bot
 from vkbottle.dispatch.views import ABCView
 from vkbottle.dispatch.views.bot import BotMessageView, HandlerBasement, RawBotEventView
-from vkbottle.tools.dev.utils import convert_shorten_filter
-
 from .abc import ABCBotLabeler, EventName, LabeledHandler, LabeledMessageHandler
 
-ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "from_chat": bot.PeerRule,
     "command": bot.CommandRule,
@@ -96,13 +93,13 @@ class BotLabeler(ABCBotLabeler):
         self.rule_config["vbml_flags"] = flags
 
     def message(
-        self, *rules: ShortenRule, blocking: bool = True, **custom_rules
+        self, *rules: ABCRule, blocking: bool = True, **custom_rules
     ) -> LabeledMessageHandler:
         def decorator(func):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    *map(convert_shorten_filter, rules),
+                    *rules,
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
                     blocking=blocking,
@@ -113,14 +110,14 @@ class BotLabeler(ABCBotLabeler):
         return decorator
 
     def chat_message(
-        self, *rules: ShortenRule, blocking: bool = True, **custom_rules
+        self, *rules: ABCRule, blocking: bool = True, **custom_rules
     ) -> LabeledMessageHandler:
         def decorator(func):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
                     bot.PeerRule(True),
-                    *map(convert_shorten_filter, rules),
+                    *rules,
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
                     blocking=blocking,
@@ -131,14 +128,14 @@ class BotLabeler(ABCBotLabeler):
         return decorator
 
     def private_message(
-        self, *rules: ShortenRule, blocking: bool = True, **custom_rules
+        self, *rules: ABCRule, blocking: bool = True, **custom_rules
     ) -> LabeledMessageHandler:
         def decorator(func):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
                     bot.PeerRule(False),
-                    *map(convert_shorten_filter, rules),
+                    *rules,
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
                     blocking=blocking,
@@ -152,7 +149,7 @@ class BotLabeler(ABCBotLabeler):
         self,
         event: Union[EventName, List[EventName]],
         dataclass: Callable = dict,
-        *rules: ShortenRule,
+        *rules: ABCRule,
         blocking: bool = True,
         **custom_rules,
     ) -> LabeledHandler:
@@ -171,7 +168,7 @@ class BotLabeler(ABCBotLabeler):
                     dataclass,
                     FromFuncHandler(
                         func,
-                        *map(convert_shorten_filter, rules),
+                        *rules,
                         *self.auto_rules,
                         *self.get_custom_rules(custom_rules),
                         blocking=blocking,
