@@ -1,4 +1,5 @@
 from .action import *
-from .keyboard import Keyboard, KeyboardButtonColor
+from .color import KeyboardButtonColor
+from .keyboard import Keyboard
 
 EMPTY_KEYBOARD = Keyboard().get_json()

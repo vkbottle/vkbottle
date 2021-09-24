@@ -1,7 +1,10 @@
 import json
-from typing import List, Optional, Union
+from typing import TYPE_CHECKING, List, Optional, Union
 
 from .base import BaseUploader
+
+if TYPE_CHECKING:
+    from .base import Bytes
 
 
 class VideoUploader(BaseUploader):
@@ -13,9 +16,9 @@ class VideoUploader(BaseUploader):
 
     async def upload(
         self,
-        file_source: Optional[Union[str, bytes]] = None,
+        file_source: Optional[Union[str, "Bytes"]] = None,
         group_id: Optional[int] = None,
-        **params
+        **params,
     ) -> Union[str, List[dict], dict]:
         server = await self.get_server(group_id=group_id)
         assert (

@@ -1,12 +1,12 @@
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 try:
     import contextvars
 except ImportError:
     contextvars = None  # type: ignore
 
-
-T = TypeVar("T")
+if TYPE_CHECKING:
+    T = TypeVar("T")
 
 
 class BaseContext:

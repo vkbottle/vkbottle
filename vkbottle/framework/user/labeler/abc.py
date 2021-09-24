@@ -1,25 +1,26 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict, List, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Union
 
-from vkbottle.dispatch.rules import ABCRule
-from vkbottle.dispatch.views import ABCView
-from vkbottle.tools.dev.mini_types.user.message import MessageMin
+if TYPE_CHECKING:
+    from vkbottle.dispatch.rules import ABCRule
+    from vkbottle.dispatch.views import ABCView
+    from vkbottle.tools.dev.mini_types.user.message import MessageMin
 
-LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]
-LabeledHandler = Callable[..., Callable[[Any], Any]]
+    LabeledMessageHandler = Callable[..., Callable[["MessageMin"], Any]]
+    LabeledHandler = Callable[..., Callable[[Any], Any]]
 
 
 class ABCUserLabeler(ABC):
     @abstractmethod
-    def message(self, *rules: "ABCRule", **custom_rules) -> LabeledMessageHandler:
+    def message(self, *rules: "ABCRule", **custom_rules) -> "LabeledMessageHandler":
         pass
 
     @abstractmethod
-    def chat_message(self, *rules: "ABCRule", **custom_rules) -> LabeledMessageHandler:
+    def chat_message(self, *rules: "ABCRule", **custom_rules) -> "LabeledMessageHandler":
         pass
 
     @abstractmethod
-    def private_message(self, *rules: "ABCRule", **custom_rules) -> LabeledMessageHandler:
+    def private_message(self, *rules: "ABCRule", **custom_rules) -> "LabeledMessageHandler":
         pass
 
     @abstractmethod
@@ -29,7 +30,7 @@ class ABCUserLabeler(ABC):
         dataclass: Callable = dict,
         *rules: "ABCRule",
         **custom_rules,
-    ) -> LabeledHandler:
+    ) -> "LabeledHandler":
         pass
 
     @abstractmethod

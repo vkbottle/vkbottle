@@ -1,15 +1,16 @@
-from typing import Any, List, Optional, Union
+from typing import TYPE_CHECKING, Any, List, Optional, Union
 
 from vkbottle_types import StatePeer
 from vkbottle_types.objects import MessagesMessage, UsersUser
 
-from vkbottle.api import ABCAPI, API
+if TYPE_CHECKING:
+    from vkbottle.api import ABCAPI, API
 
 
 class MessageMin(MessagesMessage):
     user_id: Optional[int] = None
     unprepared_ctx_api: Optional[Any] = None
-    state_peer: Optional[StatePeer] = None
+    state_peer: Optional["StatePeer"] = None
 
     @property
     def ctx_api(self) -> Union["ABCAPI", "API"]:

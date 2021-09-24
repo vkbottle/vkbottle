@@ -1,10 +1,10 @@
-import typing
+from typing import TYPE_CHECKING, Any, NoReturn, Union
 
 from vkbottle.modules import json, logger
 
 from .abc import ABCResponseValidator
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
 
 
@@ -17,9 +17,9 @@ class JSONResponseValidator(ABCResponseValidator):
         self,
         method: str,
         data: dict,
-        response: typing.Any,
-        ctx_api: typing.Union["ABCAPI", "API"],
-    ) -> typing.Union[typing.Any, typing.NoReturn]:
+        response: Any,
+        ctx_api: Union["ABCAPI", "API"],
+    ) -> Union[Any, NoReturn]:
         if isinstance(response, dict):
             return response
         elif isinstance(response, str):

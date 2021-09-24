@@ -1,8 +1,10 @@
 from abc import abstractmethod
-from typing import Any, Union
+from typing import TYPE_CHECKING, Any, Union
 
-from vkbottle.api.abc import ABCAPI
-from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
+if TYPE_CHECKING:
+    from vkbottle.api.abc import ABCAPI
+    from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
+
 from vkbottle.modules import logger
 
 from .view import ABCView

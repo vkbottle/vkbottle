@@ -1,17 +1,18 @@
 from abc import ABC, abstractmethod
 from asyncio import AbstractEventLoop
-from typing import NoReturn
+from typing import TYPE_CHECKING, NoReturn
 
-from vkbottle.api import ABCAPI
-from vkbottle.polling import ABCPolling
+if TYPE_CHECKING:
+    from vkbottle.api import ABCAPI
+    from vkbottle.polling import ABCPolling
 
 
 class ABCFramework(ABC):
-    api: ABCAPI
+    api: "ABCAPI"
 
     @property
     @abstractmethod
-    def polling(self) -> ABCPolling:
+    def polling(self) -> "ABCPolling":
         pass
 
     @property

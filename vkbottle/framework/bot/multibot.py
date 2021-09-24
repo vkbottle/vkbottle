@@ -1,14 +1,19 @@
-from typing import Iterable, Type
+from typing import TYPE_CHECKING, Iterable, Type
 
-from vkbottle.api import ABCAPI
 from vkbottle.http import AiohttpClient, SingleSessionManager
 from vkbottle.modules import logger
-from vkbottle.polling import ABCPolling, BotPolling
+from vkbottle.polling import BotPolling
 
 from .bot import Bot
 
+if TYPE_CHECKING:
+    from vkbottle.api import ABCAPI
+    from vkbottle.polling import ABCPolling
 
-def run_multibot(bot: Bot, apis: Iterable[ABCAPI], polling_type: Type[ABCPolling] = BotPolling):
+
+def run_multibot(
+    bot: Bot, apis: Iterable["ABCAPI"], polling_type: Type["ABCPolling"] = BotPolling
+):
     """Add run_polling with polling constructed from derived apis
     :param bot: Bot main instance (api is not required)
     :param apis: Iterable of apis

@@ -1,24 +1,25 @@
-import typing
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Type
 
-from vkbottle.http.client import ABCHTTPClient
+if TYPE_CHECKING:
+    from vkbottle.http.client import ABCHTTPClient
 
-HttpClient = typing.Type[ABCHTTPClient]
+    HttpClient = Type["ABCHTTPClient"]
 
 
 class ABCSessionManager(ABC):
-    _http_client: HttpClient
+    _http_client: "HttpClient"
 
     @property
-    def http_client(self) -> HttpClient:
+    def http_client(self) -> "HttpClient":
         return self._http_client
 
     @http_client.setter
-    def http_client(self, http_client: HttpClient):
+    def http_client(self, http_client: "HttpClient"):
         self._http_client = http_client
 
     @abstractmethod
-    async def __aenter__(self) -> ABCHTTPClient:
+    async def __aenter__(self) -> "ABCHTTPClient":
         pass
 
     @abstractmethod

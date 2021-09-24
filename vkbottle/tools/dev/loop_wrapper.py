@@ -1,13 +1,14 @@
 import asyncio
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import Any, Callable, Coroutine, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
 
 from vkbottle.modules import logger
 
 from .auto_reload import watch_to_reload
 from .delayed_task import DelayedTask
 
-Task = Coroutine[Any, Any, Any]
+if TYPE_CHECKING:
+    Task = Coroutine[Any, Any, Any]
 
 
 class LoopWrapper:
@@ -17,11 +18,11 @@ class LoopWrapper:
     def __init__(
         self,
         *,
-        on_startup: Optional[List[Task]] = None,
-        on_shutdown: Optional[List[Task]] = None,
+        on_startup: Optional[List["Task"]] = None,
+        on_shutdown: Optional[List["Task"]] = None,
         auto_reload: Optional[bool] = None,
         auto_reload_dir: Optional[str] = None,
-        tasks: Optional[List[Task]] = None,
+        tasks: Optional[List["Task"]] = None,
     ):
         self.on_startup = on_startup or []
         self.on_shutdown = on_shutdown or []
@@ -54,7 +55,7 @@ class LoopWrapper:
             if loop.is_running():
                 loop.close()
 
-    def add_task(self, task: Union[Task, Callable[..., Task]]):
+    def add_task(self, task: Union["Task", Callable[..., "Task"]]):
         """Adds tasks to be ran in run_forever
         :param task: coroutine / coroutine function with zero arguments
         """

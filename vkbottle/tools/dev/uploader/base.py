@@ -1,9 +1,13 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import Callable, Optional, Union
+from typing import TYPE_CHECKING, Callable, Optional, Union
 
-from vkbottle.api import ABCAPI
 from vkbottle.modules import json
+
+if TYPE_CHECKING:
+    from vkbottle.api import ABCAPI
+
+    Bytes = Union[bytes, BytesIO]
 
 try:
     import aiofiles
@@ -11,14 +15,11 @@ except ImportError:
     aiofiles = None  # type: ignore
 
 
-Bytes = Union[bytes, BytesIO]
-
-
 class BaseUploader(ABC):
     def __init__(
         self,
-        api: Optional[ABCAPI] = None,
-        api_getter: Optional[Callable[[], ABCAPI]] = None,
+        api: Optional["ABCAPI"] = None,
+        api_getter: Optional[Callable[[], "ABCAPI"]] = None,
         generate_attachment_strings: bool = True,
         with_name: Optional[str] = None,
     ):
@@ -37,7 +38,7 @@ class BaseUploader(ABC):
         pass
 
     @property
-    def api(self) -> ABCAPI:
+    def api(self) -> "ABCAPI":
         return self._get_api()  # type: ignore
 
     async def upload_files(self, upload_url: str, files: dict) -> dict:
@@ -46,7 +47,7 @@ class BaseUploader(ABC):
             response = json.loads(raw_response)
         return response
 
-    def get_bytes_io(self, data: Bytes, name: str = None) -> BytesIO:
+    def get_bytes_io(self, data: "Bytes", name: str = None) -> BytesIO:
         bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)
         bytes_io.seek(0)  # To avoid errors with image generators (such as pillow)
         bytes_io.name = (
@@ -64,7 +65,7 @@ class BaseUploader(ABC):
         return f"{attachment_type}{owner_id}_{item_id}"
 
     @staticmethod
-    async def read(file_source: Union[str, Bytes]) -> Bytes:
+    async def read(file_source: Union[str, "Bytes"]) -> "Bytes":
         if isinstance(file_source, str):
             assert aiofiles is not None, "to use default files opener aiofiles should be installed"
             async with aiofiles.open(file_source, "rb") as file:

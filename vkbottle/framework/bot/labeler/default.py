@@ -1,16 +1,23 @@
 import re
-from typing import Any, Callable, Dict, List, Type, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Type, Union
 
 import vbml
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.handlers import FromFuncHandler
-from vkbottle.dispatch.rules import ABCRule, bot
-from vkbottle.dispatch.views import ABCView
+from vkbottle.dispatch.rules import bot
 from vkbottle.dispatch.views.bot import BotMessageView, HandlerBasement, RawBotEventView
-from .abc import ABCBotLabeler, EventName, LabeledHandler, LabeledMessageHandler
 
-DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
+from .abc import ABCBotLabeler
+
+if TYPE_CHECKING:
+    from vkbottle.dispatch.rules import ABCRule
+    from vkbottle.dispatch.views import ABCView
+
+    from .abc import EventName, LabeledHandler, LabeledMessageHandler
+
+
+DEFAULT_CUSTOM_RULES: Dict[str, Type["ABCRule"]] = {
     "from_chat": bot.PeerRule,
     "command": bot.CommandRule,
     "from_user": bot.FromUserRule,
@@ -93,8 +100,8 @@ class BotLabeler(ABCBotLabeler):
         self.rule_config["vbml_flags"] = flags
 
     def message(
-        self, *rules: ABCRule, blocking: bool = True, **custom_rules
-    ) -> LabeledMessageHandler:
+        self, *rules: "ABCRule", blocking: bool = True, **custom_rules
+    ) -> "LabeledMessageHandler":
         def decorator(func):
             self.message_view.handlers.append(
                 FromFuncHandler(
@@ -110,8 +117,8 @@ class BotLabeler(ABCBotLabeler):
         return decorator
 
     def chat_message(
-        self, *rules: ABCRule, blocking: bool = True, **custom_rules
-    ) -> LabeledMessageHandler:
+        self, *rules: "ABCRule", blocking: bool = True, **custom_rules
+    ) -> "LabeledMessageHandler":
         def decorator(func):
             self.message_view.handlers.append(
                 FromFuncHandler(
@@ -128,8 +135,8 @@ class BotLabeler(ABCBotLabeler):
         return decorator
 
     def private_message(
-        self, *rules: ABCRule, blocking: bool = True, **custom_rules
-    ) -> LabeledMessageHandler:
+        self, *rules: "ABCRule", blocking: bool = True, **custom_rules
+    ) -> "LabeledMessageHandler":
         def decorator(func):
             self.message_view.handlers.append(
                 FromFuncHandler(
@@ -147,12 +154,12 @@ class BotLabeler(ABCBotLabeler):
 
     def raw_event(
         self,
-        event: Union[EventName, List[EventName]],
+        event: Union["EventName", List["EventName"]],
         dataclass: Callable = dict,
-        *rules: ABCRule,
+        *rules: "ABCRule",
         blocking: bool = True,
         **custom_rules,
-    ) -> LabeledHandler:
+    ) -> "LabeledHandler":
 
         if not isinstance(event, list):
             event = [event]

@@ -1,9 +1,12 @@
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from vkbottle.modules import json
 
-from .action import ABCAction
-from .button import KeyboardButton, KeyboardButtonColor
+from .button import KeyboardButton
+
+if TYPE_CHECKING:
+    from .action import ABCAction
+    from .button import KeyboardButtonColor
 
 
 class Keyboard:
@@ -18,7 +21,9 @@ class Keyboard:
         self.buttons.append([])
         return self
 
-    def add(self, action: ABCAction, color: Optional[KeyboardButtonColor] = None) -> "Keyboard":
+    def add(
+        self, action: "ABCAction", color: Optional["KeyboardButtonColor"] = None
+    ) -> "Keyboard":
         if not len(self.buttons):
             self.row()
         button = KeyboardButton.from_typed(action, color)
