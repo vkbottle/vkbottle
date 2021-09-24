@@ -1,6 +1,6 @@
 from vkbottle import vkscript
 
-BASIC_CYCLE = "var a=%A%;var some_list=[];while(a<100){API.users.get({user_id:a});a = a + 1;};return some_list;"
+BASIC_CYCLE = "var a=%A%;var some_list=[];while(a<100){API.users.get({user_id:a});a = a + 1;some_list.push(a);};return some_list;"
 
 
 @vkscript
@@ -9,6 +9,7 @@ def basic_cycle(api, a: int = 10):
     while a < 100:
         api.users.get(user_id=a)
         a += 1
+        some_list.append(a)
     return some_list
 
 

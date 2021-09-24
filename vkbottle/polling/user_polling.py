@@ -1,10 +1,13 @@
-from typing import AsyncIterator, Optional
+from typing import TYPE_CHECKING, AsyncIterator, Optional
 
-from vkbottle.api import ABCAPI
-from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
+from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
 
 from .abc import ABCPolling
+
+if TYPE_CHECKING:
+    from vkbottle.api import ABCAPI
+    from vkbottle.exception_factory import ABCErrorHandler
 
 
 class UserPolling(ABCPolling):
@@ -14,11 +17,11 @@ class UserPolling(ABCPolling):
 
     def __init__(
         self,
-        api: Optional[ABCAPI] = None,
+        api: Optional["ABCAPI"] = None,
         user_id: Optional[int] = None,
         wait: Optional[int] = None,
         rps_delay: Optional[int] = None,
-        error_handler: Optional[ABCErrorHandler] = None,
+        error_handler: Optional["ABCErrorHandler"] = None,
     ):
         self._api = api
         self.error_handler = error_handler or ErrorHandler()

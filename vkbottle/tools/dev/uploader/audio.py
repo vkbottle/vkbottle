@@ -1,6 +1,9 @@
-from typing import Union
+from typing import TYPE_CHECKING, Union
 
-from .base import BaseUploader, Bytes
+from .base import BaseUploader
+
+if TYPE_CHECKING:
+    from .base import Bytes
 
 
 class AudioUploader(BaseUploader):
@@ -10,7 +13,7 @@ class AudioUploader(BaseUploader):
         return (await self.api.request("audio.getUploadServer", {}))["response"]
 
     async def upload(
-        self, artist: str, title: str, file_source: Union[str, Bytes], **params
+        self, artist: str, title: str, file_source: Union[str, "Bytes"], **params
     ) -> Union[str, dict]:
         server = await self.get_server()
         data = await self.read(file_source)

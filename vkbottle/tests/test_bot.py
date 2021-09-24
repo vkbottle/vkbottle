@@ -1,11 +1,20 @@
 import enum
 import json
-import typing
+from typing import Any, Callable
 
 import pytest
 import vbml
 
-from vkbottle import API, AndFilter, Bot, GroupEventType, GroupTypes, OrFilter, StatePeer
+from vkbottle import (
+    API,
+    AndFilter,
+    Bot,
+    GroupEventType,
+    GroupTypes,
+    NotFilter,
+    OrFilter,
+    StatePeer,
+)
 from vkbottle.bot import BotLabeler, Message, rules
 from vkbottle.tools.dev.mini_types.bot import message_min
 from vkbottle.tools.test_utils import MockedClient, with_mocked_api
@@ -58,7 +67,7 @@ class MockIntEnum(enum.IntEnum):
     MOCK = 1
 
 
-def set_http_callback(api: API, callback: typing.Callable[[dict], typing.Any]):
+def set_http_callback(api: API, callback: Callable[[dict], Any]):
     api.http._session = MockedClient(callback=callback)
 
 
@@ -110,7 +119,7 @@ async def test_bot_scopes():
     assert bot.labeler.raw_event_view is bot.router.views["raw"]
 
 
-def fake_message(ctx_api: API, **data: typing.Any) -> Message:
+def fake_message(ctx_api: API, **data: Any) -> Message:
     return message_min(
         {
             "object": {
@@ -161,15 +170,17 @@ async def test_rules(api: API):
         )
         is not False
     )
+    assert (
+        await NotFilter(rules.FromPeerRule(123)).check(fake_message(api, peer_id=1)) is not False
+    )
     assert await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi bro")) == {
         "match": ()
     }
     assert await rules.RegexRule("Hi (.*?)$").check(fake_message(api, text="Hi bro")) == {
         "match": ("bro",)
     }
-    assert not await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) == {
-        "match": ()
-    }
+    assert await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) != {"match": ()}
+
     assert rules.PayloadMapRule.transform_to_map({"a": int, "b": {"c": str, "d": dict}}) == [
         ("a", int),
         ("b", [("c", str), ("d", dict)]),

@@ -1,7 +1,7 @@
-import typing
 from abc import ABC, abstractmethod
+from typing import Any, NewType, Optional
 
-HTTPMiddlewareResponse = typing.NewType("HTTPMiddlewareResponse", bool)
+HTTPMiddlewareResponse = NewType("HTTPMiddlewareResponse", bool)
 
 
 class ABCHTTPMiddleware(ABC):
@@ -11,10 +11,10 @@ class ABCHTTPMiddleware(ABC):
 
     @abstractmethod
     async def pre(
-        self, method: str, url: str, data: typing.Optional[dict] = None, **kwargs
-    ) -> typing.Optional[HTTPMiddlewareResponse]:
+        self, method: str, url: str, data: Optional[dict] = None, **kwargs
+    ) -> Optional[HTTPMiddlewareResponse]:
         pass
 
     @abstractmethod
-    async def post(self, response: typing.Any):
+    async def post(self, response: Any):
         pass

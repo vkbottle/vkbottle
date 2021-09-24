@@ -1,7 +1,10 @@
 from functools import wraps
-from typing import Any, Callable, Optional, Type
+from typing import TYPE_CHECKING, Any, Callable, Optional, Type
 
-from .abc import ABCErrorHandler, AsyncFunc
+from .abc import ABCErrorHandler
+
+if TYPE_CHECKING:
+    from .abc import AsyncFunc
 
 
 class ErrorHandler(ABCErrorHandler):
@@ -12,19 +15,19 @@ class ErrorHandler(ABCErrorHandler):
 
     def register_error_handler(
         self, *error_types: Type[BaseException]
-    ) -> Callable[[AsyncFunc], AsyncFunc]:
-        def decorator(handler: AsyncFunc) -> AsyncFunc:
+    ) -> Callable[["AsyncFunc"], "AsyncFunc"]:
+        def decorator(handler: "AsyncFunc") -> "AsyncFunc":
             for error_type in error_types:
                 self.error_handlers[error_type] = handler
             return handler
 
         return decorator
 
-    def register_undefined_error_handler(self, handler: AsyncFunc) -> AsyncFunc:
+    def register_undefined_error_handler(self, handler: "AsyncFunc") -> "AsyncFunc":
         self.undefined_error_handler = handler
         return handler
 
-    def lookup_handler(self, for_type: Type[BaseException]) -> Optional[AsyncFunc]:
+    def lookup_handler(self, for_type: Type[BaseException]) -> Optional["AsyncFunc"]:
         for error_type in self.error_handlers:
             if issubclass(for_type, error_type):
                 return self.error_handlers[error_type]
@@ -39,7 +42,7 @@ class ErrorHandler(ABCErrorHandler):
             await handler(error, *args, **kwargs)
         return await handler(error)
 
-    def catch(self, func: AsyncFunc) -> AsyncFunc:
+    def catch(self, func: "AsyncFunc") -> "AsyncFunc":
         @wraps(func)
         async def wrapper(*args, **kwargs) -> Any:
             try:

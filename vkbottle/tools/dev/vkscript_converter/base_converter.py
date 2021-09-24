@@ -1,8 +1,8 @@
 # type: ignore
 
 import ast
-import typing
 from inspect import getsource
+from typing import Callable, Dict, Type, Union
 
 
 class ConverterError(Exception):
@@ -13,9 +13,9 @@ class Converter:
     """Translate Python into the VKScript with AST"""
 
     def __init__(self):
-        self.definitions: typing.Dict[ast.AST, ast] = {}
+        self.definitions: Dict[ast.AST, ast] = {}
 
-    def __call__(self, for_definition: typing.Union[typing.Type[ast.AST], ast.AST]):
+    def __call__(self, for_definition: Union[Type[ast.AST], ast.AST]):
         def decorator(func):
             self.definitions[for_definition] = func
             return func
@@ -29,7 +29,7 @@ class Converter:
             )
         return self.definitions[d.__class__](d)
 
-    def scriptify(self, func: typing.Callable, **values) -> str:
+    def scriptify(self, func: Callable, **values) -> str:
         """Translate function to VKScript"""
         source = getsource(func)
         code = ast.parse(source).body[0]

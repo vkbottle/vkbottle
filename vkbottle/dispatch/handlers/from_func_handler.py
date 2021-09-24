@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Any, Callable, Union
 
-from vkbottle.dispatch.rules import ABCRule
-
 from .abc import ABCHandler
 
 if TYPE_CHECKING:
     from vkbottle_types.events import Event
+
+    from vkbottle.dispatch.rules import ABCRule
 
 
 class FromFuncHandler(ABCHandler):

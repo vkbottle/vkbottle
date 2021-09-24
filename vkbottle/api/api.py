@@ -1,18 +1,36 @@
-import typing
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    AsyncIterator,
+    Iterable,
+    List,
+    NamedTuple,
+    NoReturn,
+    Optional,
+    Union,
+)
 
 import vkbottle_types
 from vkbottle_types.categories import APICategories
 
-from vkbottle.http import ABCSessionManager, AiohttpClient, SingleSessionManager
+from vkbottle.http import AiohttpClient, SingleSessionManager
 from vkbottle.modules import logger
 
 from .abc import ABCAPI
-from .request_rescheduler import ABCRequestRescheduler, BlockingRequestRescheduler
-from .request_validator import DEFAULT_REQUEST_VALIDATORS, ABCRequestValidator
-from .response_validator import DEFAULT_RESPONSE_VALIDATORS, ABCResponseValidator
-from .token_generator import Token, get_token_generator
+from .request_rescheduler import BlockingRequestRescheduler
+from .request_validator import DEFAULT_REQUEST_VALIDATORS
+from .response_validator import DEFAULT_RESPONSE_VALIDATORS
+from .token_generator import get_token_generator
 
-APIRequest = typing.NamedTuple("APIRequest", [("method", str), ("data", dict)])
+if TYPE_CHECKING:
+    from vkbottle.http import ABCSessionManager
+
+    from .request_rescheduler import ABCRequestRescheduler
+    from .request_validator import ABCRequestValidator
+    from .response_validator import ABCResponseValidator
+    from .token_generator import Token
+
+APIRequest = NamedTuple("APIRequest", [("method", str), ("data", dict)])
 
 
 class API(ABCAPI, APICategories):
@@ -26,17 +44,17 @@ class API(ABCAPI, APICategories):
 
     def __init__(
         self,
-        token: Token,
+        token: "Token",
         ignore_errors: bool = False,
-        session_manager: typing.Optional[SingleSessionManager] = None,
-        request_rescheduler: typing.Optional[ABCRequestRescheduler] = None,
+        session_manager: Optional[SingleSessionManager] = None,
+        request_rescheduler: Optional["ABCRequestRescheduler"] = None,
     ):
         self.token_generator = get_token_generator(token)
         self.ignore_errors = ignore_errors
-        self.http: ABCSessionManager = session_manager or SingleSessionManager(AiohttpClient)
+        self.http: "ABCSessionManager" = session_manager or SingleSessionManager(AiohttpClient)
         self.request_rescheduler = request_rescheduler or BlockingRequestRescheduler()
-        self.response_validators: typing.List[ABCResponseValidator] = DEFAULT_RESPONSE_VALIDATORS
-        self.request_validators: typing.List[ABCRequestValidator] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
+        self.response_validators: List["ABCResponseValidator"] = DEFAULT_RESPONSE_VALIDATORS
+        self.request_validators: List["ABCRequestValidator"] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
 
     async def request(self, method: str, data: dict) -> dict:
         """Makes a single request opening a session"""
@@ -54,8 +72,8 @@ class API(ABCAPI, APICategories):
             return await self.validate_response(method, data, response)
 
     async def request_many(
-        self, requests: typing.Iterable[APIRequest]  # type: ignore
-    ) -> typing.AsyncIterator[dict]:
+        self, requests: Iterable[APIRequest]  # type: ignore
+    ) -> AsyncIterator[dict]:
         """Makes many requests opening one session"""
         async with self.http as session:
             for request in requests:
@@ -71,8 +89,8 @@ class API(ABCAPI, APICategories):
                 yield await self.validate_response(method, data, response)
 
     async def validate_response(
-        self, method: str, data: dict, response: typing.Union[dict, str]
-    ) -> typing.Union[typing.Any, typing.NoReturn]:
+        self, method: str, data: dict, response: Union[dict, str]
+    ) -> Union[Any, NoReturn]:
         """Validates response from VK,
         to change validations change API.response_validators (list of ResponseValidator's)"""
         for validator in self.response_validators:

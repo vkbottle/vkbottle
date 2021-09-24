@@ -2,22 +2,22 @@ import asyncio
 import importlib
 import os
 import re
-import typing
+from typing import TYPE_CHECKING, Coroutine, Iterator
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from vkbottle.framework.abc_blueprint import ABCBlueprint
 
 
 # This feature is not used in production
 # but can be useful for customization
 # purposes
-def run_in_task(coroutine: typing.Coroutine) -> None:
+def run_in_task(coroutine: Coroutine) -> None:
     """Gets loop and runs add makes task from the given coroutine"""
     loop = asyncio.get_running_loop()
     loop.create_task(coroutine)
 
 
-def load_blueprints_from_package(package_name: str) -> typing.Iterator["ABCBlueprint"]:
+def load_blueprints_from_package(package_name: str) -> Iterator["ABCBlueprint"]:
     """Gets blueprints from package
     >>> for bp in load_blueprints_from_package("blueprints"):
     >>>     bp.load(...)

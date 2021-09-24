@@ -1,7 +1,10 @@
 from abc import ABC
-from typing import Union
+from typing import TYPE_CHECKING, Union
 
-from .base import BaseUploader, Bytes
+from .base import BaseUploader
+
+if TYPE_CHECKING:
+    from .base import Bytes
 
 
 class DocUploader(BaseUploader, ABC):
@@ -11,7 +14,7 @@ class DocUploader(BaseUploader, ABC):
         return (await self.api.request("docs.getUploadServer", kwargs))["response"]
 
     async def upload(
-        self, title: str, file_source: Union[str, Bytes], **params
+        self, title: str, file_source: Union[str, "Bytes"], **params
     ) -> Union[str, dict]:
         server = await self.get_server(**params)
         data = await self.read(file_source)

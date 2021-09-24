@@ -17,15 +17,16 @@
 Пример с `response_validators` из `API`:
 
 ```python
+from typing import Any, NoReturn, Union
 from vkbottle import API, ABCResponseValidator
-import typing
 
 
 class SomeResponseValidator(ABCResponseValidator):
-    async def validate(self, response: dict) -> typing.Union[typing.Any, typing.NoReturn]:
+    async def validate(self, response: dict) -> Union[Any, NoReturn]:
         # some stuff with response
         return response
 
 api = API("token")
 api.response_validators.append(SomeResponseValidator())
+
 ```

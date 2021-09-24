@@ -3,7 +3,7 @@
 import ast
 import random
 import string
-import typing
+from typing import Callable
 
 from .base_converter import Converter, ConverterError
 
@@ -28,13 +28,7 @@ def random_string(length: int) -> str:
 @converter(ast.Assign)
 def assign(d: ast.Assign):
     left = d.targets
-    left_ = []
-    for target in left:
-        if target.__class__ == ast.Name:
-            left_.append(find(target))
-        elif target.__class__ == ast.Subscript:
-            pass
-
+    left_ = [find(target) for target in left if target.__class__ == ast.Name]
     right = find(d.value)
     return "var " + ",".join(f"{target}={right}" for target in left_) + ";"
 
@@ -313,7 +307,7 @@ def name_constant_type(d: ast.NameConstant):
     return consts[d.value]
 
 
-def vkscript(func: typing.Callable) -> typing.Callable[[], str]:
+def vkscript(func: Callable) -> Callable[[], str]:
     def decorator(**context):
         return converter.scriptify(func, **context)
 

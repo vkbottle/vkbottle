@@ -1,9 +1,9 @@
-import typing
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Any
 
-from vkbottle.http import ABCSessionManager
+if TYPE_CHECKING:
+    from vkbottle.http import ABCSessionManager
 
-if typing.TYPE_CHECKING:
     from .request_rescheduler import ABCRequestRescheduler
 
 
@@ -21,9 +21,9 @@ class ABCAPI(ABC):
         """Makes a single request opening a session"""
 
     @abstractmethod
-    async def validate_response(self, method: str, data: dict, response: typing.Any) -> typing.Any:
+    async def validate_response(self, method: str, data: dict, response: Any) -> Any:
         pass
 
     @abstractmethod
-    async def validate_request(self, request: typing.Any) -> typing.Any:
+    async def validate_request(self, request: Any) -> Any:
         pass

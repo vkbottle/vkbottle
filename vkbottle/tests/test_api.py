@@ -1,4 +1,4 @@
-import typing
+from typing import Any
 
 import pytest
 
@@ -13,7 +13,7 @@ ctx_storage = CtxStorage()
 
 
 class MockedRescheduler(ABCRequestRescheduler):
-    def __init__(self, recent_response: typing.Any, final_response: dict):
+    def __init__(self, recent_response: Any, final_response: dict):
         self.recent_response = recent_response
         self.final_response = final_response
 

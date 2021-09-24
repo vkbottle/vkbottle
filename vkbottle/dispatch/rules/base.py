@@ -1,9 +1,10 @@
 import inspect
 import re
 import types
-import typing
 from abc import abstractmethod
 from typing import (
+    TYPE_CHECKING,
+    Any,
     Awaitable,
     Callable,
     Coroutine,
@@ -11,6 +12,7 @@ from typing import (
     Generic,
     List,
     Optional,
+    Pattern,
     Tuple,
     Type,
     TypeVar,
@@ -18,7 +20,6 @@ from typing import (
 )
 
 import vbml
-from vkbottle_types import BaseStateGroup
 
 from vkbottle.tools.validator import (
     ABCValidator,
@@ -27,14 +28,17 @@ from vkbottle.tools.validator import (
     IsInstanceValidator,
 )
 
+if TYPE_CHECKING:
+    from vkbottle_types import BaseStateGroup
+
 from .abc import ABCRule
 
 DEFAULT_PREFIXES = ["!", "/"]
-PayloadMap = List[Tuple[str, Union[type, Callable[[typing.Any], bool], ABCValidator, typing.Any]]]
+PayloadMap = List[Tuple[str, Union[type, Callable[[Any], bool], ABCValidator, Any]]]
 PayloadMapStrict = List[Tuple[str, ABCValidator]]
 PayloadMapDict = Dict[str, Union[dict, type]]
 
-Message = TypeVar("Message", bound="typing.Any")
+Message = TypeVar("Message", bound="Any")
 
 
 class ABCMessageRule(ABCRule, Generic[Message]):
@@ -111,8 +115,8 @@ class VBMLRule(ABCMessageRule[Message], Generic[Message]):
 
 
 class RegexRule(ABCMessageRule[Message], Generic[Message]):
-    def __init__(self, regexp: Union[str, List[str], typing.Pattern, List[typing.Pattern]]):
-        if isinstance(regexp, typing.Pattern):
+    def __init__(self, regexp: Union[str, List[str], Pattern, List[Pattern]]):
+        if isinstance(regexp, Pattern):
             regexp = [regexp]
         elif isinstance(regexp, str):
             regexp = [re.compile(regexp)]
@@ -344,7 +348,7 @@ class CoroutineRule(ABCMessageRule[Message], Generic[Message]):
 
 
 class StateRule(ABCMessageRule[Message], Generic[Message]):
-    def __init__(self, state: Union[List[BaseStateGroup], BaseStateGroup]):
+    def __init__(self, state: Union[List["BaseStateGroup"], "BaseStateGroup"]):
         if not isinstance(state, list):
             state = [] if state is None else [state]
         self.state = state
@@ -356,7 +360,7 @@ class StateRule(ABCMessageRule[Message], Generic[Message]):
 
 
 class StateGroupRule(ABCMessageRule[Message], Generic[Message]):
-    def __init__(self, state_group: Union[List[Type[BaseStateGroup]], Type[BaseStateGroup]]):
+    def __init__(self, state_group: Union[List[Type["BaseStateGroup"]], Type["BaseStateGroup"]]):
         if not isinstance(state_group, list):
             state_group = [] if state_group is None else [state_group]
         self.state_group = state_group

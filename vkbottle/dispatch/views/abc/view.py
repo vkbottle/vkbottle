@@ -2,14 +2,15 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, List, Optional, Set, Type
 
 from vkbottle.api.abc import ABCAPI
-from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
-from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware
-from vkbottle.dispatch.return_manager import BaseReturnManager
 from vkbottle.modules import logger
 
 if TYPE_CHECKING:
     from vkbottle_types.events import Event
+
+    from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
+    from vkbottle.dispatch.handlers import ABCHandler
+    from vkbottle.dispatch.return_manager import BaseReturnManager
 
 DEFAULT_STATE_KEY = "peer_id"
 
@@ -17,7 +18,7 @@ DEFAULT_STATE_KEY = "peer_id"
 class ABCView(ABC):
     handlers: List["ABCHandler"]
     middlewares: Set[Type["BaseMiddleware"]]
-    handler_return_manager: BaseReturnManager
+    handler_return_manager: "BaseReturnManager"
 
     @abstractmethod
     def __init__(self):

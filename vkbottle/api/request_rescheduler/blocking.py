@@ -1,11 +1,11 @@
-import typing
 from time import sleep as blocking_sleep
+from typing import TYPE_CHECKING, Any, Union
 
 from vkbottle.modules import logger
 
 from .abc import ABCRequestRescheduler
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
 
 
@@ -18,10 +18,10 @@ class BlockingRequestRescheduler(ABCRequestRescheduler):
 
     async def reschedule(
         self,
-        ctx_api: typing.Union["ABCAPI", "API"],
+        ctx_api: Union["ABCAPI", "API"],
         method: str,
         data: dict,
-        recent_response: typing.Any,
+        recent_response: Any,
     ) -> dict:
         logger.debug(
             "Usage of blocking rescheduler is assumed when VK doesn't respond to "

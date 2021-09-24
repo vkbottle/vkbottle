@@ -1,12 +1,14 @@
-from typing import Dict
+from typing import TYPE_CHECKING, Dict
 
-from vkbottle.api.abc import ABCAPI
-from vkbottle.dispatch.dispenser import ABCStateDispenser
-from vkbottle.dispatch.views import ABCView
-from vkbottle.exception_factory import ABCErrorHandler
 from vkbottle.modules import logger
 
 from .abc import ABCRouter
+
+if TYPE_CHECKING:
+    from vkbottle.api.abc import ABCAPI
+    from vkbottle.dispatch.dispenser import ABCStateDispenser
+    from vkbottle.dispatch.views import ABCView
+    from vkbottle.exception_factory import ABCErrorHandler
 
 
 class Router(ABCRouter):
@@ -24,8 +26,8 @@ class Router(ABCRouter):
     def construct(
         self,
         views: Dict[str, "ABCView"],
-        state_dispenser: ABCStateDispenser,
-        error_handler: ABCErrorHandler,
+        state_dispenser: "ABCStateDispenser",
+        error_handler: "ABCErrorHandler",
     ) -> "Router":
         self.views = views
         self.state_dispenser = state_dispenser

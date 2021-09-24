@@ -1,15 +1,19 @@
-from typing import Dict, List, NamedTuple, Type, Union
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Type, Union
 
-from vkbottle_types.events import BaseGroupEvent, GroupEventType
+from vkbottle_types.events import GroupEventType
 
-from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
 from vkbottle.dispatch.views.abc import ABCRawEventView
 
+if TYPE_CHECKING:
+    from vkbottle_types.events import BaseGroupEvent
+
+    from vkbottle.dispatch.handlers import ABCHandler
+
 
 class HandlerBasement(NamedTuple):
-    dataclass: Union[dict, Type[BaseGroupEvent]]
-    handler: ABCHandler
+    dataclass: Union[dict, Type["BaseGroupEvent"]]
+    handler: "ABCHandler"
 
 
 class RawBotEventView(ABCRawEventView):

@@ -1,7 +1,10 @@
 from abc import ABC
-from typing import List, Union
+from typing import TYPE_CHECKING, List, Union
 
-from .base import BaseUploader, Bytes
+from .base import BaseUploader
+
+if TYPE_CHECKING:
+    from .base import Bytes
 
 
 class PhotoUploader(BaseUploader, ABC):
@@ -14,13 +17,13 @@ class PhotoUploader(BaseUploader, ABC):
 
 class PhotoToAlbumUploader(PhotoUploader):
     async def upload(
-        self, album_id: int, paths_like: Union[List[Union[str, Bytes]], str, Bytes], **params
+        self, album_id: int, paths_like: Union[List[Union[str, "Bytes"]], str, "Bytes"], **params
     ) -> Union[str, List[Union[str, dict]]]:
         if not isinstance(paths_like, list):
             paths_like = [paths_like]
 
         server = await self.get_server(album_id=album_id, **params)
-        files = dict()
+        files = {}
 
         for i, file_source in enumerate(paths_like):
             data = await self.read(file_source)
@@ -43,7 +46,7 @@ class PhotoToAlbumUploader(PhotoUploader):
 
 
 class PhotoWallUploader(PhotoUploader):
-    async def upload(self, file_source: Union[str, Bytes], **params) -> Union[str, List[dict]]:
+    async def upload(self, file_source: Union[str, "Bytes"], **params) -> Union[str, List[dict]]:
         server = await self.get_server(**params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
@@ -62,7 +65,7 @@ class PhotoWallUploader(PhotoUploader):
 
 
 class PhotoFaviconUploader(PhotoUploader):
-    async def upload(self, file_source: Union[str, Bytes], **params) -> Union[str, dict]:
+    async def upload(self, file_source: Union[str, "Bytes"], **params) -> Union[str, dict]:
         server = await self.get_server(owner_id=await self.get_owner_id(params))
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
@@ -81,7 +84,7 @@ class PhotoFaviconUploader(PhotoUploader):
 
 
 class PhotoMessageUploader(PhotoUploader):
-    async def upload(self, file_source: Union[str, Bytes], **params) -> Union[str, List[dict]]:
+    async def upload(self, file_source: Union[str, "Bytes"], **params) -> Union[str, List[dict]]:
         server = await self.get_server(**params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
@@ -100,7 +103,7 @@ class PhotoMessageUploader(PhotoUploader):
 
 
 class PhotoChatFaviconUploader(PhotoUploader):
-    async def upload(self, chat_id: int, file_source: Union[str, Bytes], **params) -> str:
+    async def upload(self, chat_id: int, file_source: Union[str, "Bytes"], **params) -> str:
         server = await self.get_server(chat_id=chat_id, **params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
@@ -113,16 +116,15 @@ class PhotoChatFaviconUploader(PhotoUploader):
 
 
 class PhotoMarketUploader(PhotoUploader):
-    async def upload(self, file_source: Union[str, Bytes], **params) -> dict:
+    async def upload(self, file_source: Union[str, "Bytes"], **params) -> dict:
         server = await self.get_server(**params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"file": file})
-        photo = (await self.api.request("photos.saveMarketPhoto", {**uploader, **params}))[
+        return (await self.api.request("photos.saveMarketPhoto", {**uploader, **params}))[
             "response"
         ]
-        return photo
 
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("photos.getMarketUploadServer", kwargs))["response"]

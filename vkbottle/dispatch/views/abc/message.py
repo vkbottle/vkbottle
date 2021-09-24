@@ -1,19 +1,21 @@
 from abc import ABC, abstractmethod
-from typing import Callable, List
+from typing import TYPE_CHECKING, Callable, List
 
-from vkbottle.api.abc import ABCAPI
-from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.modules import logger
-from vkbottle.tools.dev.mini_types.user import MessageMin
 
 from .dispense import ABCDispenseView
+
+if TYPE_CHECKING:
+    from vkbottle.api.abc import ABCAPI
+    from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
+    from vkbottle.tools.dev.mini_types.user import MessageMin
 
 DEFAULT_STATE_KEY = "peer_id"
 
 
 class ABCMessageView(ABCDispenseView, ABC):
     state_source_key: str
-    default_text_approximators: List[Callable[[MessageMin], str]]
+    default_text_approximators: List[Callable[["MessageMin"], str]]
 
     def __init__(self):
         super().__init__()

@@ -1,14 +1,14 @@
-import typing
+from typing import TYPE_CHECKING, Any, Dict, NoReturn, Type, Union
 
 from vkbottle.exception_factory import CaptchaError, VKAPIError
 
 from .abc import ABCResponseValidator
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
 
 
-SPECIFIC_ERRORS: typing.Dict[int, typing.Type[VKAPIError]] = {14: CaptchaError}
+SPECIFIC_ERRORS: Dict[int, Type[VKAPIError]] = {14: CaptchaError}
 
 
 class VKAPIErrorResponseValidator(ABCResponseValidator):
@@ -20,9 +20,9 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         self,
         method: str,
         data: dict,
-        response: typing.Any,
-        ctx_api: typing.Union["ABCAPI", "API"],
-    ) -> typing.Union[typing.Any, typing.NoReturn]:
+        response: Any,
+        ctx_api: Union["ABCAPI", "API"],
+    ) -> Union[Any, NoReturn]:
         if "error" not in response:
             return response
 
