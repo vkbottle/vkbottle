@@ -53,7 +53,7 @@ class MessageMin(MessagesMessage):
         intent: Optional[str] = None,
         subscribe_id: Optional[int] = None,
         **kwargs,
-    ) -> int:
+    ) -> Optional[int]:
         locals().update(kwargs)
 
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
@@ -76,7 +76,7 @@ class MessageMin(MessagesMessage):
         message: Optional[str] = None,
         attachment: Optional[str] = None,
         **kwargs,
-    ) -> int:
+    ) -> Optional[int]:
         locals().update(kwargs)
 
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
@@ -95,7 +95,7 @@ class MessageMin(MessagesMessage):
         attachment: Optional[str] = None,
         forward_message_ids: Optional[List[int]] = None,
         **kwargs,
-    ) -> int:
+    ) -> Optional[int]:
         locals().update(kwargs)
 
         data = {
