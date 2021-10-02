@@ -1,3 +1,4 @@
+from io import StringIO
 from typing import TYPE_CHECKING, Any, List, Optional, Union
 
 from vkbottle_types import StatePeer
@@ -53,9 +54,19 @@ class MessageMin(MessagesMessage):
         locals().update(kwargs)
 
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
-        data["peer_id"] = self.peer_id
+        required_params = ("peer_id", "user_id", "domain", "chat_id", "user_ids")
+        if not any(data.get(param) for param in required_params):
+            data["peer_id"] = self.peer_id
 
-        return (await self.ctx_api.request("messages.send", data))["response"]
+        stream = StringIO(message)
+        response = None
+        while True:
+            data["message"] = stream.read(4096)
+            if not (data["message"] or data.get("attachment")):
+                break
+            response = (await self.ctx_api.request("messages.send", data))["response"]
+            data.pop("attachment", None)
+        return response
 
     async def reply(
         self,
