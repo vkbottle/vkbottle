@@ -1,3 +1,4 @@
+import inspect
 from typing import TYPE_CHECKING, Any, Callable, Union
 
 from .abc import ABCHandler
@@ -26,7 +27,9 @@ class FromFuncHandler(ABCHandler):
         return rule_context
 
     async def handle(self, event: "Event", **context) -> Any:
-        return await self.handler(event, **context)
+        acceptable_keys = list(inspect.signature(self.handler).parameters.keys())[1:]
+        acceptable_context = {k: v for k, v in context.items() if k in acceptable_keys}
+        return await self.handler(event, **acceptable_context)
 
     def __eq__(self, obj: object) -> bool:
         """
