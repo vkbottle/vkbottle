@@ -1,4 +1,3 @@
-from io import StringIO
 from typing import TYPE_CHECKING, List, Optional
 
 from vkbottle_types.events.bot_events import MessageNew
@@ -8,7 +7,7 @@ from ..base import BaseMessageMin
 
 if TYPE_CHECKING:
 
-    from vkbottle.api import ABCAPI, API
+    from vkbottle.api import ABCAPI
 
 
 class MessageMin(BaseMessageMin):

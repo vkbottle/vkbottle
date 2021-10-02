@@ -1,4 +1,3 @@
-from abc import ABC
 from io import StringIO
 from typing import TYPE_CHECKING, Any, List, Optional, Union
 
@@ -68,23 +67,6 @@ class BaseMessageMin(MessagesMessage):
             if stream.tell() == len(message or ""):
                 break
         return response
-
-    async def reply(
-        self,
-        message: Optional[str] = None,
-        attachment: Optional[str] = None,
-        **kwargs,
-    ) -> int:
-        pass
-
-    async def forward(
-        self,
-        message: Optional[str] = None,
-        attachment: Optional[str] = None,
-        forward_message_ids: Optional[List[int]] = None,
-        **kwargs,
-    ) -> int:
-        pass
 
 
 BaseMessageMin.update_forward_refs()
