@@ -30,7 +30,7 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
             return None
 
         error = response["error"]
-        code = error["error_code"]
+        code = error.pop("error_code")
 
         exception = SPECIFIC_ERRORS.get(code, VKAPIError[code])
         raise exception(**error)

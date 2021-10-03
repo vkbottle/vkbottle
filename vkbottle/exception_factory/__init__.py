@@ -8,7 +8,8 @@ from .swear_handler import swear
 
 
 class VKAPIError(CodeException):
-    def __init__(self, *, error_msg: Any, **kwargs: Any):
+    def __init__(self, *, error_msg: Any):
+        super().__init__(error_msg)
         self.description = str_validator(error_msg)
 
 
