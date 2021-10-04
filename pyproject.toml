@@ -58,7 +58,7 @@ types-aiofiles = "^0.1.9"
 # Tests
 pytest = "^6.2"
 pytest-asyncio = "^0.15.0"
-pytest-cov = "^2.8"
+pytest-cov = "^3.0"
 pytest-mock = "^3.3.1"
 
 # Docs
