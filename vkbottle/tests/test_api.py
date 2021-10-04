@@ -41,7 +41,7 @@ async def test_api_typed_response(api: API):
 
 
 @pytest.mark.asyncio
-@with_mocked_api('{"error":{"error_code":0,"error_msg":"Some Error!"}}')
+@with_mocked_api('{"error":{"error_code":0,"error_msg":"Some Error!","request_params":[]}}')
 async def test_vk_api_error_handling(api: API):
     try:
         await api.request("some.method", {})
@@ -52,9 +52,12 @@ async def test_vk_api_error_handling(api: API):
 
 @pytest.mark.asyncio
 @with_mocked_api(
-    '{"error":{"error_code":14,"error_msg":"Captcha needed","captcha_sid":"239633676097",'
-    '"captcha_img":"https://api.vk.com/captcha.php?sid=239633676097&s=1"}}'
-)
+    '{"error":{"error_code":14,"error_msg":"Captcha needed","request_params":'
+    '[{"key":"oauth","value":"1"},{"key":"method","value":"captcha.force"},{"key":"uids",'
+    '"value":"66748"},{"key":"access_token","value":'
+    '"b9b5151856dcc745d785a6b604295d30888a827a37763198888d8b7f5271a4d8a049fefbaeed791b2882"}],'
+    '"captcha_sid":"239633676097","captcha_img":"https://api.vk.com/captcha.php?'
+    'sid=239633676097&s=1"}}')
 async def test_captcha_error_handling(api: API):
     try:
         await api.request("some.method", {})

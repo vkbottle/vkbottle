@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 
 from pydantic.validators import int_validator, str_validator
 
@@ -8,9 +8,10 @@ from .swear_handler import swear
 
 
 class VKAPIError(CodeException):
-    def __init__(self, *, error_msg: Any):
+    def __init__(self, *, error_msg: Any, request_params: List[dict]):
         super().__init__(error_msg)
         self.description = str_validator(error_msg)
+        self.params = {item["key"]: item["value"] for item in request_params}
 
 
 class CaptchaError(VKAPIError[14]):  # type: ignore
