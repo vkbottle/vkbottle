@@ -33,4 +33,8 @@ class RawUserEventView(ABCRawEventView):
         return event[0]
 
     async def process_event(self, event: list) -> bool:
-        return UserEventType(self.get_event_type(event)) in self.handlers
+        try:
+            event_type = UserEventType(self.get_event_type(event))
+        except ValueError:
+            event_type = UserEventType.UNDEFINED_EVENT
+        return event_type in self.handlers

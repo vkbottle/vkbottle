@@ -25,7 +25,11 @@ class ABCUserMessageView(ABCMessageView, ABC):
         return await message_min(event[1], ctx_api)
 
     async def process_event(self, event: list) -> bool:
-        return UserEventType(self.get_event_type(event)) == UserEventType.NEW_MESSAGE
+        try:
+            event_type = UserEventType(self.get_event_type(event))
+        except ValueError:
+            event_type = UserEventType.UNDEFINED_EVENT
+        return event_type == UserEventType.NEW_MESSAGE
 
 
 class UserMessageView(ABCUserMessageView):
