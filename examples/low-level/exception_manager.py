@@ -1,8 +1,8 @@
-import os
 import asyncio
+import os
 
-from vkbottle.exception_factory import VKAPIError
 from vkbottle.api import API
+from vkbottle.exception_factory import VKAPIError
 
 api = API(os.environ["token"])
 
