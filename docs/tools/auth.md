@@ -1,42 +1,16 @@
-# Authorization Flows
+# UserAuth
 
-Authorization Flows являются набором классов для удобной работы с получением ключа доступа `VK API`
+Это простой инструмент для быстрого получения токена пользователя по логину и паролю.
 
-Всего есть 3 вида путей получения ключа доступа:
+```python
+from vkbottle import UserAuth
 
-1. Implicit flow
+login = "89012345678"
+password = "qwerty123"
 
-2. Authorization code flow
+async def main():
+    token = await UserAuth().get_token(login, password)
+```
 
-3. Client credentials flow
-
-Подробнее про каждый вы можете прочитать в [документации](https://vk.com/dev/access_token)
-
-## auth_dialog_link
-
-Cвойство, которое возвращает ссылку на окно авторизации
-
-## parse_scope(scope: Optional\[Union\[int, List\[int\]\]\]) -> Optional\[int\]:
-
-Метод для удобной обработки `scope`
-
-## ABCImplicitFlow
-
-Абстрактный класс для `ImplicitFlow`  
-Не добавляет функционала, нужен только для семантики
-
-## ABCAuthorizationCodeFlow
-
-Абстрактный класс для `AuthorizationCodeFlow`
-
-### get_model()
-
-Геттер модели со схемой, которая обработает ответ с токеном
-
-### get_token_request_link(client_secret: str, code: str) -> str
-
-Геттер ссылки на запрос получение токена
-
-### request_token(client_secret: str, code: str)
-
-Запрос на получение токена из кода и возврат соответстующей модели
+По умолчанию `UserAuth` использует для входа мобильное приложение вк.
+Вы можете указать другое приложение, передав `client_id` и `client_secret` в конструктор `UserAuth`.

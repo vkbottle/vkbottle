@@ -57,7 +57,8 @@ async def test_vk_api_error_handling(api: API):
     '"value":"66748"},{"key":"access_token","value":'
     '"b9b5151856dcc745d785a6b604295d30888a827a37763198888d8b7f5271a4d8a049fefbaeed791b2882"}],'
     '"captcha_sid":"239633676097","captcha_img":"https://api.vk.com/captcha.php?'
-    'sid=239633676097&s=1"}}')
+    'sid=239633676097&s=1"}}'
+)
 async def test_captcha_error_handling(api: API):
     try:
         await api.request("some.method", {})
