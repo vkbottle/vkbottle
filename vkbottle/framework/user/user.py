@@ -1,5 +1,5 @@
-from asyncio import AbstractEventLoop, get_event_loop
-from typing import TYPE_CHECKING, NoReturn, Optional, Union
+from asyncio import AbstractEventLoop, get_event_loop, run
+from typing import TYPE_CHECKING, NoReturn, Optional, Type, Union
 
 from vkbottle.api import API
 from vkbottle.dispatch import BuiltinStateDispenser, Router
@@ -7,7 +7,7 @@ from vkbottle.exception_factory import ErrorHandler
 from vkbottle.framework.abc import ABCFramework
 from vkbottle.modules import logger
 from vkbottle.polling import UserPolling
-from vkbottle.tools import LoopWrapper
+from vkbottle.tools import LoopWrapper, UserAuth
 
 from .labeler import UserLabeler
 
@@ -63,6 +63,39 @@ class User(ABCFramework):
     @property
     def on(self) -> "ABCUserLabeler":
         return self.labeler
+
+    @classmethod
+    def direct_auth_sync(
+        cls: Type["User"],
+        login: str,
+        password: str,
+        client_id: int = None,
+        client_secret: str = None,
+        **kwargs,
+    ):
+        loop = get_event_loop()
+        assert not loop.is_running(), "Event loop is already running, use direct_auth instead"
+        return run(
+            cls.direct_auth(
+                login=login,
+                password=password,
+                client_id=client_id,
+                client_secret=client_secret,
+                **kwargs,
+            )
+        )
+
+    @classmethod
+    async def direct_auth(
+        cls: Type["User"],
+        login: str,
+        password: str,
+        client_id: int = None,
+        client_secret: str = None,
+        **kwargs,
+    ):
+        token = await UserAuth(client_id, client_secret).get_token(login, password)
+        return cls(token=token, **kwargs)
 
     async def run_polling(self, custom_polling: Optional["ABCPolling"] = None) -> NoReturn:
         polling = custom_polling or self.polling
