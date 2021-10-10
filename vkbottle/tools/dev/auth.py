@@ -2,7 +2,6 @@ from typing import Optional
 
 from vkbottle.http import AiohttpClient
 
-
 MOBILE_APP_ID = 2274003
 MOBILE_APP_SECRET = "hHbZxrka2uZ6jB1inYsH"
 

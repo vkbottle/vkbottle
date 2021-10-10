@@ -1,4 +1,4 @@
-from .auth import UserAuth, AuthError
+from .auth import AuthError, UserAuth
 from .ctx_tool import BaseContext
 from .event_data import *
 from .keyboard import *
