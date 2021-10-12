@@ -46,7 +46,7 @@ watchgod = "^0.7"
 [tool.poetry.dev-dependencies]
 # Lint
 black = {version = "^21.4b0", allow-prereleases = true}
-flake8 = "^3.7.9"
+flake8 = "^4.0.1"
 isort = "^5.7"
 lxml = "^4.5.0"
 mypy = "^0.910"
