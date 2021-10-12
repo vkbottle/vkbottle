@@ -53,7 +53,7 @@ mypy = "^0.910"
 mypy_extensions = "^0.4.3"
 
 # mypy stubs
-types-aiofiles = "^0.1.9"
+types-aiofiles = "^0.7.0"
 
 # Tests
 pytest = "^6.2"
