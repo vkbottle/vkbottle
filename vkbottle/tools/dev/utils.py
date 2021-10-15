@@ -30,7 +30,7 @@ def load_blueprints_from_package(package_name: str) -> Iterator["ABCBlueprint"]:
             yield from load_blueprints_from_package(os.path.join(package_name, filename))
             continue
 
-        with open(os.path.join(package_name, filename)) as file:
+        with open(os.path.join(package_name, filename), encoding="utf-8") as file:
             bp_names = re.findall(
                 r"^(\w+) = (?:Bot|User|)Blueprint\(", file.read(), flags=re.MULTILINE
             )
