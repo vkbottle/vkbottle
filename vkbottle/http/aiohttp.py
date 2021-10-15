@@ -29,15 +29,19 @@ class AiohttpClient(ABCHTTPClient):
             kwargs["skip_auto_headers"] = {"User-Agent"}
             kwargs["raise_for_status"] = True
 
-        self.session = session or ClientSession(
-            connector=TCPConnector(ssl=False),
-            json_serialize=self.json_processing_module.dumps,
-            **kwargs,
-        )
+        self.session = session
+
+        self.__session_params = kwargs
 
     async def request_raw(
         self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
     ) -> "ClientResponse":
+        if not self.session:
+            self.session = ClientSession(
+                connector=TCPConnector(ssl=False),
+                json_serialize=self.json_processing_module.dumps,
+                **self.__session_params,
+            )
         async with self.session.request(url=url, method=method, data=data, **kwargs) as response:
             await response.read()
             return response
@@ -61,10 +65,11 @@ class AiohttpClient(ABCHTTPClient):
         return await response.content.read()
 
     async def close(self) -> None:
-        await self.session.close()
+        if self.session:
+            await self.session.close()
 
     def __del__(self) -> None:
-        run_sync(self.session.close())
+        run_sync(self.close())
 
 
 class SingleAiohttpClient(AiohttpClient, Singleton):
