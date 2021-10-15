@@ -1,2 +1,2 @@
 from .abc import ABCHTTPClient
-from .aiohttp import AiohttpClient
+from .aiohttp import AiohttpClient, SingleAiohttpClient

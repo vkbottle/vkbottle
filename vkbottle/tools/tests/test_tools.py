@@ -157,7 +157,8 @@ def test_bp_importer(mocker: MockerFixture):
         else ["bp3.py", "bp4.py", "__init__.py"],
     )
     mocker.patch(
-        "builtins.open", lambda fln, encoding: StringIO((main_files if "bps" not in fln else bps_files)[fln])
+        "builtins.open",
+        lambda fln, encoding: StringIO((main_files if "bps" not in fln else bps_files)[fln]),
     )
     mocker.patch(
         "importlib.import_module",

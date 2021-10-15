@@ -44,8 +44,8 @@ from .exception_factory import (
     swear,
 )
 from .framework import ABCBlueprint, ABCFramework, Bot, BotBlueprint
-from .http import ABCClient, ABCResponse, AiohttpClient, AiohttpResponse, SingleAiohttpClient
+from .http import ABCHTTPClient, AiohttpClient, SingleAiohttpClient
 from .polling import ABCPolling, BotPolling
-from .tools import *
+from .tools import *  # noqa # noqa
 
 event_types = GroupTypes

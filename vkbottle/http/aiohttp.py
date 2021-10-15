@@ -38,7 +38,7 @@ class AiohttpClient(ABCHTTPClient):
     async def request_raw(
         self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
     ) -> "ClientResponse":
-        async with self.session.request(url, method, data=data, **kwargs) as response:
+        async with self.session.request(url=url, method=method, data=data, **kwargs) as response:
             await response.read()
             return response
 
