@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from vkbottle import ABCClient
+    from vkbottle.http import ABCHTTPClient
 
     from .request_rescheduler import ABCRequestRescheduler
 
@@ -12,7 +12,7 @@ class ABCAPI(ABC):
     Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/api.md
     """
 
-    http_client: "ABCClient"
+    http_client: "ABCHTTPClient"
     ignore_errors: bool
     request_rescheduler: "ABCRequestRescheduler"
 

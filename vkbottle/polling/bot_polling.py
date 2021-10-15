@@ -33,7 +33,6 @@ class BotPolling(ABCPolling):
     async def get_event(self, server: dict) -> dict:
         logger.debug("Making long request to get event with longpoll...")
         response = await self.api.http_client.request(
-            "POST",
             "{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
                 server["server"],
                 server["key"],
@@ -41,6 +40,7 @@ class BotPolling(ABCPolling):
                 self.wait,
                 self.rps_delay,
             ),
+            method="POST",
         )
         return response.json()
 

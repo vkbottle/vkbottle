@@ -25,10 +25,9 @@ class VideoUploader(BaseUploader):
         ), "file_source or link to video must be set"
 
         if "link" in params and not file_source:
-            response = await self.api.http_client.request(
-                "GET", server["upload_url"], params=params
+            return await self.api.http_client.request_json(
+                server["upload_url"], method="GET", params=params
             )
-            return response.json()
 
         data = await self.read(file_source)  # type: ignore
         file = self.get_bytes_io(data)

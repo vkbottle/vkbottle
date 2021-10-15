@@ -40,8 +40,7 @@ class BaseUploader(ABC):
         return self._get_api()  # type: ignore
 
     async def upload_files(self, upload_url: str, files: dict) -> dict:
-        response = await self.api.http_client.request("POST", upload_url, data=files)
-        return response.json()
+        return await self.api.http_client.request_json(upload_url, method="POST", data=files)
 
     def get_bytes_io(self, data: "Bytes", name: str = None) -> BytesIO:
         bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)

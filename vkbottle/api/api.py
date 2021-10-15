@@ -13,7 +13,7 @@ from typing import (
 import vkbottle_types
 from vkbottle_types.categories import APICategories
 
-from vkbottle.http import ABCClient, SingleAiohttpClient
+from vkbottle.http import SingleAiohttpClient
 from vkbottle.modules import logger
 
 from .abc import ABCAPI
@@ -23,6 +23,8 @@ from .response_validator import DEFAULT_RESPONSE_VALIDATORS
 from .token_generator import get_token_generator
 
 if TYPE_CHECKING:
+    from vkbottle.http import ABCHTTPClient
+
     from .request_rescheduler import ABCRequestRescheduler
     from .request_validator import ABCRequestValidator
     from .response_validator import ABCResponseValidator
@@ -44,7 +46,7 @@ class API(ABCAPI, APICategories):
         self,
         token: "Token",
         ignore_errors: bool = False,
-        http_client: Optional[ABCClient] = None,
+        http_client: Optional["ABCHTTPClient"] = None,
         request_rescheduler: Optional["ABCRequestRescheduler"] = None,
     ):
         self.token_generator = get_token_generator(token)
@@ -59,15 +61,14 @@ class API(ABCAPI, APICategories):
         data = await self.validate_request(data)
 
         async with self.token_generator as token:
-            response = await self.http_client.request(
-                "POST",
+            response = await self.http_client.request_json(
                 self.API_URL + method,
+                method="POST",
                 data=data,  # type: ignore
                 params={"access_token": token, "v": self.API_VERSION},
             )
-        json = response.json()
-        logger.debug("Request {} with {} data returned {}".format(method, data, json))
-        return await self.validate_response(method, data, json)
+        logger.debug("Request {} with {} data returned {}".format(method, data, response))
+        return await self.validate_response(method, data, response)
 
     async def request_many(
         self, requests: Iterable[APIRequest]  # type: ignore
@@ -76,15 +77,14 @@ class API(ABCAPI, APICategories):
         for request in requests:
             method, data = request.method, await self.validate_request(request.data)  # type: ignore
             async with self.token_generator as token:
-                response = await self.http_client.request(
-                    "POST",
+                response = await self.http_client.request_json(
                     self.API_URL + method,
+                    method="POST",
                     data=data,  # noqa
                     params={"access_token": token, "v": self.API_VERSION},  # noqa
                 )
-            json = response.json()
-            logger.debug("Request {} with {} data returned {}".format(method, data, json))
-            yield await self.validate_response(method, data, json)
+            logger.debug("Request {} with {} data returned {}".format(method, data, response))
+            yield await self.validate_response(method, data, response)
 
     async def validate_response(
         self, method: str, data: dict, response: Union[dict, str]
