@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Iterable, Type
 
-from vkbottle.http import AiohttpClient, SingleSessionManager
+from vkbottle.http import SingleAiohttpClient
 from vkbottle.modules import logger
 from vkbottle.polling import BotPolling
 
@@ -22,6 +22,6 @@ def run_multibot(
     for i, api_instance in enumerate(apis):
         logger.debug(f"Connecting API (index: {i})")
         polling = polling_type().construct(api_instance)
-        api_instance.http = SingleSessionManager(AiohttpClient)
+        api_instance.http_client = SingleAiohttpClient()
         bot.loop_wrapper.add_task(bot.run_polling(custom_polling=polling))
     bot.loop_wrapper.run_forever(bot.loop)

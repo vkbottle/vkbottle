@@ -2,8 +2,6 @@ from abc import ABC, abstractmethod
 from io import BytesIO
 from typing import TYPE_CHECKING, Callable, Optional, Union
 
-from vkbottle.modules import json
-
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
 
@@ -42,10 +40,8 @@ class BaseUploader(ABC):
         return self._get_api()  # type: ignore
 
     async def upload_files(self, upload_url: str, files: dict) -> dict:
-        async with self.api.http as session:
-            raw_response = await session.request_text("POST", upload_url, data=files)
-            response = json.loads(raw_response)
-        return response
+        response = await self.api.http_client.request("POST", upload_url, data=files)
+        return response.json()
 
     def get_bytes_io(self, data: "Bytes", name: str = None) -> BytesIO:
         bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)

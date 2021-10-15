@@ -1,31 +1,31 @@
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional
 
-from vkbottle import API, ABCHTTPClient
+from vkbottle import API, ABCClient, ABCResponse
 
 
-class MockedClient(ABCHTTPClient):
+class MockedResponse(ABCResponse):
+    def __init__(self, return_value: Any):
+        self.return_value = return_value
+
+    def text(self) -> str:
+        return self.return_value
+
+    def content(self) -> bytes:
+        return self.return_value
+
+    def json(self) -> Any:
+        return self.return_value
+
+
+class MockedClient(ABCClient):
     def __init__(self, return_value: Optional[Any] = None, callback: Optional[Callable] = None):
-        super().__init__()
         self.return_value = return_value
         self.callback = callback or (lambda method, url, data: None)
 
-    async def request_text(
+    async def request(
         self, method: str, url: str, data: Optional[dict] = None, **kwargs
-    ) -> Union[str, Any]:
-        return self.return_value or self.callback(method, url, data)
-
-    async def request_json(
-        self, method: str, url: str, data: Optional[dict] = None, **kwargs
-    ) -> Union[dict, Any]:
-        return self.return_value or self.callback(method, url, data)
-
-    async def request_content(
-        self, method: str, url: str, data: Optional[dict] = None, **kwargs
-    ) -> Union[bytes, Any]:
-        return self.return_value or self.callback(method, url, data)
-
-    async def close(self) -> None:
-        pass
+    ) -> MockedResponse:
+        return MockedResponse(self.return_value or self.callback(method, url, data))
 
 
 def with_mocked_api(return_value: Any):
@@ -34,7 +34,7 @@ def with_mocked_api(return_value: Any):
     def decorator(func: Any):
         async def wrapper(*args, **kwargs):
             api = API("token")
-            api.http._session = MockedClient(return_value)
+            api.http_client = MockedClient(return_value)
             return await func(*args, **kwargs, api=api)
 
         return wrapper

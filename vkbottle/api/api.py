@@ -13,7 +13,7 @@ from typing import (
 import vkbottle_types
 from vkbottle_types.categories import APICategories
 
-from vkbottle.http import AiohttpClient, SingleSessionManager
+from vkbottle.http import ABCClient, SingleAiohttpClient
 from vkbottle.modules import logger
 
 from .abc import ABCAPI
@@ -23,8 +23,6 @@ from .response_validator import DEFAULT_RESPONSE_VALIDATORS
 from .token_generator import get_token_generator
 
 if TYPE_CHECKING:
-    from vkbottle.http import ABCSessionManager
-
     from .request_rescheduler import ABCRequestRescheduler
     from .request_validator import ABCRequestValidator
     from .response_validator import ABCResponseValidator
@@ -46,12 +44,12 @@ class API(ABCAPI, APICategories):
         self,
         token: "Token",
         ignore_errors: bool = False,
-        session_manager: Optional[SingleSessionManager] = None,
+        http_client: Optional[ABCClient] = None,
         request_rescheduler: Optional["ABCRequestRescheduler"] = None,
     ):
         self.token_generator = get_token_generator(token)
         self.ignore_errors = ignore_errors
-        self.http: "ABCSessionManager" = session_manager or SingleSessionManager(AiohttpClient)
+        self.http_client = http_client or SingleAiohttpClient()
         self.request_rescheduler = request_rescheduler or BlockingRequestRescheduler()
         self.response_validators: List["ABCResponseValidator"] = DEFAULT_RESPONSE_VALIDATORS
         self.request_validators: List["ABCRequestValidator"] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
@@ -60,33 +58,33 @@ class API(ABCAPI, APICategories):
         """Makes a single request opening a session"""
         data = await self.validate_request(data)
 
-        async with self.http as session:
-            async with self.token_generator as token:
-                response = await session.request_text(
-                    "POST",
-                    self.API_URL + method,
-                    data=data,  # type: ignore
-                    params={"access_token": token, "v": self.API_VERSION},
-                )
-            logger.debug("Request {} with {} data returned {}".format(method, data, response))
-            return await self.validate_response(method, data, response)
+        async with self.token_generator as token:
+            response = await self.http_client.request(
+                "POST",
+                self.API_URL + method,
+                data=data,  # type: ignore
+                params={"access_token": token, "v": self.API_VERSION},
+            )
+        json = response.json()
+        logger.debug("Request {} with {} data returned {}".format(method, data, json))
+        return await self.validate_response(method, data, json)
 
     async def request_many(
         self, requests: Iterable[APIRequest]  # type: ignore
     ) -> AsyncIterator[dict]:
         """Makes many requests opening one session"""
-        async with self.http as session:
-            for request in requests:
-                method, data = request.method, await self.validate_request(request.data)  # type: ignore
-                async with self.token_generator as token:
-                    response = await session.request_text(
-                        "POST",
-                        self.API_URL + method,
-                        data=data,  # noqa
-                        params={"access_token": token, "v": self.API_VERSION},  # noqa
-                    )
-                logger.debug("Request {} with {} data returned {}".format(method, data, response))
-                yield await self.validate_response(method, data, response)
+        for request in requests:
+            method, data = request.method, await self.validate_request(request.data)  # type: ignore
+            async with self.token_generator as token:
+                response = await self.http_client.request(
+                    "POST",
+                    self.API_URL + method,
+                    data=data,  # noqa
+                    params={"access_token": token, "v": self.API_VERSION},  # noqa
+                )
+            json = response.json()
+            logger.debug("Request {} with {} data returned {}".format(method, data, json))
+            yield await self.validate_response(method, data, json)
 
     async def validate_response(
         self, method: str, data: dict, response: Union[dict, str]

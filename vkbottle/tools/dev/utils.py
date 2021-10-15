@@ -2,10 +2,14 @@ import asyncio
 import importlib
 import os
 import re
-from typing import TYPE_CHECKING, Coroutine, Iterator
+from concurrent.futures import ThreadPoolExecutor
+from typing import TYPE_CHECKING, Coroutine, Iterator, TypeVar
 
 if TYPE_CHECKING:
     from vkbottle.framework.abc_blueprint import ABCBlueprint
+
+
+T = TypeVar("T")
 
 
 # This feature is not used in production
@@ -15,6 +19,10 @@ def run_in_task(coroutine: Coroutine) -> None:
     """Gets loop and runs add makes task from the given coroutine"""
     loop = asyncio.get_running_loop()
     loop.create_task(coroutine)
+
+
+def run_sync(coroutine: Coroutine[None, None, T]) -> T:
+    return ThreadPoolExecutor().submit(asyncio.run, coroutine).result()
 
 
 def load_blueprints_from_package(package_name: str) -> Iterator["ABCBlueprint"]:

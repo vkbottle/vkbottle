@@ -1,6 +1,6 @@
 from typing import Optional
 
-from vkbottle.http import AiohttpClient
+from vkbottle.http import SingleAiohttpClient
 
 MOBILE_APP_ID = 2274003
 MOBILE_APP_SECRET = "hHbZxrka2uZ6jB1inYsH"
@@ -31,11 +31,11 @@ class UserAuth:
     async def get_token(self, login: str, password: str) -> str:
         url = self._build_oauth_url(login, password)
 
-        http = AiohttpClient()
-        response = await http.request_json("get", url)
-        await http.close()
+        client = SingleAiohttpClient()
+        response = await client.request("get", url)
+        json = response.json()
 
-        if "access_token" in response:
-            return response["access_token"]
+        if "access_token" in json:
+            return json["access_token"]
 
-        raise AuthError(response["error"], response["error_description"])
+        raise AuthError(json["error"], json["error_description"])
