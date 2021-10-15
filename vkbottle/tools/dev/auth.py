@@ -32,10 +32,9 @@ class UserAuth:
         url = self._build_oauth_url(login, password)
 
         client = SingleAiohttpClient()
-        response = await client.request("get", url)
-        json = response.json()
+        response = await client.request_json(url)
 
-        if "access_token" in json:
-            return json["access_token"]
+        if "access_token" in response:
+            return response["access_token"]
 
-        raise AuthError(json["error"], json["error_description"])
+        raise AuthError(response["error"], response["error_description"])
