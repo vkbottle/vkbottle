@@ -73,4 +73,5 @@ class AiohttpClient(ABCHTTPClient):
 
 
 class SingleAiohttpClient(AiohttpClient, Singleton):
-    pass
+    def __aexit__(self, exc_type, exc_val, exc_tb):
+        pass  # no need to close session in this case
