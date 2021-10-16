@@ -5,7 +5,6 @@ from aiohttp import ClientSession, TCPConnector
 
 from vkbottle.modules import json as json_module
 from vkbottle.tools.dev.singleton import Singleton
-from vkbottle.tools.dev.utils import run_sync
 
 from .abc import ABCHTTPClient
 
@@ -65,11 +64,14 @@ class AiohttpClient(ABCHTTPClient):
         return await response.content.read()
 
     async def close(self) -> None:
-        if self.session:
+        if self.session and not self.session.closed:
             await self.session.close()
 
-    def __del__(self) -> None:
-        run_sync(self.close())
+    def __del__(self):
+        if self.session and not self.session.closed:
+            if self._connector is not None and self._connector_owner:
+                self.session._connector.close()
+            self._connector = None
 
 
 class SingleAiohttpClient(AiohttpClient, Singleton):
