@@ -1,10 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Optional
-
-from vkbottle.http.middleware.justlog import JustLogHTTPMiddleware
-
-if TYPE_CHECKING:
-    from vkbottle.http.middleware.abc import ABCHTTPMiddleware
+from typing import Any, Optional
 
 
 class ABCHTTPClient(ABC):
@@ -12,27 +7,31 @@ class ABCHTTPClient(ABC):
     Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/http/http-client.md
     """
 
-    middleware: "ABCHTTPMiddleware" = JustLogHTTPMiddleware()
-
     @abstractmethod
     def __init__(self, *args, **kwargs):
         pass
 
     @abstractmethod
+    async def request_raw(
+        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
+    ) -> Any:
+        pass
+
+    @abstractmethod
     async def request_text(
-        self, method: str, url: str, data: Optional[dict] = None, **kwargs
+        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
     ) -> str:
         pass
 
     @abstractmethod
     async def request_json(
-        self, method: str, url: str, data: Optional[dict] = None, **kwargs
+        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
     ) -> dict:
         pass
 
     @abstractmethod
     async def request_content(
-        self, method: str, url: str, data: Optional[dict] = None, **kwargs
+        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
     ) -> bytes:
         pass
 

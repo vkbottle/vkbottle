@@ -1,4 +1,3 @@
-import json
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from .base import BaseUploader
@@ -26,11 +25,9 @@ class VideoUploader(BaseUploader):
         ), "file_source or link to video must be set"
 
         if "link" in params and not file_source:
-            async with self.api.http as session:
-                raw_response = await session.request_text(
-                    "GET", server["upload_url"], params=params
-                )
-                return json.loads(raw_response)
+            return await self.api.http_client.request_json(
+                server["upload_url"], method="GET", params=params
+            )
 
         data = await self.read(file_source)  # type: ignore
         file = self.get_bytes_io(data)

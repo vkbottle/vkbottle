@@ -1,5 +1,5 @@
-from .audio import *
+from .audio import *  # noqa
 from .base import BaseUploader
-from .doc import *
-from .photo import *
-from .video import *
+from .doc import *  # noqa
+from .photo import *  # noqa
+from .video import *  # noqa

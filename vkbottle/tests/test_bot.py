@@ -68,7 +68,7 @@ class MockIntEnum(enum.IntEnum):
 
 
 def set_http_callback(api: API, callback: Callable[[dict], Any]):
-    api.http._session = MockedClient(callback=callback)
+    api.http_client = MockedClient(callback=callback)
 
 
 @pytest.mark.asyncio

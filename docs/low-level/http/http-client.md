@@ -4,6 +4,10 @@
 
 ## Работа с клиентами
 
+### request_raw
+
+Делает реквест. Возвращает ответ сервера
+
 ### request_text
 
 Делает реквест и читает поле `text`. Возвращает строковой тип
@@ -18,9 +22,18 @@
 
 ### Параметры
 
-* **method** - HTTP метод запроса (например: get)
 * **url** - ссылка по которой будет произведен
+* **method** - HTTP метод запроса (например: get)
 * **data** - данные которые будут переданы в запросе
+
+### Пример
+```python
+from vkbottle.http import AiohttpClient
+
+# ...
+http_client = AiohttpClient()
+await http_client.request_text("https://google.com")
+```
 
 ## Создание кастомного клиента
 

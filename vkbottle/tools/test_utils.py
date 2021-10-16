@@ -9,18 +9,23 @@ class MockedClient(ABCHTTPClient):
         self.return_value = return_value
         self.callback = callback or (lambda method, url, data: None)
 
+    async def request_raw(
+        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
+    ) -> Union[str, Any]:
+        return self.return_value or self.callback(method, url, data)
+
     async def request_text(
-        self, method: str, url: str, data: Optional[dict] = None, **kwargs
+        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
     ) -> Union[str, Any]:
         return self.return_value or self.callback(method, url, data)
 
     async def request_json(
-        self, method: str, url: str, data: Optional[dict] = None, **kwargs
+        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
     ) -> Union[dict, Any]:
         return self.return_value or self.callback(method, url, data)
 
     async def request_content(
-        self, method: str, url: str, data: Optional[dict] = None, **kwargs
+        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
     ) -> Union[bytes, Any]:
         return self.return_value or self.callback(method, url, data)
 
@@ -34,7 +39,7 @@ def with_mocked_api(return_value: Any):
     def decorator(func: Any):
         async def wrapper(*args, **kwargs):
             api = API("token")
-            api.http._session = MockedClient(return_value)
+            api.http_client = MockedClient(return_value)
             return await func(*args, **kwargs, api=api)
 
         return wrapper
