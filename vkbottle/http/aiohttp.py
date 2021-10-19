@@ -69,7 +69,7 @@ class AiohttpClient(ABCHTTPClient):
 
     def __del__(self):
         if self.session and not self.session.closed:
-            if self._connector is not None and self._connector_owner:
+            if self.session._connector is not None and self.session._connector_owner:
                 self.session._connector.close()
             self._connector = None
 
