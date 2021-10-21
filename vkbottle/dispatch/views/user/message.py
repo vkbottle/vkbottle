@@ -25,6 +25,8 @@ class ABCUserMessageView(ABCMessageView, ABC):
         return await message_min(event[1], ctx_api)
 
     async def process_event(self, event: list) -> bool:
+        if not (self.handlers or self.middlewares):
+            return False
         try:
             event_type = UserEventType(self.get_event_type(event))
         except ValueError:
