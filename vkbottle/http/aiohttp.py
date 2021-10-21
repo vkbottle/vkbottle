@@ -71,7 +71,7 @@ class AiohttpClient(ABCHTTPClient):
         if self.session and not self.session.closed:
             if self.session._connector is not None and self.session._connector_owner:
                 self.session._connector.close()
-            self._connector = None
+            self.session._connector = None
 
 
 class SingleAiohttpClient(AiohttpClient, Singleton):
