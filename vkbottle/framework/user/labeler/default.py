@@ -58,7 +58,7 @@ class UserLabeler(ABCUserLabeler):
         custom_rules: Optional[Dict[str, Type["ABCRule"]]] = None,
         auto_rules: Optional[List["ABCRule"]] = None,
     ):
-        # Default views are fixed in BotLabeler,
+        # Default views are fixed in UserLabeler,
         # if you need to create your own implement
         # custom labeler
         self.message_view = message_view or UserMessageView()
