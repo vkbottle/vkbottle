@@ -1,12 +1,17 @@
 import re
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Type, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Type, Union
 
 import vbml
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import bot
-from vkbottle.dispatch.views.bot import BotMessageView, HandlerBasement, RawBotEventView
+from vkbottle.dispatch.views.bot import (
+    ABCBotMessageView,
+    BotMessageView,
+    HandlerBasement,
+    RawBotEventView,
+)
 
 from .abc import ABCBotLabeler
 
@@ -54,15 +59,21 @@ class BotLabeler(ABCBotLabeler):
     all custom rules from ABCRule.config
     """
 
-    def __init__(self, **kwargs):
+    def __init__(
+        self,
+        message_view: Optional[ABCBotMessageView] = None,
+        raw_event_view: Optional[RawBotEventView] = None,
+        custom_rules: Optional[Dict[str, Type["ABCRule"]]] = None,
+        auto_rules: Optional[List["ABCRule"]] = None,
+    ):
         # Default views are fixed in BotLabeler,
         # if you need to create your own implement
         # custom labeler
-        self.message_view = BotMessageView()
-        self.raw_event_view = RawBotEventView()
+        self.message_view = message_view or BotMessageView()
+        self.raw_event_view = raw_event_view or RawBotEventView()
 
-        self.custom_rules = kwargs.get("custom_rules") or DEFAULT_CUSTOM_RULES
-        self.auto_rules: List["ABCRule"] = []
+        self.custom_rules = custom_rules or DEFAULT_CUSTOM_RULES
+        self.auto_rules = auto_rules or []
 
         # Rule config is accessible from every single custom rule
         self.rule_config: Dict[str, Any] = {
