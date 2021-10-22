@@ -1,5 +1,5 @@
 import re
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Type, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Type, Union
 
 import vbml
 
@@ -12,6 +12,7 @@ from .abc import ABCUserLabeler
 if TYPE_CHECKING:
     from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views import ABCView
+    from vkbottle.dispatch.views.user import ABCUserMessageView
 
     from .abc import LabeledHandler, LabeledMessageHandler
 
@@ -50,19 +51,25 @@ class UserLabeler(ABCUserLabeler):
     all custom rules from ABCRule.config
     """
 
-    def __init__(self, **kwargs):
-        # Default views are fixed in UserLabeler,
+    def __init__(
+        self,
+        message_view: Optional["ABCUserMessageView"] = None,
+        raw_event_view: Optional[RawUserEventView] = None,
+        custom_rules: Optional[Dict[str, Type["ABCRule"]]] = None,
+        auto_rules: Optional[List["ABCRule"]] = None,
+    ):
+        # Default views are fixed in BotLabeler,
         # if you need to create your own implement
         # custom labeler
-        self.message_view = UserMessageView()
-        self.raw_event_view = RawUserEventView()
+        self.message_view = message_view or UserMessageView()
+        self.raw_event_view = raw_event_view or RawUserEventView()
 
-        self.custom_rules = kwargs.get("custom_rules") or DEFAULT_CUSTOM_RULES
-        self.auto_rules: List["ABCRule"] = []
+        self.custom_rules = custom_rules or DEFAULT_CUSTOM_RULES
+        self.auto_rules = auto_rules or []
 
         # Rule config is accessible from every single custom rule
         self.rule_config: Dict[str, Any] = {
-            "vbml_flags": re.MULTILINE,  # Flags for VBMLRule
+            "vbml_flags": re.MULTILINE | re.DOTALL,  # Flags for VBMLRule
             "vbml_patcher": vbml.Patcher(),  # Patcher for VBMLRule
         }
 
