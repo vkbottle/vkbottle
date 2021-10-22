@@ -6,18 +6,14 @@ from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import bot
-from vkbottle.dispatch.views.bot import (
-    ABCBotMessageView,
-    BotMessageView,
-    HandlerBasement,
-    RawBotEventView,
-)
+from vkbottle.dispatch.views.bot import BotMessageView, HandlerBasement, RawBotEventView
 
 from .abc import ABCBotLabeler
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views import ABCView
+    from vkbottle.dispatch.views.bot import ABCBotMessageView
 
     from .abc import EventName, LabeledHandler, LabeledMessageHandler
 
@@ -61,7 +57,7 @@ class BotLabeler(ABCBotLabeler):
 
     def __init__(
         self,
-        message_view: Optional[ABCBotMessageView] = None,
+        message_view: Optional["ABCBotMessageView"] = None,
         raw_event_view: Optional[RawBotEventView] = None,
         custom_rules: Optional[Dict[str, Type["ABCRule"]]] = None,
         auto_rules: Optional[List["ABCRule"]] = None,
