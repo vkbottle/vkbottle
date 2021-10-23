@@ -1,6 +1,7 @@
 from .auth import AuthError, UserAuth
 from .ctx_tool import BaseContext
 from .event_data import *  # noqa
+from .get_acceptable_kwargs import get_acceptable_kwargs
 from .keyboard import *  # noqa
 from .loop_wrapper import DelayedTask, LoopWrapper
 from .mini_types import BotTypes, UserTypes

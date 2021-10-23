@@ -54,7 +54,7 @@ class ABCMessageView(ABCDispenseView, ABC):
         handlers = []
 
         for handler in self.handlers:
-            result = await handler.filter(message)
+            result = await handler.filter(message, context_variables)
             logger.debug("Handler {} returned {}".format(handler, result))
 
             if result is False:

@@ -1,5 +1,6 @@
-import inspect
 from typing import TYPE_CHECKING, Any, Callable, Union
+
+from vkbottle.tools import get_acceptable_kwargs
 
 from .abc import ABCHandler
 
@@ -15,10 +16,12 @@ class FromFuncHandler(ABCHandler):
         self.rules = rules
         self.blocking = blocking
 
-    async def filter(self, event: "Event") -> Union[dict, bool]:
+    async def filter(self, event: "Event", context: dict) -> Union[dict, bool]:
         rule_context = {}
         for rule in self.rules:
-            result = await rule.check(event)
+            _context = {**context, **rule_context}
+            acceptable_context = get_acceptable_kwargs(rule.check, _context)
+            result = await rule.check(event, **acceptable_context)
             if result is False or result is None:
                 return False
             elif result is True:
@@ -27,9 +30,7 @@ class FromFuncHandler(ABCHandler):
         return rule_context
 
     async def handle(self, event: "Event", **context) -> Any:
-        acceptable_keys = list(inspect.signature(self.handler).parameters.keys())[1:]
-        acceptable_context = {k: v for k, v in context.items() if k in acceptable_keys}
-        return await self.handler(event, **acceptable_context)
+        return await self.handler(event, **get_acceptable_kwargs(self.handler, context))
 
     def __eq__(self, obj: object) -> bool:
         """

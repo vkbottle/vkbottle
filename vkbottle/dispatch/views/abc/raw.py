@@ -46,7 +46,7 @@ class ABCRawEventView(ABCView):
             else:
                 setattr(event_model, "unprepared_ctx_api", ctx_api)
 
-            result = await handler_basement.handler.filter(event_model)
+            result = await handler_basement.handler.filter(event_model, context_variables)
             logger.debug("Handler {} returned {}".format(handler_basement.handler, result))
 
             if result is False:

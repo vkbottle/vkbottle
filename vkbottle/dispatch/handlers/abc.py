@@ -9,7 +9,7 @@ class ABCHandler(ABC):
     blocking: bool
 
     @abstractmethod
-    async def filter(self, event: "Event") -> Union[dict, bool]:
+    async def filter(self, event: "Event", context: dict) -> Union[dict, bool]:
         pass
 
     @abstractmethod

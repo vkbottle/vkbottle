@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Iterable, Type
 
+from vkbottle.tools import get_acceptable_kwargs
+
 if TYPE_CHECKING:
     from vkbottle_types.events import Event
 
@@ -14,7 +16,7 @@ class ABCRule(ABC):
         return cls
 
     @abstractmethod
-    async def check(self, event: "Event"):
+    async def check(self, event: "Event", **kwargs):
         pass
 
     def __and__(self, other: "ABCRule") -> "ABCFilter":
@@ -41,11 +43,13 @@ class AndFilter(ABCFilter):
     def __init__(self, *rules: ABCRule):
         self._rules = rules
 
-    async def check(self, event: Any):
+    async def check(self, event: Any, **kwargs):
         context = {}
 
         for rule in self.rules:
-            check_response = await rule.check(event)
+            _context = {**kwargs, **context}
+            acceptable_context = get_acceptable_kwargs(rule.check, _context)
+            check_response = await rule.check(event, **acceptable_context)
             if check_response is False:
                 return False
             elif isinstance(check_response, dict):
@@ -62,9 +66,10 @@ class NotFilter(ABCFilter):
     def __init__(self, *rules: ABCRule):
         self._rules = rules
 
-    async def check(self, event: Any):
+    async def check(self, event: Any, **kwargs):
         for rule in self.rules:
-            check_response = await rule.check(event)
+            acceptable_context = get_acceptable_kwargs(rule.check, kwargs)
+            check_response = await rule.check(event, **acceptable_context)
             if check_response is False:
                 return True
         return False
@@ -78,9 +83,10 @@ class OrFilter(ABCFilter):
     def __init__(self, *rules: ABCRule):
         self._rules = rules
 
-    async def check(self, event: Any):
+    async def check(self, event: Any, **kwargs):
         for rule in self.rules:
-            check_response = await rule.check(event)
+            acceptable_context = get_acceptable_kwargs(rule.check, kwargs)
+            check_response = await rule.check(event, **acceptable_context)
             if check_response is not False:
                 return check_response
         return False
