@@ -1,5 +1,5 @@
-from typing import Callable
 import inspect
+from typing import Callable
 
 
 def get_acceptable_kwargs(func: Callable, context: dict) -> dict:

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Callable, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, Union
 
 from vkbottle.tools import get_acceptable_kwargs
 
@@ -17,7 +17,7 @@ class FromFuncHandler(ABCHandler):
         self.blocking = blocking
 
     async def filter(self, event: "Event", context: dict) -> Union[dict, bool]:
-        rule_context = {}
+        rule_context: Dict[str, Any] = {}
         for rule in self.rules:
             _context = {**context, **rule_context}
             acceptable_context = get_acceptable_kwargs(rule.check, _context)

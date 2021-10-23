@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Iterable, Type
+from typing import TYPE_CHECKING, Any, Dict, Iterable, Type
 
 from vkbottle.tools import get_acceptable_kwargs
 
@@ -44,7 +44,7 @@ class AndFilter(ABCFilter):
         self._rules = rules
 
     async def check(self, event: Any, **kwargs):
-        context = {}
+        context: Dict[str, Any] = {}
 
         for rule in self.rules:
             _context = {**kwargs, **context}

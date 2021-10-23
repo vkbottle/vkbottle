@@ -43,7 +43,7 @@ Message = TypeVar("Message", bound="Any")
 
 class ABCMessageRule(ABCRule, Generic[Message]):
     @abstractmethod
-    async def check(self, message: Message) -> Union[dict, bool]:
+    async def check(self, message: Message, **kwargs) -> Union[dict, bool]:
         pass
 
 
@@ -51,7 +51,7 @@ class PeerRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, from_chat: bool = True):
         self.from_chat = from_chat
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         return self.from_chat is (message.peer_id != message.from_id)
 
 
@@ -68,7 +68,7 @@ class CommandRule(ABCMessageRule[Message], Generic[Message]):
         self.args_count = args_count if isinstance(command_text, str) else command_text[1]
         self.sep = sep
 
-    async def check(self, message: Message) -> Union[dict, bool]:
+    async def check(self, message: Message, **kwargs) -> Union[dict, bool]:
         for prefix in self.prefixes:
             if self.args_count == 0 and message.text == prefix + self.command_text:
                 return True
@@ -106,7 +106,7 @@ class VBMLRule(ABCMessageRule[Message], Generic[Message]):
         self.patterns = pattern
         self.patcher = patcher or self.config["vbml_patcher"]
 
-    async def check(self, message: Message) -> Union[dict, bool]:
+    async def check(self, message: Message, **kwargs) -> Union[dict, bool]:
         for pattern in self.patterns:
             result = self.patcher.check(pattern, message.text)
             if result not in (None, False):
@@ -125,7 +125,7 @@ class RegexRule(ABCMessageRule[Message], Generic[Message]):
 
         self.regexp = regexp
 
-    async def check(self, message: Message) -> Union[dict, bool]:
+    async def check(self, message: Message, **kwargs) -> Union[dict, bool]:
         for regexp in self.regexp:
             match = re.match(regexp, message.text)
             if match:
@@ -140,7 +140,7 @@ class StickerRule(ABCMessageRule[Message], Generic[Message]):
             sticker_ids = [sticker_ids]
         self.sticker_ids = sticker_ids
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         if not message.attachments:
             return False
         elif not message.attachments[0].sticker:
@@ -160,7 +160,7 @@ class FromPeerRule(ABCMessageRule[Message], Generic[Message]):
             peer_ids = [peer_ids]
         self.peer_ids = peer_ids
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         return message.peer_id in self.peer_ids
 
 
@@ -170,7 +170,7 @@ class AttachmentTypeRule(ABCMessageRule[Message], Generic[Message]):
             attachment_types = [attachment_types]
         self.attachment_types = attachment_types
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         if not message.attachments:
             return False
         return all(
@@ -179,17 +179,17 @@ class AttachmentTypeRule(ABCMessageRule[Message], Generic[Message]):
 
 
 class ForwardMessagesRule(ABCMessageRule[Message], Generic[Message]):
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         return bool(message.fwd_messages)
 
 
 class ReplyMessageRule(ABCMessageRule[Message], Generic[Message]):
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         return bool(message.reply_message)
 
 
 class GeoRule(ABCMessageRule[Message], Generic[Message]):
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         return bool(message.geo)
 
 
@@ -222,7 +222,7 @@ class LevensteinRule(ABCMessageRule[Message], Generic[Message]):
 
         return current_row[n]
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         return any(
             self.distance(message.text, levenstein_text) <= self.max_distance
             for levenstein_text in self.levenstein_texts
@@ -233,7 +233,7 @@ class MessageLengthRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, min_length: int):
         self.min_length = min_length
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         return len(message.text) >= self.min_length
 
 
@@ -243,7 +243,7 @@ class ChatActionRule(ABCMessageRule[Message], Generic[Message]):
             chat_action_types = [chat_action_types]
         self.chat_action_types = chat_action_types
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         if not message.action:
             return False
         elif message.action.type.value in self.chat_action_types:
@@ -257,7 +257,7 @@ class PayloadRule(ABCMessageRule[Message], Generic[Message]):
             payload = [payload]
         self.payload = payload
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         return message.get_payload_json() in self.payload
 
 
@@ -265,7 +265,7 @@ class PayloadContainsRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, payload_particular_part: dict):
         self.payload_particular_part = payload_particular_part
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         payload = message.get_payload_json(unpack_failure=lambda p: {})
         return all(payload.get(k) == v for k, v in self.payload_particular_part.items())
 
@@ -316,7 +316,7 @@ class PayloadMapRule(ABCMessageRule[Message], Generic[Message]):
                 return False
         return True
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         payload = message.get_payload_json(unpack_failure=lambda p: {})
         return await self.match(payload, self.payload_map)
 
@@ -325,7 +325,7 @@ class FromUserRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, from_user: bool = True):
         self.from_user = from_user
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         return self.from_user is (message.from_id > 0)
 
 
@@ -333,7 +333,7 @@ class FuncRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, func: Union[Callable[[Message], Union[bool, Awaitable]]]):
         self.func = func
 
-    async def check(self, message: Message) -> Union[dict, bool]:
+    async def check(self, message: Message, **kwargs) -> Union[dict, bool]:
         if inspect.iscoroutinefunction(self.func):
             return await self.func(message)  # type: ignore
         return self.func(message)  # type: ignore
@@ -343,7 +343,7 @@ class CoroutineRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, coroutine: Coroutine):
         self.coro = coroutine
 
-    async def check(self, message: Message) -> Union[dict, bool]:
+    async def check(self, message: Message, **kwargs) -> Union[dict, bool]:
         return await self.coro
 
 
@@ -353,7 +353,7 @@ class StateRule(ABCMessageRule[Message], Generic[Message]):
             state = [] if state is None else [state]
         self.state = state
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         if message.state_peer is None:
             return not self.state
         return message.state_peer.state in self.state
@@ -365,7 +365,7 @@ class StateGroupRule(ABCMessageRule[Message], Generic[Message]):
             state_group = [] if state_group is None else [state_group]
         self.state_group = state_group
 
-    async def check(self, message: Message) -> bool:
+    async def check(self, message: Message, **kwargs) -> bool:
         if message.state_peer is None:
             return not self.state_group
         return type(message.state_peer.state) in self.state_group
@@ -386,7 +386,7 @@ class MacroRule(ABCMessageRule[Message], Generic[Message]):
             pattern = [pattern]
         self.patterns = list(map(macro.Pattern, pattern))
 
-    async def check(self, message: Message) -> Union[dict, bool]:
+    async def check(self, message: Message, **kwargs) -> Union[dict, bool]:
         for pattern in self.patterns:
             result = pattern.check(message.text)
             if result is not None:
