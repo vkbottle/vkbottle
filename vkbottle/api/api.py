@@ -61,7 +61,7 @@ class API(ABCAPI, APICategories):
         data = await self.validate_request(data)
 
         async with self.token_generator as token:
-            response = await self.http_client.request_json(
+            response = await self.http_client.request_text(
                 self.API_URL + method,
                 method="POST",
                 data=data,  # type: ignore
