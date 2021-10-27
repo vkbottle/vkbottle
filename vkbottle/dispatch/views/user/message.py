@@ -31,7 +31,7 @@ class ABCUserMessageView(ABCMessageView, ABC):
             event_type = UserEventType(self.get_event_type(event))
         except ValueError:
             event_type = UserEventType.UNDEFINED_EVENT
-        return event_type == UserEventType.NEW_MESSAGE
+        return event_type == UserEventType.MESSAGE_NEW
 
 
 class UserMessageView(ABCUserMessageView):
