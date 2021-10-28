@@ -41,7 +41,7 @@ aiohttp = "^3.6.2"
 choicelib = "^0.1.1"
 pydantic = "^1.8.2"
 vbml = "^1.0"
-vkbottle-types = "^5.131.119.3"
+vkbottle-types = "^5.131.119.4"
 watchgod = "^0.7"
 
 [tool.poetry.dev-dependencies]

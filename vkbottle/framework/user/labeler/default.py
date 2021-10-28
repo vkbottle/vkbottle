@@ -2,6 +2,7 @@ import re
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Type, Union
 
 import vbml
+from vkbottle_types.events.user_events import RawUserEvent
 
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import user
@@ -158,7 +159,7 @@ class UserLabeler(ABCUserLabeler):
     def raw_event(
         self,
         event: Union[str, List[str]],
-        dataclass: Callable = list,
+        dataclass: Callable = RawUserEvent,
         *rules: "ABCRule",
         blocking: bool = True,
         **custom_rules,

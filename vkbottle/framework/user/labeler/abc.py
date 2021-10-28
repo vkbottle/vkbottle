@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Union
 
+from vkbottle_types.events.user_events import RawUserEvent
+
 if TYPE_CHECKING:
     from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views import ABCView
@@ -27,7 +29,7 @@ class ABCUserLabeler(ABC):
     def raw_event(
         self,
         event: Union[str, List[str]],
-        dataclass: Callable = list,
+        dataclass: Callable = RawUserEvent,
         *rules: "ABCRule",
         **custom_rules,
     ) -> "LabeledHandler":
