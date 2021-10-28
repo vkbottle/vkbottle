@@ -158,7 +158,7 @@ class UserLabeler(ABCUserLabeler):
     def raw_event(
         self,
         event: Union[str, List[str]],
-        dataclass: Callable = dict,
+        dataclass: Callable = list,
         *rules: "ABCRule",
         blocking: bool = True,
         **custom_rules,

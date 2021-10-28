@@ -27,7 +27,7 @@ class ABCUserLabeler(ABC):
     def raw_event(
         self,
         event: Union[str, List[str]],
-        dataclass: Callable = dict,
+        dataclass: Callable = list,
         *rules: "ABCRule",
         **custom_rules,
     ) -> "LabeledHandler":
