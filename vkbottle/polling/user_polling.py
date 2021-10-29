@@ -20,6 +20,7 @@ class UserPolling(ABCPolling):
         api: Optional["ABCAPI"] = None,
         user_id: Optional[int] = None,
         wait: Optional[int] = None,
+        mode: Optional[int] = None,
         rps_delay: Optional[int] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
     ):
@@ -27,17 +28,19 @@ class UserPolling(ABCPolling):
         self.error_handler = error_handler or ErrorHandler()
         self.user_id = user_id
         self.wait = wait or 15
+        self.mode = mode or 234
         self.rps_delay = rps_delay or 0
         self.stop = False
 
     async def get_event(self, server: dict) -> dict:
         logger.debug("Making long request to get event with longpoll...")
         return await self.api.http_client.request_json(
-            "https://{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
+            "https://{}?act=a_check&key={}&ts={}&wait={}&mode={}&rps_delay={}".format(
                 server["server"],
                 server["key"],
                 server["ts"],
                 self.wait,
+                self.mode,
                 self.rps_delay,
             ),
             method="POST",
