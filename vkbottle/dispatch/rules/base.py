@@ -10,6 +10,7 @@ from typing import (
     Coroutine,
     Dict,
     Generic,
+    Iterable,
     List,
     Optional,
     Pattern,
@@ -85,26 +86,23 @@ class CommandRule(ABCMessageRule[Message], Generic[Message]):
 class VBMLRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(
         self,
-        pattern: Union[str, "vbml.Pattern", List[Union[str, "vbml.Pattern"]]],
+        pattern: Union[str, "vbml.Pattern", Iterable[Union[str, "vbml.Pattern"]]],
         patcher: Optional["vbml.Patcher"] = None,
         flags: Optional[re.RegexFlag] = None,
     ):
-        flags = flags or self.config.get("vbml_flags")
+        flags = flags or self.config.get("vbml_flags") or (re.MULTILINE | re.DOTALL)
 
         if isinstance(pattern, str):
             pattern = [vbml.Pattern(pattern, flags=flags or self.config.get("vbml_flags"))]
         elif isinstance(pattern, vbml.Pattern):
             pattern = [pattern]
-        elif isinstance(pattern, list):
+        elif isinstance(pattern, Iterable):
             pattern = [
-                p
-                if isinstance(p, vbml.Pattern)
-                else vbml.Pattern(p, flags=flags or self.config.get("vbml_flags"))
-                for p in pattern
+                p if isinstance(p, vbml.Pattern) else vbml.Pattern(p, flags=flags) for p in pattern
             ]
 
         self.patterns = pattern
-        self.patcher = patcher or self.config["vbml_patcher"]
+        self.patcher = patcher or self.config.get("vbml_patcher") or vbml.Patcher()
 
     async def check(self, message: Message) -> Union[dict, bool]:
         for pattern in self.patterns:
@@ -330,7 +328,7 @@ class FromUserRule(ABCMessageRule[Message], Generic[Message]):
 
 
 class FuncRule(ABCMessageRule[Message], Generic[Message]):
-    def __init__(self, func: Union[Callable[[Message], Union[bool, Awaitable]]]):
+    def __init__(self, func: Callable[[Message], Union[bool, Awaitable]]):
         self.func = func
 
     async def check(self, message: Message) -> Union[dict, bool]:
@@ -372,7 +370,7 @@ class StateGroupRule(ABCMessageRule[Message], Generic[Message]):
 
 
 try:
-    import macro
+    import macro  # type: ignore
 except ImportError:
     macro = None
 
