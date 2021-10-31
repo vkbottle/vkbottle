@@ -1,3 +1,4 @@
+from typing import Iterable
 from .abc import ABCTokenGenerator, Token
 from .consistent import ConsistentTokenGenerator
 from .single import SingleTokenGenerator
@@ -11,6 +12,6 @@ def get_token_generator(token: "Token") -> "ABCTokenGenerator":
     """
     if isinstance(token, str):
         return SingleTokenGenerator(token)
-    elif isinstance(token, list):
+    elif isinstance(token, Iterable):
         return ConsistentTokenGenerator(token)
     return token
