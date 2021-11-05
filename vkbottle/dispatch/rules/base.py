@@ -3,7 +3,6 @@ import re
 import types
 from abc import abstractmethod
 from typing import (
-    TYPE_CHECKING,
     Any,
     Awaitable,
     Callable,
@@ -21,17 +20,14 @@ from typing import (
 )
 
 import vbml
-from vkbottle_types.state import get_state_repr
 
+from vkbottle.dispatch.dispenser import BaseStateGroup, get_state_repr
 from vkbottle.tools.validator import (
     ABCValidator,
     CallableValidator,
     EqualsValidator,
     IsInstanceValidator,
 )
-
-if TYPE_CHECKING:
-    from vkbottle_types import BaseStateGroup
 
 from .abc import ABCRule
 

@@ -1,4 +1,4 @@
-from vkbottle_types import BaseStateGroup, GroupTypes, StatePeer
+from vkbottle_types import GroupTypes
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.tools.dev.vkscript_converter import vkscript
@@ -29,11 +29,13 @@ from .dispatch import (
     AndFilter,
     BaseMiddleware,
     BaseReturnManager,
+    BaseStateGroup,
     BuiltinStateDispenser,
     MiddlewareError,
     NotFilter,
     OrFilter,
     Router,
+    StatePeer,
 )
 from .exception_factory import (
     ABCErrorHandler,
