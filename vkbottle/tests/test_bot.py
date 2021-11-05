@@ -14,6 +14,7 @@ from vkbottle import (
     NotFilter,
     OrFilter,
     StatePeer,
+    BaseStateGroup
 )
 from vkbottle.bot import BotLabeler, Message, rules
 from vkbottle.tools.dev.mini_types.bot import message_min
@@ -63,7 +64,10 @@ EXAMPLE_EVENT = {
 }
 
 
-class MockIntEnum(enum.IntEnum):
+class FirstMockState(BaseStateGroup):
+    MOCK = 1
+
+class SecondMockState(BaseStateGroup):
     MOCK = 1
 
 
@@ -222,9 +226,13 @@ async def test_rules(api: API):
     assert await rules.PayloadRule([{"cmd": "text"}, {"cmd": "ne text"}]).check(
         fake_message(api, payload='{"cmd":"text"}')
     )
+    s_mock_message = fake_message(api)
+    s_mock_message.state_peer = StatePeer(peer_id=1, state=FirstMockState.MOCK)
+    assert await rules.StateRule(state=FirstMockState.MOCK).check(s_mock_message)
+    assert not await rules.StateRule(state=SecondMockState.MOCK).check(s_mock_message)
     assert await rules.StateRule(state=None).check(fake_message(api))
-    assert not await rules.StateRule(state=MockIntEnum.MOCK).check(fake_message(api))
     assert await rules.StateGroupRule(state_group=None).check(fake_message(api))
     sg_mock_message = fake_message(api)
-    sg_mock_message.state_peer = StatePeer(peer_id=1, state=MockIntEnum.MOCK, payload={})
-    assert await rules.StateGroupRule(state_group=MockIntEnum).check(sg_mock_message)
+    sg_mock_message.state_peer = StatePeer(peer_id=1, state=FirstMockState.MOCK, payload={})
+    assert await rules.StateGroupRule(state_group=FirstMockState).check(sg_mock_message)
+    assert not await rules.StateGroupRule(state_group=SecondMockState).check(sg_mock_message)

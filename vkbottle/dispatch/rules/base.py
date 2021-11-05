@@ -3,7 +3,6 @@ import re
 import types
 from abc import abstractmethod
 from typing import (
-    TYPE_CHECKING,
     Any,
     Awaitable,
     Callable,
@@ -22,15 +21,13 @@ from typing import (
 
 import vbml
 
+from vkbottle.dispatch.dispenser import BaseStateGroup, get_state_repr
 from vkbottle.tools.validator import (
     ABCValidator,
     CallableValidator,
     EqualsValidator,
     IsInstanceValidator,
 )
-
-if TYPE_CHECKING:
-    from vkbottle_types import BaseStateGroup
 
 from .abc import ABCRule
 
@@ -349,7 +346,7 @@ class StateRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, state: Union[List["BaseStateGroup"], "BaseStateGroup"]):
         if not isinstance(state, list):
             state = [] if state is None else [state]
-        self.state = state
+        self.state = [get_state_repr(s) for s in state]
 
     async def check(self, message: Message) -> bool:
         if message.state_peer is None:
@@ -361,12 +358,13 @@ class StateGroupRule(ABCMessageRule[Message], Generic[Message]):
     def __init__(self, state_group: Union[List[Type["BaseStateGroup"]], Type["BaseStateGroup"]]):
         if not isinstance(state_group, list):
             state_group = [] if state_group is None else [state_group]
-        self.state_group = state_group
+        self.state_group = [group.__name__ for group in state_group]
 
     async def check(self, message: Message) -> bool:
         if message.state_peer is None:
             return not self.state_group
-        return type(message.state_peer.state) in self.state_group
+        group_name, *_ = message.state_peer.state.split(":", maxsplit=1)
+        return group_name in self.state_group
 
 
 try:
