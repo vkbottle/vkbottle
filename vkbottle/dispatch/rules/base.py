@@ -3,6 +3,7 @@ import re
 import types
 from abc import abstractmethod
 from typing import (
+    TYPE_CHECKING,
     Any,
     Awaitable,
     Callable,
@@ -21,13 +22,16 @@ from typing import (
 
 import vbml
 
-from vkbottle.dispatch.dispenser import BaseStateGroup, get_state_repr
+from vkbottle.dispatch.dispenser import get_state_repr
 from vkbottle.tools.validator import (
     ABCValidator,
     CallableValidator,
     EqualsValidator,
     IsInstanceValidator,
 )
+
+if TYPE_CHECKING:
+    from vkbottle_types import BaseStateGroup
 
 from .abc import ABCRule
 
@@ -363,7 +367,7 @@ class StateGroupRule(ABCMessageRule[Message], Generic[Message]):
     async def check(self, message: Message) -> bool:
         if message.state_peer is None:
             return not self.state_group
-        group_name, *_ = message.state_peer.state.split(":", maxsplit=1)
+        group_name = message.state_peer.state.split(":", maxsplit=1)[0]
         return group_name in self.state_group
 
 
