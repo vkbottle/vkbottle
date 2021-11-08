@@ -43,7 +43,7 @@ class GeoRule(base.GeoRule[MessageMin]):
     pass
 
 
-class LevensteinRule(base.LevensteinRule[MessageMin]):
+class LevenshteinRule(base.LevenshteinRule[MessageMin]):
     pass
 
 

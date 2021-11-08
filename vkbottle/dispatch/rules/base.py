@@ -192,11 +192,11 @@ class GeoRule(ABCMessageRule[Message], Generic[Message]):
         return bool(message.geo)
 
 
-class LevensteinRule(ABCMessageRule[Message], Generic[Message]):
-    def __init__(self, levenstein_texts: Union[List[str], str], max_distance: int = 1):
-        if isinstance(levenstein_texts, str):
-            levenstein_texts = [levenstein_texts]
-        self.levenstein_texts = levenstein_texts
+class LevenshteinRule(ABCMessageRule[Message], Generic[Message]):
+    def __init__(self, levenshtein_texts: Union[List[str], str], max_distance: int = 1):
+        if isinstance(levenshtein_texts, str):
+            levenshtein_texts = [levenshtein_texts]
+        self.levenshtein_texts = levenshtein_texts
         self.max_distance = max_distance
 
     @staticmethod
@@ -223,8 +223,8 @@ class LevensteinRule(ABCMessageRule[Message], Generic[Message]):
 
     async def check(self, message: Message) -> bool:
         return any(
-            self.distance(message.text, levenstein_text) <= self.max_distance
-            for levenstein_text in self.levenstein_texts
+            self.distance(message.text, levenshtein_text) <= self.max_distance
+            for levenshtein_text in self.levenshtein_texts
         )
 
 
@@ -402,7 +402,7 @@ __all__ = (
     "StickerRule",
     "FromPeerRule",
     "AttachmentTypeRule",
-    "LevensteinRule",
+    "LevenshteinRule",
     "MessageLengthRule",
     "ChatActionRule",
     "PayloadRule",
