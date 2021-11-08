@@ -48,6 +48,6 @@ from .exception_factory import (
 from .framework import ABCBlueprint, ABCFramework, Bot, BotBlueprint
 from .http import ABCHTTPClient, AiohttpClient, SingleAiohttpClient
 from .polling import ABCPolling, BotPolling
-from .tools import *  # noqa # noqa
+from .tools import *  # noqa: F403
 
 event_types = GroupTypes
