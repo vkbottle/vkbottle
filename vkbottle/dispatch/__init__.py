@@ -4,5 +4,5 @@ from .dispenser import ABCStateDispenser, BaseStateGroup, BuiltinStateDispenser,
 from .handlers import ABCHandler
 from .middlewares import BaseMiddleware, MiddlewareError
 from .return_manager import BaseReturnManager
-from .rules import ABCFilter, ABCRule, AndFilter, NotFilter, OrFilter
+from .rules import ABCRule, AndRule, NotRule, OrRule
 from .views import ABCDispenseView, ABCView

@@ -1,7 +1,7 @@
-# AndFilter and OrFilter can be replaced with simple
+# AndRule and OrRule can be replaced with simple
 # tuple or set of rules. Tuple of rules is automatically
-# converted to the OrFilter and set is converted to
-# the AndFilter.
+# converted to the OrRule and set is converted to
+# the AndRule.
 
 import os
 
