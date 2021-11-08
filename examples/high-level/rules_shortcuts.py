@@ -5,7 +5,8 @@
 
 import os
 
-from vkbottle.bot import Bot, Message, rules
+from vkbottle.bot import Bot, Message
+from vkbottle.dispatch.rules.base import StickerRule, MessageLengthRule, FromUserRule, AttachmentTypeRule
 
 bot = Bot(os.environ["token"])
 
@@ -16,9 +17,9 @@ bot = Bot(os.environ["token"])
 # (4) AttachmentTypeRule will check if all attachments are of the same type
 # If (1) or (2) is confirmed, (3) is confirmed and (4) not confirmed check is satisfied
 @bot.on.message(
-    rules.StickerRule() | rules.MessageLengthRule(5),
-    rules.FromUserRule(),
-    ~rules.AttachmentTypeRule("photo"),
+    StickerRule() | MessageLengthRule(5),
+    FromUserRule(),
+    ~AttachmentTypeRule("photo"),
 )
 async def greeting(message: Message):
     await message.answer("Привет!")
