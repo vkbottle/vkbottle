@@ -39,7 +39,7 @@ class ErrorHandler(ABCErrorHandler):
             raise error
 
         if self.redirect_arguments:
-            await handler(error, *args, **kwargs)
+            return await handler(error, *args, **kwargs)
         return await handler(error)
 
     def catch(self, func: "AsyncFunc") -> "AsyncFunc":
@@ -48,6 +48,6 @@ class ErrorHandler(ABCErrorHandler):
             try:
                 await func(*args, **kwargs)
             except BaseException as error:
-                return await self.handle(error)
+                return await self.handle(error, *args, **kwargs)
 
         return wrapper
