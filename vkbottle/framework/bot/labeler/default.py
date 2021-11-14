@@ -5,7 +5,7 @@ import vbml
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.handlers import FromFuncHandler
-from vkbottle.dispatch.rules import bot
+from vkbottle.dispatch.rules import base
 from vkbottle.dispatch.views.bot import BotMessageView, HandlerBasement, RawBotEventView
 
 from .abc import ABCBotLabeler
@@ -19,28 +19,28 @@ if TYPE_CHECKING:
 
 
 DEFAULT_CUSTOM_RULES: Dict[str, Type["ABCRule"]] = {
-    "from_chat": bot.PeerRule,
-    "command": bot.CommandRule,
-    "from_user": bot.FromUserRule,
-    "peer_ids": bot.FromPeerRule,
-    "sticker": bot.StickerRule,
-    "attachment": bot.AttachmentTypeRule,
-    "levenstein": bot.LevensteinRule,
-    "lev": bot.LevensteinRule,
-    "length": bot.MessageLengthRule,
-    "action": bot.ChatActionRule,
-    "payload": bot.PayloadRule,
-    "payload_contains": bot.PayloadContainsRule,
-    "payload_map": bot.PayloadMapRule,
-    "func": bot.FuncRule,
-    "coro": bot.CoroutineRule,
-    "coroutine": bot.CoroutineRule,
-    "state": bot.StateRule,
-    "state_group": bot.StateGroupRule,
-    "regexp": bot.RegexRule,
-    "regex": bot.RegexRule,
-    "macro": bot.MacroRule,
-    "text": bot.VBMLRule,
+    "from_chat": base.PeerRule,
+    "command": base.CommandRule,
+    "from_user": base.FromUserRule,
+    "peer_ids": base.FromPeerRule,
+    "sticker": base.StickerRule,
+    "attachment": base.AttachmentTypeRule,
+    "levenshtein": base.LevenshteinRule,
+    "lev": base.LevenshteinRule,
+    "length": base.MessageLengthRule,
+    "action": base.ChatActionRule,
+    "payload": base.PayloadRule,
+    "payload_contains": base.PayloadContainsRule,
+    "payload_map": base.PayloadMapRule,
+    "func": base.FuncRule,
+    "coro": base.CoroutineRule,
+    "coroutine": base.CoroutineRule,
+    "state": base.StateRule,
+    "state_group": base.StateGroupRule,
+    "regexp": base.RegexRule,
+    "regex": base.RegexRule,
+    "macro": base.MacroRule,
+    "text": base.VBMLRule,
 }
 
 
@@ -130,7 +130,7 @@ class BotLabeler(ABCBotLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    bot.PeerRule(True),
+                    base.PeerRule(),
                     *rules,
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
@@ -148,7 +148,7 @@ class BotLabeler(ABCBotLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    bot.PeerRule(False),
+                    base.PeerRule(False),
                     *rules,
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),

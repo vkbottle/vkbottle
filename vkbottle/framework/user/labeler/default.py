@@ -5,7 +5,7 @@ import vbml
 from vkbottle_types.events.user_events import RawUserEvent
 
 from vkbottle.dispatch.handlers import FromFuncHandler
-from vkbottle.dispatch.rules import user
+from vkbottle.dispatch.rules import base
 from vkbottle.dispatch.views.user import HandlerBasement, RawUserEventView, UserMessageView
 
 from .abc import ABCUserLabeler
@@ -19,25 +19,25 @@ if TYPE_CHECKING:
 
 
 DEFAULT_CUSTOM_RULES: Dict[str, Type["ABCRule"]] = {
-    "from_chat": user.PeerRule,
-    "command": user.CommandRule,
-    "from_user": user.FromUserRule,
-    "peer_ids": user.FromPeerRule,
-    "sticker": user.StickerRule,
-    "attachment": user.AttachmentTypeRule,
-    "levenstein": user.LevensteinRule,
-    "lev": user.LevensteinRule,
-    "length": user.MessageLengthRule,
-    "action": user.ChatActionRule,
-    "func": user.FuncRule,
-    "coro": user.CoroutineRule,
-    "coroutine": user.CoroutineRule,
-    "state": user.StateRule,
-    "state_group": user.StateGroupRule,
-    "regexp": user.RegexRule,
-    "regex": user.RegexRule,
-    "macro": user.MacroRule,
-    "text": user.VBMLRule,
+    "from_chat": base.PeerRule,
+    "command": base.CommandRule,
+    "from_user": base.FromUserRule,
+    "peer_ids": base.FromPeerRule,
+    "sticker": base.StickerRule,
+    "attachment": base.AttachmentTypeRule,
+    "levenshtein": base.LevenshteinRule,
+    "lev": base.LevenshteinRule,
+    "length": base.MessageLengthRule,
+    "action": base.ChatActionRule,
+    "func": base.FuncRule,
+    "coro": base.CoroutineRule,
+    "coroutine": base.CoroutineRule,
+    "state": base.StateRule,
+    "state_group": base.StateGroupRule,
+    "regexp": base.RegexRule,
+    "regex": base.RegexRule,
+    "macro": base.MacroRule,
+    "text": base.VBMLRule,
 }
 
 
@@ -127,7 +127,7 @@ class UserLabeler(ABCUserLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    user.PeerRule(True),
+                    base.PeerRule(),
                     *rules,
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),
@@ -145,7 +145,7 @@ class UserLabeler(ABCUserLabeler):
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
-                    user.PeerRule(False),
+                    base.PeerRule(False),
                     *rules,
                     *self.auto_rules,
                     *self.get_custom_rules(custom_rules),

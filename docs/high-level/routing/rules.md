@@ -8,7 +8,7 @@
 `peer_ids` - от `FromPeerRule`  
 `sticker` - от `StickerRule`  
 `attachment` - от `AttachmentTypeRule`  
-`levenstein` и `lev` - от `LevensteinRule`  
+`levenshtein` и `lev` - от `LevenshteinRule`  
 `length` - от `MessageLengthRule`  
 `action` - от `ChatActionRule`  
 `payload` - от `PayloadRule`  

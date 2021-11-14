@@ -1,4 +1,3 @@
-import enum
 import json
 from typing import Any, Callable
 
@@ -7,16 +6,17 @@ import vbml
 
 from vkbottle import (
     API,
-    AndFilter,
+    AndRule,
+    BaseStateGroup,
     Bot,
     GroupEventType,
     GroupTypes,
-    NotFilter,
-    OrFilter,
+    NotRule,
+    OrRule,
     StatePeer,
-    BaseStateGroup
 )
-from vkbottle.bot import BotLabeler, Message, rules
+from vkbottle.bot import BotLabeler, Message
+from vkbottle.dispatch.rules import base
 from vkbottle.tools.dev.mini_types.bot import message_min
 from vkbottle.tools.test_utils import MockedClient, with_mocked_api
 
@@ -66,6 +66,7 @@ EXAMPLE_EVENT = {
 
 class FirstMockState(BaseStateGroup):
     MOCK = 1
+
 
 class SecondMockState(BaseStateGroup):
     MOCK = 1
@@ -140,71 +141,67 @@ def fake_message(ctx_api: API, **data: Any) -> Message:
 @pytest.mark.asyncio
 @with_mocked_api(None)
 async def test_rules(api: API):
-    assert await rules.FromPeerRule(123).check(fake_message(api, peer_id=123))
-    assert not await rules.FromUserRule().check(fake_message(api, from_id=-1))
-    assert await rules.VBMLRule("i am in love with <whom>", vbml.Patcher()).check(
+    assert await base.FromPeerRule(123).check(fake_message(api, peer_id=123))
+    assert not await base.FromUserRule().check(fake_message(api, from_id=-1))
+    assert await base.VBMLRule("i am in love with <whom>", vbml.Patcher()).check(
         fake_message(api, text="i am in love with you")
     ) == {"whom": "you"}
-    assert await rules.FuncRule(lambda m: m.text.endswith("!")).check(
+    assert await base.FuncRule(lambda m: m.text.endswith("!")).check(
         fake_message(api, text="yes!")
     )
-    assert not await rules.PeerRule(from_chat=True).check(fake_message(api, peer_id=1, from_id=1))
-    assert await rules.PayloadMapRule([("a", int), ("b", str)]).check(
+    assert not await base.PeerRule().check(fake_message(api, peer_id=1, from_id=1))
+    assert await base.PayloadMapRule([("a", int), ("b", str)]).check(
         fake_message(api, payload=json.dumps({"a": 1, "b": ""}))
     )
-    assert await rules.PayloadMapRule([("a", int), ("b", [("c", str), ("d", dict)])]).check(
+    assert await base.PayloadMapRule([("a", int), ("b", [("c", str), ("d", dict)])]).check(
         fake_message(api, payload=json.dumps({"a": 1, "b": {"c": "", "d": {}}}))
     )
-    assert await rules.PayloadMapRule({"a": int, "b": {"c": str, "d": dict}}).check(
+    assert await base.PayloadMapRule({"a": int, "b": {"c": str, "d": dict}}).check(
         fake_message(api, payload=json.dumps({"a": 1, "b": {"c": "", "d": {}}}))
     )
-    assert await rules.StickerRule(sticker_ids=[1, 2]).check(
+    assert await base.StickerRule(sticker_ids=[1, 2]).check(
         fake_message(api, attachments=[{"type": "sticker", "sticker": {"sticker_id": 2}}])
     )
 
     assert (
-        await AndFilter(rules.FromPeerRule(123), rules.FromPeerRule([1, 123])).check(
+        await AndRule(base.FromPeerRule(123), base.FromPeerRule([1, 123])).check(
             fake_message(api, peer_id=123)
         )
         is not False
     )
     assert (
-        await OrFilter(rules.FromPeerRule(123), rules.FromPeerRule([1, 123])).check(
+        await OrRule(base.FromPeerRule(123), base.FromPeerRule([1, 123])).check(
             fake_message(api, peer_id=1)
         )
         is not False
     )
-    assert (
-        await NotFilter(rules.FromPeerRule(123)).check(fake_message(api, peer_id=1)) is not False
-    )
-    assert await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi bro")) == {
-        "match": ()
-    }
-    assert await rules.RegexRule("Hi (.*?)$").check(fake_message(api, text="Hi bro")) == {
+    assert await NotRule(base.FromPeerRule(123)).check(fake_message(api, peer_id=1)) is not False
+    assert await base.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi bro")) == {"match": ()}
+    assert await base.RegexRule("Hi (.*?)$").check(fake_message(api, text="Hi bro")) == {
         "match": ("bro",)
     }
-    assert await rules.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) != {"match": ()}
+    assert await base.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi")) != {"match": ()}
 
-    assert rules.PayloadMapRule.transform_to_map({"a": int, "b": {"c": str, "d": dict}}) == [
+    assert base.PayloadMapRule.transform_to_map({"a": int, "b": {"c": str, "d": dict}}) == [
         ("a", int),
         ("b", [("c", str), ("d", dict)]),
     ]
-    assert await rules.CommandRule("cmd", ["!", "."], 2).check(
+    assert await base.CommandRule("cmd", ["!", "."], 2).check(
         fake_message(api, text="!cmd test bar")
     ) == {"args": ("test", "bar")}
     assert (
-        await rules.CommandRule("cmd", ["!", "."], 2).check(fake_message(api, text="cmd test bar"))
+        await base.CommandRule("cmd", ["!", "."], 2).check(fake_message(api, text="cmd test bar"))
         is False
     )
 
     # todo: if args are more than args_count do join excess args with last
     assert (
-        await rules.CommandRule("cmd", ["!", "."], 1).check(fake_message(api, text="cmd test bar"))
+        await base.CommandRule("cmd", ["!", "."], 1).check(fake_message(api, text="cmd test bar"))
         is False
     )
 
     assert (
-        await rules.CommandRule("cmd", ["!", "."], 3).check(fake_message(api, text="cmd test bar"))
+        await base.CommandRule("cmd", ["!", "."], 3).check(fake_message(api, text="cmd test bar"))
         is False
     )
 
@@ -220,19 +217,19 @@ async def test_rules(api: API):
     assert not await labeler.get_custom_rules({"text": "privet"})[0].check(
         fake_message(api, text="Private")
     )
-    assert await rules.PayloadRule({"cmd": "text"}).check(
+    assert await base.PayloadRule({"cmd": "text"}).check(
         fake_message(api, payload='{"cmd":"text"}')
     )
-    assert await rules.PayloadRule([{"cmd": "text"}, {"cmd": "ne text"}]).check(
+    assert await base.PayloadRule([{"cmd": "text"}, {"cmd": "ne text"}]).check(
         fake_message(api, payload='{"cmd":"text"}')
     )
     s_mock_message = fake_message(api)
     s_mock_message.state_peer = StatePeer(peer_id=1, state=FirstMockState.MOCK)
-    assert await rules.StateRule(state=FirstMockState.MOCK).check(s_mock_message)
-    assert not await rules.StateRule(state=SecondMockState.MOCK).check(s_mock_message)
-    assert await rules.StateRule(state=None).check(fake_message(api))
-    assert await rules.StateGroupRule(state_group=None).check(fake_message(api))
+    assert await base.StateRule(state=FirstMockState.MOCK).check(s_mock_message)
+    assert not await base.StateRule(state=SecondMockState.MOCK).check(s_mock_message)
+    assert await base.StateRule(state=None).check(fake_message(api))
+    assert await base.StateGroupRule(state_group=None).check(fake_message(api))
     sg_mock_message = fake_message(api)
     sg_mock_message.state_peer = StatePeer(peer_id=1, state=FirstMockState.MOCK, payload={})
-    assert await rules.StateGroupRule(state_group=FirstMockState).check(sg_mock_message)
-    assert not await rules.StateGroupRule(state_group=SecondMockState).check(sg_mock_message)
+    assert await base.StateGroupRule(state_group=FirstMockState).check(sg_mock_message)
+    assert not await base.StateGroupRule(state_group=SecondMockState).check(sg_mock_message)

@@ -6,7 +6,7 @@ from pytest_mock import MockerFixture
 
 from vkbottle import API
 from vkbottle.bot import Bot, run_multibot
-from vkbottle.dispatch import ABCRule, AndFilter, NotFilter, OrFilter
+from vkbottle.dispatch import ABCRule, AndRule, NotRule, OrRule
 from vkbottle.modules import json
 from vkbottle.tools import (
     CallableValidator,
@@ -237,13 +237,13 @@ async def test_utils(mocker: MockerFixture):
         "c_rule", (ABCRule,), {"check": task_to_run, "__init__": lambda s, i: setattr(s, "x", i)}
     )
 
-    assert (c_rule(None) | c_rule(None)).__class__ == OrFilter(
+    assert (c_rule(None) | c_rule(None)).__class__ == OrRule(
         c_rule(None),
     ).__class__
-    assert (c_rule(None) & c_rule(None)).__class__ == AndFilter(
+    assert (c_rule(None) & c_rule(None)).__class__ == AndRule(
         c_rule(None),
     ).__class__
-    assert (~c_rule(None)).__class__ == NotFilter(
+    assert (~c_rule(None)).__class__ == NotRule(
         c_rule(None),
     ).__class__
 

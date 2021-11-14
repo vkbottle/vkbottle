@@ -1,4 +1,5 @@
 from typing import Iterable
+
 from .abc import ABCTokenGenerator, Token
 from .consistent import ConsistentTokenGenerator
 from .single import SingleTokenGenerator

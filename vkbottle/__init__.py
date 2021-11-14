@@ -20,20 +20,19 @@ from .api import (
 )
 from .dispatch import (
     ABCDispenseView,
-    ABCFilter,
     ABCHandler,
     ABCRouter,
     ABCRule,
     ABCStateDispenser,
     ABCView,
-    AndFilter,
+    AndRule,
     BaseMiddleware,
     BaseReturnManager,
     BaseStateGroup,
     BuiltinStateDispenser,
     MiddlewareError,
-    NotFilter,
-    OrFilter,
+    NotRule,
+    OrRule,
     Router,
     StatePeer,
 )
