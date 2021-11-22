@@ -1,16 +1,22 @@
+import asyncio
+import typing
 from asyncio import AbstractEventLoop, get_event_loop
 from typing import NoReturn, Optional, Union
 
 from vkbottle.api import ABCAPI, API, Token
-from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
-from vkbottle.dispatch import ABCStateDispenser
+from vkbottle.dispatch import ABCRouter, BotRouter
 from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
 from vkbottle.framework.abc import ABCFramework
 from vkbottle.modules import logger
 from vkbottle.polling import ABCPolling, BotPolling
 from vkbottle.tools import LoopWrapper
+from vkbottle.tools.dev_tools.waiter import Await, DefaultWaiterHandler, Waiter
 
 from .labeler import ABCBotLabeler, BotLabeler
+
+if typing.TYPE_CHECKING:
+    from vkbottle.dispatch.rules.abc import ABCRule
+    from vkbottle.tools.dev_tools.mini_types.bot import MessageMin
 
 
 class Bot(ABCFramework):
@@ -23,7 +29,6 @@ class Bot(ABCFramework):
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCBotLabeler"] = None,
-        state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
         task_each_event: bool = True,
     ):
@@ -31,7 +36,6 @@ class Bot(ABCFramework):
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.labeler = labeler or BotLabeler()
-        self.state_dispenser = state_dispenser or BuiltinStateDispenser()
         self._polling = polling or BotPolling(self.api)
         self._router = router or BotRouter()
         self._loop = loop
@@ -45,7 +49,6 @@ class Bot(ABCFramework):
     def router(self) -> "ABCRouter":
         return self._router.construct(
             views=self.labeler.views(),
-            state_dispenser=self.state_dispenser,
             error_handler=self.error_handler,
         )
 
@@ -83,3 +86,21 @@ class Bot(ABCFramework):
     @loop.setter
     def loop(self, new_loop: AbstractEventLoop):
         self._loop = new_loop
+
+    def awaited_message(
+        self,
+        message: "MessageMin",
+        *rules_: "ABCRule",
+        default: typing.Optional[typing.Union[DefaultWaiterHandler, str]] = None,
+        **custom_rules,
+    ) -> Await["MessageMin"]:
+
+        event = asyncio.Event()
+
+        rules = list(rules_)
+        rules.extend(self.labeler.get_custom_rules(custom_rules))  # type: ignore
+
+        waiter = Waiter(rules, event, default)
+        self.labeler.message_view.waiters[message.peer_id] = waiter  # type: ignore
+
+        return Await(waiter)

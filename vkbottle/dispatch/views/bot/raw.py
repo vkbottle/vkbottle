@@ -1,9 +1,8 @@
-from typing import Any, Dict, List, NamedTuple, Callable
+from typing import Any, Callable, Dict, List, NamedTuple
 
 from vkbottle_types.events import GroupEventType
 
 from vkbottle.api.abc import ABCAPI
-from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware, MiddlewareResponse
 from vkbottle.dispatch.return_manager.bot import BotMessageReturnHandler
@@ -25,7 +24,7 @@ class RawEventView(ABCView):
             return True
 
     async def handle_event(
-        self, event: dict, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self, event: dict, ctx_api: "ABCAPI"
     ) -> Any:
         logger.debug("Handling event ({}) with message view".format(event.get("event_id")))
 

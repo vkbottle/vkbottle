@@ -4,7 +4,6 @@ from typing import Callable, Dict, Type
 from vkbottle.api.abc import ABCAPI
 from vkbottle.exception_factory.error_handler import ABCErrorHandler
 
-from .dispenser.abc import ABCStateDispenser
 from .views import ABCView
 
 
@@ -14,7 +13,6 @@ class ABCRouter(ABC):
     """
 
     views: Dict[str, "ABCView"] = {}
-    state_dispenser: ABCStateDispenser
     error_handler: ABCErrorHandler
 
     @abstractmethod
@@ -25,7 +23,6 @@ class ABCRouter(ABC):
     def construct(
         self,
         views: Dict[str, "ABCView"],
-        state_dispenser: ABCStateDispenser,
         error_handler: ABCErrorHandler,
     ) -> "ABCRouter":
         pass

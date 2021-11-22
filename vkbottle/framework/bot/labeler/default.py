@@ -15,6 +15,7 @@ from vkbottle.dispatch.rules.bot import (
     FromUserRule,
     FuncRule,
     LevensteinRule,
+    MacroRule,
     MessageLengthRule,
     PayloadContainsRule,
     PayloadMapRule,
@@ -24,13 +25,12 @@ from vkbottle.dispatch.rules.bot import (
     StateGroupRule,
     StateRule,
     StickerRule,
-    MacroRule,
     VBMLRule,
 )
 from vkbottle.dispatch.views import ABCView, HandlerBasement, MessageView, RawEventView
 from vkbottle.tools.dev_tools.utils import convert_shorten_filter
 
-from .abc import ABCBotLabeler, LabeledHandler, LabeledMessageHandler, EventName
+from .abc import ABCBotLabeler, EventName, LabeledHandler, LabeledMessageHandler
 
 ShortenRule = Union[ABCRule, Tuple[ABCRule, ...], Set[ABCRule]]
 DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {

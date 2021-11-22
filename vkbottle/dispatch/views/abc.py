@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import Any, List
 
 from vkbottle.api.abc import ABCAPI
-from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
 from vkbottle.dispatch.handlers import ABCHandler
 from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.dispatch.return_manager import BaseReturnManager
@@ -19,7 +18,7 @@ class ABCView(ABC):
 
     @abstractmethod
     async def handle_event(
-        self, event: dict, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self, event: dict, ctx_api: "ABCAPI"
     ) -> Any:
         pass
 

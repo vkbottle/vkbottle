@@ -1,3 +1,4 @@
+import enum
 import inspect
 import re
 import types
@@ -343,7 +344,7 @@ class CoroutineRule(ABCMessageRule):
 
 
 class StateRule(ABCMessageRule):
-    def __init__(self, state: Union[List[BaseStateGroup], BaseStateGroup]):
+    def __init__(self, state: Optional[Union[List[enum.IntEnum], enum.IntEnum]]):
         if not isinstance(state, list):
             state = [] if state is None else [state]
         self.state = state
@@ -355,7 +356,7 @@ class StateRule(ABCMessageRule):
 
 
 class StateGroupRule(ABCMessageRule):
-    def __init__(self, state_group: Union[List[Type[BaseStateGroup]], Type[BaseStateGroup]]):
+    def __init__(self, state_group: Optional[Union[List[Type[enum.IntEnum]], Type[enum.IntEnum]]]):
         if not isinstance(state_group, list):
             state_group = [] if state_group is None else [state_group]
         self.state_group = state_group

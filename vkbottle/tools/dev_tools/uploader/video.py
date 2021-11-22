@@ -1,5 +1,5 @@
 import json
-from typing import Union, List, Optional
+from typing import List, Optional, Union
 
 from .base import BaseUploader
 
@@ -15,7 +15,7 @@ class VideoUploader(BaseUploader):
         self,
         file_source: Optional[Union[str, bytes]] = None,
         group_id: Optional[int] = None,
-        **params
+        **params,
     ) -> Union[str, List[dict], dict]:
         server = await self.get_server(group_id=group_id)
         assert (

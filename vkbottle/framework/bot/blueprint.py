@@ -1,7 +1,7 @@
 from typing import Optional, Union
 
 from vkbottle.api import ABCAPI, API
-from vkbottle.dispatch import ABCStateDispenser, BotRouter
+from vkbottle.dispatch import BotRouter
 from vkbottle.framework.abc_blueprint import ABCBlueprint
 from vkbottle.framework.bot.bot import Bot
 from vkbottle.framework.bot.labeler import BotLabeler
@@ -24,18 +24,17 @@ class BotBlueprint(ABCBlueprint):
         self.constructed = False
 
     def construct(
-        self, api: Union[ABCAPI, API], polling: ABCPolling, state_dispenser: ABCStateDispenser
+        self, api: Union[ABCAPI, API], polling: ABCPolling
     ) -> "BotBlueprint":
         self.api = api
         self.polling = polling
-        self.state_dispenser = state_dispenser
         self.constructed = True
         return self
 
     def load(self, framework: "Bot") -> "BotBlueprint":
         framework.labeler.load(self.labeler)  # type: ignore
         logger.debug(f"Blueprint {self.name!r} loaded")
-        return self.construct(framework.api, framework.polling, framework.state_dispenser)
+        return self.construct(framework.api, framework.polling)
 
     @property
     def on(self) -> BotLabeler:

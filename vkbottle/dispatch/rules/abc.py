@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Type, Union, Iterable, Any
+from typing import Any, Iterable, Type, Union
 
 from vkbottle_types.events import BaseGroupEvent, BaseUserEvent
 
@@ -13,7 +13,7 @@ class ABCRule(ABC):
         return cls
 
     @abstractmethod
-    async def check(self, event: Union[BaseUserEvent, BaseGroupEvent]):
+    async def check(self, event: Any):
         pass
 
     def __and__(self, other: "ABCRule") -> "ABCFilter":

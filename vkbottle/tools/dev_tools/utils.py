@@ -1,14 +1,13 @@
+import asyncio
 import importlib
 import os
 import re
 import typing
-import asyncio
 
 from vkbottle.dispatch.rules import ABCRule, AndFilter, OrFilter
 
 if typing.TYPE_CHECKING:
     from vkbottle.framework.abc_blueprint import ABCBlueprint
-    from vkbottle.api.token_generator import ABCTokenGenerator, Token
 
 
 # This feature is not used in production

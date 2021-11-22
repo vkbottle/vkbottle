@@ -3,7 +3,7 @@ from abc import abstractmethod
 from typing import Any, NoReturn, Optional, Union
 
 from vkbottle.api import ABCAPI, API
-from vkbottle.dispatch import ABCRouter, ABCStateDispenser
+from vkbottle.dispatch import ABCRouter
 from vkbottle.polling import ABCPolling
 
 from .abc import ABCFramework
@@ -16,14 +16,13 @@ class ABCBlueprint(ABCFramework):
 
     _polling: Optional[ABCPolling] = None
     _api: Optional[ABCAPI] = None
-    _state_dispenser: Optional[ABCStateDispenser] = None
 
     name: str = "Unnamed"
     constructed: bool = False
 
     @abstractmethod
     def construct(
-        self, api: ABCAPI, polling: ABCPolling, state_dispenser: ABCStateDispenser
+        self, api: ABCAPI, polling: ABCPolling
     ) -> "ABCBlueprint":
         pass
 
@@ -39,15 +38,6 @@ class ABCBlueprint(ABCFramework):
     @polling.setter
     def polling(self, new_polling: ABCPolling):  # type: ignore
         self._polling = new_polling
-
-    @property
-    def state_dispenser(self) -> ABCStateDispenser:
-        self.assert_constructed()
-        return self._state_dispenser
-
-    @state_dispenser.setter
-    def state_dispenser(self, new_state_dispenser: ABCStateDispenser):
-        self._state_dispenser = new_state_dispenser
 
     @property
     def loop(self) -> asyncio.AbstractEventLoop:
