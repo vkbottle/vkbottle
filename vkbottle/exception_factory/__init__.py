@@ -5,9 +5,9 @@ from .swear_handler import swear
 
 __all__ = (
     "ABCErrorHandler",
+    "CaptchaError",
+    "CodeException",
     "ErrorHandler",
     "swear",
     "VKAPIError",
-    "CaptchaError",
-    "CodeException",
 )

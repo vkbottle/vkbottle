@@ -5,6 +5,6 @@ DEFAULT_REQUEST_VALIDATORS = [TranslateFriendlyTypesRequestValidator()]
 
 __all__ = (
     "ABCRequestValidator",
-    "TranslateFriendlyTypesRequestValidator",
     "DEFAULT_REQUEST_VALIDATORS",
+    "TranslateFriendlyTypesRequestValidator",
 )

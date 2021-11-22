@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 
 from .abc import ABCRule
 
-__all__ = [
+__all__ = (
     "PeerRule",
     "CommandRule",
     "VBMLRule",
@@ -53,7 +53,7 @@ __all__ = [
     "StateGroupRule",
     "RegexRule",
     "MacroRule",
-]
+)
 
 
 DEFAULT_PREFIXES = ["!", "/"]

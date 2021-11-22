@@ -9,7 +9,7 @@ DEFAULT_RESPONSE_VALIDATORS = [
 
 __all__ = (
     "ABCResponseValidator",
+    "DEFAULT_RESPONSE_VALIDATORS",
     "JSONResponseValidator",
     "VKAPIErrorResponseValidator",
-    "DEFAULT_RESPONSE_VALIDATORS",
 )

@@ -5,7 +5,7 @@ from .builtin import BuiltinStateDispenser
 __all__ = (
     "ABCStateDispenser",
     "BaseStateGroup",
-    "StatePeer",
-    "get_state_repr",
     "BuiltinStateDispenser",
+    "get_state_repr",
+    "StatePeer",
 )
