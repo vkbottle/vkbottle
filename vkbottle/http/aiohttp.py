@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any, Optional
 from aiohttp import ClientSession, TCPConnector
 
 from vkbottle.modules import json as json_module
-from vkbottle.tools.dev.singleton import Singleton
 
 from .abc import ABCHTTPClient
 
@@ -74,6 +73,13 @@ class AiohttpClient(ABCHTTPClient):
             self.session._connector = None
 
 
-class SingleAiohttpClient(AiohttpClient, Singleton):
+class SingleAiohttpClient(AiohttpClient):
+    __instance__ = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls.__instance__ is not None:
+            return cls.__instance__
+        return super().__new__(cls, *args, **kwargs)
+
     def __aexit__(self, exc_type, exc_val, exc_tb):
         pass  # no need to close session in this case

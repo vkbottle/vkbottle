@@ -1,7 +1,3 @@
-# type: ignore
-# ^ ignore typing because legacies were entirely
-# copied from vkbottle 2.x without quality insurance
-
 from typing import List
 from warnings import warn
 

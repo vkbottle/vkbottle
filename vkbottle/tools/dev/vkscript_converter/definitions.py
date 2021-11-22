@@ -1,5 +1,3 @@
-# type: ignore
-
 import ast
 import random
 import string
@@ -182,7 +180,6 @@ def call(d: ast.Call):
     while isinstance(func, ast.Attribute):
         calls.append(func.attr)
         func = func.value
-
     if func.__class__ == ast.Str:
         if calls[0] in CALL_STRING:
             return str(find(d.args[0])) + "." + calls[0] + "(" + find(func) + ")"
@@ -190,14 +187,14 @@ def call(d: ast.Call):
             raise ConverterError("Use f-strings instead of str.format")
         raise ConverterError("String formatter")
 
-    if func.id.lower() == "api":
-        params = dispatch_keywords(d.keywords)
+    if func.id.lower() == "api":  # type: ignore
+        params = dispatch_keywords(d.keywords)  # type: ignore
         return "API." + ".".join(calls[::-1]) + "({" + params + "})"
-    elif func.id == "len":
+    elif func.id == "len":  # type: ignore
         return f"{find(d.args[0])}.length"
     elif calls and calls[0] in CALL_REPLACEMENTS:
         args = ",".join(find(arg) for arg in d.args)
-        return find(d.func.value) + "." + CALL_REPLACEMENTS[calls[0]] + "(" + args + ")"
+        return find(d.func.value) + "." + CALL_REPLACEMENTS[calls[0]] + "(" + args + ")"  # type: ignore
     elif calls[0] in CALL_STRING:
         return find(func) + "." + calls[0] + "(" + find(d.args[0]) + ")"
     raise ConverterError(f"Call for {getattr(d.func, 'attr', d.func.__dict__)} is not referenced")
@@ -247,9 +244,9 @@ def unary_op(d: ast.UnaryOp):
 def subscript(d: ast.Subscript):
     value = find(d.value)
     if d.slice.__class__ == ast.Index:
-        if d.slice.value.__class__ == str:
-            return f"{value}.{d.slice.value.s}"
-        return f"{value}[{find(d.slice.value)}]"
+        if d.slice.value.__class__ == str:  # type: ignore
+            return f"{value}.{d.slice.value.s}"  # type: ignore
+        return f"{value}[{find(d.slice.value)}]"  # type: ignore
     raise ConverterError(f"Slice {d.slice} is not referenced")
 
 

@@ -6,7 +6,12 @@
 import os
 
 from vkbottle.bot import Bot, Message
-from vkbottle.dispatch.rules.base import StickerRule, MessageLengthRule, FromUserRule, AttachmentTypeRule
+from vkbottle.dispatch.rules.base import (
+    AttachmentTypeRule,
+    FromUserRule,
+    MessageLengthRule,
+    StickerRule,
+)
 
 bot = Bot(os.environ["token"])
 

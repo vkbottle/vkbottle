@@ -1,1 +1,3 @@
-from .definitions import vkscript  # type: ignore
+from .definitions import vkscript
+
+__all__ = ("vkscript",)
