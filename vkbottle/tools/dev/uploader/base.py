@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from io import BytesIO
 from typing import TYPE_CHECKING, Callable, Optional, Union
 
+from vkbottle.exception_factory.base_exceptions import VKAPIError
+
 from vkbottle.modules import json
 
 if TYPE_CHECKING:
@@ -58,7 +60,14 @@ class BaseUploader(ABC):
     async def get_owner_id(self, upload_params: dict) -> int:
         if "group_id" in upload_params:
             return upload_params["group_id"]
-        return (await self.api.request("groups.getById", {}))["response"][0]["id"]
+        if "user_id" in upload_params:
+            return upload_params["user_id"]
+        if "owner_id" in upload_params:
+            return upload_params["owner_id"]
+        try:
+            return (await self.api.request("groups.getById", {}))["response"][0]["id"]
+        except VKAPIError:
+            return (await self.api.request("users.get", {}))["response"][0]["id"]
 
     @staticmethod
     def generate_attachment_string(attachment_type: str, owner_id: int, item_id: int) -> str:
