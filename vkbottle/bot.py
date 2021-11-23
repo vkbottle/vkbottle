@@ -7,10 +7,11 @@ Message = MessageMin
 Blueprint = BotBlueprint
 
 __all__ = (
-    "Bot",
-    "BotBlueprint",
-    "BotLabeler",
     "ABCBotLabeler",
+    "Bot",
+    "Blueprint",
+    "BotLabeler",
+    "Message",
     "run_multibot",
     "rules",
     "views",
