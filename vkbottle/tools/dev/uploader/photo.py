@@ -66,7 +66,8 @@ class PhotoWallUploader(PhotoUploader):
 
 class PhotoFaviconUploader(PhotoUploader):
     async def upload(self, file_source: Union[str, "Bytes"], **params) -> Union[str, dict]:
-        server = await self.get_server(owner_id=await self.get_owner_id(params))
+        owner_id = await self.get_owner_id(params)
+        server = await self.get_server(owner_id=owner_id)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
@@ -76,7 +77,7 @@ class PhotoFaviconUploader(PhotoUploader):
         ]
 
         if self.generate_attachment_strings:
-            return self.generate_attachment_string("photo", photo["owner_id"], photo["id"])
+            return self.generate_attachment_string("wall", owner_id, photo["post_id"])
         return photo
 
     async def get_server(self, **kwargs) -> dict:
