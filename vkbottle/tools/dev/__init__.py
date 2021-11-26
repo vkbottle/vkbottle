@@ -1,7 +1,9 @@
 from .auth import AuthError, UserAuth
 from .ctx_tool import BaseContext
+from .delayed_task import DelayedTask
 from .event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
 from .keyboard import (
+    EMPTY_KEYBOARD,
     ABCAction,
     Callback,
     Keyboard,
@@ -12,7 +14,7 @@ from .keyboard import (
     VKApps,
     VKPay,
 )
-from .loop_wrapper import DelayedTask, LoopWrapper
+from .loop_wrapper import LoopWrapper
 from .mini_types import BotTypes, UserTypes
 from .storage import ABCStorage, CtxStorage
 from .template import TemplateElement, template_gen
@@ -55,12 +57,11 @@ __all__ = (
     "DocUploader",
     "DocWallUploader",
     "DocWallUploader",
+    "EMPTY_KEYBOARD",
     "GraffitiUploader",
     "GraffitiUploader",
     "Keyboard",
     "KeyboardButtonColor",
-    "KeyboardError",
-    "KeyboardErrorType",
     "load_blueprints_from_package",
     "Location",
     "LoopWrapper",
