@@ -5,11 +5,10 @@ from vkbottle.api import API
 from vkbottle.dispatch import BuiltinStateDispenser, Router
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.framework.abc import ABCFramework
+from vkbottle.framework.labeler import UserLabeler
 from vkbottle.modules import logger
 from vkbottle.polling import UserPolling
 from vkbottle.tools import LoopWrapper, UserAuth
-
-from .labeler import UserLabeler
 
 if TYPE_CHECKING:
     from asyncio import AbstractEventLoop
@@ -17,9 +16,8 @@ if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, Token
     from vkbottle.dispatch import ABCRouter, ABCStateDispenser
     from vkbottle.exception_factory import ABCErrorHandler
+    from vkbottle.framework.labeler import ABCLabeler
     from vkbottle.polling import ABCPolling
-
-    from .labeler import ABCUserLabeler
 
 
 class User(ABCFramework):
@@ -31,7 +29,7 @@ class User(ABCFramework):
         loop: Optional["AbstractEventLoop"] = None,
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
-        labeler: Optional["ABCUserLabeler"] = None,
+        labeler: Optional["ABCLabeler"] = None,
         state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
         task_each_event: bool = True,
@@ -63,7 +61,7 @@ class User(ABCFramework):
         self._router = new_router
 
     @property
-    def on(self) -> "ABCUserLabeler":
+    def on(self) -> "ABCLabeler":
         return self.labeler
 
     @classmethod

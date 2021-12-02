@@ -3,7 +3,6 @@ from io import BytesIO
 from typing import TYPE_CHECKING, Callable, Optional, Union
 
 from vkbottle.exception_factory.base_exceptions import VKAPIError
-
 from vkbottle.modules import json
 
 if TYPE_CHECKING:

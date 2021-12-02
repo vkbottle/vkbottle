@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Optional, Union
 
 from vkbottle.dispatch import Router
 from vkbottle.framework.abc_blueprint import ABCBlueprint
-from vkbottle.framework.user.labeler import UserLabeler
+from vkbottle.framework.labeler import UserLabeler
 from vkbottle.modules import logger
 
 if TYPE_CHECKING:

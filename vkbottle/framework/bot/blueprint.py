@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional, Union
 from vkbottle.dispatch import Router
 from vkbottle.framework.abc_blueprint import ABCBlueprint
 from vkbottle.framework.bot.bot import Bot
-from vkbottle.framework.bot.labeler import BotLabeler
+from vkbottle.framework.labeler import BotLabeler
 from vkbottle.modules import logger
 
 if TYPE_CHECKING:

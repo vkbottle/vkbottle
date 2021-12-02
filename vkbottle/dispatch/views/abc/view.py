@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, List, Optional, Set, Type
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set, Type, Union
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.middlewares import BaseMiddleware
@@ -12,11 +12,13 @@ if TYPE_CHECKING:
     from vkbottle.dispatch.handlers import ABCHandler
     from vkbottle.dispatch.return_manager import BaseReturnManager
 
+    Handlers = Union[List["ABCHandler"], Dict[Any, List]]
+
 DEFAULT_STATE_KEY = "peer_id"
 
 
 class ABCView(ABC):
-    handlers: List["ABCHandler"]
+    handlers: "Handlers"
     middlewares: Set[Type["BaseMiddleware"]]
     handler_return_manager: "BaseReturnManager"
 

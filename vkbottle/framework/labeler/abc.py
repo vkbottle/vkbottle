@@ -1,18 +1,16 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Union
 
-from vkbottle_types.events.user_events import RawUserEvent
-
 if TYPE_CHECKING:
     from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views import ABCView
-    from vkbottle.tools.dev.mini_types.user.message import MessageMin
+    from vkbottle.tools.dev.mini_types.base.message import BaseMessageMin
 
-    LabeledMessageHandler = Callable[..., Callable[["MessageMin"], Any]]
+    LabeledMessageHandler = Callable[..., Callable[["BaseMessageMin"], Any]]
     LabeledHandler = Callable[..., Callable[[Any], Any]]
 
 
-class ABCUserLabeler(ABC):
+class ABCLabeler(ABC):
     @abstractmethod
     def message(self, *rules: "ABCRule", **custom_rules) -> "LabeledMessageHandler":
         pass
@@ -29,7 +27,7 @@ class ABCUserLabeler(ABC):
     def raw_event(
         self,
         event: Union[str, List[str]],
-        dataclass: Callable = RawUserEvent,
+        dataclass: Callable,
         *rules: "ABCRule",
         **custom_rules,
     ) -> "LabeledHandler":

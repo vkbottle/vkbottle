@@ -1,21 +1,20 @@
 import re
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Type, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type
 
 import vbml
-from vkbottle_types.events import GroupEventType
 
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import base
-from vkbottle.dispatch.views.bot import BotMessageView, HandlerBasement, RawBotEventView
+from vkbottle.dispatch.views.abc import ABCRawEventView
 
-from .abc import ABCBotLabeler
+from .abc import ABCLabeler
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views import ABCView
-    from vkbottle.dispatch.views.bot import ABCBotMessageView
+    from vkbottle.dispatch.views.abc import ABCMessageView
 
-    from .abc import EventName, LabeledHandler, LabeledMessageHandler
+    from .abc import LabeledMessageHandler
 
 
 DEFAULT_CUSTOM_RULES: Dict[str, Type["ABCRule"]] = {
@@ -44,29 +43,16 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type["ABCRule"]] = {
 }
 
 
-class BotLabeler(ABCBotLabeler):
-    """BotLabeler - shortcut manager for router
-    Can be loaded to other BotLabeler
-    >>> bl = BotLabeler()
-    >>> ...
-    >>> bl.load(BotLabeler())
-    Views are fixed. Custom rules can be set locally (they are
-    not inherited to other labelers). Rule config is accessible from
-    all custom rules from ABCRule.config
-    """
-
+class BaseLabeler(ABCLabeler):
     def __init__(
         self,
-        message_view: Optional["ABCBotMessageView"] = None,
-        raw_event_view: Optional[RawBotEventView] = None,
+        message_view: "ABCMessageView",
+        raw_event_view: "ABCRawEventView",
         custom_rules: Optional[Dict[str, Type["ABCRule"]]] = None,
         auto_rules: Optional[List["ABCRule"]] = None,
     ):
-        # Default views are fixed in BotLabeler,
-        # if you need to create your own implement
-        # custom labeler
-        self.message_view = message_view or BotMessageView()
-        self.raw_event_view = raw_event_view or RawBotEventView()
+        self.message_view = message_view
+        self.raw_event_view = raw_event_view
 
         self.custom_rules = custom_rules or DEFAULT_CUSTOM_RULES
         self.auto_rules = auto_rules or []
@@ -159,53 +145,13 @@ class BotLabeler(ABCBotLabeler):
 
         return decorator
 
-    def raw_event(
-        self,
-        event: Union["EventName", List["EventName"]],
-        dataclass: Callable = dict,
-        *rules: "ABCRule",
-        blocking: bool = True,
-        **custom_rules,
-    ) -> "LabeledHandler":
-
-        if not isinstance(event, list):
-            event = [event]
-
-        def decorator(func):
-            for e in event:
-
-                if isinstance(e, str):
-                    e = GroupEventType(e)
-
-                event_handlers = self.raw_event_view.handlers.get(e)
-                handler_basement = HandlerBasement(
-                    dataclass,
-                    FromFuncHandler(
-                        func,
-                        *rules,
-                        *self.auto_rules,
-                        *self.get_custom_rules(custom_rules),
-                        blocking=blocking,
-                    ),
-                )
-                if not event_handlers:
-                    self.raw_event_view.handlers[e] = [handler_basement]
-                else:
-                    self.raw_event_view.handlers[e].append(handler_basement)
-            return func
-
-        return decorator
-
-    def load(self, labeler: "BotLabeler"):
+    def load(self, labeler: "BaseLabeler"):
         self.message_view.handlers.extend(labeler.message_view.handlers)
         self.message_view.middlewares.update(labeler.message_view.middlewares)
-        for event, handler_basements in labeler.raw_event_view.handlers.items():
-            event_handlers = self.raw_event_view.handlers.get(event)
-            if event_handlers:
-                event_handlers.extend(handler_basements)
-            else:
-                self.raw_event_view.handlers[event] = handler_basements
         self.raw_event_view.middlewares.update(labeler.raw_event_view.middlewares)
+        for event, handler_basements in labeler.raw_event_view.handlers.items():
+            event_handlers = self.raw_event_view.handlers.setdefault(event, [])
+            event_handlers.extend(handler_basements)
 
     def get_custom_rules(self, custom_rules: Dict[str, Any]) -> List["ABCRule"]:
         return [self.custom_rules[k].with_config(self.rule_config)(v) for k, v in custom_rules.items()]  # type: ignore

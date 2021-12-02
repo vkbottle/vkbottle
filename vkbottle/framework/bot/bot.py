@@ -5,19 +5,17 @@ from vkbottle.api import API
 from vkbottle.dispatch import BuiltinStateDispenser, Router
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.framework.abc import ABCFramework
+from vkbottle.framework.labeler import BotLabeler
 from vkbottle.modules import logger
 from vkbottle.polling import BotPolling
 from vkbottle.tools import LoopWrapper
-
-from .labeler import BotLabeler
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, Token
     from vkbottle.dispatch import ABCRouter, ABCStateDispenser
     from vkbottle.exception_factory import ABCErrorHandler
+    from vkbottle.framework.labeler import ABCLabeler
     from vkbottle.polling import ABCPolling
-
-    from .labeler import ABCBotLabeler
 
 
 class Bot(ABCFramework):
@@ -29,7 +27,7 @@ class Bot(ABCFramework):
         loop: Optional[AbstractEventLoop] = None,
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
-        labeler: Optional["ABCBotLabeler"] = None,
+        labeler: Optional["ABCLabeler"] = None,
         state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
         task_each_event: bool = True,
@@ -61,7 +59,7 @@ class Bot(ABCFramework):
         self._router = new_router
 
     @property
-    def on(self) -> "ABCBotLabeler":
+    def on(self) -> "ABCLabeler":
         return self.labeler
 
     async def run_polling(self, custom_polling: Optional["ABCPolling"] = None) -> NoReturn:
