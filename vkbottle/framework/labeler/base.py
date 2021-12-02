@@ -147,8 +147,8 @@ class BaseLabeler(ABCLabeler):
 
     def load(self, labeler: "BaseLabeler"):
         self.message_view.handlers.extend(labeler.message_view.handlers)
-        self.message_view.middlewares.update(labeler.message_view.middlewares)
-        self.raw_event_view.middlewares.update(labeler.raw_event_view.middlewares)
+        self.message_view.middlewares.extend(labeler.message_view.middlewares)
+        self.raw_event_view.middlewares.extend(labeler.raw_event_view.middlewares)
         for event, handler_basements in labeler.raw_event_view.handlers.items():
             event_handlers = self.raw_event_view.handlers.setdefault(event, [])
             event_handlers.extend(handler_basements)

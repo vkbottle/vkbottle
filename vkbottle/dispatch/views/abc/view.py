@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set, Type, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.middlewares import BaseMiddleware
@@ -19,13 +19,13 @@ DEFAULT_STATE_KEY = "peer_id"
 
 class ABCView(ABC):
     handlers: "Handlers"
-    middlewares: Set[Type["BaseMiddleware"]]
+    middlewares: List[Type["BaseMiddleware"]]
     handler_return_manager: "BaseReturnManager"
 
     @abstractmethod
     def __init__(self):
         self.handlers = []
-        self.middlewares = set()
+        self.middlewares = []
         self.handler_return_manager = None  # type: ignore
 
     @abstractmethod
@@ -81,11 +81,11 @@ class ABCView(ABC):
 
     def register_middleware(self, middleware: Type["BaseMiddleware"]):
         try:
-            if not issubclass(middleware, (BaseMiddleware,)):
+            if not issubclass(middleware, BaseMiddleware):
                 raise ValueError("Argument is not a subclass of BaseMiddleware")
         except TypeError:
             raise ValueError("Argument is not a class")
-        self.middlewares.add(middleware)
+        self.middlewares.append(middleware)
 
     def __repr__(self) -> str:
         return (
