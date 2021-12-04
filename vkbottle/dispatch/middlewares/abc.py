@@ -1,24 +1,25 @@
 from abc import ABC
-from typing import TYPE_CHECKING, Any, List, NoReturn, Optional
+from typing import TYPE_CHECKING, Any, Generic, List, NoReturn, Optional, TypeVar
 
 if TYPE_CHECKING:
-    from vkbottle_types.events import Event
-
     from vkbottle.dispatch.handlers.abc import ABCHandler
     from vkbottle.dispatch.views.abc import ABCView
+
+
+T = TypeVar("T")
 
 
 class MiddlewareError(Exception):
     pass
 
 
-class BaseMiddleware(ABC):
-    event: "Event"
+class BaseMiddleware(ABC, Generic[T]):
+    event: T
     view: Optional["ABCView"]
     handle_responses: List
     handlers: List["ABCHandler"]
 
-    def __init__(self, event: "Event", view: Optional["ABCView"] = None):
+    def __init__(self, event: T, view: Optional["ABCView"] = None):
         self.event = event
         self.view = view
 
