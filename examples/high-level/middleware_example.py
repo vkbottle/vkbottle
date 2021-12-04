@@ -9,13 +9,13 @@ bot = Bot(os.environ["token"])
 dummy_db = CtxStorage()
 
 
-class NoBotMiddleware(BaseMiddleware):
+class NoBotMiddleware(BaseMiddleware[Message]):
     async def pre(self):
         if self.event.from_id < 0:
             self.stop("Groups are not allowed to use bot")
 
 
-class RegistrationMiddleware(BaseMiddleware):
+class RegistrationMiddleware(BaseMiddleware[Message]):
     call_count = 0
 
     def __init__(self, event, view):
@@ -43,7 +43,7 @@ class RegistrationMiddleware(BaseMiddleware):
             )
 
 
-class InfoMiddleware(BaseMiddleware):
+class InfoMiddleware(BaseMiddleware[Message]):
     async def post(self):
         if not self.handlers:
             self.stop("Сообщение не было обработано")

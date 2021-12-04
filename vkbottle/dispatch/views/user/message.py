@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Generic, Optional, TypeVar
 
 from vkbottle_types.events import UserEventType
 
@@ -11,7 +11,10 @@ if TYPE_CHECKING:
     from vkbottle.tools.dev.mini_types.user import MessageMin
 
 
-class ABCUserMessageView(ABCMessageView, ABC):
+T_contra = TypeVar("T_contra", contravariant=True)
+
+
+class ABCUserMessageView(ABCMessageView[list, T_contra], ABC, Generic[T_contra]):
     def __init__(self):
         super().__init__()
         self.handler_return_manager = UserMessageReturnHandler()
@@ -21,7 +24,7 @@ class ABCUserMessageView(ABCMessageView, ABC):
         return event[0]
 
     @staticmethod
-    async def get_message(event, ctx_api) -> "MessageMin":
+    async def get_message(event: list, ctx_api) -> "MessageMin":
         return await message_min(event[1], ctx_api)
 
     async def process_event(self, event: list) -> bool:
@@ -34,6 +37,6 @@ class ABCUserMessageView(ABCMessageView, ABC):
         return event_type == UserEventType.MESSAGE_NEW
 
 
-class UserMessageView(ABCUserMessageView):
+class UserMessageView(ABCUserMessageView["MessageMin"]):
     def get_state_key(self, message: "MessageMin") -> Optional[int]:
         return getattr(message, self.state_source_key, None)

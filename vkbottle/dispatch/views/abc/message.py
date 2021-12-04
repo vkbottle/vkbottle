@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Callable, List
+from typing import TYPE_CHECKING, Callable, Generic, List, TypeVar
 
 from vkbottle.modules import logger
 
@@ -14,7 +14,11 @@ if TYPE_CHECKING:
 DEFAULT_STATE_KEY = "peer_id"
 
 
-class ABCMessageView(ABCDispenseView, ABC):
+T_contra = TypeVar("T_contra", list, dict, contravariant=True)
+F_contra = TypeVar("F_contra", contravariant=True)
+
+
+class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra, F_contra]):
     handlers: List["ABCHandler"]
     state_source_key: str
     default_text_approximators: List[Callable[["MessageMin"], str]]
@@ -26,16 +30,16 @@ class ABCMessageView(ABCDispenseView, ABC):
 
     @staticmethod
     @abstractmethod
-    def get_event_type(event):
-        ...
+    def get_event_type(event: T_contra):
+        pass
 
     @staticmethod
     @abstractmethod
-    async def get_message(event, ctx_api):
-        ...
+    async def get_message(event: T_contra, ctx_api):
+        pass
 
     async def handle_event(
-        self, event, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self, event: T_contra, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
     ) -> None:
         # For user event mapping, consider checking out
         # https://vk.com/dev/using_longpoll?f=3.%20Event%20Structure

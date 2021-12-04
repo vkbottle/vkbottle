@@ -30,7 +30,7 @@ Middleware без методов `pre` или/и `post` бесполезен, н
 from vkbottle.bot import Message
 from vkbottle import BaseMiddleware, MiddlewareResponse
 
-class NoBotMiddleware(BaseMiddleware):
+class NoBotMiddleware(BaseMiddleware[Message]):
     async def pre(self):
         if self.event.from_id < 0:
             self.stop("from_id меньше 0")
@@ -45,7 +45,7 @@ from vkbottle.bot import Message
 from vkbottle import BaseMiddleware
 from typing import List, Any
 
-class LogMiddleware(BaseMiddleware):
+class LogMiddleware(BaseMiddleware[Message]):
     async def post(
         self,
         view: "ABCView",
