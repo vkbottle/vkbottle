@@ -1,19 +1,15 @@
 from io import StringIO
 from typing import TYPE_CHECKING, Any, List, Optional, Union
 
-from vkbottle_types.events import MessageEvent
 from vkbottle_types.events.objects.group_event_objects import MessageEventObject
-from vkbottle_types.objects import BaseBoolInt
 
 from vkbottle import StatePeer
-
-from ...event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
+from vkbottle.tools.dev.event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
 
 if TYPE_CHECKING:
-
     from vkbottle.api import ABCAPI, API
 
-EventDataType = Union[ShowSnackbarEvent, OpenAppEvent, OpenLinkEvent]
+    EventDataType = Union[ShowSnackbarEvent, OpenAppEvent, OpenLinkEvent]
 
 
 class MessageEventMin(MessageEventObject):
@@ -22,9 +18,8 @@ class MessageEventMin(MessageEventObject):
     group_id: Optional[int] = None
 
     def __init__(self, **event):
-        update = MessageEvent(**event)
-        data = update.object.dict()
-        data["group_id"] = update.group_id
+        data = event["object"]
+        data["group_id"] = event.group_id
 
         super().__init__(**data)
 
@@ -32,7 +27,7 @@ class MessageEventMin(MessageEventObject):
     def ctx_api(self) -> Union["ABCAPI", "API"]:
         return getattr(self, "unprepared_ctx_api")
 
-    async def send_message_event_answer(self, event_data: EventDataType, **kwargs) -> int:
+    async def send_message_event_answer(self, event_data: "EventDataType", **kwargs) -> int:
         data = dict(
             event_id=self.event_id,
             user_id=self.user_id,
@@ -65,7 +60,7 @@ class MessageEventMin(MessageEventObject):
         template: Optional[str] = None,
         keyboard: Optional[str] = None,
         **kwargs,
-    ) -> "BaseBoolInt":
+    ) -> int:
         locals().update(kwargs)
 
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
