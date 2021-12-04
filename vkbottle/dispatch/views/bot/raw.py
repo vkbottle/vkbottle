@@ -16,7 +16,7 @@ class BotHandlerBasement(NamedTuple):
     handler: "ABCHandler"
 
 
-class RawBotEventView(ABCRawEventView):
+class RawBotEventView(ABCRawEventView[dict]):
     handlers: Dict[GroupEventType, List["BotHandlerBasement"]]
 
     def __init__(self):

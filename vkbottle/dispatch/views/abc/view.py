@@ -1,13 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union
+from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.modules import logger
 
 if TYPE_CHECKING:
-    from vkbottle_types.events import Event
-
     from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
     from vkbottle.dispatch.handlers import ABCHandler
     from vkbottle.dispatch.return_manager import BaseReturnManager
@@ -17,7 +15,10 @@ if TYPE_CHECKING:
 DEFAULT_STATE_KEY = "peer_id"
 
 
-class ABCView(ABC):
+T_contra = TypeVar("T_contra", list, dict, contravariant=True)
+
+
+class ABCView(ABC, Generic[T_contra]):
     handlers: "Handlers"
     middlewares: List[Type["BaseMiddleware"]]
     handler_return_manager: "BaseReturnManager"
@@ -29,12 +30,12 @@ class ABCView(ABC):
         self.handler_return_manager = None  # type: ignore
 
     @abstractmethod
-    async def process_event(self, event: "Event") -> bool:
+    async def process_event(self, event: T_contra) -> bool:
         pass
 
     async def pre_middleware(
         self,
-        event: "Event",
+        event: T_contra,
         context_variables: Optional[dict] = None,
     ) -> Optional[List[BaseMiddleware]]:
         """Run all of the pre middleware methods and return an exception if any error occurs"""
@@ -73,13 +74,13 @@ class ABCView(ABC):
     @abstractmethod
     async def handle_event(
         self,
-        event: "Event",
+        event: T_contra,
         ctx_api: "ABCAPI",
         state_dispenser: "ABCStateDispenser",
     ) -> None:
         pass
 
-    def register_middleware(self, middleware: Type["BaseMiddleware"]):
+    def register_middleware(self, middleware: Type[BaseMiddleware]):
         try:
             if not issubclass(middleware, BaseMiddleware):
                 raise ValueError("Argument is not a subclass of BaseMiddleware")

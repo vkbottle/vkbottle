@@ -16,7 +16,7 @@ class UserHandlerBasement(NamedTuple):
     handler: "ABCHandler"
 
 
-class RawUserEventView(ABCRawEventView):
+class RawUserEventView(ABCRawEventView[list]):
     handlers: Dict[UserEventType, List["UserHandlerBasement"]]
 
     def __init__(self):

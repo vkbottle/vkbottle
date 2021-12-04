@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, List, Union
+from typing import TYPE_CHECKING, Any, Dict, Generic, List, TypeVar
 
 if TYPE_CHECKING:
     from vkbottle.api.abc import ABCAPI
@@ -9,25 +9,27 @@ from vkbottle.modules import logger
 
 from .view import ABCView
 
+T_contra = TypeVar("T_contra", list, dict, contravariant=True)
 
-class ABCRawEventView(ABCView):
+
+class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
     handlers: Dict[Any, List]
 
     @abstractmethod
-    def get_handler_basements(self, event):
-        ...
+    def get_handler_basements(self, event: T_contra):
+        pass
 
     @abstractmethod
-    def get_event_model(self, handler_basement, event):
-        ...
+    def get_event_model(self, handler_basement, event: T_contra):
+        pass
 
     @staticmethod
     @abstractmethod
-    def get_event_type(event):
-        ...
+    def get_event_type(event: T_contra):
+        pass
 
     async def handle_event(
-        self, event: Union[list, dict], ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self, event: T_contra, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
     ) -> Any:
         logger.debug("Handling event ({}) with message view".format(self.get_event_type(event)))
 
