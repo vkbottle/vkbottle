@@ -36,7 +36,7 @@ exclude = ["**/tests/*", "**/test_*"]
 "Bug Tracker" = "https://github.com/vkbottle/vkbottle/issues"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.7.2"
 aiohttp = "^3.6.2"
 choicelib = "^0.1.1"
 pydantic = "^1.8.2"
