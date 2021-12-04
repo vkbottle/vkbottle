@@ -1,3 +1,5 @@
+from vkbottle.framework.labeler import BotLabeler
+
 from .dispatch.rules import base as rules
 from .dispatch.views import bot as views
 from .framework.bot import ABCBotLabeler, Bot, BotBlueprint, BotLabeler, run_multibot
@@ -8,7 +10,6 @@ MessageEvent = MessageEventMin
 Blueprint = BotBlueprint
 
 __all__ = (
-    "ABCBotLabeler",
     "Bot",
     "Blueprint",
     "BotLabeler",

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Dict, List, NamedTuple, Type
 from vkbottle_types.events import UserEventType
 
 from vkbottle.dispatch.return_manager.user import UserMessageReturnHandler
-from vkbottle.dispatch.views.abc import ABCRawEventView
+from vkbottle.dispatch.views.abc.raw import ABCRawEventView
 
 if TYPE_CHECKING:
     from vkbottle_types.events import BaseUserEvent
@@ -11,22 +11,24 @@ if TYPE_CHECKING:
     from vkbottle.dispatch.handlers import ABCHandler
 
 
-class HandlerBasement(NamedTuple):
+class UserHandlerBasement(NamedTuple):
     dataclass: Type["BaseUserEvent"]
     handler: "ABCHandler"
 
 
 class RawUserEventView(ABCRawEventView):
+    handlers: Dict[UserEventType, List["UserHandlerBasement"]]
+
     def __init__(self):
         super().__init__()
-        self.handlers: Dict[UserEventType, List[HandlerBasement]] = {}
+        self.handlers = {}
         self.handler_return_manager = UserMessageReturnHandler()
 
-    def get_handler_basements(self, event: list) -> List[HandlerBasement]:
+    def get_handler_basements(self, event: list) -> List["UserHandlerBasement"]:
         return self.handlers[UserEventType(self.get_event_type(event))]
 
     def get_event_model(
-        self, handler_basement: HandlerBasement, event: list
+        self, handler_basement: Type["UserHandlerBasement"], event: list
     ) -> Type["BaseUserEvent"]:
         return handler_basement.dataclass(*event)
 

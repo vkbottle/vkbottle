@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Union
 
 if TYPE_CHECKING:
     from vkbottle.api.abc import ABCAPI
@@ -11,6 +11,8 @@ from .view import ABCView
 
 
 class ABCRawEventView(ABCView):
+    handlers: Dict[Any, List]
+
     @abstractmethod
     def get_handler_basements(self, event):
         ...

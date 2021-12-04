@@ -8,12 +8,14 @@ from .dispense import ABCDispenseView
 if TYPE_CHECKING:
     from vkbottle.api.abc import ABCAPI
     from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
+    from vkbottle.dispatch.handlers import ABCHandler
     from vkbottle.tools.dev.mini_types.user import MessageMin
 
 DEFAULT_STATE_KEY = "peer_id"
 
 
 class ABCMessageView(ABCDispenseView, ABC):
+    handlers: List["ABCHandler"]
     state_source_key: str
     default_text_approximators: List[Callable[["MessageMin"], str]]
 
