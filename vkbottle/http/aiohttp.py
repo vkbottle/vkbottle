@@ -48,7 +48,9 @@ class AiohttpClient(ABCHTTPClient):
         self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
     ) -> dict:
         response = await self.request_raw(url, method, data, **kwargs)
-        return await response.json(encoding="utf-8", loads=self.json_processing_module.loads)
+        return await response.json(
+            encoding="utf-8", loads=self.json_processing_module.loads, content_type=None
+        )
 
     async def request_text(
         self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs

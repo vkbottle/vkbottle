@@ -1,7 +1,7 @@
 site_name: VKBottle
 site_description: Awesome VK framework
 site_author: timoniq
-repo_name: timoniq/vkbottle
+repo_name: vkbottle/vkbottle
 repo_url: https://github.com/vkbottle/vkbottle
 edit_uri: edit/master/docs/
 
@@ -40,13 +40,14 @@ nav:
         API:
           Работа с API: low-level/api/api.md
           Response Validators: low-level/api/response-validator.md
+          Request Rescheduler: low-level/api/request-rescheduler.md
+          Request Validator: low-level/api/request-validator.md
+          Token Generator: low-level/api/token-generator.md
           Exception Handling: low-level/exception_handling/index.md
           Code Exception: low-level/exception_handling/code-exception.md
           Error Handler: low-level/exception_handling/error-handler.md
         Http Client:
           Accessing Http Client: low-level/http/http-client.md
-          Http Middleware: low-level/http/http-middleware.md
-          Accessing Http Session Manager: low-level/http/http-session-manager.md
         Polling:
           Работа с поллингом: low-level/polling/polling.md
       Дополнительные инструменты:
@@ -56,7 +57,12 @@ nav:
         Loop Wrapper: tools/loop-wrapper.md
         Auth Flows: tools/auth.md
         Uploaders: tools/uploaders.md
+        Message Event: tools/message-event.md
+        Event Data генераторы: tools/event-data.md
+        Template: tools/template.md
       Кастомизация зависимостей: modules.md
+  - Что нового:
+      - 4.0: whats_new/4.0.md
 
 theme:
   name: material
@@ -80,8 +86,8 @@ theme:
     text: Roboto Mono
     code: Monaco
 
-  logo: logo_docs.png
-  favicon: logo.jpg
+  logo: logo.png
+  favicon: logo.png
 
 markdown_extensions:
   - admonition

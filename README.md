@@ -1,15 +1,15 @@
 <p align="center">
-  <a href="https://github.com/timoniq/vkbottle">
-    <img src="https://raw.githubusercontent.com/timoniq/vkbottle/master/docs/logo.jpg" width="200px" style="display: inline-block; border-radius: 5px">
+  <a href="https://github.com/vkbottle/vkbottle">
+    <img src="docs/logo.png" width="200px" style="display: inline-block; border-radius: 5px">
   </a>
 </p>
 <h1 align="center">
   VKBottle 4.x
 </h1>
 <p align="center">
-  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/timoniq/vkbottle/CI?style=flat-square">
-  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/timoniq/vkbottle?style=flat-square">
-  <img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/timoniq/vkbottle/bug?style=flat-square">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/vkbottle/vkbottle/CI?style=flat-square">
+  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/vkbottle/vkbottle?style=flat-square">
+  <img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/vkbottle/vkbottle/bug?style=flat-square">
   <img alt="PyPI" src="https://img.shields.io/pypi/v/vkbottle?color=green&label=PyPI&style=flat-square">
 </p>
 
@@ -26,7 +26,7 @@
 Установить новейшую версию можно командой:
 
 ```shell
-pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
+pip install -U https://github.com/vkbottle/vkbottle/archive/master.zip
 ```
 
 Установить версию 4.0 с PyPI можно командой:
@@ -36,8 +36,8 @@ pip install vkbottle
 ```
 
 Если вы ищете старые версии:
-- [`3.x`](https://github.com/timoniq/vkbottle/tree/v3.0)
-- [`2.x`](https://github.com/timoniq/vkbottle/tree/v2.0)
+- [`3.x`](https://github.com/vkbottle/vkbottle/tree/v3.0)
+- [`2.x`](https://github.com/vkbottle/vkbottle/tree/v2.0)
 
 ## Hello World
 
@@ -66,4 +66,4 @@ bot.run_forever()
 ## Лицензия
 
 Copyright © 2019-2021 [timoniq](https://github.com/timoniq).\
-Этот проект имеет [MIT](https://github.com/timoniq/vkbottle/blob/master/LICENSE) лицензию.
+Этот проект имеет [MIT](./LICENSE) лицензию.
