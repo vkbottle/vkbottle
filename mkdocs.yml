@@ -63,14 +63,24 @@ theme:
   language: ru
 
   palette:
-    scheme: slate
-    primary: black
-    accent: blue
+    - scheme: slate
+      primary: black
+      accent: blue
+      toggle:
+        icon: fontawesome/solid/sun
+        name: Светлый режим
+    - scheme: default
+      primary: black
+      accent: blue
+      toggle:
+        icon: fontawesome/solid/moon
+        name: Тёмный режим
 
   font:
     text: Roboto Mono
     code: Monaco
 
+  logo: logo_docs.png
   favicon: logo.jpg
 
 markdown_extensions:
