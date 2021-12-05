@@ -17,7 +17,7 @@
 
 ## Документация
 
-### [Что нового в 4.x](https://vkbottle.readthedocs.io/ru/latest/whats_new/4.0.md)
+### [Что нового в 4.x](https://vkbottle.readthedocs.io/ru/latest/whats_new/4.0)
 [Туториал для новичков](https://vkbottle.readthedocs.io/ru/latest/tutorial/)\
 [Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
 
