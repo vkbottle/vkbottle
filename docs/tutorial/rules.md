@@ -32,8 +32,9 @@
 Чтобы создать правила импортируем `ABCRule` и имплементируем асинхронный метод `check`, еще стоит импортировать `Union` из `typing` для типизации вашего кода:
 
 ```python
-from vkbottle.dispatch.rules import ABCRule
 from typing import Union
+from vkbottle.bot import Message
+from vkbottle.dispatch.rules import ABCRule
 
 class MyRule(ABCRule[Message]):
     async def check(self, event: Message) -> Union[dict, bool]:
@@ -51,8 +52,9 @@ return len(message.text) < 100
 > Union в данном правиле не понадобился поэтому его допустимо опустить по стандартам mypy, в любом случае на сигнатуру это не повлияет
 
 ```python
-from vkbottle.dispatch.rules import ABCRule
 from typing import Union
+from vkbottle.bot import Message
+from vkbottle.dispatch.rules import ABCRule
 
 class MyRule(ABCRule[Message]):
     async def check(self, event: Message) -> bool:
