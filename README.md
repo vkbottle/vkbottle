@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center">
-  VKBottle 3.x
+  VKBottle 4.x
 </h1>
 <p align="center">
   <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/timoniq/vkbottle/CI?style=flat-square">
