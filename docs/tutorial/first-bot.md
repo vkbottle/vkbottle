@@ -119,5 +119,4 @@ bot.run_forever()
 
 ## Экзамплы по этой части туториала
 
-* [easy-bot](/examples/high-level/easy_bot.py)
-
+* [easy-bot](https://github.com/timoniq/vkbottle/blob/master/examples/high-level/easy_bot.py)

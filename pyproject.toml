@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vkbottle"
-version = "3.0"
+version = "3.0.2"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
 authors = ["timoniq"]
 license = "MIT"
@@ -38,7 +38,7 @@ python = "^3.7"
 aiohttp = "^3.6.2"
 vbml = "^1.0"
 choicelib = "^0.1.1"
-vkbottle-types = "^0.1.21"
+vkbottle-types = "^5.131"
 watchgod = "^0.7"
 
 [tool.poetry.dev-dependencies]
@@ -66,7 +66,7 @@ pre-commit = "^2.12.0"
 [tool.black]
 line-length = 99
 target-version = ['py37', 'py38']
-exclude = '''
+force-exclude = '''
 (
     \.eggs
   | \.git

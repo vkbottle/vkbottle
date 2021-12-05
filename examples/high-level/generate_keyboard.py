@@ -1,8 +1,8 @@
 from vkbottle import Keyboard, KeyboardButtonColor, Text
 
 # Simplest way of generating keyboard is non-builder interface
-# Use <.raw()> to add raw
-# Use <.add(Action(...), COLOR)> to add button to the last raw
+# Use <.row()> to add row
+# Use <.add(Action(...), COLOR)> to add button to the last row
 # Use <.get_json()> to make keyboard sendable
 KEYBOARD_STANDARD = Keyboard(one_time=True, inline=False)
 KEYBOARD_STANDARD.add(Text("Button 1"), color=KeyboardButtonColor.POSITIVE)

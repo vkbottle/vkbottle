@@ -53,6 +53,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type[ABCRule]] = {
     "state": StateRule,
     "state_group": StateGroupRule,
     "regexp": RegexRule,
+    "regex": RegexRule,
     "macro": MacroRule,
     "text": VBMLRule,
 }
@@ -81,7 +82,7 @@ class BotLabeler(ABCBotLabeler):
 
         # Rule config is accessible from every single custom rule
         self.rule_config: Dict[str, Any] = {
-            "vbml_flags": re.MULTILINE,  # Flags for VBMLRule
+            "vbml_flags": re.MULTILINE | re.DOTALL,  # Flags for VBMLRule
             "vbml_patcher": vbml.Patcher(),  # Patcher for VBMLRule
         }
 

@@ -1,5 +1,6 @@
 import typing
 
+import vkbottle_types
 from vkbottle_types.categories import APICategories
 
 from vkbottle.http import ABCSessionManager, AiohttpClient, SingleSessionManager
@@ -19,8 +20,8 @@ class API(ABCAPI, APICategories):
     Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/api.md
     """
 
-    API_URL = "https://api.vk.com/method/"
-    API_VERSION = "5.103"
+    API_URL = vkbottle_types.API_URL
+    API_VERSION = vkbottle_types.API_VERSION
     APIRequest = APIRequest
 
     def __init__(

@@ -4,10 +4,7 @@ import re
 import typing
 import asyncio
 
-from vkbottle.api.token_generator.consistent import ConsistentTokenGenerator
-from vkbottle.api.token_generator.single import SingleTokenGenerator
-from vkbottle.dispatch.filter import AndFilter, OrFilter
-from vkbottle.dispatch.rules import ABCRule
+from vkbottle.dispatch.rules import ABCRule, AndFilter, OrFilter
 
 if typing.TYPE_CHECKING:
     from vkbottle.framework.abc_blueprint import ABCBlueprint

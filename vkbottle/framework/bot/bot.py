@@ -3,6 +3,7 @@ from typing import NoReturn, Optional, Union
 
 from vkbottle.api import ABCAPI, API, Token
 from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
+from vkbottle.dispatch import ABCStateDispenser
 from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
 from vkbottle.framework.abc import ABCFramework
 from vkbottle.modules import logger
@@ -22,14 +23,15 @@ class Bot(ABCFramework):
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCBotLabeler"] = None,
+        state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
-        task_each_event: bool = False,
+        task_each_event: bool = True,
     ):
         self.api: Union[ABCAPI, API] = API(token) if token is not None else api  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.labeler = labeler or BotLabeler()
-        self.state_dispenser = BuiltinStateDispenser()
+        self.state_dispenser = state_dispenser or BuiltinStateDispenser()
         self._polling = polling or BotPolling(self.api)
         self._router = router or BotRouter()
         self._loop = loop
