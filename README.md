@@ -17,7 +17,8 @@
 
 ## Документация
 
-[Туториал для новичков](https://github.com/timoniq/vkbottle/blob/master/docs/tutorial/index.md)\
+### [Что нового в 4.x](https://vkbottle.readthedocs.io/ru/latest/whats_new/4.0.md)
+[Туториал для новичков](https://vkbottle.readthedocs.io/ru/latest/tutorial/)\
 [Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
 
 ## Установка
@@ -28,13 +29,15 @@
 pip install -U https://github.com/timoniq/vkbottle/archive/master.zip
 ```
 
-Установить версию 3.0 с PyPI можно командой:
+Установить версию 4.0 с PyPI можно командой:
 
 ```shell
 pip install vkbottle
 ```
 
-Если вы ищете старые версии (`2.x`) - [вам сюда](https://github.com/timoniq/vkbottle/tree/v2.0)
+Если вы ищете старые версии:
+- [`3.x`](https://github.com/timoniq/vkbottle/tree/v3.0)
+- [`2.x`](https://github.com/timoniq/vkbottle/tree/v2.0)
 
 ## Hello World
 
