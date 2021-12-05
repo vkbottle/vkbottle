@@ -1,12 +1,12 @@
-import typing
 from abc import ABC, abstractmethod
+from typing import Any, NoReturn, Union
 
 
 class ABCRequestValidator(ABC):
-    """ Abstract Response Validator class
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/response-validator.md
+    """Abstract Response Validator class
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/response-validator.md
     """
 
     @abstractmethod
-    async def validate(self, response: typing.Any) -> typing.Union[typing.Any, typing.NoReturn]:
+    async def validate(self, response: Any) -> Union[Any, NoReturn]:
         pass

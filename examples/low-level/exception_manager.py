@@ -1,10 +1,21 @@
+import asyncio
+import os
+
+from vkbottle.api import API
 from vkbottle.exception_factory import VKAPIError
 
-try:
-    raise VKAPIError(2, "Some exception occurred")
-except VKAPIError(3) as e:
-    print("Oh, third exception.")
-except VKAPIError(2) as e:
-    print("Oh, second exception.")
-except VKAPIError():
-    print("Unknown vk error")
+api = API(os.environ["token"])
+
+
+async def main():
+    try:
+        await api.users.get(user_ids=["123456789"])
+    except VKAPIError[5]:
+        print("Ой, неверный ключ доступа.")
+    except VKAPIError[30]:
+        print("Ой, у пользователя закрытый профиль.")
+    except VKAPIError as e:
+        print(f"Произошла ошибка {e.code}.")
+
+
+asyncio.get_event_loop().run_until_complete(main())

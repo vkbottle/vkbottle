@@ -12,8 +12,14 @@ repos:
 
     # Use locally installed hooks
   - repo: local
-
     hooks:
+      - id: autoflake
+        name: autoflake
+        entry: bash -c 'make autoflake_fix filename=$@' --
+        language: system
+        types: [ python ]
+        stages: [ commit ]
+
       - id: black
         name: black
         entry: poetry run black
@@ -24,7 +30,7 @@ repos:
 
       - id: isort
         name: isort
-        entry: poetry run isort
+        entry: poetry run isort --filter-files
         language: system
         types: [ python ]
         stages: [ commit ]
@@ -39,7 +45,7 @@ repos:
 
       - id: pytest
         name: pytest
-        entry: poetry run pytest vkbottle tests
+        entry: poetry run pytest vkbottle
         language: system
         always_run: false
         pass_filenames: false

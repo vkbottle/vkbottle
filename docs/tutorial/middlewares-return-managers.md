@@ -8,22 +8,24 @@
 
 ```python
 from vkbottle import BaseMiddleware
+from vkbottle.bot import Message
 ```
 
 Теперь начните писать ваш собственный класс:
 
 ```python
-class MiddlewareName(BaseMiddleware):
+class MiddlewareName(BaseMiddleware[Message]):
 ```
+Так как наш мидлварь обрабатывает именно сообщения, нужно указать тип в дженерике.
+В данном случае мы используем класс `Message` из `vkbottle.bot`
 
 Middleware без методов `pre` или/и `post` бесполезен, нужно разобраться как реализировать каждый из них
 
-### async def pre(self, event)
+### async def pre(self)
 
-`pre` получает только ивент (например сообщение) и может вернуть `vkbottle.MiddlewareResponse` или `dict`
+`pre` получает имеет доступен к ивенту (например сообщение) через `self` и может вернуть вызвать ошибку через `self.stop` или обновить констекст через `self.send`
 
-В этом акторе (в этой вами имплементированной функции) можно делать какие-то проверки. Если из pre вернется `MiddlewareResponse(False)` то обработка ивента на всех уровнях срочно прекратится, так можно например отсеивать какие-то спам сообщения или сообщения от игнорируемых пользователей.
-Если из мидлваря вернуть `dict`, то он будет распаковываться ВО ВСЕ ХЕНДЛЕРЫ (`await your_handler(event, **dict)`)
+[техническая документация](/docs/high-level/handling/middleware.md)
 
 Вот так например можно отсеивать все сообщения от ботов:
 
@@ -31,13 +33,13 @@ Middleware без методов `pre` или/и `post` бесполезен, н
 from vkbottle.bot import Message
 from vkbottle import BaseMiddleware, MiddlewareResponse
 
-class NoBotMiddleware(BaseMiddleware):
-    async def pre(self, message: Message):
-        if message.from_id < 0:
-            return MiddlewareResponse(False)
+class NoBotMiddleware(BaseMiddleware[Message]):
+    async def pre(self):
+        if self.event.from_id < 0:
+            self.stop("from_id меньше 0")
 ```
 
-### async def post(self, event, view, handle_responses, handlers)
+### async def post(self, view, handle_responses, handlers)
 
 `post` получает гораздо больше информации в отличии от `pre`, но он уже никак не может повлиять на обработку ивента. Обычно его используют для статистики и логов
 
@@ -46,10 +48,9 @@ from vkbottle.bot import Message
 from vkbottle import BaseMiddleware
 from typing import List, Any
 
-class LogMiddleware(BaseMiddleware):
+class LogMiddleware(BaseMiddleware[Message]):
     async def post(
         self,
-        message: Message,
         view: "ABCView",
         handle_responses: List[Any],
         handlers: List["ABCHandler"],
@@ -75,13 +76,13 @@ class LogMiddleware(BaseMiddleware):
 У каждого view есть метод `register_middleware`, воспользуемся им:
 
 ```python
-bot.labeler.message_view.register_middleware(NoBotMiddleware())
-bot.labeler.message_view.register_middleware(LogMiddleware())
+bot.labeler.message_view.register_middleware(NoBotMiddleware)
+bot.labeler.message_view.register_middleware(LogMiddleware)
 ```
 
 Кстати методом `register_middleware` можно пользоваться и как декоратором.
 
-Полный код с мидлварями вы можете найти [в этом экзампле](https://githib.com/timoniq/vkbottle/examples/high-level/middleware_example.py)
+Полный код с мидлварями вы можете найти [в этом экзампле](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/middleware_example.py)
 
 ## Return менеджеры
 
@@ -93,12 +94,12 @@ bot.labeler.message_view.register_middleware(LogMiddleware())
 
 Суть заключается в том, что возвращая значения некоторых типов из хендлера, сработают хендлеры return менеджера которые произведут некоторые действия, вот что будет необходимо знать для комфортной разработки:
 
-тип значения | что произойдет
---- | ---
-str | строка отправится как сообщение
-`tuple` или `list` | все элементы будут конвертированы в строки и отправлены как сообщения
-dict | словарь распакуется как непозиционные аргументы для метода `message.answer`
+| тип значения       | что произойдет                                                              |
+| ------------------ | --------------------------------------------------------------------------- |
+| str                | строка отправится как сообщение                                             |
+| `tuple` или `list` | все элементы будут конвертированы в строки и отправлены как сообщения       |
+| dict               | словарь распакуется как непозиционные аргументы для метода `message.answer` |
 
 ## Экзамплы по этой части туториала
 
-* [middleware](https://github.com/timoniq/vkbottle/blob/master/examples/high-level/middleware_example.py)
+* [middleware](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/middleware_example.py)

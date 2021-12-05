@@ -25,7 +25,7 @@ StateDispenser должен имплементировать следующие 
 Ловить пользователей со стейтами в хендлерами можно с помощью `StateRule`. Пример:
 
 ```python
-from vkbottle_types import BaseStateGroup
+from vkbottle import BaseStateGroup
 from vkbottle.bot import Message, Bot
 
 bot = Bot("t")

@@ -1,24 +1,27 @@
-from typing import AsyncIterator, Optional
+from typing import TYPE_CHECKING, AsyncIterator, Optional
 
-from vkbottle.api import ABCAPI
-from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
+from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
 
 from .abc import ABCPolling
 
+if TYPE_CHECKING:
+    from vkbottle.api import ABCAPI
+    from vkbottle.exception_factory import ABCErrorHandler
+
 
 class BotPolling(ABCPolling):
-    """ Bot Polling class
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/polling/polling.md
+    """Bot Polling class
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/polling/polling.md
     """
 
     def __init__(
         self,
-        api: Optional[ABCAPI] = None,
+        api: Optional["ABCAPI"] = None,
         group_id: Optional[int] = None,
         wait: Optional[int] = None,
         rps_delay: Optional[int] = None,
-        error_handler: Optional[ABCErrorHandler] = None,
+        error_handler: Optional["ABCErrorHandler"] = None,
     ):
         self._api = api
         self.error_handler = error_handler or ErrorHandler()
@@ -29,13 +32,16 @@ class BotPolling(ABCPolling):
 
     async def get_event(self, server: dict) -> dict:
         logger.debug("Making long request to get event with longpoll...")
-        async with self.api.http as session:
-            return await session.request_json(
-                "POST",
-                "{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
-                    server["server"], server["key"], server["ts"], self.wait, self.rps_delay,
-                ),
-            )
+        return await self.api.http_client.request_json(
+            "{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
+                server["server"],
+                server["key"],
+                server["ts"],
+                self.wait,
+                self.rps_delay,
+            ),
+            method="POST",
+        )
 
     async def get_server(self) -> dict:
         logger.debug("Getting polling server...")

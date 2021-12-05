@@ -1,29 +1,29 @@
-import typing
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Any
 
-from vkbottle.http import ABCSessionManager
+if TYPE_CHECKING:
+    from vkbottle.http import ABCHTTPClient
 
-if typing.TYPE_CHECKING:
     from .request_rescheduler import ABCRequestRescheduler
 
 
 class ABCAPI(ABC):
-    """ Abstract API class
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/api/api.md
+    """Abstract API class
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/api.md
     """
 
-    http: "ABCSessionManager"
+    http_client: "ABCHTTPClient"
     ignore_errors: bool
     request_rescheduler: "ABCRequestRescheduler"
 
     @abstractmethod
     async def request(self, method: str, data: dict) -> dict:
-        """ Makes a single request opening a session """
+        """Makes a single request opening a session"""
 
     @abstractmethod
-    async def validate_response(self, method: str, data: dict, response: typing.Any) -> typing.Any:
+    async def validate_response(self, method: str, data: dict, response: Any) -> Any:
         pass
 
     @abstractmethod
-    async def validate_request(self, request: typing.Any) -> typing.Any:
+    async def validate_request(self, request: Any) -> Any:
         pass

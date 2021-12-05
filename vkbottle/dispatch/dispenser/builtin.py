@@ -1,8 +1,6 @@
 from typing import Dict, Optional
 
-from vkbottle_types import BaseStateGroup, StatePeer
-
-from .abc import ABCStateDispenser
+from .abc import ABCStateDispenser, BaseStateGroup, StatePeer
 
 
 class BuiltinStateDispenser(ABCStateDispenser):

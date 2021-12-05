@@ -6,4 +6,4 @@
 
 * `ConsistentTokenGenerator` - используется несколько токенов поочередно, если вы хотите его использовать грамотно, необходимо расчитать нагрузку по времени, лимит вконтакте на запросы для ботов - 25/сек, для пользователей - 3/сек, принимает лист из строк
 
-По правилам vkbottle вы конечно же можете реализовать свой генератор, базируясь на интерфейсе [ABCTokenGenerator](https://github.com/timoniq/vkbottle/blob/master/vkbottle/api/token_generator/abc.py)
+По правилам vkbottle вы конечно же можете реализовать свой генератор, базируясь на интерфейсе [ABCTokenGenerator](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/api/token_generator/abc.py)

@@ -16,5 +16,5 @@ my_template = template_gen(
 
 # my_template - готовый для отправки json
 # ...
-await message.answer("держи карусель, ой ты что не с телефона? ну тогда прости", template=my_template)
+await message.answer("Держи карусель!", template=my_template)
 ```

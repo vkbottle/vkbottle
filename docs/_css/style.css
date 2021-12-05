@@ -1,0 +1,18 @@
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color:  #14161b;
+  --md-primary-fg-color: #060608;
+}
+
+.md-typeset a {
+    color: #5b74a9!important;
+}
+
+.md-typeset a:hover {
+    color: var(--md-accent-fg-color)!important;
+}
+
+div.doc-contents:not(.first) {
+  padding-left: 25px;
+  border-left: 2px solid hsla(var(--md-hue), 15%, 12%, 0.87);
+  margin-bottom: 80px;
+}

@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from vkbottle_types import BaseStateGroup, StatePeer
-
 from vkbottle.modules import logger
+
+from .base import BaseStateGroup, StatePeer
 
 
 class ABCStateDispenser(ABC):

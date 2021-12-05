@@ -4,17 +4,17 @@
 
 Чтобы получить доступ к правилам из коробки вы можете поступить по-разному:
 
-1. Импортировать их из `vkbottle.bot.rules` и использовать, инициализируя прямо в декораторе или в любой другой части кода:
+1. Импортировать их из `vkbottle.dispatch.rules` и использовать, инициализируя прямо в декораторе или в любой другой части кода:
     ```python
-    from vkbottle.bot import rules
+    from vkbottle.dispatch.rules.base import CommandRule
     from typing import Tuple
 
-    @bot.on.message(rules.CommandRule("say", ["!", "/"], 1))
+    @bot.on.message(CommandRule("say", ["!", "/"], 1))
     async def say_handler(message: Message, args: Tuple[str]):
         await message.answer(f"<<{args[0]}>>")
     ```
 
-2. Использовать автораспаковщики рулзов из коробки, список с названиями можно найти [здесь](https://github.com/timoniq/vkbottle/blob/master/vkbottle/framework/bot/labeler/default.py#L34), в этом случае некоторые второстепенные параметры контролировать будет нельзя
+2. Использовать автораспаковщики рулзов из коробки, список с названиями можно найти [здесь](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/framework/bot/labeler/default.py#L34), в этом случае некоторые второстепенные параметры контролировать будет нельзя
     ```python
     @bot.on.message(command=("say", 1))
     async def say_handler(message: Message, args: Tuple[str]):
@@ -29,14 +29,15 @@
 
 ### Создание правил напрямую
 
-Чтобы создать правила импортируем продолженный от `ABCRule` абстрактный интерфейс `ABCMessageRule` и имплементируем асинхронный метод `check`, еще стоит импортировать `Union` из `typing` для типизации вашего кода:
+Чтобы создать правила импортируем `ABCRule` и имплементируем асинхронный метод `check`, еще стоит импортировать `Union` из `typing` для типизации вашего кода:
 
 ```python
-from vkbottle.bot import rules
 from typing import Union
+from vkbottle.bot import Message
+from vkbottle.dispatch.rules import ABCRule
 
-class MyRule(rules.ABCMessageRule):
-    async def check(self, message: Message) -> Union[dict, bool]:
+class MyRule(ABCRule[Message]):
+    async def check(self, event: Message) -> Union[dict, bool]:
         ...
 ```
 
@@ -51,12 +52,13 @@ return len(message.text) < 100
 > Union в данном правиле не понадобился поэтому его допустимо опустить по стандартам mypy, в любом случае на сигнатуру это не повлияет
 
 ```python
-from vkbottle.bot import rules
 from typing import Union
+from vkbottle.bot import Message
+from vkbottle.dispatch.rules import ABCRule
 
-class MyRule(rules.ABCMessageRule):
-    async def check(self, message: Message) -> bool:
-        return len(message.text) < 100
+class MyRule(ABCRule[Message]):
+    async def check(self, event: Message) -> bool:
+        return len(event.text) < 100
 ```
 
 Теперь правило можно использовать как первым способом:
@@ -69,12 +71,12 @@ class MyRule(rules.ABCMessageRule):
 
 ```python
 # Новый вид правила
-class MyRule(rules.ABCMessageRule):
+class MyRule(ABCRule[Message]):
     def __init__(self, lt: int = 100):
         self.lt = lt
 
-    async def check(self, message: Message) -> bool:
-        return len(message.text) < self.lt
+    async def check(self, event: Message) -> bool:
+        return len(event.text) < self.lt
 ```
 
 Теперь, если предварительно (до объявления хендлеров) зарегистрировать правило в локальный лейблер
@@ -103,11 +105,12 @@ bot.labeler.custom_rules["my_rule"] = MyRule
 
 `FuncRule` принимает корутину.
 
-> Еще существуют фильтры, они могут помочь контролировать какие-то множества рулзов которые могут исполняться выборочно. В vkbottle [существует](https://github.com/timoniq/vkbottle/blob/master/vkbottle/tools/dev_tools/utils.py#L26) автоматическая распаковка и трансформация некоторых инстансов в фильтры (стоит заметить что рекурсивно это не работает), а именно:
-> * сет (`set`) из рулзов конвертируется в фильтр `AndFilter`
-> * кортеж (`tuple`) из рулзов конвертируется в фильтр `OrFilter`
+> Еще существуют правила, которые совмещают несколько правил. В vkbottle [существует](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/tools/dev_tools/utils.py#L26) автоматическая распаковка и трансформация некоторых инстансов в такие правила (стоит заметить что рекурсивно это не работает), а именно:
+> * `Rule1() & Rule2()` конвертируется в `AndRule`
+> * `Rule1() | Rule2()` конвертируется в `OrRule`
+> * `~Rule2()` конвертируется в `NotRule`
 >
-> Вместо фильтров еще можно использовать несколько разных хендлеров (это будет схоже с результатом использования `OrFilter`):
+> Вместо `OrRule` можно использовать несколько хендлеров:
 > ```python
 > @bot.on.message(some_rule=1)
 > @bot.on.message(some_rule=100)
@@ -117,5 +120,5 @@ bot.labeler.custom_rules["my_rule"] = MyRule
 
 ## Экзамплы по этой части туториала
 
-* [labeler-setup](https://github.com/timoniq/vkbottle/blob/master/examples/high-level/labeler_setup.py)
-* [filters-shortcuts](https://github.com/timoniq/vkbottle/blob/master/examples/high-level/filters_shortcuts.py)
+* [labeler-setup](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/labeler_setup.py)
+* [rules-shortcuts](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/rules_shortcuts.py)

@@ -4,23 +4,31 @@
 
 Мидлвари всегда распаковываются из `labeler`
 
-Абстрактный класс для мидлварей - `BaseMiddleware` 
+Абстрактный класс для мидлварей - `BaseMiddleware`
 
-Стандартные view: 
+Конструктор принимает ивент в качестве аргумента
 
-`pre` может возвращать `bool` или `dict`:
+`pre`/`post` не принимают аргументов, должны возвращать `None`:
 
-* `True` исполнение view проходит дальше
-* `False` исполнение view срочно останавливается
-* `Dict[str, Any]` в контекст добавляются аргемументы (ключ - имя аргумента)
+* `self.stop(ошибка)` исполнение view срочно останавливается
+* `self.send({ключ: значние})` в контекст добавляются аргументы (ключ - имя аргумента)
 
-Принимает `pre` в аргументы только ивент
+`BaseMiddleware`, имеет доступ к следующим атрибутам:
 
-`post` ничего не возвращает, принимает следующие аргументы:
-
-* Ивент
+* `event` (сам евент, как указать его тип, смотрите ниже)
 * `view: ABCView` (с которым был обработан ивент)
 * `handle_responses: list` (все то что вернули хендлеры по порядку их исполнения)
 * `handlers: List[ABCHandler]` (все хендлеры что были исполнены)
 
-[Примеры смотреть здесь](https://github.com/timoniq/vkbottle/blob/master/examples/high-level/middleware_example.py)
+Тип ивента, который будет обрабатывать мидлварь, указывается в дженерике конструктора мидлвари. Например:
+```python
+from vkbottle import BaseMiddleware
+from vkbottle.bot import Message
+
+class MyMiddleware(BaseMiddleware[Message]):
+    ...
+```
+Для message_view это Message (разный для `Bot` и `User`), а для raw_event_view словарь (для `Bot`) или лист (для `User`)
+
+
+[Больше примеров можно посмотреть здесь](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/middleware_example.py)

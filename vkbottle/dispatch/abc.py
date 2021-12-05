@@ -1,21 +1,22 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Dict, Type
+from typing import TYPE_CHECKING, Callable, Dict, Type
 
-from vkbottle.api.abc import ABCAPI
-from vkbottle.exception_factory.error_handler import ABCErrorHandler
+if TYPE_CHECKING:
+    from vkbottle.api.abc import ABCAPI
+    from vkbottle.exception_factory.error_handler import ABCErrorHandler
 
-from .dispenser.abc import ABCStateDispenser
-from .views import ABCView
+    from .dispenser.abc import ABCStateDispenser
+    from .views import ABCView
 
 
 class ABCRouter(ABC):
-    """ Abstract Router
+    """Abstract Router
     Documentation: soon
     """
 
     views: Dict[str, "ABCView"] = {}
-    state_dispenser: ABCStateDispenser
-    error_handler: ABCErrorHandler
+    state_dispenser: "ABCStateDispenser"
+    error_handler: "ABCErrorHandler"
 
     @abstractmethod
     async def route(self, event: dict, ctx_api: "ABCAPI") -> None:
@@ -25,8 +26,8 @@ class ABCRouter(ABC):
     def construct(
         self,
         views: Dict[str, "ABCView"],
-        state_dispenser: ABCStateDispenser,
-        error_handler: ABCErrorHandler,
+        state_dispenser: "ABCStateDispenser",
+        error_handler: "ABCErrorHandler",
     ) -> "ABCRouter":
         pass
 

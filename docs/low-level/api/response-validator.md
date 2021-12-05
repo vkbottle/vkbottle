@@ -6,26 +6,27 @@
 
 ### JSONValidator
 
-Парсит json из ответа с помощью самого правого жсон-парсера [из списка](/docs/modules.md); Если вернулся необрабатываемый тип (например `NoneType`) то возбуждается `VKBottleError`
+Парсит json из ответа с помощью самого правого json-парсера [из списка](/docs/modules.md). Если вернулся необрабатываемый тип (например `NoneType`), то отправляет запрос заново, пока не будет получен валидный ответ
 
 ### VKErrorValidator
 
-Вызывает `VKAPIError` от `CodeErrorFactory` при респонсе с ошибкой от вк
+Вызывает `VKAPIError` от `CodeException` при респонсе с ошибкой от вк
 
 ## Создание свего валидатора ответа
 
 Пример с `response_validators` из `API`:
 
 ```python
+from typing import Any, NoReturn, Union
 from vkbottle import API, ABCResponseValidator
-import typing
 
 
 class SomeResponseValidator(ABCResponseValidator):
-    async def validate(self, response: dict) -> typing.Union[typing.Any, typing.NoReturn]:
+    async def validate(self, response: dict) -> Union[Any, NoReturn]:
         # some stuff with response
         return response
 
 api = API("token")
 api.response_validators.append(SomeResponseValidator())
+
 ```

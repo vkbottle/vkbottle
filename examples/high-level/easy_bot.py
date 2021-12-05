@@ -21,7 +21,7 @@ EATABLE = ["мороженое", "макароны", "суп"]
 
 
 # If you need to make handler respond for 2 different rule set you can
-# use double decorator like here it is or use filters (OrFilter here)
+# use double decorator like here it is or use filters (OrRule here)
 @bot.on.message(text=["/съесть <item>", "/съесть"])
 @bot.on.message(payload={"cmd": "eat"})
 async def eat_handler(message: Message, item: Optional[str] = None):
@@ -45,8 +45,8 @@ async def group_join_handler(event: GroupTypes.GroupJoin):
         )
 
     # Read more about exception handling in documentation
-    # low-level/exception_factory/exception_factory
-    except VKAPIError(901):
+    # low-level/exception_handling/exception_handling
+    except VKAPIError[901]:
         pass
 
 

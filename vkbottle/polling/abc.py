@@ -1,13 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import Any, AsyncIterator, Optional
+from typing import TYPE_CHECKING, Any, AsyncIterator, Optional
 
-from vkbottle.api import ABCAPI
-from vkbottle.exception_factory import ABCErrorHandler
+if TYPE_CHECKING:
+    from vkbottle.api import ABCAPI
+    from vkbottle.exception_factory import ABCErrorHandler
 
 
 class ABCPolling(ABC):
-    """ Abstract Polling class
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/low-level/polling/polling.md
+    """Abstract Polling class
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/polling/polling.md
     """
 
     @abstractmethod

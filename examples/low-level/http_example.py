@@ -5,7 +5,7 @@ from vkbottle.http import AiohttpClient
 
 async def main():
     http = AiohttpClient()
-    print(await http.request_text("get", "https://google.com"))
+    print(await http.request_text("https://google.com"))
     await http.close()
 
 

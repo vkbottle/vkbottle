@@ -1,7 +1,7 @@
-import typing
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Any, Union
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
 
 
@@ -9,9 +9,9 @@ class ABCRequestRescheduler(ABC):
     @abstractmethod
     async def reschedule(
         self,
-        ctx_api: typing.Union["ABCAPI", "API"],
+        ctx_api: Union["ABCAPI", "API"],
         method: str,
         data: dict,
-        recent_response: typing.Any,
+        recent_response: Any,
     ) -> dict:
         pass

@@ -1,13 +1,13 @@
-import typing
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Any, NoReturn, Union
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
 
 
 class ABCResponseValidator(ABC):
-    """ Abstract Response Validator class
-    Documentation: https://github.com/timoniq/vkbottle/blob/master/docs/api/low-level/response-validator.md
+    """Abstract Response Validator class
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/api/low-level/response-validator.md
     """
 
     @abstractmethod
@@ -15,7 +15,7 @@ class ABCResponseValidator(ABC):
         self,
         method: str,
         data: dict,
-        response: typing.Any,
-        ctx_api: typing.Union["ABCAPI", "API"],
-    ) -> typing.Union[typing.Any, typing.NoReturn]:
+        response: Any,
+        ctx_api: Union["ABCAPI", "API"],
+    ) -> Union[Any, NoReturn]:
         pass

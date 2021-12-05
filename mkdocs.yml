@@ -2,8 +2,8 @@ site_name: VKBottle
 site_description: Awesome VK framework
 site_author: timoniq
 repo_name: timoniq/vkbottle
-repo_url: https://github.com/timoniq/vkbottle
-edit_uri: edit/v3.0/docs/
+repo_url: https://github.com/vkbottle/vkbottle
+edit_uri: edit/master/docs/
 
 extra:
   disqus: ""
@@ -15,7 +15,7 @@ extra:
 nav:
   - Хаб: index.md
   - Туториал:
-      - Хаб: tutorial/index.md
+      - Содержание туториала: tutorial/index.md
       - Первый бот: tutorial/first-bot.md
       - Правила: tutorial/rules.md
       - Разделение кода: tutorial/code-separation.md
@@ -23,20 +23,72 @@ nav:
       - Мидлвари и return менеджеры: tutorial/middlewares-return-managers.md
       - Обработка ошибок: tutorial/error-handling.md
   - Документация:
-      - High-Level: high-level/index.md
-      - Low-Level: low-level/index.md
+      Интерфейсы высокого уровня:
+        Интерфейс ботов:
+          Bot: high-level/bot/bot.md
+          Labeler: high-level/bot/labeler.md
+          Multibot: high-level/bot/multibot.md
+          Blueprint: high-level/bot/blueprint.md
+        Хендлинг:
+          Handler: high-level/handling/handler.md
+          View: high-level/handling/view.md
+          Return Manager: high-level/handling/return-manager.md
+          State Dispenser: high-level/handling/state-dispenser.md
+          Middleware: high-level/handling/middleware.md
+          Routing: high-level/routing/index.md
+      Интерфейсы низкого уровня:
+        API:
+          Работа с API: low-level/api/api.md
+          Response Validators: low-level/api/response-validator.md
+          Exception Handling: low-level/exception_handling/index.md
+          Code Exception: low-level/exception_handling/code-exception.md
+          Error Handler: low-level/exception_handling/error-handler.md
+        Http Client:
+          Accessing Http Client: low-level/http/http-client.md
+          Http Middleware: low-level/http/http-middleware.md
+          Accessing Http Session Manager: low-level/http/http-session-manager.md
+        Polling:
+          Работа с поллингом: low-level/polling/polling.md
+      Дополнительные инструменты:
+        Storages: tools/storage.md
+        Keyboard генераторы: tools/keyboard.md
+        VKScript: tools/vkscript.md
+        Loop Wrapper: tools/loop-wrapper.md
+        Auth Flows: tools/auth.md
+        Uploaders: tools/uploaders.md
+      Кастомизация зависимостей: modules.md
 
 theme:
   name: material
   language: ru
 
   palette:
-    scheme: preference
-    primary: black
-    accent: blue
+    - scheme: slate
+      primary: black
+      accent: blue
+      toggle:
+        icon: fontawesome/solid/sun
+        name: Светлый режим
+    - scheme: default
+      primary: black
+      accent: blue
+      toggle:
+        icon: fontawesome/solid/moon
+        name: Тёмный режим
 
   font:
     text: Roboto Mono
     code: Monaco
 
+  logo: logo_docs.png
   favicon: logo.jpg
+
+markdown_extensions:
+  - admonition
+  - pymdownx.magiclink
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      check_paths: true
+
+extra_css:
+  - _css/style.css

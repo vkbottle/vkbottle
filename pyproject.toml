@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "vkbottle"
-version = "3.0.2"
+version = "4.0.0"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
 authors = ["timoniq"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/timoniq/vkbottle"
-repository = "https://github.com/timoniq/vkbottle"
+homepage = "https://github.com/vkbottle/vkbottle"
+repository = "https://github.com/vkbottle/vkbottle"
 keywords = [
   "vk",
   "vk-api",
@@ -25,47 +25,63 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Software Development :: Quality Assurance",
   "Typing :: Typed",
 ]
+exclude = ["**/tests/*", "**/test_*"]
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/timoniq/vkbottle/issues"
+"Bug Tracker" = "https://github.com/vkbottle/vkbottle/issues"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.7.2"
 aiohttp = "^3.6.2"
-vbml = "^1.0"
 choicelib = "^0.1.1"
-vkbottle-types = "^5.131"
+pydantic = "^1.8.2"
+vbml = "^1.0"
+vkbottle-types = "^5.131.131.2"
 watchgod = "^0.7"
 
 [tool.poetry.dev-dependencies]
 # Lint
-lxml = "^4.5.0"
-mypy = "^0.770"
+black = {version = "^21.4b0", allow-prereleases = true}
+flake8 = "^4.0.1"
 isort = "^5.7"
-flake8 = "^3.7.9"
+lxml = "^4.5.0"
+mypy = "^0.910"
 mypy_extensions = "^0.4.3"
-black = { version = "^21.4b0", allow-prereleases = true }
+
+# mypy stubs
+types-aiofiles = "^0.7.0"
 
 # Tests
 pytest = "^6.2"
-pytest-cov = "^2.8"
-pytest-asyncio = "^0.15.0"
+pytest-asyncio = "^0.16.0"
+pytest-cov = "^3.0.0"
 pytest-mock = "^3.3.1"
 
 # Docs
 mkdocs = "^1.1.2"
-mkdocs-material = "^7.0.0"
+mkdocs-material = "^8.0.2"
 
 # Pre-commit
+autoflake = "^1.4"
 pre-commit = "^2.12.0"
 
+[tool.mypy]
+python_version = 3.8
+ignore_missing_imports = true
+warn_no_return = false
+warn_return_any = false
+warn_unused_configs = true
+# Ignore tests, because we can use fixtures that not quite represent a real type
+[[tool.mypy.overrides]]
+module = "*.tests.*"
+ignore_errors = true
+
 [tool.black]
-line-length = 99
-target-version = ['py37', 'py38']
 force-exclude = '''
 (
     \.eggs
@@ -77,14 +93,16 @@ force-exclude = '''
   | docs
 )
 '''
+line-length = 99
+target-version = ['py37', 'py38']
 
 [tool.isort]
-multi_line_output = 3
-include_trailing_comma = true
 force_grid_wrap = 0
-use_parentheses = true
+include_trailing_comma = true
 line_length = 99
+multi_line_output = 3
+use_parentheses = true
 
 [build-system]
-requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
+requires = ["poetry>=0.12"]

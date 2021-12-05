@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import Type, Union, Iterable, Any
+from typing import Generic, Iterable, Type, TypeVar
 
-from vkbottle_types.events import BaseGroupEvent, BaseUserEvent
+T_contra = TypeVar("T_contra", contravariant=True)
 
 
-class ABCRule(ABC):
+class ABCRule(ABC, Generic[T_contra]):
     config: dict = {}
 
     @classmethod
@@ -13,31 +13,27 @@ class ABCRule(ABC):
         return cls
 
     @abstractmethod
-    async def check(self, event: Union[BaseUserEvent, BaseGroupEvent]):
+    async def check(self, event: T_contra):
         pass
 
-    def __and__(self, other: "ABCRule") -> "ABCFilter":
-        return AndFilter(self, other)
+    def __and__(self, other: "ABCRule[T_contra]") -> "AndRule[T_contra]":
+        return AndRule(self, other)
 
-    def __or__(self, other: "ABCRule") -> "ABCFilter":
-        return OrFilter(self, other)
+    def __or__(self, other: "ABCRule[T_contra]") -> "OrRule[T_contra]":
+        return OrRule(self, other)
+
+    def __invert__(self) -> "NotRule[T_contra]":
+        return NotRule(self)
 
     def __repr__(self):
         return f"<{self.__class__.__qualname__}>"
 
 
-class ABCFilter(ABCRule):
-    @property
-    @abstractmethod
-    def rules(self) -> Iterable[ABCRule]:
-        pass
-
-
-class AndFilter(ABCFilter):
-    def __init__(self, *rules: ABCRule):
+class AndRule(ABCRule[T_contra], Generic[T_contra]):
+    def __init__(self, *rules: ABCRule[T_contra]):
         self._rules = rules
 
-    async def check(self, event: Any):
+    async def check(self, event: T_contra):
         context = {}
 
         for rule in self.rules:
@@ -50,15 +46,31 @@ class AndFilter(ABCFilter):
         return context
 
     @property
-    def rules(self) -> Iterable[ABCRule]:
+    def rules(self) -> Iterable[ABCRule[T_contra]]:
         return self._rules
 
 
-class OrFilter(ABCFilter):
-    def __init__(self, *rules: ABCRule):
+class NotRule(ABCRule[T_contra]):
+    def __init__(self, *rules: ABCRule[T_contra]):
         self._rules = rules
 
-    async def check(self, event: Any):
+    async def check(self, event: T_contra):
+        for rule in self.rules:
+            check_response = await rule.check(event)
+            if check_response is False:
+                return True
+        return False
+
+    @property
+    def rules(self) -> Iterable[ABCRule[T_contra]]:
+        return self._rules
+
+
+class OrRule(ABCRule[T_contra]):
+    def __init__(self, *rules: ABCRule[T_contra]):
+        self._rules = rules
+
+    async def check(self, event: T_contra):
         for rule in self.rules:
             check_response = await rule.check(event)
             if check_response is not False:
@@ -66,5 +78,5 @@ class OrFilter(ABCFilter):
         return False
 
     @property
-    def rules(self) -> Iterable[ABCRule]:
+    def rules(self) -> Iterable[ABCRule[T_contra]]:
         return self._rules

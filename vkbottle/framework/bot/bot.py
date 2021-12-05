@@ -1,39 +1,44 @@
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import NoReturn, Optional, Union
+from typing import TYPE_CHECKING, NoReturn, Optional, Union
 
-from vkbottle.api import ABCAPI, API, Token
-from vkbottle.dispatch import ABCRouter, BotRouter, BuiltinStateDispenser
-from vkbottle.dispatch import ABCStateDispenser
-from vkbottle.exception_factory import ABCErrorHandler, ErrorHandler
+from vkbottle.api import API
+from vkbottle.dispatch import BuiltinStateDispenser, Router
+from vkbottle.exception_factory import ErrorHandler
 from vkbottle.framework.abc import ABCFramework
+from vkbottle.framework.labeler import BotLabeler
 from vkbottle.modules import logger
-from vkbottle.polling import ABCPolling, BotPolling
+from vkbottle.polling import BotPolling
 from vkbottle.tools import LoopWrapper
 
-from .labeler import ABCBotLabeler, BotLabeler
+if TYPE_CHECKING:
+    from vkbottle.api import ABCAPI, Token
+    from vkbottle.dispatch import ABCRouter, ABCStateDispenser
+    from vkbottle.exception_factory import ABCErrorHandler
+    from vkbottle.framework.labeler import ABCLabeler
+    from vkbottle.polling import ABCPolling
 
 
 class Bot(ABCFramework):
     def __init__(
         self,
-        token: Optional[Token] = None,
-        api: Optional[ABCAPI] = None,
-        polling: Optional[ABCPolling] = None,
+        token: Optional["Token"] = None,
+        api: Optional["ABCAPI"] = None,
+        polling: Optional["ABCPolling"] = None,
         loop: Optional[AbstractEventLoop] = None,
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
-        labeler: Optional["ABCBotLabeler"] = None,
+        labeler: Optional["ABCLabeler"] = None,
         state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
         task_each_event: bool = True,
     ):
-        self.api: Union[ABCAPI, API] = API(token) if token is not None else api  # type: ignore
+        self.api: Union["ABCAPI", API] = API(token) if token is not None else api  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.labeler = labeler or BotLabeler()
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
         self._polling = polling or BotPolling(self.api)
-        self._router = router or BotRouter()
+        self._router = router or Router()
         self._loop = loop
         self.task_each_event = task_each_event
 
@@ -54,10 +59,10 @@ class Bot(ABCFramework):
         self._router = new_router
 
     @property
-    def on(self) -> "ABCBotLabeler":
+    def on(self) -> "ABCLabeler":
         return self.labeler
 
-    async def run_polling(self, custom_polling: Optional[ABCPolling] = None) -> NoReturn:
+    async def run_polling(self, custom_polling: Optional["ABCPolling"] = None) -> NoReturn:
         polling = custom_polling or self.polling
         logger.info(f"Starting polling for {polling.api!r}")
 

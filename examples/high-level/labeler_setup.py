@@ -7,12 +7,12 @@ from vkbottle.bot import Bot, BotLabeler, Message
 
 # A simple rule to demonstrate labeler
 # setup for custom rules later
-class SpamRule(ABCRule):
+class SpamRule(ABCRule[Message]):
     def __init__(self, chars: List[str]):
         self.chars = "".join(chars)
 
-    async def check(self, message: Message):
-        return len(message.text) and message.text.strip(self.chars) == ""
+    async def check(self, event: Message):
+        return len(event.text) and event.text.strip(self.chars) == ""
 
 
 # Create a bot, or a single labeler:
@@ -66,7 +66,7 @@ async def spam_handler(message: Message):
         try:
             await bot.api.messages.remove_chat_user(message.peer_id - 2e9, message.from_id)
             return "Как можно игнорировать мои просьбы"
-        except VKAPIError(15):
+        except VKAPIError[15]:
             return "Где мои права администратора?"
 
     await message.answer("Пожалуйста перестаньте спамить")

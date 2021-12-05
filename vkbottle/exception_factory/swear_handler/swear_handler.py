@@ -13,7 +13,7 @@ def swear(
     just_log: bool = False,
     just_return: bool = False,
 ) -> Any:
-    """ Swear catcher allows to handle exceptions | Used as a decorator
+    """Swear catcher allows to handle exceptions | Used as a decorator
     :param exception: Exception(s) to handle
     :param exception_handler: async exception handler
     :param just_log: should swear handler log the error
