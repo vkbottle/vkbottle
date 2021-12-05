@@ -19,7 +19,7 @@ class MessageEventMin(MessageEventObject):
 
     def __init__(self, **event):
         data = event["object"]
-        data["group_id"] = event.group_id
+        data["group_id"] = event["group_id"]
 
         super().__init__(**data)
 
