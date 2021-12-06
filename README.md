@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/vkbottle/vkbottle">
-    <img src="docs/logo.png" width="200px" style="display: inline-block; border-radius: 5px">
+    <img src="https://raw.githubusercontent.com/vkbottle/vkbottle/master/docs/logo.png" width="175px" style="display: inline-block; border-radius: 5px">
   </a>
 </p>
 <h1 align="center">
@@ -66,4 +66,4 @@ bot.run_forever()
 ## Лицензия
 
 Copyright © 2019-2021 [timoniq](https://github.com/timoniq).\
-Этот проект имеет [MIT](./LICENSE) лицензию.
+Этот проект имеет [MIT](https://github.com/vkbottle/vkbottle/blob/master/LICENSE) лицензию.
