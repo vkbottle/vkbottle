@@ -12,4 +12,5 @@ api = API(token="token")
 
 * **token** - токен сообщества/пользователя или [генератор токенов](token-generator.md)
 * **ignore_error** - игнорировать ошибки VK API
-* **session_manager** - менеджер сессий (читать документацию `http-session-manager`)
+* **http_client** - клиент для запросов ([документация](../http/http-client.md))
+* **request_rescheduler** - рещедулер запросов ([документация](request-rescheduler.md))

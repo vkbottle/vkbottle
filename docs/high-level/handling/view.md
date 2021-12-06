@@ -39,7 +39,7 @@ class VoteView(ABCView):
 
     async def process_event(self, event: dict) -> bool:
         # Эта функция принимает ивент в форме словаря,
-        # она должна определить подходит ли ивент под 
+        # она должна определить подходит ли ивент под
         # текущий view или нет и вернуть соответствующее
         # boolean-значение
         return event["type"] == "poll_vote_new"
@@ -50,32 +50,32 @@ class VoteView(ABCView):
         # Эта функция полностью обрабатывает
         # полученный ивент
         vote = PollVoteNew(**event)
-        
+
         # Здесь можно обозначить стейт-каст
         # по определенному ключу для объекта
         vote.object.state_peer = await state_dispenser.cast(vote.object.user_id)
-        
+
         # Здесь можно имплементировать стандартное поведение мидлварей
         # Например, если `pre_middleware` вернул что либо, то в одном из
         # мидлварей был вызван `self.stop(...)` - обработка сразу останавливается
         mw_instances = await self.pre_middleware(vote)
         if mw_instances is None:
             return logger.info("Обработка остановлена, pre_middleware вернул ошибку")
-        
+
         # `handlers` и `handle_responses` нужны для post мидлварей
         handlers = []
         handler_responses = []
-        
+
         for handler in self.handlers:
             if not await handler.filter(vote):
                 continue
-            
+
             handler_responses.append(await handler.handle(vote))
             handlers.append(handler)
-            
+
             if handler.blocking:
                 break
-                
+
         # Запуск post-мидлварей
         await self.post_middleware(mw_instances, handler_responses, handlers)
 ```
@@ -91,11 +91,11 @@ from typing import Dict
 
 async def vote_up(vote: PollVoteNew):
     print("{} со стейтом {} голосует за {}".format(
-        vote.object.user_id, 
-        vote.object.state_peer, 
+        vote.object.user_id,
+        vote.object.state_peer,
         vote.object.option_id
     ))
-    
+
 async def vote_up_admin(vote: PollVoteNew):
     print("Админ проголосовал за {}", vote.object.option_id)
 
