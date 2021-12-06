@@ -86,8 +86,8 @@ theme:
     text: Roboto Mono
     code: Monaco
 
-  logo: logo.png
-  favicon: logo.png
+  logo: logo.svg
+  favicon: logo.svg
 
 markdown_extensions:
   - admonition
