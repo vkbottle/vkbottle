@@ -1,6 +1,7 @@
 import typing
 from typing import (
     TYPE_CHECKING,
+    Any,
     AsyncIterator,
     Iterable,
     List,
@@ -91,7 +92,7 @@ class API(ABCAPI, APICategories):
 
     async def validate_response(
         self, method: str, data: dict, response: Union[dict, str]
-    ) -> Union[None, dict, NoReturn]:
+    ) -> Union[Any, NoReturn]:
         """Validates response from VK,
         to change validations change API.response_validators (list of ResponseValidator's)"""
         for validator in self.response_validators:
