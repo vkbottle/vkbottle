@@ -35,9 +35,9 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         exception = SPECIFIC_ERRORS.get(code, VKAPIError[code])
 
         if exception == CaptchaError and getattr(ctx_api, "captcha_handler"):
-            key = await ctx_api.captcha_handler(exception)  # type: ignore
+            key = await ctx_api.captcha_handler(exception(**error))  # type: ignore
             return await ctx_api.request(
-                method, {**data, "captcha_sid": exception.sid, "captcha_key": key}
+                method, {**data, "captcha_sid": error["captcha_sid"], "captcha_key": key}
             )
 
         raise exception(**error)
