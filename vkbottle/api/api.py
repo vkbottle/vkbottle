@@ -108,8 +108,9 @@ class API(ABCAPI, APICategories):
         logger.debug("API request was validated")
         return request  # type: ignore
 
-    def add_captcha_handler(self, handler: CaptchaHandler):
+    def add_captcha_handler(self, handler: CaptchaHandler) -> CaptchaHandler:
         self.captcha_handler = handler
+        return handler
 
     @property
     def api_instance(self) -> "API":

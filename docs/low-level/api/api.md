@@ -14,3 +14,19 @@ api = API(token="token")
 * **ignore_error** - игнорировать ошибки VK API
 * **http_client** - клиент для запросов ([документация](../http/http-client.md))
 * **request_rescheduler** - рещедулер запросов ([документация](request-rescheduler.md))
+
+## Captcha хендлер
+
+Должен вернуть код от капчи:
+
+```python
+from vkbottle import CaptchaError
+
+bot = ...
+
+async def captcha_handler(e: CaptchaError):
+    ...
+    return code
+
+bot.api.add_captcha_handler(captcha_handler)
+```
