@@ -22,7 +22,7 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         data: dict,
         response: Any,
         ctx_api: Union["ABCAPI", "API"],
-    ) -> Union[Any, NoReturn]:
+    ) -> Union[None, dict, NoReturn]:
         if "error" not in response:
             return response
 
@@ -33,4 +33,11 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         code = error.pop("error_code")
 
         exception = SPECIFIC_ERRORS.get(code, VKAPIError[code])
+
+        if isinstance(exception, CaptchaError) and ctx_api.captcha_handler:
+            key = await ctx_api.captcha_handler(exception)
+            return await ctx_api.request(
+                method, {**data, "captcha_sid": exception.sid, "captcha_key": key}
+            )
+
         raise exception(**error)

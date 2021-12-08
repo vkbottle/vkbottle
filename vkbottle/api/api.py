@@ -1,6 +1,6 @@
+import typing
 from typing import (
     TYPE_CHECKING,
-    Any,
     AsyncIterator,
     Iterable,
     List,
@@ -15,6 +15,7 @@ from vkbottle_types.categories import APICategories
 
 from vkbottle.http import SingleAiohttpClient
 from vkbottle.modules import logger
+from vkbottle.exception_factory import CaptchaError
 
 from .abc import ABCAPI
 from .request_rescheduler import BlockingRequestRescheduler
@@ -31,6 +32,7 @@ if TYPE_CHECKING:
     from .token_generator import Token
 
 APIRequest = NamedTuple("APIRequest", [("method", str), ("data", dict)])
+CaptchaHandler = typing.Callable[[CaptchaError], typing.Awaitable]
 
 
 class API(ABCAPI, APICategories):
@@ -55,6 +57,7 @@ class API(ABCAPI, APICategories):
         self.request_rescheduler = request_rescheduler or BlockingRequestRescheduler()
         self.response_validators: List["ABCResponseValidator"] = DEFAULT_RESPONSE_VALIDATORS
         self.request_validators: List["ABCRequestValidator"] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
+        self.captcha_handler: Optional[CaptchaHandler] = None
 
     async def request(self, method: str, data: dict) -> dict:
         """Makes a single request opening a session"""
@@ -88,7 +91,7 @@ class API(ABCAPI, APICategories):
 
     async def validate_response(
         self, method: str, data: dict, response: Union[dict, str]
-    ) -> Union[Any, NoReturn]:
+    ) -> Union[None, dict, NoReturn]:
         """Validates response from VK,
         to change validations change API.response_validators (list of ResponseValidator's)"""
         for validator in self.response_validators:
@@ -103,6 +106,9 @@ class API(ABCAPI, APICategories):
             request = await validator.validate(request)
         logger.debug("API request was validated")
         return request  # type: ignore
+
+    def add_captcha_handler(self, handler: CaptchaHandler):
+        self.captcha_handler = handler
 
     @property
     def api_instance(self) -> "API":
