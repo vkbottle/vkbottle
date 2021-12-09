@@ -40,7 +40,7 @@ from vkbottle import Keyboard
 
 Для этого есть аплоадеры!
 
-[Подробная документация по аплоадерам](/docs/tools/uploaders.md)
+[Подробная документация по аплоадерам](../tools/uploaders.md)
 
 [Пример с аплоадером \[второй хендлер\]](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/photo_upload_example.py)
 

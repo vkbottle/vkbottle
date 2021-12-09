@@ -23,9 +23,9 @@ Middleware без методов `pre` или/и `post` бесполезен, н
 
 ### async def pre(self)
 
-`pre` получает имеет доступен к ивенту (например сообщение) через `self` и может вернуть вызвать ошибку через `self.stop` или обновить констекст через `self.send`
+`pre` имеет доступ к ивенту (например сообщению) через `self` и может вернуть ошибку через `self.stop` или обновить констекст через `self.send`
 
-[техническая документация](/docs/high-level/handling/middleware.md)
+[техническая документация](../high-level/handling/middleware.md)
 
 Вот так например можно отсеивать все сообщения от ботов:
 
@@ -39,9 +39,9 @@ class NoBotMiddleware(BaseMiddleware[Message]):
             self.stop("from_id меньше 0")
 ```
 
-### async def post(self, view, handle_responses, handlers)
+### async def post(self)
 
-`post` получает гораздо больше информации в отличии от `pre`, но он уже никак не может повлиять на обработку ивента. Обычно его используют для статистики и логов
+`post` уже никак не может повлиять на обработку ивента. Обычно его используют для статистики и логов
 
 ```python
 from vkbottle.bot import Message
@@ -49,18 +49,13 @@ from vkbottle import BaseMiddleware
 from typing import List, Any
 
 class LogMiddleware(BaseMiddleware[Message]):
-    async def post(
-        self,
-        view: "ABCView",
-        handle_responses: List[Any],
-        handlers: List["ABCHandler"],
-    ):
-        if not handlers:
+    async def post(self):
+        if not self.handlers:
             return
 
-        print(f"{len(handlers)} хендлеров сработало на сообщение. "
-              f"Они вернули {handle_responses}, "
-              f"все они принадлежали к view {view}")
+        print(f"{len(self.handlers)} хендлеров сработало на сообщение. "
+              f"Они вернули {self.handle_responses}, "
+              f"все они принадлежали к view {self.view}")
 ```
 
 ---
@@ -88,7 +83,7 @@ bot.labeler.message_view.register_middleware(LogMiddleware)
 
 В этой части туториала упомяналось о каких-то значениях, что возвращаются их хендлеров. Что же это и зачем они нужны?
 
-> Создание кастомного менеджера для вашего view выходит за рамки этого туториала, но вы можете [прочитать об этом в технической документации](/docs/high-level/handling/view.md), когда посчитаете что готовы
+> Создание кастомного менеджера для вашего view выходит за рамки этого туториала, но вы можете [прочитать об этом в технической документации](../high-level/handling/view.md), когда посчитаете что готовы
 
 Для общего понимания будет разобран return менеджер из коробки для `MessageView`
 
