@@ -25,9 +25,9 @@ View являются блокирующими менеджерами хендл
 * middleware_instances - лист объектов `BaseMiddleware`, используется в `view.pre_middleware` и `view.post_middleware`
 * handler_return_manager - `BaseReturnManager`
 
-Из них **рекомендуются** 2 аттрибута, `handlers` и `middlewares`
+Из них **рекомендуются** 2 атрибута, `handlers` и `middlewares`
 
-Эти аттрибуты впоследствии рекомендуется использовать в `handle_event` для запуска мидлварей и поиска хендлера
+Эти атрибуты впоследствии рекомендуется использовать в `handle_event` для запуска мидлварей и поиска хендлера
 
 ```python
 from vkbottle import ABCView, MiddlewareResponse
