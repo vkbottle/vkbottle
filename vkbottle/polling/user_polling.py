@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class UserPolling(ABCPolling):
     """User Polling class
-    Documentation: https://github.com/vkbottle/vkbottle/tree/v3.0/docs/polling/polling.md
+    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/polling/polling.md
     """
 
     def __init__(
