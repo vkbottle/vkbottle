@@ -20,7 +20,7 @@ class AiohttpClient(ABCHTTPClient):
         optimize: bool = False,
         **kwargs,
     ):
-        self.loop = loop or asyncio.get_event_loop()
+        self.loop = loop or asyncio.get_event_loop_policy().get_event_loop()
         self.json_processing_module = json_processing_module or json_module
 
         if optimize:
