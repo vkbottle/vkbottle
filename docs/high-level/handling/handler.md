@@ -34,7 +34,7 @@ bot.run_forever()
 
 ---
 
-Типы хендлеров выше не делают ничего необычного а просто оперируют предустановленным правилом `PeerRule`. В `message` он не предустанавливается, в `chat_message` - `PeerRule(True)` в `private_message` - `PeerRule(False)`
+Типы хендлеров выше не делают ничего необычного, а просто оперируют предустановленным правилом `PeerRule`. В `message` он не предустанавливается, в `chat_message` - `PeerRule(True)` в `private_message` - `PeerRule(False)`
 
 ---
 

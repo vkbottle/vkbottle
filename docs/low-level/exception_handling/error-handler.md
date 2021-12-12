@@ -2,12 +2,12 @@
 
 Хендлер ошибок нужен для быстрой и простой обработки любых типов исключений.
 
-Для того, чтобы начать с ним работу, потребуется создать его и зарегистрировать в него хендлеры исключений:
+Для того, что-бы начать с ним работу, потребуется создать его и зарегистрировать в него хендлеры исключений:
 
 ```python
 from vkbottle import ErrorHandler
 
-error_handler = ErrorHandler(redirect_arguments=False) # Если redirect_arguments = True то все аргументы обернутой функции будут поступать и в хендлер исключения тоже
+error_handler = ErrorHandler(redirect_arguments=False) # Если redirect_arguments = True, то все аргументы обернутой функции будут поступать и в хендлер исключения тоже
 
 @error_handler.register_error_handler(RuntimeError)
 async def exc_handler_runtime(e: RuntimeError):

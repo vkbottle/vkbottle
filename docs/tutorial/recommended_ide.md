@@ -1,4 +1,4 @@
-# Подходящее иде для разработки на vkbottle
+# Подходящее IDE для разработки на vkbottle
 
 * PyCharm
 * vscode (с расширением Pylance)

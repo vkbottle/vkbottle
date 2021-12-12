@@ -14,7 +14,7 @@
         await message.answer(f"<<{args[0]}>>")
     ```
 
-2. Использовать автораспаковщики рулзов из коробки, список с названиями можно найти [здесь](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/framework/bot/labeler/default.py#L34), в этом случае некоторые второстепенные параметры контролировать будет нельзя
+2. Использовать авто-распаковщики рулзов из коробки, список с названиями можно найти [здесь](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/framework/bot/labeler/default.py#L34), в этом случае некоторые второстепенные параметры контролировать будет нельзя
     ```python
     @bot.on.message(command=("say", 1))
     async def say_handler(message: Message, args: Tuple[str]):
@@ -85,7 +85,7 @@ class MyRule(ABCRule[Message]):
 bot.labeler.custom_rules["my_rule"] = MyRule
 ```
 
-его можно будет использовать и вторым способом:
+Его можно будет использовать и вторым способом:
 
 ```python
 @bot.on.message(my_rule=50)
@@ -93,7 +93,7 @@ bot.labeler.custom_rules["my_rule"] = MyRule
 
 ### Создание правил через правила-врапперы
 
-> Есть так называемые правила-врапперы, правила которые исполняют какой-то код который получают как параметры
+> Есть так называемые правила-врапперы, правила, которые исполняют какой-то код который получают как параметры
 
 К правилам-врапперам из коробки можно отнести: `func`, шорткат `FuncRule`; `coro` или `coroutine`, шорткат `CoroutineRule`
 
