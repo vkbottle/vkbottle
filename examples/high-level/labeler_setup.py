@@ -35,7 +35,7 @@ bot.labeler.vbml_ignore_case = True
 # We can add rule to custom_rules and it will be accessible
 # in handlers in any place but is it of importance that
 # labeler is always local (shortcuts work only for a local
-# instance, for eg Bot, Blueprint, or pure Labeler)
+# instance, for eg. Bot, Blueprint, or pure Labeler)
 bot.labeler.custom_rules["spam"] = SpamRule
 
 # BotLabeler has fixed views. If you want to add yours you need
