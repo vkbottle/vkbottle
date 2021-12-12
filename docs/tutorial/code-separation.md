@@ -61,7 +61,7 @@ bot.run_forever()
 from vkbottle.bot import Blueprint, Message, rules
 from vkbottle_types.objects import MessagesConversation
 
-class ChatInfoRule(rules.ABCMessageRule):
+class ChatInfoRule(rules.ABCRule[Message]):
     async def check(self, message: Message) -> dict:
         chats_info = await bp.api.messages.get_conversations_by_id(message.peer_id)
         return {"chat": chats_info.items[0]}
