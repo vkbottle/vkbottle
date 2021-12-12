@@ -34,7 +34,7 @@ await message.answer(
     message="Смотри сколько кнопок!!",
     keyboard=(
         Keyboard(one_time=True, inline=False)
-        .add(Text("Кнопка 1"))
+        .add(Text("Кнопка 1"), color=KeyboardButtonColor.POSITIVE)
         .row()
         .add(Text("Кнопка 2"))
         .add(Text("Кнопка 3", payload={"command": 3}))
