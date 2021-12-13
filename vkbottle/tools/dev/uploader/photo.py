@@ -36,7 +36,9 @@ class PhotoToAlbumUploader(PhotoUploader):
 
         if self.generate_attachment_strings:
             return [
-                self.generate_attachment_string("photo", photo["owner_id"], photo["id"])
+                self.generate_attachment_string(
+                    "photo", photo["owner_id"], photo["id"], photo.get("access_key")
+                )
                 for photo in photos
             ]
         return photos
@@ -57,7 +59,9 @@ class PhotoWallUploader(PhotoUploader):
         ]
 
         if self.generate_attachment_strings:
-            return self.generate_attachment_string("photo", photos[0]["owner_id"], photos[0]["id"])
+            return self.generate_attachment_string(
+                "photo", photos[0]["owner_id"], photos[0]["id"], photos[0].get("access_key")
+            )
         return photos
 
     async def get_server(self, **kwargs) -> dict:
@@ -77,7 +81,9 @@ class PhotoFaviconUploader(PhotoUploader):
         ]
 
         if self.generate_attachment_strings:
-            return self.generate_attachment_string("wall", owner_id, photo["post_id"])
+            return self.generate_attachment_string(
+                "wall", owner_id, photo["post_id"], photo.get("access_key")
+            )
         return photo
 
     async def get_server(self, **kwargs) -> dict:
@@ -96,7 +102,9 @@ class PhotoMessageUploader(PhotoUploader):
         ]
 
         if self.generate_attachment_strings:
-            return self.generate_attachment_string("photo", photo[0]["owner_id"], photo[0]["id"])
+            return self.generate_attachment_string(
+                "photo", photo[0]["owner_id"], photo[0]["id"], photo.get("access_key")
+            )
         return photo
 
     async def get_server(self, **kwargs) -> dict:

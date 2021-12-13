@@ -32,7 +32,10 @@ class DocUploader(BaseUploader, ABC):
 
         if self.generate_attachment_strings:
             return self.generate_attachment_string(
-                doc_type, doc[doc_type]["owner_id"], doc[doc_type]["id"]
+                doc_type,
+                doc[doc_type]["owner_id"],
+                doc[doc_type]["id"],
+                doc[doc_type].get("access_key"),
             )
         return doc
 

@@ -69,8 +69,10 @@ class BaseUploader(ABC):
             return (await self.api.request("users.get", {}))["response"][0]["id"]
 
     @staticmethod
-    def generate_attachment_string(attachment_type: str, owner_id: int, item_id: int) -> str:
-        return f"{attachment_type}{owner_id}_{item_id}"
+    def generate_attachment_string(
+        attachment_type: str, owner_id: int, item_id: int, access_key: Optional[str] = None
+    ) -> str:
+        return f"{attachment_type}{owner_id}_{item_id}{('_' + access_key) if access_key else ''}"
 
     @staticmethod
     async def read(file_source: Union[str, "Bytes"]) -> "Bytes":

@@ -30,7 +30,7 @@ class AudioUploader(BaseUploader):
 
         if self.generate_attachment_strings:
             return self.generate_attachment_string(
-                "audio", await self.get_owner_id(params), audio["id"]
+                "audio", await self.get_owner_id(params), audio["id"], audio.get("access_key")
             )
         return audio
 
