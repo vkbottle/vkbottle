@@ -1,7 +1,7 @@
 from vkbottle import vkscript
 
 BASIC_CYCLE = "var a=%A%;var some_list=[];while(a<100){API.users.get({user_id:a});a = a + 1;some_list.push(a);};return some_list;"
-API_REQUEST = "var group_id=1;return API.groups.getById({group_id:group_id});"
+API_REQUEST = "var group_id=%A%;return API.groups.getById({group_id:group_id});"
 
 
 @vkscript
@@ -47,5 +47,5 @@ def types(api):
 def test_vkscript():
     assert basic_cycle(a=10) == BASIC_CYCLE.replace("%A%", "10")
     assert basic_cycle(a=94) == BASIC_CYCLE.replace("%A%", "94")
-    assert api_request(group_id=1) == API_REQUEST
+    assert api_request(group_id=1) == API_REQUEST.replace("%A%", "1")
     assert types()
