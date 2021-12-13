@@ -30,8 +30,8 @@ class Converter:
     def scriptify(self, func: Callable, **values) -> str:
         """Translate function to VKScript"""
         source = getsource(func)
-        code = ast.parse(source).body[0]
-        args = [a.arg for a in code.args.args]  # type: ignore
+        code: ast.FunctionDef = ast.parse(source).body[0]  # type: ignore
+        args = [a.arg for a in code.args.args]
         args.pop(0)
         if any(v not in values for v in args):
             raise ConverterError(
@@ -39,5 +39,5 @@ class Converter:
             )
         values_assignments = [f"var {k}={v!r};" for k, v in values.items()]
         return "".join(values_assignments) + "".join(
-            self.find_definition(line) for line in code.body  # type: ignore
+            self.find_definition(line) for line in code.body
         )

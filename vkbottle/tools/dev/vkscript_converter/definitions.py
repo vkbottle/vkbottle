@@ -1,7 +1,7 @@
 import ast
 import random
 import string
-from typing import Callable
+from typing import Callable, Iterable
 
 from .base_converter import Converter, ConverterError
 
@@ -15,12 +15,17 @@ converter = Converter()
 find = converter.find_definition
 
 
-def dispatch_keywords(keywords: dict, assigner: str = ":", sep: str = ","):
+def dispatch_keywords(keywords: Iterable, assigner: str = ":", sep: str = ","):
     return sep.join(f"{param.arg}{assigner}{find(param.value)}" for param in keywords)
 
 
 def random_string(length: int) -> str:
     return "".join(random.choice(string.ascii_lowercase) for _ in range(length))
+
+
+def to_camel_case(snake_str: str) -> str:
+    components = snake_str.split("_")
+    return components[0].lower() + "".join(x.title() for x in components[1:])
 
 
 @converter(ast.Assign)
@@ -174,12 +179,12 @@ def if_statement(d: ast.If):
 
 @converter(ast.Call)
 def call(d: ast.Call):
-    func = d.func
+    func: ast.Attribute = d.func  # type: ignore
     calls = []
 
     while isinstance(func, ast.Attribute):
         calls.append(func.attr)
-        func = func.value
+        func = func.value  # type: ignore
     if func.__class__ == ast.Str:
         if calls[0] in CALL_STRING:
             return str(find(d.args[0])) + "." + calls[0] + "(" + find(func) + ")"
@@ -187,14 +192,14 @@ def call(d: ast.Call):
             raise ConverterError("Use f-strings instead of str.format")
         raise ConverterError("String formatter")
 
-    if func.id.lower() == "api":  # type: ignore
-        params = dispatch_keywords(d.keywords)  # type: ignore
-        return "API." + ".".join(calls[::-1]) + "({" + params + "})"
-    elif func.id == "len":  # type: ignore
+    if func.id.lower() == "api":
+        params = dispatch_keywords(d.keywords)
+        return "API." + ".".join(map(to_camel_case, calls[::-1])) + "({" + params + "})"
+    elif func.id == "len":
         return f"{find(d.args[0])}.length"
     elif calls and calls[0] in CALL_REPLACEMENTS:
         args = ",".join(find(arg) for arg in d.args)
-        return find(d.func.value) + "." + CALL_REPLACEMENTS[calls[0]] + "(" + args + ")"  # type: ignore
+        return find(d.func.value) + "." + CALL_REPLACEMENTS[calls[0]] + "(" + args + ")"
     elif calls[0] in CALL_STRING:
         return find(func) + "." + calls[0] + "(" + find(d.args[0]) + ")"
     raise ConverterError(f"Call for {getattr(d.func, 'attr', d.func.__dict__)} is not referenced")
