@@ -3,7 +3,7 @@
 import ast
 import random
 import string
-import typing
+from typing import Callable, Iterable
 
 from .base_converter import Converter, ConverterError
 
@@ -17,7 +17,7 @@ converter = Converter()
 find = converter.find_definition
 
 
-def dispatch_keywords(keywords: dict, assigner: str = ":", sep: str = ","):
+def dispatch_keywords(keywords: Iterable, assigner: str = ":", sep: str = ","):
     return sep.join(f"{param.arg}{assigner}{find(param.value)}" for param in keywords)
 
 
@@ -25,16 +25,15 @@ def random_string(length: int) -> str:
     return "".join(random.choice(string.ascii_lowercase) for _ in range(length))
 
 
+def to_camel_case(snake_str: str) -> str:
+    components = snake_str.split("_")
+    return components[0].lower() + "".join(x.title() for x in components[1:])
+
+
 @converter(ast.Assign)
 def assign(d: ast.Assign):
     left = d.targets
-    left_ = []
-    for target in left:
-        if target.__class__ == ast.Name:
-            left_.append(find(target))
-        elif target.__class__ == ast.Subscript:
-            pass
-
+    left_ = [find(target) for target in left if target.__class__ == ast.Name]
     right = find(d.value)
     return "var " + ",".join(f"{target}={right}" for target in left_) + ";"
 
@@ -182,13 +181,12 @@ def if_statement(d: ast.If):
 
 @converter(ast.Call)
 def call(d: ast.Call):
-    func = d.func
+    func: ast.Attribute = d.func  # type: ignore
     calls = []
 
     while isinstance(func, ast.Attribute):
         calls.append(func.attr)
-        func = func.value
-
+        func = func.value  # type: ignore
     if func.__class__ == ast.Str:
         if calls[0] in CALL_STRING:
             return str(find(d.args[0])) + "." + calls[0] + "(" + find(func) + ")"
@@ -198,7 +196,7 @@ def call(d: ast.Call):
 
     if func.id.lower() == "api":
         params = dispatch_keywords(d.keywords)
-        return "API." + ".".join(calls[::-1]) + "({" + params + "})"
+        return "API." + ".".join(map(to_camel_case, calls[::-1])) + "({" + params + "})"
     elif func.id == "len":
         return f"{find(d.args[0])}.length"
     elif calls and calls[0] in CALL_REPLACEMENTS:
@@ -313,7 +311,7 @@ def name_constant_type(d: ast.NameConstant):
     return consts[d.value]
 
 
-def vkscript(func: typing.Callable) -> typing.Callable[[], str]:
+def vkscript(func: Callable) -> Callable[[], str]:
     def decorator(**context):
         return converter.scriptify(func, **context)
 

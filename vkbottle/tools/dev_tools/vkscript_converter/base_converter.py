@@ -10,7 +10,7 @@ class ConverterError(Exception):
 
 
 class Converter:
-    """ Translate Python into the VKScript with AST """
+    """Translate Python into the VKScript with AST"""
 
     def __init__(self):
         self.definitions: typing.Dict[ast.AST, ast] = {}
@@ -30,9 +30,9 @@ class Converter:
         return self.definitions[d.__class__](d)
 
     def scriptify(self, func: typing.Callable, **values) -> str:
-        """ Translate function to VKScript """
+        """Translate function to VKScript"""
         source = getsource(func)
-        code = ast.parse(source).body[0]
+        code: ast.FunctionDef = ast.parse(source).body[0]  # type: ignore
         args = [a.arg for a in code.args.args]
         args.pop(0)
         if any(v not in values for v in args):
