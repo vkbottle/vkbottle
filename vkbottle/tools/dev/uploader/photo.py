@@ -103,7 +103,7 @@ class PhotoMessageUploader(PhotoUploader):
 
         if self.generate_attachment_strings:
             return self.generate_attachment_string(
-                "photo", photo[0]["owner_id"], photo[0]["id"], photo.get("access_key")
+                "photo", photo[0]["owner_id"], photo[0]["id"], photo[0].get("access_key")
             )
         return photo
 
