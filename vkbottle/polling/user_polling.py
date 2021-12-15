@@ -1,4 +1,3 @@
-import asyncio
 from typing import TYPE_CHECKING, AsyncIterator, Optional
 
 from vkbottle.exception_factory import ErrorHandler
@@ -54,24 +53,16 @@ class UserPolling(ABCPolling):
         return (await self.api.request("messages.getLongPollServer", {}))["response"]
 
     async def listen(self) -> AsyncIterator[dict]:  # type: ignore
+        server = await self.get_server()
         logger.debug("Starting listening to longpoll")
-        server: Optional[dict] = None
         while not self.stop:
             try:
-                if not server:
-                    server = await self.get_server()
                 event = await self.get_event(server)
                 if not event.get("ts"):
                     server = await self.get_server()
                     continue
                 server["ts"] = event["ts"]
                 yield event
-            except (TimeoutError, asyncio.exceptions.TimeoutError):
-                logger.error(
-                    f"Looks like VK are dead, sleeping {self.wait} seconds and trying again..."
-                )
-                await asyncio.sleep(self.wait)
-                server = None
             except BaseException as e:
                 await self.error_handler.handle(e)
 
