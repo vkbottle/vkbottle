@@ -36,8 +36,10 @@ class ErrorHandler(ABCErrorHandler):
     async def handle(self, error: BaseException, *args, **kwargs) -> Any:
         handler = self.lookup_handler(type(error)) or self.undefined_error_handler
 
-        if handler is None and self.raise_exceptions:
-            raise error
+        if not handler:
+            if self.raise_exceptions:
+                raise error
+            return
 
         if self.redirect_arguments:
             return await handler(error, *args, **kwargs)
