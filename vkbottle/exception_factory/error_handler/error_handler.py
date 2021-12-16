@@ -8,8 +8,9 @@ if TYPE_CHECKING:
 
 
 class ErrorHandler(ABCErrorHandler):
-    def __init__(self, redirect_arguments: bool = False):
+    def __init__(self, redirect_arguments: bool = False, raise_exceptions: bool = False):
         self.redirect_arguments = redirect_arguments
+        self.raise_exceptions = raise_exceptions
         self.error_handlers = {}
         self.undefined_error_handler = None
 
@@ -35,7 +36,7 @@ class ErrorHandler(ABCErrorHandler):
     async def handle(self, error: BaseException, *args, **kwargs) -> Any:
         handler = self.lookup_handler(type(error)) or self.undefined_error_handler
 
-        if handler is None:
+        if handler is None and self.raise_exceptions:
             raise error
 
         if self.redirect_arguments:
