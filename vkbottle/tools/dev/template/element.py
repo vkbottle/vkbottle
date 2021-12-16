@@ -20,7 +20,7 @@ class TemplateElement:
         if isinstance(buttons, str):
             buttons = json.loads(buttons)
 
-        elif isinstance(buttons, dict):
+        if isinstance(buttons, dict):
             buttons = buttons.get("buttons")[0]  # taking only first row
 
         self.raw: dict = {k: v for k, v in locals().items() if v is not None and k != "self"}
