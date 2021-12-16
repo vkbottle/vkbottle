@@ -11,7 +11,7 @@ from vkbottle import TemplateElement, template_gen
 
 my_template = template_gen(
     TemplateElement(...), # о том как нужно сочетать параметры можно
-    TemplateElement(...)  # прочитать в документации вконтакте выше
+    TemplateElement(...)  # прочитать в документации Вконтакте выше
 )
 
 # my_template - готовый для отправки json

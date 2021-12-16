@@ -12,7 +12,7 @@
 
 ## Стандартная иерархия файлов
 
-Для того чтобы разделить код вам нужен так называемый коллектор блупринтов, сами блупринты и бот, который может быть сгруппирован с коллектором. Самая простая иерархия:
+Для того чтобы разделить код, вам нужен так называемый коллектор блупринтов, сами блупринты и бот, который может быть сгруппирован с коллектором. Самая простая иерархия:
 
 ```
 * bot.py
@@ -53,7 +53,7 @@ bot.run_forever()
 
 ### `chat.py`
 
-1. Добавим в auto_rules правило которое будет следить чтобы все сообщения шли только из чата
+1. Добавим в auto_rules правило, которое будет следить чтобы все сообщения шли только из чата
 2. Создадим правило и добавим его в auto_rules, которое будет получать информацию о чате и возвращать ее для всех хендлеров этого блупринта
 3. Добавим несколько хендлеров
 
@@ -61,7 +61,7 @@ bot.run_forever()
 from vkbottle.bot import Blueprint, Message, rules
 from vkbottle_types.objects import MessagesConversation
 
-class ChatInfoRule(rules.ABCMessageRule):
+class ChatInfoRule(rules.ABCRule[Message]):
     async def check(self, message: Message) -> dict:
         chats_info = await bp.api.messages.get_conversations_by_id(message.peer_id)
         return {"chat": chats_info.items[0]}

@@ -7,7 +7,7 @@
 ```python
 from vkbottle import ErrorHandler
 
-error_handler = ErrorHandler(redirect_arguments=False) # Если redirect_arguments = True то все аргументы обернутой функции будут поступать и в хендлер исключения тоже
+error_handler = ErrorHandler(redirect_arguments=False) # Если redirect_arguments = True, то все аргументы обернутой функции будут поступать и в хендлер исключения тоже
 
 @error_handler.register_error_handler(RuntimeError)
 async def exc_handler_runtime(e: RuntimeError):

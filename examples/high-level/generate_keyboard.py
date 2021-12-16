@@ -12,7 +12,7 @@ KEYBOARD_STANDARD.add(Text("Button 3"))
 KEYBOARD_STANDARD = KEYBOARD_STANDARD.get_json()
 
 # add and row methods returns the instance of Keyboard
-# so you can use it as builder
+# so, you can use it as builder
 KEYBOARD_WITH_BUILDER = (
     Keyboard(one_time=True, inline=False)
     .add(Text("Button 1"), color=KeyboardButtonColor.POSITIVE)

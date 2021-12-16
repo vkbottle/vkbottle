@@ -56,7 +56,7 @@ class VoteView(ABCView):
         vote.object.state_peer = await state_dispenser.cast(vote.object.user_id)
 
         # Здесь можно имплементировать стандартное поведение мидлварей
-        # Например, если `pre_middleware` вернул что либо, то в одном из
+        # Например, если `pre_middleware` вернул что-либо, то в одном из
         # мидлварей был вызван `self.stop(...)` - обработка сразу останавливается
         mw_instances = await self.pre_middleware(vote)
         if mw_instances is None:
