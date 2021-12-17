@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class Mention(BaseModel):
     """Mention object
 
-    :param id: Identifier of the user that was mentioned (negative if it is a community)
+    :param id: Identifier of the user that was mentioned (negative if it's a group)
     :param text: Mention text
     """
 
