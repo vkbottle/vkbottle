@@ -29,9 +29,9 @@ class BaseMessageMin(MessagesMessage, ABC):
 
     @root_validator
     def __replace_mention(cls, values):
-        if "text" not in values:
+        message_text = values.get("text")
+        if not message_text:
             return values
-        message_text = values["text"]
         mention_pattern = r"\[(?P<type>club|public|id)(?P<id>\d*)\|(?P<text>.+)\],?\s?"
         match = re.search(mention_pattern, message_text)
         if not match:
