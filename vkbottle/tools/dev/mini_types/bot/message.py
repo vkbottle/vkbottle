@@ -16,7 +16,7 @@ class MessageMin(BaseMessageMin):
 
     @property
     def is_mentioned(self) -> bool:
-        if not self.mention:
+        if not (self.mention and self.group_id):
             return False
         return self.mention.id == -self.group_id
 
