@@ -28,7 +28,7 @@
 pip install -U https://github.com/vkbottle/vkbottle/archive/master.zip
 ```
 
-Установить версию 4.x с PyPI можно командой:
+Установить последнюю версию VKBottle 4.x с PyPI можно командой:
 
 ```shell
 pip install vkbottle
