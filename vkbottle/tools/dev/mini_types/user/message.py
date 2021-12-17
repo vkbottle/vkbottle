@@ -9,6 +9,12 @@ if TYPE_CHECKING:
 class MessageMin(BaseMessageMin):
     user_id: Optional[int] = None
 
+    @property
+    async def is_mentioned(self) -> bool:
+        if not self.mention:
+            return False
+        return self.mention.id == self.user_id
+
     async def reply(
         self,
         message: Optional[str] = None,

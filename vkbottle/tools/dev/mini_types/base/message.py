@@ -1,21 +1,64 @@
+import re
+from abc import ABC, abstractmethod
 from io import StringIO
 from typing import TYPE_CHECKING, Any, List, Optional, Union
 
+from pydantic import BaseModel, root_validator
 from vkbottle_types import StatePeer
 from vkbottle_types.objects import MessagesMessage, UsersUser
 
 if TYPE_CHECKING:
-
     from vkbottle.api import ABCAPI, API
 
 
-class BaseMessageMin(MessagesMessage):
+class Mention(BaseModel):
+    """Mention object
+
+    :param id: Identifier of the user that was mentioned (negative if it is a community)
+    :param text: Mention text
+    """
+
+    id: int
+    text: str
+
+
+class BaseMessageMin(MessagesMessage, ABC):
     unprepared_ctx_api: Optional[Any] = None
     state_peer: Optional["StatePeer"] = None
+    _mention: Optional[Mention] = None
+
+    @root_validator
+    def __replace_mention(cls, values):
+        if "text" not in values:
+            return values
+        message_text = values["text"]
+        mention_pattern = r"\[(?P<type>club|public|id)(?P<id>\d*)\|(?P<text>.+)\],?\s?"
+        match = re.search(mention_pattern, message_text)
+        if not match:
+            return values
+        values["text"] = message_text.replace(match.group(0), "", 1)
+        mention_id = int(match.group("id"))
+        if match.group("type") in ("club", "public"):
+            mention_id = -mention_id
+        values["_mention"] = Mention(id=mention_id, text=match.group("text"))
+        return values
 
     @property
     def ctx_api(self) -> Union["ABCAPI", "API"]:
         return getattr(self, "unprepared_ctx_api")
+
+    @property
+    def mention(self) -> Optional[Mention]:
+        """Returns `Mention` object if message contains mention,
+        eg if message is `@username text` returns `Mention(id=123, text="text")`,
+        also mention is automatically removes from message text"""
+        return self._mention
+
+    @property
+    @abstractmethod
+    def is_mentioned(self) -> bool:
+        """Returns True if current bot is mentioned in message"""
+        pass
 
     async def get_user(self, raw_mode: bool = False, **kwargs) -> Union["UsersUser", dict]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[

@@ -14,6 +14,12 @@ class MessageMin(BaseMessageMin):
     group_id: Optional[int] = None
     client_info: Optional["ClientInfoForBots"] = None
 
+    @property
+    def is_mentioned(self) -> bool:
+        if not self.mention:
+            return False
+        return self.mention.id == -self.group_id
+
     async def reply(
         self,
         message: Optional[str] = None,

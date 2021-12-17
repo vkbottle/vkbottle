@@ -19,6 +19,7 @@ if TYPE_CHECKING:
 
 DEFAULT_CUSTOM_RULES: Dict[str, Type["ABCRule"]] = {
     "from_chat": base.PeerRule,
+    "mention": base.MentionRule,
     "command": base.CommandRule,
     "from_user": base.FromUserRule,
     "peer_ids": base.FromPeerRule,

@@ -35,6 +35,7 @@ from .abc import ABCRule
 
 __all__ = (
     "PeerRule",
+    "MentionRule",
     "CommandRule",
     "VBMLRule",
     "StickerRule",
@@ -68,6 +69,14 @@ class PeerRule(ABCRule[BaseMessageMin]):
 
     async def check(self, event: BaseMessageMin) -> bool:
         return self.from_chat is (event.peer_id != event.from_id)
+
+
+class MentionRule(ABCRule[BaseMessageMin]):
+    def __init__(self, mention_only: bool = True):
+        self.mention_only = mention_only
+
+    async def check(self, event: BaseMessageMin) -> bool:
+        return self.mention_only == event.is_mentioned
 
 
 class CommandRule(ABCRule[BaseMessageMin]):
