@@ -17,7 +17,6 @@
 
 ## Документация
 
-### [Что нового в 4.x](https://vkbottle.readthedocs.io/ru/latest/whats_new/4.0)
 [Туториал для новичков](https://vkbottle.readthedocs.io/ru/latest/tutorial/)\
 [Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
 
@@ -29,7 +28,7 @@
 pip install -U https://github.com/vkbottle/vkbottle/archive/master.zip
 ```
 
-Установить версию 4.0 с PyPI можно командой:
+Установить версию 4.x с PyPI можно командой:
 
 ```shell
 pip install vkbottle
