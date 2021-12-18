@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, List, Optional, Union
 
 from vkbottle_types.events.objects.group_event_objects import MessageEventObject
 
-from vkbottle import StatePeer
+from vkbottle.dispatch.dispenser.base import StatePeer
 from vkbottle.tools.dev.event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
 
 if TYPE_CHECKING:

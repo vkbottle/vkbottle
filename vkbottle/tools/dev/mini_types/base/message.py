@@ -4,8 +4,9 @@ from io import StringIO
 from typing import TYPE_CHECKING, Any, List, Optional, Union
 
 from pydantic import BaseModel, root_validator
-from vkbottle_types import StatePeer
-from vkbottle_types.objects import MessagesMessage, UsersUser
+from vkbottle_types.objects import MessagesMessage, UsersUserFull
+
+from vkbottle.dispatch.dispenser.base import StatePeer
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
@@ -60,11 +61,11 @@ class BaseMessageMin(MessagesMessage, ABC):
         """Returns True if current bot is mentioned in message"""
         pass
 
-    async def get_user(self, raw_mode: bool = False, **kwargs) -> Union["UsersUser", dict]:
+    async def get_user(self, raw_mode: bool = False, **kwargs) -> Union[UsersUserFull, dict]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
         ][0]
-        return raw_user if raw_mode else UsersUser(**raw_user)
+        return raw_user if raw_mode else UsersUserFull(**raw_user)
 
     async def answer(
         self,
