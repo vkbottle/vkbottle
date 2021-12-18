@@ -62,7 +62,7 @@ class AiohttpClient(ABCHTTPClient):
         self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
     ) -> bytes:
         response = await self.request_raw(url, method, data, **kwargs)
-        return await response.content.read()
+        return response._body
 
     async def close(self) -> None:
         if self.session and not self.session.closed:
