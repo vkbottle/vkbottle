@@ -5,6 +5,7 @@ from .abc import ABCErrorHandler
 
 if TYPE_CHECKING:
     from .abc import AsyncFunc
+from vkbottle.modules import logger
 
 
 class ErrorHandler(ABCErrorHandler):
@@ -39,6 +40,7 @@ class ErrorHandler(ABCErrorHandler):
         if not handler:
             if self.raise_exceptions:
                 raise error
+            logger.exception(error)
             return
 
         if self.redirect_arguments:
