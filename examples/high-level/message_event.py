@@ -27,27 +27,27 @@ async def send_callback_button(message: Message):
 
 
 @bot.on.raw_event(
+    GroupEventType.MESSAGE_EVENT,
+    MessageEvent,
     rules.PayloadRule({"cmd": "snackbar"}),
-    event=GroupEventType.MESSAGE_EVENT,
-    dataclass=MessageEvent,
 )
 async def show_snackbar(event: MessageEvent):
     await event.show_snackbar("Сейчас я исчезну")
 
 
 @bot.on.raw_event(
+    GroupEventType.MESSAGE_EVENT,
+    MessageEvent,
     rules.PayloadRule({"cmd": "app"}),
-    event=GroupEventType.MESSAGE_EVENT,
-    dataclass=MessageEvent,
 )
 async def open_app(event: MessageEvent):
     await event.open_app(6798836, "reg", event.user_id)
 
 
 @bot.on.raw_event(
+    GroupEventType.MESSAGE_EVENT,
+    MessageEvent,
     rules.PayloadRule({"cmd": "close"}),
-    event=GroupEventType.MESSAGE_EVENT,
-    dataclass=MessageEvent,
 )
 async def edit_message(event: MessageEvent):
     await event.edit_message("Окей")
