@@ -11,6 +11,8 @@ from vkbottle.dispatch.dispenser.base import StatePeer
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
 
+MENTION_PATTERN = re.compile(r"^\[(?P<type>club|public|id)(?P<id>\d*)\|(?P<text>.+)\],?\s?")
+
 
 class Mention(BaseModel):
     """Mention object
@@ -33,8 +35,7 @@ class BaseMessageMin(MessagesMessage, ABC):
         message_text = values.get("text")
         if not message_text:
             return values
-        mention_pattern = r"\[(?P<type>club|public|id)(?P<id>\d*)\|(?P<text>.+)\],?\s?"
-        match = re.search(mention_pattern, message_text)
+        match = MENTION_PATTERN.search(message_text)
         if not match:
             return values
         values["text"] = message_text.replace(match.group(0), "", 1)
