@@ -42,7 +42,7 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
         self, event: T_contra, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
     ) -> None:
         # For user event mapping, consider checking out
-        # https://vk.com/dev/using_longpoll?f=3.%20Event%20Structure
+        # https://dev.vk.com/api/user-long-poll/getting-started
         logger.debug("Handling event ({}) with message view".format(self.get_event_type(event)))
         context_variables: dict = {}
         message = await self.get_message(event, ctx_api)

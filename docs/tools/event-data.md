@@ -1,6 +1,6 @@
 # Генераторы `event-data`
 
-Документация ко всем объектам `event_data`: [здесь](https://vk.com/dev/bots_docs_5?f=Типы%20действий)
+Документация ко всем объектам `event_data`: [здесь](https://dev.vk.com/api/bots/development/keyboard#Типы%20действий)
 
 ### Их реализации в vkbottle:
 
