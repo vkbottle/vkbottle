@@ -1,6 +1,5 @@
 # Example of sending and receiving an event after pressing the Callback button
-# Documentation: https://vk.com/dev/bots_docs_5?f=4.4.%20Callback-кнопки
-
+# Documentation: https://dev.vk.com/api/bots/development/keyboard#Callback-кнопки
 import logging
 import os
 

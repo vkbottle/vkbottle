@@ -1,6 +1,6 @@
 # Template
 
-Посмотреть как применять темплейты можно [здесь](https://vk.com/dev/bot_docs_templates)
+Посмотреть как применять темплейты можно [здесь](https://dev.vk.com/api/bots/development/messages#Шаблоны%20сообщений)
 
 Для создания темплейтов есть `template_gen`
 

@@ -11,7 +11,7 @@ keyboard_1 = Keyboard().add(Text("button 1", {})).get_json()
 keyboard_2 = Keyboard().add(Text("button 2", {})).get_json()
 
 # More about combining fields can be read in vk documentation
-# for templates: https://vk.com/dev/bot_docs_templates
+# for templates: https://dev.vk.com/api/bots/development/messages#Шаблоны%20сообщений
 template = template_gen(
     TemplateElement(
         photo_id="-109837093_457242809", buttons=keyboard_1, action={"type": "open_photo"}
