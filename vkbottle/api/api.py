@@ -12,11 +12,10 @@ from typing import (
 )
 
 import vkbottle_types
-from vkbottle_types.categories import APICategories
 
+from vkbottle.exception_factory import CaptchaError
 from vkbottle.http import SingleAiohttpClient
 from vkbottle.modules import logger
-from vkbottle.exception_factory import CaptchaError
 
 from .abc import ABCAPI
 from .request_rescheduler import BlockingRequestRescheduler
@@ -36,7 +35,7 @@ APIRequest = NamedTuple("APIRequest", [("method", str), ("data", dict)])
 CaptchaHandler = typing.Callable[[CaptchaError], typing.Awaitable]
 
 
-class API(ABCAPI, APICategories):
+class API(ABCAPI):
     """Default API instance
     Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/api.md
     """
@@ -111,10 +110,6 @@ class API(ABCAPI, APICategories):
     def add_captcha_handler(self, handler: CaptchaHandler) -> CaptchaHandler:
         self.captcha_handler = handler
         return handler
-
-    @property
-    def api_instance(self) -> "API":
-        return self
 
     def __repr__(self) -> str:
         return f"<API token_generator={self.token_generator}...>"

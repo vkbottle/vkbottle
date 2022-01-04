@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any
+from vkbottle_types.categories import APICategories
 
 if TYPE_CHECKING:
     from vkbottle.http import ABCHTTPClient
@@ -7,7 +8,7 @@ if TYPE_CHECKING:
     from .request_rescheduler import ABCRequestRescheduler
 
 
-class ABCAPI(ABC):
+class ABCAPI(APICategories, ABC):
     """Abstract API class
     Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/api.md
     """
@@ -27,3 +28,7 @@ class ABCAPI(ABC):
     @abstractmethod
     async def validate_request(self, request: Any) -> Any:
         pass
+
+    @property
+    def api_instance(self) -> "ABCAPI":
+        return self
