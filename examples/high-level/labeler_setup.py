@@ -28,7 +28,7 @@ bot = Bot(os.environ["token"])
 # This is first shortcut for VBMLRule from custom_rules
 # <vbml_ignore_case = True> makes get_vbml_rule to add
 # re.IGNORECASE to flags
-bot.labeler.vbml_ignore_case = True
+bot.labeler.vbml_ignore_case = True  # type: ignore
 # You can add default flags if ignore case is False
 # <bot.labeler.default_flags = ...>
 

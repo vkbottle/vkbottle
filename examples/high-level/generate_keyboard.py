@@ -9,7 +9,7 @@ KEYBOARD_STANDARD.add(Text("Button 1"), color=KeyboardButtonColor.POSITIVE)
 KEYBOARD_STANDARD.add(Text("Button 2"))
 KEYBOARD_STANDARD.row()
 KEYBOARD_STANDARD.add(Text("Button 3"))
-KEYBOARD_STANDARD = KEYBOARD_STANDARD.get_json()
+KEYBOARD_STANDARD = KEYBOARD_STANDARD.get_json()  # type: ignore
 
 # add and row methods returns the instance of Keyboard
 # so, you can use it as builder
