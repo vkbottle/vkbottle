@@ -1,10 +1,10 @@
-from enum import IntEnum
+from enum import Enum
 from typing import Union
 
 from pydantic import BaseModel, validator
 
 
-class BaseStateGroup(IntEnum):
+class BaseStateGroup(Enum):
     pass
 
 
