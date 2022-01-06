@@ -31,9 +31,9 @@ from vkbottle.bot import Message, Bot
 bot = Bot("t")
 
 class SuperStates(BaseStateGroup):
-    AWKWARD_STATE = 0
-    CONFIDENT_STATE = 1
-    TERRIFYING_STATE = 2
+    AWKWARD_STATE = "awkward"
+    CONFIDENT_STATE = "confident"
+    TERRIFYING_STATE = "terrifying"
 
 @bot.on.message(state=SuperStates.AWKWARD_STATE)  # StateRule(SuperStates.AWKWARD_STATE)
 async def awkward_handler(message: Message):
