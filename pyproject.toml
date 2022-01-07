@@ -50,7 +50,7 @@ black = {version = "^21.4b0", allow-prereleases = true}
 flake8 = "^4.0.1"
 isort = "^5.7"
 lxml = "^4.5.0"
-mypy = "^0.930"
+mypy = "^0.931"
 mypy_extensions = "^0.4.3"
 
 # mypy stubs
