@@ -24,19 +24,22 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         ctx_api: Union["ABCAPI", "API"],
     ) -> Union[Any, NoReturn]:
         if (
-            isinstance(response.get("response"), list)
+            not response.get("error")
+            and isinstance(response.get("response"), list)
             and not any(item.get("error") for item in response["response"])
-            or not response.get("error")
         ):
             return response
 
         if ctx_api.ignore_errors:
             return None
         if isinstance(response.get("response"), list):
-            error = next(item for item in response["response"] if item.get("error"))
+            error = next(item["error"] for item in response["response"] if item.get("error"))
         else:
             error = response["error"]
         code = error.pop("error_code") if "error_code" in error else error.pop("code")
+        if error.get("description"):
+            error["error_msg"] = error.pop("description")
+            error["request_params"] = [{"key": key, "value": value} for key, value in data.items()]
         exception = SPECIFIC_ERRORS.get(code, VKAPIError[code])
 
         if exception == CaptchaError and getattr(ctx_api, "captcha_handler"):
