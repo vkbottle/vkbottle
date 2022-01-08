@@ -23,19 +23,27 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         response: Any,
         ctx_api: Union["ABCAPI", "API"],
     ) -> Union[Any, NoReturn]:
-        if (
-            not response.get("error")
-            and isinstance(response.get("response"), list)
-            and not any(item.get("error") for item in response["response"])
-        ):
-            return response
+        if "error" not in response:
+            if "response" not in response:
+                # invalid response, just igrnore it
+                return response
+            elif not (
+                (
+                    isinstance(response.get("response"), list)
+                    and any(item.get("error") for item in response["response"])
+                )
+            ):
+                # response is not a list of errors
+                return response
 
         if ctx_api.ignore_errors:
             return None
         if isinstance(response.get("response"), list):
+            # find first error in list
             error = next(item["error"] for item in response["response"] if item.get("error"))
         else:
             error = response["error"]
+        # list of errors has a special error object with description and code instead of error_msg and error_code
         code = error.pop("error_code") if "error_code" in error else error.pop("code")
         if error.get("description"):
             error["error_msg"] = error.pop("description")
