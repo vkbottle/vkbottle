@@ -60,7 +60,7 @@ class BaseLabeler(ABCLabeler):
 
         # Rule config is accessible from every single custom rule
         self.rule_config: Dict[str, Any] = {
-            "vbml_flags": re.MULTILINE | re.DOTALL,  # Flags for VBMLRule
+            "vbml_flags": re.DOTALL,  # Flags for VBMLRule
             "vbml_patcher": vbml.Patcher(),  # Patcher for VBMLRule
         }
 

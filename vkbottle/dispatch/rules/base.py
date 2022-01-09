@@ -116,7 +116,7 @@ class VBMLRule(ABCRule[BaseMessageMin]):
         patcher: Optional["vbml.Patcher"] = None,
         flags: Optional[re.RegexFlag] = None,
     ):
-        flags = flags or self.config.get("vbml_flags") or (re.MULTILINE | re.DOTALL)
+        flags = flags or self.config.get("vbml_flags") or re.DOTALL
 
         if isinstance(pattern, str):
             pattern = [vbml.Pattern(pattern, flags=flags or self.config.get("vbml_flags"))]
