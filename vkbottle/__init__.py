@@ -160,6 +160,7 @@ __all__ = (
     "get_token_generator",
     "GraffitiUploader",
     "GroupEventType",
+    "GroupTypes",
     "IsInstanceValidator",
     "keyboard_gen",
     "Keyboard",
