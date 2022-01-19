@@ -1,66 +1,70 @@
 # Клавиатуры и вложения
 
-В vkbottle предусмотрено множество способов сериализации в объекты vk. Здесь будет рассмотрена клавиатура и все виды вложений
-
 ## Клавиатура
 
-Все генераторы вы можете увидеть [здесь](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/generate_keyboard.py) в использовании
-
-Генераторы, как и их составляющие, импортируются из корневого пакета `vkbottle` либо из `vkbottle.tools`
-
-### Билдер-генератор клавиатуры `Keyboard`
-
-Как и все его элементы полностью типизирован, рекомендуем к использованию:
+### Создание через `Keyboard`
 
 ```python
 from vkbottle import Keyboard
 ```
 
-`Keyboard` принимает `one_time` (`bool`) и `inline` (`bool`) (для чего они нужны читайте в документации вконтакте)
+`Keyboard` принимает параметры `one_time` и `inline` (их значение описано [здесь](https://vk.com/dev/bots_docs_3?f=4.2.%20Структура%20данных)).
 
-У `Keyboard` есть методы: `add`, принимающий **action** и **color**; `row()`;  `get_json()`
+Методы `Keyboard`:
+- `add(action, color)` - добавляет кнопку к текущему ряду кнопок;
+- `row()` - создаёт следующий ряд кнопок, переводит "курсор" на него;
+- `get_json()` - преобразует клавиатуру в JSON-объект, который можно отправить в сообщении.
 
-`add` - добавляет кнопку к текущему ряду кнопок
+Создание клавиатуры использует `json.dumps` для преобразования в JSON-объект. Если ваша клавиатура статична, то вы можете избежать этой повторяющейся операции, создав её один раз, и используя уже "преобразованную" клавиатуру.
 
-`row` - переводит "курсор" на следующий ряд кнопок
+Примеры создания клавиатуры приведены [здесь](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/generate_keyboard.py), а отправить её можно так:
 
-`get_json` - возвращает уже готовый json для прикрепления клавиатуры к сообщению (p.s. если клавиатура статична, это лучше делать сразу после генерации вне хендлера чтобы не тратить время на json.dumps каждый раз в хендлере)
+```python
+keyboard = ...  # see examples above
 
-### Старый генератор клавиатуры `keyboard_gen`
+@bot.on.message()
+async def send_keyboard(message):
+    await message.answer("Here is your keyboard!", keyboard=keyboard)
+```
 
-Он считается устаревшим, но многим почему-то нужен, поэтому [оставим это здесь](https://github.com/vkbottle/vkbottle/blob/v2.0/docs/api.ru.md#генератор-keyboard_gen)
+### Создание через `keyboard_gen` (устарело)
+
+Устаревшая документация по устаревшему методу находится [здесь](https://github.com/vkbottle/vkbottle/blob/v2.0/docs/api.ru.md#генератор-keyboard_gen).
 
 ## Вложения
 
-Для того чтобы отправить вложение вконтакте вам нужно иметь его вида `"type{OWNER_ID}_{ITEM_ID}"`, например `"photo-41629685_457239401"`
+### Если у вас уже есть ссылка на вложение
 
-Строку такого вида можно передать в метод отправки сообщения как `attachment` и вложение отправится ([пример \[первый хендлер\]](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/photo_upload_example.py)),
+Если у вас уже есть ссылка на вложение вида `"type{OWNER_ID}_{ITEM_ID}"` (например "photo-41629685_457239401"), то вы можете отправить её так:
+```python
+attachment = ... # see example above
 
-но такую ссылку вы можете получить только загрузив картинку на сервера вконтакте, что делать если картинку нужно загружать на сервера вконтакте прямо во время выполнения хендлера?
+@bot.on.message
+async def send_attachment(message):
+    await message.answer("See that attachment!", attachment=attachment)
+```
 
-Для этого есть аплоадеры!
+### Если вы загружаете вложения динамически
 
-[Подробная документация по аплоадерам](../tools/uploaders.md)
+Для того чтобы отправлять вложения, загруженные во время работы бота, нужны загрузчики. Прочитайте [документацию про загрузчики], и возвращайтесь сюда.
 
-[Пример с аплоадером \[второй хендлер\]](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/photo_upload_example.py)
+Пример отправки вложения, полученного из загрузчика:
+```python
+uploader = AnyUploader(bot.api)  # see uploaders types in "Uploaders documentation" above
 
-Все аплоадеры импортируются из корневого пакета `vkbottle` или из `vkbottle.tools`
+@bot.on.message()
+async def send_attachment(message):
+    attachment = await uploader.upload("path/to/file")
+    await message.answer("See that attachment!", attachment=attachment)
+```
 
-Вам, скорее всего, понадобится только метод `.upload` (предполагается что вы уже прочитали документацию, упомянутую выше)
+## Шаблоны
 
-`file_source` принимает путь к файлу (еще он может принимать BytesIO, то есть читаемым файлом, если говорить упрощенно)
+На данный момент ВКонтакте поддерживает только один вид шаблона — карусель. Документация по этому виду шаблона представлена [здесь](https://vk.com/dev/bot_docs_templates?f=5.%20Шаблоны%20сообщений).
 
-У аплоадеров могут быть и другие индивидуальные поля в методе `upload`, но что туда передать должно быть понятно из контекста, если вы забыли передать какое-то поле вам будет показано чего не хватает
-
-## Еще есть темплейты
-
-Темплейты получились у вконтакте довольно странными (~~как и многие другие вещи~~), но их поддержка в vkbottle тоже есть
-
-Для того чтобы понимать как должны работать темплейты и как делать элементы с идентичной "структурой" рекомендуется прочитать [документацию вконтакте по темплейтами](https://dev.vk.com/api/bots/development/messages#Шаблоны%20сообщений)
-
-`TemplateElement` - обертка над элементом, по названиям полей вопросов возникнуть не должно, если возникли - возможно вы плохо ознакомились с документацей вконтакте
-
-`template_gen` - принимает темплейт элементы:
+Вы можете создать шаблон через vkbottle с помощью:
+- `TemplateElement` - элемент шаблона. Названия полей соответствуют названиям полей в документации ВКонтакте.
+- `template_gen` - создаёт шаблон из предоставленных элементов:
 
 ```python
 from vkbottle.tools import template_gen, TemplateElement
@@ -68,16 +72,16 @@ from vkbottle.tools import template_gen, TemplateElement
 my_template = template_gen(TemplateElement(...), TemplateElement(...), TemplateElement(...))
 ```
 
-`my_template` - уже готовый json для отправки в сообщении как `template`
-
-Вот пример отправки темплейта в среде хендлера с ивентом `message`:
-
+В этом примере `my_template` - уже готовый JSON-объект для отправки в сообщении. Вот пример его отправки:
 ```python
-message.answer("Отправляю темплейт", template=my_template)
+my_template = ...  # see example above
+
+@bot.on.message()
+async def send_template(message):
+    await message.answer("Sending template...", template=my_template)
 ```
 
+## Расширенные примеры по этой части
 
-## Экзамплы по этой части туториала
-
-* [клавиатура](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/generate_keyboard.py)
-* [вложения](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/photo_upload_example.py)
+* [Создание клавиатуры](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/generate_keyboard.py)
+* [Загрузка и отправка вложений](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/photo_upload_example.py)
