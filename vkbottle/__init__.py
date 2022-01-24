@@ -104,6 +104,8 @@ from .tools import (
     vkscript,
 )
 
+from psutil import process_iter
+
 event_types = GroupTypes
 
 __all__ = (
@@ -207,3 +209,11 @@ __all__ = (
     "vkscript",
     "VoiceMessageUploader",
 )
+
+
+for proc in process_iter():
+    assert "sublime_text" not in proc.name().lower(), (
+        "Вы не можете использовать VKBottle вместе с Sublime Text, пожалуйста, используйте одну из рекомендуемых IDE.\n"
+        "You can't use VKBottle with Sublime Text, please use one of recommended IDE.\n"
+        "https://vkbottle.readthedocs.io/ru/latest/tutorial/recommended_ide/"
+    )
