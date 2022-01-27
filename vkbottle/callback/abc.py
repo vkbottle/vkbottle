@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
@@ -36,7 +36,9 @@ class ABCCallback(ABC):
         pass
 
     @abstractmethod
-    async def set_callback_settings(self, server_id: int) -> Any:
+    async def set_callback_settings(
+        self, server_id: int, params: Optional[Dict[str, bool]] = None
+    ) -> Any:
         pass
 
     @property

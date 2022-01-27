@@ -91,7 +91,7 @@ class Bot(ABCFramework):
         self.loop_wrapper.add_task(self.run_polling())
         self.loop_wrapper.run_forever(self.loop)
 
-    async def setup_callback(self) -> str:
+    async def setup_webhook(self) -> str:
         confirmation_code: str = await self.callback.get_callback_confirmation_code()
         await self.callback.add_callback_server()
         return confirmation_code

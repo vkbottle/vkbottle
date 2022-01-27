@@ -1,6 +1,6 @@
 from random import choice
 from string import ascii_lowercase
-from typing import TYPE_CHECKING, List, NoReturn, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
@@ -76,8 +76,13 @@ class BotCallback(ABCCallback):
             )
         )["response"]["code"]
 
-    async def get_callback_servers(self, servers_ids: Optional[List[int]] = None) -> NoReturn:
-        raise NotImplementedError("get_callback_servers not implemented")
+    async def get_callback_servers(
+        self, servers_ids: Optional[List[int]] = None
+    ) -> List[Dict[int, Dict[str, Any]]]:
+        data: Dict[str, Any] = {"group_id": self.group_id}
+        if servers_ids is not None:
+            data.update({"server_ids": ",".join(map(str, servers_ids))})
+        return (await self.api.request("groups.getCallbackServers", data))["response"]["items"]
 
     async def get_callback_settings(self, server_id: int) -> dict:
         return (
@@ -86,8 +91,17 @@ class BotCallback(ABCCallback):
             )
         )["response"]["events"]
 
-    async def set_callback_settings(self, server_id: int) -> NoReturn:
-        raise NotImplementedError("set_callback_settings not implemented")
+    async def set_callback_settings(
+        self, server_id: int, params: Optional[Dict[str, bool]] = None
+    ):
+        """Search values in https://dev.vk.com/method/groups.getCallbackSettings"""
+
+        data = {"group_id": self.group_id, "server_id": server_id}
+
+        if params is not None:
+            for k, v in params.items():
+                data.update({k: v})
+        await self.api.request("groups.setCallbackSettings", data)
 
     def construct(
         self, api: "ABCAPI", error_handler: Optional["ABCErrorHandler"] = None
