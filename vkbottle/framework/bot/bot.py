@@ -50,7 +50,7 @@ class Bot(ABCFramework):
     def callback(self) -> "ABCCallback":
         if self._callback is None:
             raise ValueError(
-                "To work with this methods, you need to create a Bool Callback class and pass it as a parameter to the Bot class"
+                "To work with this methods, you need to create a BotCallback class and pass it as a parameter to the Bot class"
             )
         return self._callback.construct(self.api, self.error_handler)
 
