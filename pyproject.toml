@@ -43,13 +43,14 @@ pydantic = "^1.8.2"
 vbml = "^1.0"
 vkbottle-types = "^5.131.131.12"
 watchgod = "^0.7"
+aiofiles = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
 # Lint
 black = {version = "^21.4b0", allow-prereleases = true}
 flake8 = "^4.0.1"
-isort = "^5.7"
-lxml = "^4.5.0"
+isort = "^5.10.1"
+lxml = "^4.7.1"
 mypy = "^0.931"
 mypy_extensions = "^0.4.3"
 
@@ -57,18 +58,19 @@ mypy_extensions = "^0.4.3"
 types-aiofiles = "^0.8.0"
 
 # Tests
-pytest = "^6.2"
+pytest = "^6.2.5"
 pytest-asyncio = "^0.17.2"
 pytest-cov = "^3.0.0"
-pytest-mock = "^3.3.1"
+pytest-mock = "^3.6.1"
 
 # Docs
-mkdocs = "^1.1.2"
-mkdocs-material = "^8.0.2"
+mkdocs = "^1.2.3"
+mkdocs-material = "^8.1.8"
 
 # Pre-commit
 autoflake = "^1.4"
-pre-commit = "^2.12.0"
+pre-commit = "^2.17.0"
+mypy-extensions = "^0.4.3"
 
 [tool.mypy]
 python_version = 3.8

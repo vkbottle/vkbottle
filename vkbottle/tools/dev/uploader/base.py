@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from io import BytesIO
 from typing import TYPE_CHECKING, Callable, Optional, Union
 
+import aiofiles
+
 from vkbottle.exception_factory.base_exceptions import VKAPIError
 from vkbottle.modules import json
 
@@ -9,11 +11,6 @@ if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
 
     Bytes = Union[bytes, BytesIO]
-
-try:
-    import aiofiles
-except ImportError:
-    aiofiles = None  # type: ignore
 
 
 class BaseUploader(ABC):
@@ -77,7 +74,6 @@ class BaseUploader(ABC):
     @staticmethod
     async def read(file_source: Union[str, "Bytes"]) -> "Bytes":
         if isinstance(file_source, str):
-            assert aiofiles is not None, "to use default files opener aiofiles should be installed"
             async with aiofiles.open(file_source, "rb") as file:
                 return await file.read()
         return file_source
