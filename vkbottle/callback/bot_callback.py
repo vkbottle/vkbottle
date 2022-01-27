@@ -32,7 +32,7 @@ class BotCallback(ABCCallback):
         self.error_handler = error_handler or ErrorHandler()
 
     def _generate_secret_key(self) -> str:
-        return "".join(choice(ascii_lowercase) for _ in range(64))
+        return "".join(choice(ascii_lowercase) for _ in range(30))
 
     async def add_callback_server(self):
         logger.debug("Adding callback server...")
