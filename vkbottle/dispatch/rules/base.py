@@ -29,7 +29,7 @@ from vkbottle.tools.validator import (
 )
 
 if TYPE_CHECKING:
-    from vkbottle_types import BaseStateGroup
+    from vkbottle.dispatch.dispenser.base import BaseStateGroup
 
 from .abc import ABCRule
 
@@ -130,7 +130,7 @@ class VBMLRule(ABCRule[BaseMessageMin]):
         self.patterns = pattern
         self.patcher = patcher or self.config.get("vbml_patcher") or vbml.Patcher()
 
-    async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
+    async def check(self, event: BaseMessageMin) -> Union[Optional[dict], bool]:
         for pattern in self.patterns:
             result = self.patcher.check(pattern, event.text)
             if result not in (None, False):
@@ -290,7 +290,11 @@ class PayloadContainsRule(ABCRule[BaseMessageMin]):
         self.payload_particular_part = payload_particular_part
 
     async def check(self, event: BaseMessageMin) -> bool:
-        payload = event.get_payload_json(unpack_failure=lambda p: {})
+        if event.payload is None:
+            return False
+        payload = event.get_payload_json()
+        if not isinstance(payload, dict):
+            return False
         return all(payload.get(k) == v for k, v in self.payload_particular_part.items())
 
 
@@ -341,7 +345,9 @@ class PayloadMapRule(ABCRule[BaseMessageMin]):
         return True
 
     async def check(self, event: BaseMessageMin) -> bool:
-        payload = event.get_payload_json(unpack_failure=lambda p: {})
+        payload = event.get_payload_json()
+        if not isinstance(payload, dict):
+            return False
         return await self.match(payload, self.payload_map)
 
 
@@ -372,7 +378,10 @@ class CoroutineRule(ABCRule[BaseMessageMin]):
 
 
 class StateRule(ABCRule[BaseMessageMin]):
-    def __init__(self, state: Union[List["BaseStateGroup"], "BaseStateGroup"]):
+    def __init__(
+        self,
+        state: Optional[Union[List["BaseStateGroup"], "BaseStateGroup"]] = None,
+    ):
         if not isinstance(state, list):
             state = [] if state is None else [state]
         self.state = [get_state_repr(s) for s in state]
@@ -384,7 +393,10 @@ class StateRule(ABCRule[BaseMessageMin]):
 
 
 class StateGroupRule(ABCRule[BaseMessageMin]):
-    def __init__(self, state_group: Union[List[Type["BaseStateGroup"]], Type["BaseStateGroup"]]):
+    def __init__(
+        self,
+        state_group: Optional[Union[List[Type["BaseStateGroup"]], Type["BaseStateGroup"]]] = None,
+    ):
         if not isinstance(state_group, list):
             state_group = [] if state_group is None else [state_group]
         self.state_group = [group.__name__ for group in state_group]
