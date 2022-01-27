@@ -125,11 +125,13 @@ async def test_bot_scopes():
 
 
 def fake_message(ctx_api: API, **data: Any) -> Message:
+    message = dict(peer_id=1, date=1, from_id=1, text="test", out=0, id=1)
+    message.update(data)
     return message_min(
         {
             "object": {
-                "message": data,
-                "client_info": data.get(
+                "message": message,
+                "client_info": message.get(
                     "client_info", EXAMPLE_EVENT["updates"][1]["object"]["client_info"]
                 ),
             }
