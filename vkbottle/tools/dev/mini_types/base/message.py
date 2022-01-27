@@ -7,7 +7,7 @@ from pydantic import BaseModel, root_validator
 from vkbottle_types.objects import MessagesMessage, UsersUserFull
 
 from vkbottle.dispatch.dispenser.base import StatePeer
-
+from vkbottle.modules import logger
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
 
@@ -72,20 +72,13 @@ class BaseMessageMin(MessagesMessage, ABC):
         self,
         message: Optional[str] = None,
         attachment: Optional[str] = None,
-        user_id: Optional[int] = None,
         random_id: Optional[int] = 0,
-        peer_id: Optional[int] = None,
-        peer_ids: Optional[List[int]] = None,
-        domain: Optional[str] = None,
-        chat_id: Optional[int] = None,
-        user_ids: Optional[List[int]] = None,
         lat: Optional[float] = None,
         long: Optional[float] = None,
         reply_to: Optional[int] = None,
         forward_messages: Optional[List[int]] = None,
         forward: Optional[str] = None,
         sticker_id: Optional[int] = None,
-        group_id: Optional[int] = None,
         keyboard: Optional[str] = None,
         template: Optional[str] = None,
         payload: Optional[str] = None,
@@ -99,9 +92,13 @@ class BaseMessageMin(MessagesMessage, ABC):
         locals().update(kwargs)
 
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
+        data["peer_id"] = self.peer_id
         required_params = ("peer_id", "user_id", "domain", "chat_id", "user_ids")
-        if not any(data.get(param) for param in required_params):
-            data["peer_id"] = self.peer_id
+        if any(data.get(param) for param in required_params):
+            logger.warning(
+                "Params like peer_id or user_id is deprecated in Message.answer()."
+                "Use API.messages.send() instead"
+            )
 
         stream = StringIO(message)
         while True:
