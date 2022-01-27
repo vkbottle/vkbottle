@@ -34,6 +34,9 @@ class BotCallback(ABCCallback):
     def _generate_secret_key(self) -> str:
         return "".join(choice(ascii_lowercase) for _ in range(30))
 
+    def get_secret_key(self) -> str:
+        return self.secret_key
+
     async def add_callback_server(self):
         logger.debug("Adding callback server...")
         data = {
