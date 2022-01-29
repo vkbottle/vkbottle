@@ -1,7 +1,7 @@
 import logging
-from typing import Protocol
 
 from choicelib import choice_in_order
+from typing_extensions import Protocol
 
 
 class JSONModule(Protocol):

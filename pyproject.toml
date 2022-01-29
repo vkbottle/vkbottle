@@ -44,6 +44,7 @@ vbml = "^1.0"
 vkbottle-types = "^5.131.134"
 watchgod = "^0.7"
 aiofiles = "^0.8.0"
+typing-extensions = "^4.0.1"
 
 [tool.poetry.dev-dependencies]
 # Lint

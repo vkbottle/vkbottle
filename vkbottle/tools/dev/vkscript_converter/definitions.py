@@ -1,7 +1,9 @@
 import ast
 import random
 import string
-from typing import Callable, Iterable, Protocol
+from typing import Callable, Iterable
+
+from typing_extensions import Protocol
 
 from .base_converter import Converter, ConverterError
 
