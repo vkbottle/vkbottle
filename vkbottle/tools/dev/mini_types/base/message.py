@@ -162,13 +162,13 @@ class BaseMessageMin(MessagesMessage, ABC):
         locals().update(kwargs)
 
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
-        data["peer_id"] = self.peer_id
         required_params = ("peer_id", "user_id", "domain", "chat_id", "user_ids")
         if any(data.get(param) for param in required_params):
             logger.warning(
                 "Params like peer_id or user_id is deprecated in Message.answer()."
                 "Use API.messages.send() instead"
             )
+        data["peer_id"] = self.peer_id
 
         stream = StringIO(message)
         while True:
