@@ -21,9 +21,9 @@ class ABCFramework(ABC):
         pass
 
     @abstractmethod
-    async def run_polling(self) -> NoReturn:
+    async def run_polling(self) -> NoReturn:  # type: ignore
         pass
 
     @abstractmethod
-    def run_forever(self) -> NoReturn:
+    def run_forever(self) -> NoReturn:  # type: ignore
         pass

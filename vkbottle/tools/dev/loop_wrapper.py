@@ -1,6 +1,6 @@
 import asyncio
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, NoReturn, Optional, Union
 
 from vkbottle.modules import logger
 
@@ -30,7 +30,7 @@ class LoopWrapper:
         self.auto_reload_dir = auto_reload_dir or "."
         self.tasks = tasks or []
 
-    def run_forever(self, loop: Optional[AbstractEventLoop] = None):
+    def run_forever(self, loop: Optional[AbstractEventLoop] = None) -> NoReturn:  # type: ignore
         """Runs startup tasks and makes the loop running forever"""
 
         if not len(self.tasks):

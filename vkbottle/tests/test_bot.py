@@ -72,7 +72,7 @@ class SecondMockState(BaseStateGroup):
     MOCK = 1
 
 
-def set_http_callback(api: API, callback: Callable[[dict], Any]):
+def set_http_callback(api: API, callback: Callable[[str, str, dict], Any]):
     api.http_client = MockedClient(callback=callback)
 
 

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Callable, Generic, List, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Generic, List, TypeVar
 
 from vkbottle.modules import logger
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from vkbottle.api.abc import ABCAPI
     from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
     from vkbottle.dispatch.handlers import ABCHandler
-    from vkbottle.tools.dev.mini_types.user import MessageMin
+    from vkbottle.tools.dev.mini_types.base import BaseMessageMin
 
 DEFAULT_STATE_KEY = "peer_id"
 
@@ -21,7 +21,7 @@ F_contra = TypeVar("F_contra", contravariant=True)
 class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra, F_contra]):
     handlers: List["ABCHandler"]
     state_source_key: str
-    default_text_approximators: List[Callable[["MessageMin"], str]]
+    default_text_approximators: List[Callable[["BaseMessageMin"], str]]
 
     def __init__(self):
         super().__init__()
@@ -30,12 +30,12 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
 
     @staticmethod
     @abstractmethod
-    def get_event_type(event: T_contra):
+    def get_event_type(event: T_contra) -> Any:
         pass
 
     @staticmethod
     @abstractmethod
-    async def get_message(event: T_contra, ctx_api):
+    async def get_message(event: T_contra, ctx_api) -> Any:
         pass
 
     async def handle_event(

@@ -9,6 +9,8 @@ from vkbottle.dispatch.views.user import RawUserEventView, UserHandlerBasement, 
 from .base import BaseLabeler
 
 if TYPE_CHECKING:
+    from vkbottle_types.events import BaseUserEvent
+
     from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views.user import ABCUserMessageView
     from vkbottle.tools.dev.mini_types.user import MessageMin
@@ -64,7 +66,7 @@ class UserLabeler(BaseLabeler):
     def raw_event(
         self,
         event: Union[str, List[str]],
-        dataclass: Callable = RawUserEvent,
+        dataclass: Type["BaseUserEvent"] = RawUserEvent,
         *rules: "ABCRule",
         blocking: bool = True,
         **custom_rules,

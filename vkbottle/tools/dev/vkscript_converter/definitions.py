@@ -1,7 +1,7 @@
 import ast
 import random
 import string
-from typing import Callable, Iterable
+from typing import Callable, Iterable, Protocol
 
 from .base_converter import Converter, ConverterError
 
@@ -199,7 +199,7 @@ def call(d: ast.Call):
         return f"{find(d.args[0])}.length"
     elif calls and calls[0] in CALL_REPLACEMENTS:
         args = ",".join(find(arg) for arg in d.args)
-        return find(d.func.value) + "." + CALL_REPLACEMENTS[calls[0]] + "(" + args + ")"
+        return find(d.func.value) + "." + CALL_REPLACEMENTS[calls[0]] + "(" + args + ")"  # type: ignore
     elif calls[0] in CALL_STRING:
         return find(func) + "." + calls[0] + "(" + find(d.args[0]) + ")"
     raise ConverterError(f"Call for {getattr(d.func, 'attr', d.func.__dict__)} is not referenced")
@@ -309,7 +309,12 @@ def name_constant_type(d: ast.NameConstant):
     return consts[d.value]
 
 
-def vkscript(func: Callable) -> Callable[[], str]:
+class VKScriptFunction(Protocol):
+    def __call__(self, **kwargs) -> str:
+        ...
+
+
+def vkscript(func: Callable) -> VKScriptFunction:
     def decorator(**context):
         return converter.scriptify(func, **context)
 

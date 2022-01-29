@@ -1,6 +1,6 @@
 import os
 
-from vkbottle_types.objects import UsersUserXtrCounters
+from vkbottle_types.objects import UsersUserFull
 
 from vkbottle import BaseMiddleware, CtxStorage
 from vkbottle.bot import Bot, Message
@@ -56,7 +56,7 @@ class InfoMiddleware(BaseMiddleware[Message]):
 
 
 @bot.on.message(lev="кто я")
-async def who_i_am_handler(message: Message, info: UsersUserXtrCounters):
+async def who_i_am_handler(message: Message, info: UsersUserFull):
     await message.answer(f"Ты - {info.first_name}")
 
 

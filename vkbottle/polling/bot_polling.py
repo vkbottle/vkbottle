@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, AsyncIterator, Optional
+from typing import TYPE_CHECKING, AsyncGenerator, Optional
 
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
@@ -51,7 +51,7 @@ class BotPolling(ABCPolling):
             "response"
         ]
 
-    async def listen(self) -> AsyncIterator[dict]:  # type: ignore
+    async def listen(self) -> AsyncGenerator[dict, None]:
         server = await self.get_server()
         logger.debug("Starting listening to longpoll")
         while not self.stop:

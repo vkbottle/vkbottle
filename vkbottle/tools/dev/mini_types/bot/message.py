@@ -31,7 +31,7 @@ class MessageMin(BaseMessageMin):
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
         data["peer_id"] = self.peer_id
         data["forward"] = MessagesForward(
-            conversation_message_ids=[self.conversation_message_id],
+            conversation_message_ids=[self.conversation_message_id],  # type: ignore
             peer_id=self.peer_id,
             is_reply=True,
         ).json()
@@ -53,7 +53,7 @@ class MessageMin(BaseMessageMin):
             if k not in ("self", "kwargs", "forward_message_ids") and v is not None
         }
         if not forward_message_ids:
-            forward_message_ids = [self.conversation_message_id]
+            forward_message_ids = [self.conversation_message_id]  # type: ignore
         data["forward"] = MessagesForward(
             conversation_message_ids=forward_message_ids, peer_id=self.peer_id
         ).json()
@@ -69,7 +69,7 @@ def message_min(event: dict, ctx_api: "ABCAPI") -> "MessageMin":
 
     message = MessageMin(
         **update.object.message.dict(),
-        client_info=update.object.client_info.dict(),
+        client_info=update.object.client_info,
         group_id=update.group_id,
     )
     setattr(message, "unprepared_ctx_api", ctx_api)

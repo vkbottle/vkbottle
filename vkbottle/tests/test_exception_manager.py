@@ -9,9 +9,9 @@ def test_code_exception():
         raise CodeError[1]()
     except CodeError[2]:
         assert False
-    except CodeError[3, 4]:
+    except CodeError[3, 4]:  # type: ignore
         assert False
-    except CodeError[1, 2, 5] as e:
+    except CodeError[1, 2, 5] as e:  # type: ignore
         assert e.code == 1
 
 

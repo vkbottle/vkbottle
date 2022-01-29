@@ -28,8 +28,8 @@ class RawUserEventView(ABCRawEventView[list]):
         return self.handlers[UserEventType(self.get_event_type(event))]
 
     def get_event_model(
-        self, handler_basement: Type["UserHandlerBasement"], event: list
-    ) -> Type["BaseUserEvent"]:
+        self, handler_basement: "UserHandlerBasement", event: list
+    ) -> "BaseUserEvent":
         return handler_basement.dataclass(*event)
 
     @staticmethod

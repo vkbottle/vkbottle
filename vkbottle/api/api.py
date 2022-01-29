@@ -71,7 +71,7 @@ class API(ABCAPI):
                 params={"access_token": token, "v": self.API_VERSION},
             )
         logger.debug("Request {} with {} data returned {}".format(method, data, response))
-        return await self.validate_response(method, data, response)
+        return await self.validate_response(method, data, response)  # type: ignore
 
     async def request_many(
         self, requests: Iterable[APIRequest]  # type: ignore
@@ -87,7 +87,7 @@ class API(ABCAPI):
                     params={"access_token": token, "v": self.API_VERSION},  # noqa
                 )
             logger.debug("Request {} with {} data returned {}".format(method, data, response))
-            yield await self.validate_response(method, data, response)
+            yield await self.validate_response(method, data, response)  # type: ignore
 
     async def validate_response(
         self, method: str, data: dict, response: Union[dict, str]
@@ -95,7 +95,7 @@ class API(ABCAPI):
         """Validates response from VK,
         to change validations change API.response_validators (list of ResponseValidator's)"""
         for validator in self.response_validators:
-            response = await validator.validate(method, data, response, self)
+            response = await validator.validate(method, data, response, self)  # type: ignore
         logger.debug("API response was validated")
         return response  # type: ignore
 
@@ -103,7 +103,7 @@ class API(ABCAPI):
         """Validates requests from VK,
         to change validations change API.request_validators (list of RequestValidator's)"""
         for validator in self.request_validators:
-            request = await validator.validate(request)
+            request = await validator.validate(request)  # type: ignore
         logger.debug("API request was validated")
         return request  # type: ignore
 

@@ -64,7 +64,7 @@ async def spam_handler(message: Message):
 
     if state_peer and state_peer.state == SpamState.BAD:
         try:
-            await bot.api.messages.remove_chat_user(message.peer_id - 2e9, message.from_id)
+            await bot.api.messages.remove_chat_user(message.chat_id, message.from_id)
             return "Как можно игнорировать мои просьбы"
         except VKAPIError[15]:
             return "Где мои права администратора?"

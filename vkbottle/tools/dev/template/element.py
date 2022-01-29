@@ -18,9 +18,8 @@ class TemplateElement:
         assert photo_id or title, "photo_id or title is required"
 
         if isinstance(buttons, str):
-            buttons = json.loads(buttons)
+            buttons = json.loads(buttons)  # type: ignore
 
         if isinstance(buttons, dict):
-            buttons = buttons.get("buttons")[0]  # taking only first row
-
+            buttons = buttons["buttons"][0]  # type: ignore
         self.raw: dict = {k: v for k, v in locals().items() if v is not None and k != "self"}

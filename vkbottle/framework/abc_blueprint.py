@@ -15,9 +15,9 @@ CONSTRUCT_BLUEPRINT = "You need to construct blueprint firstly"
 class ABCBlueprint(ABCFramework):
     router: "ABCRouter"
 
-    _polling: Optional["ABCPolling"] = None
-    _api: Optional["ABCAPI"] = None
-    _state_dispenser: Optional["ABCStateDispenser"] = None
+    _polling: "ABCPolling"
+    _api: "ABCAPI"
+    _state_dispenser: "ABCStateDispenser"
 
     name: str = "Unnamed"
     constructed: bool = False
@@ -73,7 +73,7 @@ class ABCBlueprint(ABCFramework):
     def run_forever(self) -> NoReturn:
         raise RuntimeError("You are not allowed to run polling with blueprint")
 
-    def assert_constructed(self) -> NoReturn:
+    def assert_constructed(self) -> Optional[NoReturn]:
         if not self.constructed:
             raise RuntimeError(CONSTRUCT_BLUEPRINT)
 

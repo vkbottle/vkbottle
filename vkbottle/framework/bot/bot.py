@@ -1,5 +1,5 @@
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import TYPE_CHECKING, NoReturn, Optional, Union
+from typing import TYPE_CHECKING, NoReturn, Optional
 
 from vkbottle.api import API
 from vkbottle.dispatch import BuiltinStateDispenser, Router
@@ -32,7 +32,7 @@ class Bot(ABCFramework):
         error_handler: Optional["ABCErrorHandler"] = None,
         task_each_event: bool = True,
     ):
-        self.api: Union["ABCAPI", API] = API(token) if token is not None else api  # type: ignore
+        self.api: API = API(token) if token is not None else api  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.labeler = labeler or BotLabeler()
@@ -62,11 +62,11 @@ class Bot(ABCFramework):
     def on(self) -> "ABCLabeler":
         return self.labeler
 
-    async def run_polling(self, custom_polling: Optional["ABCPolling"] = None) -> NoReturn:
+    async def run_polling(self, custom_polling: Optional["ABCPolling"] = None):
         polling = custom_polling or self.polling
         logger.info(f"Starting polling for {polling.api!r}")
 
-        async for event in polling.listen():  # type: ignore
+        async for event in polling.listen():
             logger.debug(f"New event was received: {event}")
             for update in event["updates"]:
                 if not self.task_each_event:
@@ -74,7 +74,7 @@ class Bot(ABCFramework):
                 else:
                     self.loop.create_task(self.router.route(update, polling.api))
 
-    def run_forever(self) -> NoReturn:
+    def run_forever(self) -> NoReturn:  # type: ignore
         logger.info("Loop will be ran forever")
         self.loop_wrapper.add_task(self.run_polling())
         self.loop_wrapper.run_forever(self.loop)

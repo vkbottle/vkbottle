@@ -34,7 +34,7 @@ async def test_api_raw_response(api: API):
 @pytest.mark.asyncio
 @with_mocked_api(USERS_GET_RESPONSE)
 async def test_api_typed_response(api: API):
-    response = await api.users.get(1)
+    response = await api.users.get(1)  # type: ignore
 
     assert isinstance(response, list)
     assert response[0].first_name == "Павел"

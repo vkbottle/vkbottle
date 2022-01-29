@@ -16,7 +16,7 @@ class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
     handlers: Dict[Any, List]
 
     @abstractmethod
-    def get_handler_basements(self, event: T_contra):
+    def get_handler_basements(self, event: T_contra) -> List:
         pass
 
     @abstractmethod

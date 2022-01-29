@@ -1,12 +1,9 @@
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import Any
 
 try:
     import contextvars
 except ImportError:
     contextvars = None  # type: ignore
-
-if TYPE_CHECKING:
-    T = TypeVar("T")
 
 
 class BaseContext:
@@ -28,5 +25,5 @@ class BaseContext:
         return cls.ctx_instance.get()
 
     @classmethod
-    def set_instance(cls, value: "T") -> None:
+    def set_instance(cls, value: Any) -> None:
         cls.ctx_instance.set(value)

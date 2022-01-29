@@ -208,11 +208,11 @@ def test_loop_wrapper():
     async def task3():
         pass
 
-    lw = LoopWrapper(tasks=[task1])
-    lw.on_startup.append(task2)
-    lw.on_shutdown.append(task3)
+    lw = LoopWrapper(tasks=[task1()])
+    lw.on_startup.append(task2())
+    lw.on_shutdown.append(task3())
 
-    lw.run_forever(MockedLoop())
+    lw.run_forever(MockedLoop())  # type: ignore
 
     assert ctx_storage.get("checked-test-lw-create-task") == task1.__name__
     assert ctx_storage.get("checked-test-lw-run-until-complete") == [
@@ -237,22 +237,16 @@ async def test_utils(mocker: MockerFixture):
         "c_rule", (ABCRule,), {"check": task_to_run, "__init__": lambda s, i: setattr(s, "x", i)}
     )
 
-    assert (c_rule(None) | c_rule(None)).__class__ == OrRule(
-        c_rule(None),
-    ).__class__
-    assert (c_rule(None) & c_rule(None)).__class__ == AndRule(
-        c_rule(None),
-    ).__class__
-    assert (~c_rule(None)).__class__ == NotRule(
-        c_rule(None),
-    ).__class__
+    assert (c_rule(None) | c_rule(None)).__class__ == OrRule(c_rule(None)).__class__  # type: ignore
+    assert (c_rule(None) & c_rule(None)).__class__ == AndRule(c_rule(None)).__class__  # type: ignore
+    assert (~c_rule(None)).__class__ == NotRule(c_rule(None)).__class__  # type: ignore
 
-    assert_rule(await (c_rule(1) | c_rule(2)).check(2))
-    assert_rule(await (c_rule(1) | c_rule(2)).check(4), True)
-    assert_rule(await (c_rule(4) & c_rule(4)).check(4))
-    assert_rule(await (c_rule(2) & c_rule(4)).check(4), True)
-    assert_rule(await (~c_rule(1)).check(2))
-    assert_rule(await (~c_rule(2)).check(2), True)
+    assert_rule(await (c_rule(1) | c_rule(2)).check(2))  # type: ignore
+    assert_rule(await (c_rule(1) | c_rule(2)).check(4), True)  # type: ignore
+    assert_rule(await (c_rule(4) & c_rule(4)).check(4))  # type: ignore
+    assert_rule(await (c_rule(2) & c_rule(4)).check(4), True)  # type: ignore
+    assert_rule(await (~c_rule(1)).check(2))  # type: ignore
+    assert_rule(await (~c_rule(2)).check(2), True)  # type: ignore
 
 
 def test_run_multibot(mocker: MockerFixture):
@@ -266,4 +260,4 @@ def test_run_multibot(mocker: MockerFixture):
     )
 
     run_multibot(Bot(), (API("1"), API("2"), API("3")))
-    assert len(bot_apis) == 3
+    assert len(bot_apis) == 3  # type: ignore

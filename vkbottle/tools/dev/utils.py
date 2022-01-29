@@ -3,7 +3,7 @@ import importlib
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
-from typing import TYPE_CHECKING, Coroutine, Iterator, TypeVar
+from typing import TYPE_CHECKING, Any, Coroutine, Iterator, TypeVar
 
 if TYPE_CHECKING:
     from vkbottle.framework.abc_blueprint import ABCBlueprint
@@ -21,8 +21,8 @@ def run_in_task(coroutine: Coroutine) -> None:
     loop.create_task(coroutine)
 
 
-def run_sync(coroutine: Coroutine[None, None, T]) -> T:
-    return ThreadPoolExecutor().submit(asyncio.run, coroutine).result()
+def run_sync(coroutine: Coroutine[Any, Any, T]) -> T:
+    return ThreadPoolExecutor().submit(asyncio.run, coroutine).result()  # type: ignore
 
 
 def load_blueprints_from_package(package_name: str) -> Iterator["ABCBlueprint"]:

@@ -47,7 +47,7 @@ class CodeException(Exception):
     @classmethod
     def _register_exception(cls: T, code: int) -> T:
         name = f"{cls.__name__}_{code}"
-        exception = cast(T, type(name, (cls,), {}))
+        exception = cast(T, type(name, (cls,), {}))  # type: ignore
 
         exception.code = code
         exception.__code_specified__ = True

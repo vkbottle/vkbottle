@@ -1,11 +1,15 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, List
+
 from vkbottle_types.categories import APICategories
 
 if TYPE_CHECKING:
     from vkbottle.http import ABCHTTPClient
 
     from .request_rescheduler import ABCRequestRescheduler
+    from .request_validator import ABCRequestValidator
+    from .response_validator import ABCResponseValidator
+    from .token_generator import ABCTokenGenerator
 
 
 class ABCAPI(APICategories, ABC):
@@ -13,9 +17,12 @@ class ABCAPI(APICategories, ABC):
     Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/api.md
     """
 
-    http_client: "ABCHTTPClient"
+    token_generator: "ABCTokenGenerator"
     ignore_errors: bool
+    http_client: "ABCHTTPClient"
     request_rescheduler: "ABCRequestRescheduler"
+    response_validators: List["ABCResponseValidator"]
+    request_validators: List["ABCRequestValidator"]
 
     @abstractmethod
     async def request(self, method: str, data: dict) -> dict:

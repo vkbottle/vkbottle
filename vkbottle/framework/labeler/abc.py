@@ -34,7 +34,7 @@ class ABCLabeler(ABC):
     def raw_event(
         self,
         event: Union[str, List[str]],
-        dataclass: Callable,
+        dataclass: Any,
         *rules: "ABCRule",
         **custom_rules,
     ) -> "LabeledHandler":

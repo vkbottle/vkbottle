@@ -11,7 +11,7 @@ class Converter:
     """Translate Python into the VKScript with AST"""
 
     def __init__(self):
-        self.definitions: Dict[ast.AST, Callable] = {}
+        self.definitions: Dict[Union[Type[ast.AST], ast.AST], Callable] = {}
 
     def __call__(self, for_definition: Union[Type[ast.AST], ast.AST]):
         def decorator(func):

@@ -1,8 +1,20 @@
 import logging
+from typing import Protocol
 
 from choicelib import choice_in_order
 
-json = choice_in_order(["ujson", "hyperjson", "orjson"], do_import=True, default="json")
+
+class JSONModule(Protocol):
+    def loads(self, s: str) -> dict:
+        ...
+
+    def dumps(self, o: dict) -> str:
+        ...
+
+
+json: JSONModule = choice_in_order(
+    ["ujson", "hyperjson", "orjson"], do_import=True, default="json"
+)
 logger = choice_in_order(["loguru"], do_import=True, default="logging")
 
 if logger.__name__ == "logging":

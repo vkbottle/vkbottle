@@ -1,10 +1,10 @@
 from enum import Enum
-from typing import Union
+from typing import Any
 
 from pydantic import BaseModel, validator
 
 
-class BaseStateGroup(Enum):
+class BaseStateGroup(str, Enum):
     pass
 
 
@@ -18,7 +18,7 @@ class StatePeer(BaseModel):
     payload: dict = {}
 
     @validator("state", pre=True)
-    def validate_state(cls, v: Union[BaseStateGroup, str]) -> str:
+    def validate_state(cls, v: Any) -> str:
         if isinstance(v, BaseStateGroup):
             return get_state_repr(v)
         elif isinstance(v, str):

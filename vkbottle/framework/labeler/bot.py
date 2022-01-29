@@ -8,6 +8,8 @@ from vkbottle.dispatch.views.bot import BotHandlerBasement, BotMessageView, RawB
 from .base import BaseLabeler
 
 if TYPE_CHECKING:
+    from vkbottle_types.events import BaseGroupEvent
+
     from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views.bot import ABCBotMessageView
     from vkbottle.tools.dev.mini_types.bot.message import MessageMin
@@ -63,7 +65,7 @@ class BotLabeler(BaseLabeler):
     def raw_event(
         self,
         event: Union["EventName", List["EventName"]],
-        dataclass: Callable = dict,
+        dataclass: Union[Type[dict], Type["BaseGroupEvent"]] = dict,
         *rules: "ABCRule",
         blocking: bool = True,
         **custom_rules,

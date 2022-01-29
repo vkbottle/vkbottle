@@ -97,7 +97,7 @@ class User(ABCFramework):
         token = await UserAuth(client_id, client_secret).get_token(login, password)
         return cls(token=token, **kwargs)
 
-    async def run_polling(self, custom_polling: Optional["ABCPolling"] = None) -> NoReturn:
+    async def run_polling(self, custom_polling: Optional["ABCPolling"] = None) -> NoReturn:  # type: ignore
         polling = custom_polling or self.polling
         logger.info(f"Starting polling for {polling.api!r}")
 

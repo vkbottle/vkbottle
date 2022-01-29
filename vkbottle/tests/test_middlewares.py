@@ -6,7 +6,7 @@ from vkbottle.dispatch.views.bot.message import BotMessageView
 
 def test_middleware_send(empty_middleware_instance: BaseMiddleware):
     with pytest.raises(ValueError):
-        empty_middleware_instance.send("not_a_dict")
+        empty_middleware_instance.send("not_a_dict")  # type: ignore
 
     assert empty_middleware_instance.send() is None
 
@@ -65,4 +65,5 @@ async def test_cant_forward_on_error(empty_middleware_class, empty_event):
 async def test_view_middleware_utils_run(empty_event):
     view = BotMessageView()
     mw_instances = await view.pre_middleware(empty_event, {})
-    await view.post_middleware(mw_instances)
+    if mw_instances:
+        await view.post_middleware(mw_instances)

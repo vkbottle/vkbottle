@@ -21,7 +21,7 @@ class ABCPolling(ABC):
 
     @abstractmethod
     async def listen(self) -> AsyncIterator[dict]:
-        pass
+        yield {}
 
     @property
     @abstractmethod

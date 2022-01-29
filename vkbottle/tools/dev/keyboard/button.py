@@ -31,7 +31,7 @@ class KeyboardButton:
         if color is not None:
             keyboard_data["action"].pop("color")
             keyboard_data["color"] = color
-        return cls(cls.action, cls.color, keyboard_data)
+        return cls(cls.action, cls.color, keyboard_data)  # type: ignore
 
     def get_data(self) -> dict:
         if self.data is not None:
