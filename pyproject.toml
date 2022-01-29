@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vkbottle"
-version = "4.1.12"
+version = "4.1.13"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
 authors = ["timoniq"]
 license = "MIT"
@@ -38,9 +38,9 @@ exclude = ["**/tests/*", "**/test_*"]
 [tool.poetry.dependencies]
 python = "^3.7.2"
 aiohttp = "^3.6.2"
-choicelib = "^0.1.1"
+choicelib = "^0.1.5"
 pydantic = "^1.8.2"
-vbml = "^1.0"
+vbml = "^1.1.post1"
 vkbottle-types = "^5.131.134"
 watchgod = "^0.7"
 aiofiles = "^0.8.0"

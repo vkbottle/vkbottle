@@ -94,12 +94,12 @@ class MessageEventMin(MessageEventObject):
 
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
         required_params = ("peer_id", "user_id", "domain", "chat_id", "user_ids")
-        data["peer_id"] = self.peer_id
         if any(data.get(param) for param in required_params):
             logger.warning(
                 "Params like peer_id or user_id is deprecated in MessageEvent.send_message()."
                 "Use API.messages.send() instead"
             )
+        data["peer_id"] = self.peer_id
         stream = StringIO(message)
         while True:
             msg = stream.read(4096)
