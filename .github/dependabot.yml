@@ -7,11 +7,3 @@ updates:
     time: "22:00"
   open-pull-requests-limit: 10
   target-branch: "dev"
-  ignore:
-  - dependency-name: black
-    versions:
-    - 21.4b1
-  - dependency-name: mypy
-    versions:
-    - "0.800"
-    - "0.812"
