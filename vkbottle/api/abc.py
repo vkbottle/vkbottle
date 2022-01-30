@@ -1,16 +1,16 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, List, Callable, Awaitable
+from typing import TYPE_CHECKING, Any, Awaitable, Callable, List, Optional
 
 from vkbottle_types.categories import APICategories
 
 if TYPE_CHECKING:
+    from vkbottle.exception_factory import CaptchaError
     from vkbottle.http import ABCHTTPClient
 
     from .request_rescheduler import ABCRequestRescheduler
     from .request_validator import ABCRequestValidator
     from .response_validator import ABCResponseValidator
     from .token_generator import ABCTokenGenerator
-    from vkbottle.exception_factory import CaptchaError
 
 
 class ABCAPI(APICategories, ABC):
@@ -24,7 +24,7 @@ class ABCAPI(APICategories, ABC):
     request_rescheduler: "ABCRequestRescheduler"
     response_validators: List["ABCResponseValidator"]
     request_validators: List["ABCRequestValidator"]
-    captcha_handler: Callable[["CaptchaError"], Awaitable]
+    captcha_handler: Optional[Callable[["CaptchaError"], Awaitable]] = None
 
     @abstractmethod
     async def request(self, method: str, data: dict) -> dict:
