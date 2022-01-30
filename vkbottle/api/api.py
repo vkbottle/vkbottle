@@ -57,7 +57,7 @@ class API(ABCAPI):
         self.request_rescheduler = request_rescheduler or BlockingRequestRescheduler()
         self.response_validators: List["ABCResponseValidator"] = DEFAULT_RESPONSE_VALIDATORS
         self.request_validators: List["ABCRequestValidator"] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
-        self.captcha_handler: Optional[CaptchaHandler] = None
+        self.captcha_handler: Optional["CaptchaHandler"] = None
 
     async def request(self, method: str, data: dict) -> dict:
         """Makes a single request opening a session"""
