@@ -22,6 +22,7 @@ nav:
       - Клавиатуры и вложения: tutorial/keyboards-attachments.md
       - Мидлвари и return менеджеры: tutorial/middlewares-return-managers.md
       - Обработка ошибок: tutorial/error-handling.md
+      - Подключение Callback API: tutorial/callback-bot.md
   - Документация:
       Интерфейсы высокого уровня:
         Интерфейс ботов:
@@ -50,6 +51,8 @@ nav:
           Accessing Http Client: low-level/http/http-client.md
         Polling:
           Работа с поллингом: low-level/polling/polling.md
+        Callback:
+          Работа с Callback API: low-level/callback/callback.md
       Дополнительные инструменты:
         Storages: tools/storage.md
         Keyboard генераторы: tools/keyboard.md
