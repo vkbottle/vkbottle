@@ -23,13 +23,13 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
         logger.warning("Empty request")
         return Response("not today", status_code=403)
 
-    if data["type"] == "confirmation":
+    if data.get("type") == "confirmation":
         global confirmation_token
         logger.info(f"Send confirmation token: {confirmation_token}")
         return Response(confirmation_token)
 
     # If the secrets match, then the message definitely came from our bot
-    if data["secret"] == secret_key:
+    if data.get("secret") == secret_key:
         # Running the process in the background, because the logic can be complicated
         background_task.add_task(bot.process_event, data)
     return Response("ok")
