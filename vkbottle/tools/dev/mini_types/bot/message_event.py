@@ -8,6 +8,8 @@ from vkbottle.modules import logger
 from vkbottle.tools.dev.event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
 
 if TYPE_CHECKING:
+    from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
+
     from vkbottle.api import ABCAPI, API
 
     EventDataType = Union[ShowSnackbarEvent, OpenAppEvent, OpenLinkEvent]
@@ -89,23 +91,25 @@ class MessageEventMin(MessageEventObject):
         intent: Optional[str] = None,
         subscribe_id: Optional[int] = None,
         **kwargs,
-    ) -> int:
+    ) -> "MessagesSendUserIdsResponseItem":
         locals().update(kwargs)
 
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
-        required_params = ("peer_id", "user_id", "domain", "chat_id", "user_ids")
-        if any(data.get(param) for param in required_params):
+        deprecated_params = ("peer_id", "user_id", "domain", "chat_id", "user_ids")
+        deprecated = [k for k in data if k in deprecated_params]
+        if deprecated:
             logger.warning(
                 "Params like peer_id or user_id is deprecated in MessageEvent.send_message()."
                 "Use API.messages.send() instead"
             )
-        data["peer_id"] = self.peer_id
+            for k in deprecated:
+                data.pop(k)
         stream = StringIO(message)
         while True:
             msg = stream.read(4096)
             if msg:
                 data["message"] = msg
-            response = (await self.ctx_api.request("messages.send", data))["response"]
+            response = (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]
             if stream.tell() == len(message or ""):
                 break
         return response
