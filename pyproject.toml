@@ -48,7 +48,7 @@ typing-extensions = "^4.0.1"
 
 [tool.poetry.dev-dependencies]
 # Lint
-black = {version = "^21.4b0", allow-prereleases = true}
+black = {version = "^22.1", allow-prereleases = true}
 flake8 = "^4.0.1"
 isort = "^5.10.1"
 lxml = "^4.7.1"
@@ -59,7 +59,7 @@ mypy_extensions = "^0.4.3"
 types-aiofiles = "^0.8.0"
 
 # Tests
-pytest = "^6.2.5"
+pytest = "^7.0.0"
 pytest-asyncio = "^0.17.2"
 pytest-cov = "^3.0.0"
 pytest-mock = "^3.6.1"

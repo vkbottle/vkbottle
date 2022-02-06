@@ -12,9 +12,6 @@ if TYPE_CHECKING:
 
     Handlers = Union[List["ABCHandler"], Dict[Any, List]]
 
-DEFAULT_STATE_KEY = "peer_id"
-
-
 T_contra = TypeVar("T_contra", list, dict, contravariant=True)
 
 

@@ -6,6 +6,7 @@ from vkbottle_types.objects import ClientInfoForBots, MessagesForward
 from ..base import BaseMessageMin
 
 if TYPE_CHECKING:
+    from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
 
     from vkbottle.api import ABCAPI
 
@@ -25,11 +26,10 @@ class MessageMin(BaseMessageMin):
         message: Optional[str] = None,
         attachment: Optional[str] = None,
         **kwargs,
-    ) -> int:
+    ) -> "MessagesSendUserIdsResponseItem":
         locals().update(kwargs)
 
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
-        data["peer_id"] = self.peer_id
         data["forward"] = MessagesForward(
             conversation_message_ids=[self.conversation_message_id],  # type: ignore
             peer_id=self.peer_id,
@@ -44,7 +44,7 @@ class MessageMin(BaseMessageMin):
         attachment: Optional[str] = None,
         forward_message_ids: Optional[List[int]] = None,
         **kwargs,
-    ) -> int:
+    ) -> "MessagesSendUserIdsResponseItem":
         locals().update(kwargs)
 
         data = {

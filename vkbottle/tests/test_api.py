@@ -41,19 +41,6 @@ async def test_api_typed_response(api: API):
 
 
 @pytest.mark.asyncio
-@with_mocked_api(
-    '{"response": [{"peer_id": 1,"error": {'
-    '"code": 901,"description": "Can\'t send messages for users without permission"}}]}'
-)
-async def test_list_error_handling(api: API):
-    try:
-        await api.request("some.method", {})
-    except VKAPIError[901]:
-        return True
-    raise AssertionError
-
-
-@pytest.mark.asyncio
 @with_mocked_api('{"error":{"error_code":0,"error_msg":"Some Error!","request_params":[]}}')
 async def test_vk_api_error_handling(api: API):
     try:

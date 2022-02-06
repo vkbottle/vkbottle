@@ -208,9 +208,9 @@ def test_loop_wrapper():
     async def task3():
         pass
 
-    lw = LoopWrapper(tasks=[task1()])
-    lw.on_startup.append(task2())
-    lw.on_shutdown.append(task3())
+    lw = LoopWrapper(tasks=[task1])  # type: ignore
+    lw.on_startup.append(task2)  # type: ignore
+    lw.on_shutdown.append(task3)  # type: ignore
 
     lw.run_forever(MockedLoop())  # type: ignore
 

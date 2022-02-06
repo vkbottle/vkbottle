@@ -2,6 +2,7 @@ from asyncio import AbstractEventLoop, get_event_loop
 from typing import TYPE_CHECKING, NoReturn, Optional
 
 from vkbottle.api import API
+from vkbottle.callback import BotCallback
 from vkbottle.dispatch import BuiltinStateDispenser, Router
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.framework.abc import ABCFramework
@@ -12,6 +13,7 @@ from vkbottle.tools import LoopWrapper
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, Token
+    from vkbottle.callback import ABCCallback
     from vkbottle.dispatch import ABCRouter, ABCStateDispenser
     from vkbottle.exception_factory import ABCErrorHandler
     from vkbottle.framework.labeler import ABCLabeler
@@ -24,6 +26,7 @@ class Bot(ABCFramework):
         token: Optional["Token"] = None,
         api: Optional["ABCAPI"] = None,
         polling: Optional["ABCPolling"] = None,
+        callback: Optional["ABCCallback"] = None,
         loop: Optional[AbstractEventLoop] = None,
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
@@ -38,9 +41,18 @@ class Bot(ABCFramework):
         self.labeler = labeler or BotLabeler()
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
         self._polling = polling or BotPolling(self.api)
+        self._callback = callback or BotCallback()
         self._router = router or Router()
         self._loop = loop
         self.task_each_event = task_each_event
+
+    @property
+    def callback(self) -> "ABCCallback":
+        if self._callback is None:
+            raise ValueError(
+                "To work with this methods, you need to create a BotCallback class and pass it as a parameter to the Bot class"
+            )
+        return self._callback.construct(self.api, self.error_handler)
 
     @property
     def polling(self) -> "ABCPolling":
@@ -78,6 +90,14 @@ class Bot(ABCFramework):
         logger.info("Loop will be ran forever")
         self.loop_wrapper.add_task(self.run_polling())
         self.loop_wrapper.run_forever(self.loop)
+
+    async def setup_webhook(self) -> str:
+        confirmation_code: str = await self.callback.get_callback_confirmation_code()
+        await self.callback.add_callback_server()
+        return confirmation_code
+
+    async def process_event(self, event: dict):
+        await self.router.route(event, self.callback.api)
 
     @property
     def loop(self) -> AbstractEventLoop:
