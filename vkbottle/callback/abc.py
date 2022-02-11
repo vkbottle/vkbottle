@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
@@ -10,6 +10,18 @@ class ABCCallback(ABC):
     """
     Abstract Callback class
     """
+
+    @abstractmethod
+    def get_secret_key(self) -> str:
+        pass
+
+    @abstractmethod
+    async def setup_group_id(self) -> None:
+        pass
+
+    @abstractmethod
+    async def find_server_id(self) -> Union[int, None]:
+        pass
 
     @abstractmethod
     async def add_callback_server(self) -> Any:

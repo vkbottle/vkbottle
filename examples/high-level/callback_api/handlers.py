@@ -4,7 +4,6 @@ from vkbottle.callback import BotCallback
 
 TOKEN = "<TOKEN>"
 callback = BotCallback(url="http://example.com/whateveryouwant", title="my server")
-secret_key = callback.get_secret_key()
 bot = Bot(token=TOKEN, callback=callback)
 
 

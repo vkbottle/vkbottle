@@ -1,22 +1,25 @@
 from fastapi import BackgroundTasks, FastAPI, Request, Response
-from handlers import bot, secret_key
+from handlers import bot
 from loguru import logger
 
 app = FastAPI()
 
 # token from vk for init callback server
-confirmation_token: str
+confirmation_code: str
+secret_key: str
 
 
 @app.on_event("startup")
 async def startup_event():
     logger.info("Setup webhook")
-    global confirmation_token
-    confirmation_token = await bot.setup_webhook()
+    global confirmation_code, secret_key
+    confirmation_code, secret_key = await bot.setup_webhook()
 
 
 @app.post("/whateveryouwant")
 async def vk_handler(req: Request, background_task: BackgroundTasks):
+    global confirmation_code, secret_key
+
     try:
         data = await req.json()
     except:
@@ -24,9 +27,8 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
         return Response("not today", status_code=403)
 
     if data["type"] == "confirmation":
-        global confirmation_token
-        logger.info(f"Send confirmation token: {confirmation_token}")
-        return Response(confirmation_token)
+        logger.info(f"Send confirmation token: {confirmation_code}")
+        return Response(confirmation_code)
 
     # If the secrets match, then the message definitely came from our bot
     if data["secret"] == secret_key:
