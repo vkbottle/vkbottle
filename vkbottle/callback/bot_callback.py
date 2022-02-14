@@ -1,6 +1,6 @@
 from random import choice
 from string import ascii_lowercase
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
@@ -41,7 +41,7 @@ class BotCallback(ABCCallback):
         if self.group_id is None:
             self.group_id = (await self.api.request("groups.getById", {}))["response"][0]["id"]
 
-    async def find_server_id(self) -> Union[int, None]:
+    async def find_server_id(self) -> Optional[int]:
         servers = await self.get_callback_servers()
         if not servers:
             return None
