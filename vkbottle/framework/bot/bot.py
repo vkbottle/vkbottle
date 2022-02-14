@@ -1,5 +1,5 @@
 from asyncio import AbstractEventLoop, get_event_loop
-from typing import TYPE_CHECKING, NoReturn, Optional
+from typing import TYPE_CHECKING, NoReturn, Optional, Tuple
 
 from vkbottle.api import API
 from vkbottle.callback import BotCallback
@@ -91,10 +91,26 @@ class Bot(ABCFramework):
         self.loop_wrapper.add_task(self.run_polling())
         self.loop_wrapper.run_forever(self.loop)
 
-    async def setup_webhook(self) -> str:
+    async def setup_webhook(self) -> Tuple[str, str]:
+        """
+        :return: confirmation_code, secret_key
+        """
+        await self.callback.setup_group_id()
+
         confirmation_code: str = await self.callback.get_callback_confirmation_code()
-        await self.callback.add_callback_server()
-        return confirmation_code
+        secret_key: str = self.callback.get_secret_key()
+
+        server_id = await self.callback.find_server_id()
+
+        if server_id is not None:
+            await self.callback.set_callback_settings(server_id, {"message_new": True})
+            await self.callback.edit_callback_server(server_id)
+        else:
+            server_id = await self.callback.add_callback_server()
+            self.loop.create_task(
+                self.callback.set_callback_settings(server_id, {"message_new": True})
+            )
+        return confirmation_code, secret_key
 
     async def process_event(self, event: dict):
         await self.router.route(event, self.callback.api)

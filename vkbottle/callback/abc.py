@@ -12,6 +12,18 @@ class ABCCallback(ABC):
     """
 
     @abstractmethod
+    def get_secret_key(self) -> str:
+        pass
+
+    @abstractmethod
+    async def setup_group_id(self) -> None:
+        pass
+
+    @abstractmethod
+    async def find_server_id(self) -> Optional[int]:
+        pass
+
+    @abstractmethod
     async def add_callback_server(self) -> Any:
         pass
 
