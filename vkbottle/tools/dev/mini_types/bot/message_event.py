@@ -1,34 +1,41 @@
 from io import StringIO
-from typing import TYPE_CHECKING, Any, List, Optional, Union
+from typing import TYPE_CHECKING, List, Optional, Union
 
-from vkbottle_types.events.objects.group_event_objects import MessageEventObject
+from vkbottle_types.events import MessageEvent
 
-from vkbottle.dispatch.dispenser.base import StatePeer
 from vkbottle.modules import logger
 from vkbottle.tools.dev.event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
 
 if TYPE_CHECKING:
     from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
 
-    from vkbottle.api import ABCAPI, API
-
     EventDataType = Union[ShowSnackbarEvent, OpenAppEvent, OpenLinkEvent]
 
 
-class MessageEventMin(MessageEventObject):
-    unprepared_ctx_api: Optional[Any] = None
-    state_peer: Optional["StatePeer"] = None
-    group_id: Optional[int] = None
-
-    def __init__(self, **event):
-        data = event["object"]
-        data["group_id"] = event["group_id"]
-
-        super().__init__(**data)
+class MessageEventMin(MessageEvent):
+    @property
+    def user_id(self) -> int:
+        """alias to event.object.user_id"""
+        return self.object.user_id
 
     @property
-    def ctx_api(self) -> Union["ABCAPI", "API"]:
-        return getattr(self, "unprepared_ctx_api")
+    def peer_id(self) -> int:
+        """alias to event.object.peer_id"""
+        return self.object.peer_id
+
+    @property
+    def payload(self) -> Optional[dict]:
+        """alias to event.object.payload"""
+        return self.object.payload
+
+    @property
+    def conversation_message_id(self) -> int:
+        """alias to event.object.conversation_message_id"""
+        return self.object.conversation_message_id
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.event_id = self.object.event_id
 
     async def send_message_event_answer(self, event_data: "EventDataType", **kwargs) -> int:
         data = dict(
@@ -113,6 +120,9 @@ class MessageEventMin(MessageEventObject):
             if stream.tell() == len(message or ""):
                 break
         return response
+
+    def get_payload_json(self, *args, **kwargs) -> Optional[dict]:
+        return self.payload
 
 
 MessageEventMin.update_forward_refs()
