@@ -65,7 +65,7 @@ class UserLabeler(BaseLabeler):
 
     def raw_event(
         self,
-        event: Union[str, List[str]],
+        event: Union[int, List[int], UserEventType, List[UserEventType]],
         dataclass: Type["BaseUserEvent"] = RawUserEvent,
         *rules: "ABCRule",
         blocking: bool = True,
