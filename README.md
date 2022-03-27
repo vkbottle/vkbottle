@@ -65,4 +65,5 @@ bot.run_forever()
 ## Лицензия
 
 Copyright © 2019-2021 [timoniq](https://github.com/timoniq).\
+Copyright © 2022 [FeeeeK](https://github.com/FeeeeK).\
 Этот проект имеет [MIT](https://github.com/vkbottle/vkbottle/blob/master/LICENSE) лицензию.
