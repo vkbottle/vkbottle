@@ -29,7 +29,7 @@ class AiohttpClient(ABCHTTPClient):
 
         self.session = session
 
-        self.__session_params = kwargs
+        self._session_params = kwargs
 
     async def request_raw(
         self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
@@ -38,7 +38,7 @@ class AiohttpClient(ABCHTTPClient):
             self.session = ClientSession(
                 connector=TCPConnector(ssl=False),
                 json_serialize=self.json_processing_module.dumps,
-                **self.__session_params,
+                **self._session_params,
             )
         async with self.session.request(url=url, method=method, data=data, **kwargs) as response:
             await response.read()
@@ -81,7 +81,7 @@ class SingleAiohttpClient(AiohttpClient):
     def __new__(cls, *args, **kwargs):
         if cls.__instance__ is not None:
             return cls.__instance__
-        return super().__new__(cls, *args, **kwargs)
+        return super().__new__(cls)
 
     def __aexit__(self, exc_type, exc_val, exc_tb):
         pass  # no need to close session in this case
