@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, AsyncGenerator, Optional
 
+from aiohttp.client_exceptions import ServerConnectionError
+
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
 
@@ -62,6 +64,8 @@ class BotPolling(ABCPolling):
                     continue
                 server["ts"] = event["ts"]
                 yield event
+            except ServerConnectionError:
+                server = await self.get_server()
             except BaseException as e:
                 await self.error_handler.handle(e)
 
