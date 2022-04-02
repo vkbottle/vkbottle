@@ -21,19 +21,24 @@ jobs:
           - 3.9
 
     steps:
-      - uses: dhvcc/python-poetry-setup@v1
+      - uses: actions/checkout@v3
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-          cache-key: ${{ matrix.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/poetry.lock') }}
+          cache: poetry
+
+      - name: Install dependencies
+        run: poetry install
 
       - name: Run flake8
-        run: |
-          poetry run flake8
+        run: poetry run flake8
 
       - name: Run mypy
-        run: |
-          poetry run mypy vkbottle
+        run: poetry run mypy vkbottle
 
       - name: Run tests
-        run: |
-          poetry run pytest
+        run: poetry run pytest
