@@ -26,13 +26,15 @@ jobs:
       - name: Install poetry
         run: pipx install poetry
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v3.1.1
+        id: python-setup
         with:
           python-version: ${{ matrix.python-version }}
           cache: poetry
           cache-dependency-path: pyproject.toml
 
       - name: Install dependencies
+        if: steps.python-setup.outputs.cache-hit != 'true'
         run: poetry install
 
       - name: Run flake8
