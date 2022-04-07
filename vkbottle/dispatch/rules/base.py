@@ -344,11 +344,13 @@ class PayloadMapRule(ABCRule[BaseMessageMin]):
                 return False
         return True
 
-    async def check(self, event: BaseMessageMin) -> bool:
+    async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
         payload = event.get_payload_json()
         if not isinstance(payload, dict):
             return False
-        return await self.match(payload, self.payload_map)
+        if await self.match(payload, self.payload_map):
+            return payload
+        return False
 
 
 class FromUserRule(ABCRule[BaseMessageMin]):
