@@ -51,12 +51,14 @@ class BaseLabeler(ABCLabeler):
         raw_event_view: "ABCRawEventView",
         custom_rules: Optional[Dict[str, Type["ABCRule"]]] = None,
         auto_rules: Optional[List["ABCRule"]] = None,
+        raw_event_auto_rules: Optional[List["ABCRule"]] = None,
     ):
         self.message_view = message_view
         self.raw_event_view = raw_event_view
 
         self.custom_rules = custom_rules or DEFAULT_CUSTOM_RULES
         self.auto_rules = auto_rules or []
+        self.raw_event_auto_rules = raw_event_auto_rules or []
 
         # Rule config is accessible from every single custom rule
         self.rule_config: Dict[str, Any] = {
@@ -96,6 +98,11 @@ class BaseLabeler(ABCLabeler):
     def message(
         self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> "LabeledMessageHandler":
+        assert all(isinstance(rule, ABCRule) for rule in rules), (
+            "All rules must be subclasses of ABCRule or rule shortcuts "
+            "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+        )
+
         def decorator(func):
             self.message_view.handlers.append(
                 FromFuncHandler(
@@ -113,6 +120,11 @@ class BaseLabeler(ABCLabeler):
     def chat_message(
         self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> "LabeledMessageHandler":
+        assert all(isinstance(rule, ABCRule) for rule in rules), (
+            "All rules must be subclasses of ABCRule or rule shortcuts "
+            "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+        )
+
         def decorator(func):
             self.message_view.handlers.append(
                 FromFuncHandler(
@@ -131,6 +143,11 @@ class BaseLabeler(ABCLabeler):
     def private_message(
         self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> "LabeledMessageHandler":
+        assert all(isinstance(rule, ABCRule) for rule in rules), (
+            "All rules must be subclasses of ABCRule or rule shortcuts "
+            "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+        )
+
         def decorator(func):
             self.message_view.handlers.append(
                 FromFuncHandler(

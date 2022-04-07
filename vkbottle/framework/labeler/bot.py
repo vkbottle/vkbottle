@@ -37,6 +37,7 @@ class BotLabeler(BaseLabeler):
         raw_event_view: Optional[RawBotEventView] = None,
         custom_rules: Optional[Dict[str, Type["ABCRule"]]] = None,
         auto_rules: Optional[List["ABCRule"]] = None,
+        raw_event_auto_rules: Optional[List["ABCRule"]] = None,
     ):
         message_view = message_view or BotMessageView()
         raw_event_view = raw_event_view or RawBotEventView()
@@ -45,6 +46,7 @@ class BotLabeler(BaseLabeler):
             raw_event_view=raw_event_view,
             custom_rules=custom_rules,
             auto_rules=auto_rules,
+            raw_event_auto_rules=raw_event_auto_rules,
         )
 
     def message(
@@ -70,6 +72,10 @@ class BotLabeler(BaseLabeler):
         blocking: bool = True,
         **custom_rules,
     ) -> "LabeledHandler":
+        assert all(isinstance(rule, ABCRule) for rule in rules), (
+            "All rules must be subclasses of ABCRule or rule shortcuts "
+            "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+        )
 
         if not isinstance(event, list):
             event = [event]
@@ -83,7 +89,7 @@ class BotLabeler(BaseLabeler):
                     FromFuncHandler(
                         func,
                         *rules,
-                        *self.auto_rules,
+                        *self.raw_event_auto_rules,
                         *self.get_custom_rules(custom_rules),
                         blocking=blocking,
                     ),

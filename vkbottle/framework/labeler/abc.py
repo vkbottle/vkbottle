@@ -16,6 +16,7 @@ class ABCLabeler(ABC):
     raw_event_view: "ABCRawEventView"
     custom_rules: Dict[str, Type["ABCRule"]]
     auto_rules: List["ABCRule"]
+    raw_event_auto_rules: List["ABCRule"]
     rule_config: Dict[str, Any]
 
     @abstractmethod
