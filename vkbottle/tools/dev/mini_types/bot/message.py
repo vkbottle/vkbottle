@@ -23,7 +23,7 @@ class MessageMin(BaseMessageMin):
         return self.mention.id == -self.group_id
 
     async def get_full_message(self) -> "MessageMin":
-        if not self.is_cropped and self.id:
+        if self.is_cropped is None and self.id:
             return self
         message = (
             await self.ctx_api.messages.get_by_conversation_message_id(
@@ -31,7 +31,8 @@ class MessageMin(BaseMessageMin):
                 conversation_message_ids=[self.conversation_message_id],  # type: ignore
             )
         ).items[0]
-        self.is_cropped = False
+        if self.is_cropped:
+            message.is_cropped = False
         for k, v in message.__dict__.items():
             self.__dict__[k] = v
         return self
