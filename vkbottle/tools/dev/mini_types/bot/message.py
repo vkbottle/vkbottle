@@ -4,6 +4,7 @@ from vkbottle_types.events.bot_events import MessageNew
 from vkbottle_types.objects import ClientInfoForBots, MessagesForward
 
 from ..base import BaseMessageMin
+from vkbottle.modules import logger
 
 if TYPE_CHECKING:
     from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
@@ -20,6 +21,54 @@ class MessageMin(BaseMessageMin):
         if not (self.mention and self.group_id):
             return False
         return self.mention.id == -self.group_id
+
+    async def get_full_message(self) -> "MessageMin":
+        if not self.is_cropped and self.id:
+            return self
+        message = (
+            await self.ctx_api.messages.get_by_conversation_message_id(
+                peer_id=self.peer_id,
+                conversation_message_ids=[self.conversation_message_id],  # type: ignore
+            )
+        ).items[0]
+        self.is_cropped = False
+        for k, v in message.__dict__.items():
+            self.__dict__[k] = v
+        return self
+
+    def get_attachments(self) -> List[str]:
+        if not self.attachments:
+            return []
+        if not self.id and any(
+            getattr(attachment, attachment.type.value).access_key
+            for attachment in self.attachments
+        ):
+            logger.warning(
+                (
+                    "Some attachments may does't work because of wrong access_key. "
+                    "Use .get_full_message() to update message and fix this issue."
+                )
+            )
+        if self.is_cropped:
+            logger.warning(
+                (
+                    "Some attachments may doesn't included because message is cropped. "
+                    "Use .get_full_message() to update message and fix this issue."
+                )
+            )
+        attachments = []
+        for attachment in self.attachments:
+            attachment_type = attachment.type.value
+            attachment_object = getattr(attachment, attachment_type)
+            if not hasattr(attachment_object, "id") or not hasattr(attachment_object, "owner_id"):
+                continue
+            attachment_string = (
+                f"{attachment_type}{attachment_object.owner_id}_{attachment_object.id}"
+            )
+            if hasattr(attachment_object, "access_key"):
+                attachment_string += f"_{attachment_object.access_key}"
+            attachments.append(attachment_string)
+        return attachments
 
     async def reply(
         self,
