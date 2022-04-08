@@ -115,25 +115,22 @@ def test_keyboard_builder():
 
 def test_keyboard_generator():
     with pytest.deprecated_call():
-        assert (
-            json.loads(
-                keyboard_gen(
+        assert json.loads(
+            keyboard_gen(
+                [
+                    [{"label": "I love nuggets", "payload": {"love": "nuggets"}}],
                     [
-                        [{"label": "I love nuggets", "payload": {"love": "nuggets"}}],
-                        [
-                            {
-                                "type": "callback",
-                                "label": "Eat nuggets",
-                                "payload": {"eat": "nuggets"},
-                                "color": "positive",
-                            }
-                        ],
+                        {
+                            "type": "callback",
+                            "label": "Eat nuggets",
+                            "payload": {"eat": "nuggets"},
+                            "color": "positive",
+                        }
                     ],
-                    one_time=True,
-                )
+                ],
+                one_time=True,
             )
-            == json.loads(KEYBOARD_JSON)
-        )
+        ) == json.loads(KEYBOARD_JSON)
 
 
 def test_bp_importer(mocker: MockerFixture):
