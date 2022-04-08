@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING, Optional
 
-from ..base import BaseMessageMin
 from pydantic import root_validator
+
+from ..base import BaseMessageMin
 
 if TYPE_CHECKING:
 

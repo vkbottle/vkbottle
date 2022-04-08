@@ -6,6 +6,7 @@ from pydantic import root_validator
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
+    MessagesForward,
     MessagesMessage,
     PhotosPhoto,
     UsersUserFull,
@@ -16,15 +17,14 @@ from vkbottle_types.objects import (
 
 from vkbottle.dispatch.dispenser.base import StatePeer
 from vkbottle.modules import json, logger
-from vkbottle_types.objects import MessagesForward
 
 if TYPE_CHECKING:
     from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
 
     from vkbottle.api import ABCAPI, API
 
-from .mention import Mention, replace_mention_validator
 from .foreign_message import BaseForeignMessageMin
+from .mention import Mention, replace_mention_validator
 
 
 class BaseMessageMin(MessagesMessage, ABC):

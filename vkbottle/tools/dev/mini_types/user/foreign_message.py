@@ -1,7 +1,8 @@
-from typing import Optional, List
+from typing import List, Optional
+
+from pydantic import root_validator
 
 from ..base.foreign_message import BaseForeignMessageMin
-from pydantic import root_validator
 
 
 class ForeignMessageMin(BaseForeignMessageMin):

@@ -39,7 +39,7 @@ def types(api):
             a *= 1.1
 
     for i in results:
-        results.append(i ** 2)
+        results.append(i**2)
     results.pop()
     return results
 
