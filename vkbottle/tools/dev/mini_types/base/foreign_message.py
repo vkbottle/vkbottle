@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
-from io import StringIO
 from typing import TYPE_CHECKING, Any, Callable, List, Optional, Union
 
 from pydantic import root_validator
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
-    MessagesMessage,
+    MessagesForeignMessage,
     PhotosPhoto,
     UsersUserFull,
     VideoVideo,
@@ -14,24 +13,16 @@ from vkbottle_types.objects import (
     WallWallpostFull,
 )
 
-from vkbottle.dispatch.dispenser.base import StatePeer
-from vkbottle.modules import json, logger
-from vkbottle_types.objects import MessagesForward
+from vkbottle.modules import json
 
 if TYPE_CHECKING:
-    from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
-
     from vkbottle.api import ABCAPI, API
 
 from .mention import Mention, replace_mention_validator
-from .foreign_message import BaseForeignMessageMin
 
 
-class BaseMessageMin(MessagesMessage, ABC):
+class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     unprepared_ctx_api: Optional[Any] = None
-    state_peer: Optional["StatePeer"] = None
-    reply_message: Optional["BaseForeignMessageMin"] = None
-    fwd_messages: Optional[List["BaseForeignMessageMin"]] = []
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
 
@@ -61,11 +52,11 @@ class BaseMessageMin(MessagesMessage, ABC):
         return raw_user if raw_mode else UsersUserFull(**raw_user)
 
     @property
-    def chat_id(self) -> int:
-        return self.peer_id - 2_000_000_000
+    def chat_id(self) -> Optional[int]:
+        return None if self.peer_id is None else self.peer_id - 2_000_000_000
 
     @property
-    def message_id(self) -> int:
+    def message_id(self) -> Optional[int]:
         return self.conversation_message_id or self.id
 
     def get_attachments(self) -> Optional[List[str]]:
@@ -136,86 +127,5 @@ class BaseMessageMin(MessagesMessage, ABC):
                 raise e from e
         return unpack_failure(self.payload)
 
-    async def answer(
-        self,
-        message: Optional[str] = None,
-        attachment: Optional[str] = None,
-        random_id: Optional[int] = 0,
-        lat: Optional[float] = None,
-        long: Optional[float] = None,
-        reply_to: Optional[int] = None,
-        forward_messages: Optional[List[int]] = None,
-        forward: Optional[str] = None,
-        sticker_id: Optional[int] = None,
-        keyboard: Optional[str] = None,
-        template: Optional[str] = None,
-        payload: Optional[str] = None,
-        content_source: Optional[str] = None,
-        dont_parse_links: Optional[bool] = None,
-        disable_mentions: Optional[bool] = None,
-        intent: Optional[str] = None,
-        subscribe_id: Optional[int] = None,
-        **kwargs,
-    ) -> "MessagesSendUserIdsResponseItem":
-        locals().update(kwargs)
 
-        data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
-        deprecated_params = ("peer_id", "user_id", "domain", "chat_id", "user_ids")
-        deprecated = [k for k in data if k in deprecated_params]
-        if deprecated:
-            logger.warning(
-                "Params like peer_id or user_id is deprecated in Message.answer()."
-                "Use API.messages.send() instead"
-            )
-            for k in deprecated:
-                data.pop(k)
-        if not isinstance(message, str):
-            message = str(message)
-        stream = StringIO(message)
-        while True:
-            msg = stream.read(4096)
-            if msg:
-                data["message"] = msg
-            response = (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]  # type: ignore
-            if stream.tell() == len(message or ""):
-                break
-        return response
-
-    async def reply(
-        self,
-        message: Optional[str] = None,
-        attachment: Optional[str] = None,
-        **kwargs,
-    ) -> "MessagesSendUserIdsResponseItem":
-        locals().update(kwargs)
-
-        data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
-        data["forward"] = MessagesForward(
-            conversation_message_ids=[self.conversation_message_id],  # type: ignore
-            peer_id=self.peer_id,
-            is_reply=True,
-        ).json()
-
-        return await self.answer(**data)
-
-    async def forward(
-        self,
-        message: Optional[str] = None,
-        attachment: Optional[str] = None,
-        **kwargs,
-    ) -> "MessagesSendUserIdsResponseItem":
-        locals().update(kwargs)
-
-        data = {
-            k: v
-            for k, v in locals().items()
-            if k not in ("self", "kwargs", "forward_message_ids") and v is not None
-        }
-        data["forward"] = MessagesForward(
-            conversation_message_ids=[self.conversation_message_id], peer_id=self.peer_id  # type: ignore
-        ).json()
-
-        return await self.answer(**data)
-
-
-BaseMessageMin.update_forward_refs()
+BaseForeignMessageMin.update_forward_refs()

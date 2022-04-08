@@ -166,7 +166,7 @@ def test_bp_importer(mocker: MockerFixture):
     )
 
     for bp in load_blueprints_from_package(main_package):
-        required_files.pop(required_files.index(str(bp).split(".")[-1] + ".py"))
+        required_files.pop(required_files.index(f'{str(bp).split(".")[-1]}.py'))
 
     assert not len(required_files)
 

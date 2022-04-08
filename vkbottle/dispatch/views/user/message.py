@@ -24,8 +24,8 @@ class ABCUserMessageView(ABCMessageView[list, T_contra], ABC, Generic[T_contra])
         return event[0]
 
     @staticmethod
-    async def get_message(event: list, ctx_api) -> "MessageMin":
-        return await message_min(event[1], ctx_api)
+    async def get_message(event: list, ctx_api, replace_mention: bool) -> "MessageMin":
+        return await message_min(event[1], ctx_api, replace_mention)
 
     async def process_event(self, event: list) -> bool:
         if not (self.handlers or self.middlewares):

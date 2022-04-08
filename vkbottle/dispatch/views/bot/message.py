@@ -24,8 +24,8 @@ class ABCBotMessageView(ABCMessageView[dict, T_contra], ABC, Generic[T_contra]):
         return event["type"]
 
     @staticmethod
-    async def get_message(event, ctx_api) -> "MessageMin":
-        return message_min(event, ctx_api)
+    async def get_message(event, ctx_api, replace_mention: bool) -> "MessageMin":
+        return message_min(event, ctx_api, replace_mention)
 
     async def process_event(self, event: dict) -> bool:
         return GroupEventType(self.get_event_type(event)) == GroupEventType.MESSAGE_NEW

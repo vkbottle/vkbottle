@@ -11,6 +11,12 @@ class JSONModule(Protocol):
     def dumps(self, o: dict) -> str:
         ...
 
+    def load(self, f: str) -> dict:
+        ...
+
+    def dump(self, o: dict, f: str) -> None:
+        ...
+
 
 json: JSONModule = choice_in_order(
     ["ujson", "hyperjson", "orjson"], do_import=True, default="json"

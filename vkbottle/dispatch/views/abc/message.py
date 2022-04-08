@@ -22,6 +22,7 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
     handlers: List["ABCHandler"]
     state_source_key: str
     default_text_approximators: List[Callable[["BaseMessageMin"], str]]
+    replace_mention = True
 
     def __init__(self):
         super().__init__()
@@ -35,7 +36,7 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
 
     @staticmethod
     @abstractmethod
-    async def get_message(event: T_contra, ctx_api) -> Any:
+    async def get_message(event: T_contra, ctx_api, replace_mention: bool) -> Any:
         pass
 
     async def handle_event(
@@ -45,7 +46,7 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
         # https://dev.vk.com/api/user-long-poll/getting-started
         logger.debug("Handling event ({}) with message view".format(self.get_event_type(event)))
         context_variables: dict = {}
-        message = await self.get_message(event, ctx_api)
+        message = await self.get_message(event, ctx_api, self.replace_mention)
         message.state_peer = await state_dispenser.cast(self.get_state_key(message))
 
         for text_ax in self.default_text_approximators:
