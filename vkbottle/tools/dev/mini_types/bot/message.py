@@ -56,7 +56,7 @@ class MessageMin(BaseMessageMin):
         self.__dict__["_is_full"] = True
         return self
 
-    def get_attachments(self) -> Optional[List[str]]:
+    def get_attachment_strings(self) -> Optional[List[str]]:
         if self.attachments is None:
             return None
         if (
@@ -80,7 +80,7 @@ class MessageMin(BaseMessageMin):
                     "Use .get_full_message() to update message and fix this issue."
                 )
             )
-        return super().get_attachments()
+        return super().get_attachment_strings()
 
 
 def message_min(event: dict, ctx_api: "ABCAPI", replace_mention: bool = True) -> "MessageMin":

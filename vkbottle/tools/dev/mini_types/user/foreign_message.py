@@ -28,3 +28,6 @@ class ForeignMessageMin(BaseForeignMessageMin):
         if not (self.mention and self.user_id):
             return False
         return self.mention.id == self.user_id
+
+
+ForeignMessageMin.update_forward_refs()

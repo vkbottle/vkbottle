@@ -116,7 +116,7 @@ class MessageEventMin(MessageEvent):
             msg = stream.read(4096)
             if msg:
                 data["message"] = msg
-            response = (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]
+            response = (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]  # type: ignore
             if stream.tell() == len(message or ""):
                 break
         return response
