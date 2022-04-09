@@ -59,7 +59,7 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     def message_id(self) -> Optional[int]:
         return self.conversation_message_id or self.id
 
-    def get_attachments(self) -> Optional[List[str]]:
+    def get_attachment_strings(self) -> Optional[List[str]]:
         if self.attachments is None:
             return None
         attachments = []

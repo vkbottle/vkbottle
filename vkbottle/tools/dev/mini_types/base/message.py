@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from io import StringIO
-from typing import TYPE_CHECKING, Any, Callable, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, List, Optional, Union, overload
 
 from pydantic import root_validator
+from typing_extensions import Literal
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
@@ -54,6 +55,14 @@ class BaseMessageMin(MessagesMessage, ABC):
         """Returns True if current bot is mentioned in message"""
         pass
 
+    @overload
+    async def get_user(self, raw_mode: Literal[False] = ..., **kwargs) -> UsersUserFull:
+        ...
+
+    @overload
+    async def get_user(self, raw_mode: Literal[True] = ..., **kwargs) -> dict:
+        ...
+
     async def get_user(self, raw_mode: bool = False, **kwargs) -> Union[UsersUserFull, dict]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
@@ -68,7 +77,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     def message_id(self) -> int:
         return self.conversation_message_id or self.id
 
-    def get_attachments(self) -> Optional[List[str]]:
+    def get_attachment_strings(self) -> Optional[List[str]]:
         if self.attachments is None:
             return None
         attachments = []

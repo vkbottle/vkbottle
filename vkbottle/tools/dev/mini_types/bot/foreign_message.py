@@ -31,3 +31,6 @@ class ForeignMessageMin(BaseForeignMessageMin):
         if not (self.mention and self.group_id):
             return False
         return self.mention.id == -self.group_id
+
+
+ForeignMessageMin.update_forward_refs()
