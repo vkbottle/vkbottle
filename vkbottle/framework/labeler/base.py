@@ -4,13 +4,12 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type
 import vbml
 
 from vkbottle.dispatch.handlers import FromFuncHandler
-from vkbottle.dispatch.rules import base
+from vkbottle.dispatch.rules import ABCRule, base
 from vkbottle.dispatch.views.abc import ABCRawEventView
 
 from .abc import ABCLabeler
 
 if TYPE_CHECKING:
-    from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views import ABCView
     from vkbottle.dispatch.views.abc import ABCMessageView
 
