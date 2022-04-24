@@ -21,29 +21,27 @@ jobs:
           - 3.9
 
     steps:
-      - uses: actions/checkout@master
-
-      - name: Set up Python ${{ matrix.python-version }} on ${{ matrix.os }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v3
 
       - name: Install poetry
-        run: |
-          python -m pip install --upgrade pip poetry
+        run: pipx install poetry
+
+      - uses: actions/setup-python@v3.1.1
+        id: python-setup
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: poetry
+          cache-dependency-path: pyproject.toml
 
       - name: Install dependencies
-        run: |
-          poetry install
+        if: steps.python-setup.outputs.cache-hit != 'true'
+        run: poetry install
 
       - name: Run flake8
-        run: |
-          poetry run flake8
+        run: poetry run flake8
 
       - name: Run mypy
-        run: |
-          poetry run mypy vkbottle
+        run: poetry run mypy vkbottle
 
       - name: Run tests
-        run: |
-          poetry run pytest
+        run: poetry run pytest
