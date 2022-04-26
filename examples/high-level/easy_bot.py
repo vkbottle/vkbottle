@@ -30,6 +30,18 @@ async def eat_handler(message: Message, item: Optional[str] = None):
     await message.answer(f"Ты съел <<{item}>>!", keyboard=KEYBOARD)
 
 
+# This need to be set to True if you want to use that rule
+bot.labeler.message_view.replace_mention = True
+
+
+# Will reply to message that exactly match bot mention
+# eg "@bot" if mention=True or just starts with mention if mention=False
+# Mention will be removed from message text and can be accessed via message.mention with id and text fields
+@bot.on.message(mention=True)
+async def mention_handler(message: Message):
+    await message.reply("Привет, чего вы хотите?")
+
+
 # You can use raw_event to handle any event type, the advantage is
 # free dataclass, for example it can be dict if you have some problems
 # with module types quality

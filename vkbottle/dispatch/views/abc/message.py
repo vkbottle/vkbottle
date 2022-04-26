@@ -22,7 +22,7 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
     handlers: List["ABCHandler"]
     state_source_key: str
     default_text_approximators: List[Callable[["BaseMessageMin"], str]]
-    replace_mention = True
+    replace_mention = False
 
     def __init__(self):
         super().__init__()

@@ -13,7 +13,7 @@ from vkbottle_types.objects import (
     WallWallpostFull,
 )
 
-from vkbottle.modules import json
+from vkbottle.modules import json, logger
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
@@ -37,6 +37,11 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
         """Returns `Mention` object if message contains mention,
         eg if message is `@username text` returns `Mention(id=123, text="text")`,
         also mention is automatically removes from message text"""
+        if not self.replace_mention:
+            logger.warning(
+                "labeler.message_view.replace_mention is set to False, the mention will not be processed"
+            )
+            return None
         return self._mention
 
     @property
