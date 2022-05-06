@@ -4,6 +4,7 @@ from vkbottle_types.events.enums import UserEventType
 from vkbottle_types.events.user_events import RawUserEvent
 
 from vkbottle.dispatch.handlers import FromFuncHandler
+from vkbottle.dispatch.rules import ABCRule
 from vkbottle.dispatch.views.user import RawUserEventView, UserHandlerBasement, UserMessageView
 
 from .base import BaseLabeler
@@ -11,7 +12,6 @@ from .base import BaseLabeler
 if TYPE_CHECKING:
     from vkbottle_types.events import BaseUserEvent
 
-    from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views.user import ABCUserMessageView
     from vkbottle.tools.dev.mini_types.user import MessageMin
 

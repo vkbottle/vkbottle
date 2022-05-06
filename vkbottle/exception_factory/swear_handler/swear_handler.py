@@ -6,9 +6,7 @@ from vkbottle.modules import logger
 
 
 def swear(
-    exception: Union[
-        Exception, Type[Exception], Tuple[Union[Exception, Type[Exception]], ...]
-    ],
+    exception: Union[Exception, Type[Exception], Tuple[Union[Exception, Type[Exception]], ...]],
     exception_handler: Optional[Callable] = None,
     just_log: bool = False,
     just_return: bool = False,
