@@ -24,7 +24,7 @@ async def exc_handler_lookup(e: LookupError):
 
 ```python
 @error_handler.register_undefined_error_handler
-async def exc_handler_undefined(e: BaseException):
+async def exc_handler_undefined(e: Exception):
     print("Oh no unknown error occurred", e)
 ```
 

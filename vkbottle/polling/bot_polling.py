@@ -66,7 +66,7 @@ class BotPolling(ABCPolling):
                 yield event
             except ServerConnectionError:
                 server = await self.get_server()
-            except BaseException as e:
+            except Exception as e:
                 await self.error_handler.handle(e)
 
     def construct(

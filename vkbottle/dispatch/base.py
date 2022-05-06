@@ -13,14 +13,14 @@ if TYPE_CHECKING:
 
 class Router(ABCRouter):
     async def route(self, event: dict, ctx_api: "ABCAPI") -> None:
-        logger.debug("Routing update {}".format(event))
+        logger.debug(f"Routing update {event}")
 
         for view in self.views.values():
             try:
                 if not await view.process_event(event):
                     continue
                 await view.handle_event(event, ctx_api, self.state_dispenser)
-            except BaseException as e:
+            except Exception as e:
                 await self.error_handler.handle(e)
 
     def construct(

@@ -18,7 +18,7 @@ def test_code_error():
 
 
 def test_swear_sync():
-    def sync_exception_handler(e: BaseException, a):
+    def sync_exception_handler(e: Exception, a):
         assert isinstance(e, RuntimeError)
         return a
 
@@ -45,7 +45,7 @@ async def test_error_handler():
     error_handler = ErrorHandler()
 
     @error_handler.register_error_handler(Base)
-    async def handler(error: BaseException) -> int:
+    async def handler(error: Exception) -> int:
         assert isinstance(error, Derived)
         return 42
 

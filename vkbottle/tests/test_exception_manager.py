@@ -16,7 +16,7 @@ def test_code_exception():
 
 
 def test_swear_sync():
-    def sync_exception_handler(e: BaseException, a):
+    def sync_exception_handler(e: Exception, a):
         assert isinstance(e, RuntimeError)
         return a
 

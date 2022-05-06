@@ -16,7 +16,7 @@ class ErrorHandler(ABCErrorHandler):
         self.undefined_error_handler = None
 
     def register_error_handler(
-        self, *error_types: Type[BaseException]
+        self, *error_types: Type[Exception]
     ) -> Callable[["AsyncFunc"], "AsyncFunc"]:
         def decorator(handler: "AsyncFunc") -> "AsyncFunc":
             for error_type in error_types:
@@ -29,12 +29,12 @@ class ErrorHandler(ABCErrorHandler):
         self.undefined_error_handler = handler
         return handler
 
-    def lookup_handler(self, for_type: Type[BaseException]) -> Optional["AsyncFunc"]:
+    def lookup_handler(self, for_type: Type[Exception]) -> Optional["AsyncFunc"]:
         for error_type in self.error_handlers:
             if issubclass(for_type, error_type):
                 return self.error_handlers[error_type]
 
-    async def handle(self, error: BaseException, *args, **kwargs) -> Any:
+    async def handle(self, error: Exception, *args, **kwargs) -> Any:
         handler = self.lookup_handler(type(error)) or self.undefined_error_handler
 
         if not handler:
@@ -52,7 +52,7 @@ class ErrorHandler(ABCErrorHandler):
         async def wrapper(*args, **kwargs) -> Any:
             try:
                 await func(*args, **kwargs)
-            except BaseException as error:
+            except Exception as error:
                 return await self.handle(error, *args, **kwargs)
 
         return wrapper
