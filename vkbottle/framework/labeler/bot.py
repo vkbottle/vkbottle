@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Type, Uni
 
 from vkbottle_types.events import GroupEventType
 
+from vkbottle.dispatch.rules import ABCRule
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.views.bot import BotHandlerBasement, BotMessageView, RawBotEventView
 
@@ -10,7 +11,6 @@ from .base import BaseLabeler
 if TYPE_CHECKING:
     from vkbottle_types.events import BaseGroupEvent
 
-    from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views.bot import ABCBotMessageView
     from vkbottle.tools.dev.mini_types.bot.message import MessageMin
 
