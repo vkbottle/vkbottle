@@ -28,9 +28,7 @@ class ForeignMessageMin(BaseForeignMessageMin):
 
     @property
     def is_mentioned(self) -> bool:
-        if not (self.mention and self.group_id):
-            return False
-        return self.mention.id == -self.group_id
+        return self.mention.id == -self.group_id if (self.mention and self.group_id) else False
 
 
 ForeignMessageMin.update_forward_refs()

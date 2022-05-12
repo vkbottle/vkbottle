@@ -111,6 +111,10 @@ class MessageEventMin(MessageEvent):
             )
             for k in deprecated:
                 data.pop(k)
+        if message is None:
+            message = ""
+        elif not isinstance(message, str):
+            message = str(message)
         stream = StringIO(message)
         while True:
             msg = stream.read(4096)

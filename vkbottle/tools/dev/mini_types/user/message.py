@@ -14,7 +14,7 @@ class MessageMin(BaseMessageMin):
 
     @property
     def is_mentioned(self) -> bool:
-        return False if not self.mention else self.mention.id == self.user_id
+        return self.mention.id == self.user_id if self.mention else False
 
     @root_validator(pre=True)
     def __foreign_messages(cls, values):

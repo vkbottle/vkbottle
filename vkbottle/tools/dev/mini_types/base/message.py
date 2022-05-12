@@ -183,7 +183,9 @@ class BaseMessageMin(MessagesMessage, ABC):
             )
             for k in deprecated:
                 data.pop(k)
-        if not isinstance(message, str):
+        if message is None:
+            message = ""
+        elif not isinstance(message, str):
             message = str(message)
         stream = StringIO(message)
         while True:

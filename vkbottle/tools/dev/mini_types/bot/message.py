@@ -36,9 +36,7 @@ class MessageMin(BaseMessageMin):
 
     @property
     def is_mentioned(self) -> bool:
-        if not (self.mention and self.group_id):
-            return False
-        return self.mention.id == -self.group_id
+        return self.mention.id == -self.group_id if (self.mention and self.group_id) else False
 
     async def get_full_message(self) -> "BaseMessageMin":
         if self._is_full:
