@@ -1,5 +1,5 @@
 import asyncio
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Optional, Type, TypeVar
 
 from aiohttp import ClientSession, TCPConnector
 
@@ -9,6 +9,8 @@ from .abc import ABCHTTPClient
 
 if TYPE_CHECKING:
     from aiohttp import ClientResponse
+
+TSingleAiohttpClient = TypeVar("TSingleAiohttpClient", bound="SingleAiohttpClient")
 
 
 class AiohttpClient(ABCHTTPClient):
@@ -78,10 +80,12 @@ class AiohttpClient(ABCHTTPClient):
 class SingleAiohttpClient(AiohttpClient):
     __instance__ = None
 
-    def __new__(cls, *args, **kwargs):
-        if cls.__instance__ is not None:
-            return cls.__instance__
-        return super().__new__(cls)
+    def __new__(
+        cls: Type[TSingleAiohttpClient], *args: Any, **kwargs: Any
+    ) -> TSingleAiohttpClient:
+        if cls.__instance__ is None:
+            cls.__instance__ = super().__new__(cls, *args, **kwargs)
+        return cls.__instance__
 
     def __aexit__(self, exc_type, exc_val, exc_tb):
         pass  # no need to close session in this case
