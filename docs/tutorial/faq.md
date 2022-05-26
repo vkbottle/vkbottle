@@ -75,12 +75,12 @@ asyncio.run(main())
 В асинхронном программировании блокирующие функции это все функции без конструкции **await**, работающие на принципе
 IO [(Input/Output)](https://en.wikipedia.org/wiki/Input/output). 
 
-Но не все блокирующие функции плохи, так как их использование неизбежно. Главное, этим не злоупотреблять. 
+Но не все блокирующие функции плохи, так как их использование неизбежно. Главное этим не злоупотреблять. 
 Если заблокируете выполнение функции надолго, то ваш бот зависнет, 
 потому что он не остановил функцию в нужный момент, чтобы выполнять другие сопрограммы.
 
-Конечно, Python не запрещает использовать синхронные решения в программировании асинхронных, но в этом нет смысла,
-так как пропадают все преимущества асинхрона. 
+Конечно, интерпретатор Python не запрещает использовать синхронные решения в программировании асинхронных, 
+но в этом нет смысла, так как пропадают все преимущества асинхрона. 
 
 Самые частые проблемы блокировок происходят из-за функций то типу `time.sleep()`.
 В **async** функциях используйте `asyncio.sleep()`.
@@ -98,10 +98,10 @@ await asyncio.sleep(10)
 Так же распространённой проблемой долгой блокировки является модуль **requests**, **urllib3** 
 и ему производные API-обёртки (**vk_api**, и тп). 
 
-Они хороши для **неасинхронного** программирования, но могут произойти ситуации, когда запрос-ответ может идти
-долго и бот из за этого зависнет. Используйте для этого модуль 
+Они хороши для **неасинхронного** программирования, но могут произойти ситуации, когда запрос и ответ с сервера 
+может идти долго и бот из за этого зависнет. Используйте для этого модуль 
 [aiohttp](https://docs.aiohttp.org/en/stable/client_quickstart.html), 
-он идёт "из коробки" с vkbottle или используйте встроенный AiohttpClient.
+он идёт зависимостью в vkbottle или используйте встроенный AiohttpClient.
 
 ```python
 # bad
@@ -116,6 +116,7 @@ async def send_httpbin_get() -> dict:
 # good, recommended
 # see https://vkbottle.readthedocs.io/ru/latest/low-level/http/http-client/
 from vkbottle.http import AiohttpClient
+
 
 async def send_httpbin_get() -> dict:
     http_client = AiohttpClient()
@@ -138,12 +139,12 @@ async def send_httpbin_get() -> dict:
 В Python написание async кода требует такого же освоения и понимания, как и других синтаксических конструкций.
 
 
-Подробнее о работе с asyncio читайте в [официальной документации.](https://docs.python.org/3/library/asyncio.html)
+Подробнее о работе с asyncio читайте в [официальной документации](https://docs.python.org/3/library/asyncio.html).
 
 Дополнительные материалы помимо официальной документации:
 * [В форме текста](https://www.google.com/search?q=python+asyncio)
 * [В форме текста, на русском](https://www.google.com/search?q=python+asyncio+lang%3Aru)
-* [В форме плейлистов с видео](https://www.youtube.com/results?search_query=python+asyncio&sp=EgIQAw%253D%253D)
+* [В форме плейлистов youtube](https://www.youtube.com/results?search_query=python+asyncio&sp=EgIQAw%253D%253D)
 
 ## Какие методы присутствуют во фреймворке
 
@@ -157,8 +158,8 @@ from vkbottle.api import API
 
 api = API("token")
 
-# https://api.vk.com/method/account.unban
-await api.account.unban(owner_id=1)
+# https://api.vk.com/method/account.ban
+await api.account.ban(owner_id=1)
 
 
 # https://api.vk.com/method/account.getBanned
@@ -179,18 +180,21 @@ await api.account.get_banned(offset=0, count=1)
 Самый простой способ воспользоваться сервисом [vkhost.github.io](https://vkhost.github.io)
 
 ## Как получить токен для бота
+![bot_methods](assets/bot_methods.jpg "bot methods")
+У бота (токена от сообщества) не все методы доступны в отличие от получения токена через пользователя, учитывайте это. 
+На картинке красным выделен один из методов, который будет работать в ботах.
+
 [Чат бот Быстрый старт](https://dev.vk.com/api/bots/getting-started)
 
 ## Как отправить метод, которого нет во фреймворке
 
 Если очень нужно использовать то, чего во фреймворке и официальной документации нет, 
-используйте `API.request` или `bot.api.request` методы. 
+используйте `API.request`, `Bot.api.request` или `Message.ctx_api.request` методы. 
 
-После их выполнения вернёт словарь, а не типизированный объект, учитывайте это.
+После их выполнения вернёт словарь с json ответом, а не типизированный объект, учитывайте это.
 
-Userbot:
+Код ниже показывает простой пример использования VK API. Он выполнит заданный код и завершает работу.
 ```python
-# userbot
 import asyncio
 
 from vkbottle.api import API
@@ -211,19 +215,17 @@ async def main():
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
 ```
-![bot_methods](assets/bot_methods.jpg "api highlighting")
-У бота не все методы доступны в отличие от Userbot, учитывайте это.
+Для бота необходимо инициализировать класс **Bot**. В нём присутствует класс **API**, его дополнительно
+**инициализировать не надо**.
 
-Bot:
 ```python
 import asyncio
-from vkbottle.bot import Bot, Message
+from vkbottle.bot import Bot
 
 bot = Bot("token")
 
 async def main():
     print(await bot.api.request("users.get", {}))  # Single request
-
     # Multiple request for one session
     async for response in bot.api.request_many(
         [bot.api.APIRequest("users.get", {}), bot.api.APIRequest("groups.get", {})]
@@ -233,6 +235,25 @@ async def main():
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
+```
+
+Также доступ к классу **API** можно получить через объект Message с помощью параметра `Message.ctx_api`
+
+```python
+from vkbottle.bot import Bot, Message
+
+bot = Bot(token="token")
+admin_ids = [1, 100]
+
+
+@bot.on.message(text="админы")
+async def who_admins(message: Message):
+    admins = [f"{adm.first_name} {adm.last_name}" for adm in (await message.ctx_api.users.get(admin_ids))]
+    print((await message.ctx_api.request("users.get", {"user_ids": admin_ids})))
+    await message.answer(f"Администраторы этого бота: {' '.join(admins)}")
+
+        
+bot.run_forever()
 ```
 
 ## Pydantic.error_wrappers.ValidationError
@@ -247,4 +268,4 @@ loop.run_until_complete(main())
 pip install git+https://github.com/vkbottle/types -U
 ```
 
-Если и это не помогло, пишите issue (в vkbottle, __не types__) или в чат ВК/Телеграмм.
+Если и это не помогло, пишите issue (в **vkbottle**, __не types__) или в чат ВК/Телеграмм.
