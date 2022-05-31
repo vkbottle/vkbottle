@@ -3,6 +3,7 @@ from typing import Any, Callable
 
 import pytest
 import vbml
+from vkbottle_types.methods.base_category import BaseCategory
 
 from vkbottle import (
     API,
@@ -79,12 +80,36 @@ class SecondMockState(BaseStateGroup):
     MOCK = 1
 
 
+class MessagesCategory(BaseCategory):
+    async def send(self, **data: Any) -> Any:
+        return (await self.api.request("messages.send", data))["response"]
+
+
+class GroupsCategory(BaseCategory):
+    async def get_by_id(self, **data: Any) -> Any:
+        return (await self.api.request("groups.getById", data))["response"]
+
+    async def get_long_poll_server(self, **data: Any) -> Any:
+        return (await self.api.request("groups.getLongPollServer", data))["response"]
+
+
 def set_http_callback(api: API, callback: Callable[[str, str, dict], Any]):
     api.http_client = MockedClient(callback=callback)
 
 
-@pytest.mark.asyncio
 async def test_bot_polling():
+    class TestApi(API):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+        @property
+        def groups(self):
+            return GroupsCategory(self)
+
+        @property
+        def messages(self):
+            return MessagesCategory(self)
+
     def callback(method: str, url: str, data: dict):
         if "groups.getById" in url:
             return {"response": [{"id": 1}]}
@@ -93,9 +118,12 @@ async def test_bot_polling():
         elif "!SERVER!" in url:
             return EXAMPLE_EVENT
         elif "messages.send" in url:
-            return json.dumps({"response": {**data, **{"r": 1}}})
+            _r = {**data, **{"r": 1}}
+            if "peer_ids" in data:
+                return {"response": [_r]}
+            return {"response": _r}
 
-    bot = Bot("token")
+    bot = Bot(api=TestApi("token"))
     set_http_callback(bot.api, callback)
 
     @bot.labeler.raw_event(GroupEventType.WALL_POST_NEW, GroupTypes.WallPostNew)
@@ -107,9 +135,13 @@ async def test_bot_polling():
     async def message_handler(message: Message):
         assert message.id == 100
         assert message.from_id == 1
-        assert await message.answer() == {"peer_id": message.peer_id, "r": 1, "random_id": 0}
+        assert await message.answer() == {
+            "peer_ids": f"{message.peer_id}",
+            "r": 1,
+            "random_id": 0,
+        }
         assert await message.answer(some_unsigned_param="test") == {
-            "peer_id": message.peer_id,
+            "peer_ids": f"{message.peer_id}",
             "random_id": 0,
             "some_unsigned_param": "test",
             "r": 1,

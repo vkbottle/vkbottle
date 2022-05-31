@@ -11,7 +11,7 @@ from vkbottle_types.objects import (
     MessagesMessage,
     PhotosPhoto,
     UsersUserFull,
-    VideoVideo,
+    VideoVideoFull,
     WallWallComment,
     WallWallpostFull,
 )
@@ -37,6 +37,9 @@ class BaseMessageMin(MessagesMessage, ABC):
     _mention: Optional[Mention] = None
 
     __replace_mention = root_validator(replace_mention_validator, allow_reuse=True, pre=False)  # type: ignore
+
+    class Config:
+        frozen = False
 
     @property
     def ctx_api(self) -> Union["ABCAPI", "API"]:
@@ -118,7 +121,7 @@ class BaseMessageMin(MessagesMessage, ABC):
             return None
         return [attachment.photo for attachment in self.attachments if attachment.photo]
 
-    def get_video_attachments(self) -> Optional[List["VideoVideo"]]:
+    def get_video_attachments(self) -> Optional[List["VideoVideoFull"]]:
         if self.attachments is None:
             return None
         return [attachment.video for attachment in self.attachments if attachment.video]

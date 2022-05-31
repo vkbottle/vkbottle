@@ -1,4 +1,4 @@
-from asyncio import AbstractEventLoop, get_event_loop
+import asyncio
 from typing import TYPE_CHECKING, NoReturn, Optional, Tuple
 
 from vkbottle.api import API
@@ -27,7 +27,7 @@ class Bot(ABCFramework):
         api: Optional["ABCAPI"] = None,
         polling: Optional["ABCPolling"] = None,
         callback: Optional["ABCCallback"] = None,
-        loop: Optional[AbstractEventLoop] = None,
+        loop: Optional[asyncio.AbstractEventLoop] = None,
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCLabeler"] = None,
@@ -116,11 +116,11 @@ class Bot(ABCFramework):
         await self.router.route(event, self.callback.api)
 
     @property
-    def loop(self) -> AbstractEventLoop:
+    def loop(self) -> asyncio.AbstractEventLoop:
         if self._loop is None:
-            self._loop = get_event_loop()
+            self._loop = asyncio.get_event_loop()
         return self._loop
 
     @loop.setter
-    def loop(self, new_loop: AbstractEventLoop):
+    def loop(self, new_loop: asyncio.AbstractEventLoop):
         self._loop = new_loop

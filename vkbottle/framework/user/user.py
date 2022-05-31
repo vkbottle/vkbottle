@@ -69,8 +69,8 @@ class User(ABCFramework):
         cls: Type["User"],
         login: str,
         password: str,
-        client_id: int = None,
-        client_secret: str = None,
+        client_id: Optional[int] = None,
+        client_secret: Optional[str] = None,
         **kwargs,
     ):
         loop = get_event_loop()
@@ -90,8 +90,8 @@ class User(ABCFramework):
         cls: Type["User"],
         login: str,
         password: str,
-        client_id: int = None,
-        client_secret: str = None,
+        client_id: Optional[int] = None,
+        client_secret: Optional[str] = None,
         **kwargs,
     ):
         token = await UserAuth(client_id, client_secret).get_token(login, password)

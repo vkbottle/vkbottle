@@ -20,7 +20,7 @@ class ForeignMessageMin(BaseForeignMessageMin):
         for foreign_message in foreign_messages:
             foreign_message.unprepared_ctx_api = values["unprepared_ctx_api"]
             foreign_message.replace_mention = values["replace_mention"]
-            foreign_message.user_id = values["user_id"]
+            foreign_message.user_id = values.get("user_id")
         return values
 
     @property

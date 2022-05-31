@@ -1,9 +1,9 @@
-import asyncio
 from typing import TYPE_CHECKING, Any, Optional, Type, TypeVar
 
 from aiohttp import ClientSession, TCPConnector
 
 from vkbottle.modules import json as json_module
+from vkbottle.modules import logger
 
 from .abc import ABCHTTPClient
 
@@ -16,18 +16,18 @@ TSingleAiohttpClient = TypeVar("TSingleAiohttpClient", bound="SingleAiohttpClien
 class AiohttpClient(ABCHTTPClient):
     def __init__(
         self,
-        loop: Optional[asyncio.AbstractEventLoop] = None,
         session: Optional[ClientSession] = None,
         json_processing_module: Optional[Any] = None,
         optimize: bool = False,
         **kwargs,
     ):
-        self.loop = loop or asyncio.get_event_loop()
         self.json_processing_module = json_processing_module or json_module
 
         if optimize:
             kwargs["skip_auto_headers"] = {"User-Agent"}
             kwargs["raise_for_status"] = True
+        if kwargs.pop("loop", None):
+            logger.warning("loop argument is deprecated")
 
         self.session = session
 

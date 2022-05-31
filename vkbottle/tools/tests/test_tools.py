@@ -253,7 +253,7 @@ def test_run_multibot(mocker: MockerFixture):
     mocker.patch("asyncio.iscoroutine", lambda _: True)
     mocker.patch(
         "vkbottle.tools.dev.loop_wrapper.LoopWrapper.run_forever",
-        lambda s, l: bot_apis.extend(s.tasks),
+        lambda s: bot_apis.extend(s.tasks),
     )
 
     run_multibot(Bot(), (API("1"), API("2"), API("3")))
