@@ -30,11 +30,11 @@ class BlockingRequestRescheduler(ABCRequestRescheduler):
 
         attempt_number = 1
         while not isinstance(recent_response, dict):
-            logger.info(f"Attempt number {attempt_number}. Making request...")
+            logger.info("Attempt number %s. Making request...", attempt_number)
             blocking_sleep(self.delay * attempt_number)
             recent_response = await ctx_api.request(method, data)
             attempt_number += 1
-            logger.debug(f"Attempt succeed? - {isinstance(recent_response, dict)}")
+            logger.debug("Attempt succeed? - %s", isinstance(recent_response, dict))
 
-        logger.info(f"Finally succeed after {self.delay ** attempt_number} seconds")
+        logger.info("Finally succeed after %s seconds", self.delay * attempt_number)
         return recent_response
