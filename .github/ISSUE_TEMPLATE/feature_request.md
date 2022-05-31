@@ -3,7 +3,7 @@ name: Предложение новой функции
 about: Новая функциональность для фреймворка
 title: 'Предложение: {тема}'
 labels: enhancement
-assignees: ''
+assignees: 'FeeeeK'
 
 ---
 

@@ -3,7 +3,7 @@ name: Баг
 about: Сообщение о произошедшем баге во время работы с библиотекой
 title: 'Баг: {краткое описание}'
 labels: bug
-assignees: 'timoniq'
+assignees: 'FeeeeK'
 
 ---
 
@@ -21,9 +21,9 @@ assignees: 'timoniq'
 <!-- Узнать версии установленных библиотек можно командой pip freeze -->
 
 ---
-vkbottle: 3.0
-vkbottle-types: 0.1.18
-OS: Windows 7
+vkbottle: 4.3
+vkbottle-types: 5.131.146
+OS: Windows 10
 
 ---
 

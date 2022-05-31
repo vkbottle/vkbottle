@@ -3,7 +3,7 @@ name: Вопрос по библиотеке
 about: Сообщение о произошедшем баге во время работы с библиотекой
 title: 'Вопрос: {тема}'
 labels: question
-assignees: 'timoniq'
+assignees: 'FeeeeK'
 
 ---
 
