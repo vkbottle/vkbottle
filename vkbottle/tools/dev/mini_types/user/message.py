@@ -1,16 +1,18 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import root_validator
 
 from ..base import BaseMessageMin
+from .foreign_message import ForeignMessageMin
 
 if TYPE_CHECKING:
-
     from vkbottle.api import ABCAPI
 
 
 class MessageMin(BaseMessageMin):
     user_id: Optional[int] = None
+    reply_message: Optional["ForeignMessageMin"] = None
+    fwd_messages: Optional[List["ForeignMessageMin"]] = []
 
     @property
     def is_mentioned(self) -> bool:
