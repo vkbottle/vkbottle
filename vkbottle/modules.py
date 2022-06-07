@@ -45,7 +45,7 @@ json: JSONModule = choice_in_order(
 logging_module = choice_in_order(["loguru"], do_import=True, default="logging")
 
 if logging_module.__name__ == "loguru":
-    logger: Logger = getattr(logging_module, "logger")
+    logger: Logger = getattr(logging_module, "logger")  # type: ignore
 
 elif logging_module.__name__ == "logging":
 
@@ -57,7 +57,7 @@ elif logging_module.__name__ == "logging":
         def __str__(self):
             return self.fmt.format(*self.args)
 
-    class StyleAdapter(logging_module.LoggerAdapter):
+    class StyleAdapter(logging_module.LoggerAdapter):  # type: ignore
         def __init__(self, logger, extra=None):
             super().__init__(logger, extra or {})
 
@@ -66,4 +66,4 @@ elif logging_module.__name__ == "logging":
                 msg, kwargs = self.process(msg, kwargs)
                 self.logger._log(level, LogMessage(msg, args), (), **kwargs)
 
-    logger: Logger = StyleAdapter(logging_module.getLogger("vkbottle"))
+    logger: Logger = StyleAdapter(logging_module.getLogger("vkbottle"))  # type: ignore
