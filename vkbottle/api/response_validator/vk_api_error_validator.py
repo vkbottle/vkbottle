@@ -32,7 +32,7 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
                 errors = [item["error"] for item in response["response"] if "error" in item]
                 if errors:
                     logger.debug(
-                        f"{len(errors)} API error(s) in response wasn't handled: {errors}"
+                        "{} API error(s) in response wasn't handled: {}", len(errors), errors
                     )
             return response
 

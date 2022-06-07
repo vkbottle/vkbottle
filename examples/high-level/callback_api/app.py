@@ -22,12 +22,12 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
 
     try:
         data = await req.json()
-    except:
+    except Exception:
         logger.warning("Empty request")
         return Response("not today", status_code=403)
 
     if data["type"] == "confirmation":
-        logger.info(f"Send confirmation token: {confirmation_code}")
+        logger.info("Send confirmation token: {}", confirmation_code)
         return Response(confirmation_code)
 
     # If the secrets match, then the message definitely came from our bot

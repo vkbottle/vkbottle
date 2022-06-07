@@ -40,7 +40,7 @@ class UserBlueprint(ABCBlueprint):
 
     def load(self, framework: "User") -> "UserBlueprint":
         framework.labeler.load(self.labeler)  # type: ignore
-        logger.debug(f"Blueprint {self.name!r} loaded")
+        logger.debug("Blueprint {!r} loaded", self.name)
         return self.construct(framework.api, framework.polling, framework.state_dispenser)
 
     @property

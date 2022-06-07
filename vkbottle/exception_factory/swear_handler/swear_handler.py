@@ -35,12 +35,14 @@ def swear(
                     return await exception_handler(e, *args, **kwargs)
                 elif just_log:
                     logger.error(
-                        f"{func.__name__} (handling with swear) has thrown an exception: \n\n{traceback.format_exc()}"
+                        "{} (handling with swear) has thrown an exception: \n\n{}",
+                        func.__name__,
+                        traceback.format_exc(),
                     )
                 elif just_return:
                     return e
             finally:
-                logger.debug(f"Function {func.__name__} was handled with swear")
+                logger.debug("Function {} was handled with swear", func.__name__)
 
         def synchronous_wrapper(*args, **kwargs):
             try:
@@ -50,12 +52,14 @@ def swear(
                     return exception_handler(e, *args, **kwargs)
                 elif just_log:
                     logger.error(
-                        f"{func.__name__} (handling with swear) has thrown an exception: \n\n{traceback.format_exc()}"
+                        "{} (handling with swear) has thrown an exception: \n\n{}",
+                        func.__name__,
+                        traceback.format_exc(),
                     )
                 elif just_return:
                     return e
             finally:
-                logger.debug(f"Function {func.__name__} was handled with swear")
+                logger.debug("Function {} was handled with swear", func.__name__)
 
         if iscoroutinefunction(func) and iscoroutinefunction(exception_handler):
             return asynchronous_wrapper
