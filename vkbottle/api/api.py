@@ -70,7 +70,7 @@ class API(ABCAPI):
                 data=data,  # type: ignore
                 params={"access_token": token, "v": self.API_VERSION},
             )
-        logger.debug("Request %s with %s data returned %s", method, data, response)
+        logger.debug("Request {} with {} data returned {}", method, data, response)
         return await self.validate_response(method, data, response)  # type: ignore
 
     async def request_many(
@@ -86,7 +86,7 @@ class API(ABCAPI):
                     data=data,  # noqa
                     params={"access_token": token, "v": self.API_VERSION},  # noqa
                 )
-            logger.debug("Request %s with %s data returned %s", method, data, response)
+            logger.debug("Request {} with {} data returned {}", method, data, response)
             yield await self.validate_response(method, data, response)  # type: ignore
 
     async def validate_response(

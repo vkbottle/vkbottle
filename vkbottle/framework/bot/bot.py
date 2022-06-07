@@ -76,10 +76,10 @@ class Bot(ABCFramework):
 
     async def run_polling(self, custom_polling: Optional["ABCPolling"] = None):
         polling = custom_polling or self.polling
-        logger.info("Starting polling for %r", polling.api)
+        logger.info("Starting polling for {!r}", polling.api)
 
         async for event in polling.listen():
-            logger.debug("New event was received: %s", event)
+            logger.debug("New event was received: {}", event)
             for update in event["updates"]:
                 if not self.task_each_event:
                     await self.router.route(update, polling.api)

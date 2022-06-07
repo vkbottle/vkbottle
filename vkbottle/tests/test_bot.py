@@ -136,12 +136,12 @@ async def test_bot_polling():
         assert message.id == 100
         assert message.from_id == 1
         assert await message.answer() == {
-            "peer_ids": f"{message.peer_id}",
+            "peer_ids": str(message.peer_id),
             "r": 1,
             "random_id": 0,
         }
         assert await message.answer(some_unsigned_param="test") == {
-            "peer_ids": f"{message.peer_id}",
+            "peer_ids": str(message.peer_id),
             "random_id": 0,
             "some_unsigned_param": "test",
             "r": 1,

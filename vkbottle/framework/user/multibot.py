@@ -20,7 +20,7 @@ def run_multibot(
     :param polling_type: polling type to be ran
     """
     for i, api_instance in enumerate(apis):
-        logger.debug("Connecting API (index: %s)", i)
+        logger.debug("Connecting API (index: {})", i)
         polling = polling_type().construct(api_instance)
         api_instance.http_client = SingleAiohttpClient()
         user.loop_wrapper.add_task(user.run_polling(custom_polling=polling))

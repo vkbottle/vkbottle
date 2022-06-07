@@ -23,5 +23,5 @@ class ABCStateDispenser(ABC):
         if peer_id is None:
             return None
 
-        logger.debug("Casting state for peer_id %s", peer_id)
+        logger.debug("Casting state for peer_id {}", peer_id)
         return await self.get(peer_id)

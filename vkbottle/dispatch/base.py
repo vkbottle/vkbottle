@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class Router(ABCRouter):
     async def route(self, event: dict, ctx_api: "ABCAPI") -> None:
-        logger.debug("Routing update %s", event)
+        logger.debug("Routing update {}", event)
 
         for view in self.views.values():
             try:
