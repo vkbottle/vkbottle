@@ -1,7 +1,7 @@
 import os
 import sys
 
-from watchgod import awatch
+from watchfiles import awatch
 
 from vkbottle.modules import logger
 
