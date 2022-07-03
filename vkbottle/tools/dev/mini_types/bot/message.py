@@ -47,11 +47,11 @@ class MessageMin(BaseMessageMin):
                 conversation_message_ids=[self.conversation_message_id],  # type: ignore
             )
         ).items[0]
-        if self.is_cropped:
-            message.is_cropped = False
         self.__dict__.update(message.__dict__)
         super().__init__(**self.dict())
         self.__dict__["_is_full"] = True
+        if self.is_cropped:
+            self.__dict__["is_cropped"] = False
         return self
 
     def get_attachment_strings(self) -> Optional[List[str]]:

@@ -48,11 +48,13 @@ if logging_module.__name__ == "loguru":
     logger: Logger = getattr(logging_module, "logger")  # type: ignore
 
 elif logging_module.__name__ == "logging":
+    import inspect
 
     class LogMessage:
-        def __init__(self, fmt, args):
+        def __init__(self, fmt, args, kwargs):
             self.fmt = fmt
             self.args = args
+            self.kwargs = kwargs
 
         def __str__(self):
             return self.fmt.format(*self.args)
@@ -63,7 +65,18 @@ elif logging_module.__name__ == "logging":
 
         def log(self, level, msg, /, *args, **kwargs):
             if self.isEnabledFor(level):
-                msg, kwargs = self.process(msg, kwargs)
-                self.logger._log(level, LogMessage(msg, args), (), **kwargs)
+                msg, args, kwargs = self.process(msg, args, kwargs)
+                self.logger._log(level, msg, args, **kwargs)
+
+        def process(self, msg, args, kwargs):
+            log_kwargs = {
+                key: kwargs[key]
+                for key in inspect.getargspec(self.logger._log).args[1:]
+                if key in kwargs
+            }
+            if isinstance(msg, str):
+                msg = LogMessage(msg, args, kwargs)
+                args = ()
+            return msg, args, log_kwargs
 
     logger: Logger = StyleAdapter(logging_module.getLogger("vkbottle"))  # type: ignore

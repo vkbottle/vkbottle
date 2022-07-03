@@ -65,7 +65,7 @@ class BaseMiddleware(ABC, Generic[T]):
         raise MiddlewareError(description)
 
     def send(self, context_update: Optional[dict] = None) -> None:
-        """Validate new contxet update data if needed"""
+        """Validate new context update data if needed"""
         if context_update is not None:
             if not isinstance(context_update, dict):
                 raise ValueError("Context update value should be an instance of dict")
