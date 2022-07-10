@@ -18,39 +18,24 @@ class JSONModule(Protocol):
         ...
 
 
-class Logger(Protocol):
-    def info(self, msg, *args, **kwargs):
-        ...
-
-    def debug(self, msg, *args, **kwargs):
-        ...
-
-    def warning(self, msg, *args, **kwargs):
-        ...
-
-    def error(self, msg, *args, **kwargs):
-        ...
-
-    def critical(self, msg, *args, **kwargs):
-        ...
-
-    def exception(self, msg, *args, **kwargs):
-        ...
-
-    def log(self, level, msg, *args, **kwargs):
-        ...
-
-
 json: JSONModule = choice_in_order(
     ["ujson", "hyperjson", "orjson"], do_import=True, default="json"
 )
-logging_module = choice_in_order(["loguru"], do_import=True, default="logging")
+logging_module = choice_in_order(["loguru"], default="logging")
 
-if logging_module.__name__ == "loguru":
-    logger: Logger = getattr(logging_module, "logger")  # type: ignore
+if logging_module == "loguru":
+    from loguru import logger  # type: ignore
+else:
+    """
+    This is workaround for lazy formating with {} in logging.
 
-elif logging_module.__name__ == "logging":
+    About:
+    https://docs.python.org/3/howto/logging-cookbook.html#use-of-alternative-formatting-styles
+    """
     import inspect
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG)
 
     class LogMessage:
         def __init__(self, fmt, args, kwargs):
@@ -61,7 +46,7 @@ elif logging_module.__name__ == "logging":
         def __str__(self):
             return self.fmt.format(*self.args)
 
-    class StyleAdapter(logging_module.LoggerAdapter):  # type: ignore
+    class StyleAdapter(logging.LoggerAdapter):
         def __init__(self, logger, extra=None):
             super().__init__(logger, extra or {})
 
@@ -81,10 +66,14 @@ elif logging_module.__name__ == "logging":
                 args = ()
             return msg, args, log_kwargs
 
-    logger: Logger = StyleAdapter(logging_module.getLogger("vkbottle"))  # type: ignore
+    logger = StyleAdapter(logging.getLogger("vkbottle"))  # type: ignore
+    logger.info(
+        "logging is used as the default logger, but we recommend using loguru. "
+        "It may also become a required dependency in future releases."
+    )
 
 if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
-    asyncio.get_event_loop_policy(), asyncio.WindowsProactorEventLoopPolicy
+    asyncio.get_event_loop_policy(), asyncio.WindowsProactorEventLoopPolicy  # type: ignore
 ):
     """
     This is a workaround for a bug in ProactorEventLoop:
@@ -93,8 +82,8 @@ if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
     This also can be fixed by using loop.run_until_complete instead of asyncio.run
     but I like to use asyncio.run because it's more readable.
     """
-    from functools import wraps
     from asyncio.proactor_events import _ProactorBasePipeTransport, _ProactorBaseWritePipeTransport
+    from functools import wraps
 
     def silence_exception(func):
         @wraps(func)
@@ -110,7 +99,7 @@ if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
 
         return wrapper
 
-    _ProactorBasePipeTransport.__del__ = silence_exception(_ProactorBasePipeTransport.__del__)
+    _ProactorBasePipeTransport.__del__ = silence_exception(_ProactorBasePipeTransport.__del__)  # type: ignore
     _ProactorBaseWritePipeTransport._loop_writing = silence_exception(  # type: ignore
         _ProactorBaseWritePipeTransport._loop_writing  # type: ignore
     )
