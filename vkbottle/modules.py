@@ -1,3 +1,5 @@
+import asyncio
+
 from choicelib import choice_in_order
 from typing_extensions import Protocol
 
@@ -80,3 +82,35 @@ elif logging_module.__name__ == "logging":
             return msg, args, log_kwargs
 
     logger: Logger = StyleAdapter(logging_module.getLogger("vkbottle"))  # type: ignore
+
+if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
+    asyncio.get_event_loop_policy(), asyncio.WindowsProactorEventLoopPolicy
+):
+    """
+    This is a workaround for a bug in ProactorEventLoop:
+    https://github.com/aio-libs/aiohttp/issues/4324
+
+    This also can be fixed by using loop.run_until_complete instead of asyncio.run
+    but I like to use asyncio.run because it's more readable.
+    """
+    from functools import wraps
+    from asyncio.proactor_events import _ProactorBasePipeTransport, _ProactorBaseWritePipeTransport
+
+    def silence_exception(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except (AttributeError, RuntimeError) as e:
+                if str(e) not in (
+                    "'NoneType' object has no attribute 'send'",
+                    "Event loop is closed",
+                ):
+                    raise
+
+        return wrapper
+
+    _ProactorBasePipeTransport.__del__ = silence_exception(_ProactorBasePipeTransport.__del__)
+    _ProactorBaseWritePipeTransport._loop_writing = silence_exception(  # type: ignore
+        _ProactorBaseWritePipeTransport._loop_writing  # type: ignore
+    )
