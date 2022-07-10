@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "vkbottle"
-version = "4.3.5"
+version = "4.3.6"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
-authors = ["timoniq", "FeeeeK"]
+authors = ["timoniq"]
+maintainers = ["FeeeeK"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/vkbottle/vkbottle"

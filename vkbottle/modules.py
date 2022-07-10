@@ -63,7 +63,7 @@ elif logging_module.__name__ == "logging":
         def __init__(self, logger, extra=None):
             super().__init__(logger, extra or {})
 
-        def log(self, level, msg, /, *args, **kwargs):
+        def log(self, level, msg, *args, **kwargs):
             if self.isEnabledFor(level):
                 msg, args, kwargs = self.process(msg, args, kwargs)
                 self.logger._log(level, msg, args, **kwargs)
