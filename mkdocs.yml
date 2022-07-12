@@ -75,7 +75,7 @@ nav:
       - 4.1: whats_new/4.1.md
       - 4.2: whats_new/4.2.md
       - 4.3: whats_new/4.3.md
-  - Почему vkbottle?: why-vkbottle.md
+  - Почему vkbottle?: why_vkbottle.md
 
 theme:
   name: material
