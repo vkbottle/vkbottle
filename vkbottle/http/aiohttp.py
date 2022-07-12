@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Optional, Type, TypeVar
 
-from aiohttp import ClientSession, TCPConnector
+from aiohttp import ClientSession
 
 from vkbottle.modules import json as json_module
 from vkbottle.modules import logger
@@ -19,26 +19,31 @@ class AiohttpClient(ABCHTTPClient):
         session: Optional[ClientSession] = None,
         json_processing_module: Optional[Any] = None,
         optimize: bool = False,
-        **kwargs,
+        **session_params,
     ):
-        self.json_processing_module = json_processing_module or json_module
+        self.json_processing_module = (
+            json_processing_module or session_params.pop("json_serialize", None) or json_module
+        )
 
         if optimize:
-            kwargs["skip_auto_headers"] = {"User-Agent"}
-            kwargs["raise_for_status"] = True
-        if kwargs.pop("loop", None):
+            session_params["skip_auto_headers"] = {"User-Agent"}
+            session_params["raise_for_status"] = True
+        if session_params.pop("loop", None):
             logger.warning("loop argument is deprecated")
 
         self.session = session
 
-        self._session_params = kwargs
+        self._session_params = session_params
 
     async def request_raw(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
+        self,
+        url: str,
+        method: str = "GET",
+        data: Optional[dict] = None,
+        **kwargs,
     ) -> "ClientResponse":
         if not self.session:
             self.session = ClientSession(
-                connector=TCPConnector(ssl=False),
                 json_serialize=self.json_processing_module.dumps,
                 **self._session_params,
             )
@@ -47,7 +52,11 @@ class AiohttpClient(ABCHTTPClient):
             return response
 
     async def request_json(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
+        self,
+        url: str,
+        method: str = "GET",
+        data: Optional[dict] = None,
+        **kwargs,
     ) -> dict:
         response = await self.request_raw(url, method, data, **kwargs)
         return await response.json(
@@ -55,13 +64,21 @@ class AiohttpClient(ABCHTTPClient):
         )
 
     async def request_text(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
+        self,
+        url: str,
+        method: str = "GET",
+        data: Optional[dict] = None,
+        **kwargs,
     ) -> str:
         response = await self.request_raw(url, method, data, **kwargs)
         return await response.text(encoding="utf-8")
 
     async def request_content(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
+        self,
+        url: str,
+        method: str = "GET",
+        data: Optional[dict] = None,
+        **kwargs,
     ) -> bytes:
         response = await self.request_raw(url, method, data, **kwargs)
         return response._body
