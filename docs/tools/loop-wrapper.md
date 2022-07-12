@@ -64,8 +64,11 @@ async def delayed_task():
     print("I'll print this after 10 seconds!")
 ```
 
-# Запуск
+## Запуск
 
 ```python
 lw.run_forever()
 ```
+
+!!! warning "Внимание"
+    Если вы используете `LoopWrapper` вместе с `Bot`, то учтите, то `Bot` уже имеет свой `LoopWrapper`, который доступен по пути `bot.loop_wrapper` и запускается при вызове `bot.run_forever()`

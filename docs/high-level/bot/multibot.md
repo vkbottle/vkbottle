@@ -4,9 +4,13 @@
 
 Пример мультибота можно увидеть [здесь](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/multibot.py)
 
-# run_multibot(bot, apis, polling_type=BotPolling)
+## Запуск
 
-Для запуска такого бота вам понадобится `run_multibot`, он создает запуски лонгпола как таски и навсегда запускает `event loop`. Его можно импортировать из `vkbottle.bot`
+Для запуска такого бота вам понадобится `run_multibot`, он добавляет `run_polling` в таски и запускает `event loop`. Его можно импортировать из `vkbottle.bot`
+
+```python
+run_multibot(bot, apis, polling_type=BotPolling)
+```
 
 Основному боту передавать токен для создания API не нужно
 

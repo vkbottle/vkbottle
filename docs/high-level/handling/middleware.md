@@ -21,6 +21,7 @@
 * `handlers: List[ABCHandler]` (все хендлеры что были исполнены)
 
 Тип ивента, который будет обрабатывать мидлварь, указывается в дженерике конструктора мидлвари. Например:
+
 ```python
 from vkbottle import BaseMiddleware
 from vkbottle.bot import Message
@@ -28,7 +29,7 @@ from vkbottle.bot import Message
 class MyMiddleware(BaseMiddleware[Message]):
     ...
 ```
-Для message_view это Message (разный для `Bot` и `User`), а для raw_event_view словарь (для `Bot`) или лист (для `User`)
 
+Для message_view это Message, а для raw_event_view словарь.
 
 [Больше примеров можно посмотреть здесь](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/middleware_example.py)

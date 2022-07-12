@@ -10,7 +10,10 @@ extra:
   social:
     - icon: fontawesome/brands/telegram
       link: https://t.me/vkbottle_ru
-      name: our chat
+      name: our Telegram chat
+    - icon: fontawesome/brands/vk
+      link: https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj
+      name: our VK chat
 
 nav:
   - Хаб: index.md
@@ -23,20 +26,23 @@ nav:
       - Мидлвари и return менеджеры: tutorial/middlewares-return-managers.md
       - Обработка ошибок: tutorial/error-handling.md
       - Подключение Callback API: tutorial/callback-bot.md
+      - FAQ: tutorial/faq.md
+      - Рекомендуемые IDE: tutorial/recommended-ide.md
   - Документация:
       Интерфейсы высокого уровня:
         Интерфейс ботов:
           Bot: high-level/bot/bot.md
+          User: high-level/user/user.md
           Labeler: high-level/bot/labeler.md
-          Multibot: high-level/bot/multibot.md
           Blueprint: high-level/bot/blueprint.md
+          Multibot: high-level/bot/multibot.md
         Хендлинг:
           Handler: high-level/handling/handler.md
           View: high-level/handling/view.md
           Return Manager: high-level/handling/return-manager.md
           State Dispenser: high-level/handling/state-dispenser.md
           Middleware: high-level/handling/middleware.md
-          Routing: high-level/routing/index.md
+          Rules: high-level/routing/rules.md
       Интерфейсы низкого уровня:
         API:
           Работа с API: low-level/api/api.md
@@ -66,6 +72,10 @@ nav:
       Кастомизация зависимостей: modules.md
   - Что нового:
       - 4.0: whats_new/4.0.md
+      - 4.1: whats_new/4.1.md
+      - 4.2: whats_new/4.2.md
+      - 4.3: whats_new/4.3.md
+  - Почему vkbottle?: why-vkbottle.md
 
 theme:
   name: material
@@ -94,6 +104,7 @@ theme:
 
 markdown_extensions:
   - admonition
+  - md_in_html
   - pymdownx.magiclink
   - pymdownx.superfences
   - pymdownx.snippets:

@@ -2,17 +2,18 @@
 
 StateDispenser'ы нужны, чтобы организовывать веточную систему организации пользователя. Сложное меню - стейты, квиз - стейты, какая-то игра - стейты.
 
-StateDispenser должен имплементировать следующие методы:
+## StateDispenser имееет следующие методы
 
-## get
+### get
 
-Возвращает `StatePeer` (если запись на запрошенный peer_id существует) или `None` (если нет). На вход получает `peer_id`
+Возвращает `StatePeer` (если запись на запрошенный peer_id существует) или `None` (если нет).<br/>
+На вход получает `peer_id`
 
-## set
+### set
 
 Делает запись. На вход получает `peer_id` и `state`.
 
-## delete
+### delete
 
 Удаляет запись. На вход получает `peer_id`
 
@@ -22,7 +23,9 @@ StateDispenser должен имплементировать следующие 
 
 Чтобы задать стейт пользователю, достаточно воспользоваться вышеупомянутым методом `set`
 
-Ловить пользователей со стейтами в хендлерами можно с помощью `StateRule`. Пример:
+Ловить пользователей со стейтами в хендлерами можно с помощью `StateRule`.
+
+Пример:
 
 ```python
 from vkbottle import BaseStateGroup
@@ -47,11 +50,12 @@ async def die_handler(message: Message):
 bot.run_forever()
 ```
 
-`set` может принимать `**payload` который позже доступен как словарь из `event.state_peer.payload`
+!!! info "Примечание"
+    `set` может принимать `**payload` который позже доступен как словарь из `event.state_peer.payload`
 
-```python
-# ... In handler:
-await bot.state_dispenser.set(message.peer_id, SuperStates.TERRIFYING_STATE, something=1)
-# ... With state:
-print(event.state_peer.payload["something"])  # 1
-```
+    ```python
+    # ... In handler:
+    await bot.state_dispenser.set(message.peer_id, SuperStates.TERRIFYING_STATE, something=1)
+    # ... With state:
+    print(event.state_peer.payload["something"])  # 1
+    ```

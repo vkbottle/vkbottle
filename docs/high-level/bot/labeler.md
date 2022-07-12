@@ -2,9 +2,12 @@
 
 Удобная оболочка над роутерами. С помощью лейблера создаются хендлеры. Может быть использовано в качестве портабельного диспатчера.
 
-Имеет метод load который должен загружать хендлеры и мидлвари в текущий лейблер из данного. Может быть использовано для разбивания кода на много частей:
+Имеет метод load который должен загружать хендлеры и мидлвари в текущий лейблер из переданного. Может быть использовано для разбивания кода на много частей.
 
-__bot.py__
+## Пример
+
+### bot.py
+
 ```python
 from vkbottle import Bot
 from routes import labelers
@@ -17,14 +20,16 @@ for custom_labeler in labelers:
 bot.run_forever()
 ```
 
-__routes/\_\_init\_\_.py__
+### routes/\_\_init\_\_.py
+
 ```python
 from . import greetings, goodbyes
 
 labelers = [greetings.bl, goodbyes.bl]
 ```
 
-__routes/greetings.py__
+### routes/greetings.py
+
 ```python
 from vkbottle.bot import BotLabeler, Message
 
@@ -35,7 +40,8 @@ async def greeting(message: Message):
     await message.answer("Привет, друг")
 ```
 
-__routes/goodbyes.py__
+### routes/goodbyes.py
+
 ```python
 from vkbottle.bot import BotLabeler, Message
 

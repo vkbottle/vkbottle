@@ -12,7 +12,8 @@ View являются блокирующими менеджерами хендл
 
 ## Написание view
 
-> View - это как большой хендлер, имплементирующий индивидуальную логику работы с мидлварями, стейт менеджером и производными хендлеров
+!!! info "Примечание"
+    View - это "большой хендлер", имплементирующий индивидуальную логику работы с мидлварями, стейт менеджером и производными хендлеров
 
 Кастомные view нужны обычно для создания среды обработки какого-то ивента или группы ивентов
 
@@ -90,19 +91,22 @@ from typing import Dict
 
 
 async def vote_up(vote: PollVoteNew):
-    print("{} со стейтом {} голосует за {}".format(
-        vote.object.user_id,
-        vote.object.state_peer,
-        vote.object.option_id
-    ))
+    print(
+        "{} со стейтом {} голосует за {}".format(
+            vote.object.user_id, vote.object.state_peer, vote.object.option_id
+        )
+    )
 
 async def vote_up_admin(vote: PollVoteNew):
     print("Админ проголосовал за {}", vote.object.option_id)
 
 my_view = VoteView()
 my_view.handlers = [
-    FromFuncHandler(vote_up_admin, rules.FuncRule(lambda v: v.object.user_id in admin_ids)),
-    FromFuncHandler(vote_up)
+    FromFuncHandler(
+        vote_up_admin,
+        rules.FuncRule(lambda v: v.object.user_id in admin_ids),
+    ),
+    FromFuncHandler(vote_up),
 ]
 
 class MyLabeler(BotLabeler):

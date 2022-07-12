@@ -4,18 +4,18 @@
 
 Атрибуты:
 
-`bot.api` - [API документация](../../low-level/api/api.md)
-`bot.router` - [Router документация](../../high-level/routing/index.md)
-`bot.labeler`/`bot.on` - [Labeler документация](labeler.md)
-`bot.polling` - [Polling документация](../../low-level/polling/polling.md)
-`bot.callback` - [Callback документация](../../low-level/callback/callback.md)
-`bot.loop_wrapper` - [Loop Wrapper документация](../../tools/loop-wrapper.md)
-`bot.loop` - возвращает _event loop_ который был установлен или самостоятельно получает его
-`bot.error` - возвращает `error handler` бота из `bot.router`. Добавлено для краткой записи
+`bot.api` - [API документация](../../low-level/api/api.md)<br/>
+`bot.router` - [Router документация](../../high-level/routing/index.md)<br/>
+`bot.labeler`/`bot.on` - [Labeler документация](labeler.md)<br/>
+`bot.polling` - [Polling документация](../../low-level/polling/polling.md)<br/>
+`bot.callback` - [Callback документация](../../low-level/callback/callback.md)<br/>
+`bot.error_handler` - [Error handler документация](../../low-level/exception_handling/error-handler.md)<br/>
+`bot.loop_wrapper` - [Loop Wrapper документация](../../tools/loop-wrapper.md)<br/>
+`bot.loop` - возвращает _event loop_ который был установлен или получает запущенный
 
 Функции:
 
-## Работа через Long Poll API
+## Long Poll API
 
 ### bot.run_polling()
 
@@ -25,7 +25,7 @@
 
 Синхронный запуск longpoll. Добавляет `run_polling` в таски `bot.loop_wrapper` и запускает луп в `run_forever`
 
-## Работа через Callback API
+## Callback API
 
 ### bot.setup_webhook()
 

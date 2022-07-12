@@ -11,6 +11,7 @@ from vkbottle import Keyboard
 `Keyboard` принимает параметры `one_time` и `inline` (их значение описано [здесь](https://vk.com/dev/bots_docs_3?f=4.2.%20Структура%20данных)).
 
 Методы `Keyboard`:
+
 - `add(action, color)` - добавляет кнопку к текущему ряду кнопок;
 - `row()` - создаёт следующий ряд кнопок, переводит "курсор" на него;
 - `get_json()` - преобразует клавиатуру в JSON-объект, который можно отправить в сообщении.
@@ -36,6 +37,7 @@ async def send_keyboard(message):
 ### Если у вас уже есть ссылка на вложение
 
 Если у вас уже есть ссылка на вложение вида `"type{OWNER_ID}_{ITEM_ID}"` (например "photo-41629685_457239401"), то вы можете отправить её так:
+
 ```python
 attachment = ... # see example above
 
@@ -49,6 +51,7 @@ async def send_attachment(message):
 Для того чтобы отправлять вложения, загруженные во время работы бота, нужны загрузчики. Прочитайте [документацию про загрузчики], и возвращайтесь сюда.
 
 Пример отправки вложения, полученного из загрузчика:
+
 ```python
 uploader = AnyUploader(bot.api)  # see uploaders types in "Uploaders documentation" above
 
@@ -63,6 +66,7 @@ async def send_attachment(message):
 На данный момент ВКонтакте поддерживает только один вид шаблона — карусель. Документация по этому виду шаблона представлена [здесь](https://vk.com/dev/bot_docs_templates?f=5.%20Шаблоны%20сообщений).
 
 Вы можете создать шаблон через vkbottle с помощью:
+
 - `TemplateElement` - элемент шаблона. Названия полей соответствуют названиям полей в документации ВКонтакте.
 - `template_gen` - создаёт шаблон из предоставленных элементов:
 
@@ -73,6 +77,7 @@ my_template = template_gen(TemplateElement(...), TemplateElement(...), TemplateE
 ```
 
 В этом примере `my_template` - уже готовый JSON-объект для отправки в сообщении. Вот пример его отправки:
+
 ```python
 my_template = ...  # see example above
 
@@ -83,5 +88,5 @@ async def send_template(message):
 
 ## Расширенные примеры по этой части
 
-* [Создание клавиатуры](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/generate_keyboard.py)
-* [Загрузка и отправка вложений](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/photo_upload_example.py)
+- [Создание клавиатуры](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/generate_keyboard.py)
+- [Загрузка и отправка вложений](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/photo_upload_example.py)

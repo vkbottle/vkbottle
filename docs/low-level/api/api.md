@@ -5,8 +5,14 @@
 ```python
 from vkbottle import API
 
+# ...
 api = API(token="token")
+await api.messages.send(peer_id=1, message="Привет Павел Дуров!")
 ```
+
+!!! warning "Внимание"
+    Все методы в vkbottle пишутся *снейк_кейсом*. <br/>
+    Это значит, например, что метод [`messages.getById`](https://dev.vk.com/method/messages.getById) в vkbottle пишется как `api.messages.get_by_id`.
 
 ## Параметры
 
@@ -17,7 +23,7 @@ api = API(token="token")
 
 ## Captcha хендлер
 
-Должен вернуть код от капчи:
+Должен решить капчу и вернуть ее код:
 
 ```python
 from vkbottle import CaptchaError
