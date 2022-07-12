@@ -25,51 +25,51 @@ nav:
       - Клавиатуры и вложения: tutorial/keyboards-attachments.md
       - Мидлвари и return менеджеры: tutorial/middlewares-return-managers.md
       - Обработка ошибок: tutorial/error-handling.md
-      - Подключение Callback API: tutorial/callback-bot.md
+      - Callback API: tutorial/callback-bot.md
       - Рекомендуемые IDE: tutorial/recommended-ide.md
       - FAQ: tutorial/faq.md
   - Документация:
-      Интерфейсы высокого уровня:
-        Интерфейс ботов:
-          Bot: high-level/bot/bot.md
-          User: high-level/user/user.md
-          Labeler: high-level/bot/labeler.md
-          Blueprint: high-level/bot/blueprint.md
-          Multibot: high-level/bot/multibot.md
-        Хендлинг:
-          Handler: high-level/handling/handler.md
-          View: high-level/handling/view.md
-          Return Manager: high-level/handling/return-manager.md
-          State Dispenser: high-level/handling/state-dispenser.md
-          Middleware: high-level/handling/middleware.md
-          Rules: high-level/routing/rules.md
-      Интерфейсы низкого уровня:
-        API:
-          Работа с API: low-level/api/api.md
-          Response Validators: low-level/api/response-validator.md
-          Request Rescheduler: low-level/api/request-rescheduler.md
-          Request Validator: low-level/api/request-validator.md
-          Token Generator: low-level/api/token-generator.md
-          Exception Handling: low-level/exception_handling/index.md
-          Code Exception: low-level/exception_handling/code-exception.md
-          Error Handler: low-level/exception_handling/error-handler.md
-        Http Client:
-          Accessing Http Client: low-level/http/http-client.md
-        Polling:
-          Работа с поллингом: low-level/polling/polling.md
-        Callback:
-          Работа с Callback API: low-level/callback/callback.md
-      Дополнительные инструменты:
-        Storages: tools/storage.md
-        Keyboard генераторы: tools/keyboard.md
-        VKScript: tools/vkscript.md
-        Loop Wrapper: tools/loop-wrapper.md
-        Auth Flows: tools/auth.md
-        Uploaders: tools/uploaders.md
-        Message Event: tools/message-event.md
-        Event Data генераторы: tools/event-data.md
-        Template: tools/template.md
-      Кастомизация зависимостей: modules.md
+      - Интерфейсы высокого уровня:
+          - Интерфейс ботов:
+              - Bot: high-level/bot/bot.md
+              - User: high-level/user/user.md
+              - Labeler: high-level/bot/labeler.md
+              - Blueprint: high-level/bot/blueprint.md
+              - Multibot: high-level/bot/multibot.md
+          - Хендлинг:
+              - Handler: high-level/handling/handler.md
+              - View: high-level/handling/view.md
+              - Return Manager: high-level/handling/return-manager.md
+              - State Dispenser: high-level/handling/state-dispenser.md
+              - Middleware: high-level/handling/middleware.md
+              - Rules: high-level/routing/rules.md
+      - Интерфейсы низкого уровня:
+          - API:
+            - Работа с API: low-level/api/api.md
+            - Response Validators: low-level/api/response-validator.md
+            - Request Rescheduler: low-level/api/request-rescheduler.md
+            - Request Validator: low-level/api/request-validator.md
+            - Token Generator: low-level/api/token-generator.md
+          - Exception Handling:
+            - Error Handler: low-level/exception_handling/error-handler.md
+            - Code Exception: low-level/exception_handling/code-exception.md
+          - Http Client:
+            - Accessing Http Client: low-level/http/http-client.md
+          - Polling:
+            - Работа с поллингом: low-level/polling/polling.md
+          - Callback:
+            - Работа с Callback API: low-level/callback/callback.md
+      - Дополнительные инструменты:
+          - Auth Flows: tools/auth.md
+          - Event Data генераторы: tools/event-data.md
+          - Keyboard генераторы: tools/keyboard.md
+          - Loop Wrapper: tools/loop-wrapper.md
+          - Message Event: tools/message-event.md
+          - Storages: tools/storage.md
+          - Template: tools/template.md
+          - Uploaders: tools/uploaders.md
+          - VKScript: tools/vkscript.md
+      - Кастомизация зависимостей: modules.md
   - Почему vkbottle?: why-vkbottle.md
   - Что нового:
       - 4.0: whats_new/4.0.md
