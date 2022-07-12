@@ -12,7 +12,7 @@ from vkbottle import API
 
 ## Типизация
 
-При условии, что у вас стоит [нормальное IDE](recommended_ide.md) вы можете использовать подсказки типов:
+При условии, что у вас стоит [нормальное IDE](recommended-ide.md) вы можете использовать подсказки типов:
 
 ![api highlighting](assets/api-highlighting.png "api highlighting")
 
