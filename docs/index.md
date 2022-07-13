@@ -7,3 +7,4 @@
 * [high-level](high-level/index.md)
 * [low-level](low-level/index.md)
 * [tools](tools/index.md)
+* [Кастомизация зависимостей](modules.md)

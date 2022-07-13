@@ -7,3 +7,5 @@
 5. [Мидлвари и return менеджеры](middlewares-return-managers.md)
 6. [Обработка ошибок](error-handling.md)
 7. [Подключение CallbackAPI](callback-bot.md)
+8. [Рекомендуемые IDE](recommended-ide.md)
+9. [FAQ](faq.md)

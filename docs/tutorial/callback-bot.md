@@ -9,6 +9,7 @@
 Для подключения `CallbackAPI` к вашему сообществу:
 
 1. Инициализировать параметры для настройки, например, таким образом:
+
     ```python
     import os
     TOKEN = os.getenv("VK_TOKEN") # ключ сообщества
@@ -16,7 +17,9 @@
     title = os.getenv("VK_TITLE") # title = "server"
     secret_key = os.getenv("VK_SECRET_KEY") # опционально
     ```
+
 2. Импортировать `BotCallback` из `vkbottle.callback` и указать параметры для настройки:
+
     ```python
     from vkbottle.callback import BotCallback
     callback = BotCallback(
@@ -24,13 +27,16 @@
         title = title
     )
     ```
+
 3. Инициализировать бота:
+
     ```python
     from vkbottle import Bot
     bot = Bot(token=TOKEN, callback=callback)
     ```
 
 4. Настроить любой сервер (`aiohttp`, `flask`, `fastapi`) и обрабатывать полученные события. Для более полного ознакомления рекомендуется посмотреть пример.
+
     ```python
     # event - событие, полученное от vk
     await bot.process_event(event)

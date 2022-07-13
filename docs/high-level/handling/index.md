@@ -5,3 +5,4 @@
 * [State Dispenser](state-dispenser.md)
 * [View](view.md)
 * [Middleware](middleware.md)
+* [Rules](../routing/rules.md)

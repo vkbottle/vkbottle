@@ -1,10 +1,11 @@
 # High-level API
 
-- [Bot](bot/)
-    - [Access Bot](bot/bot.md)
+- [Bot](bot/index.md)
+    - [Bot](bot/bot.md)
+    - [User](user/user.md)
     - [Labeler](bot/labeler.md)
-    - [Multibot](bot/multibot.md)
     - [Blueprint](bot/blueprint.md)
+    - [Multibot](bot/multibot.md)
 
 - [Handling](handling/index.md)
     - [Handler](handling/handler.md)
@@ -12,4 +13,4 @@
     - [Return Manager](handling/return-manager.md)
     - [State Dispenser](handling/state-dispenser.md)
     - [Middleware](handling/middleware.md)
-- [Routing](routing/index.md)
+    - [Rules](routing/rules.md)

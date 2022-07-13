@@ -29,7 +29,7 @@
 
 ### bot.setup_webhook()
 
-Устаналивает сервер для `CallbackAPI` в сообщество
+Устанавливает сервер для `CallbackAPI` в сообщество
 
 ### bot.process_event(event)
 

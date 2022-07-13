@@ -46,7 +46,7 @@ nav:
       - Интерфейсы низкого уровня:
           - API:
             - Работа с API: low-level/api/api.md
-            - Response Validators: low-level/api/response-validator.md
+            - Response Validator: low-level/api/response-validator.md
             - Request Rescheduler: low-level/api/request-rescheduler.md
             - Request Validator: low-level/api/request-validator.md
             - Token Generator: low-level/api/token-generator.md
@@ -62,10 +62,10 @@ nav:
       - Дополнительные инструменты:
           - Auth Flows: tools/auth.md
           - Event Data генераторы: tools/event-data.md
-          - Keyboard генераторы: tools/keyboard.md
+          - Keyboard: tools/keyboard.md
           - Loop Wrapper: tools/loop-wrapper.md
           - Message Event: tools/message-event.md
-          - Storages: tools/storage.md
+          - Storage: tools/storage.md
           - Template: tools/template.md
           - Uploaders: tools/uploaders.md
           - VKScript: tools/vkscript.md
