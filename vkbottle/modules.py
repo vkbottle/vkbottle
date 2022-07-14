@@ -24,8 +24,22 @@ json: JSONModule = choice_in_order(
 logging_module = choice_in_order(["loguru"], default="logging")
 
 if logging_module == "loguru":
+    import os
+    import sys
+
+    if not os.environ.get("LOGURU_AUTOINIT"):
+        os.environ["LOGURU_AUTOINIT"] = "0"
     from loguru import logger  # type: ignore
-else:
+
+    if not logger._core.handlers:  # type: ignore
+        log_format = (
+            "<level>{level: <8}</level> | "
+            "{time:YYYY-MM-DD HH:mm:ss} | "
+            "{name}:{function}:{line} > <level>{message}</level>"
+        )
+        logger.add(sys.stderr, format=log_format, enqueue=True, colorize=True)
+
+elif logging_module == "logging":
     """
     This is workaround for lazy formating with {} in logging.
 
