@@ -26,7 +26,7 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
     ) -> Union[Any, NoReturn]:
         if "error" not in response:
             if "response" not in response:
-                # invalid response, just igrnore it
+                # invalid response, just ignore it
                 return response
             elif isinstance(response["response"], list):
                 errors = [item["error"] for item in response["response"] if "error" in item]

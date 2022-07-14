@@ -44,7 +44,8 @@ class SomeResponseValidator(ABCResponseValidator):
         )
 
 api = API("token")
-# Этот валидатор должен быть первым, чтобы ошибку не обработал дефолтный валидатор
-api.response_validators.insert(0, SomeResponseValidator())
+# Этот валидатор должен идти после JSONResponseValidator,
+# но раньше VKAPIErrorResponseValidator, чтобы он не обработал эту ошибку
+api.response_validators.insert(1, SomeResponseValidator())
 
 ```
