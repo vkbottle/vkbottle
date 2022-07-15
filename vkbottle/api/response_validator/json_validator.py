@@ -31,7 +31,7 @@ class JSONResponseValidator(ABCResponseValidator):
                 return json.loads(response)
 
         if self.context.get("reschedule"):
-            return
+            return None
 
         logger.info(
             "VK returned object of invalid type ({}). Request will be rescheduled with {}",
