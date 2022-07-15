@@ -26,7 +26,14 @@ jobs:
       - name: Install poetry
         run: pipx install poetry
 
-      - uses: actions/setup-python@v3.1.1
+      - name: Cache .mypy_cache
+        id: cache-mypy
+        uses: actions/cache@v3
+        with:
+          key: ${{ matrix.python-version }}-${{ runner.os }}
+          path: .mypy_cache
+
+      - uses: actions/setup-python@v4.1.0
         id: python-setup
         with:
           python-version: ${{ matrix.python-version }}
