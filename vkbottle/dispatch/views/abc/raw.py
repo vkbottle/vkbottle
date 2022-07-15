@@ -31,7 +31,7 @@ class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
     async def handle_event(
         self, event: T_contra, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
     ) -> Any:
-        logger.debug("Handling event ({}) with message view".format(self.get_event_type(event)))
+        logger.debug("Handling event ({}) with message view", self.get_event_type(event))
 
         context_variables: dict = {}
         handle_responses = []
@@ -51,7 +51,7 @@ class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
                 setattr(event_model, "unprepared_ctx_api", ctx_api)
 
             result = await handler_basement.handler.filter(event_model)
-            logger.debug("Handler {} returned {}".format(handler_basement.handler, result))
+            logger.debug("Handler {} returned {}", handler_basement.handler, result)
 
             if result is False:
                 continue
