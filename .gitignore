@@ -137,8 +137,5 @@ dmypy.json
 # pytest
 .pytest_cache
 
-# poetry lock files
-poetry.lock
-
 .vscode
 .vim

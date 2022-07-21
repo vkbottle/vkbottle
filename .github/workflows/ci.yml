@@ -38,7 +38,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: poetry
-          cache-dependency-path: pyproject.toml
 
       - name: Install dependencies
         if: steps.python-setup.outputs.cache-hit != 'true'
