@@ -805,7 +805,7 @@ watchmedo = ["PyYAML (>=3.10)"]
 
 [[package]]
 name = "watchfiles"
-version = "0.15.0"
+version = "0.16.0"
 description = "Simple, modern and high performance file watching and code reload in python."
 category = "main"
 optional = false
@@ -842,7 +842,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "1cb923d5cc605b0aa01ae98d0dc6b9ff99354a2ab9c5504c9fd24e4ef7521ade"
+content-hash = "8d488bcac4b346f76fd7c7878cec2bd1203b4ba6b86ebca9633c80ccc0ee3f10"
 
 [metadata.files]
 aiofiles = [
@@ -1600,18 +1600,23 @@ watchdog = [
     {file = "watchdog-2.1.9.tar.gz", hash = "sha256:43ce20ebb36a51f21fa376f76d1d4692452b2527ccd601950d69ed36b9e21609"},
 ]
 watchfiles = [
-    {file = "watchfiles-0.15.0-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:67d4c66e46a564059df4aeedab78f09cba0b697bf36cc77566b0a7015dfb7f5d"},
-    {file = "watchfiles-0.15.0-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:6e0e8829d32b05151e6009570449f44f891e05f518e495d25f960e0d0b2d0064"},
-    {file = "watchfiles-0.15.0-cp37-abi3-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:f7f71012e096e11256fae3b37617a9777980f281e18deb2e789e85cd5b113935"},
-    {file = "watchfiles-0.15.0-cp37-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:65ca99a94fcab29d00aa406526eb29cf198c0661854d59a315596064fed02141"},
-    {file = "watchfiles-0.15.0-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d4f45acd1143db6d3ee77a4ff12d3239bc8083108133e6174e9dcce59c1f9902"},
-    {file = "watchfiles-0.15.0-cp37-abi3-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:955e8f840e1996a8a41be57de4c03af7b1515a685b7fb6abe222f859e413a907"},
-    {file = "watchfiles-0.15.0-cp37-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:715733c2ac9da67b2790788657ff6f8b3797eb31565bfc592289b523ae907ca2"},
-    {file = "watchfiles-0.15.0-cp37-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:d1f9de6b776b3aff17898a4cf5ac5a2d0a16212ea7aad2bbe0ef6aa3e79a96af"},
-    {file = "watchfiles-0.15.0-cp37-abi3-win32.whl", hash = "sha256:56abed43e645d1f2d6def83e35999cc5758b051aff54ca1065cbfcaea15b3389"},
-    {file = "watchfiles-0.15.0-cp37-abi3-win_amd64.whl", hash = "sha256:7b81c6e404b2aa62482a719eb778e4a16d01728302dce1f1512c1e5354a73fda"},
-    {file = "watchfiles-0.15.0-cp37-abi3-win_arm64.whl", hash = "sha256:82238d08d8a49f1a1ba254278cd4329a154f6100b028393059722ebeddd2ff3d"},
-    {file = "watchfiles-0.15.0.tar.gz", hash = "sha256:cab62510f990d195986302aa6a48ed636d685b099927049120d520c96069fa49"},
+    {file = "watchfiles-0.16.0-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:8d635dcba3aab2909bf568765547696d7465d30e2e9c6f5ab99da877b58d29bb"},
+    {file = "watchfiles-0.16.0-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:5fa786d102e7eabef22b2147af531aa70194aabcb35335be81c07c26382b0050"},
+    {file = "watchfiles-0.16.0-cp37-abi3-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:a5f64674559fac56a6bf2f5e086cb3758740140c80711fe3e016f5443b84ef15"},
+    {file = "watchfiles-0.16.0-cp37-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:1bb5f0117c8b93f8e1b22ac0be60cfeb00332959a72e6bbe2073fea27ed086e5"},
+    {file = "watchfiles-0.16.0-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d5fb4f3b5c884d4f22f643b0697edbb04942bcad961a8f9a9bfadb73e7a1e229"},
+    {file = "watchfiles-0.16.0-cp37-abi3-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:59498853d3214d1e4d9b1cb3a06b0011a11f24d31708b1734d9cd7f5a30fe1af"},
+    {file = "watchfiles-0.16.0-cp37-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:43d1d517faffa8955c2da0e6f64268e38442d43b50ca73cb686df25f891e49a1"},
+    {file = "watchfiles-0.16.0-cp37-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:7c80e3907d21ca3f1689f42632d239fdc40ffc1d5f32f564997480f85e94c474"},
+    {file = "watchfiles-0.16.0-cp37-abi3-win32.whl", hash = "sha256:cbdb7814ca43f85ab8569206ab2c3bcd51dd5d1ba582914246784414e6ada62e"},
+    {file = "watchfiles-0.16.0-cp37-abi3-win_amd64.whl", hash = "sha256:059bd9596429f8c13604b2eb30888a5661b3c79099edc506f11b63be7afe3ca4"},
+    {file = "watchfiles-0.16.0-cp37-abi3-win_arm64.whl", hash = "sha256:750e40db5efcf3f5f11602dbc6fdf8e96a0eefdbccd271093efe9fa2e9d02ed2"},
+    {file = "watchfiles-0.16.0-pp38-pypy38_pp73-macosx_10_7_x86_64.whl", hash = "sha256:c9e3756cd2ba17e5042e8c9399a08e4bdbe1a366156a164e8373bda30ca096d0"},
+    {file = "watchfiles-0.16.0-pp38-pypy38_pp73-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:5e3d4c92091d16bca1d61920575dab5d6dcbceda76dccd5fb91da0b7390b4ee9"},
+    {file = "watchfiles-0.16.0-pp38-pypy38_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3d3f0397c9128971398a5cbb0fb45852ab2fa4472ac9724c031071e1e39970c0"},
+    {file = "watchfiles-0.16.0-pp39-pypy39_pp73-macosx_10_7_x86_64.whl", hash = "sha256:09490d258be8fdd7f5141a39b468dede0b4aa4a52f2b2dbfb0f3835ae7c23eca"},
+    {file = "watchfiles-0.16.0-pp39-pypy39_pp73-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:4f712dbe9d8c0365bf46ffe0dd9c6a62cc0acf05ba951f1a53de2b4d5bb63299"},
+    {file = "watchfiles-0.16.0-pp39-pypy39_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bcd085980389bc64fe509188a9caffa4fe13b2616e2e3e674cde58f916b2a8ee"},
 ]
 yarl = [
     {file = "yarl-1.7.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:f2a8508f7350512434e41065684076f640ecce176d262a7d54f0da41d99c5a95"},
