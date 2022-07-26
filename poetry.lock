@@ -250,7 +250,7 @@ python-versions = "*"
 python-dateutil = ">=2.8.1"
 
 [package.extras]
-dev = ["twine", "markdown", "flake8", "wheel"]
+dev = ["wheel", "flake8", "markdown", "twine"]
 
 [[package]]
 name = "identify"
@@ -509,8 +509,8 @@ python-versions = ">=3.6"
 importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
 
 [package.extras]
-dev = ["pre-commit", "tox"]
-testing = ["pytest", "pytest-benchmark"]
+testing = ["pytest-benchmark", "pytest"]
+dev = ["tox", "pre-commit"]
 
 [[package]]
 name = "pre-commit"
@@ -648,7 +648,7 @@ coverage = {version = ">=5.2.1", extras = ["toml"]}
 pytest = ">=4.6"
 
 [package.extras]
-testing = ["fields", "hunter", "process-tests", "six", "pytest-xdist", "virtualenv"]
+testing = ["virtualenv", "pytest-xdist", "six", "process-tests", "hunter", "fields"]
 
 [[package]]
 name = "pytest-mock"
@@ -782,7 +782,7 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 
 [[package]]
 name = "vkbottle-types"
-version = "5.131.146.9"
+version = "5.131.146.10"
 description = "Types for vkbottle"
 category = "main"
 optional = false
@@ -1569,8 +1569,8 @@ virtualenv = [
     {file = "virtualenv-20.15.1.tar.gz", hash = "sha256:288171134a2ff3bfb1a2f54f119e77cd1b81c29fc1265a2356f3e8d14c7d58c4"},
 ]
 vkbottle-types = [
-    {file = "vkbottle-types-5.131.146.9.tar.gz", hash = "sha256:b4714edebe414f53a19ae348a07ec4aa9be685b36ff9812174fdca163568490b"},
-    {file = "vkbottle_types-5.131.146.9-py3-none-any.whl", hash = "sha256:57fcc03575a4658e30638e9c6c02d10beae22c9eeb8dc9f1af5c7e2aa8e4d967"},
+    {file = "vkbottle-types-5.131.146.10.tar.gz", hash = "sha256:57154c91fb1c3d27983e9e40da8658185a3e788eec4c5d835eefbc8a9f20f6fb"},
+    {file = "vkbottle_types-5.131.146.10-py3-none-any.whl", hash = "sha256:0a2f85ad46e545d4239e71a342bded1e94faabc4afb6852d1fbe2e8a7f6de8fb"},
 ]
 watchdog = [
     {file = "watchdog-2.1.9-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:a735a990a1095f75ca4f36ea2ef2752c99e6ee997c46b0de507ba40a09bf7330"},
