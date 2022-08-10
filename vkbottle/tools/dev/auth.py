@@ -1,7 +1,10 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from vkbottle.exception_factory import CaptchaError, VKAPIError
-from vkbottle.http.aiohttp import SingleAiohttpClient
+from vkbottle.http import SingleAiohttpClient
+
+if TYPE_CHECKING:
+    from vkbottle.http import ABCHTTPClient
 
 MOBILE_APP_ID = 2274003
 MOBILE_APP_SECRET = "hHbZxrka2uZ6jB1inYsH"
@@ -14,13 +17,20 @@ class AuthError(VKAPIError):
 class UserAuth:
     AUTH_URL = "https://oauth.vk.com/token"
 
-    def __init__(self, client_id: Optional[int] = None, client_secret: Optional[str] = None):
+    def __init__(
+        self,
+        client_id: Optional[int] = None,
+        client_secret: Optional[str] = None,
+        http_client: Optional["ABCHTTPClient"] = None,
+    ):
         if client_id is not None and client_secret is not None:
             self.client_id = client_id
             self.client_secret = client_secret
         else:
             self.client_id = MOBILE_APP_ID
             self.client_secret = MOBILE_APP_SECRET
+
+        self.http_client = http_client or SingleAiohttpClient()
 
     def _get_params(self, login: str, password: str) -> dict:
         return {
@@ -34,8 +44,7 @@ class UserAuth:
     async def get_token(self, login: str, password: str) -> str:
         params = self._get_params(login, password)
 
-        client = SingleAiohttpClient()
-        response = await client.request_json(
+        response = await self.http_client.request_json(
             url=self.AUTH_URL,
             method="POST",
             data=params,
