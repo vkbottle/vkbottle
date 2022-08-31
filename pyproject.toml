@@ -70,7 +70,7 @@ mkdocs = "^1.3.0"
 mkdocs-material = "^8.4.1"
 
 # Pre-commit
-autoflake = "^1.4"
+autoflake = "^1.5"
 pre-commit = "^2.19.0"
 
 [tool.pytest.ini_options]
