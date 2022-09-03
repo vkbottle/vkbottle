@@ -1,20 +1,26 @@
 from typing import TYPE_CHECKING, Any, Dict, Optional, Type
 
-if TYPE_CHECKING:
-    from .action import ABCAction
-    from .color import KeyboardButtonColor
+from .action import ABCAction, Callback, Location, OpenLink, Text, VKApps, VKPay
+from .color import KeyboardButtonColor
+
+KEYBOARD_ACTIONS = {
+    "text": Text,
+    "open_link": OpenLink,
+    "callback": Callback,
+    "location": Location,
+    "vkpay": VKPay,
+    "open_app": VKApps,
+}
 
 
 class KeyboardButton:
-    def __init__(
-        self,
-        action: "ABCAction",
-        color: Optional["KeyboardButtonColor"] = None,
-        data: Optional[dict] = None,
-    ):
+    def __init__(self, action: "ABCAction", color: Optional["KeyboardButtonColor"] = None):
+        if not isinstance(action, ABCAction):
+            raise TypeError("action must be instance of ABCAction")
+        if color and not isinstance(color, KeyboardButtonColor):
+            raise TypeError("color must be instance of KeyboardButtonColor")
         self.action = action
         self.color = color
-        self.data = data
 
     @classmethod
     def from_typed(
@@ -22,29 +28,21 @@ class KeyboardButton:
         action: "ABCAction",
         color: Optional["KeyboardButtonColor"] = None,
     ) -> "KeyboardButton":
-        return cls(action, color, None)
+        return cls(action, color)
 
     @classmethod
     def from_dict(cls: Type["KeyboardButton"], data: dict) -> "KeyboardButton":
-        color = data.get("color")
-        keyboard_data = {"action": data}
-        if color is not None:
-            keyboard_data["action"].pop("color")
-            keyboard_data["color"] = color
-        return cls(cls.action, cls.color, keyboard_data)  # type: ignore
+        action_type = KEYBOARD_ACTIONS.get(data.pop("type", None))
+        color = data.pop("color", None)
+        if color:
+            color = KeyboardButtonColor(color)
+        if action_type is None:
+            raise ValueError("KeyboardButton action type is not defined")
+
+        return cls(action_type(**data), color)
 
     def get_data(self) -> dict:
-        if self.data is not None:
-            return self.data
-
         data: Dict[str, Any] = {"action": self.action.get_data()}
-        if (
-            self.action.type
-            in (
-                "text",
-                "callback",
-            )
-            and self.color
-        ):
+        if self.action.type in ("text", "callback") and self.color:
             data["color"] = self.color.value
         return data
