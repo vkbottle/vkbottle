@@ -49,7 +49,7 @@ typing-extensions = "^4.3.0"
 
 [tool.poetry.dev-dependencies]
 # Lint
-black = {version = "^22.1", allow-prereleases = true}
+black = {version = "^22.8", allow-prereleases = true}
 flake8 = "^3.9.2"
 isort = "^5.10.1"
 lxml = "^4.9.0"
