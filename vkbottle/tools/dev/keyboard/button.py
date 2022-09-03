@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, Optional, Type
+from typing import Any, Dict, Optional, Type
 
 from .action import ABCAction, Callback, Location, OpenLink, Text, VKApps, VKPay
 from .color import KeyboardButtonColor
