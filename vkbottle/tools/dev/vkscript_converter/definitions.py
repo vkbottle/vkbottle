@@ -228,7 +228,8 @@ def call(d: ast.Call):
         elif d.func.attr in CALL_STRING:
             return f"{value}.{d.func.attr}({','.join(args)})"
         elif d.func.attr == "extend":
-            return f"{find(d.func.value)} = {find(d.func.value)} + {args[0]}"
+            array = find(d.func.value)
+            return f"{array} = {array} + {args[0]}"
         elif (
             isinstance(d.func.value, ast.Attribute)
             and isinstance(d.func.value.value, ast.Name)
