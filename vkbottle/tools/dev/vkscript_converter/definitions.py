@@ -1,17 +1,24 @@
 import ast
 import random
 import string
-from typing import Callable, Iterable
+from typing import Any, Callable, Iterable
 
-from typing_extensions import Protocol
+from typing_extensions import Concatenate, ParamSpec
+
+from vkbottle import ABCAPI
 
 from .base_converter import Converter, ConverterError
 
 CALL_REPLACEMENTS = {
     "append": "push",
     "pop": "pop",
+    "sort": "sort",
+    "index": "indexOf",
 }
 CALL_STRING = ["join", "strip", "split"]
+CALL_TYPES = {
+    "str": "toString",
+}
 
 converter = Converter()
 find = converter.find_definition
@@ -101,23 +108,33 @@ def lt_operator(_: ast.Lt):
 
 
 @converter(ast.GtE)
-def gt_operator_1(_: ast.GtE):
+def gte_operator(_: ast.GtE):
     return ">="
 
 
 @converter(ast.LtE)
-def gt_operator_2(_: ast.LtE):
+def lte_operator(_: ast.LtE):
     return "<="
 
 
 @converter(ast.Eq)
-def gt_operator_3(_: ast.Eq):
+def eq_operator(_: ast.Eq):
     return "=="
 
 
+@converter(ast.Is)
+def is_operator(_: ast.Is):
+    return "==="
+
+
 @converter(ast.NotEq)
-def gt_operator_4(_: ast.Gt):
+def noteq_operator(_: ast.Gt):
     return "!="
+
+
+@converter(ast.IsNot)
+def isnot_operator(_: ast.IsNot):
+    return "!=="
 
 
 @converter(ast.And)
@@ -140,7 +157,20 @@ def aug_assign(d: ast.AugAssign):
 
 @converter(ast.Constant)
 def constant(d: ast.Constant):
-    return d.value
+    # Since python 3.8 ast.Constant is used
+    # instead of ast.Num, ast.Str, ast.Bytes and ast.NameConstant
+    if isinstance(d.value, bool):
+        return "true" if d.value else "false"
+    elif d.value is None:
+        return "null"
+    elif isinstance(d.value, str):
+        return repr(d.value)
+    elif isinstance(d.value, bytes):
+        return repr(d.value.decode())
+    elif isinstance(d.value, int):
+        return str(d.value)
+    else:
+        return d.value
 
 
 @converter(ast.Name)
@@ -153,7 +183,7 @@ def while_cycle(d: ast.While):
     if d.orelse:
         raise ConverterError("You can't use while or/else in vkscript")
     body = "".join(find(line) for line in d.body)
-    return "while(" + find(d.test) + "){" + body + "};"
+    return f"while({find(d.test)}" + "){" + body + "};"
 
 
 @converter(ast.For)
@@ -181,29 +211,42 @@ def if_statement(d: ast.If):
 
 @converter(ast.Call)
 def call(d: ast.Call):
-    func: ast.Attribute = d.func  # type: ignore
-    calls = []
+    args = [find(arg) for arg in d.args]
+    if isinstance(d.func, ast.Name):
+        if d.func.id in CALL_TYPES:
+            # function call like str()
+            # eg str(1) -> 1.toString()
+            return f"{args[0]}.{CALL_TYPES[d.func.id]}({','.join(args[1:])})"
+        elif d.func.id == "int":
+            return f"parseInt({','.join(args)})"
+    elif isinstance(d.func, ast.Attribute):
+        value = find(d.func.value)
+        # array functions like array.pop()
+        if d.func.attr in CALL_REPLACEMENTS:
+            return f"{value}.{CALL_REPLACEMENTS[d.func.attr]}({','.join(args)})"
+        # .split .join etc
+        elif d.func.attr in CALL_STRING:
+            return f"{value}.{d.func.attr}({','.join(args)})"
+        elif d.func.attr == "extend":
+            # vkscript doesn't have extend function, so we need to use push in loop
+            random_iter_name = f"__iter_{random_string(5)}__"
+            return (
+                f"var {random_iter_name} = {args[0]};"
+                f"while({random_iter_name}.length > 0){{"
+                f"{find(d.func.value)}.push({random_iter_name}.pop());}}"
+            )
 
-    while isinstance(func, ast.Attribute):
-        calls.append(func.attr)
-        func = func.value  # type: ignore
-    if func.__class__ == ast.Str:
-        if calls[0] in CALL_STRING:
-            return str(find(d.args[0])) + "." + calls[0] + "(" + find(func) + ")"
-        elif calls[0] == "format":
-            raise ConverterError("Use f-strings instead of str.format")
-        raise ConverterError("String formatter")
-
-    if func.id.lower() == "api":
-        params = dispatch_keywords(d.keywords)
-        return "API." + ".".join(map(to_camel_case, calls[::-1])) + "({" + params + "})"
-    elif func.id == "len":
-        return f"{find(d.args[0])}.length"
-    elif calls and calls[0] in CALL_REPLACEMENTS:
-        args = ",".join(find(arg) for arg in d.args)
-        return find(d.func.value) + "." + CALL_REPLACEMENTS[calls[0]] + "(" + args + ")"  # type: ignore
-    elif calls[0] in CALL_STRING:
-        return find(func) + "." + calls[0] + "(" + find(d.args[0]) + ")"
+        elif (
+            isinstance(d.func.value, ast.Attribute)
+            and isinstance(d.func.value.value, ast.Name)
+            and d.func.value.value.id == "api"
+        ):
+            return (
+                f"API.{to_camel_case(d.func.value.attr)}.{to_camel_case(d.func.attr)}"
+                + "({"
+                + dispatch_keywords(d.keywords)
+                + "})"
+            )
     raise ConverterError(f"Call for {getattr(d.func, 'attr', d.func.__dict__)} is not referenced")
 
 
@@ -214,7 +257,7 @@ def pass_expr(_: ast.Pass):
 
 @converter(ast.Expr)
 def expr(d: ast.Expr):
-    return find(d.value) + ";"
+    return f"{find(d.value)};"
 
 
 @converter(ast.Module)
@@ -285,7 +328,7 @@ def num_type(d: ast.Num):
 
 
 @converter(ast.Str)
-def str_type(d: ast.Num):
+def str_type(d: ast.Str):
     return repr(d.s)
 
 
@@ -311,13 +354,14 @@ def name_constant_type(d: ast.NameConstant):
     return consts[d.value]
 
 
-class VKScriptFunction(Protocol):
-    def __call__(self, **kwargs) -> str:
-        ...
+# Just a few typing magic
+# How it works:
+# func(api: ABCAPI, a: int, b: str) -> func(a: int, b: str)
+P = ParamSpec("P")
 
 
-def vkscript(func: Callable) -> VKScriptFunction:
-    def decorator(**context):
-        return converter.scriptify(func, **context)
+def vkscript(func: Callable[Concatenate[ABCAPI, P], Any]) -> Callable[P, str]:
+    def decorator(*args: P.args, **context: P.kwargs) -> str:
+        return converter.scriptify(func, *args, **context)
 
     return decorator

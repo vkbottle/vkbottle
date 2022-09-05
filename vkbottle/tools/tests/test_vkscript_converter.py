@@ -23,11 +23,11 @@ def api_request(api, group_id):
 def types(api):
     a = 5.1
     b = 5 * a
-    results = [b, b - 2]
-    _ = {"a": 1, "b": 2}
-    _ = True
-    _ = 3 - 3.3 + 3.0 * 0.3 / 33 % 3
-    _ = "string"
+    results = [b, b - 2, "a"]
+    _a = {"a": 1, "b": 2}
+    _a = True
+    _a = 3 - 3.3 + 3.0 * 0.3 / 33 % 3
+    _a = "string" + "string"
 
     if a < 5:
         pass
@@ -38,8 +38,7 @@ def types(api):
         while a < b:
             a *= 1.1
 
-    for i in results:
-        results.append(i**2)
+    results.extend([_a, b])
     results.pop()
     return results
 
