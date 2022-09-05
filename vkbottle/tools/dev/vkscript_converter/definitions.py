@@ -228,14 +228,7 @@ def call(d: ast.Call):
         elif d.func.attr in CALL_STRING:
             return f"{value}.{d.func.attr}({','.join(args)})"
         elif d.func.attr == "extend":
-            # vkscript doesn't have extend function, so we need to use push in loop
-            random_iter_name = f"__iter_{random_string(5)}__"
-            return (
-                f"var {random_iter_name} = {args[0]};"
-                f"while({random_iter_name}.length > 0){{"
-                f"{find(d.func.value)}.push({random_iter_name}.pop());}}"
-            )
-
+            return f"{find(d.func.value)} = {find(d.func.value)} + {args[0]}"
         elif (
             isinstance(d.func.value, ast.Attribute)
             and isinstance(d.func.value.value, ast.Name)
