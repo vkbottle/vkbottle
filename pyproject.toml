@@ -44,7 +44,7 @@ pydantic = "^1.9.1"
 vbml = "^1.1.post1"
 vkbottle-types = "^5.131.146.9"
 watchfiles = ">=0.15,<0.17"
-aiofiles = "^0.8.0"
+aiofiles = ">=0.8,<22.2"
 typing-extensions = "^4.3.0"
 
 [tool.poetry.dev-dependencies]

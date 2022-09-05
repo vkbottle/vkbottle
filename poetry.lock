@@ -1,10 +1,10 @@
 [[package]]
 name = "aiofiles"
-version = "0.8.0"
+version = "22.1.0"
 description = "File support for asyncio."
 category = "main"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.7,<4.0"
 
 [[package]]
 name = "aiohttp"
@@ -850,12 +850,12 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "38fb11da2df654307dc847acb9654aae6b803535d559eb17605f6b4b17883d07"
+content-hash = "ab78e7418ed845a4c135d25a52270fa3afd2ff5f4998fb89290f7cf98d32911a"
 
 [metadata.files]
 aiofiles = [
-    {file = "aiofiles-0.8.0-py3-none-any.whl", hash = "sha256:7a973fc22b29e9962d0897805ace5856e6a566ab1f0c8e5c91ff6c866519c937"},
-    {file = "aiofiles-0.8.0.tar.gz", hash = "sha256:8334f23235248a3b2e83b2c3a78a22674f39969b96397126cc93664d9a901e59"},
+    {file = "aiofiles-22.1.0-py3-none-any.whl", hash = "sha256:1142fa8e80dbae46bb6339573ad4c8c0841358f79c6eb50a493dceca14621bad"},
+    {file = "aiofiles-22.1.0.tar.gz", hash = "sha256:9107f1ca0b2a5553987a94a3c9959fe5b491fdf731389aa5b7b1bd0733e32de6"},
 ]
 aiohttp = [
     {file = "aiohttp-3.8.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:1ed0b6477896559f17b9eaeb6d38e07f7f9ffe40b9f0f9627ae8b9926ae260a8"},
