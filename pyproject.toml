@@ -67,7 +67,7 @@ pytest-mock = "^3.7.0"
 
 # Docs
 mkdocs = "^1.3.0"
-mkdocs-material = "^8.4.2"
+mkdocs-material = "^8.4.3"
 
 # Pre-commit
 autoflake = "^1.5"
