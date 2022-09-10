@@ -15,7 +15,7 @@ repos:
     hooks:
       - id: autoflake
         name: autoflake
-        entry: autoflake -i --remove-all-unused-imports
+        entry: bash -c 'make autoflake_fix filename=""$*""' --
         language: system
         types: [ python ]
         stages: [ commit ]
