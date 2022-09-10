@@ -43,8 +43,8 @@ jobs:
         if: steps.python-setup.outputs.cache-hit != 'true'
         run: poetry install --with dev
 
-      - name: Run flake8
-        run: poetry run flake8
+      - name: Run flakeheaven
+        run: poetry run flakeheaven lint
 
       - name: Run mypy
         run: poetry run mypy vkbottle

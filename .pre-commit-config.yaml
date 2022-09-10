@@ -51,9 +51,9 @@ repos:
         pass_filenames: false
         stages: [ push ]
 
-      - id: flake8
-        name: flake8 check
-        entry: poetry run flake8
+      - id: flakeheaven
+        name: flakeheaven check
+        entry: poetry run flakeheaven lint
         language: system
         types: [ python ]
         stages: [ push ]
