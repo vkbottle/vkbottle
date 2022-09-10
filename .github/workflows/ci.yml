@@ -41,7 +41,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.python-setup.outputs.cache-hit != 'true'
-        run: poetry install
+        run: poetry install --with dev
 
       - name: Run flake8
         run: poetry run flake8

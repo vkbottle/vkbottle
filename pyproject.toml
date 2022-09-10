@@ -33,8 +33,10 @@ classifiers = [
 ]
 exclude = ["**/tests/*", "**/test_*"]
 
+
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/vkbottle/vkbottle/issues"
+
 
 [tool.poetry.dependencies]
 python = "^3.7.2"
@@ -47,36 +49,41 @@ watchfiles = ">=0.15,<0.17"
 aiofiles = ">=0.8,<22.2"
 typing-extensions = "^4.3.0"
 
-[tool.poetry.dev-dependencies]
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
 # Lint
 black = {version = "^22.8", allow-prereleases = true}
 flake8 = "^3.9.2"
 isort = "^5.10.1"
-lxml = "^4.9.0"
 mypy = "^0.971"
 mypy-extensions = "^0.4.3"
-
 # mypy stubs
 types-aiofiles = "^22.1.0"
-
 # Tests
 pytest = "^7.1.3"
 pytest-asyncio = "^0.19.0"
 pytest-cov = "^3.0.0"
 pytest-mock = "^3.7.0"
-
+# Pre-commit
+autoflake = "^1.5"
+pre-commit = "^2.19.0"
 # Docs
 # Due to a conflict with flake8 (https://github.com/PyCQA/flake8/pull/1438)
 # docs dependencies are now listed in mkdocs-requirements.txt.
 # mkdocs = "^1.3.1"
 # mkdocs-material = "^8.4.3"
 
-# Pre-commit
-autoflake = "^1.5"
-pre-commit = "^2.19.0"
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+
 
 [tool.mypy]
 python_version = 3.8
@@ -84,30 +91,18 @@ ignore_missing_imports = true
 warn_no_return = false
 warn_return_any = false
 warn_unused_configs = true
-# Ignore tests, because we can use fixtures that not quite represent a real type
+
 [[tool.mypy.overrides]]
+# Ignore tests, because we can use fixtures that not quite represent a real type
 module = "*.tests.*"
 ignore_errors = true
 
+
 [tool.black]
-force-exclude = '''
-(
-    \.eggs
-  | \.git
-  | \.tox
-  | build
-  | dist
-  | venv
-  | docs
-)
-'''
 line-length = 99
 target-version = ['py37', 'py38']
+
 
 [tool.isort]
 profile = "black"
 line_length = 99
-
-[build-system]
-build-backend = "poetry.masonry.api"
-requires = ["poetry>=0.12"]
