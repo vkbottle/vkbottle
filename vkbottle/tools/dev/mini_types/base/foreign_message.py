@@ -33,7 +33,7 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
 
     @property
     def ctx_api(self) -> Union["ABCAPI", "API"]:
-        return getattr(self, "unprepared_ctx_api")
+        return self.unprepared_ctx_api  # type: ignore
 
     @property
     def mention(self) -> Optional[Mention]:
@@ -51,7 +51,6 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     @abstractmethod
     def is_mentioned(self) -> bool:
         """Returns True if current bot is mentioned in message"""
-        pass
 
     async def get_user(self, raw_mode: bool = False, **kwargs) -> Union[UsersUserFull, dict]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
