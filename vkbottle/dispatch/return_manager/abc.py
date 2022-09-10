@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod, abstractproperty
 from typing import Any, Callable, Coroutine, Dict, NamedTuple, Optional, Tuple, Union
 
 HandlerProperty = NamedTuple(
@@ -6,7 +6,26 @@ HandlerProperty = NamedTuple(
 )
 
 
-class BaseReturnManager(ABC):
+# TODO: fix types here
+class ABCRetunManager(ABC):
+    @abstractmethod
+    def get_handler(self, value: Any) -> Any:
+        ...
+
+    @abstractproperty
+    def handlers(self) -> Any:
+        ...
+
+    @classmethod
+    @abstractmethod
+    def instance_of(cls, types: Any) -> Any:
+        ...
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}>"
+
+
+class BaseReturnManager(ABCRetunManager):
     def get_handler(self, value: Any) -> Optional[Callable]:
         for types, handler in self.handlers.items():
             if isinstance(value, types):
@@ -28,6 +47,3 @@ class BaseReturnManager(ABC):
             return HandlerProperty(types, func)
 
         return decorator
-
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"

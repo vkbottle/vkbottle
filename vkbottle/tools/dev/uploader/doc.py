@@ -1,4 +1,3 @@
-from abc import ABC
 from typing import TYPE_CHECKING, Union
 
 from .base import BaseUploader
@@ -7,7 +6,7 @@ if TYPE_CHECKING:
     from .base import Bytes
 
 
-class DocUploader(BaseUploader, ABC):
+class DocUploader(BaseUploader):
     NAME = "doc.txt"
 
     async def get_server(self, **kwargs) -> dict:

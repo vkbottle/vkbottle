@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Generic, List, NoReturn, Optional, TypeVar
 
 if TYPE_CHECKING:
@@ -13,7 +13,28 @@ class MiddlewareError(Exception):
     pass
 
 
-class BaseMiddleware(ABC, Generic[T]):
+class ABCMiddleware(ABC):
+    @abstractmethod
+    def stop(self, description: Any = "") -> NoReturn:
+        ...
+
+    @abstractmethod
+    def send(self, context_update: Optional[dict] = None) -> None:
+        ...
+
+    @abstractmethod
+    async def pre(self) -> None:
+        ...
+
+    @abstractmethod
+    async def post(self) -> None:
+        ...
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}>"
+
+
+class BaseMiddleware(Generic[T]):
     event: T
     view: Optional["ABCView"]
     handle_responses: List
@@ -76,6 +97,3 @@ class BaseMiddleware(ABC, Generic[T]):
 
     async def post(self) -> None:
         ...
-
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"

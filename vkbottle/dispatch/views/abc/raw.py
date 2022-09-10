@@ -48,7 +48,7 @@ class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
             if isinstance(event_model, dict):
                 event_model["ctx_api"] = ctx_api
             else:
-                setattr(event_model, "unprepared_ctx_api", ctx_api)
+                event_model.unprepared_ctx_api = ctx_api  # type: ignore
 
             result = await handler_basement.handler.filter(event_model)
             logger.debug("Handler {} returned {}", handler_basement.handler, result)

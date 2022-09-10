@@ -1,4 +1,3 @@
-from abc import ABC
 from typing import TYPE_CHECKING, List, Union
 
 from .base import BaseUploader
@@ -7,7 +6,7 @@ if TYPE_CHECKING:
     from .base import Bytes
 
 
-class PhotoUploader(BaseUploader, ABC):
+class PhotoUploader(BaseUploader):
     NAME = "picture.jpg"
 
     @property

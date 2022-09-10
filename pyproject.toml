@@ -50,9 +50,6 @@ aiofiles = ">=0.8,<22.2"
 typing-extensions = "^4.3.0"
 
 
-[tool.poetry.group.dev]
-optional = true
-
 [tool.poetry.group.dev.dependencies]
 # Lint
 black = "^22.8.0"
@@ -64,6 +61,7 @@ types-aiofiles = "^22.1.0"
 # flake8 and it's plugins
 flake8 = "^4.0.1"
 flakeheaven = "^3.0.0" # wrapper for flake8 with better plugin management
+flake8-bugbear = "^22.8.23"
 # Tests
 pytest = "^7.1.3"
 pytest-asyncio = "^0.19.0"
@@ -111,7 +109,7 @@ line_length = 99
 
 
 [tool.flakeheaven]
-max_line_length = 99
+max-line-length = 99
 exclude = [
   ".git",
   "build",

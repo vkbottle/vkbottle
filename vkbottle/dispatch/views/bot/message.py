@@ -1,4 +1,3 @@
-from abc import ABC
 from typing import TYPE_CHECKING, Generic, Optional, TypeVar
 
 from vkbottle_types.events import GroupEventType
@@ -14,7 +13,7 @@ if TYPE_CHECKING:
 T_contra = TypeVar("T_contra", contravariant=True)
 
 
-class ABCBotMessageView(ABCMessageView[dict, T_contra], ABC, Generic[T_contra]):
+class ABCBotMessageView(ABCMessageView[dict, T_contra], Generic[T_contra]):
     def __init__(self):
         super().__init__()
         self.handler_return_manager = BotMessageReturnHandler()
