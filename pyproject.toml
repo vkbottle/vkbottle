@@ -103,11 +103,8 @@ line-length = 99
 target-version = ['py37', 'py38']
 
 [tool.isort]
-force_grid_wrap = 0
-include_trailing_comma = true
+profile = "black"
 line_length = 99
-multi_line_output = 3
-use_parentheses = true
 
 [build-system]
 build-backend = "poetry.masonry.api"
