@@ -1,19 +1,19 @@
-from typing import Any, List
-
-from pydantic.validators import int_validator, str_validator
+from typing import List
 
 from .code_exception import CodeException
 
 
 class VKAPIError(CodeException):
-    def __init__(self, *, error_msg: Any, request_params: List[dict]):
-        super().__init__(error_msg)
-        self.description = str_validator(error_msg)
+    def __init__(self, *, error_msg: str, request_params: List[dict]):
+        self.description = error_msg
         self.params = {item["key"]: item["value"] for item in request_params}
 
+    def __str__(self) -> str:
+        return self.description
 
-class CaptchaError(VKAPIError[14]):  # type: ignore
-    def __init__(self, *, captcha_sid: Any, captcha_img: Any, **kwargs):
+
+class CaptchaError(VKAPIError, code=14):
+    def __init__(self, *, captcha_sid: str, captcha_img: str, **kwargs):
         super().__init__(**kwargs)
-        self.sid = int_validator(captcha_sid)
-        self.img = str_validator(captcha_img)
+        self.sid = int(captcha_sid)
+        self.img = captcha_img
