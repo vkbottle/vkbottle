@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, NoReturn, Type, Union
+from typing import TYPE_CHECKING, Any, NoReturn, Union
 
 from vkbottle.exception_factory import CaptchaError, VKAPIError
 from vkbottle.modules import logger
@@ -7,9 +7,6 @@ from .abc import ABCResponseValidator
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
-
-
-SPECIFIC_ERRORS: Dict[int, Type[VKAPIError]] = {14: CaptchaError}
 
 
 class VKAPIErrorResponseValidator(ABCResponseValidator):
@@ -40,12 +37,11 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
             return None
         error = response["error"]
         code = error.pop("error_code")
-        exception = SPECIFIC_ERRORS.get(code, VKAPIError[code])
 
-        if exception == CaptchaError and ctx_api.captcha_handler:
-            key = await ctx_api.captcha_handler(exception(**error))  # type: ignore
+        if VKAPIError[code] is CaptchaError and ctx_api.captcha_handler:
+            key = await ctx_api.captcha_handler(CaptchaError(**error))  # type: ignore
             return await ctx_api.request(
                 method, {**data, "captcha_sid": error["captcha_sid"], "captcha_key": key}
             )
 
-        raise exception(**error)
+        raise VKAPIError[code](**error)
