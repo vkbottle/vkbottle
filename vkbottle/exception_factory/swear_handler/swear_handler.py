@@ -4,9 +4,11 @@ from typing import Any, Callable, Optional, Tuple, Type, Union
 
 from vkbottle.modules import logger
 
+EXCEPTION = Union[Exception, Type[Exception]]
+
 
 def swear(
-    exception: Union[Exception, Type[Exception], Tuple[Union[Exception, Type[Exception]], ...]],
+    exception: Union[EXCEPTION, Tuple[EXCEPTION, ...]],
     exception_handler: Optional[Callable] = None,
     just_log: bool = False,
     just_return: bool = False,

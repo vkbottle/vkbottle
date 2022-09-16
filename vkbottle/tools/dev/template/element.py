@@ -13,7 +13,7 @@ class TemplateElement:
         title: Optional[str] = None,
         description: Optional[str] = None,
         photo_id: Optional[str] = None,
-        buttons: Optional[Union[List[KeyboardButton], List[dict], str]] = None,
+        buttons: Union[List[KeyboardButton], List[dict], str, None] = None,
         action: Optional[dict] = None,
     ):
         assert buttons, "Buttons are required"

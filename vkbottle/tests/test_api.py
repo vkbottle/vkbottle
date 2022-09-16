@@ -71,9 +71,9 @@ async def test_captcha_error_handling(api: API):
 @pytest.mark.asyncio
 @with_mocked_api(None)
 async def test_api_invalid_response(api: API):
-    api.request_rescheduler = MockedRescheduler(None, {"some": "response"})
+    api.request_rescheduler = MockedRescheduler(None, {"response": {"some": "response"}})
     response = await api.request("some.method", {})
-    assert response == {"some": "response"}
+    assert response == {"response": {"some": "response"}}
 
 
 @pytest.mark.asyncio

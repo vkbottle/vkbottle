@@ -5,6 +5,7 @@ from typing import Optional
 
 from vkbottle import GroupEventType, GroupTypes, Keyboard, Text, VKAPIError
 from vkbottle.bot import Bot, Message
+from vkbottle.modules import logger
 
 bot = Bot(os.environ["token"])
 
@@ -59,7 +60,7 @@ async def group_join_handler(event: GroupTypes.GroupJoin):
     # Read more about exception handling in documentation
     # low-level/exception_handling/exception_handling
     except VKAPIError[901]:
-        pass
+        logger.error("Can't send message to user with id {}", event.object.user_id)
 
 
 # Runs loop > loop.run_forever() > with tasks created in loop_wrapper before,

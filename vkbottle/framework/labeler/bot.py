@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Type, Union
+from typing import TYPE_CHECKING, Any, Callable, List, Optional, Type, Union
 
 from vkbottle_types.events import GroupEventType
 
@@ -6,7 +6,7 @@ from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule
 from vkbottle.dispatch.views.bot import BotHandlerBasement, BotMessageView, RawBotEventView
 
-from .base import BaseLabeler
+from .base import CUSTOM_RULES_TYPE, BaseLabeler
 
 if TYPE_CHECKING:
     from vkbottle_types.events import BaseGroupEvent
@@ -35,7 +35,7 @@ class BotLabeler(BaseLabeler):
         self,
         message_view: Optional["ABCBotMessageView"] = None,
         raw_event_view: Optional[RawBotEventView] = None,
-        custom_rules: Optional[Dict[str, Type["ABCRule"]]] = None,
+        custom_rules: Optional[CUSTOM_RULES_TYPE] = None,
         auto_rules: Optional[List["ABCRule"]] = None,
         raw_event_auto_rules: Optional[List["ABCRule"]] = None,
     ):

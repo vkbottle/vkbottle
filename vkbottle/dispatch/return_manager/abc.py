@@ -1,9 +1,12 @@
 from abc import ABC, abstractmethod, abstractproperty
-from typing import Any, Callable, Coroutine, Dict, NamedTuple, Optional, Tuple, Union
+from typing import Any, Awaitable, Callable, Dict, NamedTuple, Optional, Tuple, Union
 
-HandlerProperty = NamedTuple(
-    "HandlerProperty", (("types", Union[type, Tuple[type, ...]]), ("handler", Callable))
-)
+HANDLER_PROPERTY_TYPES = Union[type, Tuple[type, ...]]
+
+
+class HandlerProperty(NamedTuple):
+    types: HANDLER_PROPERTY_TYPES
+    handler: Callable
 
 
 # TODO: fix types here
@@ -32,7 +35,7 @@ class BaseReturnManager(ABCRetunManager):
                 return handler
 
     @property
-    def handlers(self) -> Dict[Union[type, Tuple[type, ...]], Callable[[Any], Coroutine]]:
+    def handlers(self) -> Dict[HANDLER_PROPERTY_TYPES, Callable[[Any], Awaitable]]:
         return {
             v.types: v.handler
             for k, v in vars(self.__class__).items()

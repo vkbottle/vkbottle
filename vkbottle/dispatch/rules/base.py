@@ -33,30 +33,6 @@ if TYPE_CHECKING:
 
 from .abc import ABCRule
 
-__all__ = (
-    "PeerRule",
-    "MentionRule",
-    "CommandRule",
-    "VBMLRule",
-    "StickerRule",
-    "FromPeerRule",
-    "AttachmentTypeRule",
-    "LevenshteinRule",
-    "MessageLengthRule",
-    "ChatActionRule",
-    "PayloadRule",
-    "PayloadContainsRule",
-    "PayloadMapRule",
-    "FromUserRule",
-    "FuncRule",
-    "CoroutineRule",
-    "StateRule",
-    "StateGroupRule",
-    "RegexRule",
-    "MacroRule",
-)
-
-
 DEFAULT_PREFIXES = ["!", "/"]
 PayloadMap = List[Tuple[str, Union[type, Callable[[Any], bool], ABCValidator, Any]]]
 PayloadMapStrict = List[Tuple[str, ABCValidator]]
@@ -91,28 +67,29 @@ class CommandRule(ABCRule[BaseMessageMin]):
         sep: str = " ",
     ):
         self.prefixes = prefixes or DEFAULT_PREFIXES
-        self.command_text = command_text if isinstance(command_text, str) else command_text[0]
-        self.args_count = args_count if isinstance(command_text, str) else command_text[1]
+        if isinstance(command_text, str):
+            self.command_text = command_text
+            self.args_count = args_count
+        else:
+            self.command_text, self.args_count = command_text
         self.sep = sep
 
     async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
         for prefix in self.prefixes:
-            if self.args_count == 0 and event.text == prefix + self.command_text:
+            text_lenght = len(prefix + self.command_text)
+            text_lenght_with_sep = text_lenght + len(self.sep)
+            if self.args_count == 0 and event.text == text_lenght:
                 return True
-            if self.args_count > 0 and event.text.startswith(prefix + self.command_text + " "):
-                args = event.text[len(prefix + self.command_text) + 1 :].split(self.sep)
-                if len(args) != self.args_count:
-                    return False
-                elif any(len(arg) == 0 for arg in args):
-                    return False
-                return {"args": tuple(args)}
+            elif event.text.startswith(prefix + self.command_text + self.sep):
+                args = event.text[text_lenght_with_sep:].split(self.sep)
+                return {"args": args} if len(args) == self.args_count and all(args) else False
         return False
 
 
 class VBMLRule(ABCRule[BaseMessageMin]):
     def __init__(
         self,
-        pattern: Union[str, "vbml.Pattern", Iterable[Union[str, "vbml.Pattern"]]],
+        pattern: Union[str, "vbml.Pattern", Iterable[str], Iterable["vbml.Pattern"]],
         patcher: Optional["vbml.Patcher"] = None,
         flags: Optional[re.RegexFlag] = None,
     ):
@@ -158,23 +135,19 @@ class RegexRule(ABCRule[BaseMessageMin]):
 
 
 class StickerRule(ABCRule[BaseMessageMin]):
-    def __init__(self, sticker_ids: Union[List[int], int] = None):
-        sticker_ids = sticker_ids or []
+    def __init__(self, sticker_ids: Union[List[int], int, None] = None):
         if isinstance(sticker_ids, int):
             sticker_ids = [sticker_ids]
         self.sticker_ids = sticker_ids
 
     async def check(self, event: BaseMessageMin) -> bool:
-        if not event.attachments:
+        if not event.attachments or not event.attachments[0].sticker:
             return False
-        elif not event.attachments[0].sticker:
-            return False
-        else:
-            if not self.sticker_ids:
-                if event.attachments[0].sticker.sticker_id:
-                    return True
-            elif event.attachments[0].sticker.sticker_id in self.sticker_ids:
+        if not self.sticker_ids:
+            if event.attachments[0].sticker.sticker_id:
                 return True
+        elif event.attachments[0].sticker.sticker_id in self.sticker_ids:
+            return True
         return False
 
 
@@ -195,10 +168,10 @@ class AttachmentTypeRule(ABCRule[BaseMessageMin]):
         self.attachment_types = attachment_types
 
     async def check(self, event: BaseMessageMin) -> bool:
-        if not event.attachments:
-            return False
-        return all(
-            attachment.type.value in self.attachment_types for attachment in event.attachments
+        return (
+            all(attachment.type.value in self.attachment_types for attachment in event.attachments)
+            if event.attachments
+            else False
         )
 
 
@@ -293,9 +266,11 @@ class PayloadContainsRule(ABCRule[BaseMessageMin]):
         if event.payload is None:
             return False
         payload = event.get_payload_json()
-        if not isinstance(payload, dict):
-            return False
-        return all(payload.get(k) == v for k, v in self.payload_particular_part.items())
+        return (
+            all(payload.get(k) == v for k, v in self.payload_particular_part.items())
+            if isinstance(payload, dict)
+            else False
+        )
 
 
 class PayloadMapRule(ABCRule[BaseMessageMin]):
@@ -330,15 +305,13 @@ class PayloadMapRule(ABCRule[BaseMessageMin]):
         return payload_map  # type: ignore
 
     @classmethod
-    async def match(cls, payload: dict, payload_map: PayloadMapStrict):
+    async def match(cls, payload: dict, payload_map: PayloadMapStrict) -> bool:
         """Matches payload with payload_map recursively"""
-        for (k, validator) in payload_map:
-            if k not in payload:
+        for (k, validator) in payload_map:  # noqa: SIM111
+            if k not in payload:  # noqa: SIM114
                 return False
-            elif isinstance(validator, list):
-                if not isinstance(payload[k], dict):
-                    return False
-                elif not await cls.match(payload[k], validator):
+            elif isinstance(validator, list):  # noqa: SIM102
+                if not (isinstance(payload[k], dict) and await cls.match(payload[k], validator)):
                     return False
             elif not await validator.check(payload[k]):
                 return False
@@ -348,9 +321,7 @@ class PayloadMapRule(ABCRule[BaseMessageMin]):
         payload = event.get_payload_json()
         if not isinstance(payload, dict):
             return False
-        if await self.match(payload, self.payload_map):
-            return payload
-        return False
+        return payload if await self.match(payload, self.payload_map) else False
 
 
 class FromUserRule(ABCRule[BaseMessageMin]):
@@ -382,7 +353,7 @@ class CoroutineRule(ABCRule[BaseMessageMin]):
 class StateRule(ABCRule[BaseMessageMin]):
     def __init__(
         self,
-        state: Optional[Union[List["BaseStateGroup"], "BaseStateGroup"]] = None,
+        state: Union[List["BaseStateGroup"], "BaseStateGroup", None] = None,
     ):
         if not isinstance(state, list):
             state = [] if state is None else [state]
@@ -394,10 +365,14 @@ class StateRule(ABCRule[BaseMessageMin]):
         return event.state_peer.state in self.state
 
 
+BASESTATEGROUP_TYPE = Type["BaseStateGroup"]
+STATEGROUPRULE_ARG = Union[BASESTATEGROUP_TYPE, List[BASESTATEGROUP_TYPE]]
+
+
 class StateGroupRule(ABCRule[BaseMessageMin]):
     def __init__(
         self,
-        state_group: Optional[Union[List[Type["BaseStateGroup"]], Type["BaseStateGroup"]]] = None,
+        state_group: Optional[STATEGROUPRULE_ARG] = None,
     ):
         if not isinstance(state_group, list):
             state_group = [] if state_group is None else [state_group]
@@ -418,12 +393,12 @@ except ImportError:
 
 class MacroRule(ABCRule[BaseMessageMin]):
     def __init__(self, pattern: Union[str, List[str]]):
-        if macro is None:
+        if macro is None:  # type: ignore
             raise RuntimeError("macro must be installed to use MacroRule")
 
         if isinstance(pattern, str):
             pattern = [pattern]
-        self.patterns = list(map(macro.Pattern, pattern))
+        self.patterns = list(map(macro.Pattern, pattern))  # type: ignore
 
     async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
         for pattern in self.patterns:
@@ -431,3 +406,27 @@ class MacroRule(ABCRule[BaseMessageMin]):
             if result is not None:
                 return result
         return False
+
+
+__all__ = (
+    "PeerRule",
+    "MentionRule",
+    "CommandRule",
+    "VBMLRule",
+    "StickerRule",
+    "FromPeerRule",
+    "AttachmentTypeRule",
+    "LevenshteinRule",
+    "MessageLengthRule",
+    "ChatActionRule",
+    "PayloadRule",
+    "PayloadContainsRule",
+    "PayloadMapRule",
+    "FromUserRule",
+    "FuncRule",
+    "CoroutineRule",
+    "StateRule",
+    "StateGroupRule",
+    "RegexRule",
+    "MacroRule",
+)

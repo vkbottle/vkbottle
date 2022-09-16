@@ -31,8 +31,13 @@ if TYPE_CHECKING:
     from .response_validator import ABCResponseValidator
     from .token_generator import Token
 
-APIRequest = NamedTuple("APIRequest", [("method", str), ("data", dict)])
+
 CaptchaHandler = typing.Callable[[CaptchaError], typing.Awaitable]
+
+
+class APIRequest(NamedTuple):
+    method: str
+    data: dict
 
 
 class API(ABCAPI):

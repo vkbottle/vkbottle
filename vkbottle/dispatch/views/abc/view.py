@@ -81,8 +81,8 @@ class ABCView(ABC, Generic[T_contra]):
         try:
             if not issubclass(middleware, BaseMiddleware):
                 raise ValueError("Argument is not a subclass of BaseMiddleware")
-        except TypeError:
-            raise ValueError("Argument is not a class")
+        except TypeError as e:
+            raise ValueError("Argument is not a class") from e
         self.middlewares.append(middleware)
 
     def __repr__(self) -> str:

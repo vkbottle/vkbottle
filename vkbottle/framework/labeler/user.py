@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Type, Union
+from typing import TYPE_CHECKING, Any, Callable, List, Optional, Type, Union
 
 from vkbottle_types.events.enums import UserEventType
 from vkbottle_types.events.user_events import RawUserEvent
@@ -7,7 +7,7 @@ from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule
 from vkbottle.dispatch.views.user import RawUserEventView, UserHandlerBasement, UserMessageView
 
-from .base import BaseLabeler
+from .base import CUSTOM_RULES_TYPE, BaseLabeler
 
 if TYPE_CHECKING:
     from vkbottle_types.events import BaseUserEvent
@@ -36,7 +36,7 @@ class UserLabeler(BaseLabeler):
         self,
         message_view: Optional["ABCUserMessageView"] = None,
         raw_event_view: Optional[RawUserEventView] = None,
-        custom_rules: Optional[Dict[str, Type["ABCRule"]]] = None,
+        custom_rules: Optional[CUSTOM_RULES_TYPE] = None,
         auto_rules: Optional[List["ABCRule"]] = None,
         raw_event_auto_rules: Optional[List["ABCRule"]] = None,
     ):

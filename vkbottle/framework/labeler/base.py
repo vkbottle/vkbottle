@@ -42,13 +42,15 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type["ABCRule"]] = {
     "text": base.VBMLRule,
 }
 
+CUSTOM_RULES_TYPE = Dict[str, Type["ABCRule"]]
+
 
 class BaseLabeler(ABCLabeler):
     def __init__(
         self,
         message_view: "ABCMessageView",
         raw_event_view: "ABCRawEventView",
-        custom_rules: Optional[Dict[str, Type["ABCRule"]]] = None,
+        custom_rules: Optional[CUSTOM_RULES_TYPE] = None,
         auto_rules: Optional[List["ABCRule"]] = None,
         raw_event_auto_rules: Optional[List["ABCRule"]] = None,
     ):

@@ -97,7 +97,7 @@ def set_http_callback(api: API, callback: Callable[[str, str, dict], Any]):
     api.http_client = MockedClient(callback=callback)
 
 
-async def test_bot_polling():
+async def test_bot_polling():  # noqa: CCR001
     class TestApi(API):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -119,9 +119,7 @@ async def test_bot_polling():
             return EXAMPLE_EVENT
         elif "messages.send" in url:
             _r = {**data, **{"r": 1}}
-            if "peer_ids" in data:
-                return {"response": [_r]}
-            return {"response": _r}
+            return {"response": [_r]} if "peer_ids" in data else {"response": _r}
 
     bot = Bot(api=TestApi("token"))
     set_http_callback(bot.api, callback)
@@ -229,7 +227,7 @@ async def test_rules(api: API):
     ]
     assert await base.CommandRule("cmd", ["!", "."], 2).check(
         fake_message(api, text="!cmd test bar")
-    ) == {"args": ("test", "bar")}
+    ) == {"args": ["test", "bar"]}
     assert (
         await base.CommandRule("cmd", ["!", "."], 2).check(fake_message(api, text="cmd test bar"))
         is False

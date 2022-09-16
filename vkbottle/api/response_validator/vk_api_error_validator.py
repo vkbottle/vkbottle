@@ -14,7 +14,7 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
     Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/response-validator.md
     """
 
-    async def validate(
+    async def validate(  # noqa: CCR001
         self,
         method: str,
         data: dict,
@@ -23,14 +23,15 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
     ) -> Union[Any, NoReturn]:
         if "error" not in response:
             if "response" not in response:
-                # invalid response, just ignore it
-                return response
-            elif isinstance(response["response"], list):
-                errors = [item["error"] for item in response["response"] if "error" in item]
-                if errors:
-                    logger.debug(
-                        "{} API error(s) in response wasn't handled: {}", len(errors), errors
-                    )
+                request_params = [{"key": key, "value": value} for key, value in data.items()]
+                raise VKAPIError[1](
+                    error_msg=f"Unknown response from {method}: {response}",
+                    request_params=request_params,
+                )
+            if isinstance(response["response"], list) and any(
+                "error" in item for item in response["response"]
+            ):
+                logger.info("API error(s) in response wasn't handled: {}", response["response"])
             return response
 
         if ctx_api.ignore_errors:

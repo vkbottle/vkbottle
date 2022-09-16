@@ -52,7 +52,8 @@ async def info_handler(message: Message):
 
 @bot.on.private_message(state=MenuState.INFO, payload_map=[("item", str)])
 async def info_item_handler(message: Message):
-    await message.answer(f"Cool! I am too interested in {message.get_payload_json()['item']}!")
+    payload: dict = message.get_payload_json()  # type: ignore
+    await message.answer(f"Cool! I am too interested in {payload['item']}!")
     await start_handler(message)
 
 
