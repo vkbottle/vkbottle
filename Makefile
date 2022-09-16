@@ -11,7 +11,6 @@ help:
 
 # Use poetry or activated venv
 interpreter := $(shell poetry env info --path > /dev/null 2>&1 && echo "poetry run")
-# extract_ignores = $(shell awk '/.*.py/{split($$1,a,":"); print a[1]}' .flake8 | tr '\n' ',')
 
 
 check-venv:
@@ -67,4 +66,3 @@ publish: ## Publish to PyPi using PYPI_TOKEN
 	@# "; true" is used to ignore command exit code so that rm -rf can execute anyway
 	poetry publish; true
 	rm -rf dist/
-#   extract_ignores=$(shell echo "$$(grep ':F401' .flake8 | sed -n 's/\s*\(\S*\):F401/\1,/p' | tr '\n' '\0')")
