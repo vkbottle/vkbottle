@@ -24,7 +24,7 @@ class Keyboard:
     def add(
         self, action: "ABCAction", color: Optional["KeyboardButtonColor"] = None
     ) -> "Keyboard":
-        if not len(self.buttons):
+        if not self.buttons:
             self.row()
         button = KeyboardButton.from_typed(action, color)
         self.buttons[-1].append(button)

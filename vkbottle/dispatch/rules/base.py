@@ -241,11 +241,7 @@ class ChatActionRule(ABCRule[BaseMessageMin]):
         self.chat_action_types = chat_action_types
 
     async def check(self, event: BaseMessageMin) -> bool:
-        if not event.action:
-            return False
-        elif event.action.type.value in self.chat_action_types:
-            return True
-        return False
+        return event.action.type.value in self.chat_action_types if event.action else False
 
 
 class PayloadRule(ABCRule[BaseMessageMin]):
@@ -308,9 +304,9 @@ class PayloadMapRule(ABCRule[BaseMessageMin]):
     async def match(cls, payload: dict, payload_map: PayloadMapStrict) -> bool:
         """Matches payload with payload_map recursively"""
         for (k, validator) in payload_map:  # noqa: SIM111
-            if k not in payload:  # noqa: SIM114
+            if k not in payload:
                 return False
-            elif isinstance(validator, list):  # noqa: SIM102
+            elif isinstance(validator, list):
                 if not (isinstance(payload[k], dict) and await cls.match(payload[k], validator)):
                     return False
             elif not await validator.check(payload[k]):

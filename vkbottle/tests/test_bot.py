@@ -118,7 +118,7 @@ async def test_bot_polling():  # noqa: CCR001
         elif "!SERVER!" in url:
             return EXAMPLE_EVENT
         elif "messages.send" in url:
-            _r = {**data, **{"r": 1}}
+            _r = {**data, "r": 1}
             return {"response": [_r]} if "peer_ids" in data else {"response": _r}
 
     bot = Bot(api=TestApi("token"))

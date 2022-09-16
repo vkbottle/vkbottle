@@ -33,7 +33,7 @@ class LoopWrapper:
     def run_forever(self, loop: Optional[AbstractEventLoop] = None) -> NoReturn:  # type: ignore
         """Runs startup tasks and makes the loop running forever"""
 
-        if not len(self.tasks):
+        if not self.tasks:
             logger.warning("You ran loop with 0 tasks. Is it ok?")
 
         loop = loop or get_event_loop()

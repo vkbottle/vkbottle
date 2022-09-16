@@ -76,7 +76,7 @@ def assert_rule(res, rev=False):
     assert (res is not False) is not rev
 
 
-class MockedLoop:
+class MockedLoop:  # noqa: PIE798
     @staticmethod
     def create_task(task):
         ctx_storage.set("checked-test-lw-create-task", task.__name__)

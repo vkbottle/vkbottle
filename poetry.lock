@@ -206,6 +206,17 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "dlint"
+version = "0.13.0"
+description = "Dlint is a tool for encouraging best coding practices and helping ensure Python code is secure."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+flake8 = ">=3.6.0,<6.0.0"
+
+[[package]]
 name = "entrypoints"
 version = "0.4"
 description = "Discover and load entry points from installed packages."
@@ -288,6 +299,17 @@ python-versions = "*"
 [package.extras]
 lint = ["flake8"]
 test = ["PyHamcrest", "pytest", "pytest-cov"]
+
+[[package]]
+name = "flake8-pie"
+version = "0.16.0"
+description = "A flake8 extension that implements misc. lints"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+typing_extensions = "*"
 
 [[package]]
 name = "flake8-scream"
@@ -817,7 +839,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "70d7d1420fbbc58cdec649ad2e76434565880851d0816cc99db3f0049c366482"
+content-hash = "f0ecb2920eaf0e898a95f0dbb0dd992493bfcd4995cbc63b06a74a7fd834ce42"
 
 [metadata.files]
 aiofiles = [
@@ -1027,6 +1049,9 @@ distlib = [
     {file = "distlib-0.3.6-py2.py3-none-any.whl", hash = "sha256:f35c4b692542ca110de7ef0bea44d73981caeb34ca0b9b6b2e6d7790dda8f80e"},
     {file = "distlib-0.3.6.tar.gz", hash = "sha256:14bad2d9b04d3a36127ac97f30b12a19268f211063d8f8ee4f47108896e11b46"},
 ]
+dlint = [
+    {file = "dlint-0.13.0-py3-none-any.whl", hash = "sha256:72094f35711a338eed4b8f95cbbaade5ec1d784bec516933bdbc2863676c4298"},
+]
 entrypoints = [
     {file = "entrypoints-0.4-py3-none-any.whl", hash = "sha256:f174b5ff827504fd3cd97cc3f8649f3693f51538c7e4bdf3ef002c8429d42f9f"},
     {file = "entrypoints-0.4.tar.gz", hash = "sha256:b706eddaa9218a19ebcd67b56818f05bb27589b1ca9e8d797b74affad4ccacd4"},
@@ -1053,6 +1078,10 @@ flake8-bugbear = [
 ]
 flake8-logging-format = [
     {file = "flake8-logging-format-0.7.5.tar.gz", hash = "sha256:54f7e349c934ce5c594f251885bc2240e99f6b48752a672a8fc7e3d1388352bb"},
+]
+flake8-pie = [
+    {file = "flake8-pie-0.16.0.tar.gz", hash = "sha256:b8dcb7b92706fa33d05d92a4b3e49b7a9fd3f0041849166275b646ba50e515ba"},
+    {file = "flake8_pie-0.16.0-py3-none-any.whl", hash = "sha256:24cd7849b0eee22e2328b9e9d2a1dea40013b0a3106864bbadd06a4b05dbb71f"},
 ]
 flake8-scream = [
     {file = "flake8_scream-0.1.0-py3-none-any.whl", hash = "sha256:11e03260c64364d22ee1c8de4773bc382beb317b826a0f602c4b898f5fde0649"},

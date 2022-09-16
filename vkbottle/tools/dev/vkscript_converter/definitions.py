@@ -204,7 +204,7 @@ def if_statement(d: ast.If):
         + "){"
         + "".join(find(li) for li in d.body)
         + "}else{"
-        + ("".join(find(e) for e in d.orelse) if len(d.orelse) else "")
+        + ("".join(find(e) for e in d.orelse) if d.orelse else "")
         + "};"
     )
 
