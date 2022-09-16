@@ -8,7 +8,14 @@ class CodeExceptionMeta(type):
     __exceptions__: Dict[int, Any]
     __code_specified__ = False
 
-    def __init__(cls, name: str, bases: Tuple[type, ...], attrs: Dict[str, object], *, code: Optional[int] = None):
+    def __init__(
+        cls,
+        name: str,
+        bases: Tuple[type, ...],
+        attrs: Dict[str, object],
+        *,
+        code: Optional[int] = None,
+    ):
         super().__init__(name, bases, attrs)
         if code is None:
             cls.__exceptions__ = {}
@@ -26,7 +33,11 @@ class CodeExceptionMeta(type):
     def __getitem__(cls: T, codes: Tuple[int, ...], /) -> Union[Tuple[T, ...], Any]:
         ...
 
-    def __getitem__(cls: T, code_or_codes: Union[int, Tuple[int, ...]], /) -> Union[T, Tuple[T], Any]:
+    def __getitem__(
+        cls: T,
+        code_or_codes: Union[int, Tuple[int, ...]],
+        /,
+    ) -> Union[T, Tuple[T], Any]:
         if cls.__code_specified__:
             raise TypeError("exception code already specified")
         if isinstance(code_or_codes, tuple):
@@ -44,7 +55,9 @@ class CodeExceptionMeta(type):
         return cls.__exceptions__[code]
 
     def _create_exception(cls, code: int) -> None:
-        cls.register_exception(cast(CodeExceptionMeta, type(f"{cls.__name__}_{code}", (cast(type, cls),), {})), code)
+        cls.register_exception(
+            cast(CodeExceptionMeta, type(f"{cls.__name__}_{code}", (cast(type, cls),), {})), code
+        )
 
 
 class CodeException(Exception, metaclass=CodeExceptionMeta):

@@ -1,21 +1,26 @@
 from abc import ABC, abstractmethod
-from typing import Any, Awaitable, Callable, Dict, Optional, Type
+from typing import Any, Awaitable, Callable, Coroutine, Dict, Optional, Type, TypeVar
 
-AsyncFunc = Callable[..., Awaitable[Any]]
+from typing_extensions import ParamSpec
+
+P = ParamSpec("P")
+
+T = TypeVar("T")
+T_AsyncFunc = TypeVar("T_AsyncFunc", bound=Callable[..., Awaitable[object]])
 
 
 class ABCErrorHandler(ABC):
-    error_handlers: Dict[Type[Exception], AsyncFunc]
-    undefined_error_handler: Optional[AsyncFunc]
+    error_handlers: Dict[Type[Exception], Callable[..., Awaitable[Any]]]
+    undefined_error_handler: Optional[Callable[..., Awaitable[Any]]]
 
     @abstractmethod
     def register_error_handler(
         self, *error_types: Type[Exception]
-    ) -> Callable[[AsyncFunc], AsyncFunc]:
+    ) -> Callable[[T_AsyncFunc], T_AsyncFunc]:
         pass
 
     @abstractmethod
-    def register_undefined_error_handler(self, handler: AsyncFunc) -> AsyncFunc:
+    def register_undefined_error_handler(self, handler: T_AsyncFunc) -> T_AsyncFunc:
         pass
 
     @abstractmethod
@@ -23,5 +28,5 @@ class ABCErrorHandler(ABC):
         pass
 
     @abstractmethod
-    def catch(self, func: AsyncFunc) -> AsyncFunc:
+    def catch(self, func: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]:
         pass
