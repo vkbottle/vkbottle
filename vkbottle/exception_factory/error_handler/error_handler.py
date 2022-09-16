@@ -1,11 +1,16 @@
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Callable, Optional, Type
+from typing import Any, Awaitable, Callable, Coroutine, Optional, Type, TypeVar
+
+from typing_extensions import ParamSpec
+
+from vkbottle.modules import logger
 
 from .abc import ABCErrorHandler
 
-if TYPE_CHECKING:
-    from .abc import AsyncFunc
-from vkbottle.modules import logger
+P = ParamSpec("P")
+
+T = TypeVar("T")
+T_AsyncFunc = TypeVar("T_AsyncFunc", bound=Callable[..., Awaitable[object]])
 
 
 class ErrorHandler(ABCErrorHandler):
@@ -17,19 +22,19 @@ class ErrorHandler(ABCErrorHandler):
 
     def register_error_handler(
         self, *error_types: Type[Exception]
-    ) -> Callable[["AsyncFunc"], "AsyncFunc"]:
-        def decorator(handler: "AsyncFunc") -> "AsyncFunc":
+    ) -> Callable[[T_AsyncFunc], T_AsyncFunc]:
+        def decorator(handler: T_AsyncFunc) -> T_AsyncFunc:
             for error_type in error_types:
                 self.error_handlers[error_type] = handler
             return handler
 
         return decorator
 
-    def register_undefined_error_handler(self, handler: "AsyncFunc") -> "AsyncFunc":
+    def register_undefined_error_handler(self, handler: T_AsyncFunc) -> T_AsyncFunc:
         self.undefined_error_handler = handler
         return handler
 
-    def lookup_handler(self, for_type: Type[Exception]) -> Optional["AsyncFunc"]:
+    def lookup_handler(self, for_type: Type[Exception]) -> Optional[Callable[..., Awaitable[Any]]]:
         for error_type in self.error_handlers:
             if issubclass(for_type, error_type):
                 return self.error_handlers[error_type]
@@ -47,11 +52,11 @@ class ErrorHandler(ABCErrorHandler):
             return await handler(error, *args, **kwargs)
         return await handler(error)
 
-    def catch(self, func: "AsyncFunc") -> "AsyncFunc":
+    def catch(self, func: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]:
         @wraps(func)
-        async def wrapper(*args, **kwargs) -> Any:
+        async def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
             try:
-                await func(*args, **kwargs)
+                return await func(*args, **kwargs)
             except Exception as error:
                 return await self.handle(error, *args, **kwargs)
 
