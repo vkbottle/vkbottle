@@ -1,3 +1,6 @@
 from .message import MessageMin, message_min
 
-__all__ = ("message_min", "MessageMin")
+__all__ = (
+    "MessageMin",
+    "message_min",
+)

@@ -6,7 +6,7 @@ from .util import get_token_generator
 __all__ = (
     "ABCTokenGenerator",
     "ConsistentTokenGenerator",
-    "get_token_generator",
     "SingleTokenGenerator",
     "Token",
+    "get_token_generator",
 )

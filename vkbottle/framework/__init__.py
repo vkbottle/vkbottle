@@ -8,7 +8,7 @@ __all__ = (
     "ABCFramework",
     "Bot",
     "BotBlueprint",
-    "run_multibot",
     "User",
     "UserBlueprint",
+    "run_multibot",
 )

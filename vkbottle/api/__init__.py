@@ -22,7 +22,7 @@ __all__ = (
     "ConsistentTokenGenerator",
     "DEFAULT_REQUEST_VALIDATORS",
     "DEFAULT_RESPONSE_VALIDATORS",
-    "get_token_generator",
     "SingleTokenGenerator",
     "Token",
+    "get_token_generator",
 )

@@ -10,12 +10,12 @@ MessageEvent = MessageEventMin
 Blueprint = BotBlueprint
 
 __all__ = (
-    "Bot",
     "Blueprint",
+    "Bot",
     "BotLabeler",
     "Message",
     "MessageEvent",
-    "run_multibot",
     "rules",
+    "run_multibot",
     "views",
 )

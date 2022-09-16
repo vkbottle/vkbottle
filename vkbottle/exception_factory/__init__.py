@@ -8,6 +8,6 @@ __all__ = (
     "CaptchaError",
     "CodeException",
     "ErrorHandler",
-    "swear",
     "VKAPIError",
+    "swear",
 )

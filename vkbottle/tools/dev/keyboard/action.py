@@ -72,10 +72,10 @@ class Callback(ABCAction):
 
 __all__ = (
     "ABCAction",
-    "Text",
-    "OpenLink",
-    "Location",
-    "VKPay",
-    "VKApps",
     "Callback",
+    "Location",
+    "OpenLink",
+    "Text",
+    "VKApps",
+    "VKPay",
 )

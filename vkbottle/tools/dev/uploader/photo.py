@@ -139,11 +139,11 @@ class PhotoMarketUploader(PhotoUploader):
 
 
 __all__ = (
-    "PhotoUploader",
-    "PhotoToAlbumUploader",
-    "PhotoWallUploader",
-    "PhotoFaviconUploader",
-    "PhotoMessageUploader",
     "PhotoChatFaviconUploader",
+    "PhotoFaviconUploader",
     "PhotoMarketUploader",
+    "PhotoMessageUploader",
+    "PhotoToAlbumUploader",
+    "PhotoUploader",
+    "PhotoWallUploader",
 )

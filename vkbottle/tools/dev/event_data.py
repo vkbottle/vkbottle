@@ -20,4 +20,8 @@ class OpenAppEvent(BaseModel):
     hash: str
 
 
-__all__ = ("ShowSnackbarEvent", "OpenLinkEvent", "OpenAppEvent")
+__all__ = (
+    "OpenAppEvent",
+    "OpenLinkEvent",
+    "ShowSnackbarEvent",
+)

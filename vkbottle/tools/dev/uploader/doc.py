@@ -70,9 +70,9 @@ class GraffitiUploader(DocUploader):
 
 
 __all__ = (
+    "DocMessagesUploader",
     "DocUploader",
     "DocWallUploader",
-    "DocMessagesUploader",
-    "VoiceMessageUploader",
     "GraffitiUploader",
+    "VoiceMessageUploader",
 )

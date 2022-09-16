@@ -6,6 +6,6 @@ __all__ = (
     "ABCStateDispenser",
     "BaseStateGroup",
     "BuiltinStateDispenser",
-    "get_state_repr",
     "StatePeer",
+    "get_state_repr",
 )

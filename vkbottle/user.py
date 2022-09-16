@@ -9,11 +9,11 @@ Message = MessageMin
 Blueprint = UserBlueprint
 
 __all__ = (
-    "User",
     "Blueprint",
-    "UserLabeler",
     "Message",
-    "run_multibot",
+    "User",
+    "UserLabeler",
     "rules",
+    "run_multibot",
     "views",
 )
