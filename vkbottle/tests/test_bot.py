@@ -162,7 +162,7 @@ async def test_bot_scopes():
 
 
 def fake_message(ctx_api: API, **data: Any) -> Message:
-    message = dict(peer_id=1, date=1, from_id=1, text="test", out=0, id=1)
+    message = {"peer_id": 1, "date": 1, "from_id": 1, "text": "test", "out": 0, "id": 1}
     message.update(data)
     return message_min(
         {

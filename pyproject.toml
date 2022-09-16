@@ -67,6 +67,7 @@ flake8-logging-format = "^0.7.5"
 flake8-annotations-complexity = "^0.0.7"
 flake8-alphabetize = "^0.0.17"
 flake8-pie = "^0.16.0"
+flake8-comprehensions = "^3.10.0"
 dlint = "^0.13.0"
 # Tests
 pytest = "^7.1.3"

@@ -18,7 +18,7 @@ def empty_middleware_class():
 
 @pytest.fixture
 def empty_event():
-    return dict()
+    return {}
 
 
 @pytest.fixture

@@ -38,12 +38,12 @@ class MessageEventMin(MessageEvent):
         self.event_id = self.object.event_id
 
     async def send_message_event_answer(self, event_data: "EventDataType", **kwargs) -> int:
-        data = dict(
-            event_id=self.event_id,
-            user_id=self.user_id,
-            peer_id=self.peer_id,
-            event_data=event_data.json(),
-        )
+        data = {
+            "event_id": self.event_id,
+            "user_id": self.user_id,
+            "peer_id": self.peer_id,
+            "event_data": event_data.json(),
+        }
         data.update(kwargs)
         return (await self.ctx_api.request("messages.sendMessageEventAnswer", data))["response"]
 
