@@ -1,3 +1,4 @@
+import warnings
 from abc import ABC, abstractmethod
 from io import BytesIO
 from typing import TYPE_CHECKING, Callable, Optional, Union
@@ -18,12 +19,19 @@ class BaseUploader(ABC):
         self,
         api: Optional["ABCAPI"] = None,
         api_getter: Optional[Callable[[], "ABCAPI"]] = None,
-        generate_attachment_strings: bool = True,
         with_name: Optional[str] = None,
+        **kwargs,
     ):
-        assert api_getter is not None or api is not None, "api or api_getter should be set"
+        if api_getter is None and api is None:
+            raise ValueError("You must pass api or api_getter")
         self._get_api = api_getter or (lambda: api)  # type: ignore
-        self.generate_attachment_strings = generate_attachment_strings
+        if "generate_attachment_strings" in kwargs:
+            warnings.warn(
+                "generate_attachment_strings in __init__ is deprecated"
+                " pass this parameter directly to .upload()",
+                DeprecationWarning,
+            )
+            self.generate_attachment_strings = kwargs.pop("generate_attachment_strings")
         self.with_name = with_name
 
     @abstractmethod
@@ -45,12 +53,13 @@ class BaseUploader(ABC):
         )
         return json.loads(raw_response)
 
-    def get_bytes_io(self, data: "Bytes", name: str = None) -> BytesIO:
+    def get_bytes_io(self, data: "Bytes", name: Optional[str] = None) -> BytesIO:
         bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)
-        bytes_io.seek(0)  # To avoid errors with image generators (such as pillow)
-        bytes_io.name = (
-            name or self.attachment_name
-        )  # To guarantee VK API file extension recognition
+        # To avoid errors with image generators (such as pillow)
+        bytes_io.seek(0)
+        # To guarantee VK API file extension recognition
+        if not bytes_io.name:
+            bytes_io.name = name or self.attachment_name
         return bytes_io
 
     async def get_owner_id(self, upload_params: dict) -> int:

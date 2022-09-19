@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING, List, Union
+import warnings
+from typing import TYPE_CHECKING, List, Optional, Union, overload
+
+from typing_extensions import Literal
 
 from .base import BaseUploader
 
@@ -15,13 +18,52 @@ class PhotoUploader(BaseUploader):
 
 
 class PhotoToAlbumUploader(PhotoUploader):
+    @overload
     async def upload(
-        self, album_id: int, paths_like: Union[List[Union[str, "Bytes"]], str, "Bytes"], **params
-    ) -> Union[str, List[Union[str, dict]]]:
+        self,
+        album_id: int,
+        paths_like: Union[List[Union[str, "Bytes"]], str, "Bytes"],
+        group_id: Optional[int] = ...,
+        generate_attachment_strings: Literal[True] = ...,
+        **params,
+    ) -> List[str]:
+        ...
+
+    @overload
+    async def upload(
+        self,
+        album_id: int,
+        paths_like: Union[List[Union[str, "Bytes"]], str, "Bytes"],
+        group_id: Optional[int] = ...,
+        generate_attachment_strings: Literal[False] = ...,
+        **params,
+    ) -> List[dict]:
+        ...
+
+    @overload
+    async def upload(
+        self,
+        album_id: int,
+        paths_like: Union[List[Union[str, "Bytes"]], str, "Bytes"],
+        group_id: Optional[int] = ...,
+        generate_attachment_strings: bool = ...,
+        **params,
+    ) -> Union[List[str], List[dict]]:
+        ...
+
+    async def upload(
+        self,
+        album_id: int,
+        paths_like: Union[List[Union[str, "Bytes"]], str, "Bytes"],
+        group_id: Optional[int] = None,
+        generate_attachment_strings: bool = True,
+        **params,
+    ) -> Union[List[str], List[dict]]:
         if not isinstance(paths_like, list):
             paths_like = [paths_like]
-
-        server = await self.get_server(album_id=album_id, **params)
+        if len(paths_like) > 5:
+            raise ValueError("You can upload up to 5 photos at once")
+        server = await self.get_server(album_id=album_id, group_id=group_id, **params)
         files = {}
 
         for i, file_source in enumerate(paths_like):
@@ -33,7 +75,14 @@ class PhotoToAlbumUploader(PhotoUploader):
             await self.api.request("photos.save", {"album_id": album_id, **uploader, **params})
         )["response"]
 
-        if self.generate_attachment_strings:
+        if self.generate_attachment_strings is not None:
+            warnings.warn(
+                "generate_attachment_strings in __init__ is deprecated"
+                " pass this parameter directly to .upload()",
+                DeprecationWarning,
+            )
+            generate_attachment_strings = self.generate_attachment_strings
+        if generate_attachment_strings:
             return [
                 self.generate_attachment_string(
                     "photo", photo["owner_id"], photo["id"], photo.get("access_key")
@@ -47,8 +96,44 @@ class PhotoToAlbumUploader(PhotoUploader):
 
 
 class PhotoWallUploader(PhotoUploader):
-    async def upload(self, file_source: Union[str, "Bytes"], **params) -> Union[str, List[dict]]:
-        server = await self.get_server(**params)
+    @overload
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        group_id: Optional[int] = ...,
+        generate_attachment_strings: Literal[True] = ...,
+        **params,
+    ) -> str:
+        ...
+
+    @overload
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        group_id: Optional[int] = ...,
+        generate_attachment_strings: Literal[False] = ...,
+        **params,
+    ) -> dict:
+        ...
+
+    @overload
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        group_id: Optional[int] = ...,
+        generate_attachment_strings: bool = ...,
+        **params,
+    ) -> Union[str, dict]:
+        ...
+
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        group_id: Optional[int] = None,
+        generate_attachment_strings: bool = True,
+        **params,
+    ) -> Union[str, dict]:
+        server = await self.get_server(group_id=group_id, **params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
@@ -57,19 +142,62 @@ class PhotoWallUploader(PhotoUploader):
             "response"
         ]
 
-        if self.generate_attachment_strings:
+        if self.generate_attachment_strings is not None:
+            warnings.warn(
+                "generate_attachment_strings in __init__ is deprecated"
+                " pass this parameter directly to .upload()",
+                DeprecationWarning,
+            )
+            generate_attachment_strings = self.generate_attachment_strings
+        if generate_attachment_strings:
             return self.generate_attachment_string(
                 "photo", photos[0]["owner_id"], photos[0]["id"], photos[0].get("access_key")
             )
-        return photos
+        return photos[0]
 
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("photos.getWallUploadServer", {}))["response"]
 
 
 class PhotoFaviconUploader(PhotoUploader):
-    async def upload(self, file_source: Union[str, "Bytes"], **params) -> Union[str, dict]:
-        owner_id = await self.get_owner_id(params)
+    @overload
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        owner_id: Optional[int] = ...,
+        generate_attachment_strings: Literal[True] = ...,
+        **params,
+    ) -> str:
+        ...
+
+    @overload
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        owner_id: Optional[int] = ...,
+        generate_attachment_strings: Literal[False] = ...,
+        **params,
+    ) -> dict:
+        ...
+
+    @overload
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        owner_id: Optional[int] = ...,
+        generate_attachment_strings: bool = ...,
+        **params,
+    ) -> Union[str, dict]:
+        ...
+
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        owner_id: Optional[int] = None,
+        generate_attachment_strings: bool = True,
+        **params,
+    ) -> Union[str, dict]:
+        owner_id = owner_id or await self.get_owner_id(params)
         server = await self.get_server(owner_id=owner_id)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
@@ -79,7 +207,14 @@ class PhotoFaviconUploader(PhotoUploader):
             "response"
         ]
 
-        if self.generate_attachment_strings:
+        if self.generate_attachment_strings is not None:
+            warnings.warn(
+                "generate_attachment_strings in __init__ is deprecated"
+                " pass this parameter directly to .upload()",
+                DeprecationWarning,
+            )
+            generate_attachment_strings = self.generate_attachment_strings
+        if generate_attachment_strings:
             return self.generate_attachment_string(
                 "wall", owner_id, photo["post_id"], photo.get("access_key")
             )
@@ -90,8 +225,44 @@ class PhotoFaviconUploader(PhotoUploader):
 
 
 class PhotoMessageUploader(PhotoUploader):
-    async def upload(self, file_source: Union[str, "Bytes"], **params) -> Union[str, List[dict]]:
-        server = await self.get_server(**params)
+    @overload
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        peer_id: Optional[int] = ...,
+        generate_attachment_strings: Literal[True] = ...,
+        **params,
+    ) -> str:
+        ...
+
+    @overload
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        peer_id: Optional[int] = ...,
+        generate_attachment_strings: Literal[False] = ...,
+        **params,
+    ) -> dict:
+        ...
+
+    @overload
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        peer_id: Optional[int] = ...,
+        generate_attachment_strings: bool = ...,
+        **params,
+    ) -> Union[str, dict]:
+        ...
+
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        peer_id: Optional[int] = None,
+        generate_attachment_strings: bool = True,
+        **params,
+    ) -> Union[str, dict]:
+        server = await self.get_server(peer_id=peer_id, **params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
@@ -100,7 +271,14 @@ class PhotoMessageUploader(PhotoUploader):
             "response"
         ]
 
-        if self.generate_attachment_strings:
+        if self.generate_attachment_strings is not None:
+            warnings.warn(
+                "generate_attachment_strings in __init__ is deprecated"
+                " pass this parameter directly to .upload()",
+                DeprecationWarning,
+            )
+            generate_attachment_strings = self.generate_attachment_strings
+        if generate_attachment_strings:
             return self.generate_attachment_string(
                 "photo", photo[0]["owner_id"], photo[0]["id"], photo[0].get("access_key")
             )
@@ -111,8 +289,22 @@ class PhotoMessageUploader(PhotoUploader):
 
 
 class PhotoChatFaviconUploader(PhotoUploader):
-    async def upload(self, chat_id: int, file_source: Union[str, "Bytes"], **params) -> str:
-        server = await self.get_server(chat_id=chat_id, **params)
+    async def upload(
+        self,
+        chat_id: int,
+        file_source: Union[str, "Bytes"],
+        crop_x: Optional[int] = None,
+        crop_y: Optional[int] = None,
+        crop_width: Optional[int] = None,
+        **params,
+    ) -> str:
+        server = await self.get_server(
+            chat_id=chat_id,
+            crop_x=crop_x,
+            crop_y=crop_y,
+            crop_width=crop_width,
+            **params,
+        )
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
@@ -124,15 +316,23 @@ class PhotoChatFaviconUploader(PhotoUploader):
 
 
 class PhotoMarketUploader(PhotoUploader):
-    async def upload(self, file_source: Union[str, "Bytes"], **params) -> dict:
-        server = await self.get_server(**params)
+    async def upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        group_id: int,
+        **params,
+    ) -> dict:
+        server = await self.get_server(group_id=group_id, **params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"file": file})
-        return (await self.api.request("photos.saveMarketPhoto", {**uploader, **params}))[
-            "response"
-        ]
+        return (
+            await self.api.request(
+                "photos.saveMarketPhoto",
+                {**uploader, **params},
+            )
+        )["response"]
 
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("photos.getMarketUploadServer", kwargs))["response"]
