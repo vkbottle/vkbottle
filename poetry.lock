@@ -802,7 +802,7 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 
 [[package]]
 name = "vkbottle-types"
-version = "5.131.146.11"
+version = "5.131.146.13"
 description = "Types for vkbottle"
 category = "main"
 optional = false
@@ -1508,8 +1508,8 @@ virtualenv = [
     {file = "virtualenv-20.16.2.tar.gz", hash = "sha256:0ef5be6d07181946891f5abc8047fda8bc2f0b4b9bf222c64e6e8963baee76db"},
 ]
 vkbottle-types = [
-    {file = "vkbottle-types-5.131.146.11.tar.gz", hash = "sha256:433842edaacb38b3b44e5113311289b2b16a252220ca7d725b60df8737ddca4f"},
-    {file = "vkbottle_types-5.131.146.11-py3-none-any.whl", hash = "sha256:4b2154cec3d49016416714da2c462b44a2bc247b519e2031f4492acf6635dc2b"},
+    {file = "vkbottle-types-5.131.146.13.tar.gz", hash = "sha256:b7933121df8bacdb8a2e4838322adc44eccbb7150346269b15e27e7ce3907a9f"},
+    {file = "vkbottle_types-5.131.146.13-py3-none-any.whl", hash = "sha256:cbf05594826b21f1be0d814848a714c3e9384f27b070e6ef3b6687bae05a0152"},
 ]
 watchfiles = [
     {file = "watchfiles-0.17.0-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:c7e1ffbd03cbcb46d1b7833e10e7d6b678ab083b4e4b80db06cfff5baca3c93f"},
