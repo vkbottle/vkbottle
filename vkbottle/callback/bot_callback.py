@@ -43,11 +43,8 @@ class BotCallback(ABCCallback):
 
     async def find_server_id(self) -> Optional[int]:
         servers = await self.get_callback_servers()
-        if not servers:
-            return None
-        for server in servers:
-            if server["url"] == self.url:
-                return server["id"]
+        if servers:
+            return next((server["id"] for server in servers if server["url"] == self.url), None)
         return None
 
     async def add_callback_server(self) -> int:
@@ -75,8 +72,9 @@ class BotCallback(ABCCallback):
             "title": self.title,
             "secret_key": self.secret_key,
         }
+
         if secret_key is not None:
-            data.update({"secret_key": secret_key})
+            data["secret_key"] = secret_key
         await self.api.request("groups.editCallbackServer", data)
 
     async def get_callback_confirmation_code(self) -> str:
@@ -96,7 +94,7 @@ class BotCallback(ABCCallback):
         logger.debug("Getting callback servers...")
         data: Dict[str, Any] = {"group_id": self.group_id}
         if servers_ids is not None:
-            data.update({"server_ids": ",".join(map(str, servers_ids))})
+            data["server_ids"] = ",".join(map(str, servers_ids))
         return (await self.api.request("groups.getCallbackServers", data))["response"]["items"]
 
     async def get_callback_settings(self, server_id: int) -> Dict[str, bool]:
@@ -117,7 +115,7 @@ class BotCallback(ABCCallback):
 
         if params is not None:
             for k, v in params.items():
-                data.update({k: v})
+                data[k] = v
         await self.api.request("groups.setCallbackSettings", data)
 
     def construct(
