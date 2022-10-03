@@ -113,7 +113,7 @@ class Bot(ABCFramework):
         return confirmation_code, secret_key
 
     async def process_event(self, event: dict):
-        await self.router.route(event, self.callback.api)
+        await self.router.route(event, self.api)
 
     @property
     def loop(self) -> asyncio.AbstractEventLoop:
