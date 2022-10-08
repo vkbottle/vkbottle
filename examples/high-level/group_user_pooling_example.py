@@ -42,8 +42,14 @@ async def process_event(event):
         type_action = "left"
     elif event.object[1] == 6:
         type_action = "returned to the"
-    if event.object[1] in [6, 7]:
-        logger.info(f"User {event.object[3]} {type_action} conversation {event.object[2]}.")
+    if event.object[1] in (6, 7):
+        logger.info(
+            "User {} {} conversation {}.".format(
+                event.object[3],
+                type_action,
+                event.object[2]
+            )
+        )
 
 
 if __name__ == "__main__":
