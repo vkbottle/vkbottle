@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from vkbottle_types.events.enums import UserEventType
 
@@ -6,6 +6,10 @@ from vkbottle import Bot
 from vkbottle.framework.labeler import UserLabeler
 from vkbottle.modules import logger
 from vkbottle.polling.user_polling import UserPolling
+
+if TYPE_CHECKING:
+    from vkbottle.api import ABCAPI
+    from vkbottle.exception_factory import ABCErrorHandler
 
 
 class BotMessagesPooling(UserPolling):
@@ -43,12 +47,7 @@ async def process_event(event):
     elif event.object[1] == 6:
         type_action = "returned to the"
     if event.object[1] in (6, 7):
-        logger.info(
-            "User {} {} conversation {}.",
-            event.object[3],
-            type_action,
-            event.object[2]
-        )
+        logger.info("User {} {} conversation {}.", event.object[3], type_action, event.object[2])
 
 
 if __name__ == "__main__":
