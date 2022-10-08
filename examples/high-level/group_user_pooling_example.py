@@ -44,11 +44,10 @@ async def process_event(event):
         type_action = "returned to the"
     if event.object[1] in (6, 7):
         logger.info(
-            "User {} {} conversation {}.".format(
-                event.object[3],
-                type_action,
-                event.object[2]
-            )
+            "User {} {} conversation {}.",
+            event.object[3],
+            type_action,
+            event.object[2]
         )
 
 
