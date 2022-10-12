@@ -106,3 +106,13 @@ async def test_request_many(api: API):
 async def test_types_translator():
     api = API("token")
     assert await api.validate_request({"a": [1, 2, 3, 4, "hi!"]}) == {"a": "1,2,3,4,hi!"}
+
+
+@pytest.mark.asyncio
+@with_mocked_api('{"error": {"error_code": 10, "error_msg": "Internal server error: Unknown error, try later"}}')
+async def test_error_handling_without_request_params(api: API):
+    try:
+        await api.request("some.method", {})
+    except VKAPIError[10]:
+        return True
+    raise AssertionError
