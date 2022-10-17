@@ -244,6 +244,15 @@ async def test_rules(api: API):
         is False
     )
 
+    assert (
+        await base.CommandRule("cmd", ["!", "."], 0).check(fake_message(api, text="!cmd test bar"))
+        is False
+    )
+
+    assert (
+        await base.CommandRule("cmd", ["!", "."], 0).check(fake_message(api, text="!cmd")) is True
+    )
+
     labeler = BotLabeler()
     labeler.vbml_ignore_case = True
     assert (

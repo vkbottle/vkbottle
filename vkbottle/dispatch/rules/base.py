@@ -78,7 +78,7 @@ class CommandRule(ABCRule[BaseMessageMin]):
         for prefix in self.prefixes:
             text_lenght = len(prefix + self.command_text)
             text_lenght_with_sep = text_lenght + len(self.sep)
-            if self.args_count == 0 and event.text == text_lenght:
+            if self.args_count == 0 and len(event.text) == text_lenght:
                 return True
             elif event.text.startswith(prefix + self.command_text + self.sep):
                 args = event.text[text_lenght_with_sep:].split(self.sep)
