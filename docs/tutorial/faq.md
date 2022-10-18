@@ -215,8 +215,7 @@ async def main():
         print(response)
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+asyncio.run(main())
 ```
 
 Для бота необходимо инициализировать класс **Bot**. В нём присутствует класс **API**, его дополнительно
@@ -237,8 +236,7 @@ async def main():
         print(response)
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+asyncio.run(main())
 ```
 
 Также доступ к классу **API** можно получить через объект Message с помощью параметра `Message.ctx_api`

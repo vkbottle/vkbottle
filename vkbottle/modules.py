@@ -94,7 +94,7 @@ if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
     https://github.com/aio-libs/aiohttp/issues/4324
 
     This also can be fixed by using loop.run_until_complete instead of asyncio.run
-    but I like to use asyncio.run because it's more readable.
+    but I like to use asyncio.run because it's more readable, and not require to create new event loop.
     """
     from asyncio.proactor_events import _ProactorBasePipeTransport, _ProactorBaseWritePipeTransport
     from functools import wraps

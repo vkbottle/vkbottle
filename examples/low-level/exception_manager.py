@@ -18,4 +18,4 @@ async def main():
         print(f"Произошла ошибка {e.code}.")
 
 
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())
