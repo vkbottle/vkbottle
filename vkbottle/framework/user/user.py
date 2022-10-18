@@ -1,4 +1,4 @@
-from asyncio import get_event_loop
+import asyncio
 from typing import TYPE_CHECKING, NoReturn, Optional, Type, Union
 
 from vkbottle.api import API
@@ -11,7 +11,6 @@ from vkbottle.polling import UserPolling
 from vkbottle.tools import LoopWrapper, UserAuth
 
 if TYPE_CHECKING:
-    from asyncio import AbstractEventLoop
 
     from vkbottle.api import ABCAPI, Token
     from vkbottle.dispatch import ABCRouter, ABCStateDispenser
@@ -26,13 +25,12 @@ class User(ABCFramework):
         token: Optional["Token"] = None,
         api: Optional["ABCAPI"] = None,
         polling: Optional["ABCPolling"] = None,
-        loop: Optional["AbstractEventLoop"] = None,
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCLabeler"] = None,
         state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
-        task_each_event: bool = True,
+        task_each_event=None,
     ):
         self.api: Union["ABCAPI", API] = API(token) if token is not None else api  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
@@ -41,8 +39,8 @@ class User(ABCFramework):
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
         self._polling = polling or UserPolling(self.api)
         self._router = router or Router()
-        self._loop = loop
-        self.task_each_event = task_each_event
+        if task_each_event:
+            logger.warning("task_each_event is deprecated and will be removed in future versions")
 
     @property
     def polling(self) -> "ABCPolling":
@@ -73,8 +71,11 @@ class User(ABCFramework):
         client_secret: Optional[str] = None,
         **kwargs,
     ):
-        loop = get_event_loop()
-        assert not loop.is_running(), "Event loop is already running, use direct_auth instead"
+        try:
+            loop = asyncio.get_running_loop()
+            logger.warning("Event loop is already running, use direct_auth instead")
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
         return loop.run_until_complete(
             cls.direct_auth(
                 login=login,
@@ -104,22 +105,9 @@ class User(ABCFramework):
         async for event in polling.listen():  # type: ignore
             logger.debug("New event was received: {}", event)
             for update in event.get("updates", []):
-                if not self.task_each_event:
-                    await self.router.route(update, polling.api)
-                else:
-                    self.loop.create_task(self.router.route(update, polling.api))
+                self.loop_wrapper.add_task(self.router.route(update, polling.api))
 
     def run_forever(self) -> NoReturn:  # type: ignore
         logger.info("Loop will be run forever")
         self.loop_wrapper.add_task(self.run_polling())
-        self.loop_wrapper.run_forever(self.loop)
-
-    @property
-    def loop(self) -> "AbstractEventLoop":
-        if self._loop is None:
-            self._loop = get_event_loop()
-        return self._loop
-
-    @loop.setter
-    def loop(self, new_loop: "AbstractEventLoop"):
-        self._loop = new_loop
+        self.loop_wrapper.run()

@@ -17,10 +17,10 @@ T = TypeVar("T")
 # This feature is not used in production
 # but can be useful for customization
 # purposes
-def run_in_task(coroutine: Coroutine) -> None:
+def run_in_task(coroutine: Coroutine) -> asyncio.Task:
     """Gets loop and runs add makes task from the given coroutine"""
     loop = asyncio.get_running_loop()
-    loop.create_task(coroutine)
+    return loop.create_task(coroutine)
 
 
 def run_sync(coroutine: Coroutine[Any, Any, T]) -> T:
@@ -48,9 +48,9 @@ def load_blueprints_from_package(package_name: str) -> Iterator["ABCBlueprint"]:
             bp_names = re.findall(
                 r"^(\w+) = (?:Bot|User|)Blueprint\(", file.read(), flags=re.MULTILINE
             )
+
             assert len(bp_names) == 1
             bp_paths.append((filename[:-3], bp_names[0]))
-
     for bp_path in bp_paths:
         module, bp_name = bp_path
         module_name = package_name.replace(f".{os.sep}", ".").replace(os.sep, ".")

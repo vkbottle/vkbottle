@@ -24,4 +24,4 @@ def run_multibot(
         polling = polling_type().construct(api_instance)
         api_instance.http_client = SingleAiohttpClient()
         bot.loop_wrapper.add_task(bot.run_polling(custom_polling=polling))
-    bot.loop_wrapper.run_forever()
+    bot.loop_wrapper.run()
