@@ -35,6 +35,7 @@ pip install vkbottle
 ```
 
 Если вы ищете старые версии:
+
 - [`3.x`](https://github.com/vkbottle/vkbottle/tree/v3.0)
 - [`2.x`](https://github.com/vkbottle/vkbottle/tree/v2.0)
 
@@ -59,8 +60,8 @@ bot.run_forever()
 
 ПР поддерживаются! Перед созданием пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE.md](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие библиотеки. Задавайте вопросы в блоке Issues и в [**чате Telegram**](https://t.me/vkbottle_ru) / [**чате VK**](https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj)!
 
-* Создатель [@timoniq](https://github.com/timoniq)
-* Мейнтейнер [@FeeeeK](https://github.com/FeeeeK)
+- Создатель [@timoniq](https://github.com/timoniq)
+- Мейнтейнер [@FeeeeK](https://github.com/FeeeeK)
 
 ## Лицензия
 

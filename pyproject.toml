@@ -31,7 +31,6 @@ classifiers = [
   "Topic :: Software Development :: Quality Assurance",
   "Typing :: Typed",
 ]
-exclude = ["**/tests/*", "**/test_*"]
 
 
 [tool.poetry.urls]
@@ -101,7 +100,7 @@ warn_unused_configs = true
 
 [[tool.mypy.overrides]]
 # Ignore tests, because we can use fixtures that not quite represent a real type
-module = "*.tests.*"
+module = "tests.*"
 ignore_errors = true
 
 

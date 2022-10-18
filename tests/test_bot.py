@@ -19,7 +19,7 @@ from vkbottle import (
 from vkbottle.bot import BotLabeler, Message
 from vkbottle.dispatch.rules import base
 from vkbottle.tools.dev.mini_types.bot import message_min
-from vkbottle.tools.test_utils import MockedClient, with_mocked_api
+from tests.test_utils import MockedClient, with_mocked_api
 
 EXAMPLE_EVENT = {
     "ts": 1,
