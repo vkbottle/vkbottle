@@ -1,4 +1,4 @@
-from typing import Any, Hashable
+from typing import Any, Hashable, Optional
 
 from vkbottle.tools.dev.ctx_tool import BaseContext
 
@@ -14,7 +14,7 @@ class CtxStorage(ABCStorage, BaseContext):
 
     def __init__(
         self,
-        default: dict = None,
+        default: Optional[dict] = None,
         force_reset: bool = False,
     ):
 
