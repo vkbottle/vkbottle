@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING, Any, Optional, Type, TypeVar
 from aiohttp import ClientSession
 
 from vkbottle.modules import json as json_module
-from vkbottle.modules import logger
 
 from .abc import ABCHTTPClient
 
@@ -28,8 +27,6 @@ class AiohttpClient(ABCHTTPClient):
         if optimize:
             session_params["skip_auto_headers"] = {"User-Agent"}
             session_params["raise_for_status"] = True
-        if session_params.pop("loop", None):
-            logger.warning("loop argument is deprecated")
 
         self.session = session
 
