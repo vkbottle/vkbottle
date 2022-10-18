@@ -68,7 +68,7 @@ class LoopWrapper:
         :param task: coroutine / coroutine function with zero arguments
         """
         if asyncio.iscoroutinefunction(task) or isinstance(task, DelayedTask):
-            task = task()
+            task = task()  # type: ignore
         elif not asyncio.iscoroutine(task):
             raise TypeError("Task should be coroutine or coroutine function")
 
