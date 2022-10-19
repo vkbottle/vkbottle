@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 from asyncio import new_event_loop
 from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
 
@@ -55,13 +56,27 @@ class LoopWrapper:
             self.loop.create_task(task)
 
         tasks = asyncio.all_tasks(self.loop)
-        self.loop.run_until_complete(asyncio.gather(*tasks))
-
-        for shutdown_task in self.on_shutdown:
-            self.loop.run_until_complete(shutdown_task)
-
-        if self.loop.is_running():
-            self.loop.close()
+        try:
+            while tasks:
+                results = self.loop.run_until_complete(
+                    asyncio.gather(*tasks, return_exceptions=True)
+                )
+                for result in results:
+                    if not isinstance(result, Exception):
+                        continue
+                    logger.exception(result)
+                tasks = asyncio.all_tasks(self.loop)
+        except KeyboardInterrupt:
+            logger.info("Caught keyboard interrupt. Shutting down...")
+            task = asyncio.gather(*tasks)
+            task.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                self.loop.run_until_complete(task)
+        finally:
+            for shutdown_task in self.on_shutdown:
+                self.loop.run_until_complete(shutdown_task)
+            if self.loop.is_running():
+                self.loop.close()
 
     def add_task(self, task: Union["Task", Callable[..., "Task"]]):
         """Adds tasks to be ran in run_forever or run it immediately if loop is already running
