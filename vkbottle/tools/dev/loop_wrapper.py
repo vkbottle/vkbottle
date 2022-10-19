@@ -68,10 +68,10 @@ class LoopWrapper:
                 tasks = asyncio.all_tasks(self.loop)
         except KeyboardInterrupt:
             logger.info("Caught keyboard interrupt. Shutting down...")
-            task = asyncio.gather(*tasks)
-            task.cancel()
+            task_to_cancel = asyncio.gather(*tasks)
+            task_to_cancel.cancel()
             with contextlib.suppress(asyncio.CancelledError):
-                self.loop.run_until_complete(task)
+                self.loop.run_until_complete(task_to_cancel)
         finally:
             for shutdown_task in self.on_shutdown:
                 self.loop.run_until_complete(shutdown_task)
