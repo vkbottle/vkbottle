@@ -72,7 +72,7 @@ elif logging_module == "logging":
         def process(self, msg, args, kwargs):
             log_kwargs = {
                 key: kwargs[key]
-                for key in inspect.getargspec(self.logger._log).args[1:]
+                for key in inspect.getfullargspec(self.logger._log).args[1:]
                 if key in kwargs
             }
             if isinstance(msg, str):
