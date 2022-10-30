@@ -3,80 +3,85 @@
 !!! info "Примечание"
     Разделение кода - очень важная вещь для создания структуры проекта
 
-Чтобы делать это, в vkbottle предусмотрен инструмент `Blueprint`.
+Чтобы делать это, в vkbottle можно использовать составляющие фреймворка отдельно от `Bot`
 
-`Blueprint` - точная копия (в данном случае бота), но при всей идентичности с интерфейсом бота, блупринт не может быть индивидуально запущен как агент поллинга, он может лишь имплементировать хендлеры и другие `labeler` definition'ы
-
-Атрибуты `api`, `polling` и `state_dispenser` могут быть использованы только в среде (хендлера например), до момента того, как блупринт был сконструирован они равны `None`, для определения сконструирован блупринт или нет в среде в которой находитесь вы, вы можете использовать атрибут `constructed`
-
-Разделение кода, кроме того может быть очень грамотно использовано для создания локальных изменений в аплоадере, например `auto_rules` поможет установить правила, которые будут накладываться на все хендлеры сообщений блупринта
+Разделение кода, кроме того может быть очень грамотно использовано для создания локальных изменений в лейблере, например `auto_rules` поможет установить правила, которые будут накладываться на все хендлеры сообщений
 
 !!! warning "Внимание"
-    `auto_rules` распространяется только на хендлеры сообщений, для сырых евентов вам нужен `raw_event_auto_rules` и кастомные правила, работающие с ними
+    Правила в `auto_rules` распространяются только на хендлеры сообщений, для сырых евентов вам нужен `raw_event_auto_rules` и кастомные правила, работающие с ними
 
 ## Стандартная иерархия файлов
 
-Для того чтобы разделить код, вам нужен так называемый коллектор блупринтов, сами блупринты и бот, который может быть сгруппирован с коллектором. Самая простая иерархия:
+Для удобства разработки больших проектов, рекомендуется использовать подобную структуру файлов:
 
-* bot.py
-* blueprints
-    * chat.py
-    * admin.py
-
-### `bot.py`
-
-Сначала разберем код файла `bot.py`, самый простой коллектор, который можно использовать - коллектор из коробки `load_blueprints_from_package`, он принимает только название пакеты из которого следует загружать блупринты
-
-Для начала следует импортировать нужные объекты:
-
-```python
-from vkbottle import Bot, load_blueprints_from_package
+```text
+/src/
+├── handlers
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── chat.py
+│   └── ping.py
+├── bot.py
+└── config.py
 ```
 
-Далее нужно создать самого бота:
+### `config.py`
+
+Для начала создадим файл с конфигом, в котором будут храниться все глоабльные переменные, которые будут использоваться в разных частях проекта
 
 ```python
-bot = Bot("token")
+from vkbottle import API, BuiltinStateDispenser
+from vkbottle.bot import BotLabeler
+
+
+api = API("token")
+labeler = BotLabeler()
+state_dispenser = BuiltinStateDispenser()
+
 ```
 
-Теперь с помощью коллектора и бота можно сконструировать все блупринты:
+### `ping.py`
+
+Теперь создадим файл `ping.py` в папке `handlers`, в котором будет простой хендлер, обрабатывающий сообщения с текстом `ping`
 
 ```python
-for bp in load_blueprints_from_package("blueprints"):
-    bp.load(bot)
-```
+from config import labeler
 
-Осталось только запустить бота:
+@labeler.message(text="ping")
+async def ping_handler(message):
+    await message.answer("pong")
 
-```python
-bot.run_forever()
 ```
 
 ### `chat.py`
+
+В этом случае мы будем использовать `auto_rules`, чтобы автоматически добавлять правила к хендлерам,
+поэтому создадим новый лейблер, который будет использоваться только в этом файле
 
 1. Добавим в auto_rules правило, которое будет следить чтобы все сообщения шли только из чата
 2. Создадим правило и добавим его в auto_rules, которое будет получать информацию о чате и возвращать ее для всех хендлеров этого блупринта
 3. Добавим несколько хендлеров
 
 ```python
-from vkbottle.bot import Blueprint, Message, rules
+from vkbottle.bot import BotLabeler, Message, rules
 from vkbottle_types.objects import MessagesConversation
 
 class ChatInfoRule(rules.ABCRule[Message]):
     async def check(self, message: Message) -> dict:
-        chats_info = await bp.api.messages.get_conversations_by_id(message.peer_id)
+        chats_info = await message.ctx_api.messages.get_conversations_by_id(message.peer_id)
         return {"chat": chats_info.items[0]}
 
-bp = Blueprint("for chat commands")
-bp.labeler.vbml_ignore_case = True
-bp.labeler.auto_rules = [rules.PeerRule(from_chat=True), ChatInfoRule()]
 
-@bp.on.message(command="самобан")
+chat_labeler = BotLabeler()
+chat_labeler.vbml_ignore_case = True
+chat_labeler.auto_rules = [rules.PeerRule(from_chat=True), ChatInfoRule()]
+
+@chat_labeler.message(command="самобан")
 async def kick(message: Message, chat: MessagesConversation):
-    await bp.api.messages.remove_chat_user(message.chat_id, message.from_id)
+    await message.ctx_api.messages.remove_chat_user(message.chat_id, message.from_id)
     await message.answer(f"Участник самоустранился из {chat.chat_settings.title} по собственному желанию")
 
-@bp.on.message(text="где я")
+@chat_labeler.message(text="где я")
 async def where_am_i(message: Message, chat: MessagesConversation):
     await message.answer(f"Вы в <<{chat.chat_settings.title}>>")
 ```
@@ -91,14 +96,62 @@ async def where_am_i(message: Message, chat: MessagesConversation):
 <!-- todo сегодня не первое апреля, можно сделать пример с рассылкой -->
 
 ```python
-from vkbottle.bot import Blueprint, Message, rules
+from vkbottle.bot import BotLabeler, Message, rules
 
-bp = Blueprint("for admin commands")
-bp.labeler.auto_rules = [rules.FromPeerRule(1)] # Допустим, вы являетесь Павлом Дуровым
+admin_labeler = BotLabeler()
+admin_labeler.auto_rules = [rules.FromPeerRule(1)] # Допустим, вы являетесь Павлом Дуровым
 
-@bp.on.message(command="halt")
+@admin_labeler.message(command="halt")
 async def halt(_):
     exit(0)
+```
+
+### `__init__.py`
+
+Теперь создадим файл `__init__.py` в папке `handlers`, в котором будем импортировать все лейблеры
+
+```python
+from .chat import chat_labeler
+from .admin import admin_labeler
+from .ping import labeler
+# Если использовать глобальный лейблер, то все хендлеры будут зарегистрированы в том же порядке, в котором они были импортированы
+
+__all__ = ("admin_labeler", "chat_labeler", "labeler")
+```
+
+### `bot.py`
+
+Теперь мы можем создать файл `bot.py`, в котором будем создавать бота и регистрировать лейблеры
+
+```python
+from vkbottle import Bot
+from config import api, state_dispenser, labeler
+from handlers import chat_labeler, admin_labeler
+```
+
+> Так как мы создали файл `__init__.py` в папке `handlers`, интерпретатор выполнит код в `echo.py` и нам не нужно будет импортировать лейблер оттуда
+
+Теперь нам нужно загрузить хендлеры в глобальный лейблер:
+
+```python
+labeler.load(chat_labeler)
+labeler.load(admin_labeler)
+```
+
+Далее нужно создать самого бота и указать, какой лейблер использовать:
+
+```python
+bot = Bot(
+    api=api,
+    labeler=labeler,
+    state_dispenser=state_dispenser,
+)
+```
+
+Осталось только запустить бота:
+
+```python
+bot.run_forever()
 ```
 
 ## Экзамплы по этой части туториала

@@ -50,7 +50,7 @@ async def mention_handler(message: Message):
 async def group_join_handler(event: GroupTypes.GroupJoin):
     try:
 
-        # Basic API call, please notice that bot.api (or blueprint.api) is
+        # Basic API call, please notice that bot.api is
         # not accessible in case multibot is used, API can be accessed from
         # event.ctx_api
         await bot.api.messages.send(

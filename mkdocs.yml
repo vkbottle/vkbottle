@@ -34,7 +34,6 @@ nav:
               - Bot: high-level/bot/bot.md
               - User: high-level/user/user.md
               - Labeler: high-level/bot/labeler.md
-              - Blueprint: high-level/bot/blueprint.md
               - Multibot: high-level/bot/multibot.md
           - Хендлинг:
               - Handler: high-level/handling/handler.md

@@ -1,13 +1,13 @@
-from vkbottle.bot import Blueprint, Message
+from vkbottle.bot import BotLabeler, Message
 
-bp = Blueprint()
+labeler = BotLabeler()
 
 
-@bp.on.message(text=["привет<!>", "hi"])
+@labeler.message(text=["привет<!>", "hi"])
 async def hi_handler(message: Message):
     await message.answer("Привет!")
 
 
-@bp.on.message(text="здравст<!>")
+@labeler.message(text="здравст<!>")
 async def hello_handler(message: Message):
     await message.answer("Здравствуйте!")

@@ -19,6 +19,10 @@ class BotBlueprint(ABCBlueprint):
         labeler: Optional[BotLabeler] = None,
         router: Optional[Router] = None,
     ):
+        logger.warning(
+            "Blueprints was deprecated and will be removed in future releases, read about new code separation method in documentation: \n"
+            "https://vkbottle.readthedocs.io/ru/latest/tutorial/code-separation/"
+        )
         if name is not None:
             self.name = name
 

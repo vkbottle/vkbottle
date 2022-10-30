@@ -5,6 +5,8 @@ import re
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, Coroutine, Iterator, TypeVar
 
+from vkbottle.modules import logger
+
 if TYPE_CHECKING:
     from vkbottle.framework.abc_blueprint import ABCBlueprint
 
@@ -30,6 +32,10 @@ def load_blueprints_from_package(package_name: str) -> Iterator["ABCBlueprint"]:
     >>> for bp in load_blueprints_from_package("blueprints"):
     >>>     bp.load(...)
     """
+    logger.warning(
+        "Blueprints was deprecated and will be removed in future releases, read about new code separation method in documentation: \n"
+        "https://vkbottle.readthedocs.io/ru/latest/tutorial/code-separation/"
+    )
     bp_paths = []
     for filename in os.listdir(package_name):
         if filename.startswith("__"):
@@ -47,6 +53,6 @@ def load_blueprints_from_package(package_name: str) -> Iterator["ABCBlueprint"]:
 
     for bp_path in bp_paths:
         module, bp_name = bp_path
-        module_name = package_name.replace("." + os.sep, ".").replace(os.sep, ".")
-        bp_module = importlib.import_module(module_name + "." + module)
+        module_name = package_name.replace(f".{os.sep}", ".").replace(os.sep, ".")
+        bp_module = importlib.import_module(f"{module_name}.{module}")
         yield getattr(bp_module, bp_name)
