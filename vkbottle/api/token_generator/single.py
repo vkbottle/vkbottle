@@ -7,3 +7,6 @@ class SingleTokenGenerator(ABCTokenGenerator):
 
     async def get_token(self) -> str:
         return self.token
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        pass

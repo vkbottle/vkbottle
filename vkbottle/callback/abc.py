@@ -59,7 +59,7 @@ class ABCCallback(ABC):
         pass
 
     @api.setter
-    def api(self, new_api: "ABCAPI"):
+    def api(self, new_api: "ABCAPI"):  # noqa: B027
         pass
 
     @abstractmethod
