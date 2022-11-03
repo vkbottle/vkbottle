@@ -26,13 +26,6 @@ jobs:
       - name: Install poetry
         run: pipx install poetry
 
-      - name: Cache .mypy_cache
-        id: cache-mypy
-        uses: actions/cache@v3
-        with:
-          key: ${{ matrix.python-version }}-${{ runner.os }}
-          path: .mypy_cache
-
       - uses: actions/setup-python@v4.1.0
         id: python-setup
         with:
@@ -43,8 +36,22 @@ jobs:
         if: steps.python-setup.outputs.cache-hit != 'true'
         run: poetry install --with dev
 
+      - name: Cache ~/.cache/flakeheaven
+        id: cache-flakeheaven
+        uses: actions/cache@v3
+        with:
+          key: ${{ matrix.python-version }}-${{ runner.os }}
+          path: ~/.cache/flakeheaven
+
       - name: Run flakeheaven
         run: poetry run flakeheaven lint
+
+      - name: Cache .mypy_cache
+        id: cache-mypy
+        uses: actions/cache@v3
+        with:
+          key: ${{ matrix.python-version }}-${{ runner.os }}
+          path: .mypy_cache
 
       - name: Run mypy
         run: poetry run mypy vkbottle
