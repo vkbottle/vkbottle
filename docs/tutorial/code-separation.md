@@ -156,4 +156,4 @@ bot.run_forever()
 
 ## Экзамплы по этой части туториала
 
-* [blueprint](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/blueprint.py)
+* [code_separation](https://github.com/vkbottle/vkbottle/tree/master/examples/high-level/code_separation)
