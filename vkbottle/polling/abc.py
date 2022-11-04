@@ -28,7 +28,7 @@ class ABCPolling(ABC):
     def api(self) -> "ABCAPI":
         pass
 
-    @api.setter
+    @api.setter  # noqa: B027
     def api(self, new_api: "ABCAPI"):  # noqa: B027
         pass
 
