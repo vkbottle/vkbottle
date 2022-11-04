@@ -1,14 +1,15 @@
 name: CI
 
 on:
-  push:
-    branches: [master, dev]
-  pull_request:
-    branches: [master, dev]
+  - push
+  - pull_request
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     strategy:
       max-parallel: 6
       matrix:
@@ -23,34 +24,51 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install poetry
-        run: pipx install poetry
-
-      - uses: actions/setup-python@v4.1.0
+      - uses: actions/setup-python@v4
         id: python-setup
         with:
           python-version: ${{ matrix.python-version }}
-          cache: poetry
 
-      - name: Install dependencies
-        if: steps.python-setup.outputs.cache-hit != 'true'
-        run: poetry install --with dev
-
-      - name: Cache ~/.cache/flakeheaven
-        id: cache-flakeheaven
+      - name: Load cached poetry installation
+        id: cached-poetry-installation
         uses: actions/cache@v3
         with:
-          key: ${{ matrix.python-version }}-${{ runner.os }}
+          key: dotlocal-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          path: ~/.local
+
+
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          key: venv-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+          path: .venv
+
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --with dev
+
+      - name: Load cached ~/.cache/flakeheaven
+        id: cached-flakeheaven
+        uses: actions/cache@v3
+        with:
+          key: flakeheaven-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
           path: ~/.cache/flakeheaven
 
       - name: Run flakeheaven
         run: poetry run flakeheaven lint
 
-      - name: Cache .mypy_cache
-        id: cache-mypy
+      - name: Load cached .mypy_cache
+        id: cached-mypy
         uses: actions/cache@v3
         with:
-          key: ${{ matrix.python-version }}-${{ runner.os }}
+          key: mypy-${{ matrix.python-version }}-${{ runner.os }}
           path: .mypy_cache
 
       - name: Run mypy
