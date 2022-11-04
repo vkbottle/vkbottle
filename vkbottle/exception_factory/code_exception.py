@@ -26,23 +26,22 @@ class CodeExceptionMeta(type):
         return super().__call__(*args, **kwargs)
 
     @overload
-    def __getitem__(cls: T, code: int, /) -> Union[T, Any]:
+    def __getitem__(cls: T, codes: int) -> Union[T, Any]:
         ...
 
     @overload
-    def __getitem__(cls: T, codes: Tuple[int, ...], /) -> Union[Tuple[T, ...], Any]:
+    def __getitem__(cls: T, codes: Tuple[int, ...]) -> Union[Tuple[T, ...], Any]:
         ...
 
     def __getitem__(
         cls: T,
-        code_or_codes: Union[int, Tuple[int, ...]],
-        /,
+        codes: Union[int, Tuple[int, ...]],
     ) -> Union[T, Tuple[T], Any]:
         if cls.__code_specified__:
             raise TypeError("exception code already specified")
-        if isinstance(code_or_codes, tuple):
-            return tuple(cls._get_exception(code) for code in code_or_codes)
-        return cls._get_exception(code_or_codes)
+        if isinstance(codes, tuple):
+            return tuple(cls._get_exception(code) for code in codes)
+        return cls._get_exception(codes)
 
     def register_exception(cls: T, exception: T, code: int) -> None:
         exception.code = code
