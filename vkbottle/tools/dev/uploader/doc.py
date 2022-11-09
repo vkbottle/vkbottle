@@ -1,8 +1,5 @@
 import os.path
-import warnings
-from typing import TYPE_CHECKING, Optional, Union, overload
-
-from typing_extensions import Literal
+from typing import TYPE_CHECKING, Optional, Union
 
 from .base import BaseUploader
 
@@ -16,43 +13,27 @@ class DocUploader(BaseUploader):
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("docs.getUploadServer", kwargs))["response"]
 
-    @overload
     async def upload(
         self,
         file_source: Union[str, "Bytes"],
         group_id: Optional[int] = None,
-        generate_attachment_strings: Literal[True] = ...,
         **params,
     ) -> str:
-        ...
+        doc = await self.raw_upload(file_source, group_id, **params)
+        doc_type = doc["type"]
+        return self.generate_attachment_string(
+            doc_type,
+            doc[doc_type]["owner_id"],
+            doc[doc_type]["id"],
+            doc[doc_type].get("access_key"),
+        )
 
-    @overload
-    async def upload(
+    async def raw_upload(
         self,
         file_source: Union[str, "Bytes"],
         group_id: Optional[int] = None,
-        generate_attachment_strings: Literal[False] = ...,
         **params,
     ) -> dict:
-        ...
-
-    @overload
-    async def upload(
-        self,
-        file_source: Union[str, "Bytes"],
-        group_id: Optional[int] = None,
-        generate_attachment_strings: bool = True,
-        **params,
-    ) -> Union[str, dict]:
-        ...
-
-    async def upload(
-        self,
-        file_source: Union[str, "Bytes"],
-        group_id: Optional[int] = None,
-        generate_attachment_strings: bool = True,
-        **params,
-    ) -> Union[str, dict]:
         title = params.pop("title", None)
         if title is None:
             if isinstance(file_source, str):
@@ -66,28 +47,12 @@ class DocUploader(BaseUploader):
 
         uploader = await self.upload_files(server["upload_url"], {"file": file})
 
-        doc = (
+        return (
             await self.api.request(
                 "docs.save",
                 {"title": title, **uploader, **params},
             )
         )["response"]
-        doc_type = doc["type"]
-        if self.generate_attachment_strings is not None:
-            warnings.warn(
-                "generate_attachment_strings in __init__ is deprecated"
-                " pass this parameter directly to .upload()",
-                DeprecationWarning,
-            )
-            generate_attachment_strings = self.generate_attachment_strings
-        if generate_attachment_strings:
-            return self.generate_attachment_string(
-                doc_type,
-                doc[doc_type]["owner_id"],
-                doc[doc_type]["id"],
-                doc[doc_type].get("access_key"),
-            )
-        return doc
 
     @property
     def attachment_name(self) -> str:
@@ -100,53 +65,31 @@ class DocWallUploader(DocUploader):
 
 
 class DocMessagesUploader(DocUploader):
-    @overload
     async def upload(
         self,
         file_source: Union[str, "Bytes"],
-        peer_id: Optional[int] = None,
         group_id: Optional[int] = None,
-        generate_attachment_strings: Literal[True] = ...,
+        peer_id: Optional[int] = None,
         **params,
     ) -> str:
-        ...
-
-    @overload
-    async def upload(
-        self,
-        file_source: Union[str, "Bytes"],
-        peer_id: Optional[int] = None,
-        group_id: Optional[int] = None,
-        *,
-        generate_attachment_strings: Literal[False],
-        **params,
-    ) -> dict:
-        ...
-
-    @overload
-    async def upload(
-        self,
-        file_source: Union[str, "Bytes"],
-        peer_id: Optional[int] = None,
-        group_id: Optional[int] = None,
-        generate_attachment_strings: bool = ...,
-        **params,
-    ) -> Union[str, dict]:
-        ...
-
-    async def upload(
-        self,
-        file_source: Union[str, "Bytes"],
-        peer_id: Optional[int] = None,
-        group_id: Optional[int] = None,
-        generate_attachment_strings: bool = True,
-        **params,
-    ) -> Union[str, dict]:
         return await super().upload(
             file_source=file_source,
-            peer_id=peer_id,
             group_id=group_id,
-            generate_attachment_strings=generate_attachment_strings,
+            peer_id=peer_id,
+            **params,
+        )
+
+    async def raw_upload(
+        self,
+        file_source: Union[str, "Bytes"],
+        group_id: Optional[int] = None,
+        peer_id: Optional[int] = None,
+        **params,
+    ) -> dict:
+        return await super().raw_upload(
+            file_source=file_source,
+            group_id=group_id,
+            peer_id=peer_id,
             **params,
         )
 

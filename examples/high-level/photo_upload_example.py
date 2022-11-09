@@ -26,7 +26,10 @@ async def readme_handler(m: Message):
 
 @bot.on.message(command="лого")
 async def logo_handler(m: Message):
-    photo = await photo_uploader.upload("../../docs/logo.png", m.peer_id)
+    photo = await photo_uploader.upload(
+        file_source="../../docs/logo.png",
+        peer_id=m.peer_id,
+    )
     await m.answer(attachment=photo)
 
 

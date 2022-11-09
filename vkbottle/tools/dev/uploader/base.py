@@ -1,7 +1,7 @@
 import warnings
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import TYPE_CHECKING, Callable, Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 import aiofiles
 
@@ -17,21 +17,18 @@ if TYPE_CHECKING:
 class BaseUploader(ABC):
     def __init__(
         self,
-        api: Optional["ABCAPI"] = None,
-        api_getter: Optional[Callable[[], "ABCAPI"]] = None,
+        api: "ABCAPI",
         with_name: Optional[str] = None,
         **kwargs,
     ):
-        if api_getter is None and api is None:
-            raise ValueError("You must pass api or api_getter")
-        self._get_api = api_getter or (lambda: api)  # type: ignore
+        self.api = api
         if "generate_attachment_strings" in kwargs:
             warnings.warn(
                 "generate_attachment_strings in __init__ is deprecated"
-                " pass this parameter directly to .upload()",
+                " use .raw_upload() to get raw response or .upload() to get attachment string",
                 DeprecationWarning,
             )
-            self.generate_attachment_strings = kwargs.pop("generate_attachment_strings")
+            kwargs.pop("generate_attachment_strings")
         self.with_name = with_name
 
     @abstractmethod
@@ -42,10 +39,6 @@ class BaseUploader(ABC):
     @abstractmethod
     def attachment_name(self) -> str:
         pass
-
-    @property
-    def api(self) -> "ABCAPI":
-        return self._get_api()  # type: ignore
 
     async def upload_files(self, upload_url: str, files: dict) -> dict:
         raw_response = await self.api.http_client.request_text(
@@ -58,11 +51,11 @@ class BaseUploader(ABC):
         # To avoid errors with image generators (such as pillow)
         bytes_io.seek(0)
         # To guarantee VK API file extension recognition
-        if not bytes_io.name:
+        if not hasattr(bytes_io, "name"):
             bytes_io.name = name or self.attachment_name
         return bytes_io
 
-    async def get_owner_id(self, upload_params: dict) -> int:
+    async def get_owner_id(self, **upload_params) -> int:
         if "group_id" in upload_params:
             return upload_params["group_id"]
         if "user_id" in upload_params:
@@ -70,7 +63,7 @@ class BaseUploader(ABC):
         if "owner_id" in upload_params:
             return upload_params["owner_id"]
         try:
-            return (await self.api.request("groups.getById", {}))["response"][0]["id"]
+            return -(await self.api.request("groups.getById", {}))["response"][0]["id"]
         except VKAPIError:
             return (await self.api.request("users.get", {}))["response"][0]["id"]
 
