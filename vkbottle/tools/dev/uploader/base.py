@@ -45,7 +45,7 @@ class BaseUploader(ABC):
         )
         return json.loads(raw_response)
 
-    def get_bytes_io(self, data: "Bytes", name: str = None) -> BytesIO:
+    def get_bytes_io(self, data: "Bytes", name: str = "") -> BytesIO:
         bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)
         bytes_io.seek(0)  # To avoid errors with image generators (such as pillow)
         bytes_io.name = (
@@ -61,7 +61,7 @@ class BaseUploader(ABC):
         if "owner_id" in upload_params:
             return upload_params["owner_id"]
         try:
-            return (await self.api.request("groups.getById", {}))["response"][0]["id"]
+            return -(await self.api.request("groups.getById", {}))["response"][0]["id"]
         except VKAPIError:
             return (await self.api.request("users.get", {}))["response"][0]["id"]
 
