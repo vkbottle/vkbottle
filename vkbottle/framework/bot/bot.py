@@ -1,4 +1,3 @@
-import asyncio
 from typing import TYPE_CHECKING, NoReturn, Optional, Tuple
 
 from vkbottle.api import API
@@ -27,13 +26,12 @@ class Bot(ABCFramework):
         api: Optional["ABCAPI"] = None,
         polling: Optional["ABCPolling"] = None,
         callback: Optional["ABCCallback"] = None,
-        loop: Optional[asyncio.AbstractEventLoop] = None,
         loop_wrapper: Optional[LoopWrapper] = None,
         router: Optional["ABCRouter"] = None,
         labeler: Optional["ABCLabeler"] = None,
         state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
-        task_each_event: bool = True,
+        task_each_event=None,
     ):
         self.api: API = API(token) if token is not None else api  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
@@ -43,8 +41,8 @@ class Bot(ABCFramework):
         self._polling = polling or BotPolling(self.api)
         self._callback = callback or BotCallback()
         self._router = router or Router()
-        self._loop = loop
-        self.task_each_event = task_each_event
+        if task_each_event:
+            logger.warning("task_each_event is deprecated and will be removed in future versions")
 
     @property
     def callback(self) -> "ABCCallback":
@@ -81,15 +79,12 @@ class Bot(ABCFramework):
         async for event in polling.listen():
             logger.debug("New event was received: {}", event)
             for update in event["updates"]:
-                if not self.task_each_event:
-                    await self.router.route(update, polling.api)
-                else:
-                    self.loop.create_task(self.router.route(update, polling.api))
+                self.loop_wrapper.add_task(self.router.route(update, polling.api))
 
     def run_forever(self) -> NoReturn:  # type: ignore
-        logger.info("Loop will be ran forever")
+        logger.info("Loop will be run forever")
         self.loop_wrapper.add_task(self.run_polling())
-        self.loop_wrapper.run_forever(self.loop)
+        self.loop_wrapper.run()
 
     async def setup_webhook(self) -> Tuple[str, str]:
         """
@@ -107,20 +102,9 @@ class Bot(ABCFramework):
             await self.callback.edit_callback_server(server_id)
         else:
             server_id = await self.callback.add_callback_server()
-            self.loop.create_task(
-                self.callback.set_callback_settings(server_id, {"message_new": True})
-            )
+            await self.callback.set_callback_settings(server_id, {"message_new": True})
+
         return confirmation_code, secret_key
 
     async def process_event(self, event: dict):
         await self.router.route(event, self.api)
-
-    @property
-    def loop(self) -> asyncio.AbstractEventLoop:
-        if self._loop is None:
-            self._loop = asyncio.get_event_loop()
-        return self._loop
-
-    @loop.setter
-    def loop(self, new_loop: asyncio.AbstractEventLoop):
-        self._loop = new_loop

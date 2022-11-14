@@ -17,8 +17,8 @@ jobs:
           - macos-latest
           - windows-latest
         python-version:
-          - 3.7
-          - 3.9
+          - "3.7"
+          - "3.10"
 
     steps:
       - uses: actions/checkout@v3
@@ -71,6 +71,13 @@ jobs:
 
       - name: Run mypy
         run: poetry run mypy vkbottle
+
+      - name: Load cached .pytest_cache
+        id: cached-pytest
+        uses: actions/cache@v3
+        with:
+          key: pytest-${{ matrix.python-version }}-${{ runner.os }}
+          path: .pytest_cache
 
       - name: Run tests
         run: poetry run pytest

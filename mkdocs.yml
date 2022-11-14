@@ -1,6 +1,7 @@
 site_name: VKBottle
 site_description: Awesome VK framework
 site_author: timoniq
+site_url: https://vkbottle.rtfd.io/
 repo_name: vkbottle/vkbottle
 repo_url: https://github.com/vkbottle/vkbottle
 edit_uri: edit/master/docs/
@@ -44,20 +45,20 @@ nav:
               - Rules: high-level/routing/rules.md
       - Интерфейсы низкого уровня:
           - API:
-            - Работа с API: low-level/api/api.md
-            - Response Validator: low-level/api/response-validator.md
-            - Request Rescheduler: low-level/api/request-rescheduler.md
-            - Request Validator: low-level/api/request-validator.md
-            - Token Generator: low-level/api/token-generator.md
+              - Работа с API: low-level/api/api.md
+              - Response Validator: low-level/api/response-validator.md
+              - Request Rescheduler: low-level/api/request-rescheduler.md
+              - Request Validator: low-level/api/request-validator.md
+              - Token Generator: low-level/api/token-generator.md
           - Exception Handling:
-            - Error Handler: low-level/exception_handling/error-handler.md
-            - Code Exception: low-level/exception_handling/code-exception.md
+              - Error Handler: low-level/exception_handling/error-handler.md
+              - Code Exception: low-level/exception_handling/code-exception.md
           - Http Client:
-            - Accessing Http Client: low-level/http/http-client.md
+              - Accessing Http Client: low-level/http/http-client.md
           - Polling:
-            - Работа с поллингом: low-level/polling/polling.md
+              - Работа с поллингом: low-level/polling/polling.md
           - Callback:
-            - Работа с Callback API: low-level/callback/callback.md
+              - Работа с Callback API: low-level/callback/callback.md
       - Дополнительные инструменты:
           - Auth Flows: tools/auth.md
           - Event Data генераторы: tools/event-data.md
@@ -69,7 +70,6 @@ nav:
           - Uploaders: tools/uploaders.md
           - VKScript: tools/vkscript.md
       - Кастомизация зависимостей: modules.md
-  - Почему vkbottle?: why-vkbottle.md
   - Что нового:
       - 4.0: whats_new/4.0.md
       - 4.1: whats_new/4.1.md
@@ -78,7 +78,6 @@ nav:
 
 theme:
   name: material
-  language: ru
 
   palette:
     - scheme: slate

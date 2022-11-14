@@ -46,6 +46,7 @@ class BaseUploader(ABC):
         )
         return json.loads(raw_response)
 
+
     def get_bytes_io(self, data: "Bytes", name: Optional[str] = None) -> BytesIO:
         bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)
         # To avoid errors with image generators (such as pillow)

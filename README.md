@@ -4,45 +4,19 @@
   </a>
 </p>
 <h1 align="center">
-  VKBottle 4.x
+  VKBottle
 </h1>
 <p align="center">
-  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/vkbottle/vkbottle/CI?style=flat-square">
-  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/vkbottle/vkbottle?style=flat-square">
-  <img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/vkbottle/vkbottle/bug?style=flat-square">
-  <img alt="PyPI" src="https://img.shields.io/pypi/v/vkbottle?color=green&label=PyPI&style=flat-square">
+    <em><b>Кастомизируемый, быстрый и удобный фреймворк для работы с VK API</b></em>
+</p>
+<p align="center">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/vkbottle/vkbottle/CI">
+  <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dw/vkbottle">
+  <img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/vkbottle/vkbottle/bug">
+  <img alt="PyPI" src="https://img.shields.io/pypi/v/vkbottle?color=green&label=PyPI">
 </p>
 
-> Кастомизируемый, быстрый и удобный фреймворк для работы с VK API
-
-## Документация
-
-[Туториал для новичков](https://vkbottle.readthedocs.io/ru/latest/tutorial/)\
-[Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
-
-## Установка
-
-Установить новейшую версию можно командой:
-
-```shell
-pip install -U https://github.com/vkbottle/vkbottle/archive/master.zip
-```
-
-Установить последнюю версию VKBottle 4.x с PyPI можно командой:
-
-```shell
-pip install vkbottle
-```
-
-Если вы ищете старые версии:
-
-- [`3.x`](https://github.com/vkbottle/vkbottle/tree/v3.0)
-- [`2.x`](https://github.com/vkbottle/vkbottle/tree/v2.0)
-
 ## Hello World
-
-[Смотреть больше примеров!](https://github.com/vkbottle/vkbottle/tree/master/examples)\
-[Почему VKBottle?](https://github.com/vkbottle/vkbottle/blob/master/docs/why_vkbottle.md)
 
 ```python
 from vkbottle.bot import Bot
@@ -56,9 +30,30 @@ async def handler(_) -> str:
 bot.run_forever()
 ```
 
+[Смотреть больше примеров!](https://github.com/vkbottle/vkbottle/tree/master/examples)
+
+## Документация
+
+[Туториал для новичков](https://vkbottle.readthedocs.io/ru/latest/tutorial/)\
+[Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
+
+## Установка
+
+Установить новейшую версию можно командой:
+
+```shell
+pip install vkbottle
+```
+
+Если вы ищете старые версии:
+
+- [`3.x`](https://github.com/vkbottle/vkbottle/tree/v3.0)
+- [`2.x`](https://github.com/vkbottle/vkbottle/tree/v2.0)
+
 ## Contributing
 
-ПР поддерживаются! Перед созданием пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE.md](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие библиотеки. Задавайте вопросы в блоке Issues и в [**чате Telegram**](https://t.me/vkbottle_ru) / [**чате VK**](https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj)!
+ПР поддерживаются! Перед созданием пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие фреймворка.\
+Задавайте вопросы в блоке Issues или в [**чате Telegram**](https://t.me/vkbottle_ru) / [**чате VK**](https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj)!
 
 - Создатель [@timoniq](https://github.com/timoniq)
 - Мейнтейнер [@FeeeeK](https://github.com/FeeeeK)
