@@ -6,26 +6,26 @@
 
 ## Установка
 1) С помощью установщика pip из PyPi:
-   
+
    Новейшая версия:
    ```sh
    pip install vkbottle
    ```
-   
+
    Последний стабильный релиз:
    ```sh
-   pip install vkbottle==2.7.8
+   pip install vkbottle==2.7.12
    ```
 
-2) С помощью установщика pip из GitHub: 
-   
+2) С помощью установщика pip из GitHub:
+
    ```sh
    pip install https://github.com/timoniq/vkbottle/archive/master.zip --upgrade
    ```
-   
+
 ### Документация
 
-Доступны следующие разделы:  
+Доступны следующие разделы:
 
 * [Первый бот на vkbottle](https://github.com/timoniq/vkbottle/blob/master/docs/getting_started.md) - пособие для новичков, краткое введение
 * [Работа с API, генераторами токенов. Генераторы клавиатур, загрузчики вложений, перевод в VKScript](https://github.com/timoniq/vkbottle/blob/master/docs/api.ru.md)
@@ -116,7 +116,7 @@ bot = Bot("my-token")
 @bot.on.message(AttachmentRule("photo"))
 async def wrapper():
     return "What a beautiful photo!"
-    
+
 bot.run_polling()
 
 ```
@@ -142,18 +142,18 @@ user.run_polling()
 
 ## Based on
 
-[aiohttp](https://github.com/aio-libs/aiohttp) - longpoll и запросы к API  
-[pydantic](https://github.com/samuelcolvin/pydantic) - все датаклассы  
+[aiohttp](https://github.com/aio-libs/aiohttp) - longpoll и запросы к API
+[pydantic](https://github.com/samuelcolvin/pydantic) - все датаклассы
 [vbml](https://github.com/timoniq/vbml) - встроенная поддержка лучшего парсера сообщений
 
 Для оптимальной работы фреймворка, рекомендуется использовать только [асинхронные библиотеки](https://github.com/timofurrer/awesome-asyncio)
 
 ## Contributing
 
-ПР поддерживаются! Мне приятно видеть ваш вклад в развитие библиотеки  
+ПР поддерживаются! Мне приятно видеть ваш вклад в развитие библиотеки
 Задавайте вопросы в блоке Issues и в чате VK!
 
 ## Лицензия
 
-Copyright © 2019-2020 [timoniq](https://github.com/timoniq).  
+Copyright © 2019-2020 [timoniq](https://github.com/timoniq).
 Этот проект имеет [MIT](https://github.com/timoniq/vkbottle/blob/master/LICENSE) лицензию.

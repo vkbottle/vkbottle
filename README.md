@@ -1,8 +1,8 @@
 <h1 align="center">VKBottle - high quality bot building library</h1>
 <p align="center"><a href="https://pypi.org/project/vkbottle/">
-    <img alt="downloads" src="https://img.shields.io/static/v1?label=pypi%20package&message=2.7.8&color=brightgreen"></a> 
+    <img alt="downloads" src="https://img.shields.io/static/v1?label=pypi%20package&message=2.7.12&color=brightgreen"></a>
     <a href="https://github.com/timoniq/vkbottle">
-    <img src="https://img.shields.io/static/v1?label=version&message=opensource&color=green" alt="service-test status"></a>  
+    <img src="https://img.shields.io/static/v1?label=version&message=opensource&color=green" alt="service-test status"></a>
     <a href="https://t.me/vkbottle_ru">
         <img src="https://img.shields.io/static/v1?message=Telegram%20Chat&label=&color=blue">
     </a>
@@ -15,14 +15,14 @@
 
 ## Установка
 1) С помощью установщика pip из PyPi:
-   
+
    Последний стабильный релиз:
    ```sh
-   pip install vkbottle==2.7.8
+   pip install vkbottle==2.7.12
    ```
 
-2) С помощью установщика pip из GitHub: 
-   
+2) С помощью установщика pip из GitHub:
+
    ```sh
    pip install https://github.com/timoniq/vkbottle/archive/v2.0.zip --upgrade
    ```
@@ -33,14 +33,14 @@
 
 ### Документация
 
-Доступны следующие разделы:  
+Доступны следующие разделы:
 
 * [Первый бот на vkbottle](./docs/getting_started.md) - пособие для новичков, краткое введение
 * [Работа с API, генераторами токенов. Генераторы клавиатур, загрузчики вложений, перевод в VKScript](./docs/api.ru.md)
 * [Введение в составляющие фреймворка](./docs/framework.ru.md) - Боты, юзерботы, хендлеры и блупринты
 * [Бранчи - имплементация FSM](./docs/branches.ru.md)
 * [Внешние составляющие: Middleware, хендлинг ошибок и капчи, TaskManager](./docs/stuff.ru.md)
-   
+
 ### Кастомизация
 
 После установки `vkbottle` рекомендуется сразу же установить дополнительные модули `loguru` и `uvloop`, без них фреймворк работает медленне и логи не настраиваемы. О возможностях этих модулей можно прочитать в их документации
@@ -140,7 +140,7 @@ bot = Bot("my-token")
 @bot.on.message(AttachmentRule("photo"))
 async def wrapper():
     return "What a beautiful photo!"
-    
+
 bot.run_polling()
 
 ```
@@ -167,8 +167,8 @@ user.run_polling()
 
 ## Based on
 
-[aiohttp](https://github.com/aio-libs/aiohttp) - longpoll и запросы к API  
-[pydantic](https://github.com/samuelcolvin/pydantic) - все датаклассы  
+[aiohttp](https://github.com/aio-libs/aiohttp) - longpoll и запросы к API
+[pydantic](https://github.com/samuelcolvin/pydantic) - все датаклассы
 [vbml](https://github.com/timoniq/vbml) - встроенная поддержка лучшего парсера сообщений
 
 Не забывайте что в vbml существует огромное количество отличных паттернов для использования, валидаторы и многое другое, изучите документацию.
@@ -177,10 +177,10 @@ user.run_polling()
 
 ## Contributing
 
-ПР поддерживаются! Нам приятно видеть ваш вклад в развитие библиотеки  
+ПР поддерживаются! Нам приятно видеть ваш вклад в развитие библиотеки
 Задавайте вопросы в блоке Issues и в чате Telegram/VK!
 
 ## Лицензия
 
-Copyright © 2019-2020 [timoniq](https://github.com/timoniq).  
+Copyright © 2019-2020 [timoniq](https://github.com/timoniq).
 Этот проект имеет [MIT](./LICENSE) лицензию.
