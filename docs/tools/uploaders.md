@@ -9,14 +9,37 @@
 * doc - загрузка документов разного типа
 * video - загрузка видео
 
+## Пример
+
+```python
+from vkbottle import PhotoMessageUploader
+from vkbottle.bot import Bot
+
+bot = Bot("token")
+photo_uploader = PhotoMessageUploader(bot.api)
+
+
+@bot.on.message(text="photo")
+async def handler(message):
+    photo = await photo_uploader.upload(
+        file_source="photo.png",
+        peer_id=m.peer_id,
+    )
+    await message.answer(attachment=photo)
+
+bot.run_forever()
+```
+
 ## Интерфейс аплоадера
 
-Аплоадер принимает `API` при инициализации.
+Аплоадер принимает объект `API` при инициализации.
 
-Любой аплоадер имеет метод `.upload(file_source, ...)`, нужный для передачи документа и индивидуальных параметров (если они есть в аплоадере)
+Аплоадеры имеет два метода:
 
-* `file_source` - путь до файла в строке или байты
-* `generate_attachment_strings` (`bool`) отвечает за то, что будет возвращать `upload`, по умолчанию это строка готовая к отправке как медиа, если нужен объект, следует изменить значение на `False`
+* `.upload(...)`
+* `.raw_upload(...)`
+
+Оба метода имеют одинаковый интерфейс, но различаются в том, что первый метод возвращает готовую строку аттачмента, а второй - словарь с ответом сервера.
 
 Все аплоадеры различаются методом получения сервера. Получить сервер аплоадера можно с помощью метода `.get_server(...)`
 
@@ -24,8 +47,8 @@
 
 * `.upload_files(url, files)` - загрузка файлов методом POST
 * `.get_bytes_io(data)` - приводит сырые байты в подходящий для вк вид
-* `.generate_attachment_string(attachment_type, owner_id, item_id)` - делает из понятных составляющих строку которую вк принимает как медиа для отправки
-* `.read(file_source)` - читает файл если file_source строка, если байты - возвращает их
+* `.generate_attachment_string(attachment_type, owner_id, item_id, access_key)` - делает строку, которую вк принимает, как медиа для отправки
+* `.read(file_source)` - читает файл, если file_source строка, a если байты - возвращает их
 
 Обычно нужен только метод `upload`
 
@@ -49,10 +72,6 @@
 
 * `VideoUploader` - загрузка видео
 
-## Импорт
+## Дополнительные примеры
 
-Все аплоадеры импортируются из корня проекта
-
-```python
-from vkbottle import DocMessagesUploader
-```
+* [Uploaders example](https://github.com/vkbottle/vkbottle/blob/master/examples/high-level/uploaders_example.py)
