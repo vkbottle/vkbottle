@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/timoniq/vkbottle">
-    <img src="https://raw.githubusercontent.com/timoniq/vkbottle/master/docs/logo.jpg" width="200px" style="display: inline-block; border-radius: 5px">
+    <img src="docs/logo.jpg" width="200px" style="display: inline-block; border-radius: 5px">
   </a>
 </p>
 <h1 align="center">
@@ -31,7 +31,7 @@ pip install -U https://github.com/timoniq/vkbottle/archive/v3.0.zip
 Установить версию 3.0 с PyPI можно командой:
 
 ```shell
-pip install vkbottle
+pip install vkbottle==3.0.3
 ```
 
 Если вы ищете старые версии (`2.x`) - [вам сюда](https://github.com/timoniq/vkbottle/tree/v2.0)
