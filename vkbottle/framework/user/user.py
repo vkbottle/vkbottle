@@ -109,8 +109,8 @@ class User(ABCFramework):
                 else:
                     self.loop.create_task(self.router.route(update, polling.api))
 
-    def run_forever(self) -> NoReturn:
-        logger.info("Loop will be ran forever")
+    def run_forever(self) -> NoReturn:  # type: ignore
+        logger.info("Loop will be run forever")
         self.loop_wrapper.add_task(self.run_polling())
         self.loop_wrapper.run_forever(self.loop)
 
