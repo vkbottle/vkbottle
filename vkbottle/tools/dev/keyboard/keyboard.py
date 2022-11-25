@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Optional, Union
 
 from vkbottle.modules import json
 
@@ -38,14 +38,13 @@ class Keyboard:
 
     def get_json(self) -> str:
         buttons = [[button.get_data() for button in row] for row in self.buttons if row]
-        data = json.dumps(
+        data: Union[str, bytes] = json.dumps(
             {
                 "one_time": self.one_time,
                 "inline": self.inline,
                 "buttons": buttons,
             }
         )
-
         return data.decode() if isinstance(data, bytes) else data
 
     def __str__(self) -> str:
