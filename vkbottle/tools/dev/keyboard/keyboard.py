@@ -14,27 +14,31 @@ class Keyboard:
         self.one_time = one_time
         self.inline = inline
         self.buttons: List[List[KeyboardButton]] = []
+        self.expect_new_line = True
 
     def row(self) -> "Keyboard":
-        if len(self.buttons) and not len(self.buttons[-1]):
-            raise RuntimeError("Last row is empty!")
-        self.buttons.append([])
+        self.expect_new_line = True
+        return self
+
+    def add_button(self, button: "KeyboardButton") -> "Keyboard":
+        if self.expect_new_line:
+            self.buttons.append([])
+        self.buttons[-1].append(button)
+        self.expect_new_line = False
         return self
 
     def add(
         self, action: "ABCAction", color: Optional["KeyboardButtonColor"] = None
     ) -> "Keyboard":
-        if not self.buttons:
-            self.row()
         button = KeyboardButton.from_typed(action, color)
-        self.buttons[-1].append(button)
+        self.add_button(button)
         return self
 
     def schema(self, rows: List[List[dict]]):
         for row in rows:
             self.row()
             for button in row:
-                self.buttons[-1].append(KeyboardButton.from_dict(button))
+                self.add_button(KeyboardButton.from_dict(button))
         return self
 
     def get_json(self) -> str:
