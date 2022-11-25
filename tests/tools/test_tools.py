@@ -79,9 +79,11 @@ def assert_rule(res, rev=False):
 
 def test_keyboard_non_builder():
     keyboard = Keyboard(one_time=True)
+    keyboard.row()  # test empty row autoremove
     keyboard.add(Text("I love nuggets", {"love": "nuggets"}))
     keyboard.row()
     keyboard.add(Callback("Eat nuggets", {"eat": "nuggets"}), color=KeyboardButtonColor.POSITIVE)
+    keyboard.row()  # test empty row autoremove
     assert keyboard.get_json() == KEYBOARD_JSON
 
 
