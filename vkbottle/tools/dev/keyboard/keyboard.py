@@ -23,8 +23,8 @@ class Keyboard:
     def add_button(self, button: "KeyboardButton") -> "Keyboard":
         if self.expect_new_line:
             self.buttons.append([])
+            self.expect_new_line = False
         self.buttons[-1].append(button)
-        self.expect_new_line = False
         return self
 
     def add(
