@@ -29,10 +29,8 @@ class Keyboard:
 
     def add(
         self, action: "ABCAction", color: Optional["KeyboardButtonColor"] = None
-    ) -> "Keyboard":
-        button = KeyboardButton.from_typed(action, color)
-        self.add_button(button)
-        return self
+    ) -> "Keyboard":        
+        return self.add_button(KeyboardButton.from_typed(action, color))
 
     def schema(self, rows: List[List[dict]]):
         for row in rows:
