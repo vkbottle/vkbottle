@@ -5,6 +5,7 @@ import pytest
 import vbml
 from vkbottle_types.methods.base_category import BaseCategory
 
+from tests.test_utils import MockedClient, with_mocked_api
 from vkbottle import (
     API,
     AndRule,
@@ -19,7 +20,6 @@ from vkbottle import (
 from vkbottle.bot import BotLabeler, Message
 from vkbottle.dispatch.rules import base
 from vkbottle.tools.dev.mini_types.bot import message_min
-from tests.test_utils import MockedClient, with_mocked_api
 
 EXAMPLE_EVENT = {
     "ts": 1,
