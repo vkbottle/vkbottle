@@ -1,0 +1,21 @@
+name: Предложить новый функционал
+description: Новая функциональность для фреймворка
+labels: enhancement
+assignees: "FeeeeK"
+body:
+  - type: textarea
+    attributes:
+      label: Описание
+      description: Опишите новый функционал, который вы хотите видеть в фреймворке
+      placeholder: |
+        ...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Пример кода
+      description: Пример кода
+      placeholder: |
+        ...
+      render: python

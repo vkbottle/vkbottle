@@ -1,0 +1,43 @@
+name: Сообщение об ошибке
+description: Сообщение о произошедшем баге во время работы с фреймворком
+labels: bug
+assignees: 'FeeeeK'
+body:
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      options:
+        - label: Я уверен, что это баг фреймворка
+          required: true
+        - label: Я искал похожие баги в issues
+          required: true
+        - label: Я установил последнюю версию (`pip3 install -U https://github.com/vkbottle/vkbottle/archive/master.zip`) и проблема осталась
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Описание
+      description: Опишите баг
+      placeholder: |
+        Когда я ..., происходит ...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Пример кода
+      description: Предоставьте минимальный пример кода, который вызывает баг
+      placeholder: |
+        from vkbottle.bot import Bot, Message
+        ...
+      render: python
+
+  - type: textarea
+    attributes:
+      label: Логи
+      description: Предоставьте логи, если они есть
+      placeholder: |
+        Traceback (most recent call last):
+        File "main.py", line 1, in <module>
+        ...
+      render: shell
