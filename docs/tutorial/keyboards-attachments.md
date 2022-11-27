@@ -28,10 +28,6 @@ async def send_keyboard(message):
     await message.answer("Here is your keyboard!", keyboard=keyboard)
 ```
 
-### Создание через `keyboard_gen` (устарело)
-
-Устаревшая документация по устаревшему методу находится [здесь](https://github.com/vkbottle/vkbottle/blob/v2.0/docs/api.ru.md#генератор-keyboard_gen).
-
 ## Вложения
 
 ### Если у вас уже есть ссылка на вложение
