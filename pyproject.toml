@@ -98,6 +98,7 @@ ignore_missing_imports = true
 warn_no_return = false
 warn_return_any = false
 warn_unused_configs = true
+check_untyped_defs = true
 
 [[tool.mypy.overrides]]
 # Ignore tests, because we can use fixtures that not quite represent a real type

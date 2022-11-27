@@ -78,11 +78,10 @@ class UserLabeler(BaseLabeler):
             "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
         )
 
-        if not isinstance(event, list):
-            event = [event]
+        event_types = [event] if isinstance(event, (int, UserEventType)) else event
 
         def decorator(func):
-            for e in event:
+            for e in event_types:
                 if isinstance(e, int):
                     e = UserEventType(e)
                 handler_basement = UserHandlerBasement(
