@@ -1,11 +1,11 @@
 import asyncio
 import contextlib
+import warnings
 from asyncio import new_event_loop
 from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
 
 from vkbottle.modules import logger
 
-from .auto_reload import watch_to_reload
 from .delayed_task import DelayedTask
 
 if TYPE_CHECKING:
@@ -17,19 +17,17 @@ class LoopWrapper:
     """Loop Wrapper for vkbottle manages startup, shutdown and main tasks,
     creates loop and runs it forever"""
 
+    auto_reload = None
+
     def __init__(
         self,
         *,
         on_startup: Optional[List["Task"]] = None,
         on_shutdown: Optional[List["Task"]] = None,
-        auto_reload: bool = False,
-        auto_reload_dir: str = ".",
         tasks: Optional[List["Task"]] = None,
     ):
         self.on_startup = on_startup or []
         self.on_shutdown = on_shutdown or []
-        self.auto_reload = auto_reload
-        self.auto_reload_dir = auto_reload_dir
         self.tasks = tasks or []
         self.loop: Optional["AbstractEventLoop"] = None
 
@@ -50,7 +48,10 @@ class LoopWrapper:
             self.loop.run_until_complete(startup_task)
 
         if self.auto_reload:
-            self.loop.create_task(watch_to_reload(self.auto_reload_dir))
+            warnings.warn(
+                "auto_reload is deprecated, instead, install watchfiles",
+                DeprecationWarning,
+            )
 
         for task in self.tasks:
             self.loop.create_task(task)
