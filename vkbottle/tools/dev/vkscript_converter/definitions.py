@@ -169,8 +169,7 @@ def constant(d: ast.Constant):
         return repr(d.value.decode())
     elif isinstance(d.value, int):
         return str(d.value)
-    else:
-        return d.value
+    return d.value
 
 
 @converter(ast.Name)

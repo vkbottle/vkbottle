@@ -54,8 +54,7 @@ class MentionRule(ABCRule[BaseMessageMin]):
     async def check(self, event: BaseMessageMin) -> bool:
         if self.mention_only:
             return event.is_mentioned and not event.text
-        else:
-            return event.is_mentioned
+        return event.is_mentioned
 
 
 class CommandRule(ABCRule[BaseMessageMin]):
