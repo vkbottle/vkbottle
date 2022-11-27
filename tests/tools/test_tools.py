@@ -20,7 +20,6 @@ from vkbottle.tools import (
     LoopWrapper,
     TemplateElement,
     Text,
-    keyboard_gen,
     load_blueprints_from_package,
     run_in_task,
     template_gen,
@@ -95,26 +94,6 @@ def test_keyboard_builder():
         .add(Callback("Eat nuggets", {"eat": "nuggets"}), color=KeyboardButtonColor.POSITIVE)
         .get_json()
     ) == KEYBOARD_JSON
-
-
-def test_keyboard_generator():
-    with pytest.deprecated_call():
-        assert json.loads(
-            keyboard_gen(
-                [
-                    [{"label": "I love nuggets", "payload": {"love": "nuggets"}}],
-                    [
-                        {
-                            "type": "callback",
-                            "label": "Eat nuggets",
-                            "payload": {"eat": "nuggets"},
-                            "color": "positive",
-                        }
-                    ],
-                ],
-                one_time=True,
-            )
-        ) == json.loads(KEYBOARD_JSON)
 
 
 def test_bp_importer(mocker: MockerFixture):
