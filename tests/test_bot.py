@@ -73,11 +73,11 @@ EXAMPLE_EVENT = {
 
 
 class FirstMockState(BaseStateGroup):
-    MOCK = 1
+    MOCK = "mock"
 
 
 class SecondMockState(BaseStateGroup):
-    MOCK = 1
+    MOCK = "mock"
 
 
 class MessagesCategory(BaseCategory):
@@ -281,3 +281,13 @@ async def test_rules(api: API):
     sg_mock_message.state_peer = StatePeer(peer_id=1, state=FirstMockState.MOCK, payload={})
     assert await base.StateGroupRule(state_group=FirstMockState).check(sg_mock_message)
     assert not await base.StateGroupRule(state_group=SecondMockState).check(sg_mock_message)
+
+
+def test_states():
+    first_mock_state = StatePeer(peer_id=1, state=FirstMockState.MOCK)
+    second_mock_state = StatePeer(peer_id=1, state=SecondMockState.MOCK)
+    assert FirstMockState.MOCK == SecondMockState.MOCK
+    assert first_mock_state.state != second_mock_state.state
+    assert first_mock_state.state == FirstMockState.MOCK
+    assert first_mock_state.state != "SecondMockState:mock"
+    assert first_mock_state.state == "FirstMockState:mock"

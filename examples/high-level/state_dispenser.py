@@ -13,8 +13,8 @@ bot = Bot(os.environ["token"])
 # Let's make a group of states
 # State group is IntEnum
 class MenuState(BaseStateGroup):
-    START = 1
-    INFO = 2
+    START = "start"
+    INFO = "info"
 
 
 # <state = None> handles all events with no state;
