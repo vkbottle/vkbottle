@@ -40,7 +40,6 @@ from .exception_factory import (
     CodeException,
     ErrorHandler,
     VKAPIError,
-    swear,
 )
 from .framework import (
     ABCBlueprint,
@@ -201,7 +200,6 @@ __all__ = (
     "run_in_task",
     "run_multibot",
     "run_sync",
-    "swear",
     "template_gen",
     "vkscript",
 )
