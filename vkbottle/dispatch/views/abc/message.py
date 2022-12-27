@@ -47,6 +47,7 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
         # https://dev.vk.com/api/user-long-poll/getting-started
         logger.debug("Handling event ({}) with message view", self.get_event_type(event))
         context_variables: dict = {}
+        context_variables["context"] = context_variables
         message = await self.get_message(event, ctx_api, self.replace_mention)
         message.state_peer = await state_dispenser.cast(self.get_state_key(message))
 

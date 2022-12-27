@@ -35,6 +35,7 @@ class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
         logger.debug("Handling event ({}) with message view", self.get_event_type(event))
 
         context_variables: dict = {}
+        context_variables["context"] = context_variables
         handle_responses = []
         handlers = []
 
