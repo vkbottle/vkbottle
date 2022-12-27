@@ -1,5 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Generic, List, NoReturn, Optional, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Generic,
+    List,
+    NoReturn,
+    Optional,
+    TypeVar,
+    overload,
+)
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.handlers.abc import ABCHandler
@@ -18,16 +27,24 @@ class ABCMiddleware(ABC):
     def stop(self, description: Any = "") -> NoReturn:
         ...
 
-    @abstractmethod
-    def send(self, context_update: Optional[dict] = None) -> None:
-        ...
-
+    @overload
     @abstractmethod
     async def pre(self) -> None:
         ...
 
+    @overload
+    @abstractmethod
+    async def pre(self, context_variables: Optional[dict] = None) -> None:
+        ...
+
+    @overload
     @abstractmethod
     async def post(self) -> None:
+        ...
+
+    @overload
+    @abstractmethod
+    async def post(self, context_variables: Optional[dict] = None) -> None:
         ...
 
     def __repr__(self) -> str:
@@ -47,7 +64,6 @@ class BaseMiddleware(Generic[T]):
         self.handle_responses = []
         self.handlers = []
 
-        self._new_context: dict = {}
         self.error: Optional[Exception] = None
 
         self.pre = self.catch_all(self.pre)  # type: ignore
@@ -63,10 +79,6 @@ class BaseMiddleware(Generic[T]):
     def can_forward(self) -> bool:
         """Check if the event can be further processed"""
         return not self.error
-
-    @property
-    def context_update(self) -> dict:
-        return self._new_context
 
     def catch_all(self, func):
         """Catch any exception and save error value"""
@@ -84,13 +96,6 @@ class BaseMiddleware(Generic[T]):
         if issubclass(type(description), (Exception,)):
             raise description
         raise MiddlewareError(description)
-
-    def send(self, context_update: Optional[dict] = None) -> None:
-        """Validate new context update data if needed"""
-        if context_update is not None:
-            if not isinstance(context_update, dict):
-                raise ValueError("Context update value should be an instance of dict")
-            self._new_context.update(context_update)
 
     async def pre(self) -> None:
         ...

@@ -21,6 +21,7 @@ import vbml
 
 from vkbottle.dispatch.dispenser import get_state_repr
 from vkbottle.tools.dev.mini_types.base import BaseMessageMin
+from vkbottle.tools.dev.utils import call_by_signature
 from vkbottle.tools.validator import (
     ABCValidator,
     CallableValidator,
@@ -333,10 +334,22 @@ class FuncRule(ABCRule[BaseMessageMin]):
     def __init__(self, func: Callable[[BaseMessageMin], Union[bool, Awaitable]]):
         self.func = func
 
-    async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
+    async def check(
+        self,
+        event: BaseMessageMin,
+        context_variables: Optional[dict] = None
+    ) -> Union[dict, bool]:
         if inspect.iscoroutinefunction(self.func):
-            return await self.func(event)  # type: ignore
-        return self.func(event)  # type: ignore
+            return await call_by_signature(
+                self.func,
+                event,
+                context_variables=context_variables
+            )  # type: ignore
+        return call_by_signature(
+            self.func,
+            event,
+            context_variables=context_variables
+        )  # type: ignore
 
 
 class CoroutineRule(ABCRule[BaseMessageMin]):

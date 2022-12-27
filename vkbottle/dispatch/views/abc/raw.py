@@ -1,13 +1,14 @@
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Any, Dict, Generic, List, TypeVar
 
+from vkbottle.modules import logger
+from vkbottle.tools.dev.utils import call_by_signature
+
+from .view import ABCView
+
 if TYPE_CHECKING:
     from vkbottle.api.abc import ABCAPI
     from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
-
-from vkbottle.modules import logger
-
-from .view import ABCView
 
 T_contra = TypeVar("T_contra", list, dict, contravariant=True)
 
@@ -50,7 +51,11 @@ class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
             else:
                 event_model.unprepared_ctx_api = ctx_api  # type: ignore
 
-            result = await handler_basement.handler.filter(event_model)
+            result = await call_by_signature(
+                handler_basement.handler.filter,
+                event_model,
+                context_variables=context_variables
+            )
             logger.debug("Handler {} returned {}", handler_basement.handler, result)
 
             if result is False:
@@ -77,4 +82,9 @@ class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
             if handler_basement.handler.blocking:
                 break
 
-        await self.post_middleware(mw_instances, handle_responses, handlers)
+        await self.post_middleware(
+            mw_instances,
+            handle_responses,
+            handlers,
+            context_variables
+        )

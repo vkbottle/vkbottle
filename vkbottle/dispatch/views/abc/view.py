@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Type, Type
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.modules import logger
+from vkbottle.tools.dev.utils import call_by_signature
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
@@ -40,15 +41,12 @@ class ABCView(ABC, Generic[T_contra]):
 
         for middleware in self.middlewares:
             mw_instance = middleware(event, view=self)
-            await mw_instance.pre()
+            await call_by_signature(mw_instance.pre, context_variables=context_variables)
             if not mw_instance.can_forward:
                 logger.debug("{} pre returned error {}", mw_instance, mw_instance.error)
                 return None
 
             mw_instances.append(mw_instance)
-
-            if context_variables is not None:
-                context_variables.update(mw_instance.context_update)
 
         return mw_instances
 
@@ -57,13 +55,14 @@ class ABCView(ABC, Generic[T_contra]):
         mw_instances: List[BaseMiddleware],
         handle_responses: Optional[List] = None,
         handlers: Optional[List["ABCHandler"]] = None,
+        context_variables: Optional[dict] = None,
     ):
         for middleware in mw_instances:
             # Update or leave value
             middleware.handle_responses = handle_responses or middleware.handle_responses
             middleware.handlers = handlers or middleware.handlers
 
-            await middleware.post()
+            await call_by_signature(middleware.post, context_variables=context_variables)
             if not middleware.can_forward:
                 logger.debug("{} post returned error {}", middleware, middleware.error)
                 return middleware.error

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Callable, Generic, List, TypeVar
 
 from vkbottle.modules import logger
+from vkbottle.tools.dev.utils import call_by_signature
 
 from .dispense import ABCDispenseView
 
@@ -61,7 +62,11 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
         handlers = []
 
         for handler in self.handlers:
-            result = await handler.filter(message)
+            result = await call_by_signature(
+                handler.filter,
+                message,
+                context_variables=context_variables
+            )
             logger.debug("Handler {} returned {}", handler, result)
 
             if result is False:
@@ -83,4 +88,9 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
             if handler.blocking:
                 break
 
-        await self.post_middleware(mw_instances, handle_responses, handlers)
+        await self.post_middleware(
+            mw_instances,
+            handle_responses,
+            handlers,
+            context_variables
+        )
