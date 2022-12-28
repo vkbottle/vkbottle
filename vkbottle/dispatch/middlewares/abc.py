@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Generic, List, NoReturn, Optional, TypeVar
+from warnings import warn
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.handlers.abc import ABCHandler
@@ -77,6 +78,10 @@ class BaseMiddleware(Generic[T]):
     def send(self, context_update: Optional[dict] = None) -> None:
         """Validate new context update data if needed"""
         # should be deprecated in future
+        if self.context is None:
+            warn("no context_variables provided, middleware send will be skipped")
+            return
+
         if context_update is not None:
             if not isinstance(context_update, dict):
                 raise ValueError("Context update value should be an instance of dict")
