@@ -1,14 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Generic,
-    List,
-    NoReturn,
-    Optional,
-    TypeVar,
-    overload,
-)
+from typing import TYPE_CHECKING, Any, Generic, List, NoReturn, Optional, TypeVar
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.handlers.abc import ABCHandler
@@ -27,24 +18,12 @@ class ABCMiddleware(ABC):
     def stop(self, description: Any = "") -> NoReturn:
         ...
 
-    @overload
     @abstractmethod
     async def pre(self) -> None:
         ...
 
-    @overload
-    @abstractmethod
-    async def pre(self, context_variables: Optional[dict] = None) -> None:
-        ...
-
-    @overload
     @abstractmethod
     async def post(self) -> None:
-        ...
-
-    @overload
-    @abstractmethod
-    async def post(self, context_variables: Optional[dict] = None) -> None:
         ...
 
     def __repr__(self) -> str:
@@ -56,10 +35,14 @@ class BaseMiddleware(Generic[T]):
     view: Optional["ABCView"]
     handle_responses: List
     handlers: List["ABCHandler"]
+    context: Optional[dict]
 
-    def __init__(self, event: T, view: Optional["ABCView"] = None):
+    def __init__(
+        self, event: T, view: Optional["ABCView"] = None, context: Optional[dict] = None
+    ) -> None:
         self.event = event
         self.view = view
+        self.context = context
 
         self.handle_responses = []
         self.handlers = []
@@ -90,6 +73,14 @@ class BaseMiddleware(Generic[T]):
                 self.error = e
 
         return wrapper
+
+    def send(self, context_update: Optional[dict] = None) -> None:
+        """Validate new context update data if needed"""
+        # should be deprecated in future
+        if context_update is not None:
+            if not isinstance(context_update, dict):
+                raise ValueError("Context update value should be an instance of dict")
+            self.context.update(context_update)
 
     def stop(self, description: Any = "") -> NoReturn:
         """Wrapper for exception raise"""

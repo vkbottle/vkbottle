@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Type, Type
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.modules import logger
-from vkbottle.tools.dev.utils import call_by_signature
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
@@ -40,8 +39,8 @@ class ABCView(ABC, Generic[T_contra]):
         mw_instances = []
 
         for middleware in self.middlewares:
-            mw_instance = middleware(event, view=self)
-            await call_by_signature(mw_instance.pre, context_variables=context_variables)
+            mw_instance = middleware(event, view=self, context=context_variables)
+            await mw_instance.pre()
             if not mw_instance.can_forward:
                 logger.debug("{} pre returned error {}", mw_instance, mw_instance.error)
                 return None
@@ -62,7 +61,7 @@ class ABCView(ABC, Generic[T_contra]):
             middleware.handle_responses = handle_responses or middleware.handle_responses
             middleware.handlers = handlers or middleware.handlers
 
-            await call_by_signature(middleware.post, context_variables=context_variables)
+            await middleware.post()
             if not middleware.can_forward:
                 logger.debug("{} post returned error {}", middleware, middleware.error)
                 return middleware.error
