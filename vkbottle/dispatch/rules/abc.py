@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, Iterable, Type, TypeVar, Optional, overload
+from typing import Generic, Iterable, Optional, Type, TypeVar, overload
 
 from vkbottle.tools.dev.utils import call_by_signature
 
@@ -16,11 +16,7 @@ class ABCRule(ABC, Generic[T_contra]):
 
     @overload
     @abstractmethod
-    async def check(
-        self,
-        event: T_contra,
-        context_variables: Optional[dict] = None
-    ):
+    async def check(self, event: T_contra, context_variables: Optional[dict] = None):
         pass
 
     @overload
@@ -45,18 +41,12 @@ class AndRule(ABCRule[T_contra], Generic[T_contra]):
     def __init__(self, *rules: ABCRule[T_contra]):
         self._rules = rules
 
-    async def check(
-        self,
-        event: T_contra,
-        context_variables: Optional[dict] = None
-    ):
+    async def check(self, event: T_contra, context_variables: Optional[dict] = None):
         inner_context = {}
 
         for rule in self.rules:
             check_response = await call_by_signature(
-                rule.check,
-                event,
-                context_variables=context_variables
+                rule.check, event, context_variables=context_variables
             )
             if check_response is False:
                 return False
@@ -74,16 +64,10 @@ class NotRule(ABCRule[T_contra]):
     def __init__(self, *rules: ABCRule[T_contra]):
         self._rules = rules
 
-    async def check(
-        self,
-        event: T_contra,
-        context_variables: Optional[dict] = None
-    ):
+    async def check(self, event: T_contra, context_variables: Optional[dict] = None):
         for rule in self.rules:
             check_response = await call_by_signature(
-                rule.check,
-                event,
-                context_variables=context_variables
+                rule.check, event, context_variables=context_variables
             )
             if check_response is False:
                 return True
@@ -98,16 +82,10 @@ class OrRule(ABCRule[T_contra]):
     def __init__(self, *rules: ABCRule[T_contra]):
         self._rules = rules
 
-    async def check(
-        self,
-        event: T_contra,
-        context_variables: Optional[dict] = None
-    ):
+    async def check(self, event: T_contra, context_variables: Optional[dict] = None):
         for rule in self.rules:
             check_response = await call_by_signature(
-                rule.check,
-                event,
-                context_variables=context_variables
+                rule.check, event, context_variables=context_variables
             )
             if check_response is not False:
                 return check_response

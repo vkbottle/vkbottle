@@ -53,9 +53,7 @@ class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
                 event_model.unprepared_ctx_api = ctx_api  # type: ignore
 
             result = await call_by_signature(
-                handler_basement.handler.filter,
-                event_model,
-                context_variables=context_variables
+                handler_basement.handler.filter, event_model, context_variables=context_variables
             )
             logger.debug("Handler {} returned {}", handler_basement.handler, result)
 
@@ -83,9 +81,4 @@ class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
             if handler_basement.handler.blocking:
                 break
 
-        await self.post_middleware(
-            mw_instances,
-            handle_responses,
-            handlers,
-            context_variables
-        )
+        await self.post_middleware(mw_instances, handle_responses, handlers, context_variables)

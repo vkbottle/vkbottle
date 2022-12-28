@@ -64,9 +64,7 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
 
         for handler in self.handlers:
             result = await call_by_signature(
-                handler.filter,
-                message,
-                context_variables=context_variables
+                handler.filter, message, context_variables=context_variables
             )
             logger.debug("Handler {} returned {}", handler, result)
 
@@ -89,9 +87,4 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
             if handler.blocking:
                 break
 
-        await self.post_middleware(
-            mw_instances,
-            handle_responses,
-            handlers,
-            context_variables
-        )
+        await self.post_middleware(mw_instances, handle_responses, handlers, context_variables)

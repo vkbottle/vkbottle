@@ -1,7 +1,8 @@
-from typing import TYPE_CHECKING, Any, Callable, Union, Optional
+from typing import TYPE_CHECKING, Any, Callable, Optional, Union
+
+from vkbottle.tools.dev.utils import call_by_signature
 
 from .abc import ABCHandler
-from vkbottle.tools.dev.utils import call_by_signature
 
 if TYPE_CHECKING:
     from vkbottle_types.events import Event
@@ -16,16 +17,12 @@ class FromFuncHandler(ABCHandler):
         self.blocking = blocking
 
     async def filter(
-        self,
-        event: "Event",
-        context_variables: Optional[dict] = None
+        self, event: "Event", context_variables: Optional[dict] = None
     ) -> Union[dict, bool]:
         rule_context = {}  # for compatability only
         for rule in self.rules:
             result = await call_by_signature(
-                rule.check,
-                event,
-                context_variables=context_variables
+                rule.check, event, context_variables=context_variables
             )
             if result is False or result is None:
                 return False

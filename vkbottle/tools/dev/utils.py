@@ -1,10 +1,10 @@
 import asyncio
 import importlib
+import inspect
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
-from typing import TYPE_CHECKING, Any, Coroutine, Iterator, TypeVar, Callable
-import inspect
+from typing import TYPE_CHECKING, Any, Callable, Coroutine, Iterator, TypeVar
 
 from vkbottle.modules import logger
 

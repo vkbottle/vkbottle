@@ -335,20 +335,14 @@ class FuncRule(ABCRule[BaseMessageMin]):
         self.func = func
 
     async def check(
-        self,
-        event: BaseMessageMin,
-        context_variables: Optional[dict] = None
+        self, event: BaseMessageMin, context_variables: Optional[dict] = None
     ) -> Union[dict, bool]:
         if inspect.iscoroutinefunction(self.func):
             return await call_by_signature(
-                self.func,
-                event,
-                context_variables=context_variables
+                self.func, event, context_variables=context_variables
             )  # type: ignore
         return call_by_signature(
-            self.func,
-            event,
-            context_variables=context_variables
+            self.func, event, context_variables=context_variables
         )  # type: ignore
 
 
