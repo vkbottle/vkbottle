@@ -1,9 +1,23 @@
 from abc import ABC, abstractmethod
-from typing import Generic, Iterable, Optional, Type, TypeVar, overload
+from typing import Generic, Iterable, Optional, Type, TypeVar, Union
+
+from typing_extensions import Protocol
 
 from vkbottle.tools.dev.utils import call_by_signature
 
 T_contra = TypeVar("T_contra", contravariant=True)
+
+
+class CleanCheck(Protocol, Generic[T_contra]):
+    async def __call__(self, event: T_contra) -> Union[dict, bool, None]:
+        ...
+
+
+class ContextCheck(Protocol, Generic[T_contra]):
+    async def __call__(
+        self, event: T_contra, context_variables: Optional[dict] = None
+    ) -> Union[dict, bool, None]:
+        ...
 
 
 class ABCRule(ABC, Generic[T_contra]):
@@ -14,15 +28,10 @@ class ABCRule(ABC, Generic[T_contra]):
         cls.config = config
         return cls
 
-    @overload
+    @property
     @abstractmethod
-    async def check(self, event: T_contra, context_variables: Optional[dict] = None):
-        pass
-
-    @overload
-    @abstractmethod
-    async def check(self, event: T_contra):
-        pass
+    def check(self) -> Union[CleanCheck[T_contra], ContextCheck[T_contra]]:
+        ...
 
     def __and__(self, other: "ABCRule[T_contra]") -> "AndRule[T_contra]":
         return AndRule(self, other)

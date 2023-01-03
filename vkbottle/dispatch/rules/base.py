@@ -109,7 +109,7 @@ class VBMLRule(ABCRule[BaseMessageMin]):
         self.patterns = pattern
         self.patcher = patcher or self.config.get("vbml_patcher") or vbml.Patcher()
 
-    async def check(self, event: BaseMessageMin) -> Union[Optional[dict], bool]:
+    async def check(self, event: BaseMessageMin) -> Union[dict, bool, None]:
         for pattern in self.patterns:
             result = self.patcher.check(pattern, event.text)
             if result not in (None, False):
