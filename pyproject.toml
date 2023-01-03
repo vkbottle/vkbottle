@@ -55,7 +55,7 @@ typing-extensions = "^4.3.0"
 # Lint
 black = "^22.8.0"
 isort = "^5.10.1"
-mypy = "^0.971"
+mypy = "^0.990"
 mypy-extensions = "^0.4.3"
 # mypy stubs
 types-aiofiles = "^22.1.0"
