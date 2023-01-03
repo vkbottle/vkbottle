@@ -1,4 +1,3 @@
-import asyncio
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Any, NoReturn, Optional, Union
 
@@ -49,10 +48,6 @@ class ABCBlueprint(ABCFramework):
     @state_dispenser.setter
     def state_dispenser(self, new_state_dispenser: "ABCStateDispenser"):
         self._state_dispenser = new_state_dispenser
-
-    @property
-    def loop(self) -> asyncio.AbstractEventLoop:
-        return asyncio.get_running_loop()
 
     @property  # type: ignore
     def api(self) -> Union["ABCAPI", "API"]:  # type: ignore

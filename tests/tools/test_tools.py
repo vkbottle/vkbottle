@@ -1,3 +1,4 @@
+import asyncio
 import os
 from io import StringIO
 
@@ -19,7 +20,6 @@ from vkbottle.tools import (
     LoopWrapper,
     TemplateElement,
     Text,
-    keyboard_gen,
     load_blueprints_from_package,
     run_in_task,
     template_gen,
@@ -76,30 +76,13 @@ def assert_rule(res, rev=False):
     assert (res is not False) is not rev
 
 
-class MockedLoop:  # noqa: PIE798
-    @staticmethod
-    def create_task(task):
-        ctx_storage.set("checked-test-lw-create-task", task.__name__)
-
-    @staticmethod
-    def run_until_complete(task):
-        c = ctx_storage.get("checked-test-lw-run-until-complete") or []
-        ctx_storage.set("checked-test-lw-run-until-complete", [*c, task.__name__])
-
-    @staticmethod
-    def run_forever():
-        ctx_storage.set("checked-test-lw-run-forever", True)
-
-    @staticmethod
-    def is_running():
-        return False
-
-
 def test_keyboard_non_builder():
     keyboard = Keyboard(one_time=True)
+    keyboard.row()  # test empty row autoremove
     keyboard.add(Text("I love nuggets", {"love": "nuggets"}))
     keyboard.row()
     keyboard.add(Callback("Eat nuggets", {"eat": "nuggets"}), color=KeyboardButtonColor.POSITIVE)
+    keyboard.row()  # test empty row autoremove
     assert keyboard.get_json() == KEYBOARD_JSON
 
 
@@ -111,26 +94,6 @@ def test_keyboard_builder():
         .add(Callback("Eat nuggets", {"eat": "nuggets"}), color=KeyboardButtonColor.POSITIVE)
         .get_json()
     ) == KEYBOARD_JSON
-
-
-def test_keyboard_generator():
-    with pytest.deprecated_call():
-        assert json.loads(
-            keyboard_gen(
-                [
-                    [{"label": "I love nuggets", "payload": {"love": "nuggets"}}],
-                    [
-                        {
-                            "type": "callback",
-                            "label": "Eat nuggets",
-                            "payload": {"eat": "nuggets"},
-                            "color": "positive",
-                        }
-                    ],
-                ],
-                one_time=True,
-            )
-        ) == json.loads(KEYBOARD_JSON)
 
 
 def test_bp_importer(mocker: MockerFixture):
@@ -197,36 +160,38 @@ async def test_validators():
 
 def test_loop_wrapper():
     async def task1():
-        pass
+        ctx_storage.set("checked-test-lw-create-task", "task1")
 
     async def task2():
-        pass
+        c = ctx_storage.get("checked-test-lw-run-until-complete") or []
+        ctx_storage.set("checked-test-lw-run-until-complete", [*c, "task2"])
 
     async def task3():
-        pass
+        c = ctx_storage.get("checked-test-lw-run-until-complete") or []
+        ctx_storage.set("checked-test-lw-run-until-complete", [*c, "task3"])
 
-    lw = LoopWrapper(tasks=[task1])  # type: ignore
-    lw.on_startup.append(task2)  # type: ignore
-    lw.on_shutdown.append(task3)  # type: ignore
+    lw = LoopWrapper(tasks=[task1()])
+    lw.on_startup.append(task2())
+    lw.on_shutdown.append(task3())
 
-    lw.run_forever(MockedLoop())  # type: ignore
+    lw.run()  # type: ignore
 
     assert ctx_storage.get("checked-test-lw-create-task") == task1.__name__
     assert ctx_storage.get("checked-test-lw-run-until-complete") == [
         task2.__name__,
         task3.__name__,
     ]
-    assert ctx_storage.get("checked-test-lw-run-forever")
 
 
 @pytest.mark.asyncio
-@pytest.mark.filterwarnings("ignore:coroutine")
 async def test_utils(mocker: MockerFixture):
-    async def task_to_run(s, y: int):
+    async def task_to_run(s, y):
+        ctx_storage.set("checked-test-lw-create-task", "task_to_run")
         return s.x == y
 
-    mocker.patch("asyncio.get_running_loop", lambda: MockedLoop())
-    run_in_task(task_to_run(1, 1))
+    a = type("A", (object,), {"x": 1})
+    task = run_in_task(task_to_run(a, 1))
+    await asyncio.gather(task)
 
     assert ctx_storage.get("checked-test-lw-create-task") == "task_to_run"
 
@@ -252,7 +217,7 @@ def test_run_multibot(mocker: MockerFixture):
     mocker.patch("vkbottle.bot.Bot.run_polling", lambda s, custom_polling: s.api)
     mocker.patch("asyncio.iscoroutine", lambda _: True)
     mocker.patch(
-        "vkbottle.tools.dev.loop_wrapper.LoopWrapper.run_forever",
+        "vkbottle.tools.dev.loop_wrapper.LoopWrapper.run",
         lambda s: bot_apis.extend(s.tasks),
     )
 

@@ -11,7 +11,6 @@
 `bot.callback` - [Callback документация](../../low-level/callback/callback.md)<br/>
 `bot.error_handler` - [Error handler документация](../../low-level/exception_handling/error-handler.md)<br/>
 `bot.loop_wrapper` - [Loop Wrapper документация](../../tools/loop-wrapper.md)<br/>
-`bot.loop` - возвращает _event loop_ который был установлен или получает запущенный
 
 Функции:
 
@@ -23,7 +22,7 @@
 
 ### bot.run_forever()
 
-Синхронный запуск longpoll. Добавляет `run_polling` в таски `bot.loop_wrapper` и запускает луп в `run_forever`
+Синхронный запуск longpoll. Добавляет `run_polling` в таски `bot.loop_wrapper` и вызывает `bot.loop_wrapper.run()`
 
 ## Callback API
 

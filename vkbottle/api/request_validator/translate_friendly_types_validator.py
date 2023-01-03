@@ -17,5 +17,5 @@ class TranslateFriendlyTypesRequestValidator(ABCRequestValidator):
             elif isinstance(v, dict):
                 request[k] = json.dumps(await self.validate(v))
             elif v is None:
-                del request[k]
+                request.pop(k)
         return request

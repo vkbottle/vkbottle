@@ -2,8 +2,6 @@
 
 `LoopWrapper` нужен чтобы контролировать ивент луп для работы с `asyncio` и хранить основные таски, `startup` и `shutdown`, которые будут исполнены только при запуске ивент лупа через `run_forever`
 
-Если вы установите `loop_wrapper.auto_reload = True`, то программа будет автоматически перезагружаться при изменениях в кодe, чтобы указать путь до вашего кода воспользуйтесь `auto_reload_dir`, по умолчанию он локален
-
 ## Таски
 
 Вы можете создать таск так:
@@ -16,6 +14,7 @@ async def my_task():
 
 lw = LoopWrapper()
 lw.add_task(my_task())
+lw.run()
 ```
 
 ## on_startup и on_shutdown
@@ -34,6 +33,7 @@ async def shutdown_task():
 lw = LoopWrapper()
 lw.on_startup.append(startup_task())
 lw.on_shutdown.append(shutdown_task())
+lw.run()
 ```
 
 ## interval
@@ -48,6 +48,8 @@ lw = LoopWrapper()
 @lw.interval(seconds=10)
 async def repeated_task():
     print("I'll print this every 10 seconds!")
+
+lw.run()
 ```
 
 ## timer
@@ -62,12 +64,8 @@ lw = LoopWrapper()
 @lw.timer(seconds=10)
 async def delayed_task():
     print("I'll print this after 10 seconds!")
-```
 
-## Запуск
-
-```python
-lw.run_forever()
+lw.run()
 ```
 
 !!! warning "Внимание"

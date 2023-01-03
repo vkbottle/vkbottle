@@ -1,7 +1,7 @@
 import pytest
 
-from vkbottle.http import AiohttpClient, SingleAiohttpClient
 from tests.test_utils import MockedClient
+from vkbottle.http import AiohttpClient, SingleAiohttpClient
 
 
 @pytest.mark.asyncio

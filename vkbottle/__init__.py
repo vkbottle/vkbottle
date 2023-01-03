@@ -40,7 +40,6 @@ from .exception_factory import (
     CodeException,
     ErrorHandler,
     VKAPIError,
-    swear,
 )
 from .framework import (
     ABCBlueprint,
@@ -96,7 +95,6 @@ from .tools import (
     VKApps,
     VKPay,
     VoiceMessageUploader,
-    keyboard_gen,
     load_blueprints_from_package,
     run_in_task,
     run_sync,
@@ -198,12 +196,10 @@ __all__ = (
     "VideoUploader",
     "VoiceMessageUploader",
     "get_token_generator",
-    "keyboard_gen",
     "load_blueprints_from_package",
     "run_in_task",
     "run_multibot",
     "run_sync",
-    "swear",
     "template_gen",
     "vkscript",
 )

@@ -43,7 +43,6 @@ from .dev import (
     template_gen,
     vkscript,
 )
-from .production import keyboard_gen
 from .validator import ABCValidator, CallableValidator, EqualsValidator, IsInstanceValidator
 
 __all__ = (
@@ -89,7 +88,6 @@ __all__ = (
     "VKPay",
     "VideoUploader",
     "VoiceMessageUploader",
-    "keyboard_gen",
     "load_blueprints_from_package",
     "run_in_task",
     "run_sync",

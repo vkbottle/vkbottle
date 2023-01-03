@@ -5,35 +5,35 @@ repos:
     hooks:
       # Check for files that contain merge conflict strings.
       - id: check-merge-conflict
-        stages: [ commit, push ]
+        stages: [commit, push]
       # Simply check whether files parse as valid python.
       - id: check-ast
-        stages: [ commit ]
+        stages: [commit]
 
     # Use locally installed hooks
   - repo: local
     hooks:
       - id: autoflake
         name: autoflake
-        entry: bash -c 'make autoflake_fix filename="$*"' --
+        entry: autoflake -i --remove-all-unused-imports
         language: system
-        types: [ python ]
-        stages: [ commit ]
+        types: [python]
+        stages: [commit]
 
       - id: black
         name: black
         entry: poetry run black
         language: system
-        types: [ python ]
-        stages: [ commit ]
+        types: [python]
+        stages: [commit]
         # Black should use the config from the pyproject.toml file
 
       - id: isort
         name: isort
         entry: poetry run isort --filter-files
         language: system
-        types: [ python ]
-        stages: [ commit ]
+        types: [python]
+        stages: [commit]
         # Isort should use the config from the pyproject.toml file
 
       - id: mypy
@@ -41,7 +41,14 @@ repos:
         entry: poetry run mypy vkbottle
         language: system
         pass_filenames: false
-        stages: [ commit ]
+        stages: [commit]
+
+      - id: flakeheaven
+        name: flakeheaven check
+        entry: poetry run flakeheaven lint
+        language: system
+        types: [python]
+        stages: [commit]
 
       - id: pytest
         name: pytest
@@ -49,11 +56,4 @@ repos:
         language: system
         always_run: false
         pass_filenames: false
-        stages: [ push ]
-
-      - id: flakeheaven
-        name: flakeheaven check
-        entry: poetry run flakeheaven lint
-        language: system
-        types: [ python ]
-        stages: [ push ]
+        stages: [push]

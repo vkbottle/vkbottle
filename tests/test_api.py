@@ -2,8 +2,8 @@ from typing import Any
 
 import pytest
 
-from vkbottle import API, ABCRequestRescheduler, CaptchaError, CtxStorage, VKAPIError
 from tests.test_utils import with_mocked_api
+from vkbottle import API, ABCRequestRescheduler, CaptchaError, CtxStorage, VKAPIError
 
 USERS_GET_RESPONSE = (
     '{"response":[{"first_name":"Павел","id":1,"last_name":"Дуров",'
@@ -109,7 +109,9 @@ async def test_types_translator():
 
 
 @pytest.mark.asyncio
-@with_mocked_api('{"error": {"error_code": 10, "error_msg": "Internal server error: Unknown error, try later"}}')
+@with_mocked_api(
+    '{"error": {"error_code": 10, "error_msg": "Internal server error: Unknown error, try later"}}'
+)
 async def test_error_handling_without_request_params(api: API):
     try:
         await api.request("some.method", {})

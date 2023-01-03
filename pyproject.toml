@@ -46,7 +46,6 @@ choicelib = "^0.1.5"
 pydantic = "^1.9.1"
 vbml = "^1.1.post1"
 vkbottle-types = "^5.131.146.9"
-watchfiles = ">=0.15,<0.19"
 aiofiles = ">=0.8,<22.2"
 typing-extensions = "^4.3.0"
 
@@ -99,6 +98,7 @@ ignore_missing_imports = true
 warn_no_return = false
 warn_return_any = false
 warn_unused_configs = true
+check_untyped_defs = true
 
 [[tool.mypy.overrides]]
 # Ignore tests, because we can use fixtures that not quite represent a real type

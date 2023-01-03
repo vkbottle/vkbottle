@@ -77,11 +77,10 @@ class BotLabeler(BaseLabeler):
             "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
         )
 
-        if not isinstance(event, list):
-            event = [event]
+        event_types = event if isinstance(event, list) else [event]
 
         def decorator(func):
-            for e in event:
+            for e in event_types:
                 if isinstance(e, str):
                     e = GroupEventType(e)
                 handler_basement = BotHandlerBasement(

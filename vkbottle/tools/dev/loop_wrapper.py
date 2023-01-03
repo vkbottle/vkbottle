@@ -1,71 +1,96 @@
 import asyncio
-from asyncio import AbstractEventLoop, get_event_loop
-from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, NoReturn, Optional, Union
+import contextlib
+import warnings
+from asyncio import new_event_loop
+from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
 
 from vkbottle.modules import logger
 
-from .auto_reload import watch_to_reload
 from .delayed_task import DelayedTask
 
 if TYPE_CHECKING:
     Task = Coroutine[Any, Any, Any]
+    from asyncio import AbstractEventLoop
 
 
 class LoopWrapper:
     """Loop Wrapper for vkbottle manages startup, shutdown and main tasks,
     creates loop and runs it forever"""
 
+    auto_reload = None
+
     def __init__(
         self,
         *,
         on_startup: Optional[List["Task"]] = None,
         on_shutdown: Optional[List["Task"]] = None,
-        auto_reload: Optional[bool] = None,
-        auto_reload_dir: Optional[str] = None,
         tasks: Optional[List["Task"]] = None,
     ):
         self.on_startup = on_startup or []
         self.on_shutdown = on_shutdown or []
-        self.auto_reload = auto_reload or False
-        self.auto_reload_dir = auto_reload_dir or "."
         self.tasks = tasks or []
+        self.loop: Optional["AbstractEventLoop"] = None
 
-    def run_forever(self, loop: Optional[AbstractEventLoop] = None) -> NoReturn:  # type: ignore
-        """Runs startup tasks and makes the loop running forever"""
+    def run_forever(self):
+        """Deprecated. Use run() instead"""
+        logger.warning("run_forever is deprecated. Use run() instead")
+        self.run()
+
+    def run(self) -> None:
+        """Runs startup tasks and makes the loop running until all tasks are done"""
 
         if not self.tasks:
             logger.warning("You ran loop with 0 tasks. Is it ok?")
 
-        loop = loop or get_event_loop()
+        self.loop = new_event_loop()
 
+        for startup_task in self.on_startup:
+            self.loop.run_until_complete(startup_task)
+
+        if self.auto_reload:
+            warnings.warn(
+                "auto_reload is deprecated, instead, install watchfiles",
+                DeprecationWarning,
+            )
+
+        for task in self.tasks:
+            self.loop.create_task(task)
+
+        tasks = asyncio.all_tasks(self.loop)
         try:
-            [loop.run_until_complete(startup_task) for startup_task in self.on_startup]
-
-            if self.auto_reload:
-                loop.create_task(watch_to_reload(self.auto_reload_dir))
-
-            for task in self.tasks:
-                loop.create_task(task)
-
-            loop.run_forever()
+            while tasks:
+                results = self.loop.run_until_complete(
+                    asyncio.gather(*tasks, return_exceptions=True)
+                )
+                for result in results:
+                    if not isinstance(result, Exception):
+                        continue
+                    logger.exception(result)
+                tasks = asyncio.all_tasks(self.loop)
         except KeyboardInterrupt:
-            logger.info("Keyboard Interrupt")
+            logger.info("Caught keyboard interrupt. Shutting down...")
+            task_to_cancel = asyncio.gather(*tasks)
+            task_to_cancel.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                self.loop.run_until_complete(task_to_cancel)
         finally:
-            [loop.run_until_complete(shutdown_task) for shutdown_task in self.on_shutdown]
-            if loop.is_running():
-                loop.close()
+            for shutdown_task in self.on_shutdown:
+                self.loop.run_until_complete(shutdown_task)
+            if self.loop.is_running():
+                self.loop.close()
 
     def add_task(self, task: Union["Task", Callable[..., "Task"]]):
-        """Adds tasks to be ran in run_forever
+        """Adds tasks to be ran in run_forever or run it immediately if loop is already running
         :param task: coroutine / coroutine function with zero arguments
         """
-
-        if asyncio.iscoroutinefunction(task) or isinstance(task, DelayedTask):  # type: ignore
-            self.tasks.append(task())  # type: ignore
-        elif asyncio.iscoroutine(task):  # type: ignore
-            self.tasks.append(task)  # type: ignore
-        else:
+        if asyncio.iscoroutinefunction(task) or isinstance(task, DelayedTask):
+            task = task()  # type: ignore
+        elif not asyncio.iscoroutine(task):
             raise TypeError("Task should be coroutine or coroutine function")
+
+        if self.loop and self.loop.is_running():
+            self.loop.create_task(task)
+        self.tasks.append(task)
 
     def interval(
         self, seconds: int = 0, minutes: int = 0, hours: int = 0, days: int = 0
@@ -75,7 +100,7 @@ class LoopWrapper:
         >>> @lw.interval(seconds=5)
         >>> async def repeated_function():
         >>>     print("This will be logged every five seconds")
-        >>> lw.run_forever()
+        >>> lw.run()
         """
 
         seconds += minutes * 60
@@ -96,7 +121,7 @@ class LoopWrapper:
         >>> @lw.timer(seconds=5)
         >>> async def delayed_function():
         >>>     print("This will after 5 seconds")
-        >>> lw.run_forever()
+        >>> lw.run()
         """
         seconds += minutes * 60
         seconds += hours * 60 * 60

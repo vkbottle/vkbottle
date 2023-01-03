@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Optional, Union
 
 from vkbottle.modules import json
 
@@ -14,10 +14,9 @@ class Keyboard:
         self.one_time = one_time
         self.inline = inline
         self.buttons: List[List[KeyboardButton]] = []
+        self.expect_new_line = True
 
     def row(self) -> "Keyboard":
-        if len(self.buttons) and not len(self.buttons[-1]):
-            raise RuntimeError("Last row is empty!")
         self.buttons.append([])
         return self
 
@@ -38,17 +37,15 @@ class Keyboard:
         return self
 
     def get_json(self) -> str:
-        data = json.dumps(
+        buttons = [[button.get_data() for button in row] for row in self.buttons if row]
+        data: Union[str, bytes] = json.dumps(
             {
                 "one_time": self.one_time,
                 "inline": self.inline,
-                "buttons": [[button.get_data() for button in row] for row in self.buttons],
+                "buttons": buttons,
             }
         )
-
-        if isinstance(data, bytes):
-            return data.decode("utf-8")
-        return data.encode("utf-8").decode("utf-8")
+        return data.decode() if isinstance(data, bytes) else data
 
     def __str__(self) -> str:
         return self.get_json()

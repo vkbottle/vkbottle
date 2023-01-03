@@ -53,8 +53,8 @@ bot.labeler.load(BotLabeler())  # Labeler can be loaded in another labeler
 # The comments for states are skipped because
 # we have another topic of the example
 class SpamState(BaseStateGroup):
-    GOOD = 1
-    BAD = 2
+    GOOD = "good"
+    BAD = "bad"
 
 
 # Lets add some handlers
