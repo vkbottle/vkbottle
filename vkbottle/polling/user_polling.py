@@ -1,6 +1,7 @@
+import asyncio
 from typing import TYPE_CHECKING, AsyncIterator, Optional
 
-from aiohttp.client_exceptions import ServerConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
@@ -35,6 +36,7 @@ class UserPolling(ABCPolling):
         self.stop = False
 
     async def get_event(self, server: dict) -> dict:
+        # sourcery skip: use-fstring-for-formatting
         logger.debug("Making long request to get event with longpoll...")
         return await self.api.http_client.request_json(
             "https://{}?act=a_check&key={}&ts={}&wait={}&mode={}&rps_delay={}".format(
@@ -65,7 +67,7 @@ class UserPolling(ABCPolling):
                     continue
                 server["ts"] = event["ts"]
                 yield event
-            except ServerConnectionError:
+            except (ClientConnectionError, asyncio.TimeoutError):
                 server = await self.get_server()
             except Exception as e:
                 await self.error_handler.handle(e)

@@ -1,6 +1,7 @@
+import asyncio
 from typing import TYPE_CHECKING, AsyncGenerator, Optional
 
-from aiohttp.client_exceptions import ServerConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
@@ -33,6 +34,7 @@ class BotPolling(ABCPolling):
         self.stop = False
 
     async def get_event(self, server: dict) -> dict:
+        # sourcery skip: use-fstring-for-formatting
         logger.debug("Making long request to get event with longpoll...")
         return await self.api.http_client.request_json(
             "{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
@@ -49,9 +51,12 @@ class BotPolling(ABCPolling):
         logger.debug("Getting polling server...")
         if self.group_id is None:
             self.group_id = (await self.api.request("groups.getById", {}))["response"][0]["id"]
-        return (await self.api.request("groups.getLongPollServer", {"group_id": self.group_id}))[
-            "response"
-        ]
+        return (
+            await self.api.request(
+                "groups.getLongPollServer",
+                {"group_id": self.group_id},
+            )
+        )["response"]
 
     async def listen(self) -> AsyncGenerator[dict, None]:
         server = await self.get_server()
@@ -64,7 +69,7 @@ class BotPolling(ABCPolling):
                     continue
                 server["ts"] = event["ts"]
                 yield event
-            except ServerConnectionError:
+            except (ClientConnectionError, asyncio.TimeoutError):
                 server = await self.get_server()
             except Exception as e:
                 await self.error_handler.handle(e)
