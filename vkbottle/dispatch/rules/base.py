@@ -184,7 +184,7 @@ class ReplyAttachmentRule(ABCRule[BaseMessageMin]):
 
     async def check(self, event: BaseMessageMin) -> bool:
         if not event.reply_message:
-            return
+            return False
 
         return (
             all(
