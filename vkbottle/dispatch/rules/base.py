@@ -176,6 +176,26 @@ class AttachmentTypeRule(ABCRule[BaseMessageMin]):
         )
 
 
+class ReplyAttachmentRule(ABCRule[BaseMessageMin]):
+    def __init__(self, attachment_types: Union[List[str], str]):
+        if not isinstance(attachment_types, list):
+            attachment_types = [attachment_types]
+        self.attachment_types = attachment_types
+
+    async def check(self, event: BaseMessageMin) -> bool:
+        if not event.reply_message:
+            return
+
+        return (
+            all(
+                attachment.type.value in self.attachment_types
+                for attachment in event.reply_message.attachments
+            )
+            if event.reply_message.attachments
+            else False
+        )
+
+
 class ForwardMessagesRule(ABCRule[BaseMessageMin]):
     async def check(self, event: BaseMessageMin) -> bool:
         return bool(event.fwd_messages)
@@ -422,6 +442,8 @@ __all__ = (
     "PayloadRule",
     "PeerRule",
     "RegexRule",
+    "ReplyAttachmentRule",
+    "ReplyMessageRule",
     "StateGroupRule",
     "StateRule",
     "StickerRule",
