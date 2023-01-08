@@ -281,3 +281,4 @@ async def test_rules(api: API):
     sg_mock_message.state_peer = StatePeer(peer_id=1, state=FirstMockState.MOCK, payload={})
     assert await base.StateGroupRule(state_group=FirstMockState).check(sg_mock_message)
     assert not await base.StateGroupRule(state_group=SecondMockState).check(sg_mock_message)
+    assert not await base.ReplyAttachmentRule(["sticker"]).check(fake_message(api))
