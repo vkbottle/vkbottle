@@ -7,6 +7,7 @@ from typing_extensions import Literal
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
+    MessagesAudioMessage,
     MessagesForward,
     MessagesMessage,
     PhotosPhoto,
@@ -135,6 +136,13 @@ class BaseMessageMin(MessagesMessage, ABC):
         if self.attachments is None:
             return None
         return [attachment.audio for attachment in self.attachments if attachment.audio]
+
+    def get_audio_message_attachments(self) -> Optional[List["MessagesAudioMessage"]]:
+        if self.attachments is None:
+            return None
+        return [
+            attachment.audio_message for attachment in self.attachments if attachment.audio_message
+        ]
 
     def get_message_id(self) -> Optional[int]:
         return self.id or self.conversation_message_id
