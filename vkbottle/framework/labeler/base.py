@@ -38,6 +38,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type["ABCRule"]] = {
     "state_group": base.StateGroupRule,
     "regexp": base.RegexRule,
     "regex": base.RegexRule,
+    "reply_attachment": base.ReplyAttachmentRule,
     "macro": base.MacroRule,
     "text": base.VBMLRule,
 }
