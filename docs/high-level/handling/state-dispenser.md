@@ -51,11 +51,11 @@ bot.run_forever()
 ```
 
 !!! info "Примечание"
-    `set` может принимать `**payload` который позже доступен как словарь из `event.state_peer.payload`
+    `set` может принимать `**payload` который позже доступен как словарь из `message.state_peer.payload`
 
     ```python
     # ... In handler:
     await bot.state_dispenser.set(message.peer_id, SuperStates.TERRIFYING_STATE, something=1)
     # ... With state:
-    print(event.state_peer.payload["something"])  # 1
+    print(message.state_peer.payload["something"])  # 1
     ```
