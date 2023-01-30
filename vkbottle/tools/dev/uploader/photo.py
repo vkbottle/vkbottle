@@ -1,4 +1,3 @@
-import warnings
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from .base import BaseUploader
@@ -12,7 +11,7 @@ class PhotoUploader(BaseUploader):
 
     @property
     def attachment_name(self) -> str:
-        return self.with_name or self.NAME
+        return self._attachment_name or self.NAME
 
 
 class PhotoToAlbumUploader(PhotoUploader):
@@ -189,12 +188,9 @@ class PhotoChatFaviconUploader(PhotoUploader):
         self,
         **params,
     ) -> str:
-        warnings.warn(
-            "Chat favicon upload doesn't return attachment string. Use .raw_upload() instead",
-            Warning,
+        raise NotImplementedError(
+            f"{self.__class__.__name__} does not support upload() method. Use raw_upload(...) instead."
         )
-        await self.raw_upload(**params)
-        return ""
 
     async def raw_upload(
         self,

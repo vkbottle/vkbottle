@@ -18,7 +18,7 @@ class BaseUploader(ABC):
     def __init__(
         self,
         api: "ABCAPI",
-        with_name: Optional[str] = None,
+        attachment_name: Optional[str] = None,
         **kwargs,
     ):
         self.api = api
@@ -29,7 +29,7 @@ class BaseUploader(ABC):
                 DeprecationWarning,
             )
             kwargs.pop("generate_attachment_strings")
-        self.with_name = with_name
+        self._attachment_name = attachment_name
 
     @abstractmethod
     async def get_server(self, **kwargs) -> dict:

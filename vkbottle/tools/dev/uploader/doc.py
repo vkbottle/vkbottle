@@ -56,7 +56,7 @@ class DocUploader(BaseUploader):
 
     @property
     def attachment_name(self) -> str:
-        return self.with_name or self.NAME
+        return self._attachment_name or self.NAME
 
 
 class DocWallUploader(DocUploader):
