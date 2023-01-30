@@ -15,7 +15,7 @@ repos:
     hooks:
       - id: autoflake
         name: autoflake
-        entry: autoflake -i --remove-all-unused-imports
+        entry: poetry run autoflake -i --remove-all-unused-imports
         language: system
         types: [python]
         stages: [commit]
@@ -54,6 +54,6 @@ repos:
         name: pytest
         entry: poetry run pytest vkbottle
         language: system
-        always_run: false
+        types: [python]
         pass_filenames: false
         stages: [push]
