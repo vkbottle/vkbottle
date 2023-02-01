@@ -1414,14 +1414,14 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 
 [[package]]
 name = "vkbottle-types"
-version = "5.131.146.13"
+version = "5.131.146.14"
 description = "Types for vkbottle"
 category = "main"
 optional = false
 python-versions = ">=3.7.2,<4.0.0"
 files = [
-    {file = "vkbottle-types-5.131.146.13.tar.gz", hash = "sha256:b7933121df8bacdb8a2e4838322adc44eccbb7150346269b15e27e7ce3907a9f"},
-    {file = "vkbottle_types-5.131.146.13-py3-none-any.whl", hash = "sha256:cbf05594826b21f1be0d814848a714c3e9384f27b070e6ef3b6687bae05a0152"},
+    {file = "vkbottle_types-5.131.146.14-py3-none-any.whl", hash = "sha256:e4e2240f0883b4fe2ca4ad9032014a8e5c5fd0333ad8e20d51ced3ea39c47edf"},
+    {file = "vkbottle_types-5.131.146.14.tar.gz", hash = "sha256:db0dff9619253e141269f990713118d6897a69f2c80a13f29002418e4f2ea0cd"},
 ]
 
 [package.dependencies]
