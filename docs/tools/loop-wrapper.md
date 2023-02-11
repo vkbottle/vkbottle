@@ -68,5 +68,5 @@ async def delayed_task():
 lw.run()
 ```
 
-!!! warning "Внимание"
-    Если вы используете `LoopWrapper` вместе с `Bot`, то учтите, то `Bot` уже имеет свой `LoopWrapper`, который доступен по пути `bot.loop_wrapper` и запускается при вызове `bot.run_forever()`
+!!! warning "Внимание" 
+Если вы хотите использовать LoopWrapper вместе с Bot, то следует объявить его (например в файле config.py), а затем проинициализировать в Bot, который запускается при вызове bot.run_forever()
