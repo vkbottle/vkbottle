@@ -4,13 +4,6 @@ from vkbottle.dispatch.middlewares.abc import BaseMiddleware, MiddlewareError
 from vkbottle.dispatch.views.bot.message import BotMessageView
 
 
-def test_middleware_send(empty_middleware_instance: BaseMiddleware):
-    with pytest.raises(ValueError):
-        empty_middleware_instance.send("not_a_dict")  # type: ignore
-
-    assert empty_middleware_instance.send() is None
-
-
 def test_middleware_stop(empty_middleware_instance: BaseMiddleware):
     with pytest.raises(MiddlewareError):
         empty_middleware_instance.stop()

@@ -1,5 +1,6 @@
-import inspect
-from typing import TYPE_CHECKING, Any, Callable, Union
+from typing import TYPE_CHECKING, Any, Callable, Optional, Union
+
+from vkbottle.tools.dev.utils import call_by_signature
 
 from .abc import ABCHandler
 
@@ -15,10 +16,14 @@ class FromFuncHandler(ABCHandler):
         self.rules = rules
         self.blocking = blocking
 
-    async def filter(self, event: "Event") -> Union[dict, bool]:
-        rule_context = {}
+    async def filter(
+        self, event: "Event", context_variables: Optional[dict] = None
+    ) -> Union[dict, bool]:
+        rule_context = {}  # for compatability only
         for rule in self.rules:
-            result = await rule.check(event)
+            result = await call_by_signature(
+                rule.check, event, context_variables=context_variables
+            )
             if result is False or result is None:
                 return False
             elif result is True:
@@ -27,9 +32,7 @@ class FromFuncHandler(ABCHandler):
         return rule_context
 
     async def handle(self, event: "Event", **context) -> Any:
-        acceptable_keys = list(inspect.signature(self.handler).parameters.keys())[1:]
-        acceptable_context = {k: v for k, v in context.items() if k in acceptable_keys}
-        return await self.handler(event, **acceptable_context)
+        return await call_by_signature(self.handler, event, **context)
 
     def __eq__(self, obj: object) -> bool:
         """

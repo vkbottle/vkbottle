@@ -39,16 +39,13 @@ class ABCView(ABC, Generic[T_contra]):
         mw_instances = []
 
         for middleware in self.middlewares:
-            mw_instance = middleware(event, view=self)
+            mw_instance = middleware(event, view=self, context=context_variables)
             await mw_instance.pre()
             if not mw_instance.can_forward:
                 logger.debug("{} pre returned error {}", mw_instance, mw_instance.error)
                 return None
 
             mw_instances.append(mw_instance)
-
-            if context_variables is not None:
-                context_variables.update(mw_instance.context_update)
 
         return mw_instances
 
@@ -57,6 +54,7 @@ class ABCView(ABC, Generic[T_contra]):
         mw_instances: List[BaseMiddleware],
         handle_responses: Optional[List] = None,
         handlers: Optional[List["ABCHandler"]] = None,
+        context_variables: Optional[dict] = None,
     ):
         for middleware in mw_instances:
             # Update or leave value
