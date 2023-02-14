@@ -306,7 +306,7 @@ class PayloadMapRule(ABCRule[BaseMessageMin]):
     @classmethod
     async def match(cls, payload: dict, payload_map: PayloadMapStrict) -> bool:
         """Matches payload with payload_map recursively"""
-        for (k, validator) in payload_map:  # noqa: SIM111
+        for (k, validator) in payload_map:
             if k not in payload:
                 return False
             elif isinstance(validator, list):

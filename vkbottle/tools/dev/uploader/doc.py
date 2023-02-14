@@ -36,10 +36,7 @@ class DocUploader(BaseUploader):
     ) -> dict:
         title = params.pop("title", None)
         if title is None:
-            if isinstance(file_source, str):
-                title = os.path.split(file_source)[1]
-            else:
-                title = self.NAME
+            title = os.path.split(file_source)[1] if isinstance(file_source, str) else self.NAME
         server = await self.get_server(group_id=group_id, **params)
         data = await self.read(file_source)
 

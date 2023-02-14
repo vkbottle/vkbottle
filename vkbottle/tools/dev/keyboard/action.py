@@ -39,7 +39,11 @@ class Location(ABCAction):
 class VKPay(ABCAction):
     type = "vkpay"
 
-    def __init__(self, payload: Optional[Payload] = None, hash: Optional[str] = None):
+    def __init__(
+        self,
+        payload: Optional[Payload] = None,
+        hash: Optional[str] = None,  # noqa: A002
+    ):
         self.payload = payload
         self.hash = hash
 
@@ -53,7 +57,7 @@ class VKApps(ABCAction):
         owner_id: int,
         payload: Optional[Payload] = None,
         label: Optional[str] = None,
-        hash: Optional[str] = None,
+        hash: Optional[str] = None,  # noqa: A002
     ):
         self.app_id = app_id
         self.owner_id = owner_id

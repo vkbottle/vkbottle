@@ -56,15 +56,15 @@ jobs:
         if: steps.cached-venv.outputs.cache-hit != 'true'
         run: poetry install --with dev
 
-      - name: Load cached ~/.cache/flakeheaven
+      - name: Load cached ruff cache
         id: cached-flakeheaven
         uses: actions/cache@v3
         with:
-          key: flakeheaven-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
-          path: ~/.cache/flakeheaven
+          key: ruff-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          path: .ruff_cache
 
-      - name: Run flakeheaven
-        run: poetry run flakeheaven lint
+      - name: Run ruff
+        run: poetry run ruff check .
 
       - name: Load cached .mypy_cache
         id: cached-mypy

@@ -97,7 +97,7 @@ def set_http_callback(api: API, callback: Callable[[str, str, dict], Any]):
     api.http_client = MockedClient(callback=callback)
 
 
-async def test_bot_polling():  # noqa: CCR001
+async def test_bot_polling():  # noqa: C901
     class TestApi(API):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -152,7 +152,7 @@ async def test_bot_polling():  # noqa: CCR001
         break
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_bot_scopes():
     bot = Bot(token="some token")
     assert await bot.api.token_generator.get_token() == "some token"
@@ -177,7 +177,7 @@ def fake_message(ctx_api: API, **data: Any) -> Message:
     )
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 @with_mocked_api(None)
 async def test_rules(api: API):
     assert await base.FromPeerRule(123).check(fake_message(api, peer_id=123))

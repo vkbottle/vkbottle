@@ -17,7 +17,6 @@ from vkbottle_types.objects import (
     WallWallpostFull,
 )
 
-from vkbottle.dispatch.dispenser.base import StatePeer
 from vkbottle.modules import json, logger
 
 if TYPE_CHECKING:
@@ -25,7 +24,10 @@ if TYPE_CHECKING:
 
     from vkbottle.api import ABCAPI, API
 
-from .foreign_message import BaseForeignMessageMin
+
+from vkbottle.dispatch.dispenser.base import StatePeer  # noqa: TCH001
+
+from .foreign_message import BaseForeignMessageMin  # noqa: TCH001
 from .mention import Mention, replace_mention_validator
 
 

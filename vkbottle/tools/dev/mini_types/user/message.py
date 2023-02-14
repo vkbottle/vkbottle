@@ -2,11 +2,13 @@ from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import root_validator
 
-from ..base import BaseMessageMin
-from .foreign_message import ForeignMessageMin
+from vkbottle.tools.dev.mini_types.base import BaseMessageMin
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
+
+
+from .foreign_message import ForeignMessageMin  # noqa: TCH001
 
 
 class MessageMin(BaseMessageMin):

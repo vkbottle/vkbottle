@@ -6,10 +6,10 @@ def test_code_exception():
         pass
 
     try:
-        raise CodeError[1]()
+        raise CodeError[1]
     except CodeError[2] as e:
-        raise AssertionError() from e
+        raise AssertionError from e
     except CodeError[3, 4] as e:
-        raise AssertionError() from e
+        raise AssertionError from e
     except CodeError[1, 2, 5] as e:
-        assert e.code == 1
+        assert e.code == 1  # noqa: PT017

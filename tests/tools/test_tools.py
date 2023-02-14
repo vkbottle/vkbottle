@@ -1,9 +1,9 @@
 import asyncio
 import os
 from io import StringIO
+from typing import TYPE_CHECKING
 
 import pytest
-from pytest_mock import MockerFixture
 
 from vkbottle import API
 from vkbottle.bot import Bot, run_multibot
@@ -24,6 +24,9 @@ from vkbottle.tools import (
     run_in_task,
     template_gen,
 )
+
+if TYPE_CHECKING:
+    from pytest_mock import MockerFixture
 
 KEYBOARD_JSON = json.dumps(
     {
@@ -96,7 +99,7 @@ def test_keyboard_builder():
     ) == KEYBOARD_JSON
 
 
-def test_bp_importer(mocker: MockerFixture):
+def test_bp_importer(mocker: "MockerFixture"):
     required_files = ["bp1.py", "bp2.py", "bp3.py", "bp4.py"]
     main_package = os.path.join("src", "folder")
     main_files = {
@@ -151,7 +154,7 @@ def test_template_generator():
     )
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_validators():
     assert await IsInstanceValidator((int, str)).check("foo")
     assert not await EqualsValidator("foo").check("bar")
@@ -183,8 +186,8 @@ def test_loop_wrapper():
     ]
 
 
-@pytest.mark.asyncio
-async def test_utils(mocker: MockerFixture):
+@pytest.mark.asyncio()
+async def test_utils(mocker: "MockerFixture"):
     async def task_to_run(s, y):
         ctx_storage.set("checked-test-lw-create-task", "task_to_run")
         return s.x == y
@@ -211,11 +214,11 @@ async def test_utils(mocker: MockerFixture):
     assert_rule(await (~c_rule(2)).check(2), True)  # type: ignore
 
 
-def test_run_multibot(mocker: MockerFixture):
+def test_run_multibot(mocker: "MockerFixture"):
     bot_apis = []
 
     mocker.patch("vkbottle.bot.Bot.run_polling", lambda s, custom_polling: s.api)
-    mocker.patch("asyncio.iscoroutine", lambda _: True)
+    mocker.patch("asyncio.iscoroutine", return_value=True)
     mocker.patch(
         "vkbottle.tools.dev.loop_wrapper.LoopWrapper.run",
         lambda s: bot_apis.extend(s.tasks),

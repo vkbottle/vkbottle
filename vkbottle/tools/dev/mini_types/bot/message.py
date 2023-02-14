@@ -2,13 +2,15 @@ from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import root_validator
 from vkbottle_types.events.bot_events import MessageNew
-from vkbottle_types.objects import ClientInfoForBots
 
-from ..base import BaseMessageMin
-from .foreign_message import ForeignMessageMin
+from vkbottle.tools.dev.mini_types.base import BaseMessageMin
 
 if TYPE_CHECKING:
+    from vkbottle_types.objects import ClientInfoForBots
+
     from vkbottle.api import ABCAPI
+
+    from .foreign_message import ForeignMessageMin
 
 from vkbottle.modules import logger
 

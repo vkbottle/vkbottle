@@ -88,8 +88,8 @@ class API(ABCAPI):
                 response = await self.http_client.request_json(
                     self.API_URL + method,
                     method="POST",
-                    data=data,  # noqa
-                    params={"access_token": token, "v": self.API_VERSION},  # noqa
+                    data=data,
+                    params={"access_token": token, "v": self.API_VERSION},
                 )
             logger.debug("Request {} with {} data returned {}", method, data, response)
             yield await self.validate_response(method, data, response)  # type: ignore

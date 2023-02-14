@@ -5,7 +5,10 @@ from vkbottle.dispatch.views.bot.message import BotMessageView
 
 
 def test_middleware_send(empty_middleware_instance: BaseMiddleware):
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError,
+        match="Context update value should be an instance of dict",
+    ):
         empty_middleware_instance.send("not_a_dict")  # type: ignore
 
     assert empty_middleware_instance.send() is None
@@ -18,7 +21,7 @@ def test_middleware_stop(empty_middleware_instance: BaseMiddleware):
     with pytest.raises(MiddlewareError):
         empty_middleware_instance.stop("some_middleware_error")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="some_value_error"):
         empty_middleware_instance.stop(ValueError("some_value_error"))
 
 
@@ -29,27 +32,27 @@ def test_middleware_constructs_without_pre_and_post(empty_event):
     IncompleteMiddleware(empty_event)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_raise_in_pre_sets_error(empty_middleware_class, empty_event):
-    expected_Exception = Exception("some_exception")
+    expected_exception = Exception("some_exception")
 
     class SomeMiddleware(empty_middleware_class):
         async def pre(self):
-            raise expected_Exception
+            raise expected_exception
 
         async def post(self):
-            raise expected_Exception
+            raise expected_exception
 
     middleware = SomeMiddleware(empty_event)
 
     await middleware.pre()
-    assert middleware.error == expected_Exception
+    assert middleware.error == expected_exception
 
     await middleware.post()
-    assert middleware.error == expected_Exception
+    assert middleware.error == expected_exception
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_cant_forward_on_error(empty_middleware_class, empty_event):
     class SomeMiddleware(empty_middleware_class):
         async def pre(self, *args, **kwargs):
@@ -61,7 +64,7 @@ async def test_cant_forward_on_error(empty_middleware_class, empty_event):
     assert middleware.can_forward is False
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_view_middleware_utils_run(empty_event):
     view = BotMessageView()
     mw_instances = await view.pre_middleware(empty_event, {})

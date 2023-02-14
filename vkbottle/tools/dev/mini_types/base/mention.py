@@ -16,7 +16,7 @@ class Mention(BaseModel):
     text: str
 
 
-def replace_mention_validator(cls, values):
+def replace_mention_validator(cls, values):  # noqa: ARG001
     if not values.get("replace_mention"):
         return values
     message_text = values.get("text")

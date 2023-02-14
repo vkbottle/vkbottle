@@ -1,9 +1,11 @@
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import root_validator
-from vkbottle_types.objects import ClientInfoForBots
 
-from ..base.foreign_message import BaseForeignMessageMin
+from vkbottle.tools.dev.mini_types.base.foreign_message import BaseForeignMessageMin
+
+if TYPE_CHECKING:
+    from vkbottle_types.objects import ClientInfoForBots
 
 
 class ForeignMessageMin(BaseForeignMessageMin):

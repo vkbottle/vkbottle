@@ -16,8 +16,10 @@ class TemplateElement:
         buttons: Union[List[KeyboardButton], List[dict], str, None] = None,
         action: Optional[dict] = None,
     ):
-        assert buttons, "Buttons are required"
-        assert photo_id or title, "photo_id or title is required"
+        if not buttons:
+            raise ValueError("Buttons are required")
+        if not (photo_id or title):
+            raise ValueError("photo_id or title are required")
 
         if isinstance(buttons, str):
             buttons = json.loads(buttons)["buttons"][0]  # type: ignore

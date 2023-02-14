@@ -36,7 +36,7 @@ class LoopWrapper:
         logger.warning("run_forever is deprecated. Use run() instead")
         self.run()
 
-    def run(self) -> None:
+    def run(self) -> None:  # noqa: C901
         """Runs startup tasks and makes the loop running until all tasks are done"""
 
         if not self.tasks:

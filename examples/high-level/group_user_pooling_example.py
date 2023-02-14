@@ -1,3 +1,4 @@
+import os
 from typing import TYPE_CHECKING, Optional
 
 from vkbottle_types.events.enums import UserEventType
@@ -45,15 +46,19 @@ class BotMessagesPooling(UserPolling):
         return (await self.api.request("messages.getLongPollServer", {}))["response"]
 
 
-token = "..."
+token = os.environ["TOKEN"]
 bot = Bot(token, labeler=UserLabeler(), polling=BotMessagesPooling())
+
+CHAT_LEFT = 7
+CHAT_JOIN = 6
 
 
 @bot.on.raw_event(UserEventType.CHAT_INFO_EDIT, dataclass=RawUserEvent)  # type: ignore
 async def process_event(event):
-    type_action = "left" if event.object[1] == 7 else "returned to the"
-    if event.object[1] in (6, 7):
-        logger.info("User {} {} conversation {}.", event.object[3], type_action, event.object[2])
+    if event.object[1] not in (CHAT_JOIN, CHAT_LEFT):
+        return
+    type_action = "left" if event.object[1] == CHAT_LEFT else "returned to the"
+    logger.info("User {} {} conversation {}.", event.object[3], type_action, event.object[2])
 
 
 bot.run_forever()

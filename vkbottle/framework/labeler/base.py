@@ -5,13 +5,12 @@ import vbml
 
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle.dispatch.rules import ABCRule, base
-from vkbottle.dispatch.views.abc import ABCRawEventView
 
 from .abc import ABCLabeler
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.views import ABCView
-    from vkbottle.dispatch.views.abc import ABCMessageView
+    from vkbottle.dispatch.views.abc import ABCMessageView, ABCRawEventView
 
     from .abc import LabeledMessageHandler
 
@@ -100,10 +99,11 @@ class BaseLabeler(ABCLabeler):
     def message(
         self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> "LabeledMessageHandler":
-        assert all(isinstance(rule, ABCRule) for rule in rules), (
-            "All rules must be subclasses of ABCRule or rule shortcuts "
-            "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
-        )
+        if any(not isinstance(rule, ABCRule) for rule in rules):
+            raise ValueError(
+                "All rules must be subclasses of ABCRule or rule shortcuts "
+                "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+            )
 
         def decorator(func):
             self.message_view.handlers.append(
@@ -122,10 +122,11 @@ class BaseLabeler(ABCLabeler):
     def chat_message(
         self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> "LabeledMessageHandler":
-        assert all(isinstance(rule, ABCRule) for rule in rules), (
-            "All rules must be subclasses of ABCRule or rule shortcuts "
-            "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
-        )
+        if any(not isinstance(rule, ABCRule) for rule in rules):
+            raise ValueError(
+                "All rules must be subclasses of ABCRule or rule shortcuts "
+                "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+            )
 
         def decorator(func):
             self.message_view.handlers.append(
@@ -145,10 +146,11 @@ class BaseLabeler(ABCLabeler):
     def private_message(
         self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> "LabeledMessageHandler":
-        assert all(isinstance(rule, ABCRule) for rule in rules), (
-            "All rules must be subclasses of ABCRule or rule shortcuts "
-            "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
-        )
+        if any(not isinstance(rule, ABCRule) for rule in rules):
+            raise ValueError(
+                "All rules must be subclasses of ABCRule or rule shortcuts "
+                "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+            )
 
         def decorator(func):
             self.message_view.handlers.append(

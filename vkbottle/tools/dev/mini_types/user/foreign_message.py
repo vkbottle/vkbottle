@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import root_validator
 
-from ..base.foreign_message import BaseForeignMessageMin
+from vkbottle.tools.dev.mini_types.base.foreign_message import BaseForeignMessageMin
 
 
 class ForeignMessageMin(BaseForeignMessageMin):

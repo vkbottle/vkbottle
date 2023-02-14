@@ -49,7 +49,8 @@ def load_blueprints_from_package(package_name: str) -> Iterator["ABCBlueprint"]:
                 r"^(\w+) = (?:Bot|User|)Blueprint\(", file.read(), flags=re.MULTILINE
             )
 
-            assert len(bp_names) == 1
+            if len(bp_names) != 1:
+                raise ValueError(f"Invalid blueprint declaration in file: {filename}")
             bp_paths.append((filename[:-3], bp_names[0]))
     for bp_path in bp_paths:
         module, bp_name = bp_path

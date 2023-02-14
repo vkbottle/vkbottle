@@ -1,13 +1,14 @@
 import ast
 import random
 import string
-from typing import Any, Callable, Iterable
+from typing import TYPE_CHECKING, Any, Callable, Iterable
 
 from typing_extensions import Concatenate, ParamSpec
 
-from vkbottle import ABCAPI
-
 from .base_converter import Converter, ConverterError
+
+if TYPE_CHECKING:
+    from vkbottle import ABCAPI
 
 CALL_REPLACEMENTS = {
     "append": "push",
@@ -182,7 +183,7 @@ def while_cycle(d: ast.While):
     if d.orelse:
         raise ConverterError("You can't use while or/else in vkscript")
     body = "".join(find(line) for line in d.body)
-    return f"while({find(d.test)}" + "){" + body + "};"
+    return f"while({find(d.test)}" + "){" + body + "};"  # noqa: ISC003
 
 
 @converter(ast.For)
@@ -236,9 +237,7 @@ def call(d: ast.Call):
         ):
             return (
                 f"API.{to_camel_case(d.func.value.attr)}.{to_camel_case(d.func.attr)}"
-                + "({"
-                + dispatch_keywords(d.keywords)
-                + "})"
+                "({" + dispatch_keywords(d.keywords) + "})"
             )
     raise ConverterError(f"Call for {getattr(d.func, 'attr', d.func.__dict__)} is not referenced")
 
@@ -353,7 +352,7 @@ def name_constant_type(d: ast.NameConstant):
 P = ParamSpec("P")
 
 
-def vkscript(func: Callable[Concatenate[ABCAPI, P], Any]) -> Callable[P, str]:
+def vkscript(func: Callable[Concatenate["ABCAPI", P], Any]) -> Callable[P, str]:
     def decorator(*args: P.args, **context: P.kwargs) -> str:
         return converter.scriptify(func, *args, **context)
 

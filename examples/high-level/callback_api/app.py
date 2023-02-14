@@ -18,8 +18,6 @@ async def startup_event():
 
 @app.post("/whateveryouwant")
 async def vk_handler(req: Request, background_task: BackgroundTasks):
-    global confirmation_code, secret_key
-
     try:
         data = await req.json()
     except Exception:

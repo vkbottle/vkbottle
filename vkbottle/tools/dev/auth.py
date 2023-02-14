@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from vkbottle.http import ABCHTTPClient
 
 MOBILE_APP_ID = 2274003
-MOBILE_APP_SECRET = "hHbZxrka2uZ6jB1inYsH"
+MOBILE_APP_SECRET = "hHbZxrka2uZ6jB1inYsH"  # noqa: S105
 
 
 class AuthError(VKAPIError[0]):  # type: ignore

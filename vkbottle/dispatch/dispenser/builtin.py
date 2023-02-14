@@ -1,6 +1,7 @@
 from typing import Dict, Optional
 
-from .abc import ABCStateDispenser, BaseStateGroup, StatePeer
+from .abc import ABCStateDispenser
+from .base import BaseStateGroup, StatePeer
 
 
 class BuiltinStateDispenser(ABCStateDispenser):

@@ -14,7 +14,7 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
     Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/response-validator.md
     """
 
-    async def validate(  # noqa: CCR001
+    async def validate(
         self,
         method: str,
         data: dict,

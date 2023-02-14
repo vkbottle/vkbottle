@@ -43,45 +43,32 @@ classifiers = [
 python = "^3.7.2"
 aiohttp = "^3.8.1"
 choicelib = "^0.1.5"
-pydantic = "^1.9.1"
+pydantic = "^1.10.4"
 vbml = "^1.1.post1"
-vkbottle-types = "^5.131.146.9"
-aiofiles = ">=0.8,<23.2"
-typing-extensions = "^4.3.0"
+vkbottle-types = "^5.131.146.14"
+aiofiles = "23.1.0"
+typing-extensions = "^4.4.0"
 
 
 [tool.poetry.group.dev.dependencies]
 # Lint
-black = "^22.8.0"
-isort = "^5.10.1"
-mypy = "^0.971"
-mypy-extensions = "^0.4.3"
+black = "^23.1.0"
+mypy = "^1.0.0"
+mypy-extensions = "^1.0.0"
 # mypy stubs
 types-aiofiles = "^22.1.0"
-# flake8 and it's plugins
-flake8 = "^4.0.1"
-flakeheaven = "^3.0.0" # wrapper for flake8 with better plugin management
-flake8-bugbear = "^22.8.23"
-flake8-scream = "^0.1.0"
-flake8-logging-format = "^0.7.5"
-flake8-annotations-complexity = "^0.0.7"
-flake8-alphabetize = "^0.0.17"
-flake8-pie = "^0.16.0"
-flake8-comprehensions = "^3.10.0"
-dlint = "^0.13.0"
+# flake8, isort and autoflake replacement
+ruff = "^0.0.246"
 # Tests
-pytest = "^7.1.3"
-pytest-asyncio = "^0.19.0"
-pytest-cov = "^3.0.0"
-pytest-mock = "^3.7.0"
+pytest = "^7.2.1"
+pytest-asyncio = "^0.20.3"
+pytest-cov = "^4.0.0"
+pytest-mock = "^3.10.0"
 # Pre-commit
-autoflake = "^1.5"
 pre-commit = "^2.19.0"
 # Docs
-# Due to a conflict with flake8 (https://github.com/PyCQA/flake8/pull/1438)
-# docs dependencies are now listed in mkdocs-requirements.txt.
-# mkdocs = "^1.3.1"
-# mkdocs-material = "^8.4.3"
+mkdocs = "^1.4.2"
+mkdocs-material = "^9.0.12"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -111,45 +98,89 @@ line-length = 99
 target-version = ['py37']
 
 
-[tool.isort]
-profile = "black"
-line_length = 99
+[tool.ruff]
+line-length = 99
+respect-gitignore = true
+ignore = [
+  # "E203",  # whitespace before ':' (black)
+  "E501",    # line too long
+  # "W503",  # line break before binary operator (black)
+  # "W504",  # line break after binary operator (black)
+  "B905",    # `zip()` without an explicit `strict=` parameter (python3.10+ only)
+  "PLR0913", # Too many arguments to function call
+  "A003",    # Class attribute builtin name shadowing
+  "N818",    # Exception should be named with an Error suffix
+  "PGH003",  # Use specific rule codes when ignoring type issues
+  "ARG002",  # Unused method argument
+  "RUF001",  # String contains ambiguous unicode character
+  "RUF002",  # Docstring contains ambiguous unicode character
+  "RUF003",  # Comment contains ambiguous unicode character
 
-
-[tool.flakeheaven]
-max_line_length = 99
-max_annotations_complexity = 4
-exclude = [
-  ".git",
-  "build",
-  "dist",
-  "venv",
-  ".venv",
-  "docs",
-  "*.egg-info",
-  "*.md",
 ]
 
-[tool.flakeheaven.plugins]
-"flake8-*" = ["+*"]
-"flake8-alphabetize-core" = [
-  "+*",
-  "-AZ100",
-  "-AZ200",
-  "-AZ300"
+select = [
+    "PL",    # pylint
+    "F",     # pyflakes
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "C90",   # mccabe
+    "I",     # isort
+    "N",     # pep8-naming
+    "YTT",   # flake8-2020
+    "S",     # flake8-bandit
+    "B",     # flake8-bugbear
+    "A",     # flake8-builtins
+    "C4",    # flake8-comprehensions
+    "T10",   # flake8-debugger
+    # "ANN", # flake8-annotations
+    # "BLE", # flake8-blind-except
+    # "FBT", # flake8-boolean-trap
+    # "COM", # flake8-commas
+    # "DTZ", # flake8-datetimez
+    # "DJ",  # flake8-Django
+    # "EM",  # flake8-errmsg
+    "EXE",   # flake8-executable
+    "ISC",   # flake8-implicit-str-concat
+    "ICN",   # flake8-import-conventions
+    "G",     # flake8-logging-format
+    # "INP", # flake8-no-pep420
+    "PIE",   # flake8-pie
+    "T20",   # flake8-print
+    # "PYI", # flake8-pyi
+    "PT",    # flake8-pytest-style
+    # "Q",   # flake8-quotes
+    # "RET", # flake8-return
+    "SIM",   # flake8-simplify
+    "TID",   # flake8-tidy-imports
+    "TCH",   # flake8-type-checking
+    "ARG",   # flake8-unused-arguments
+    # "PTH", # flake8-use-pathlib
+    # "ERA", # flake8-eradicate
+    # "PD",  # pandas-vet
+    "PGH",   # pygrep-hooks
+    # "TRY", # tryceratops
+    "RSE",   # flake8-raise
+    # "SLF", # flake8-self
+    "RUF",   # ruff
 ]
-flake8-pie = [
-  "+*",
-  "-PIE786",
+
+[tool.ruff.per-file-ignores]
+"tests/**.py" = [
+  "S101",    # Use of assert detected
+  "PLR2004", # Magic value used in comparison
+  "S106",    # Possible hardcoded password
+  "ARG001",  # Unused function argument
+  "ARG005",  # Unused lambda argument
 ]
-pycodestyle = [
-  "+*",
-  "-E203", # whitespace before ':' (black)
-  "-E501", # line too long
-  "-W503", # line break before binary operator (black)
-  "-W504", # line break after binary operator (black)
+"examples/**.py" = [
+  "T201",    # print statement found
+  "TCH001",  # Move application import into a type-checking block
+  "TCH002"   # Move third-party import out of a type-checking block
 ]
-pylint = ["+*"]
-pyflakes = ["+*"]
-mccabe = ["+*"]
-dlint = ["+*", "-DUO102"]
+
+[tool.ruff.pep8-naming]
+# Allow Pydantic's `@validator` decorator to trigger class method treatment.
+classmethod-decorators = ["classmethod", "pydantic.validator", "pydantic.root_validator"]
+
+[tool.ruff.flake8-type-checking]
+exempt-modules = ["typing_extensions", "typing"]

@@ -72,10 +72,11 @@ class BotLabeler(BaseLabeler):
         blocking: bool = True,
         **custom_rules,
     ) -> "LabeledHandler":
-        assert all(isinstance(rule, ABCRule) for rule in rules), (
-            "All rules must be subclasses of ABCRule or rule shortcuts "
-            "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
-        )
+        if any(not isinstance(rule, ABCRule) for rule in rules):
+            raise ValueError(
+                "All rules must be subclasses of ABCRule or rule shortcuts "
+                "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+            )
 
         event_types = event if isinstance(event, list) else [event]
 

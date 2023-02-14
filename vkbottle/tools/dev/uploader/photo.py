@@ -15,6 +15,8 @@ class PhotoUploader(BaseUploader):
 
 
 class PhotoToAlbumUploader(PhotoUploader):
+    MAX_PHOTOS_PER_UPLOAD = 5
+
     async def upload(
         self,
         album_id: int,
@@ -47,7 +49,7 @@ class PhotoToAlbumUploader(PhotoUploader):
     ) -> List[dict]:
         if not isinstance(paths_like, list):
             paths_like = [paths_like]
-        if len(paths_like) > 5:
+        if len(paths_like) > self.MAX_PHOTOS_PER_UPLOAD:
             raise ValueError("You can upload up to 5 photos at once")
         server = await self.get_server(album_id=album_id, group_id=group_id, **params)
         files = {}

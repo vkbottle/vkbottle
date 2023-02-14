@@ -8,16 +8,16 @@ def test_code_error():
         pass
 
     try:
-        raise CodeError[1]()
+        raise CodeError[1]
     except CodeError[2] as e:
-        raise AssertionError() from e
+        raise AssertionError from e
     except CodeError[3, 4] as e:
-        raise AssertionError() from e
+        raise AssertionError from e
     except CodeError[1, 2, 5] as e:
-        assert e.code == 1
+        assert e.code == 1  # noqa: PT017
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_error_handler():
     class Base(Exception):
         pass
@@ -36,12 +36,12 @@ async def test_error_handler():
 
     @error_handler.catch
     async def func() -> None:
-        raise Derived()
+        raise Derived
 
     assert await func() == 42
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_error_handler_with_code_exception():
     class CodeError(CodeException):
         pass

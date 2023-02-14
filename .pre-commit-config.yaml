@@ -9,32 +9,36 @@ repos:
       # Simply check whether files parse as valid python.
       - id: check-ast
         stages: [commit]
+      # Remove trailing whitespaces
+      - id: trailing-whitespace
+        stages: [commit]
+      # Add newlines to the end of files
+      - id: end-of-file-fixer
+        stages: [commit]
 
     # Use locally installed hooks
   - repo: local
     hooks:
-      - id: autoflake
-        name: autoflake
-        entry: poetry run autoflake -i --remove-all-unused-imports
-        language: system
-        types: [python]
-        stages: [commit]
-
       - id: black
         name: black
         entry: poetry run black
         language: system
         types: [python]
         stages: [commit]
-        # Black should use the config from the pyproject.toml file
 
-      - id: isort
-        name: isort
-        entry: poetry run isort --filter-files
+      - id: ruff (isort)
+        name: ruff-isort
+        entry: poetry run ruff --select I --select F401 --fix
         language: system
         types: [python]
         stages: [commit]
-        # Isort should use the config from the pyproject.toml file
+
+      - id: ruff
+        name: ruff check
+        entry: poetry run ruff check
+        language: system
+        types: [python]
+        stages: [commit]
 
       - id: mypy
         name: mypy check
@@ -43,12 +47,6 @@ repos:
         pass_filenames: false
         stages: [commit]
 
-      - id: flakeheaven
-        name: flakeheaven check
-        entry: poetry run flakeheaven lint
-        language: system
-        types: [python]
-        stages: [commit]
 
       - id: pytest
         name: pytest
