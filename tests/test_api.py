@@ -62,9 +62,9 @@ async def test_vk_api_error_handling(api: API):
 async def test_captcha_error_handling(api: API):
     with pytest.raises(VKAPIError) as e:
         await api.request("some.method", {})
-    assert isinstance(e, CaptchaError)
-    assert e.code == 14
-    assert e.sid == 239633676097
+    assert isinstance(e.value, CaptchaError)
+    assert e.value.code == 14
+    assert e.value.sid == 239633676097
 
 
 @pytest.mark.asyncio()
