@@ -1,6 +1,5 @@
 import asyncio
 import typing
-from abc import ABC
 
 import aioredis
 from .abc import ABCStateDispenser, BaseStateGroup, StatePeer
