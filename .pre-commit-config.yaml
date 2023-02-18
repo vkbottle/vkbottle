@@ -40,7 +40,7 @@ repos:
 
       - id: mypy
         name: mypy check
-        entry: mypy vkbottle
+        entry: mypy --enable-incomplete-feature=Unpack vkbottle
         language: system
         pass_filenames: false
         stages: [push]

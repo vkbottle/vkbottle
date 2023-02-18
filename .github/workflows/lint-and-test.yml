@@ -59,7 +59,7 @@ jobs:
           path: .mypy_cache
 
       - name: Run mypy
-        run: poetry run mypy vkbottle
+        run: poetry run mypy --enable-incomplete-feature=Unpack vkbottle
 
   test:
     name: Run tests (py${{ inputs.python-version }} on ${{ inputs.os }})
