@@ -3,9 +3,8 @@ updates:
   - package-ecosystem: pip
     directory: "/"
     schedule:
-      interval: daily
-      time: "22:00"
+      interval: weekly
     allow:
       - dependency-type: "direct"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 4
     target-branch: "dev"
