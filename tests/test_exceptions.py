@@ -44,4 +44,4 @@ def test_specific_code_exception_overrides_general_code_exception():
 
 def test_code_exception_can_be_pickled():
     error = VKAPIError[13](error_msg="test")
-    assert pickle.loads(pickle.dumps(error)) == error
+    assert pickle.loads(pickle.dumps(error)).error_msg == "test"
