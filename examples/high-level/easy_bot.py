@@ -49,7 +49,6 @@ async def mention_handler(message: Message):
 @bot.on.raw_event(GroupEventType.GROUP_JOIN, dataclass=GroupTypes.GroupJoin)
 async def group_join_handler(event: GroupTypes.GroupJoin):
     try:
-
         # Basic API call, please notice that bot.api is
         # not accessible in case multibot is used, API can be accessed from
         # event.ctx_api

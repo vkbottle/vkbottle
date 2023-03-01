@@ -177,7 +177,12 @@ class PhotoMessageUploader(PhotoUploader):
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"photo": file})
-        return (await self.api.request("photos.saveMessagesPhoto", {**uploader, **params},))[
+        return (
+            await self.api.request(
+                "photos.saveMessagesPhoto",
+                {**uploader, **params},
+            )
+        )[
             "response"
         ][0]
 

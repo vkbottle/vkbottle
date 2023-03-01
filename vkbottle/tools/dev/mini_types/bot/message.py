@@ -6,7 +6,6 @@ from vkbottle_types.events.bot_events import MessageNew
 from vkbottle.tools.dev.mini_types.base import BaseMessageMin
 
 if TYPE_CHECKING:
-
     from vkbottle.api import ABCAPI
 
 
@@ -98,5 +97,6 @@ def message_min(event: dict, ctx_api: "ABCAPI", replace_mention: bool = True) ->
         replace_mention=replace_mention,
         unprepared_ctx_api=ctx_api,
     )
+
 
 MessageMin.update_forward_refs()
