@@ -5,7 +5,7 @@ from .reducible_kwargs_exception import ReducibleKwargsException
 
 
 class VKAPIError(CodeException, ReducibleKwargsException):
-    def __init__(self, error_msg: str, request_params: Optional[List[dict]] = None):
+    def __init__(self, *, error_msg: str, request_params: Optional[List[dict]] = None):
         self.error_msg = error_msg
         # server maybe return error code without request_params key
         if request_params:
@@ -18,7 +18,7 @@ class VKAPIError(CodeException, ReducibleKwargsException):
 
 
 class CaptchaError(VKAPIError, code=14):
-    def __init__(self, captcha_sid: str, captcha_img: str, **kwargs):
+    def __init__(self, *, captcha_sid: str, captcha_img: str, **kwargs):
         super().__init__(**kwargs)
-        self.sid = int(captcha_sid)
-        self.img = captcha_img
+        self.captcha_sid = int(captcha_sid)
+        self.captcha_img = captcha_img
