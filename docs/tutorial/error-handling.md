@@ -9,7 +9,7 @@
 В `VKAPIError` есть два поля:
 
 * `code` - код ошибки, int
-* `description` - описание ошибки, str
+* `error_msg` - описание ошибки, str
 
 Чтобы использовать `VKAPIError` нужно импортировать его:
 
@@ -43,7 +43,7 @@ try:
 except VKAPIError[902] as e:
     print("не могу отправить сообщение из-за настроек приватности")
 except VKAPIError as e:
-    print("не могу отправить:", e.error_description)
+    print("не могу отправить:", e.error_msg)
 ```
 
 ## Специфичные ошибки
@@ -51,8 +51,8 @@ except VKAPIError as e:
 Некоторые ошибки vk имеют дополнительные поля, которые могут понадобиться вам для их обработки:
 
 * `CaptchaError`:
-    * `sid` - идентификатор captcha, int
-    * `img` - ссылка на изображение, str
+    * `captcha_sid` - идентификатор captcha, int
+    * `captcha_img` - ссылка на изображение, str
 
 ## ErrorHandler
 

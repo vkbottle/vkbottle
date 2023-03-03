@@ -11,7 +11,6 @@ from vkbottle.polling import UserPolling
 from vkbottle.tools import LoopWrapper, UserAuth
 
 if TYPE_CHECKING:
-
     from vkbottle.api import ABCAPI, Token
     from vkbottle.dispatch import ABCRouter, ABCStateDispenser
     from vkbottle.exception_factory import ABCErrorHandler
