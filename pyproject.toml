@@ -56,7 +56,7 @@ black = "^23.1.0"
 mypy = "^1.0.0"
 mypy-extensions = "^1.0.0"
 # mypy stubs
-types-aiofiles = "^22.1.0"
+types-aiofiles = ">=22.1,<24.0"
 # flake8, isort and autoflake replacement
 ruff = "^0.0.246"
 # Tests
