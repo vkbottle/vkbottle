@@ -11,7 +11,7 @@ body:
           required: true
         - label: Я искал похожие баги в issues
           required: true
-        - label: Я установил последнюю версию (`pip3 install -U https://github.com/vkbottle/vkbottle/archive/master.zip`) и проблема осталась
+        - label: Я установил последнюю версию (`pip3 install -U https://github.com/vkbottle/vkbottle/archive/dev.zip`) и проблема осталась
           required: true
 
   - type: textarea
