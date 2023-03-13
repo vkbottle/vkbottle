@@ -115,7 +115,8 @@ ignore = [
   "RUF001",  # String contains ambiguous unicode character
   "RUF002",  # Docstring contains ambiguous unicode character
   "RUF003",  # Comment contains ambiguous unicode character
-
+  "PLW2901", # for loop variable overwritten by assignment target
+  "PLE1205", # https://github.com/charliermarsh/ruff/issues/3351
 ]
 
 select = [
