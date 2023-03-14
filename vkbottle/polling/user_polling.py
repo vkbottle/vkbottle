@@ -1,9 +1,9 @@
 import asyncio
-from typing import TYPE_CHECKING, AsyncIterator, Optional
+from typing import TYPE_CHECKING, AsyncGenerator, Optional
 
 from aiohttp.client_exceptions import ClientConnectionError
 
-from vkbottle.exception_factory import ErrorHandler
+from vkbottle.exception_factory import ErrorHandler, VKAPIError
 from vkbottle.modules import logger
 
 from .abc import ABCPolling
@@ -56,19 +56,22 @@ class UserPolling(ABCPolling):
             self.user_id = (await self.api.request("users.get", {}))["response"][0]["id"]
         return (await self.api.request("messages.getLongPollServer", {}))["response"]
 
-    async def listen(self) -> AsyncIterator[dict]:  # type: ignore
+    async def listen(self) -> AsyncGenerator[dict, None]:
+        retry_count = 0
         server = await self.get_server()
         logger.debug("Starting listening to longpoll")
         while not self.stop:
             try:
-                event = await self.get_event(server)
-                if not event.get("ts"):
+                if not server:
                     server = await self.get_server()
-                    continue
+                event = await self.get_event(server)
                 server["ts"] = event["ts"]
+                retry_count = 0
                 yield event
-            except (ClientConnectionError, asyncio.TimeoutError):
-                server = await self.get_server()
+            except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
+                logger.error("Unable to make request to Longpoll, retrying...")
+                await asyncio.sleep(0.1 * retry_count)
+                server = None
             except Exception as e:
                 await self.error_handler.handle(e)
 

@@ -38,11 +38,16 @@ MessageMin.update_forward_refs()
 
 
 async def message_min(
-    message_id: int, ctx_api: "ABCAPI", replace_mention: bool = True
+    message_id: int,
+    ctx_api: "ABCAPI",
+    replace_mention: bool = True,
 ) -> "MessageMin":
-    message_object = (await ctx_api.request("messages.getById", {"message_ids": message_id}))[
-        "response"
-    ]["items"][0]
+    response = await ctx_api.messages.get_by_id(message_ids=[message_id])
+    if not response.items:
+        raise ValueError("Message with id {} not found, perhaps it was deleted", message_id)
+    message_object = response.items[0].dict()
     return MessageMin(
-        **message_object, unprepared_ctx_api=ctx_api, replace_mention=replace_mention
+        **message_object,
+        unprepared_ctx_api=ctx_api,
+        replace_mention=replace_mention,
     )
