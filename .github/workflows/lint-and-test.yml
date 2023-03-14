@@ -21,7 +21,7 @@ jobs:
     name: Lint with ruff (py${{ inputs.python-version }} on ${{ inputs.os }})
     runs-on: ${{ inputs.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: asottile/workflows/.github/actions/fast-checkout@v1.4.1
 
       - name: Install poetry and dependencies
         uses: ./.github/actions/install-dependencies
@@ -43,7 +43,7 @@ jobs:
     name: Lint with mypy (py${{ inputs.python-version }} on ${{ inputs.os }})
     runs-on: ${{ inputs.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: asottile/workflows/.github/actions/fast-checkout@v1.4.1
 
       - name: Install poetry and dependencies
         uses: ./.github/actions/install-dependencies
@@ -65,7 +65,7 @@ jobs:
     name: Run tests (py${{ inputs.python-version }} on ${{ inputs.os }})
     runs-on: ${{ inputs.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: asottile/workflows/.github/actions/fast-checkout@v1.4.1
 
       - name: Install poetry and dependencies
         uses: ./.github/actions/install-dependencies
