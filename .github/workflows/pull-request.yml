@@ -13,7 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/install-dependencies
+      - name: Install poetry and dependencies
+        uses: ./.github/actions/install-dependencies
         with:
           os: ubuntu-latest
           python-version: "3.11"
