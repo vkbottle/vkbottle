@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/load-venv
+      - uses: ./.github/actions/install-dependencies
         with:
           os: ${{ inputs.os }}
           python-version: ${{ inputs.python-version }}
