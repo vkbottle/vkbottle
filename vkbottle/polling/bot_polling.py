@@ -73,7 +73,7 @@ class BotPolling(ABCPolling):
             except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
                 logger.error("Unable to make request to Longpoll, retrying...")
                 await asyncio.sleep(0.1 * retry_count)
-                server = None
+                server = {}
             except Exception as e:
                 await self.error_handler.handle(e)
 
