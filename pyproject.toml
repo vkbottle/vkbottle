@@ -117,6 +117,7 @@ ignore = [
   "RUF003",  # Comment contains ambiguous unicode character
   "PLW2901", # for loop variable overwritten by assignment target
   "PLE1205", # https://github.com/charliermarsh/ruff/issues/3351
+  "B030",    # Except handlers should only be exception classes or tuples of exception
 ]
 
 select = [

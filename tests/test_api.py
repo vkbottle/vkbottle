@@ -157,3 +157,14 @@ async def test_error_handling_without_request_params(api: API):
     except VKAPIError[10]:
         return True
     raise AssertionError
+
+
+def test_unexpected_kwargs_in_api_error():
+    with pytest.raises(VKAPIError) as e:
+        raise VKAPIError[5](
+            error_msg="msg",
+            unexpected_kwarg=123,
+        )
+    assert e.value.code == 5
+    assert isinstance(e.value, APIAuthError)
+    assert e.value.kwargs == {"unexpected_kwarg": 123}
