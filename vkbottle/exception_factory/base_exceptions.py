@@ -1,8 +1,9 @@
 from typing import List, Optional
 
+from vkbottle.modules import logger
+
 from .code_exception import CodeException
 from .reducible_kwargs_exception import ReducibleKwargsException
-from vkbottle.modules import logger
 
 
 class VKAPIError(CodeException, ReducibleKwargsException):
