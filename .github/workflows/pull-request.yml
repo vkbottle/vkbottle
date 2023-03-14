@@ -1,0 +1,52 @@
+name: Pull-request
+
+on:
+  - pull_request
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/install-dependencies
+        with:
+          os: ubuntu-latest
+          python-version: "3.11"
+
+      - name: Load pre-commit cache
+        id: cached-pre-commit
+        uses: actions/cache@v3
+        with:
+          key: pre-commit-${{ env.pythonLocation }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          path: ~/.cache/pre-commit
+
+      - name: Run pre-commit
+        run: poetry run pre-commit run --all-files
+
+      - name: Run pre-commit-ci-lite
+        uses: pre-commit-ci/lite-action@v1.0.1
+        if: failure() || cancelled()
+
+      - uses: andymckay/cancel-action@0.3
+        if: failure()
+
+  lint-and-test:
+    strategy:
+      matrix:
+        python-version:
+          - "3.7"
+          - "3.11"
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    uses: ./.github/workflows/lint-and-test.yml
+    with:
+      os: ${{ matrix.os }}
+      python-version: ${{ matrix.python-version }}

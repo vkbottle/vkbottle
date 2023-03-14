@@ -1,0 +1,78 @@
+name: Lint and test
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: "Operating system"
+        required: true
+        type: string
+      python-version:
+        description: "Python version"
+        required: true
+        type: string
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lint-ruff:
+    runs-on: ${{ inputs.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/install-dependencies
+        with:
+          os: ${{ inputs.os }}
+          python-version: ${{ inputs.python-version }}
+
+      - name: Load ruff cache
+        id: cached-flakeheaven
+        uses: actions/cache@v3
+        with:
+          key: ruff-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          path: .ruff_cache
+
+      - name: Run ruff
+        run: poetry run ruff check .
+
+  lint-mypy:
+    runs-on: ${{ inputs.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/install-dependencies
+        with:
+          os: ${{ inputs.os }}
+          python-version: ${{ inputs.python-version }}
+
+      - name: Load .mypy_cache
+        id: cached-mypy
+        uses: actions/cache@v3
+        with:
+          key: mypy-${{ inputs.python-version }}-${{ runner.os }}
+          path: .mypy_cache
+
+      - name: Run mypy
+        run: poetry run mypy vkbottle
+
+  test:
+    runs-on: ${{ inputs.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/install-dependencies
+        with:
+          os: ${{ inputs.os }}
+          python-version: ${{ inputs.python-version }}
+
+      - name: Load .pytest_cache
+        id: cached-pytest
+        uses: actions/cache@v3
+        with:
+          key: pytest-${{ inputs.python-version }}-${{ runner.os }}
+          path: .pytest_cache
+
+      - name: Run tests
+        run: poetry run pytest
