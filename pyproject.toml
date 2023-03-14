@@ -58,7 +58,7 @@ mypy-extensions = "^1.0.0"
 # mypy stubs
 types-aiofiles = ">=22.1,<24.0"
 # flake8, isort and autoflake replacement
-ruff = ">=0.0.246,<0.0.255"
+ruff = ">=0.0.246,<0.0.256"
 # Tests
 pytest = "^7.2.1"
 pytest-asyncio = "^0.20.3"
@@ -117,6 +117,7 @@ ignore = [
   "RUF003",  # Comment contains ambiguous unicode character
   "PLW2901", # for loop variable overwritten by assignment target
   "PLE1205", # https://github.com/charliermarsh/ruff/issues/3351
+  "B030",    # Except handlers should only be exception classes or tuples of exception
 ]
 
 select = [
@@ -131,7 +132,7 @@ select = [
     "S",     # flake8-bandit
     "B",     # flake8-bugbear
     "A",     # flake8-builtins
-    "C4",    # flake8-comprehensions
+    "C40",    # flake8-comprehensions
     "T10",   # flake8-debugger
     # "ANN", # flake8-annotations
     # "BLE", # flake8-blind-except
