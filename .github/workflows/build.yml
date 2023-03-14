@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: "Operating system"
+        required: true
+        type: string
+      python-version:
+        description: "Python version"
+        required: true
+        type: string
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lint-and-test:
+    uses: ./.github/workflows/lint-and-test.yml
+    with:
+      os: ${{ inputs.os }}
+      python-version: ${{ inputs.python-version }}
+
+  build:
+    needs: lint-and-test
+    runs-on: ${{ inputs.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/install-dependencies
+        with:
+          os: ${{ inputs.os }}
+          python-version: ${{ inputs.python-version }}
+
+      - name: Build wheel
+        run: poetry build
+
+      - name: Get short SHA
+        run: echo "SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)" >> $GITHUB_ENV
+
+      - name: Upload wheel
+        uses: actions/upload-artifact@v3
+        with:
+          name: vkbottle-${{ inputs.python-version }}-${{ runner.os }}-${{ env.SHORT_SHA }}
+          path: dist/*.whl
