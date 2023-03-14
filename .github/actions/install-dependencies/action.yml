@@ -13,10 +13,19 @@ inputs:
     description: "Path to poetry installation"
     required: false
     default: "~/poetry"
+  poetry_virtualenvs_in_project:
+    description: "Whether to create virtualenvs in the project directory"
+    required: false
+    default: "true"
 
 runs:
   using: "composite"
   steps:
+    - name: Export poetry config
+      run: |
+        echo POETRY_HOME="${{ inputs.poetry_home }}" >> $GITHUB_ENV
+        echo POETRY_VIRTUALENVS_IN_PROJECT="${{ inputs.poetry_virtualenvs_in_project }}" >> $GITHUB_ENV
+      shell: bash
     - uses: actions/setup-python@v4
       with:
         python-version: ${{ inputs.python-version }}
@@ -37,9 +46,7 @@ runs:
 
     - name: Install poetry
       if: steps.cached-poetry.outputs.cache-hit != 'true'
-      run: |
-        export POETRY_HOME="${{ inputs.poetry_home }}"
-        curl https://install.python-poetry.org | python -
+      run: curl https://install.python-poetry.org | python -
       shell: bash
 
     - name: Add poetry binary to PATH
