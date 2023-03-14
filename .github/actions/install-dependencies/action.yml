@@ -37,7 +37,9 @@ runs:
 
     - name: Install poetry
       if: steps.cached-poetry.outputs.cache-hit != 'true'
-      run: curl https://install.python-poetry.org | python -
+      run: |
+        export POETRY_HOME="${{ inputs.poetry_home }}"
+        curl https://install.python-poetry.org | python -
       shell: bash
 
     - name: Add poetry binary to PATH
