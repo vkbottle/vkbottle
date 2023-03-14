@@ -12,7 +12,7 @@ class SpamRule(ABCRule[Message]):
         self.chars = "".join(chars)
 
     async def check(self, event: Message):
-        return len(event.text) and event.text.strip(self.chars) == ""
+        return len(event.text) and event.text.strip(self.chars)
 
 
 # Create a bot, or a single labeler:
