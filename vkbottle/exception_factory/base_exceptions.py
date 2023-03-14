@@ -22,3 +22,9 @@ class CaptchaError(VKAPIError, code=14):
         super().__init__(**kwargs)
         self.captcha_sid = int(captcha_sid)
         self.captcha_img = captcha_img
+
+
+class APIAuthError(VKAPIError, code=5):
+    def __init__(self, *, ban_info: Optional[dict] = None, **kwargs):
+        super().__init__(**kwargs)
+        self.ban_info = ban_info
