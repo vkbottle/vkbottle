@@ -31,13 +31,13 @@ class User(ABCFramework):
         error_handler: Optional["ABCErrorHandler"] = None,
         task_each_event=None,
     ):
-        if token is None and api is None:
+        if not (token or api):
             raise ValueError("You need to pass token or api instance")
         if isinstance(token, API):
             raise ValueError(
                 "You passed API instance to token parameter, use api parameter instead"
             )
-        self.api: API = api or API(token)
+        self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
         self.labeler = labeler or UserLabeler()
