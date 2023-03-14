@@ -1,7 +1,10 @@
 name: CI
 
 on:
-  - push
+  push:
+    branches:
+      - dev
+  pull_request:
 
 env:
   POETRY_VIRTUALENVS_IN_PROJECT: true
@@ -55,7 +58,7 @@ jobs:
         if: steps.cached-venv.outputs.cache-hit != 'true'
         run: poetry install --with dev
 
-      - name: Load cached ruff cache
+      - name: Load ruff cache
         id: cached-flakeheaven
         uses: actions/cache@v3
         with:
@@ -65,7 +68,7 @@ jobs:
       - name: Run ruff
         run: poetry run ruff check .
 
-      - name: Load cached .mypy_cache
+      - name: Load .mypy_cache
         id: cached-mypy
         uses: actions/cache@v3
         with:
@@ -75,7 +78,7 @@ jobs:
       - name: Run mypy
         run: poetry run mypy vkbottle
 
-      - name: Load cached .pytest_cache
+      - name: Load .pytest_cache
         id: cached-pytest
         uses: actions/cache@v3
         with:
@@ -84,3 +87,12 @@ jobs:
 
       - name: Run tests
         run: poetry run pytest
+
+      - name: Build wheel
+        run: poetry build
+
+      - name: Upload wheel
+        uses: actions/upload-artifact@v3
+        with:
+          name: vkbottle-${{ matrix.python-version }}-${{ runner.os }}
+          path: dist/*.whl
