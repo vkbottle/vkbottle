@@ -3,7 +3,7 @@ from typing import Any
 import pytest
 
 from tests.test_utils import with_mocked_api
-from vkbottle import API, ABCRequestRescheduler, CaptchaError, CtxStorage, VKAPIError
+from vkbottle import API, ABCRequestRescheduler, APIAuthError, CaptchaError, CtxStorage, VKAPIError
 
 USERS_GET_RESPONSE = (
     '{"response":[{"first_name":"Павел","id":1,"last_name":"Дуров",'
@@ -67,6 +67,46 @@ async def test_captcha_error_handling(api: API):
     assert e.value.captcha_sid == 239633676097
 
 
+@with_mocked_api(
+    '{"error": {"error_code":5, '
+    '"error_msg": "User authorization failed: user is blocked.", '
+    '"request_params": [{"key": "v", "value": "5.131"}, '
+    '{"key": "method", "value": "wall.getById"}, '
+    '{"key": "oauth", "value": "1"}, '
+    '{"key": "posts", "value": "123_123"}], '
+    '"ban_info": {"member_name": "Test", "message": "Your account has been blocked", '
+    '"access_token": "test_token"}}}'
+)
+async def test_auth_blocked_user_error_handling(api: API):
+    with pytest.raises(VKAPIError) as e:
+        await api.request("some.method", {})
+
+    assert isinstance(e.value, APIAuthError)
+    assert e.value.code == 5
+    assert e.value.ban_info == {
+        "member_name": "Test",
+        "message": "Your account has been blocked",
+        "access_token": "test_token",
+    }
+
+
+@pytest.mark.asyncio()
+@with_mocked_api(
+    '{"error": {"error_code":5, '
+    '"error_msg": "User authorization failed: invalid access_token (4).", '
+    '"request_params": [{"key": "v", "value": "5.131"}, '
+    '{"key": "method", "value": "wall.getById"},'
+    ' {"key": "oauth", "value": "1"}, '
+    '{"key": "posts", "value": "123_123"}]}}'
+)
+async def test_auth_error_handling(api: API):
+    with pytest.raises(VKAPIError) as e:
+        await api.request("some.method", {})
+    assert isinstance(e.value, APIAuthError)
+    assert e.value.code == 5
+    assert not e.value.ban_info
+
+
 @pytest.mark.asyncio()
 @with_mocked_api(None)
 async def test_api_invalid_response(api: API):
@@ -117,3 +157,14 @@ async def test_error_handling_without_request_params(api: API):
     except VKAPIError[10]:
         return True
     raise AssertionError
+
+
+def test_unexpected_kwargs_in_api_error():
+    with pytest.raises(VKAPIError) as e:
+        raise VKAPIError[5](
+            error_msg="msg",
+            unexpected_kwarg=123,
+        )
+    assert e.value.code == 5
+    assert isinstance(e.value, APIAuthError)
+    assert e.value.kwargs == {"unexpected_kwarg": 123}

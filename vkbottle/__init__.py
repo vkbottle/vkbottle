@@ -36,6 +36,7 @@ from .dispatch import (
 )
 from .exception_factory import (
     ABCErrorHandler,
+    APIAuthError,
     CaptchaError,
     CodeException,
     ErrorHandler,
@@ -143,6 +144,7 @@ __all__ = (
     "CallableValidator",
     "Callback",
     "CaptchaError",
+    "APIAuthError",
     "CodeException",
     "ConsistentTokenGenerator",
     "CtxStorage",
