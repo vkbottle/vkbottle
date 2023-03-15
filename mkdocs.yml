@@ -61,7 +61,6 @@ nav:
               - Работа с Callback API: low-level/callback/callback.md
       - Дополнительные инструменты:
           - Auth Flows: tools/auth.md
-          - Event Data генераторы: tools/event-data.md
           - Keyboard: tools/keyboard.md
           - Loop Wrapper: tools/loop-wrapper.md
           - Message Event: tools/message-event.md

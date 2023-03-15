@@ -18,7 +18,10 @@ class SpamRule(ABCRule[Message]):
 # Create a bot, or a single labeler:
 # from vkbottle.bot import BotLabeler
 # labeler = BotLabeler()
-bot = Bot(os.environ["token"])
+
+# Load token from system environment variable
+# https://12factor.net/config
+bot = Bot(os.environ["TOKEN"])
 
 # Labeler can be accessed with bot.labeler
 # or with bot.on (.on is property which returns

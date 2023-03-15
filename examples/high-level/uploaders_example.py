@@ -3,7 +3,9 @@ import os
 from vkbottle.bot import Bot, Message
 from vkbottle.tools import DocMessagesUploader, PhotoMessageUploader
 
-bot = Bot(os.environ["token"])
+# Load token from system environment variable
+# https://12factor.net/config
+bot = Bot(os.environ["TOKEN"])
 doc_uploader = DocMessagesUploader(bot.api)
 photo_uploader = PhotoMessageUploader(bot.api)
 

@@ -3,6 +3,8 @@ import os
 from vkbottle import Keyboard, TemplateElement, Text, template_gen
 from vkbottle.bot import Bot, Message
 
+# Load token from system environment variable
+# https://12factor.net/config
 bot = Bot(os.environ["TOKEN"])
 
 

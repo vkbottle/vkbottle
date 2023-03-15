@@ -4,7 +4,9 @@ import os
 from vkbottle.api import API
 from vkbottle.exception_factory import VKAPIError
 
-api = API(os.environ["token"])
+# Load token from system environment variable
+# https://12factor.net/config
+api = API(os.environ["TOKEN"])
 
 
 async def main():

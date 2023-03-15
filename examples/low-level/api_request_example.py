@@ -3,7 +3,9 @@ import os
 
 from vkbottle.api import API
 
-api = API(os.environ["token"])
+# Load token from system environment variable
+# https://12factor.net/config
+api = API(os.environ["TOKEN"])
 
 
 async def main():
@@ -11,7 +13,10 @@ async def main():
 
     # Multiple request for one session
     async for response in api.request_many(
-        [api.APIRequest("users.get", {}), api.APIRequest("groups.get", {})]
+        (
+            api.APIRequest("users.get", {}),
+            api.APIRequest("groups.get", {}),
+        )
     ):
         print(response)
 

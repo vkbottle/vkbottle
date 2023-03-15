@@ -3,12 +3,17 @@ import os
 from vkbottle import BaseStateGroup, Keyboard, Text
 from vkbottle.bot import Bot, Message
 
-# Create a simple bot
-bot = Bot(os.environ["token"])
+# Load token from system environment variable
+# https://12factor.net/config
+bot = Bot(os.environ["TOKEN"])
 
 # StateDispenser can be accessed / set with
 # bot.state_dispenser
+# Or you can use initialize it outside of bot
+# and pass to bot as a parameter
 
+# from vkbottle.dispatch.dispensers import BaseStateDispenser
+# bot = Bot(os.environ["TOKEN"], state_dispenser=BaseStateDispenser())
 
 # Let's make a group of states
 # State group is IntEnum

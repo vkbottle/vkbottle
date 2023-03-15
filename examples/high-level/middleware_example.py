@@ -5,7 +5,9 @@ from vkbottle_types.objects import UsersUserFull
 from vkbottle import BaseMiddleware, CtxStorage
 from vkbottle.bot import Bot, Message
 
-bot = Bot(os.environ["token"])
+# Load token from system environment variable
+# https://12factor.net/config
+bot = Bot(os.environ["TOKEN"])
 dummy_db = CtxStorage()
 
 

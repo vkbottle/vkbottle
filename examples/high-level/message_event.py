@@ -6,6 +6,8 @@ import os
 from vkbottle import Callback, GroupEventType, Keyboard
 from vkbottle.bot import Bot, Message, MessageEvent, rules
 
+# Load token from system environment variable
+# https://12factor.net/config
 bot = Bot(os.environ["TOKEN"])
 logging.basicConfig(level=logging.INFO)
 

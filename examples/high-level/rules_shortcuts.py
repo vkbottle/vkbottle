@@ -13,7 +13,9 @@ from vkbottle.dispatch.rules.base import (
     StickerRule,
 )
 
-bot = Bot(os.environ["token"])
+# Load token from system environment variable
+# https://12factor.net/config
+bot = Bot(os.environ["TOKEN"])
 
 
 # (1) StickerRule() handles all stickers.

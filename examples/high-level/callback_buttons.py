@@ -1,12 +1,19 @@
-# Example of sending and receiving an event after pressing the Callback button
-# Documentation: https://vk.cc/aC9JG2
-
+# WARNING:
+#
+#
+# This example is outdated, if you not interested in low-level API
+#           see examples/high-level/message_event.py
+#
+#
+#
 import logging
 import os
 
 from vkbottle import Callback, GroupEventType, GroupTypes, Keyboard, ShowSnackbarEvent
 from vkbottle.bot import Bot, Message
 
+# Load token from system environment variable
+# https://12factor.net/config
 bot = Bot(os.environ["TOKEN"])
 logging.basicConfig(level=logging.INFO)
 

@@ -7,7 +7,9 @@ from vkbottle import GroupEventType, GroupTypes, Keyboard, Text, VKAPIError
 from vkbottle.bot import Bot, Message
 from vkbottle.modules import logger
 
-bot = Bot(os.environ["token"])
+# Load token from system environment variable
+# https://12factor.net/config
+bot = Bot(os.environ["TOKEN"])
 
 # Logging level can be set through .basicConfig(level=LOGGING_LEVEL)
 # but if you use loguru the instruction is different.

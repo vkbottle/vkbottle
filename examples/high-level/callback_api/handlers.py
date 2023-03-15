@@ -4,6 +4,8 @@ from vkbottle import Bot
 from vkbottle.bot import Message
 from vkbottle.callback import BotCallback
 
+# Load token from system environment variable
+# https://12factor.net/config
 TOKEN = os.environ["TOKEN"]
 callback = BotCallback(url="http://example.com/whateveryouwant", title="my server")
 bot = Bot(token=TOKEN, callback=callback)
