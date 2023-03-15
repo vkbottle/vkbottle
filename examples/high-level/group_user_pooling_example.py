@@ -45,6 +45,7 @@ class BotMessagesPooling(UserPolling):
             self.group_id = (await self.api.request("groups.getById", {}))["response"][0]["id"]
         return (await self.api.request("messages.getLongPollServer", {}))["response"]
 
+
 # Load token from system environment variable
 # https://12factor.net/config
 token = os.environ["TOKEN"]

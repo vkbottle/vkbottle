@@ -15,6 +15,7 @@ bot = Bot(os.environ["TOKEN"])
 # from vkbottle.dispatch.dispensers import BaseStateDispenser
 # bot = Bot(os.environ["TOKEN"], state_dispenser=BaseStateDispenser())
 
+
 # Let's make a group of states
 # State group is IntEnum
 class MenuState(BaseStateGroup):
