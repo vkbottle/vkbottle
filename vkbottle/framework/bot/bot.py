@@ -33,8 +33,6 @@ class Bot(ABCFramework):
         error_handler: Optional["ABCErrorHandler"] = None,
         task_each_event=None,
     ):
-        if not (token or api):
-            raise ValueError("You need to pass token or api instance")
         if isinstance(token, API):
             raise ValueError(
                 "You passed API instance to token parameter, use api parameter instead"
