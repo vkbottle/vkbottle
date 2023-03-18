@@ -4,6 +4,8 @@ import warnings
 from asyncio import new_event_loop
 from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
 
+from typing_extensions import deprecated
+
 from vkbottle.modules import logger
 
 from .delayed_task import DelayedTask
@@ -31,8 +33,8 @@ class LoopWrapper:
         self.tasks = tasks or []
         self.loop: Optional["AbstractEventLoop"] = None
 
+    @deprecated("Deprecated. Use run() instead")
     def run_forever(self):
-        """Deprecated. Use run() instead"""
         logger.warning("run_forever is deprecated. Use run() instead")
         self.run()
 

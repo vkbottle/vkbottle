@@ -1,6 +1,8 @@
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Any, NoReturn, Optional, Union
 
+from typing_extensions import deprecated
+
 from .abc import ABCFramework
 
 if TYPE_CHECKING:
@@ -11,6 +13,11 @@ if TYPE_CHECKING:
 CONSTRUCT_BLUEPRINT = "You need to construct blueprint firstly"
 
 
+@deprecated(
+    "Blueprints was deprecated and will be removed in future releases, "
+    "read about new code separation method in documentation: \n"
+    "https://vkbottle.readthedocs.io/ru/latest/tutorial/code-separation/"
+)
 class ABCBlueprint(ABCFramework):
     router: "ABCRouter"
 

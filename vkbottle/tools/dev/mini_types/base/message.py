@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from io import StringIO
-from typing import TYPE_CHECKING, Any, Callable, List, Optional, Union, overload
+from typing import TYPE_CHECKING, Any, Callable, List, Literal, Optional, Union, overload
 
 from pydantic import root_validator
-from typing_extensions import Literal
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,

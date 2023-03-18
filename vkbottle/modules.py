@@ -1,7 +1,7 @@
 import asyncio
+from typing import Protocol
 
 from choicelib import choice_in_order
-from typing_extensions import Protocol
 
 
 class JSONModule(Protocol):
@@ -81,10 +81,7 @@ elif logging_module == "logging":
             return msg, args, log_kwargs
 
     logger = StyleAdapter(logging.getLogger("vkbottle"))  # type: ignore
-    logger.info(
-        "logging is used as the default logger, but we recommend using loguru. "
-        "It may also become a required dependency in future releases."
-    )
+    logger.info("logging is used as the default logger, but we recommend using loguru instead")
 
 if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
     asyncio.get_event_loop_policy(), asyncio.WindowsProactorEventLoopPolicy  # type: ignore
