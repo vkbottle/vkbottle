@@ -4,7 +4,7 @@ import warnings
 from asyncio import new_event_loop
 from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
 
-from typing_extensions import deprecated
+from typing_extensions import deprecated  # type: ignore
 
 from vkbottle.modules import logger
 

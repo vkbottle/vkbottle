@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Any, NoReturn, Optional, Union
 
-from typing_extensions import deprecated
+from typing_extensions import deprecated  # type: ignore
 
 from .abc import ABCFramework
 

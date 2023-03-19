@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Optional, Union
 
-from typing_extensions import deprecated
+from typing_extensions import deprecated  # type: ignore
 
 from vkbottle.dispatch import Router
 from vkbottle.framework.abc_blueprint import ABCBlueprint
