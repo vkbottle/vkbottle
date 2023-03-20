@@ -69,17 +69,13 @@ class MessageMin(BaseMessageMin):
             )
         ):
             logger.warning(
-                (
-                    "Some attachments may does't work because of wrong access_key. "
-                    "Use .get_full_message() to update message and fix this issue."
-                )
+                "Some attachments may does't work because of wrong access_key. "
+                "Use .get_full_message() to update message and fix this issue."
             )
         if self.is_cropped:
             logger.warning(
-                (
-                    "Some attachments may doesn't included because message is cropped. "
-                    "Use .get_full_message() to update message and fix this issue."
-                )
+                "Some attachments may doesn't included because message is cropped. "
+                "Use .get_full_message() to update message and fix this issue."
             )
         return super().get_attachment_strings()
 
