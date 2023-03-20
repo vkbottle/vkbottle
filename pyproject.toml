@@ -101,6 +101,22 @@ target-version = ['py37']
 line-length = 99
 respect-gitignore = true
 ignore = [
+  "ANN",    # flake8-annotations
+  "BLE",    # flake8-blind-except
+  "FBT",    # flake8-boolean-trap
+  "COM",    # flake8-commas
+  "DTZ",    # flake8-datetimez
+  "DJ",     # flake8-Django
+  "EM",     # flake8-errmsg
+  "INP",    # flake8-no-pep420
+  "PYI",    # flake8-pyi
+  "Q",      # flake8-quotes
+  "RET",    # flake8-return
+  "PTH",    # flake8-use-pathlib
+  "ERA",    # flake8-eradicate
+  "PD",     # pandas-vet
+  "TRY",    # tryceratops
+  "SLF",    # flake8-self
   # "E203",  # whitespace before ':' (black)
   "E501",    # line too long
   # "W503",  # line break before binary operator (black)
@@ -148,24 +164,6 @@ select = [
   "RSE",   # flake8-raise
   "RUF",   # ruff
   "ALL",   # All not listed above
-]
-ignore = [
-  "ANN",    # flake8-annotations
-  "BLE",    # flake8-blind-except
-  "FBT",    # flake8-boolean-trap
-  "COM",    # flake8-commas
-  "DTZ",    # flake8-datetimez
-  "DJ",     # flake8-Django
-  "EM",     # flake8-errmsg
-  "INP",    # flake8-no-pep420
-  "PYI",    # flake8-pyi
-  "Q",      # flake8-quotes
-  "RET",    # flake8-return
-  "PTH",    # flake8-use-pathlib
-  "ERA",    # flake8-eradicate
-  "PD",     # pandas-vet
-  "TRY",    # tryceratops
-  "SLF",    # flake8-self
 ]
 
 [tool.ruff.per-file-ignores]
