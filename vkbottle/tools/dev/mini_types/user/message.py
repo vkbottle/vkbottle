@@ -44,7 +44,7 @@ async def message_min(
 ) -> "MessageMin":
     response = await ctx_api.messages.get_by_id(message_ids=[message_id])
     if not response.items:
-        raise ValueError("Message with id {} not found, perhaps it was deleted", message_id)
+        raise ValueError(f"Message with id {message_id} not found, perhaps it was deleted")
     message_object = response.items[0].dict()
     return MessageMin(
         **message_object,
