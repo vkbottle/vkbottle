@@ -360,7 +360,7 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 name = "colorama"
 version = "0.4.6"
 description = "Cross-platform colored terminal text."
-category = "dev"
+category = "main"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 files = [
@@ -1717,4 +1717,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "08fe5b0d6e14ec1af622a5dd1268e6e580dad1edec8ab8fd1beaa0f8720e123b"
+content-hash = "e2936f2e161bb657b96e4e0509f9866466df3e0ae285f24be8c797e5b57c4768"
