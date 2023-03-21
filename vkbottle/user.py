@@ -1,4 +1,4 @@
-from typing_extensions import deprecated
+from typing_extensions import deprecated  # type: ignore
 
 from vkbottle.framework.labeler import UserLabeler
 

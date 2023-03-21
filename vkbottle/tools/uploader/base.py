@@ -4,7 +4,7 @@ from io import BytesIO
 from typing import TYPE_CHECKING, Optional, Union, overload
 
 import aiofiles
-from typing_extensions import deprecated
+from typing_extensions import deprecated  # type: ignore
 
 from vkbottle.exception_factory.base_exceptions import VKAPIError
 from vkbottle.modules import json
