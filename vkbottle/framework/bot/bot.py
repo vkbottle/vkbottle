@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, NoReturn, Optional, Tuple, overload
 
-from typing_extensions import deprecated
+from typing_extensions import deprecated  # type: ignore
 
 from vkbottle.api import API
 from vkbottle.callback import BotCallback
@@ -21,7 +21,42 @@ if TYPE_CHECKING:
     from vkbottle.polling import ABCPolling
 
 
-class Bot(ABCFramework):  # type: ignore
+class Bot(ABCFramework):
+    @deprecated(
+        "task_each_event is deprecated and will be removed in future versions",
+    )
+    @overload
+    def __init__(
+        self,
+        token: Optional["Token"] = None,
+        api: Optional["ABCAPI"] = None,
+        polling: Optional["ABCPolling"] = None,
+        callback: Optional["ABCCallback"] = None,
+        loop_wrapper: Optional[LoopWrapper] = None,
+        router: Optional["ABCRouter"] = None,
+        labeler: Optional["ABCLabeler"] = None,
+        state_dispenser: Optional["ABCStateDispenser"] = None,
+        error_handler: Optional["ABCErrorHandler"] = None,
+        task_each_event: bool = ...,
+    ):
+        ...
+
+    @overload
+    def __init__(
+        self,
+        token: Optional["Token"] = None,
+        api: Optional["ABCAPI"] = None,
+        polling: Optional["ABCPolling"] = None,
+        callback: Optional["ABCCallback"] = None,
+        loop_wrapper: Optional[LoopWrapper] = None,
+        router: Optional["ABCRouter"] = None,
+        labeler: Optional["ABCLabeler"] = None,
+        state_dispenser: Optional["ABCStateDispenser"] = None,
+        error_handler: Optional["ABCErrorHandler"] = None,
+        task_each_event: Optional[bool] = None,
+    ):
+        ...
+
     def __init__(
         self,
         token: Optional["Token"] = None,
@@ -114,57 +149,3 @@ class Bot(ABCFramework):  # type: ignore
 
     async def process_event(self, event: dict):
         await self.router.route(event, self.api)
-
-
-if TYPE_CHECKING:
-
-    class Bot(Bot):
-        @deprecated(
-            "task_each_event is deprecated and will be removed in future versions",
-        )
-        @overload
-        def __init__(
-            self,
-            token: Optional["Token"] = None,
-            api: Optional["ABCAPI"] = None,
-            polling: Optional["ABCPolling"] = None,
-            callback: Optional["ABCCallback"] = None,
-            loop_wrapper: Optional[LoopWrapper] = None,
-            router: Optional["ABCRouter"] = None,
-            labeler: Optional["ABCLabeler"] = None,
-            state_dispenser: Optional["ABCStateDispenser"] = None,
-            error_handler: Optional["ABCErrorHandler"] = None,
-            task_each_event=...,
-        ):
-            ...
-
-        @overload
-        def __init__(
-            self,
-            token: Optional["Token"] = None,
-            api: Optional["ABCAPI"] = None,
-            polling: Optional["ABCPolling"] = None,
-            callback: Optional["ABCCallback"] = None,
-            loop_wrapper: Optional[LoopWrapper] = None,
-            router: Optional["ABCRouter"] = None,
-            labeler: Optional["ABCLabeler"] = None,
-            state_dispenser: Optional["ABCStateDispenser"] = None,
-            error_handler: Optional["ABCErrorHandler"] = None,
-            task_each_event=None,
-        ):
-            ...
-
-        def __init__(
-            self,
-            token: Optional["Token"] = None,
-            api: Optional["ABCAPI"] = None,
-            polling: Optional["ABCPolling"] = None,
-            callback: Optional["ABCCallback"] = None,
-            loop_wrapper: Optional[LoopWrapper] = None,
-            router: Optional["ABCRouter"] = None,
-            labeler: Optional["ABCLabeler"] = None,
-            state_dispenser: Optional["ABCStateDispenser"] = None,
-            error_handler: Optional["ABCErrorHandler"] = None,
-            task_each_event=None,
-        ):
-            ...
