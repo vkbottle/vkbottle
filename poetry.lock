@@ -1555,19 +1555,19 @@ test = ["covdefaults (>=2.2.2)", "coverage (>=7.1)", "coverage-enable-subprocess
 
 [[package]]
 name = "vkbottle-types"
-version = "5.131.146.14"
+version = "5.131.146.15"
 description = "Types for vkbottle"
 category = "main"
 optional = false
 python-versions = ">=3.7.2,<4.0.0"
 files = [
-    {file = "vkbottle_types-5.131.146.14-py3-none-any.whl", hash = "sha256:e4e2240f0883b4fe2ca4ad9032014a8e5c5fd0333ad8e20d51ced3ea39c47edf"},
-    {file = "vkbottle_types-5.131.146.14.tar.gz", hash = "sha256:db0dff9619253e141269f990713118d6897a69f2c80a13f29002418e4f2ea0cd"},
+    {file = "vkbottle_types-5.131.146.15-py3-none-any.whl", hash = "sha256:a9ff7cc6f5ce914483be652c579aab50234eba2c6c71c54204739d3283f3d660"},
+    {file = "vkbottle_types-5.131.146.15.tar.gz", hash = "sha256:8f6f04274733c3e6ecf29c711d568dab5c7aa78835259d02174a6a1711cd6129"},
 ]
 
 [package.dependencies]
-pydantic = ">=1.6.1,<2.0.0"
-vkbottle = ">=4.3.5,<5.0.0"
+pydantic = ">=1.10.6,<2.0.0"
+vkbottle = ">=4.3.12,<5.0.0"
 
 [[package]]
 name = "watchdog"
