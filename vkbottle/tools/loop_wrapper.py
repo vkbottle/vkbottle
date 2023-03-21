@@ -1,10 +1,10 @@
 import asyncio
 import contextlib
-import warnings
+import warnings  # type: ignore
 from asyncio import new_event_loop
 from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
 
-from typing_extensions import deprecated  # type: ignore
+from typing_extensions import deprecated
 
 from vkbottle.modules import logger
 
@@ -19,8 +19,6 @@ class LoopWrapper:
     """Loop Wrapper for vkbottle manages startup, shutdown and main tasks,
     creates loop and runs it forever"""
 
-    auto_reload = None
-
     def __init__(
         self,
         *,
@@ -33,12 +31,26 @@ class LoopWrapper:
         self.tasks = tasks or []
         self.loop: Optional["AbstractEventLoop"] = None
 
+    @property
+    @deprecated(
+        "LoopWrapper.auto_reload is deprecated, instead, install watchfiles",
+    )
+    def auto_reload(self) -> bool:
+        return False
+
+    @auto_reload.setter
+    def auto_reload(self, value: bool) -> None:
+        warnings.warn(
+            "LoopWrapper.auto_reload is deprecated, instead, install watchfiles",
+            DeprecationWarning,
+        )
+
     @deprecated("Deprecated. Use run() instead")
     def run_forever(self):
         logger.warning("run_forever is deprecated. Use run() instead")
         self.run()
 
-    def run(self) -> None:  # noqa: C901
+    def run(self) -> None:
         """Runs startup tasks and makes the loop running until all tasks are done"""
 
         if not self.tasks:
@@ -48,12 +60,6 @@ class LoopWrapper:
 
         for startup_task in self.on_startup:
             self.loop.run_until_complete(startup_task)
-
-        if self.auto_reload:
-            warnings.warn(
-                "auto_reload is deprecated, instead, install watchfiles",
-                DeprecationWarning,
-            )
 
         for task in self.tasks:
             self.loop.create_task(task)

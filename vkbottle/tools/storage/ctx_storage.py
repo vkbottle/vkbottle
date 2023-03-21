@@ -1,6 +1,6 @@
 from typing import Any, Hashable, Optional
 
-from vkbottle.tools.dev.ctx_tool import BaseContext
+from vkbottle.tools.ctx_tool import BaseContext
 
 from .abc import ABCStorage
 

@@ -1,4 +1,5 @@
 import asyncio
+import warnings
 from typing import Protocol
 
 from choicelib import choice_in_order
@@ -21,8 +22,9 @@ class JSONModule(Protocol):
 json: JSONModule = choice_in_order(
     ["ujson", "hyperjson", "orjson"], do_import=True, default="json"
 )
-logging_module = choice_in_order(["loguru"], default="logging")
 
+warnings.simplefilter("always", DeprecationWarning)
+logging_module = choice_in_order(["loguru"], default="logging")
 if logging_module == "loguru":
     import os
     import sys

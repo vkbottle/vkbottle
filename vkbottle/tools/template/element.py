@@ -1,8 +1,8 @@
 from typing import List, Optional, Union
 
 from vkbottle.modules import json
-from vkbottle.tools.dev.keyboard import Keyboard
-from vkbottle.tools.dev.keyboard.button import KeyboardButton
+from vkbottle.tools.keyboard import Keyboard
+from vkbottle.tools.keyboard.button import KeyboardButton
 
 
 class TemplateElement:

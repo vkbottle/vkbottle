@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views import ABCView
     from vkbottle.dispatch.views.abc import ABCMessageView, ABCRawEventView
-    from vkbottle.tools.dev.mini_types.base.message import BaseMessageMin
+    from vkbottle.tools.mini_types.base.message import BaseMessageMin
 
     LabeledMessageHandler = Callable[..., Callable[["BaseMessageMin"], Any]]
     LabeledHandler = Callable[..., Callable[[Any], Any]]

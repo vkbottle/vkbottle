@@ -1,14 +1,12 @@
 from typing import List, Optional
 
 from pydantic import root_validator
-from vkbottle_types.objects import ClientInfoForBots  # noqa: TCH002
 
-from vkbottle.tools.dev.mini_types.base.foreign_message import BaseForeignMessageMin
+from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
 
 
 class ForeignMessageMin(BaseForeignMessageMin):
-    group_id: Optional[int] = None
-    client_info: Optional["ClientInfoForBots"] = None
+    user_id: Optional[int] = None
     reply_message: Optional["ForeignMessageMin"] = None
     fwd_messages: Optional[List["ForeignMessageMin"]] = []
 
@@ -22,13 +20,12 @@ class ForeignMessageMin(BaseForeignMessageMin):
         for foreign_message in foreign_messages:
             foreign_message.unprepared_ctx_api = values["unprepared_ctx_api"]
             foreign_message.replace_mention = values["replace_mention"]
-            foreign_message.group_id = values["group_id"]
-            foreign_message.client_info = values["client_info"]
+            foreign_message.user_id = values.get("user_id")
         return values
 
     @property
     def is_mentioned(self) -> bool:
-        return self.mention.id == -self.group_id if (self.mention and self.group_id) else False
+        return self.mention.id == self.user_id if (self.mention and self.user_id) else False
 
 
 ForeignMessageMin.update_forward_refs()

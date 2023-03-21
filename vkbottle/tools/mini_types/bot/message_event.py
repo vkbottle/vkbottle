@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, List, Optional, Union
 from vkbottle_types.events import MessageEvent
 
 from vkbottle.modules import logger
-from vkbottle.tools.dev.event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
+from vkbottle.tools.event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
 
 if TYPE_CHECKING:
     from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem

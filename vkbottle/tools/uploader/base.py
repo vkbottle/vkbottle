@@ -1,9 +1,10 @@
 import warnings
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Optional, Union, overload
 
 import aiofiles
+from typing_extensions import deprecated
 
 from vkbottle.exception_factory.base_exceptions import VKAPIError
 from vkbottle.modules import json
@@ -15,7 +16,30 @@ if TYPE_CHECKING:
 
 
 class BaseUploader(ABC):
+    @overload
+    @deprecated(
+        "generate_attachment_strings in __init__ is deprecated"
+        " use .raw_upload() to get raw response or .upload() to get attachment string"
+    )
     def __init__(
+        self,
+        api: "ABCAPI",
+        attachment_name: Optional[str] = None,
+        generate_attachment_strings: bool = ...,
+        **kwargs,
+    ):
+        ...
+
+    @overload
+    def __init__(
+        self,
+        api: "ABCAPI",
+        attachment_name: Optional[str] = None,
+        **kwargs,
+    ):
+        ...
+
+    def __init__(  # type: ignore
         self,
         api: "ABCAPI",
         attachment_name: Optional[str] = None,

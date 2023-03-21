@@ -1,13 +1,24 @@
+from typing_extensions import deprecated
+
 from vkbottle.framework.labeler import BotLabeler
 
 from .dispatch.rules import base as rules
 from .dispatch.views import bot as views
 from .framework.bot import Bot, BotBlueprint, run_multibot
-from .tools.dev.mini_types.bot import MessageEventMin, MessageMin
+from .tools.mini_types.bot import MessageEventMin, MessageMin
 
 Message = MessageMin
 MessageEvent = MessageEventMin
-Blueprint = BotBlueprint
+
+
+@deprecated(
+    "Blueprints was deprecated and will be removed in future releases, "
+    "read about new code separation method in documentation: \n"
+    "https://vkbottle.readthedocs.io/ru/latest/tutorial/code-separation/"
+)
+class Blueprint(BotBlueprint):
+    ...
+
 
 __all__ = (
     "Blueprint",

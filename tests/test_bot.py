@@ -19,7 +19,7 @@ from vkbottle import (
 )
 from vkbottle.bot import BotLabeler, Message
 from vkbottle.dispatch.rules import base
-from vkbottle.tools.dev.mini_types.bot import message_min
+from vkbottle.tools.mini_types.bot import message_min
 
 EXAMPLE_EVENT = {
     "ts": 1,

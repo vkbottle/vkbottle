@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from vkbottle_types.events import BaseUserEvent
 
     from vkbottle.dispatch.views.user import ABCUserMessageView
-    from vkbottle.tools.dev.mini_types.user import MessageMin
+    from vkbottle.tools.mini_types.user import MessageMin
 
     from .abc import LabeledHandler
 

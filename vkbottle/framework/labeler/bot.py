@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from vkbottle_types.events import BaseGroupEvent
 
     from vkbottle.dispatch.views.bot import ABCBotMessageView
-    from vkbottle.tools.dev.mini_types.bot.message import MessageMin
+    from vkbottle.tools.mini_types.bot.message import MessageMin
 
     from .abc import LabeledHandler
 

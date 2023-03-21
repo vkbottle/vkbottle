@@ -20,7 +20,7 @@ from typing import (
 import vbml
 
 from vkbottle.dispatch.dispenser import get_state_repr
-from vkbottle.tools.dev.mini_types.base import BaseMessageMin
+from vkbottle.tools.mini_types.base import BaseMessageMin
 from vkbottle.tools.validator import (
     ABCValidator,
     CallableValidator,

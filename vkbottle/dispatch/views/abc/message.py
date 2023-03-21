@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from vkbottle.api.abc import ABCAPI
     from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
     from vkbottle.dispatch.handlers import ABCHandler
-    from vkbottle.tools.dev.mini_types.base import BaseMessageMin
+    from vkbottle.tools.mini_types.base import BaseMessageMin
 
 DEFAULT_STATE_KEY = "peer_id"
 
