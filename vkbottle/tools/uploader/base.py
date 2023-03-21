@@ -15,31 +15,8 @@ if TYPE_CHECKING:
     Bytes = Union[bytes, BytesIO]
 
 
-class BaseUploader(ABC):
-    @overload
-    @deprecated(
-        "generate_attachment_strings in __init__ is deprecated"
-        " use .raw_upload() to get raw response or .upload() to get attachment string"
-    )
+class BaseUploader(ABC): # type: ignore
     def __init__(
-        self,
-        api: "ABCAPI",
-        attachment_name: Optional[str] = None,
-        generate_attachment_strings: bool = ...,
-        **kwargs,
-    ):
-        ...
-
-    @overload
-    def __init__(
-        self,
-        api: "ABCAPI",
-        attachment_name: Optional[str] = None,
-        **kwargs,
-    ):
-        ...
-
-    def __init__(  # type: ignore
         self,
         api: "ABCAPI",
         attachment_name: Optional[str] = None,
@@ -48,7 +25,7 @@ class BaseUploader(ABC):
         self.api = api
         if "generate_attachment_strings" in kwargs:
             warnings.warn(
-                "generate_attachment_strings in __init__ is deprecated"
+                "generate_attachment_strings in uploaders is deprecated"
                 " use .raw_upload() to get raw response or .upload() to get attachment string",
                 DeprecationWarning,
             )
@@ -106,3 +83,38 @@ class BaseUploader(ABC):
 
     def __repr__(self) -> str:
         return f"<Uploader {self.__class__.__name__} with api {self.api!r}"
+
+
+if TYPE_CHECKING:
+
+    class BaseUploader(BaseUploader):
+        @overload
+        @deprecated(
+            "generate_attachment_strings in uploaders is deprecated"
+            " use .raw_upload() to get raw response or .upload() to get attachment string"
+        )
+        def __init__(
+            self,
+            api: "ABCAPI",
+            attachment_name: Optional[str] = None,
+            generate_attachment_strings: bool = ...,
+            **kwargs,
+        ):
+            ...
+
+        @overload
+        def __init__(
+            self,
+            api: "ABCAPI",
+            attachment_name: Optional[str] = None,
+            **kwargs,
+        ):
+            ...
+
+        def __init__(  # type: ignore
+            self,
+            api: "ABCAPI",
+            attachment_name: Optional[str] = None,
+            **kwargs,
+        ):
+            ...

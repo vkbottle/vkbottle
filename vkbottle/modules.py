@@ -1,4 +1,6 @@
 import asyncio
+import inspect
+import sys
 import warnings
 from typing import Protocol
 
@@ -24,22 +26,33 @@ json: JSONModule = choice_in_order(
 )
 
 warnings.simplefilter("always", DeprecationWarning)
+showwarning_ = warnings.showwarning
+
+
+def showwarning(message, category, filename, lineno, file=None, line=None):  # noqa: ARG001
+    module = inspect.getmodule(inspect.stack()[2][0])
+    new_message = f"{category.__name__}: {module.__name__ if module else '<module>'}: {message}"
+    logger.warning(new_message)
+
+
 logging_module = choice_in_order(["loguru"], default="logging")
 if logging_module == "loguru":
     import os
-    import sys
 
     if not os.environ.get("LOGURU_AUTOINIT"):
         os.environ["LOGURU_AUTOINIT"] = "0"
+        os.environ["LOGURU_INFO_COLOR"] = "<bold><green>"
     from loguru import logger  # type: ignore
 
     if not logger._core.handlers:  # type: ignore
         log_format = (
-            "<level>{level: <8}</level> | "
-            "{time:YYYY-MM-DD HH:mm:ss} | "
-            "{name}:{function}:{line} > <level>{message}</level>"
+            "<level>{level: <8}</level> <bold><level>|</level></bold> "
+            "{time:YYYY-MM-DD HH:mm:ss} <bold><level>|</level></bold> "
+            "{name}:{function}:{line}<bold><level> > </level></bold><level>{message}</level>"
         )
         logger.add(sys.stderr, format=log_format, enqueue=True, colorize=True)
+        warnings.showwarning = showwarning
+
 
 elif logging_module == "logging":
     """
@@ -48,10 +61,55 @@ elif logging_module == "logging":
     About:
     https://docs.python.org/3/howto/logging-cookbook.html#use-of-alternative-formatting-styles
     """
-    import inspect
     import logging
 
-    logging.basicConfig(level=logging.DEBUG)
+    import colorama
+
+    colorama.just_fix_windows_console()
+    LEVEL_COLORS = {
+        "DEBUG": colorama.Style.BRIGHT + colorama.Fore.BLUE,
+        "INFO": colorama.Style.BRIGHT + colorama.Fore.GREEN,
+        "WARNING": colorama.Fore.YELLOW,
+        "ERROR": colorama.Fore.RED,
+        "CRITICAL": colorama.Style.BRIGHT + colorama.Fore.RED,
+    }
+
+    loguru_like_format = (
+        "<level>{levelname: <8}</level> <bold><level>|</level></bold> "
+        "{asctime} <bold><level>|</level></bold> "
+        "{module}:{funcName}:{lineno}<bold><level> > </level></bold><level>{message}</level>"
+    )
+
+    class ColorFormatter(logging.Formatter):
+        def format(self, record):
+            color = LEVEL_COLORS.get(record.levelname, "")
+            log_format = (
+                loguru_like_format.replace("<level>", color)
+                .replace("</level>", colorama.Style.RESET_ALL)
+                .replace("<bold>", colorama.Style.BRIGHT)
+                .replace("</bold>", colorama.Style.RESET_ALL)
+            )
+            if hasattr(sys, "_getframe"):
+                frame = sys._getframe(9)
+                module = inspect.getmodule(frame)
+                record.module = module.__name__ if module else "<module>"
+            return logging.Formatter(
+                log_format,
+                datefmt=self.datefmt,
+                style="{",
+            ).format(record)
+
+    class ColorLogger(logging.Logger):
+        def __init__(self, name, level=logging.DEBUG):
+            super().__init__(name, level)
+            color_formatter = ColorFormatter(
+                loguru_like_format,
+                style="{",
+                datefmt="%Y-%m-%d %H:%M:%S",
+            )
+            console = logging.StreamHandler()
+            console.setFormatter(color_formatter)
+            self.addHandler(console)
 
     class LogMessage:
         def __init__(self, fmt, args, kwargs):
@@ -68,6 +126,7 @@ elif logging_module == "logging":
 
         def log(self, level, msg, *args, **kwargs):
             if self.isEnabledFor(level):
+                kwargs["stacklevel"] = 2
                 msg, args, kwargs = self.process(msg, args, kwargs)
                 self.logger._log(level, msg, args, **kwargs)
 
@@ -81,6 +140,9 @@ elif logging_module == "logging":
                 msg = LogMessage(msg, args, kwargs)
                 args = ()
             return msg, args, log_kwargs
+
+    logging.setLoggerClass(ColorLogger)
+    warnings.showwarning = showwarning
 
     logger = StyleAdapter(logging.getLogger("vkbottle"))  # type: ignore
     logger.info("logging is used as the default logger, but we recommend using loguru instead")
