@@ -10,7 +10,7 @@
     <em><b>Кастомизируемый, быстрый и удобный фреймворк для работы с VK API</b></em>
 </p>
 <p align="center">
-  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/vkbottle/vkbottle/ci.yml">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/vkbottle/vkbottle/push-build.yml">
   <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dw/vkbottle">
   <img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/vkbottle/vkbottle/bug">
   <img alt="PyPI" src="https://img.shields.io/pypi/v/vkbottle?color=green&label=PyPI">
