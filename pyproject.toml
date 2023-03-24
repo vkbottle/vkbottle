@@ -168,6 +168,8 @@ ignore = [
   "B030",    # Except handlers should only be exception classes or tuples of exception
   "UP006",   # Use `list` instead of `List` for type annotation
   "UP007",   # Use `X | Y` for type annotations
+  "S311",    # Standard pseudo-random generators are not suitable for cryptographic purposes
+  "S301",    # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue
 ]
 
 [tool.ruff.per-file-ignores]
