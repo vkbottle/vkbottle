@@ -34,6 +34,7 @@ class LoopWrapper:
     @property
     @deprecated(
         "LoopWrapper.auto_reload is deprecated, instead, install watchfiles",
+        stacklevel=0,
     )
     def auto_reload(self) -> bool:
         return False
@@ -43,9 +44,13 @@ class LoopWrapper:
         warnings.warn(
             "LoopWrapper.auto_reload is deprecated, instead, install watchfiles",
             DeprecationWarning,
+            stacklevel=0,
         )
 
-    @deprecated("Deprecated. Use run() instead")
+    @deprecated(
+        "Deprecated. Use run() instead",
+        stacklevel=0,
+    )
     def run_forever(self):
         logger.warning("run_forever is deprecated. Use run() instead")
         self.run()

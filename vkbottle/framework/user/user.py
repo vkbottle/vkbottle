@@ -23,6 +23,7 @@ if TYPE_CHECKING:
 class User(ABCFramework):
     @deprecated(
         "task_each_event is deprecated and will be removed in future versions",
+        stacklevel=0,
     )
     @overload
     def __init__(
