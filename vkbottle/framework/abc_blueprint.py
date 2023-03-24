@@ -16,7 +16,8 @@ CONSTRUCT_BLUEPRINT = "You need to construct blueprint firstly"
 @deprecated(
     "Blueprints was deprecated and will be removed in future releases, "
     "read about new code separation method in documentation: \n"
-    "https://vkbottle.readthedocs.io/ru/latest/tutorial/code-separation/"
+    "https://vkbottle.readthedocs.io/ru/latest/tutorial/code-separation/",
+    stacklevel=0,
 )
 class ABCBlueprint(ABCFramework):
     router: "ABCRouter"
