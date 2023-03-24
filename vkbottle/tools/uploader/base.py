@@ -52,7 +52,7 @@ class BaseUploader(ABC):  # type: ignore
                 "generate_attachment_strings in uploaders is deprecated"
                 " use .raw_upload() to get raw response or .upload() to get attachment string",
                 DeprecationWarning,
-                stacklevel=0
+                stacklevel=0,
             )
             kwargs.pop("generate_attachment_strings")
         self._attachment_name = attachment_name
