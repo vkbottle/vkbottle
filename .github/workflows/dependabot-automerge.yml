@@ -1,22 +1,21 @@
 name: Dependabot auto-merge
-on: pull_request
 
-permissions:
-  contents: write
-  pull-requests: write
+on:
+  workflow_run:
+    workflows: ["Pull-request"]
+    types:
+      - completed
 
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }}
+    if: ${{ github.actor == 'dependabot[bot]' }} && ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v1
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: Comment dependabot comand
-        run: gh pr comment --body "@dependabot squash and merge"
+      - uses: asottile/workflows/.github/actions/fast-checkout@v1.4.1
+
+      - name: Merge pull request
         env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+        run: |
+          gh pr merge $PR_NUMBER --squash --delete-branch --auto
