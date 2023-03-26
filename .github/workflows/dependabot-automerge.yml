@@ -9,7 +9,7 @@ on:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }} && ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: github.actor == 'dependabot[bot]' && github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: asottile/workflows/.github/actions/fast-checkout@v1.4.1
 
