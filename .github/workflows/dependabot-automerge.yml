@@ -18,4 +18,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
         run: |
-          gh pr merge $PR_NUMBER --squash --delete-branch --auto
+          gh pr merge $PR_NUMBER --squash --delete-branch
