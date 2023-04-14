@@ -12,9 +12,6 @@ extra:
     - icon: fontawesome/brands/telegram
       link: https://t.me/vkbottle_ru
       name: our Telegram chat
-    - icon: fontawesome/brands/vk
-      link: https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj
-      name: our VK chat
 
 nav:
   - Хаб: index.md

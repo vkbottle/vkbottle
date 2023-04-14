@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/vkbottle/vkbottle">
-    <img src="https://raw.githubusercontent.com/vkbottle/vkbottle/master/docs/logo.svg" width="175px" style="display: inline-block; border-radius: 5px">
+    <img width="150px" height="150px" alt="VKBottle" src="https://raw.githubusercontent.com/vkbottle/vkbottle/master/docs/logo.svg">
   </a>
 </p>
 <h1 align="center">
@@ -53,7 +53,7 @@ pip install vkbottle
 ## Contributing
 
 ПР поддерживаются! Перед созданием пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие фреймворка.\
-Задавайте вопросы в блоке Issues или в [**чате Telegram**](https://t.me/vkbottle_ru) / [**чате VK**](https://vk.me/join/AJQ1d7fBUBM_800lhEe_AwJj)!
+Задавайте вопросы в блоке Issues или в [**чате Telegram**](https://t.me/vkbottle_ru)!
 
 - Создатель [@timoniq](https://github.com/timoniq)
 - Мейнтейнер [@FeeeeK](https://github.com/FeeeeK)
