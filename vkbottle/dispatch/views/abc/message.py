@@ -54,7 +54,7 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
 
         mw_instances = await self.pre_middleware(message, context_variables)
         if mw_instances is None:
-            logger.info("Handling stopped, pre_middleware returned error")
+            logger.debug("Handling stopped, pre_middleware returned error")
             return
 
         handle_responses = []
