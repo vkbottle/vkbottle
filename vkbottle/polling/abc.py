@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 class ABCPolling(ABC):
     """Abstract Polling class
-    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/polling/polling.md
+    Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/polling
     """
 
     @abstractmethod

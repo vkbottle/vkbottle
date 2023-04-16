@@ -18,7 +18,7 @@
         await message.answer(f"<<{args[0]}>>")
     ```
 
-2. Использовать шорткаты, список с названиями можно найти [здесь](../high-level/routing/rules.md)
+2. Использовать шорткаты, список с названиями можно найти [здесь](../high-level/handling/rules.md)
 
     ```python
     @bot.on.message(command=("say", 1))
@@ -29,7 +29,7 @@
 !!! info "Примечание"
     Некоторые правила принимают в качестве аргумента итерируемый объект.<br />
     Например, `CommandRule`, который принимает два аргумента: `command` и `args_count`, но при использовании шортката можно передавать их в кортеже:
-    `python @bot.on.message(command=("help", 0))`
+    `#!python @bot.on.message(command=("help", 0))`
 
 ## Создание собственных правил
 

@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 @deprecated(
     "Blueprints was deprecated and will be removed in future releases, "
     "read about new code separation method in documentation: \n"
-    "https://vkbottle.readthedocs.io/ru/latest/tutorial/code-separation/",
+    "https://vkbottle.rtfd.io/ru/latest/tutorial/code-separation/",
     stacklevel=0,
 )
 class BotBlueprint(ABCBlueprint):

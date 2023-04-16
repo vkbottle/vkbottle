@@ -4,7 +4,7 @@ from typing import NoReturn, Union
 
 class ABCRequestValidator(ABC):
     """Abstract Request Validator class
-    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/request_validator.md
+    Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/api/request_validator
     """
 
     @abstractmethod

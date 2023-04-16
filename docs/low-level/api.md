@@ -16,10 +16,10 @@ await api.messages.send(peer_id=1, message="Привет Павел Дуров!"
 
 ## Параметры
 
-* **token** - токен сообщества/пользователя или [генератор токенов](token-generator.md)
+* **token** - токен сообщества/пользователя или [генератор токенов](api/token-generator.md)
 * **ignore_error** - игнорировать ошибки VK API
-* **http_client** - клиент для запросов ([документация](../http/http-client.md))
-* **request_rescheduler** - рещедулер запросов ([документация](request-rescheduler.md))
+* **http_client** - клиент для запросов ([документация](http-client.md))
+* **request_rescheduler** - рещедулер запросов ([документация](api/request-rescheduler.md))
 
 ## Captcha хендлер
 

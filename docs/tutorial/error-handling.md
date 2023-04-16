@@ -4,7 +4,7 @@
 
 ## try ... except VKAPIError
 
-Для начала разъясним что такое `VKAPIError`, это подтип `CodeException`, особенность которого заключается в том, чтобы ошибка идентифицировалась в except и без указанного кода (`try except VKAPIError`) и при указании кода (`try except VKAPIError[code]`)
+Для начала разъясним что такое `VKAPIError`, это подтип `CodeException`, особенность которого заключается в том, чтобы ошибка идентифицировалась в except и без указанного кода (`#!python except VKAPIError`) и при указании кода (`#!python except VKAPIError[code]`)
 
 В `VKAPIError` есть два поля:
 
@@ -106,6 +106,6 @@ async def limit_reached_write_handler(e: VKAPIError):
     print("ой, слишком много запросов", e)
 ```
 
-Ещё у `ErrorHandler` есть параметр `redirect_arguments: bool`, который позволяет передавать в хендлер аргументы из задекорированной с помощью `catch` функции. В связке с ботом позволяет передать в хендлер контекстные аргументы из правил и мидлварей.
+Ещё у `ErrorHandler` есть параметр `#!python redirect_arguments: bool`, который позволяет передавать в хендлер аргументы из задекорированной с помощью `catch` функции. В связке с ботом позволяет передать в хендлер контекстные аргументы из правил и мидлварей.
 
 Подробнее про `ErrorHandler.catch` можно почитать [здесь](../low-level/exception_handling/error-handler.md)

@@ -8,10 +8,10 @@
 
 Превращает стандартные типы питона в типы которые документирует вк:
 
-* `list` -> `",".join(v)`
-* `bool` -> `int(v)`
-* `dict` -> `self.validate(v)`
-* `BaseModel` -> `v.json()`
+* `#!python list` -> `#!python ",".join(v)`
+* `#!python bool` -> `#!python int(v)`
+* `#!python dict` -> `#!python self.validate(v)`
+* `#!python BaseModel` -> `#!python v.json()`
 
 ## Создание своего валидатора ответа
 

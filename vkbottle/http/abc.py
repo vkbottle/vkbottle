@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 class ABCHTTPClient(ABC):
     """Abstract class for http-clients
-    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/http/http-client.md
+    Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/http-client
     """
 
     @abstractmethod

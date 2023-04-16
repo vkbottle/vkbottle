@@ -4,7 +4,7 @@ from typing import Any, Hashable
 
 class ABCStorage(ABC):
     """Abstract storage class
-    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/tools/storage.md
+    Documentation: https://vkbottle.rtfd.io/ru/latest/tools/storage
     """
 
     @abstractmethod

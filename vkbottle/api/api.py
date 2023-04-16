@@ -42,7 +42,7 @@ class APIRequest(NamedTuple):
 
 class API(ABCAPI):
     """Default API instance
-    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/api.md
+    Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/api
     """
 
     API_URL = vkbottle_types.API_URL

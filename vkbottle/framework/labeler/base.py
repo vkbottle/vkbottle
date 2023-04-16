@@ -102,7 +102,7 @@ class BaseLabeler(ABCLabeler):
         if any(not isinstance(rule, ABCRule) for rule in rules):
             raise ValueError(
                 "All rules must be subclasses of ABCRule or rule shortcuts "
-                "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+                "(https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
             )
 
         def decorator(func):
@@ -125,7 +125,7 @@ class BaseLabeler(ABCLabeler):
         if any(not isinstance(rule, ABCRule) for rule in rules):
             raise ValueError(
                 "All rules must be subclasses of ABCRule or rule shortcuts "
-                "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+                "(https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
             )
 
         def decorator(func):
@@ -149,7 +149,7 @@ class BaseLabeler(ABCLabeler):
         if any(not isinstance(rule, ABCRule) for rule in rules):
             raise ValueError(
                 "All rules must be subclasses of ABCRule or rule shortcuts "
-                "(https://vkbottle.readthedocs.io/ru/latest/high-level/routing/rules/)"
+                "(https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
             )
 
         def decorator(func):

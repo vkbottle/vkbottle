@@ -1,4 +1,4 @@
-# Handling-Handler
+# Handler
 
 Хендлеры это конечная точка в обработке событий. Хендлеры могут быть блокирующими (если нашелся подходящий хендлер другие уже не проверяются и не выполняются) и не блокирующими (в таком случае количество выполняемых хендлеров не ограничено и зависит от того какие пройдут). По умолчанию все хендлеры являются блокирующими
 
@@ -44,18 +44,18 @@ bot.run_forever()
 !!! info "Примечание"
     Если правило вернуло словарь, то он будет распакован и передан в качестве аргументов в хендлер, если он принимает их:
 
-    ```python
-    # Кастомное правило MyRule возвращает словарь `{"some_key": "some_value"}`
-    @bot.on.message(MyRule())
-    async def some_key_handler(message: Message, some_key: str):
-        await message.answer(f"some_key={some_value}")
+```python
+# Кастомное правило MyRule возвращает словарь `{"some_key": "some_value"}`
+@bot.on.message(MyRule())
+async def some_key_handler(message: Message, some_key: str):
+    await message.answer(f"some_key={some_value}")
 
-    @bot.on.message(MyRule())
-    async def regular_handler(message: Message):
-        await message.answer("Этот хендлер не принимает аргумент 'some_key', поэтому он и не был передан")
+@bot.on.message(MyRule())
+async def regular_handler(message: Message):
+    await message.answer("Этот хендлер не принимает аргумент 'some_key', поэтому он и не был передан")
 
-    @bot.on.message(MyRule())
-    async def kwargs_handler(message: Message, **kwargs):
-        await message.answer(f"В хендлере переданы аргументы: {kwargs}")
-        # В хендлере переданы аргументы: {"some_key": "some_value"}
-    ```
+@bot.on.message(MyRule())
+async def kwargs_handler(message: Message, **kwargs):
+    await message.answer(f"В хендлере переданы аргументы: {kwargs}")
+    # В хендлере переданы аргументы: {"some_key": "some_value"}
+```

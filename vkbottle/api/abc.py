@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class ABCAPI(APICategories, ABC):
     """Abstract API class
-    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/api.md
+    Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/api
     """
 
     token_generator: "ABCTokenGenerator"

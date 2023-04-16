@@ -34,8 +34,8 @@ bot.run_forever()
 
 ## Документация
 
-[Туториал для новичков](https://vkbottle.readthedocs.io/ru/latest/tutorial/)\
-[Техническая документация](https://vkbottle.readthedocs.io/ru/latest)
+[Туториал для новичков](https://vkbottle.rtfd.io/ru/latest/tutorial/)\
+[Техническая документация](https://vkbottle.rtfd.io/ru/latest)
 
 ## Установка
 

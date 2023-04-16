@@ -3,6 +3,7 @@
 * [Handler](handler.md)
 * [Return Manager](return-manager.md)
 * [State Dispenser](state-dispenser.md)
+* [Router](router.md)
 * [View](view.md)
 * [Middleware](middleware.md)
-* [Rules](../routing/rules.md)
+* [Rules](rules.md)

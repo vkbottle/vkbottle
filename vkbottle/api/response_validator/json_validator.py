@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class JSONResponseValidator(ABCResponseValidator):
     """Default response json-parse validator
-    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/response-validator.md
+    Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/api/response-validator
     """
 
     def __init__(self, context: Optional[dict] = None):

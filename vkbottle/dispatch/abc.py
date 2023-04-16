@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class ABCRouter(ABC):
     """Abstract Router
-    Documentation: soon
+    Documentation: https://vkbottle.rtfd.io/ru/latest/high-level/handling/router/
     """
 
     views: Dict[str, "ABCView"] = {}

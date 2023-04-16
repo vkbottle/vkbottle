@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class VKAPIErrorResponseValidator(ABCResponseValidator):
     """Default vk api error response validator
-    Documentation: https://github.com/vkbottle/vkbottle/blob/master/docs/low-level/api/response-validator.md
+    Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/api/response-validator
     """
 
     async def validate(
