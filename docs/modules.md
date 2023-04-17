@@ -18,31 +18,31 @@ VKBottle автоматически выбирает лучшую альтерн
 !!! info "Примечание"
 
     По умолчанию уровень логирования выставлен на `DEBUG`.
-Изменить это вы можете так:
+    Изменить это вы можете так:
 
-### Для logging
+    === "logging"
 
-```python
-import logging
-logging.getLogger("vkbottle").setLevel(logging.INFO)
-```
+        ```python
+        import logging
+        logging.getLogger("vkbottle").setLevel(logging.INFO)
+        ```
 
-### Для loguru
+    === "loguru"
 
-Отключить логирование полностью
+        === "Установить определенный уровень"
 
-```python
-from loguru import logger
-logger.disable("vkbottle")
-```
+            ```python
+            import sys
+            from loguru import logger
+            logger.remove()
+            logger.add(sys.stderr, level="INFO")
+            ```
 
-Установить определенный уровень
+            Или установить [переменную окружения](https://en.wikipedia.org/wiki/Environment_variable) `LOGURU_LEVEL`
 
-```python
-import sys
-from loguru import logger
-logger.remove()
-logger.add(sys.stderr, level="INFO")
-```
+        === "Отключить логирование полностью"
 
-Или установить [переменную окружения](https://en.wikipedia.org/wiki/Environment_variable) `LOGURU_LEVEL`
+            ```python
+            from loguru import logger
+            logger.disable("vkbottle")
+            ```

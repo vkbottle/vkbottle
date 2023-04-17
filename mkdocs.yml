@@ -34,7 +34,6 @@ nav:
       - Интерфейсы высокого уровня:
           - high-level/index.md
           - Интерфейс ботов:
-              - high-level/bot/index.md
               - Bot: high-level/bot.md
               - User: high-level/user.md
               - Labeler: high-level/bot/labeler.md
@@ -51,7 +50,6 @@ nav:
       - Интерфейсы низкого уровня:
           - low-level/index.md
           - API:
-              - low-level/api/index.md
               - Работа с API: low-level/api.md
               - Response Validator: low-level/api/response-validator.md
               - Request Rescheduler: low-level/api/request-rescheduler.md
@@ -135,15 +133,15 @@ markdown_extensions:
       linenums: true
       guess_lang: true
   - pymdownx.inlinehilite:
-
   - pymdownx.superfences:
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.escapeall:
       hardbreak: True
       nbsp: True
   - pymdownx.details:
   - pymdownx.tabbed:
   - pymdownx.saneheaders:
-
 
 plugins:
   - search:

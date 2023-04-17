@@ -1,6 +1,6 @@
 # Low-level API
 
-- [API](api/index.md)
+- API
     - [Accessing API](api.md)
     - [Response Validator](api/response-validator.md)
     - [Request Reschedulers](api/request-rescheduler.md)
