@@ -66,6 +66,8 @@ pytest-cov = "^4.0.0"
 pytest-mock = "^3.10.0"
 # Pre-commit
 pre-commit = ">=2.19,<4.0"
+
+[tool.poetry.group.docs.dependencies]
 # Docs
 mkdocs = "^1.4.2"
 mkdocs-material = "^9.0.12"
