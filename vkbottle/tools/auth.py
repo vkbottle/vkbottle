@@ -10,6 +10,24 @@ MOBILE_APP_ID = 2274003
 MOBILE_APP_SECRET = "hHbZxrka2uZ6jB1inYsH"  # noqa: S105
 
 
+class AccountBlocked(VKAPIError, code=3):
+    def __init__(
+        self,
+        *,
+        error_description: str,
+        error_type: str,
+        error_msg: str,
+        redirect_uri: Optional[str] = None,
+        request_params: Optional[List[dict]] = None,
+    ):
+        request_params = request_params or []
+        super().__init__(error_msg=error_msg, request_params=request_params)
+        self.error_msg = error_msg
+        self.error_type = error_type
+        self.redirect_uri = redirect_uri
+        self.error_description = error_description
+
+
 class AuthError(VKAPIError[0]):  # type: ignore
     def __init__(
         self,
@@ -17,6 +35,7 @@ class AuthError(VKAPIError[0]):  # type: ignore
         error_description: str,
         error_type: str,
         error_msg: str,
+        redirect_uri: Optional[str] = None,
         request_params: Optional[List[dict]] = None,
     ):
         request_params = request_params or []
@@ -66,6 +85,10 @@ class UserAuth:
         if "access_token" in response:
             return response["access_token"]
         response["error_msg"] = response.pop("error")
+        if response["error_msg"] == "need_validation":
+            response["error_type"] = "blocked"
+            raise AccountBlocked(**response, request_params=[])
         if response["error_msg"] == "need_captcha":
             raise CaptchaError(**response, request_params=[])
+
         raise AuthError(**response, request_params=[])
