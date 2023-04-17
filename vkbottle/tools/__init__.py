@@ -1,4 +1,4 @@
-from .auth import AuthError, UserAuth
+from .auth import AuthError, UserAuth, AccountBlocked
 from .ctx_tool import BaseContext
 from .delayed_task import DelayedTask
 from .event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
@@ -45,6 +45,7 @@ __all__ = (
     "ABCValidator",
     "AudioUploader",
     "AuthError",
+    "AccountBlocked",
     "BaseContext",
     "BaseUploader",
     "BotTypes",
