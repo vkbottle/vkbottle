@@ -117,8 +117,10 @@ theme:
 markdown_extensions:
   - admonition:
   - md_in_html:
-  - markdown.extensions.toc:
-      slugify: !!python/object/apply:pymdownx.slugs.slugify {kwds: {case: lower}}
+  - toc:
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
       permalink: ""
   - pymdownx.magiclink:
       repo_url_shortener: true
