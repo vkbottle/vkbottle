@@ -12,13 +12,13 @@ MOBILE_APP_SECRET = "hHbZxrka2uZ6jB1inYsH"  # noqa: S105
 
 class AccountBlocked(VKAPIError, code=3):
     def __init__(
-            self,
-            *,
-            error_description: str,
-            error_type: str,
-            error_msg: str,
-            redirect_uri: str = '',
-            request_params: Optional[List[dict]] = None,
+        self,
+        *,
+        error_description: str,
+        error_type: str,
+        error_msg: str,
+        redirect_uri: str = "",
+        request_params: Optional[List[dict]] = None,
     ):
         request_params = request_params or []
         super().__init__(error_msg=error_msg, request_params=request_params)
@@ -30,13 +30,13 @@ class AccountBlocked(VKAPIError, code=3):
 
 class AuthError(VKAPIError[0]):  # type: ignore
     def __init__(
-            self,
-            *,
-            error_description: str,
-            error_type: str,
-            error_msg: str,
-            redirect_uri: str = None,
-            request_params: Optional[List[dict]] = None,
+        self,
+        *,
+        error_description: str,
+        error_type: str,
+        error_msg: str,
+        redirect_uri: str = None,
+        request_params: Optional[List[dict]] = None,
     ):
         request_params = request_params or []
         super().__init__(error_msg=error_msg, request_params=request_params)
@@ -49,10 +49,10 @@ class UserAuth:
     AUTH_URL = "https://oauth.vk.com/token"
 
     def __init__(
-            self,
-            client_id: Optional[int] = None,
-            client_secret: Optional[str] = None,
-            http_client: Optional["ABCHTTPClient"] = None,
+        self,
+        client_id: Optional[int] = None,
+        client_secret: Optional[str] = None,
+        http_client: Optional["ABCHTTPClient"] = None,
     ):
         if client_id is not None and client_secret is not None:
             self.client_id = client_id
@@ -86,7 +86,7 @@ class UserAuth:
             return response["access_token"]
         response["error_msg"] = response.pop("error")
         if response["error_msg"] == "need_validation":
-            response["error_type"] = 'blocked'
+            response["error_type"] = "blocked"
             print(response)
             raise AccountBlocked(**response, request_params=[])
         if response["error_msg"] == "need_captcha":
