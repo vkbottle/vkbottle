@@ -18,7 +18,45 @@ extra:
       name: Our Telegram chat
 
 nav:
-  - Хаб: index.md
+  - Документация:
+      - index.md
+      - Интерфейсы высокого уровня:
+          - Интерфейс ботов:
+              - Bot: high-level/bot.md
+              - User: high-level/user.md
+              - Labeler: high-level/bot/labeler.md
+              - Multibot: high-level/bot/multibot.md
+          - Хендлинг:
+              - Handler: high-level/handling/handler.md
+              - Router: high-level/handling/router.md
+              - View: high-level/handling/view.md
+              - Return Manager: high-level/handling/return-manager.md
+              - State Dispenser: high-level/handling/state-dispenser.md
+              - Middleware: high-level/handling/middleware.md
+              - Rules: high-level/handling/rules.md
+      - Интерфейсы низкого уровня:
+          - API:
+              - Работа с API: low-level/api.md
+              - Response Validator: low-level/api/response-validator.md
+              - Request Rescheduler: low-level/api/request-rescheduler.md
+              - Request Validator: low-level/api/request-validator.md
+              - Token Generator: low-level/api/token-generator.md
+          - Exception Handling:
+              - Error Handler: low-level/exception_handling/error-handler.md
+              - Code Exception: low-level/exception_handling/code-exception.md
+          - Http Client: low-level/http-client.md
+          - Polling: low-level/polling.md
+          - Callback: low-level/callback.md
+      - Дополнительные инструменты:
+          - Auth Flows: tools/auth.md
+          - Keyboard: tools/keyboard.md
+          - Loop Wrapper: tools/loop-wrapper.md
+          - Message Event: tools/message-event.md
+          - Storage: tools/storage.md
+          - Template: tools/template.md
+          - Uploaders: tools/uploaders.md
+          - VKScript: tools/vkscript.md
+      - Кастомизация зависимостей: modules.md
   - Туториал:
       - tutorial/index.md
       - Первый бот: tutorial/first-bot.md
@@ -30,50 +68,8 @@ nav:
       - Callback API: tutorial/callback-bot.md
       - Рекомендуемые IDE: tutorial/recommended-ide.md
       - FAQ: tutorial/faq.md
-  - Документация:
-      - Интерфейсы высокого уровня:
-          - high-level/index.md
-          - Интерфейс ботов:
-              - Bot: high-level/bot.md
-              - User: high-level/user.md
-              - Labeler: high-level/bot/labeler.md
-              - Multibot: high-level/bot/multibot.md
-          - Хендлинг:
-              - high-level/handling/index.md
-              - Handler: high-level/handling/handler.md
-              - Router: high-level/handling/router.md
-              - View: high-level/handling/view.md
-              - Return Manager: high-level/handling/return-manager.md
-              - State Dispenser: high-level/handling/state-dispenser.md
-              - Middleware: high-level/handling/middleware.md
-              - Rules: high-level/handling/rules.md
-      - Интерфейсы низкого уровня:
-          - low-level/index.md
-          - API:
-              - Работа с API: low-level/api.md
-              - Response Validator: low-level/api/response-validator.md
-              - Request Rescheduler: low-level/api/request-rescheduler.md
-              - Request Validator: low-level/api/request-validator.md
-              - Token Generator: low-level/api/token-generator.md
-          - Exception Handling:
-              - low-level/exception_handling/index.md
-              - Error Handler: low-level/exception_handling/error-handler.md
-              - Code Exception: low-level/exception_handling/code-exception.md
-          - Http Client: low-level/http-client.md
-          - Polling: low-level/polling.md
-          - Callback: low-level/callback.md
-      - Дополнительные инструменты:
-          - tools/index.md
-          - Auth Flows: tools/auth.md
-          - Keyboard: tools/keyboard.md
-          - Loop Wrapper: tools/loop-wrapper.md
-          - Message Event: tools/message-event.md
-          - Storage: tools/storage.md
-          - Template: tools/template.md
-          - Uploaders: tools/uploaders.md
-          - VKScript: tools/vkscript.md
-      - Кастомизация зависимостей: modules.md
   - Что нового:
+      - whats_new/index.md
       - 4.0: whats_new/4.0.md
       - 4.1: whats_new/4.1.md
       - 4.2: whats_new/4.2.md
