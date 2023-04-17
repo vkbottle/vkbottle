@@ -1,4 +1,4 @@
-from .auth import AuthError, UserAuth, AccountBlocked
+from .auth import AuthError, UserAuth
 from .ctx_tool import BaseContext
 from .delayed_task import DelayedTask
 from .event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
