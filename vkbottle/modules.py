@@ -30,13 +30,20 @@ showwarning_ = warnings.showwarning
 
 
 def showwarning(message, category, filename, lineno, file=None, line=None):  # noqa: ARG001
-    module = inspect.getmodule(inspect.stack()[2][0])
-    new_message = f"{category.__name__}: {module.__name__ if module else '<module>'}: {message}"
-    logger.warning(new_message)
+    new_message = f"{category.__name__}: {message}"
+    if logging_module == "loguru":
+        logger.opt(depth=2).log("WARNING", new_message)  # type: ignore
+        return
+    logger.log(
+        logging.WARNING,
+        new_message,
+        stacklevel=4,
+    )
 
 
 logging_module = choice_in_order(["loguru"], default="logging")
 if logging_module == "loguru":
+    import logging
     import os
 
     if not os.environ.get("LOGURU_AUTOINIT"):
@@ -45,13 +52,34 @@ if logging_module == "loguru":
     from loguru import logger  # type: ignore
 
     if not logger._core.handlers:  # type: ignore
+
+        def log_filter(record):
+            if record["function"] == "<module>":
+                record["function"] = "\b"
+            return True
+
         log_format = (
             "<level>{level: <8}</level> <bold><level>|</level></bold> "
             "{time:YYYY-MM-DD HH:mm:ss} <bold><level>|</level></bold> "
             "{name}:{function}:{line}<bold><level> > </level></bold><level>{message}</level>"
         )
-        logger.add(sys.stderr, format=log_format, enqueue=True, colorize=True)
+        logger.add(sys.stderr, format=log_format, enqueue=True, colorize=True, filter=log_filter)
         warnings.showwarning = showwarning
+
+        class InterceptHandler(logging.Handler):
+            def emit(self, record):
+                try:
+                    level = logger.level(record.levelname).name  # type: ignore
+                except ValueError:
+                    level = record.levelno
+                frame, depth = sys._getframe(6), 6
+                while frame and frame.f_code.co_filename == logging.__file__:
+                    frame = frame.f_back
+                    depth += 1
+
+                logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())  # type: ignore
+
+        logging.basicConfig(handlers=[InterceptHandler()], level=0, force=True)
 
 
 elif logging_module == "logging":
@@ -89,9 +117,18 @@ elif logging_module == "logging":
                 .replace("<bold>", colorama.Style.BRIGHT)
                 .replace("</bold>", colorama.Style.RESET_ALL)
             )
-            if hasattr(sys, "_getframe"):
-                frame = sys._getframe(9)
-                module = inspect.getmodule(frame)
+            if not record.funcName or record.funcName == "<module>":
+                record.funcName = "\b"
+            frame = next(
+                (
+                    frame
+                    for frame in inspect.stack()
+                    if frame.filename == record.pathname and frame.lineno == record.lineno
+                ),
+                None,
+            )
+            if frame:
+                module = inspect.getmodule(frame.frame)
                 record.module = module.__name__ if module else "<module>"
             return logging.Formatter(
                 log_format,
@@ -99,17 +136,8 @@ elif logging_module == "logging":
                 style="{",
             ).format(record)
 
-    class ColorLogger(logging.Logger):
-        def __init__(self, name, level=logging.DEBUG):
-            super().__init__(name, level)
-            color_formatter = ColorFormatter(
-                loguru_like_format,
-                style="{",
-                datefmt="%Y-%m-%d %H:%M:%S",
-            )
-            console = logging.StreamHandler()
-            console.setFormatter(color_formatter)
-            self.addHandler(console)
+    logging.basicConfig(level=logging.DEBUG)
+    logging.root.handlers[0].setFormatter(ColorFormatter())
 
     class LogMessage:
         def __init__(self, fmt, args, kwargs):
@@ -126,7 +154,8 @@ elif logging_module == "logging":
 
         def log(self, level, msg, *args, **kwargs):
             if self.isEnabledFor(level):
-                kwargs["stacklevel"] = 2
+                if "stacklevel" not in kwargs:
+                    kwargs["stacklevel"] = 2
                 msg, args, kwargs = self.process(msg, args, kwargs)
                 self.logger._log(level, msg, args, **kwargs)
 
@@ -141,7 +170,6 @@ elif logging_module == "logging":
                 args = ()
             return msg, args, log_kwargs
 
-    logging.setLoggerClass(ColorLogger)
     warnings.showwarning = showwarning
 
     logger = StyleAdapter(logging.getLogger("vkbottle"))  # type: ignore
