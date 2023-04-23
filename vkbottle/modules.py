@@ -74,7 +74,7 @@ if logging_module == "loguru":
                     level = record.levelno
                 frame, depth = sys._getframe(6), 6
                 while frame and frame.f_code.co_filename == logging.__file__:
-                    frame = frame.f_back
+                    frame = frame.f_back  # type: ignore
                     depth += 1
 
                 logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())  # type: ignore
