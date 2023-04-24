@@ -1,7 +1,7 @@
 # Подходящее IDE для разработки на vkbottle
 
-* PyCharm
 * vscode (с расширением Pylance)
+* PyCharm
 
 !!! info "Я пишу в `IDE_name` и у меня все прекрасно работает"
     Если вы хотите предложить конфигурацию IDE для этого списка, то откройте Pull Request на GitHub.
