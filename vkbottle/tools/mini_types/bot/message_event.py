@@ -47,6 +47,15 @@ class MessageEventMin(MessageEvent):
         data.update(kwargs)
         return (await self.ctx_api.request("messages.sendMessageEventAnswer", data))["response"]
 
+    async def send_empty_answer(self, **kwargs) -> int:
+        data = {
+            "event_id": self.event_id,
+            "user_id": self.user_id,
+            "peer_id": self.peer_id,
+        }
+        data.update(kwargs)
+        return (await self.ctx_api.request("messages.sendMessageEventAnswer", data))["response"]
+
     async def show_snackbar(self, text: str) -> int:
         return await self.send_message_event_answer(ShowSnackbarEvent(text=text))
 

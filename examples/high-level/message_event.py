@@ -17,6 +17,8 @@ KEYBOARD = (
     .row()
     .add(Callback("Дата регистрации (tool42)", payload={"cmd": "app"}))
     .row()
+    .add(Callback("Ничего не делаю", payload={"cmd": "nothing"}))
+    .row()
     .add(Callback("Закрыть", payload={"cmd": "close"}))
     .get_json()
 )
@@ -43,6 +45,15 @@ async def show_snackbar(event: MessageEvent):
 )
 async def open_app(event: MessageEvent):
     await event.open_app(6798836, "reg", event.user_id)
+
+
+@bot.on.raw_event(
+    GroupEventType.MESSAGE_EVENT,
+    MessageEvent,
+    rules.PayloadRule({"cmd": "nothing"}),
+)
+async def do_nothing(event: MessageEvent):
+    await event.send_empty_answer()
 
 
 @bot.on.raw_event(
