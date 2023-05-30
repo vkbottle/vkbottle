@@ -1545,14 +1545,14 @@ test = ["covdefaults (>=2.2.2)", "coverage (>=7.1)", "coverage-enable-subprocess
 
 [[package]]
 name = "vkbottle-types"
-version = "5.131.146.15"
+version = "5.131.146.16"
 description = "Types for vkbottle"
 category = "main"
 optional = false
 python-versions = ">=3.7.2,<4.0.0"
 files = [
-    {file = "vkbottle_types-5.131.146.15-py3-none-any.whl", hash = "sha256:a9ff7cc6f5ce914483be652c579aab50234eba2c6c71c54204739d3283f3d660"},
-    {file = "vkbottle_types-5.131.146.15.tar.gz", hash = "sha256:8f6f04274733c3e6ecf29c711d568dab5c7aa78835259d02174a6a1711cd6129"},
+    {file = "vkbottle_types-5.131.146.16-py3-none-any.whl", hash = "sha256:d0172e7e56c3f832fe4234e0af147a5d7945b2098414c04cb48998863f27b3ff"},
+    {file = "vkbottle_types-5.131.146.16.tar.gz", hash = "sha256:31c71b25b446e1b888718b12e5a195a89437b9d840f79355e564c243b6584a01"},
 ]
 
 [package.dependencies]
