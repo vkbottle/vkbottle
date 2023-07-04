@@ -5,6 +5,8 @@ from pydantic import BaseModel, validator
 
 
 class BaseStateGroup(str, Enum):
+    __slots__ = ()
+
     def __str__(self) -> str:
         return get_state_repr(self)
 
@@ -14,6 +16,8 @@ def get_state_repr(state: BaseStateGroup) -> str:
 
 
 class StateRepresentation(str):
+    __slots__ = ()
+
     def __eq__(self, __x: object) -> bool:
         if isinstance(__x, BaseStateGroup):
             return self == get_state_repr(__x)
@@ -31,4 +35,5 @@ class StatePeer(BaseModel):
             return StateRepresentation(v)
         elif isinstance(v, str):
             return v
-        raise ValueError(f"State value must be `string` or `BaseStateGroup`, got `{type(v)}`")
+        msg = f"State value must be `string` or `BaseStateGroup`, got `{type(v)}`"
+        raise ValueError(msg)
