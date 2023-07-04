@@ -9,7 +9,6 @@ class HandlerProperty(NamedTuple):
     handler: Callable
 
 
-# TODO: fix types here
 class ABCRetunManager(ABC):
     @abstractmethod
     def get_handler(self, value: Any) -> Any:

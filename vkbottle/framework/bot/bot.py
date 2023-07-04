@@ -72,9 +72,8 @@ class Bot(ABCFramework):
         task_each_event=None,
     ):
         if isinstance(token, API):
-            raise ValueError(
-                "You passed API instance to token parameter, use api parameter instead"
-            )
+            msg = "You passed API instance to token parameter, use api parameter instead"
+            raise ValueError(msg)
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
@@ -89,9 +88,8 @@ class Bot(ABCFramework):
     @property
     def callback(self) -> "ABCCallback":
         if self._callback is None:
-            raise ValueError(
-                "To work with this methods, you need to create a BotCallback class and pass it as a parameter to the Bot class"
-            )
+            msg = "To work with this methods, you need to create a BotCallback class and pass it as a parameter to the Bot class"
+            raise ValueError(msg)
         return self._callback.construct(self.api, self.error_handler)
 
     @property

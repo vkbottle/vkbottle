@@ -80,9 +80,11 @@ class ABCView(ABC, Generic[T_contra]):
     def register_middleware(self, middleware: Type[BaseMiddleware]):
         try:
             if not issubclass(middleware, BaseMiddleware):
-                raise ValueError("Argument is not a subclass of BaseMiddleware")
+                msg = "Argument is not a subclass of BaseMiddleware"
+                raise ValueError(msg)
         except TypeError as e:
-            raise ValueError("Argument is not a class") from e
+            msg = "Argument is not a class"
+            raise ValueError(msg) from e
         self.middlewares.append(middleware)
 
     def __repr__(self) -> str:

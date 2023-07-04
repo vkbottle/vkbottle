@@ -17,9 +17,11 @@ class TemplateElement:
         action: Optional[dict] = None,
     ):
         if not buttons:
-            raise ValueError("Buttons are required")
+            msg = "Buttons are required"
+            raise ValueError(msg)
         if not (photo_id or title):
-            raise ValueError("photo_id or title are required")
+            msg = "photo_id or title are required"
+            raise ValueError(msg)
 
         if isinstance(buttons, str):
             buttons = json.loads(buttons)["buttons"][0]  # type: ignore

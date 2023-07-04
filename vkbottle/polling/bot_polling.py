@@ -73,7 +73,7 @@ class BotPolling(ABCPolling):
                 server["ts"] = event["ts"]
                 retry_count = 0
                 yield event
-            except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
+            except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):  # noqa: PERF203
                 logger.error("Unable to make request to Longpoll, retrying...")
                 await asyncio.sleep(0.1 * retry_count)
                 server = {}
@@ -91,9 +91,10 @@ class BotPolling(ABCPolling):
     @property
     def api(self) -> "ABCAPI":
         if self._api is None:
-            raise NotImplementedError(
+            msg = (
                 "You must construct polling with API before try to access api property of Polling"
             )
+            raise NotImplementedError(msg)
         return self._api
 
     @api.setter

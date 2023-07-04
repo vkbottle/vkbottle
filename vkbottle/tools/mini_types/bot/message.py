@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List, Optional
 
-from pydantic import root_validator
+from pydantic import Field, root_validator
 from vkbottle_types.events.bot_events import MessageNew
 
 from vkbottle.tools.mini_types.base import BaseMessageMin
@@ -20,7 +20,7 @@ class MessageMin(BaseMessageMin):
     group_id: Optional[int] = None
     client_info: Optional["ClientInfoForBots"] = None
     reply_message: Optional["ForeignMessageMin"] = None
-    fwd_messages: Optional[List["ForeignMessageMin"]] = []
+    fwd_messages: List["ForeignMessageMin"] = Field(default_factory=list)
     _is_full: Optional[bool] = None
 
     @root_validator(pre=True)
@@ -84,7 +84,8 @@ def message_min(event: dict, ctx_api: "ABCAPI", replace_mention: bool = True) ->
     update = MessageNew(**event)
 
     if update.object.message is None:
-        raise RuntimeError("Please set longpoll to latest version")
+        msg = "Please set longpoll to latest version"
+        raise RuntimeError(msg)
 
     return MessageMin(
         **update.object.message.dict(),

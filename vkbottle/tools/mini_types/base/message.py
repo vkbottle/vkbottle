@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from io import StringIO
 from typing import TYPE_CHECKING, Any, Callable, List, Literal, Optional, Union, overload
 
-from pydantic import root_validator
+from pydantic import Field, root_validator
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
@@ -34,7 +34,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     unprepared_ctx_api: Optional[Any] = None
     state_peer: Optional["StatePeer"] = None
     reply_message: Optional["BaseForeignMessageMin"] = None
-    fwd_messages: Optional[List["BaseForeignMessageMin"]] = []
+    fwd_messages: List["BaseForeignMessageMin"] = Field(default_factory=list)
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
 

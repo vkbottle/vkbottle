@@ -74,10 +74,8 @@ class UserLabeler(BaseLabeler):
         **custom_rules,
     ) -> "LabeledHandler":
         if any(not isinstance(rule, ABCRule) for rule in rules):
-            raise ValueError(
-                "All rules must be subclasses of ABCRule or rule shortcuts "
-                "(https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
-            )
+            msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
+            raise ValueError(msg)
 
         event_types = [event] if isinstance(event, (int, UserEventType)) else event
 

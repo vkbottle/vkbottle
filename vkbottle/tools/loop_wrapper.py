@@ -99,7 +99,8 @@ class LoopWrapper:
         if asyncio.iscoroutinefunction(task) or isinstance(task, DelayedTask):
             task = task()  # type: ignore
         elif not asyncio.iscoroutine(task):
-            raise TypeError("Task should be coroutine or coroutine function")
+            msg = "Task should be coroutine or coroutine function"
+            raise TypeError(msg)
 
         if self.loop and self.loop.is_running():
             self.loop.create_task(task)

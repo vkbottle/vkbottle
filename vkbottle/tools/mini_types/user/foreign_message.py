@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from pydantic import root_validator
+from pydantic import Field, root_validator
 
 from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
 
@@ -8,7 +8,7 @@ from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
 class ForeignMessageMin(BaseForeignMessageMin):
     user_id: Optional[int] = None
     reply_message: Optional["ForeignMessageMin"] = None
-    fwd_messages: Optional[List["ForeignMessageMin"]] = []
+    fwd_messages: Optional[List["ForeignMessageMin"]] = Field(default_factory=list)
 
     @root_validator
     def __foreign_messages(cls, values):

@@ -84,7 +84,8 @@ class VideoUploader(BaseUploader):
             compression=compression,
         )
         if file_source is None and link is None:
-            raise ValueError("You must specify either file_source or link")
+            msg = "You must specify either file_source or link"
+            raise ValueError(msg)
 
         if link:
             await self.api.http_client.request_json(server["upload_url"], method="GET")

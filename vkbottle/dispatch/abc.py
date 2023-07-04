@@ -14,7 +14,7 @@ class ABCRouter(ABC):
     Documentation: https://vkbottle.rtfd.io/ru/latest/high-level/handling/router/
     """
 
-    views: Dict[str, "ABCView"] = {}
+    views: Dict[str, "ABCView"]
     state_dispenser: "ABCStateDispenser"
     error_handler: "ABCErrorHandler"
 
