@@ -1,7 +1,7 @@
 name: Предложить новый функционал
 description: Новая функциональность для фреймворка
 labels: enhancement
-assignees: "FeeeeK"
+assignees: "timoniq"
 body:
   - type: textarea
     attributes:

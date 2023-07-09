@@ -5,9 +5,7 @@ site_url: https://vkbottle.rtfd.io/
 repo_name: vkbottle/vkbottle
 repo_url: https://github.com/vkbottle/vkbottle
 edit_uri: edit/master/docs/
-copyright: Copyright (c) 2022
-  <a href="https://github.com/feeeek" target="_blank" rel="noopener">FeeeeK</a> |
-  <a href="https://github.com/vkbottle/vkbottle/blob/master/LICENSE" target="_blank" rel="noopener">(More info)</a>
+copyright: <a href="https://github.com/vkbottle/vkbottle/blob/master/LICENSE" target="_blank" rel="noopener">View maintainers</a>
 
 extra:
   generator: false

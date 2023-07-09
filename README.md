@@ -55,11 +55,11 @@ pip install vkbottle
 ПР поддерживаются! Перед созданием пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие фреймворка.\
 Задавайте вопросы в блоке Issues или в [**чате Telegram**](https://t.me/vkbottle_ru)!
 
-- Создатель [@timoniq](https://github.com/timoniq)
-- Мейнтейнер [@FeeeeK](https://github.com/FeeeeK)
+
+Мейнтейнеры: [click](https://github.com/vkbottle/vkbottle/graphs/contributors)
 
 ## Лицензия
 
-Copyright © 2019-2021 [timoniq](https://github.com/timoniq).\
+Copyright © 2019-2023 [timoniq](https://github.com/timoniq).\
 Copyright © 2022 [FeeeeK](https://github.com/FeeeeK).\
 Этот проект имеет [MIT](https://github.com/vkbottle/vkbottle/blob/master/LICENSE) лицензию.
