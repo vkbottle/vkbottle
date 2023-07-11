@@ -116,21 +116,21 @@ select = [
   "UP",    # pyupgrade
   "YTT",   # flake8-2020
   # "ANN",   # flake8-annotations
-  "ASYNC", # flake8-async
+  #"ASYNC", # flake8-async
   "S",     # flake8-bandit
   # "BLE",   # flake8-blind-except
   # "FBT",   # flake8-boolean-trap
   "B",     # flake8-bugbear
   "A",     # flake8-builtins
   # "COM",   # flake8-commas
-  "CPY",   # Copyright-related rules
+  #"CPY",   # Copyright-related rules
   "C40",   # flake8-comprehensions
   # "DTZ",   # flake8-datetimez
   "T10",   # flake8-debugger
   # "DJ",    # flake8-django
   "EM",    # flake8-errmsg
   "EXE",   # flake8-executable
-  "FA",    # flake8-future-annotations
+  #"FA",    # flake8-future-annotations
   "ISC",   # flake8-implicit-str-concat
   "ICN",   # flake8-import-conventions
   "G",     # flake8-logging-format
@@ -143,15 +143,15 @@ select = [
   "RSE",   # flake8-raise
   "RET",   # flake8-return
   "SLF",   # flake8-self
-  "SLOT",  # flake8-slots
+  #"SLOT",  # flake8-slots
   "SIM",   # flake8-simplify
   "TID",   # flake8-tidy-imports
   "TCH",   # flake8-type-checking
   "INT",   # flake8-gettext
   "ARG",   # flake8-unused-arguments
   "PTH",   # flake8-use-pathlib
-  "TD",    # flake8-todos
-  "FIX",   # flake8-fixme
+  #"TD",    # flake8-todos
+  #"FIX",   # flake8-fixme
   "ERA",   # eradicate
   "PD",    # pandas-vet
   "PGH",   # pygrep-hooks
@@ -163,8 +163,8 @@ select = [
   "TRY",   # tryceratops
   "FLY",   # flynt
   "NPY",   # NumPy-specific rules
-  "AIR",   # Airflow
-  "PERF",  # Perflint
+  #"AIR",   # Airflow
+  #"PERF",  # Perflint
   "RUF",   # ruff
   "ALL",   # All not listed above
 ]
@@ -206,7 +206,7 @@ ignore = [
   "UP007",   # Use `X | Y` for type annotations
   "S311",    # Standard pseudo-random generators are not suitable for cryptographic purposes
   "S301",    # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue
-  "FA100",   # `__future__` import "annotations" missing
+  #"FA100",   # `__future__` import "annotations" missing
 ]
 
 [tool.ruff.per-file-ignores]

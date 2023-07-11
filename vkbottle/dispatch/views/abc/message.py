@@ -19,7 +19,7 @@ F_contra = TypeVar("F_contra", contravariant=True)
 
 
 class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra, F_contra]):
-    handlers: List["ABCHandler"]
+    handlers: List["ABCHandler[F_contra]"]
     state_source_key: str
     default_text_approximators: List[Callable[["BaseMessageMin"], str]]
     replace_mention = False

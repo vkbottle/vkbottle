@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from vkbottle.dispatch.handlers import ABCHandler
     from vkbottle.dispatch.return_manager import BaseReturnManager
 
-    Handlers = Union[List["ABCHandler"], Dict[Any, List]]
+    Handlers = Union[List["ABCHandler[Any]"], Dict[Any, List]]
 
 T_contra = TypeVar("T_contra", list, dict, contravariant=True)
 
