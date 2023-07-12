@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Callable, List, Optional, Union
 
-from pydantic import root_validator
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
@@ -14,7 +13,7 @@ from vkbottle_types.objects import (
     WallWallpostFull,
 )
 
-from vkbottle.modules import json, logger
+from vkbottle.modules import json, logger, pydantic
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
@@ -27,7 +26,7 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
 
-    __replace_mention = root_validator(replace_mention_validator, allow_reuse=True, pre=False)  # type: ignore
+    __replace_mention = pydantic.root_validator(replace_mention_validator, allow_reuse=True, pre=False)  # type: ignore
 
     class Config:
         frozen = False

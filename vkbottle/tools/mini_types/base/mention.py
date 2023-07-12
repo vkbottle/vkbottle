@@ -1,11 +1,11 @@
 import re
 
-from pydantic import BaseModel
+from vkbottle.modules import pydantic
 
 MENTION_PATTERN = re.compile(r"^\[(?P<type>club|public|id)(?P<id>\d*)\|(?P<text>.+)\],?\s?")
 
 
-class Mention(BaseModel):
+class Mention(pydantic.BaseModel):
     """Mention object
 
     :param id: Identifier of the user that was mentioned (negative if it's a group)

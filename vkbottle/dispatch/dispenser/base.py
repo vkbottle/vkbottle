@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, validator
+from vkbottle.modules import pydantic
 
 
 class BaseStateGroup(str, Enum):
@@ -24,12 +24,12 @@ class StateRepresentation(str):
         return super().__eq__(__x)
 
 
-class StatePeer(BaseModel):
+class StatePeer(pydantic.BaseModel):
     peer_id: int
     state: str
     payload: dict = {}
 
-    @validator("state", pre=True)
+    @pydantic.validator("state", pre=True)
     def validate_state(cls, v: Any) -> str:
         if isinstance(v, BaseStateGroup):
             return StateRepresentation(v)

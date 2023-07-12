@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING, List, Optional
 
-from pydantic import Field, root_validator
 from vkbottle_types.events.bot_events import MessageNew
 
+from vkbottle.modules import pydantic
 from vkbottle.tools.mini_types.base import BaseMessageMin
 
 if TYPE_CHECKING:
@@ -20,10 +20,10 @@ class MessageMin(BaseMessageMin):
     group_id: Optional[int] = None
     client_info: Optional["ClientInfoForBots"] = None
     reply_message: Optional["ForeignMessageMin"] = None
-    fwd_messages: List["ForeignMessageMin"] = Field(default_factory=list)
+    fwd_messages: List["ForeignMessageMin"] = pydantic.Field(default_factory=list)
     _is_full: Optional[bool] = None
 
-    @root_validator(pre=True)
+    @pydantic.root_validator(pre=True)
     def __foreign_messages(cls, values):
         foreign_messages = []
         if values.get("fwd_messages"):

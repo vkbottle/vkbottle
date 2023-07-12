@@ -42,7 +42,7 @@ classifiers = [
 python = "^3.8"
 aiohttp = "^3.8.1"
 choicelib = "^0.1.5"
-pydantic = "^1.10.4"
+pydantic = ">=1.10.4,<3"
 vbml = "^1.1.post1"
 vkbottle-types = "^5.131.146.14"
 aiofiles = "23.1.0"
@@ -207,6 +207,7 @@ ignore = [
   "S311",    # Standard pseudo-random generators are not suitable for cryptographic purposes
   "S301",    # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue
   #"FA100",   # `__future__` import "annotations" missing
+  "N805", # First argument of a method should be named `self` (Pydantic validators)
 ]
 
 [tool.ruff.per-file-ignores]

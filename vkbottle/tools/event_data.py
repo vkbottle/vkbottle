@@ -1,20 +1,20 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from vkbottle.modules import pydantic
 
 
-class ShowSnackbarEvent(BaseModel):
-    type: str = Field(default="show_snackbar", const=True)
+class ShowSnackbarEvent(pydantic.BaseModel):
+    type: str = pydantic.Field(default="show_snackbar", const=True)
     text: str
 
 
-class OpenLinkEvent(BaseModel):
-    type: str = Field(default="open_link", const=True)
+class OpenLinkEvent(pydantic.BaseModel):
+    type: str = pydantic.Field(default="open_link", const=True)
     link: str
 
 
-class OpenAppEvent(BaseModel):
-    type: str = Field(default="open_app", const=True)
+class OpenAppEvent(pydantic.BaseModel):
+    type: str = pydantic.Field(default="open_app", const=True)
     owner_id: Optional[int] = None
     app_id: int
     hash: str
