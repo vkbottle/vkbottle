@@ -71,10 +71,12 @@ class ABCBlueprint(ABCFramework):
         self._api = new_api
 
     async def run_polling(self) -> NoReturn:
-        raise RuntimeError("You are not allowed to run polling with blueprint")
+        msg = "You are not allowed to run polling with blueprint"
+        raise RuntimeError(msg)
 
     def run_forever(self) -> NoReturn:
-        raise RuntimeError("You are not allowed to run polling with blueprint")
+        msg = "You are not allowed to run polling with blueprint"
+        raise RuntimeError(msg)
 
     def assert_constructed(self) -> Optional[NoReturn]:
         if not self.constructed:

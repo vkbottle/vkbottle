@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from io import StringIO
 from typing import TYPE_CHECKING, Any, Callable, List, Literal, Optional, Union, overload
 
-from pydantic import root_validator
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
@@ -16,7 +15,7 @@ from vkbottle_types.objects import (
     WallWallpostFull,
 )
 
-from vkbottle.modules import json, logger
+from vkbottle.modules import json, logger, pydantic
 
 if TYPE_CHECKING:
     from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
@@ -34,11 +33,11 @@ class BaseMessageMin(MessagesMessage, ABC):
     unprepared_ctx_api: Optional[Any] = None
     state_peer: Optional["StatePeer"] = None
     reply_message: Optional["BaseForeignMessageMin"] = None
-    fwd_messages: Optional[List["BaseForeignMessageMin"]] = []
+    fwd_messages: List["BaseForeignMessageMin"] = pydantic.Field(default_factory=list)
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
 
-    __replace_mention = root_validator(replace_mention_validator, allow_reuse=True, pre=False)  # type: ignore
+    __replace_mention = pydantic.root_validator(replace_mention_validator, allow_reuse=True, pre=False)  # type: ignore
 
     class Config:
         frozen = False

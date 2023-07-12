@@ -18,7 +18,8 @@ async def exc_handler(exc: RuntimeError):
 
 @error_handler.catch
 async def main():
-    raise RuntimeError("Oh my god i am an exception")
+    msg = "Oh my god i am an exception"
+    raise RuntimeError(msg)
 
 
 asyncio.run(main())

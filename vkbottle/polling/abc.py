@@ -29,7 +29,7 @@ class ABCPolling(ABC):
         pass
 
     @api.setter
-    def api(self, new_api: "ABCAPI"):  # noqa: B027
+    def api(self, new_api: "ABCAPI"):  # ruff: noqa
         pass
 
     @abstractmethod

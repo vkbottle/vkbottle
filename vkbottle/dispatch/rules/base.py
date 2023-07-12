@@ -393,7 +393,8 @@ except ImportError:
 class MacroRule(ABCRule[BaseMessageMin]):
     def __init__(self, pattern: Union[str, List[str]]):
         if macro is None:  # type: ignore
-            raise RuntimeError("macro must be installed to use MacroRule")
+            msg = "macro must be installed to use MacroRule"
+            raise RuntimeError(msg)
 
         if isinstance(pattern, str):
             pattern = [pattern]

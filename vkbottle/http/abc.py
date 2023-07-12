@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional, Type
+
+if TYPE_CHECKING:
+    from types import TracebackType
 
 
 class ABCHTTPClient(ABC):
@@ -8,7 +11,7 @@ class ABCHTTPClient(ABC):
     """
 
     @abstractmethod
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         pass
 
     @abstractmethod
@@ -42,5 +45,10 @@ class ABCHTTPClient(ABC):
     async def __aenter__(self) -> "ABCHTTPClient":
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        traceback: Optional["TracebackType"],
+    ) -> None:
         await self.close()

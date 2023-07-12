@@ -13,7 +13,8 @@ class BaseContext:
 
     def __init_subclass__(cls, **kwargs):
         if not contextvars:
-            raise LookupError(f"To use {cls.__name__} you have to install contextvars")
+            msg = f"To use {cls.__name__} you have to install contextvars"
+            raise LookupError(msg)
 
         cls.ctx_instance = contextvars.ContextVar(kwargs.get("ctx_name") or cls.__name__)
         return cls

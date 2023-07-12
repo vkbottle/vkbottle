@@ -30,10 +30,7 @@ class Keyboard:
         return self
 
     def schema(self, rows: List[List[dict]]):
-        for row in rows:
-            self.row()
-            for button in row:
-                self.buttons[-1].append(KeyboardButton.from_dict(button))
+        self.buttons += [[KeyboardButton.from_dict(button) for button in row] for row in rows]
         return self
 
     def get_json(self) -> str:

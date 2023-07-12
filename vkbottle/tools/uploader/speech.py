@@ -36,9 +36,8 @@ class SpeechUploader(BaseUploader):
         self,
         **params,
     ) -> str:
-        raise NotImplementedError(
-            f"{self.__class__.__name__} does not support upload() method. Use raw_upload(...) instead."
-        )
+        msg = f"{self.__class__.__name__} does not support upload() method. Use raw_upload(...) instead."
+        raise NotImplementedError(msg)
 
     @property
     def attachment_name(self) -> str:

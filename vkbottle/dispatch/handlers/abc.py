@@ -1,17 +1,17 @@
+import typing
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Union
+from typing import Any, Union
 
-if TYPE_CHECKING:
-    from vkbottle_types.events import Event
+Event = typing.TypeVar("Event")
 
 
-class ABCHandler(ABC):
+class ABCHandler(ABC, typing.Generic[Event]):
     blocking: bool
 
     @abstractmethod
-    async def filter(self, event: "Event") -> Union[dict, bool]:
+    async def filter(self, event: Event) -> Union[dict, bool]:
         pass
 
     @abstractmethod
-    async def handle(self, event: "Event", **context) -> Any:
+    async def handle(self, event: Event, **context) -> Any:
         pass

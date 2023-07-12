@@ -38,6 +38,7 @@ from .uploader import (
 from .utils import load_blueprints_from_package, run_in_task, run_sync
 from .validator import ABCValidator, CallableValidator, EqualsValidator, IsInstanceValidator
 from .vkscript_converter import vkscript
+from .waiter_machine import WaiterMachine
 
 __all__ = (
     "ABCAction",
@@ -87,4 +88,5 @@ __all__ = (
     "run_sync",
     "template_gen",
     "vkscript",
+    "WaiterMachine",
 )

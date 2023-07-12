@@ -68,9 +68,8 @@ class User(ABCFramework):
         task_each_event=None,
     ):
         if isinstance(token, API):
-            raise ValueError(
-                "You passed API instance to token parameter, use api parameter instead"
-            )
+            msg = "You passed API instance to token parameter, use api parameter instead"
+            raise ValueError(msg)
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()

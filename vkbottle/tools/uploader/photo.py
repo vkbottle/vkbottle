@@ -50,7 +50,8 @@ class PhotoToAlbumUploader(PhotoUploader):
         if not isinstance(paths_like, list):
             paths_like = [paths_like]
         if len(paths_like) > self.MAX_PHOTOS_PER_UPLOAD:
-            raise ValueError("You can upload up to 5 photos at once")
+            msg = "You can upload up to 5 photos at once"
+            raise ValueError(msg)
         server = await self.get_server(album_id=album_id, group_id=group_id, **params)
         files = {}
 
@@ -195,9 +196,8 @@ class PhotoChatFaviconUploader(PhotoUploader):
         self,
         **params,
     ) -> str:
-        raise NotImplementedError(
-            f"{self.__class__.__name__} does not support upload() method. Use raw_upload(...) instead."
-        )
+        msg = f"{self.__class__.__name__} does not support upload() method. Use raw_upload(...) instead."
+        raise NotImplementedError(msg)
 
     async def raw_upload(
         self,

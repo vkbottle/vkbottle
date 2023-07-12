@@ -89,7 +89,8 @@ class BaseMiddleware(Generic[T]):
         """Validate new context update data if needed"""
         if context_update is not None:
             if not isinstance(context_update, dict):
-                raise ValueError("Context update value should be an instance of dict")
+                msg = "Context update value should be an instance of dict"
+                raise ValueError(msg)
             self._new_context.update(context_update)
 
     async def pre(self) -> None:
