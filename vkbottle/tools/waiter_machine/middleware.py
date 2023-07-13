@@ -1,11 +1,13 @@
 import typing
+import types
+import datetime
 
 from vkbottle.dispatch.dispenser.builtin import BuiltinStateDispenser
 from vkbottle.dispatch.handlers.from_func_handler import FromFuncHandler
 from vkbottle.dispatch.middlewares.abc import BaseMiddleware
 
 if typing.TYPE_CHECKING:
-    from .machine import WaiterMachine
+    from .machine import WaiterMachine, Behaviour
     from .short_state import ShortState
 
 
@@ -36,6 +38,13 @@ class WaiterMiddleware(BaseMiddleware[dict]):
         if not short_state:
             return
 
+        if (
+            short_state.expiration is not None
+            and datetime.datetime.now() >= short_state.expiration
+        ):
+            await self.machine.drop(self.view, short_state.key)  # type: ignore
+            return
+
         handler: FromFuncHandler = FromFuncHandler(self.pass_runtime, *short_state.rules)
 
         result = await handler.filter(self.event)
@@ -45,17 +54,12 @@ class WaiterMiddleware(BaseMiddleware[dict]):
                 result = {}
             await handler.handle(self.event, short_state=short_state, **result)
         elif short_state.default_behaviour is not None:
-            value = short_state.default_behaviour
-            if callable(value):
-                value = value(self.event)
-
-            if return_handler := self.view.handler_return_manager.get_handler(value):
-                await return_handler(
-                    self.view.handler_return_manager,
-                    value,
-                    self.event,
-                    result,
-                )
+            await self.machine.call_behaviour(
+                self.view,  # type: ignore
+                short_state.default_behaviour,
+                self.event,
+                **result,
+            )
 
         self.stop("Runtime was passed to waiter")
 
