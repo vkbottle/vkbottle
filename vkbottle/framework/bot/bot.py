@@ -1,6 +1,4 @@
-from typing import TYPE_CHECKING, NoReturn, Optional, Tuple, overload
-
-from typing_extensions import deprecated  # type: ignore
+from typing import TYPE_CHECKING, NoReturn, Optional, Tuple
 
 from vkbottle.api import API
 from vkbottle.callback import BotCallback
