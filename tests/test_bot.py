@@ -241,7 +241,6 @@ async def test_rules(api: API):
         is False
     )
 
-    # todo: if args are more than args_count do join excess args with last
     assert (
         await base.CommandRule("cmd", ["!", "."], 1).check(fake_message(api, text="cmd test bar"))
         is False
