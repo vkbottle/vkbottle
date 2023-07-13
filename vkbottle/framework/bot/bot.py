@@ -22,42 +22,6 @@ if TYPE_CHECKING:
 
 
 class Bot(ABCFramework):
-    @deprecated(
-        "task_each_event is deprecated and will be removed in future versions",
-        stacklevel=0,
-    )
-    @overload
-    def __init__(
-        self,
-        token: Optional["Token"] = None,
-        api: Optional["ABCAPI"] = None,
-        polling: Optional["ABCPolling"] = None,
-        callback: Optional["ABCCallback"] = None,
-        loop_wrapper: Optional[LoopWrapper] = None,
-        router: Optional["ABCRouter"] = None,
-        labeler: Optional["ABCLabeler"] = None,
-        state_dispenser: Optional["ABCStateDispenser"] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
-        task_each_event: bool = ...,
-    ):
-        ...
-
-    @overload
-    def __init__(
-        self,
-        token: Optional["Token"] = None,
-        api: Optional["ABCAPI"] = None,
-        polling: Optional["ABCPolling"] = None,
-        callback: Optional["ABCCallback"] = None,
-        loop_wrapper: Optional[LoopWrapper] = None,
-        router: Optional["ABCRouter"] = None,
-        labeler: Optional["ABCLabeler"] = None,
-        state_dispenser: Optional["ABCStateDispenser"] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
-        task_each_event: Optional[bool] = None,
-    ):
-        ...
-
     def __init__(
         self,
         token: Optional["Token"] = None,
