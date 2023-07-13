@@ -56,6 +56,7 @@ nav:
           - Template: tools/template.md
           - Uploaders: tools/uploaders.md
           - VKScript: tools/vkscript.md
+          - Waiter Machine: tools/waiter-machine.md
       - Кастомизация зависимостей: modules.md
   - Туториал:
       - tutorial/index.md
