@@ -15,3 +15,5 @@
     - [State Dispenser](handling/state-dispenser.md)
     - [Middleware](handling/middleware.md)
     - [Rules](handling/rules.md)
+
+- [Builtin Rules](builtin_rules.md)

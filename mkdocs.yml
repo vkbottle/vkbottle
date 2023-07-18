@@ -34,6 +34,7 @@ nav:
               - State Dispenser: high-level/handling/state-dispenser.md
               - Middleware: high-level/handling/middleware.md
               - Rules: high-level/handling/rules.md
+          - Встроенные правила: high-level/builtin-rules.md
       - Интерфейсы низкого уровня:
           - API:
               - Работа с API: low-level/api.md
