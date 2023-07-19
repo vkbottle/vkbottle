@@ -781,12 +781,12 @@ files = [
 
 [[package]]
 name = "mkdocs-redirects"
-version = "1.2.0"
+version = "1.2.1"
 description = "A MkDocs plugin for dynamic page redirects to prevent broken links."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "mkdocs-redirects-1.2.0.tar.gz", hash = "sha256:ddd38267d49fdfa19fb2f25b4aed2fb53f0496c818bf3018009c8eaf6676a327"},
+    {file = "mkdocs-redirects-1.2.1.tar.gz", hash = "sha256:9420066d70e2a6bb357adf86e67023dcdca1857f97f07c7fe450f8f1fb42f861"},
 ]
 
 [package.dependencies]
