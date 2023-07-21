@@ -118,4 +118,105 @@ assert rst == {"eggs": 11}
 
 Используется для того чтобы отлавливать сообщения с геометкой.
 
-**WIP ...**
+## LevenshteinRule
+
+`LevenshteinRule(levenshtein_texts, max_distance: int = 1)`
+
+Используется для fuzzy string matching'а.
+
+Может принимать max_distance - максимальное отклонение от заданного текста.
+
+
+## MessageLengthRule
+
+`MessageLengthRule(min_length: int)`
+
+Используется для ограничения минимальной длины текстового сообщения.
+
+## ChatActionRule
+
+`ChatActionRule(chat_action_types)`
+
+Используется для отлова событий в беседах (например: `chat_invite_user`). [Документация ВК по chat actions](https://dev.vk.com/reference/objects/message#action)
+
+## PayloadRule
+
+`PayloadRule(payload)`
+
+Проверяет что у сообщения payload равен одному из данных.
+
+## PayloadContainsRule
+
+`PayloadContainsRule(payload_part)`
+
+Проверяет что в payload сообщения содержит данную часть.
+
+## PayloadMapRule
+
+`PayloadMapRule(payload_map)`
+
+Используется для создания ассоциаций необходимых значений и типов в payload сообщений
+
+Например:
+
+Такой payload как:
+
+```json
+{"name": "boba", "data": {"action": "do", "number": 12}}
+```
+
+Выражается таким payload map:
+
+```python
+PayloadMapRule({"name": str, "data": {"action": str, "number": int}})
+```
+
+Вместо типа данных так же можно передать валидатор (`ABCValidator`), функцию (она будет вызвана со значением из полезной нагрузки сообщения) или literal-значения, например, если `"name"` в полезной нагрузке должен быть всегда `"boba"`, можно указать нужное значение в маппинге.
+
+Пример:
+
+```python
+PayloadMapRule(
+    {
+        "name": "boba",
+        "data": {
+            "action": lambda x: x in ("do", "undo"),
+            "number": int,
+        }
+    }
+)
+```
+
+## FromUserRule
+
+`FromUserRule(from_user: bool = True)`
+
+Используется для проверки что сообщение было отправлено пользователем, а не ботом.
+
+При `from_user = False`, работает в обратную сторону, проверяет что сообщение отправлено ботом.
+
+## FuncRule
+
+`FuncRule(func)`
+
+Принимает функцию, которая будет вызвана с единственным аргументом - событием. Функция должна вернуть bool или dict с обновлением контекста.
+
+## CoroutineRule
+
+`CoroutineRule(coro)`
+
+Ответ проверки правила получается из переданной корутины.
+
+## StateRule
+
+`StateRule(state)`
+
+Нужно для стейт-машины, проверяет что источник ивента находится в переданном состоянии.
+
+Если переданное состояние = None, то правило проверяет чтобы источник не находился ни в каком состоянии.
+
+## StateGroupRule
+
+`StateGroupRule(state_group)`
+
+Проверяет что пользователь находится в нужной коллекции состояний.
