@@ -1,6 +1,6 @@
 name: Предложить новый функционал
 description: Новая функциональность для фреймворка
-labels: enhancement
+labels: feature-request
 assignees: "timoniq"
 body:
   - type: textarea
