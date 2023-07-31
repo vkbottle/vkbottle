@@ -40,6 +40,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type["ABCRule"]] = {
     "reply_message": base.ReplyMessageRule,
     "macro": base.MacroRule,
     "text": base.VBMLRule,
+    "fuzzy": base.FuzzyTextRule,
 }
 
 CUSTOM_RULES_TYPE = Dict[str, Type["ABCRule"]]

@@ -120,12 +120,22 @@ assert rst == {"eggs": 11}
 
 ## LevenshteinRule
 
+!!! info "Deprecation"
+    На данный момент обсуждается удаление этого правила из новых версий из-за его неоптимальности. Вместо этого рекомендуется использовать `FuzzyTextRule`
+
 `LevenshteinRule(levenshtein_texts, max_distance: int = 1)`
 
 Используется для fuzzy string matching'а.
 
 Может принимать max_distance - максимальное отклонение от заданного текста.
 
+## FuzzyTextRule
+
+`FuzzyTextRule(texts, min_ratio: float = 0.7)`
+
+Используется для fuzzy string matching'а.
+
+Настраивается через min_ratio - минимальная _похожесть_ сообщения с переданным текстом (от 0 до 1).
 
 ## MessageLengthRule
 

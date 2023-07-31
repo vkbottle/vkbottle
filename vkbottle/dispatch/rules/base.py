@@ -1,3 +1,4 @@
+import difflib
 import inspect
 import re
 import types
@@ -229,6 +230,20 @@ class LevenshteinRule(ABCRule[BaseMessageMin]):
         )
 
 
+class FuzzyTextRule(ABCRule[BaseMessageMin]):
+    def __init__(self, texts: Union[List[str], str], min_ratio: float = 0.7) -> None:
+        if isinstance(texts, str):
+            texts = [texts]
+        self.texts = texts
+        self.min_ratio = min_ratio
+
+    async def check(self, event: BaseMessageMin) -> bool:
+        return any(
+            difflib.SequenceMatcher(None, event.text, text).ratio() >= self.min_ratio
+            for text in self.texts
+        )
+
+
 class MessageLengthRule(ABCRule[BaseMessageMin]):
     def __init__(self, min_length: int):
         self.min_length = min_length
@@ -429,4 +444,5 @@ __all__ = (
     "StateRule",
     "StickerRule",
     "VBMLRule",
+    "FuzzyTextRule",
 )
