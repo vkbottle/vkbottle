@@ -27,3 +27,5 @@
     Все встроенные рулзы работают только с объектами `Message` и `MessageEvent` из `vkbottle.bot`, для обработки сырых евентов нужно писать свою реализацию.
 
 Посмотреть логику рулзов можно [здесь](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/dispatch/rules/base.py)
+
+Посмотреть описание встроенных правил можно [здесь](https://vkbottle.readthedocs.io/ru/dev/high-level/builtin-rules/)
