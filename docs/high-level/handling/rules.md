@@ -28,4 +28,4 @@
 
 Посмотреть логику рулзов можно [здесь](https://github.com/vkbottle/vkbottle/blob/master/vkbottle/dispatch/rules/base.py)
 
-Посмотреть описание встроенных правил можно [здесь](https://vkbottle.readthedocs.io/ru/dev/high-level/builtin-rules/)
+Посмотреть описание встроенных правил можно [здесь](https://github.com/vkbottle/vkbottle/blob/dev/docs/high-level/builtin-rules.md)
