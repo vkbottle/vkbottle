@@ -89,6 +89,6 @@ html {
   background-color: var(--vkbottle-bg-darkest);
 }
 
-.injected {
+readthedocs_flyout {
   display: none;
 }
