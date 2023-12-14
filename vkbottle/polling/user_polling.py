@@ -71,7 +71,7 @@ class UserPolling(ABCPolling):
                 server["ts"] = event["ts"]
                 retry_count = 0
                 yield event
-            except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):  # noqa: PERF203
+            except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
                 logger.error("Unable to make request to Longpoll, retrying...")
                 await asyncio.sleep(0.1 * retry_count)
                 server = {}

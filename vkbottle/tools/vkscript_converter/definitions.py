@@ -184,7 +184,7 @@ def while_cycle(d: ast.While):
         msg = "You can't use while or/else in vkscript"
         raise ConverterError(msg)
     body = "".join(find(line) for line in d.body)
-    return f"while({find(d.test)}" + "){" + body + "};"  # noqa: ISC003
+    return f"while({find(d.test)}" + "){" + body + "};"
 
 
 @converter(ast.For)

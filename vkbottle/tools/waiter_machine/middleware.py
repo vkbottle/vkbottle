@@ -1,13 +1,12 @@
-import typing
-import types
 import datetime
+import typing
 
 from vkbottle.dispatch.dispenser.builtin import BuiltinStateDispenser
 from vkbottle.dispatch.handlers.from_func_handler import FromFuncHandler
 from vkbottle.dispatch.middlewares.abc import BaseMiddleware
 
 if typing.TYPE_CHECKING:
-    from .machine import WaiterMachine, Behaviour
+    from .machine import WaiterMachine
     from .short_state import ShortState
 
 
@@ -64,5 +63,5 @@ class WaiterMiddleware(BaseMiddleware[dict]):
         self.stop("Runtime was passed to waiter")
 
     async def pass_runtime(self, event, short_state: "ShortState", **context) -> None:
-        setattr(short_state.event, "context", (event, context))  # ruff: noqa
+        setattr(short_state.event, "context", (event, context))  # noqa: B010
         short_state.event.set()
