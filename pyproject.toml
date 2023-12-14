@@ -206,6 +206,7 @@ ignore = [
   "S311",    # Standard pseudo-random generators are not suitable for cryptographic purposes
   "S301",    # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue
   "FA100",   # `__future__` import "annotations" missing
+  "B027",    # {name} is an empty method in an abstract base class, but has no abstract decorator
 ]
 
 [tool.ruff.per-file-ignores]
