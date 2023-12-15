@@ -84,7 +84,7 @@ class WaiterMachine:
 
         await event.wait()
 
-        e, ctx = getattr(event, "context")  # noqa: B009
+        e, ctx = event.context  # type: ignore
         self.storage[view_name].pop(key)
 
         return e, ctx
