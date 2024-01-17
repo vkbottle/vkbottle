@@ -1,7 +1,7 @@
 name: Сообщение об ошибке
 description: Сообщение о произошедшем баге во время работы с фреймворком
-labels: bug
-assignees: 'timoniq'
+labels: ["bug"]
+assignees: ["FeeeeK"]
 body:
   - type: checkboxes
     attributes:
@@ -30,7 +30,7 @@ body:
       placeholder: |
         from vkbottle.bot import Bot, Message
         ...
-      render: python
+      render: python3
 
   - type: textarea
     attributes:
@@ -40,4 +40,3 @@ body:
         Traceback (most recent call last):
         File "main.py", line 1, in <module>
         ...
-      render: shell
