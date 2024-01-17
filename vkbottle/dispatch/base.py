@@ -20,7 +20,7 @@ class Router(ABCRouter):
                 if not await view.process_event(event):
                     continue
                 await view.handle_event(event, ctx_api, self.state_dispenser)
-            except Exception as e:  # noqa: PERF203
+            except Exception as e:
                 await self.error_handler.handle(e)
 
     def construct(

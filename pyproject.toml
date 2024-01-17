@@ -123,7 +123,7 @@ select = [
   "B",     # flake8-bugbear
   "A",     # flake8-builtins
   # "COM",   # flake8-commas
-  "CPY",   # Copyright-related rules
+  # "CPY",   # Copyright-related rules
   "C40",   # flake8-comprehensions
   # "DTZ",   # flake8-datetimez
   "T10",   # flake8-debugger
@@ -172,6 +172,7 @@ ignore = [
   "BLE",    # flake8-blind-except
   "FBT",    # flake8-boolean-trap
   "COM",    # flake8-commas
+  "CPY",   # Copyright-related rules
   "DTZ",    # flake8-datetimez
   "DJ",     # flake8-Django
   "INP",    # flake8-no-pep420

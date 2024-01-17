@@ -27,7 +27,7 @@ def types(api):
     _a = {"a": 1, "b": 2}
     _a = True
     _a = 3 - 3.3 + 3.0 * 0.3 / 33 % 3
-    _a = "string" + "string"  # noqa: ISC003
+    _a = "string" + "string"
 
     if a < 5:
         pass

@@ -1,7 +1,7 @@
 import asyncio
-import typing
 import datetime
 import types
+import typing
 
 from vkbottle.dispatch.rules.abc import ABCRule
 from vkbottle.dispatch.views.abc import ABCDispenseView
@@ -21,18 +21,18 @@ class WaiterMachine:
     async def drop(
         self,
         dispensable_view: ABCDispenseView[dict, EventModel],
-        id: Identificator,
+        identifier: Identificator,
         **context,
     ) -> None:
         view_name = dispensable_view.__class__.__name__
         if view_name not in self.storage:
-            raise LookupError("No record of view {} found".format(view_name))
+            msg = f"No record of view {view_name} found"
+            raise LookupError(msg)
 
-        short_state = self.storage[view_name].pop(id, None)
+        short_state = self.storage[view_name].pop(identifier, None)
         if not short_state:
-            raise LookupError(
-                "Waiter with identificator {} is not found for view {}".format(id, view_name)
-            )
+            msg = f"Waiter with identificator {identifier} is not found for view {view_name}"
+            raise LookupError(msg)
 
         waiters: typing.Iterable[asyncio.Future] = short_state.event._waiters  # type: ignore
 
@@ -84,7 +84,7 @@ class WaiterMachine:
 
         await event.wait()
 
-        e, ctx = getattr(event, "context")  # ruff: noqa
+        e, ctx = event.context  # type: ignore
         self.storage[view_name].pop(key)
 
         return e, ctx

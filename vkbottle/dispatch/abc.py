@@ -18,6 +18,9 @@ class ABCRouter(ABC):
     state_dispenser: "ABCStateDispenser"
     error_handler: "ABCErrorHandler"
 
+    def __init__(self):
+        self.views = {}
+
     @abstractmethod
     async def route(self, event: dict, ctx_api: "ABCAPI") -> None:
         pass
