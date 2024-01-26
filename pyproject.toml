@@ -52,7 +52,7 @@ colorama = "^0.4.6"
 
 [tool.poetry.group.dev.dependencies]
 # Lint
-black = "^23.1.0"
+black = ">=23.1,<25.0"
 mypy = "^1.0.0"
 mypy-extensions = "^1.0.0"
 # mypy stubs
