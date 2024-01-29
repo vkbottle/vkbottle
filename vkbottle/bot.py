@@ -17,8 +17,7 @@ MessageEvent = MessageEventMin
     "https://vkbottle.rtfd.io/ru/latest/tutorial/code-separation/",
     stacklevel=0,
 )
-class Blueprint(BotBlueprint):
-    ...
+class Blueprint(BotBlueprint): ...
 
 
 __all__ = (
