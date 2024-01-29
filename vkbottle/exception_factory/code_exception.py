@@ -33,14 +33,14 @@ class CodeException(Exception):
                     break
 
     @overload
-    def __class_getitem__(cls: Type[T_CodeException], code_or_codes: int) -> Type[T_CodeException]:
-        ...
+    def __class_getitem__(
+        cls: Type[T_CodeException], code_or_codes: int
+    ) -> Type[T_CodeException]: ...
 
     @overload
     def __class_getitem__(
         cls: Type[T_CodeException], code_or_codes: Tuple[int, ...]
-    ) -> Tuple[Type[T_CodeException], ...]:
-        ...
+    ) -> Tuple[Type[T_CodeException], ...]: ...
 
     def __class_getitem__(
         cls: Type[T_CodeException], code_or_codes: Union[int, Tuple[int, ...]]

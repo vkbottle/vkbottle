@@ -11,17 +11,14 @@ class HandlerProperty(NamedTuple):
 
 class ABCReturnManager(ABC):
     @abstractmethod
-    def get_handler(self, value: Any) -> Any:
-        ...
+    def get_handler(self, value: Any) -> Any: ...
 
     @abstractproperty
-    def handlers(self) -> Any:
-        ...
+    def handlers(self) -> Any: ...
 
     @classmethod
     @abstractmethod
-    def instance_of(cls, types: Any) -> Any:
-        ...
+    def instance_of(cls, types: Any) -> Any: ...
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}>"
