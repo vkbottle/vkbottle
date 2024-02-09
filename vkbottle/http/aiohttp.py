@@ -102,7 +102,7 @@ class SingleAiohttpClient(AiohttpClient):
 
     def __new__(cls, *args: Any, **kwargs: Any) -> Self:
         if cls.__instance__ is None:
-            cls.__instance__ = super().__new__(cls, *args, **kwargs)
+            cls.__instance__ = super().__new__(cls)
         return cls.__instance__  # type: ignore[return-value]
 
     async def __aexit__(
