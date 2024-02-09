@@ -100,7 +100,7 @@ class AiohttpClient(ABCHTTPClient):
 class SingleAiohttpClient(AiohttpClient):
     __instance__: Optional[Self] = None
 
-    def __new__(cls, *args: Any, **kwargs: Any) -> Self:
+    def __new__(cls, *args: Any, **kwargs: Any) -> Self:  # noqa: ARG003
         if cls.__instance__ is None:
             cls.__instance__ = super().__new__(cls)
         return cls.__instance__  # type: ignore[return-value]
