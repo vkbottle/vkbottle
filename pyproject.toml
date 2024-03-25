@@ -62,7 +62,7 @@ ruff = ">=0.0.246,<0.1.16"
 # Tests
 pytest = ">=7.2.1,<9.0.0"
 pytest-asyncio = ">=0.20.3,<0.24.0"
-pytest-cov = "^4.0.0"
+pytest-cov = ">=4,<6"
 pytest-mock = "^3.10.0"
 # Pre-commit
 pre-commit = ">=2.19,<4.0"
