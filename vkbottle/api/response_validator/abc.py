@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, NoReturn, Union
+from typing import TYPE_CHECKING, Any, Union
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
@@ -17,5 +17,5 @@ class ABCResponseValidator(ABC):
         data: dict,
         response: Any,
         ctx_api: Union["ABCAPI", "API"],
-    ) -> Union[Any, NoReturn]:
+    ) -> Any:
         pass

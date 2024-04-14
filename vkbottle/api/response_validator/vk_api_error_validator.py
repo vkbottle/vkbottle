@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, NoReturn, Union
+from typing import TYPE_CHECKING, Any, Union
 
 from vkbottle.exception_factory import CaptchaError, VKAPIError
 from vkbottle.modules import logger
@@ -20,7 +20,7 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         data: dict,
         response: Any,
         ctx_api: Union["ABCAPI", "API"],
-    ) -> Union[Any, NoReturn]:
+    ) -> Any:
         if "error" not in response:
             if "response" not in response:
                 request_params = [{"key": key, "value": value} for key, value in data.items()]
