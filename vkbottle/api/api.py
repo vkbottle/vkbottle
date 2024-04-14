@@ -93,9 +93,7 @@ class API(ABCAPI):
             logger.debug("Request {} with {} data returned {}", method, data, response)
             yield await self.validate_response(method, data, response)  # type: ignore
 
-    async def validate_response(
-        self, method: str, data: dict, response: Union[dict, str]
-    ) -> Any:
+    async def validate_response(self, method: str, data: dict, response: Union[dict, str]) -> Any:
         """Validates response from VK,
         to change validations change API.response_validators (list of ResponseValidator's)"""
         for validator in self.response_validators:
