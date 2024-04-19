@@ -105,7 +105,7 @@ class PhotoWallUploader(PhotoUploader):
         return photos[0]
 
     async def get_server(self, **kwargs) -> dict:
-        return (await self.api.request("photos.getWallUploadServer", {}))["response"]
+        return (await self.api.request("photos.getWallUploadServer", kwargs))["response"]
 
 
 class PhotoFaviconUploader(PhotoUploader):
