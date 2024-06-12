@@ -6,6 +6,7 @@ try:
 except ImportError:
     from pydantic import BaseModel, validator
 
+
 class BaseStateGroup(str, Enum):
     def __str__(self) -> str:
         return get_state_repr(self)

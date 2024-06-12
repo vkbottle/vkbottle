@@ -1,4 +1,5 @@
 from typing import List, Optional
+
 try:
     from pydantic.v1 import root_validator
 except ImportError:
