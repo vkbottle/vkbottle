@@ -42,7 +42,7 @@ classifiers = [
 python = "^3.8"
 aiohttp = "^3.8.1"
 choicelib = "^0.1.5"
-pydantic = "^1.10.4"
+pydantic = ">=1.10.4"
 vbml = "^1.1.post1"
 vkbottle-types = "^5.131.146.14"
 aiofiles = "23.1.0"
