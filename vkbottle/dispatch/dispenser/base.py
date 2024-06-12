@@ -27,7 +27,7 @@ class StatePeer(BaseModel):
     state: str
     payload: dict = {}
 
-    @validator("state", pre=False)
+    @validator("state", pre=True)
     def validate_state(cls, v: Any) -> str:
         if isinstance(v, BaseStateGroup):
             return StateRepresentation(v)
