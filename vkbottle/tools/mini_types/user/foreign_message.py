@@ -1,6 +1,9 @@
 from typing import List, Optional
 
-from pydantic import root_validator
+try:
+    from pydantic.v1 import root_validator
+except ImportError:
+    from pydantic import root_validator
 
 from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
 

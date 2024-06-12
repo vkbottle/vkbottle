@@ -1,7 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Callable, List, Optional, Union
 
-from pydantic import root_validator
+try:
+    from pydantic.v1 import root_validator
+except ImportError:
+    from pydantic import root_validator
+
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
