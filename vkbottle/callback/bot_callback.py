@@ -129,9 +129,8 @@ class BotCallback(ABCCallback):
     @property
     def api(self) -> "ABCAPI":
         if self._api is None:
-            raise NotImplementedError(
-                "You must construct callback with API before try to access api property of Callback"
-            )
+            msg = "You must construct callback with API before try to access api property of Callback"
+            raise NotImplementedError(msg)
         return self._api
 
     @api.setter

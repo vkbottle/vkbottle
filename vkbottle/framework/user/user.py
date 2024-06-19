@@ -1,7 +1,5 @@
 import asyncio
-from typing import TYPE_CHECKING, NoReturn, Optional, Type, overload
-
-from typing_extensions import deprecated  # type: ignore
+from typing import TYPE_CHECKING, NoReturn, Optional, Type
 
 from vkbottle.api import API
 from vkbottle.dispatch import BuiltinStateDispenser, Router
@@ -21,41 +19,7 @@ if TYPE_CHECKING:
 
 
 class User(ABCFramework):
-    @deprecated(
-        "task_each_event is deprecated and will be removed in future versions",
-        stacklevel=0,
-    )
-    @overload
     def __init__(
-        self,
-        token: Optional["Token"] = None,
-        api: Optional["ABCAPI"] = None,
-        polling: Optional["ABCPolling"] = None,
-        loop_wrapper: Optional[LoopWrapper] = None,
-        router: Optional["ABCRouter"] = None,
-        labeler: Optional["ABCLabeler"] = None,
-        state_dispenser: Optional["ABCStateDispenser"] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
-        task_each_event: bool = ...,
-    ):
-        ...
-
-    @overload
-    def __init__(
-        self,
-        token: Optional["Token"] = None,
-        api: Optional["ABCAPI"] = None,
-        polling: Optional["ABCPolling"] = None,
-        loop_wrapper: Optional[LoopWrapper] = None,
-        router: Optional["ABCRouter"] = None,
-        labeler: Optional["ABCLabeler"] = None,
-        state_dispenser: Optional["ABCStateDispenser"] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
-        task_each_event: Optional[bool] = None,
-    ):
-        ...
-
-    def __init__(  # type: ignore
         self,
         token: Optional["Token"] = None,
         api: Optional["ABCAPI"] = None,
@@ -68,9 +32,8 @@ class User(ABCFramework):
         task_each_event=None,
     ):
         if isinstance(token, API):
-            raise ValueError(
-                "You passed API instance to token parameter, use api parameter instead"
-            )
+            msg = "You passed API instance to token parameter, use api parameter instead"
+            raise ValueError(msg)
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()

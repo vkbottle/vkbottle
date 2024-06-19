@@ -72,13 +72,14 @@ class LoopWrapper:
         tasks = asyncio.all_tasks(self.loop)
         try:
             while tasks:
-                results = self.loop.run_until_complete(
-                    asyncio.gather(*tasks, return_exceptions=True)
+                tasks_results, _ = self.loop.run_until_complete(
+                    asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION)
                 )
-                for result in results:
-                    if not isinstance(result, Exception):
-                        continue
-                    logger.exception(result)
+                for task_result in tasks_results:
+                    try:
+                        task_result.result()
+                    except Exception as exc:  # noqa: PERF203
+                        logger.exception(exc)
                 tasks = asyncio.all_tasks(self.loop)
         except KeyboardInterrupt:
             logger.info("Caught keyboard interrupt. Shutting down...")
@@ -99,7 +100,8 @@ class LoopWrapper:
         if asyncio.iscoroutinefunction(task) or isinstance(task, DelayedTask):
             task = task()  # type: ignore
         elif not asyncio.iscoroutine(task):
-            raise TypeError("Task should be coroutine or coroutine function")
+            msg = "Task should be coroutine or coroutine function"
+            raise TypeError(msg)
 
         if self.loop and self.loop.is_running():
             self.loop.create_task(task)

@@ -29,7 +29,7 @@ class MessageEventMin(MessageEvent):
         return self.object.payload
 
     @property
-    def conversation_message_id(self) -> int:
+    def conversation_message_id(self) -> Optional[int]:
         """alias to event.object.conversation_message_id"""
         return self.object.conversation_message_id
 
@@ -45,7 +45,16 @@ class MessageEventMin(MessageEvent):
             "event_data": event_data.json(),
         }
         data.update(kwargs)
-        return (await self.ctx_api.request("messages.sendMessageEventAnswer", data))["response"]
+        return await self.ctx_api.messages.send_message_event_answer(**data)
+
+    async def send_empty_answer(self, **kwargs) -> int:
+        data = {
+            "event_id": self.event_id,
+            "user_id": self.user_id,
+            "peer_id": self.peer_id,
+        }
+        data.update(kwargs)
+        return await self.ctx_api.messages.send_message_event_answer(**data)
 
     async def show_snackbar(self, text: str) -> int:
         return await self.send_message_event_answer(ShowSnackbarEvent(text=text))
@@ -76,7 +85,7 @@ class MessageEventMin(MessageEvent):
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
         data["peer_id"] = self.peer_id
         data["conversation_message_id"] = self.conversation_message_id
-        return (await self.ctx_api.request("messages.edit", data))["response"]
+        return await self.ctx_api.messages.edit(**data)
 
     async def send_message(
         self,

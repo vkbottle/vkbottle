@@ -16,8 +16,7 @@ Message = MessageMin
     "https://vkbottle.rtfd.io/ru/latest/tutorial/code-separation/",
     stacklevel=0,
 )
-class Blueprint(UserBlueprint):
-    ...
+class Blueprint(UserBlueprint): ...
 
 
 __all__ = (

@@ -32,6 +32,7 @@ nav:
               - State Dispenser: high-level/handling/state-dispenser.md
               - Middleware: high-level/handling/middleware.md
               - Rules: high-level/handling/rules.md
+          - Встроенные правила: high-level/builtin-rules.md
       - Интерфейсы низкого уровня:
           - API:
               - Работа с API: low-level/api.md
@@ -54,6 +55,7 @@ nav:
           - Template: tools/template.md
           - Uploaders: tools/uploaders.md
           - VKScript: tools/vkscript.md
+          - Waiter Machine: tools/waiter-machine.md
       - Кастомизация зависимостей: modules.md
   - Туториал:
       - tutorial/index.md

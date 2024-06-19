@@ -10,7 +10,7 @@ class CtxStorage(ABCStorage, BaseContext):
     Documentation: https://vkbottle.rtfd.io/ru/latest/tools/storage
     """
 
-    storage: dict = {}
+    storage: dict
 
     def __init__(
         self,

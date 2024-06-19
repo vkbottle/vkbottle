@@ -6,19 +6,20 @@ from typing import Protocol
 
 from choicelib import choice_in_order
 
+try:
+    import pydantic.v1 as pydantic
+except ImportError:
+    import pydantic  # noqa: F401
+
 
 class JSONModule(Protocol):
-    def loads(self, s: str) -> dict:
-        ...
+    def loads(self, s: str) -> dict: ...
 
-    def dumps(self, o: dict) -> str:
-        ...
+    def dumps(self, o: dict) -> str: ...
 
-    def load(self, f: str) -> dict:
-        ...
+    def load(self, f: str) -> dict: ...
 
-    def dump(self, o: dict, f: str) -> None:
-        ...
+    def dump(self, o: dict, f: str) -> None: ...
 
 
 json: JSONModule = choice_in_order(

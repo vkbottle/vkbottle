@@ -22,9 +22,8 @@ class Converter:
 
     def find_definition(self, d):
         if d.__class__ not in self.definitions:
-            raise ConverterError(
-                f"Definition for {d.__class__} is undefined. Maybe vkscript doesn't support it"
-            )
+            msg = f"Definition for {d.__class__} is undefined. Maybe vkscript doesn't support it"
+            raise ConverterError(msg)
         return self.definitions[d.__class__](d)
 
     def scriptify(self, func: Callable, *args_values, **kwargs_values) -> str:
@@ -33,14 +32,16 @@ class Converter:
         code: ast.FunctionDef = ast.parse(source).body[0]  # type: ignore
         # Check if function has *args or **kwargs
         if code.args.vararg or code.args.kwarg:
-            raise ConverterError("VKScript converter doesn't support *args and **kwargs")
+            msg = "VKScript converter doesn't support *args and **kwargs"
+            raise ConverterError(msg)
         # Get list of function arguments names
         args = [a.arg for a in code.args.args]
         # Get list of function arguments default values
         defaults = [self.find_definition(d) for d in code.args.defaults]
         # Check that first argument is api
         if not args or args[0] != "api":
-            raise ConverterError("First argument must be api")
+            msg = "First argument must be api"
+            raise ConverterError(msg)
         # Remove api from args
         args = args[1:]
         # Cycle through function arguments and check if they values are passed
@@ -52,7 +53,8 @@ class Converter:
         # eg func(a, b=2, c=3) -> func(1, 3), args = [a=1, b=3, c=3], defaults = [2, 3]
         for arg in args[::-1]:
             if not defaults and arg not in kwargs_values:
-                raise ConverterError(f"Argument {arg} is not provided")
+                msg = f"Argument {arg} is not provided"
+                raise ConverterError(msg)
             if arg in kwargs_values:
                 continue
             kwargs_values[arg] = defaults.pop()

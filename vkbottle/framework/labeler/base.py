@@ -40,6 +40,7 @@ DEFAULT_CUSTOM_RULES: Dict[str, Type["ABCRule"]] = {
     "reply_message": base.ReplyMessageRule,
     "macro": base.MacroRule,
     "text": base.VBMLRule,
+    "fuzzy": base.FuzzyTextRule,
 }
 
 CUSTOM_RULES_TYPE = Dict[str, Type["ABCRule"]]
@@ -100,10 +101,8 @@ class BaseLabeler(ABCLabeler):
         self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> "LabeledMessageHandler":
         if any(not isinstance(rule, ABCRule) for rule in rules):
-            raise ValueError(
-                "All rules must be subclasses of ABCRule or rule shortcuts "
-                "(https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
-            )
+            msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
+            raise ValueError(msg)
 
         def decorator(func):
             self.message_view.handlers.append(
@@ -123,10 +122,8 @@ class BaseLabeler(ABCLabeler):
         self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> "LabeledMessageHandler":
         if any(not isinstance(rule, ABCRule) for rule in rules):
-            raise ValueError(
-                "All rules must be subclasses of ABCRule or rule shortcuts "
-                "(https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
-            )
+            msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
+            raise ValueError(msg)
 
         def decorator(func):
             self.message_view.handlers.append(
@@ -147,10 +144,8 @@ class BaseLabeler(ABCLabeler):
         self, *rules: "ABCRule", blocking: bool = True, **custom_rules
     ) -> "LabeledMessageHandler":
         if any(not isinstance(rule, ABCRule) for rule in rules):
-            raise ValueError(
-                "All rules must be subclasses of ABCRule or rule shortcuts "
-                "(https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
-            )
+            msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
+            raise ValueError(msg)
 
         def decorator(func):
             self.message_view.handlers.append(

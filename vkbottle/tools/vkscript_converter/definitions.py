@@ -181,9 +181,10 @@ def name(d: ast.Name):
 @converter(ast.While)
 def while_cycle(d: ast.While):
     if d.orelse:
-        raise ConverterError("You can't use while or/else in vkscript")
+        msg = "You can't use while or/else in vkscript"
+        raise ConverterError(msg)
     body = "".join(find(line) for line in d.body)
-    return f"while({find(d.test)}" + "){" + body + "};"  # noqa: ISC003
+    return f"while({find(d.test)}" + "){" + body + "};"
 
 
 @converter(ast.For)
@@ -239,7 +240,8 @@ def call(d: ast.Call):
                 f"API.{to_camel_case(d.func.value.attr)}.{to_camel_case(d.func.attr)}"
                 "({" + dispatch_keywords(d.keywords) + "})"
             )
-    raise ConverterError(f"Call for {getattr(d.func, 'attr', d.func.__dict__)} is not referenced")
+    msg = f"Call for {getattr(d.func, 'attr', d.func.__dict__)} is not referenced"
+    raise ConverterError(msg)
 
 
 @converter(ast.Pass)
@@ -289,7 +291,8 @@ def subscript(d: ast.Subscript):
         if d.slice.value.__class__ == str:  # type: ignore
             return f"{value}.{d.slice.value.s}"  # type: ignore
         return f"{value}[{find(d.slice.value)}]"  # type: ignore
-    raise ConverterError(f"Slice {d.slice} is not referenced")
+    msg = f"Slice {d.slice} is not referenced"
+    raise ConverterError(msg)
 
 
 @converter(ast.Attribute)

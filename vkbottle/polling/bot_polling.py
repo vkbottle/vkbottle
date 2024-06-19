@@ -91,9 +91,10 @@ class BotPolling(ABCPolling):
     @property
     def api(self) -> "ABCAPI":
         if self._api is None:
-            raise NotImplementedError(
+            msg = (
                 "You must construct polling with API before try to access api property of Polling"
             )
+            raise NotImplementedError(msg)
         return self._api
 
     @api.setter

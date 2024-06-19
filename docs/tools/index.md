@@ -8,3 +8,4 @@
 * [Template](template.md)
 * [Uploaders](uploaders.md)
 * [VKScript](vkscript.md)
+* [Waiter Machine](waiter-machine.md)

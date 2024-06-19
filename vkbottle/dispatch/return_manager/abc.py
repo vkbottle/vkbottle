@@ -9,26 +9,22 @@ class HandlerProperty(NamedTuple):
     handler: Callable
 
 
-# TODO: fix types here
-class ABCRetunManager(ABC):
+class ABCReturnManager(ABC):
     @abstractmethod
-    def get_handler(self, value: Any) -> Any:
-        ...
+    def get_handler(self, value: Any) -> Any: ...
 
     @abstractproperty
-    def handlers(self) -> Any:
-        ...
+    def handlers(self) -> Any: ...
 
     @classmethod
     @abstractmethod
-    def instance_of(cls, types: Any) -> Any:
-        ...
+    def instance_of(cls, types: Any) -> Any: ...
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}>"
 
 
-class BaseReturnManager(ABCRetunManager):
+class BaseReturnManager(ABCReturnManager):
     def get_handler(self, value: Any) -> Optional[Callable]:
         for types, handler in self.handlers.items():
             if isinstance(value, types):

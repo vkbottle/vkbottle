@@ -162,7 +162,15 @@ async def test_bot_scopes():
 
 
 def fake_message(ctx_api: API, **data: Any) -> Message:
-    message = {"peer_id": 1, "date": 1, "from_id": 1, "text": "test", "out": 0, "id": 1}
+    message = {
+        "peer_id": 1,
+        "date": 1,
+        "from_id": 1,
+        "text": "test",
+        "out": 0,
+        "id": 1,
+        "fwd_messages": [],
+    }
     message.update(data)
     return message_min(
         {
@@ -233,7 +241,6 @@ async def test_rules(api: API):
         is False
     )
 
-    # todo: if args are more than args_count do join excess args with last
     assert (
         await base.CommandRule("cmd", ["!", "."], 1).check(fake_message(api, text="cmd test bar"))
         is False

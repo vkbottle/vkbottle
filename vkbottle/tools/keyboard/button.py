@@ -16,9 +16,11 @@ KEYBOARD_ACTIONS = {
 class KeyboardButton:
     def __init__(self, action: "ABCAction", color: Optional["KeyboardButtonColor"] = None):
         if not isinstance(action, ABCAction):
-            raise TypeError("action must be instance of ABCAction")
+            msg = "action must be instance of ABCAction"
+            raise TypeError(msg)
         if color and not isinstance(color, KeyboardButtonColor):
-            raise TypeError("color must be instance of KeyboardButtonColor")
+            msg = "color must be instance of KeyboardButtonColor"
+            raise TypeError(msg)
         self.action = action
         self.color = color
 
@@ -37,7 +39,8 @@ class KeyboardButton:
         if color:
             color = KeyboardButtonColor(color)
         if action_type is None:
-            raise ValueError("KeyboardButton action type is not defined")
+            msg = "KeyboardButton action type is not defined"
+            raise ValueError(msg)
 
         return cls(action_type(**data), color)
 

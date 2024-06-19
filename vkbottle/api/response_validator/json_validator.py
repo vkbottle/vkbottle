@@ -1,5 +1,5 @@
 import contextlib
-from typing import TYPE_CHECKING, Any, NoReturn, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 from vkbottle.modules import json, logger
 
@@ -23,7 +23,7 @@ class JSONResponseValidator(ABCResponseValidator):
         data: dict,
         response: Any,
         ctx_api: Union["ABCAPI", "API"],
-    ) -> Union[Any, NoReturn]:
+    ) -> Any:
         if isinstance(response, dict):
             return response
         elif isinstance(response, str):

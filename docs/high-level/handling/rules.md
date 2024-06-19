@@ -22,6 +22,7 @@
 - `regexp` и `regex` - от `RegexRule`
 - `macro` - от `MacroRule`
 - `text` - от `VBMLRule`
+- `fuzzy` - от `FuzzyTextRule`
 
 !!! warning "Внимание"
     Все встроенные рулзы работают только с объектами `Message` и `MessageEvent` из `vkbottle.bot`, для обработки сырых евентов нужно писать свою реализацию.

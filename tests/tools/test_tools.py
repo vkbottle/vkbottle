@@ -115,9 +115,11 @@ def test_bp_importer(mocker: "MockerFixture"):
     }
     mocker.patch(
         "os.listdir",
-        lambda f: ["bp1.py", "__init__.py", "bp2.py", "bps"]
-        if "bps" not in f
-        else ["bp3.py", "bp4.py", "__init__.py"],
+        lambda f: (
+            ["bp1.py", "__init__.py", "bp2.py", "bps"]
+            if "bps" not in f
+            else ["bp3.py", "bp4.py", "__init__.py"]
+        ),
     )
     mocker.patch(
         "builtins.open",
