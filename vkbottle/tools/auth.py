@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, List, Optional
 
 from vkbottle.exception_factory import CaptchaError, VKAPIError
-from vkbottle.http import SingleAiohttpClient
 
 if TYPE_CHECKING:
     from vkbottle.http import ABCHTTPClient
@@ -35,6 +34,8 @@ class UserAuth:
         client_secret: Optional[str] = None,
         http_client: Optional["ABCHTTPClient"] = None,
     ):
+        from vkbottle.http import SingleAiohttpClient
+
         if client_id is not None and client_secret is not None:
             self.client_id = client_id
             self.client_secret = client_secret
