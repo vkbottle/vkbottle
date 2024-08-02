@@ -25,7 +25,7 @@ class LoopWrapper:
         on_startup: Optional[List["Task"]] = None,
         on_shutdown: Optional[List["Task"]] = None,
         tasks: Optional[List["Task"]] = None,
-    ):
+    ) -> None:
         self.on_startup = on_startup or []
         self.on_shutdown = on_shutdown or []
         self.tasks = tasks or []
@@ -66,8 +66,8 @@ class LoopWrapper:
         for startup_task in self.on_startup:
             self.loop.run_until_complete(startup_task)
 
-        for task in self.tasks:
-            self.loop.create_task(task)
+        while self.tasks:
+            self.loop.create_task(self.tasks.pop(0))
 
         tasks = asyncio.all_tasks(self.loop)
         try:
@@ -105,10 +105,15 @@ class LoopWrapper:
 
         if self.loop and self.loop.is_running():
             self.loop.create_task(task)
-        self.tasks.append(task)
+        else:
+            self.tasks.append(task)
 
     def interval(
-        self, seconds: int = 0, minutes: int = 0, hours: int = 0, days: int = 0
+        self,
+        seconds: int = 0,
+        minutes: int = 0,
+        hours: int = 0,
+        days: int = 0,
     ) -> Callable[[Callable], Callable]:
         """A tiny template to wrap repeated tasks with decorator
         >>> lw = LoopWrapper()
@@ -129,7 +134,11 @@ class LoopWrapper:
         return decorator
 
     def timer(
-        self, seconds: int = 0, minutes: int = 0, hours: int = 0, days: int = 0
+        self,
+        seconds: int = 0,
+        minutes: int = 0,
+        hours: int = 0,
+        days: int = 0,
     ) -> Callable[[Callable], Callable]:
         """A tiny template to wrap tasks with timer
         >>> lw = LoopWrapper()

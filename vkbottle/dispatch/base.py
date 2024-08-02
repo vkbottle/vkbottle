@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, Dict
 
+from typing_extensions import Self
+
 from vkbottle.modules import logger
 
 from .abc import ABCRouter
@@ -13,7 +15,7 @@ if TYPE_CHECKING:
 
 class Router(ABCRouter):
     async def route(self, event: dict, ctx_api: "ABCAPI") -> None:
-        logger.debug("Routing update {}", event)
+        logger.debug("Routing update {!r}", event)
 
         for view in self.views.values():
             try:
@@ -28,7 +30,7 @@ class Router(ABCRouter):
         views: Dict[str, "ABCView"],
         state_dispenser: "ABCStateDispenser",
         error_handler: "ABCErrorHandler",
-    ) -> "Router":
+    ) -> Self:
         self.views = views
         self.state_dispenser = state_dispenser
         self.error_handler = error_handler

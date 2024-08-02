@@ -12,7 +12,9 @@ if TYPE_CHECKING:
 
 
 def run_multibot(
-    user: "User", apis: Iterable["ABCAPI"], polling_type: Type["ABCPolling"] = UserPolling
+    user: "User",
+    apis: Iterable["ABCAPI"],
+    polling_type: Type["ABCPolling"] = UserPolling,
 ):
     """Add run_polling with polling constructed from derived apis
     :param user: User main instance (api is not required)

@@ -7,9 +7,9 @@ from typing import Protocol
 from choicelib import choice_in_order
 
 try:
-    import pydantic.v1 as pydantic
+    import pydantic.v1 as pydantic  # type: ignore
 except ImportError:
-    import pydantic  # noqa: F401
+    import pydantic  # type: ignore  # noqa: F401
 
 
 class JSONModule(Protocol):
@@ -23,7 +23,9 @@ class JSONModule(Protocol):
 
 
 json: JSONModule = choice_in_order(
-    ["ujson", "hyperjson", "orjson"], do_import=True, default="json"
+    ["orjson", "ujson", "hyperjson"],
+    do_import=True,
+    default="json",
 )
 
 warnings.simplefilter("always", DeprecationWarning)
@@ -160,7 +162,7 @@ elif logging_module == "logging":
                 msg, args, kwargs = self.process(msg, args, kwargs)
                 self.logger._log(level, msg, args, **kwargs)
 
-        def process(self, msg, args, kwargs):
+        def process(self, msg, args, kwargs):  # type: ignore
             log_kwargs = {
                 key: kwargs[key]
                 for key in inspect.getfullargspec(self.logger._log).args[1:]
@@ -177,7 +179,8 @@ elif logging_module == "logging":
     logger.info("logging is used as the default logger, but we recommend using loguru instead")
 
 if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
-    asyncio.get_event_loop_policy(), asyncio.WindowsProactorEventLoopPolicy  # type: ignore
+    asyncio.get_event_loop_policy(),
+    asyncio.WindowsProactorEventLoopPolicy,  # type: ignore
 ):
     """
     This is a workaround for a bug in ProactorEventLoop:

@@ -12,8 +12,8 @@ extra:
   disqus: ""
   social:
     - icon: fontawesome/brands/telegram
-      link: https://t.me/vkbottle_ru
-      name: Our Telegram chat
+      link: https://t.me/botoforum
+      name: Our Telegram forum
 
 nav:
   - Документация:

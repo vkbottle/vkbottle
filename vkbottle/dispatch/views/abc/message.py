@@ -11,11 +11,10 @@ if TYPE_CHECKING:
     from vkbottle.dispatch.handlers import ABCHandler
     from vkbottle.tools.mini_types.base import BaseMessageMin
 
-DEFAULT_STATE_KEY = "peer_id"
-
-
 T_contra = TypeVar("T_contra", list, dict, contravariant=True)
 F_contra = TypeVar("F_contra", contravariant=True)
+
+DEFAULT_STATE_KEY = "peer_id"
 
 
 class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra, F_contra]):

@@ -37,7 +37,9 @@ class BaseMessageMin(MessagesMessage, ABC):
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
 
-    __replace_mention = pydantic.root_validator(replace_mention_validator, allow_reuse=True, pre=False)  # type: ignore
+    __replace_mention = pydantic.root_validator(
+        replace_mention_validator, allow_reuse=True, pre=False
+    )  # type: ignore
 
     class Config:
         frozen = False
@@ -238,7 +240,8 @@ class BaseMessageMin(MessagesMessage, ABC):
             if k not in ("self", "kwargs", "forward_message_ids") and v is not None
         }
         data["forward"] = MessagesForward(
-            conversation_message_ids=[self.conversation_message_id], peer_id=self.peer_id  # type: ignore
+            conversation_message_ids=[self.conversation_message_id],
+            peer_id=self.peer_id,  # type: ignore
         ).json()
 
         return await self.answer(**data)

@@ -1,14 +1,11 @@
-import inspect
 from typing import TYPE_CHECKING, Any, Callable, Union
+
+from vkbottle.tools.magic import magic_bundle
 
 from .abc import ABCHandler, Event
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.rules import ABCRule
-
-
-def has_kwargs(signature: inspect.Signature) -> bool:
-    return any(True for p in signature.parameters.values() if p.kind == p.VAR_KEYWORD)
 
 
 class FromFuncHandler(ABCHandler[Event]):
@@ -28,15 +25,8 @@ class FromFuncHandler(ABCHandler[Event]):
             rule_context.update(result)
         return rule_context
 
-    async def handle(self, event: Event, **context) -> Any:
-        signature = inspect.signature(self.handler)
-
-        if has_kwargs(signature):
-            return await self.handler(event, **context)
-
-        acceptable_keys = list(signature.parameters.keys())[1:]
-        acceptable_context = {k: v for k, v in context.items() if k in acceptable_keys}
-        return await self.handler(event, **acceptable_context)
+    async def handle(self, event: Event, **context: Any) -> Any:
+        return await self.handler(event, **magic_bundle(self.handler, context))
 
     def __eq__(self, obj: object) -> bool:
         """
@@ -47,6 +37,7 @@ class FromFuncHandler(ABCHandler[Event]):
         >>> my_handler in middleware_handlers
         True
         """
+
         if callable(obj):
             return self.handler == obj
         return super().__eq__(obj)

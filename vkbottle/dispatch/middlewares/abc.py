@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Generic, List, NoReturn, Optional, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, List, NoReturn, Optional, Type, TypeVar, Union
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.handlers.abc import ABCHandler
@@ -15,7 +15,7 @@ class MiddlewareError(Exception):
 
 class ABCMiddleware(ABC):
     @abstractmethod
-    def stop(self, description: Any = "") -> NoReturn: ...
+    def stop(self, error: Any) -> NoReturn: ...
 
     @abstractmethod
     def send(self, context_update: Optional[dict] = None) -> None: ...
@@ -33,7 +33,7 @@ class ABCMiddleware(ABC):
 class BaseMiddleware(Generic[T]):
     event: T
     view: Optional["ABCView"]
-    handle_responses: List
+    handle_responses: List[Any]
     handlers: List["ABCHandler"]
 
     def __init__(self, event: T, view: Optional["ABCView"] = None):
@@ -58,6 +58,7 @@ class BaseMiddleware(Generic[T]):
     @property
     def can_forward(self) -> bool:
         """Check if the event can be further processed"""
+
         return not self.error
 
     @property
@@ -75,14 +76,16 @@ class BaseMiddleware(Generic[T]):
 
         return wrapper
 
-    def stop(self, description: Any = "") -> NoReturn:
+    def stop(self, error: Union[str, Exception, Type[Exception], None] = None) -> NoReturn:
         """Wrapper for exception raise"""
-        if issubclass(type(description), (Exception,)):
-            raise description
-        raise MiddlewareError(description)
+
+        if error is None or isinstance(error, str):
+            raise MiddlewareError(error or "")
+        raise error
 
     def send(self, context_update: Optional[dict] = None) -> None:
         """Validate new context update data if needed"""
+
         if context_update is not None:
             if not isinstance(context_update, dict):
                 msg = "Context update value should be an instance of dict"

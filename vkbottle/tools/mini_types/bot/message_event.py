@@ -1,7 +1,7 @@
 from io import StringIO
 from typing import TYPE_CHECKING, List, Optional, Union
 
-from vkbottle_types.events import MessageEvent
+from vkbottle_types.events.bot_events import MessageEvent
 
 from vkbottle.modules import logger
 from vkbottle.tools.event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
@@ -16,21 +16,25 @@ class MessageEventMin(MessageEvent):
     @property
     def user_id(self) -> int:
         """alias to event.object.user_id"""
+
         return self.object.user_id
 
     @property
     def peer_id(self) -> int:
         """alias to event.object.peer_id"""
+
         return self.object.peer_id
 
     @property
     def payload(self) -> Optional[dict]:
         """alias to event.object.payload"""
+
         return self.object.payload
 
     @property
     def conversation_message_id(self) -> Optional[int]:
         """alias to event.object.conversation_message_id"""
+
         return self.object.conversation_message_id
 
     def __init__(self, **kwargs):

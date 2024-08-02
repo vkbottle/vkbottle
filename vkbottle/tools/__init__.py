@@ -14,6 +14,7 @@ from .keyboard import (
     VKApps,
     VKPay,
 )
+from .limited_dict import LimitedDict
 from .loop_wrapper import LoopWrapper
 from .mini_types import BotTypes, UserTypes
 from .singleton import ABCSingleton
@@ -66,6 +67,7 @@ __all__ = (
     "KeyboardButtonColor",
     "Location",
     "LoopWrapper",
+    "LimitedDict",
     "OpenAppEvent",
     "OpenLink",
     "OpenLinkEvent",

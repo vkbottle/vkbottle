@@ -11,30 +11,46 @@ class ABCHTTPClient(ABC):
     """
 
     @abstractmethod
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         pass
 
     @abstractmethod
     async def request_raw(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
+        self,
+        url: str,
+        method: str = "GET",
+        data: Optional[dict] = None,
+        **kwargs: Any,
     ) -> Any:
         pass
 
     @abstractmethod
     async def request_text(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
+        self,
+        url: str,
+        method: str = "GET",
+        data: Optional[dict] = None,
+        **kwargs: Any,
     ) -> str:
         pass
 
     @abstractmethod
     async def request_json(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
+        self,
+        url: str,
+        method: str = "GET",
+        data: Optional[dict] = None,
+        **kwargs: Any,
     ) -> dict:
         pass
 
     @abstractmethod
     async def request_content(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
+        self,
+        url: str,
+        method: str = "GET",
+        data: Optional[dict] = None,
+        **kwargs: Any,
     ) -> bytes:
         pass
 

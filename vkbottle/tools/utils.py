@@ -10,15 +10,15 @@ from vkbottle.modules import logger
 if TYPE_CHECKING:
     from vkbottle.framework.abc_blueprint import ABCBlueprint
 
-
 T = TypeVar("T")
 
 
 # This feature is not used in production
 # but can be useful for customization
 # purposes
-def run_in_task(coroutine: Coroutine) -> asyncio.Task:
+def run_in_task(coroutine: Coroutine[Any, Any, Any]) -> asyncio.Task:
     """Gets loop and runs add makes task from the given coroutine"""
+
     loop = asyncio.get_running_loop()
     return loop.create_task(coroutine)
 
@@ -32,6 +32,7 @@ def load_blueprints_from_package(package_name: str) -> Iterator["ABCBlueprint"]:
     >>> for bp in load_blueprints_from_package("blueprints"):
     >>>     bp.load(...)
     """
+
     logger.warning(
         "Blueprints was deprecated and will be removed in future releases, read about new code separation method in documentation: \n"
         "https://vkbottle.readthedocs.io/ru/latest/tutorial/code-separation/"
@@ -53,6 +54,7 @@ def load_blueprints_from_package(package_name: str) -> Iterator["ABCBlueprint"]:
                 msg = f"Invalid blueprint declaration in file: {filename}"
                 raise ValueError(msg)
             bp_paths.append((filename[:-3], bp_names[0]))
+
     for bp_path in bp_paths:
         module, bp_name = bp_path
         module_name = package_name.replace(f".{os.sep}", ".").replace(os.sep, ".")
