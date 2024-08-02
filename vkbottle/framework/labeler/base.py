@@ -184,8 +184,8 @@ class BaseLabeler(ABCLabeler):
         self, custom_rules: typing.Dict[str, typing.Any]
     ) -> typing.List["ABCRule"]:
         return [
-            self.custom_rules[k].with_config(self.rule_config)(v) for k, v in custom_rules.items()
-        ]  # type: ignore
+            self.custom_rules[k].with_config(self.rule_config)(v) for k, v in custom_rules.items()  # type: ignore
+        ]
 
     def views(self) -> typing.Dict[str, "ABCView"]:
         return {"message": self.message_view, "raw": self.raw_event_view}
