@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, ClassVar
+from typing import Any, Dict, cast
 
 from vkbottle.modules import pydantic
 
@@ -27,7 +27,7 @@ class StateRepresentation(str):
 class StatePeer(pydantic.BaseModel):
     peer_id: int
     state: str
-    payload: ClassVar[dict] = {}
+    payload: Dict[str, Any] = cast(Dict[str, Any], pydantic.Field(default_factory=dict))
 
     @pydantic.validator("state", pre=True)
     def validate_state(cls, v: Any) -> str:

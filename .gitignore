@@ -140,4 +140,5 @@ dmypy.json
 .vscode
 .vim
 
+poetry.lock
 .poetry.lock
