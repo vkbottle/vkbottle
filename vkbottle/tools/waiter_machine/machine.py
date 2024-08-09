@@ -7,7 +7,7 @@ from vkbottle.dispatch.views.abc import ABCDispenseView
 from vkbottle.tools.limited_dict import LimitedDict
 
 from .middleware import WaiterMiddleware
-from .short_state import Behaviour, Event, ShortState, ShortStateContext
+from .short_state import Behaviour, Event, ShortState
 
 Identificator = typing.Union[str, int]
 Storage = typing.Dict[str, LimitedDict[Identificator, "ShortState[Event]"]]
@@ -55,7 +55,7 @@ class WaiterMachine:
         on_drop: Behaviour[Event] = None,
         exit: Behaviour[Event] = None,  # noqa: A002
         expiration: typing.Union[datetime.timedelta, float, None] = None,
-    ) -> ShortStateContext:
+    ):
         if isinstance(expiration, (int, float)):
             expiration = datetime.timedelta(seconds=expiration)
 

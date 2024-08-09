@@ -1,7 +1,8 @@
 import asyncio
 import dataclasses
 import datetime
-import typing
+
+import typing_extensions as typing
 
 from vkbottle.api.abc import ABCAPI
 from vkbottle.dispatch.handlers.abc import ABCHandler
@@ -14,9 +15,16 @@ Event = typing.TypeVar("Event")
 Behaviour = typing.Union[ABCHandler[Event], None]
 
 
-class ShortStateContext(typing.Generic[Event], typing.NamedTuple):
+class _ShortStateContext(typing.Generic[Event], typing.NamedTuple):
     event: Event
     context: typing.Dict[str, typing.Any]
+
+
+if typing.TYPE_CHECKING:
+    ShortStateContext = _ShortStateContext[Event]
+
+else:
+    ShortStateContext = typing.Annotated[_ShortStateContext[Event], ...]
 
 
 @dataclasses.dataclass
@@ -33,7 +41,8 @@ class ShortState(typing.Generic[Event]):
     exit_behaviour: typing.Optional[Behaviour[Event]] = dataclasses.field(default=None)
     expiration_date: typing.Optional[datetime.datetime] = dataclasses.field(init=False)
     context: typing.Optional[ShortStateContext[Event]] = dataclasses.field(
-        default=None, init=False
+        default=None,
+        init=False,
     )
 
     def __post_init__(self, expiration: typing.Optional[datetime.timedelta] = None) -> None:

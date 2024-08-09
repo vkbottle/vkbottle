@@ -25,7 +25,7 @@ if typing.TYPE_CHECKING:
         def __delitem__(self, key: KT) -> None: ...
 else:
 
-    class LimitedDict(UserDict):
+    class LimitedDict(UserDict, typing.Generic[KT, VT]):
         def __init__(self, *, maxlimit=1000):
             super().__init__()
             self.maxlimit = maxlimit
