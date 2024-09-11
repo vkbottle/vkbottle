@@ -45,10 +45,12 @@ aiohttp = "^3.10.0"
 choicelib = "^0.1.5"
 pydantic = "<3 || <=1.10.8"
 vbml = "^1.1.post1"
-vkbottle-types = {git = "https://github.com/vkbottle/types.git", rev = "master"}
 aiofiles = "24.1.0"
 typing-extensions = "^4.4.0"
 colorama = "^0.4.6"
+
+[tool.poetry.dependencies.vkbottle-types]
+url = "https://github.com/vkbottle/types/archive/refs/heads/master.zip"
 
 
 [tool.poetry.group.dev.dependencies]
