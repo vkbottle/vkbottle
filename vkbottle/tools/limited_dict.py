@@ -23,6 +23,7 @@ if typing.TYPE_CHECKING:
         def __setitem__(self, key: KT, value: VT, /) -> None: ...
 
         def __delitem__(self, key: KT) -> None: ...
+
 else:
 
     class LimitedDict(UserDict, typing.Generic[KT, VT]):
