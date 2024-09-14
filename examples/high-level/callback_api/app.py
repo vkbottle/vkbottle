@@ -1,5 +1,5 @@
+from bot import bot
 from fastapi import BackgroundTasks, FastAPI, Request, Response
-from handlers import bot
 from loguru import logger
 
 app = FastAPI()

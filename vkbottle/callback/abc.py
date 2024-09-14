@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
+from typing_extensions import Self
+
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
     from vkbottle.exception_factory import ABCErrorHandler
 
 
 class ABCCallback(ABC):
-    """
-    Abstract Callback class
-    """
+    """Abstract Callback class"""
 
     @abstractmethod
     def get_secret_key(self) -> str:
@@ -49,7 +49,9 @@ class ABCCallback(ABC):
 
     @abstractmethod
     async def set_callback_settings(
-        self, server_id: int, params: Optional[Dict[str, bool]] = None
+        self,
+        server_id: int,
+        params: Optional[Dict[str, bool]] = None,
     ) -> Any:
         pass
 
@@ -59,11 +61,13 @@ class ABCCallback(ABC):
         pass
 
     @api.setter  # noqa: B027
-    def api(self, new_api: "ABCAPI"):
+    def api(self, new_api: "ABCAPI") -> None:
         pass
 
     @abstractmethod
     def construct(
-        self, api: "ABCAPI", error_handler: Optional["ABCErrorHandler"] = None
-    ) -> "ABCCallback":
+        self,
+        api: "ABCAPI",
+        error_handler: Optional["ABCErrorHandler"] = None,
+    ) -> Self:
         pass

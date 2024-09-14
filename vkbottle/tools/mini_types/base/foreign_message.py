@@ -26,7 +26,9 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
 
-    __replace_mention = pydantic.root_validator(replace_mention_validator, allow_reuse=True, pre=False)  # type: ignore
+    __replace_mention = pydantic.root_validator(
+        replace_mention_validator, allow_reuse=True, pre=False
+    )  # type: ignore
 
     class Config:
         frozen = False

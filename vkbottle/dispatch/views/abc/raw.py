@@ -1,35 +1,51 @@
+import dataclasses
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, Generic, List, TypeVar
+from typing import TYPE_CHECKING, Any, Dict, Generic, List, Type, TypeVar
 
 if TYPE_CHECKING:
     from vkbottle.api.abc import ABCAPI
     from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
+    from vkbottle.dispatch.handlers import ABCHandler
 
 from vkbottle.modules import logger
 
 from .view import ABCView
 
-T_contra = TypeVar("T_contra", list, dict, contravariant=True)
+Event_contra = TypeVar("Event_contra", list, dict, contravariant=True)
+HandlerBasement = TypeVar("HandlerBasement", bound="BaseHandlerBasement")
 
 
-class ABCRawEventView(ABCView[T_contra], Generic[T_contra]):
-    handlers: Dict[Any, List]
+@dataclasses.dataclass(frozen=True)
+class BaseHandlerBasement:
+    dataclass: Type[Any]
+    handler: "ABCHandler"
+
+
+class ABCRawEventView(ABCView[Event_contra], Generic[Event_contra, HandlerBasement]):
+    handlers: Dict[Any, List[HandlerBasement]]
 
     @abstractmethod
-    def get_handler_basements(self, event: T_contra) -> List:
+    def get_handler_basements(self, event: Event_contra) -> List[HandlerBasement]:
         pass
 
     @abstractmethod
-    def get_event_model(self, handler_basement, event: T_contra):
+    def get_event_model(
+        self,
+        handler_basement: HandlerBasement,
+        event: Event_contra,
+    ) -> Any:
         pass
 
     @staticmethod
     @abstractmethod
-    def get_event_type(event: T_contra):
+    def get_event_type(event: Event_contra) -> Any:
         pass
 
     async def handle_event(
-        self, event: T_contra, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self,
+        event: Event_contra,
+        ctx_api: "ABCAPI",
+        state_dispenser: "ABCStateDispenser",
     ) -> Any:
         logger.debug("Handling event ({}) with message view", self.get_event_type(event))
 

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, List, Optional
 
 from vkbottle.modules import logger
 
@@ -7,7 +7,9 @@ from .reducible_kwargs_exception import ReducibleKwargsException
 
 
 class VKAPIError(CodeException, ReducibleKwargsException):
-    def __init__(self, *, error_msg: str, request_params: Optional[List[dict]] = None, **kwargs):
+    def __init__(
+        self, *, error_msg: str, request_params: Optional[List[dict]] = None, **kwargs: Any
+    ):
         self.error_msg = error_msg
         # server maybe return error code without request_params key
         if request_params:
@@ -30,7 +32,7 @@ class CaptchaError(VKAPIError, code=14):
         captcha_img: str,
         captcha_ts: Optional[str] = None,
         captcha_attempt: Optional[int] = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         super().__init__(**kwargs)
         self.captcha_sid = int(captcha_sid)
@@ -40,6 +42,6 @@ class CaptchaError(VKAPIError, code=14):
 
 
 class APIAuthError(VKAPIError, code=5):
-    def __init__(self, *, ban_info: Optional[dict] = None, **kwargs):
+    def __init__(self, *, ban_info: Optional[dict] = None, **kwargs: Any):
         super().__init__(**kwargs)
         self.ban_info = ban_info

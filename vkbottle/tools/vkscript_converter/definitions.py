@@ -288,7 +288,7 @@ def unary_op(d: ast.UnaryOp):
 def subscript(d: ast.Subscript):
     value = find(d.value)
     if d.slice.__class__ == ast.Index:
-        if d.slice.value.__class__ == str:  # type: ignore
+        if d.slice.value.__class__ == str:  # type: ignore  # noqa: E721
             return f"{value}.{d.slice.value.s}"  # type: ignore
         return f"{value}[{find(d.slice.value)}]"  # type: ignore
     msg = f"Slice {d.slice} is not referenced"

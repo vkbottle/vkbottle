@@ -1,28 +1,29 @@
 import asyncio
 import datetime
-import types
 import typing
 
 from vkbottle.dispatch.rules.abc import ABCRule
 from vkbottle.dispatch.views.abc import ABCDispenseView
+from vkbottle.tools.limited_dict import LimitedDict
 
 from .middleware import WaiterMiddleware
-from .short_state import Behaviour, EventModel, ShortState
+from .short_state import Behaviour, Event, ShortState
 
 Identificator = typing.Union[str, int]
-Storage = typing.Dict[str, typing.Dict[Identificator, "ShortState"]]
+Storage = typing.Dict[str, LimitedDict[Identificator, "ShortState[Event]"]]
 
 
 class WaiterMachine:
-    def __init__(self) -> None:
+    def __init__(self, *, max_storage_size: int = 1000) -> None:
         self.storage: Storage = {}
+        self.max_storage_size = max_storage_size
         self.middleware = WaiterMiddleware(self)
 
     async def drop(
         self,
-        dispensable_view: ABCDispenseView[dict, EventModel],
+        dispensable_view: ABCDispenseView[dict, Event],
         identifier: Identificator,
-        **context,
+        **context: typing.Any,
     ) -> None:
         view_name = dispensable_view.__class__.__name__
         if view_name not in self.storage:
@@ -34,11 +35,10 @@ class WaiterMachine:
             msg = f"Waiter with identificator {identifier} is not found for view {view_name}"
             raise LookupError(msg)
 
-        waiters: typing.Iterable[asyncio.Future] = short_state.event._waiters  # type: ignore
+        if short_state.context is not None:
+            context.update(short_state.context.context)
 
-        for future in waiters:
-            future.cancel()
-
+        short_state.cancel()
         await self.call_behaviour(
             dispensable_view,  # type: ignore
             short_state.on_drop_behaviour,
@@ -48,23 +48,23 @@ class WaiterMachine:
 
     async def wait(
         self,
-        dispensable_view: ABCDispenseView[dict, EventModel],
-        linked_event: EventModel,
-        *rules: ABCRule[EventModel],
-        default: Behaviour = None,
-        on_drop: Behaviour = None,
-        expiration: typing.Union[datetime.timedelta, int, None] = None,
-    ) -> typing.Tuple[EventModel, dict]:
-        if isinstance(expiration, int):
+        dispensable_view: ABCDispenseView[dict, Event],
+        linked_event: Event,
+        *rules: ABCRule[Event],
+        default: Behaviour[Event] = None,
+        on_drop: Behaviour[Event] = None,
+        exit: Behaviour[Event] = None,  # noqa: A002
+        expiration: typing.Union[datetime.timedelta, float, None] = None,
+    ):
+        if isinstance(expiration, (int, float)):
             expiration = datetime.timedelta(seconds=expiration)
-
-        event = asyncio.Event()
 
         key = dispensable_view.get_state_key(linked_event)
         if not key:
-            msg = "Unable to get state key"
+            msg = "Unable to get state key."
             raise RuntimeError(msg)
 
+        event = asyncio.Event()
         short_state = ShortState(
             key,
             ctx_api=linked_event.ctx_api,  # type: ignore
@@ -73,41 +73,49 @@ class WaiterMachine:
             expiration=expiration,
             default_behaviour=default,
             on_drop_behaviour=on_drop,
+            exit_behaviour=exit,
         )
 
         view_name = dispensable_view.__class__.__name__
         if view_name not in self.storage:
-            dispensable_view.middlewares.append(self.middleware)  # type: ignore
-            self.storage[view_name] = {}
+            dispensable_view.middlewares.insert(0, self.middleware)  # type: ignore
+            self.storage[view_name] = LimitedDict(maxlimit=self.max_storage_size)
+
+        if (deleted_short_state := self.storage[view_name].set(key, short_state)) is not None:
+            deleted_short_state.cancel()
 
         self.storage[view_name][key] = short_state
-
         await event.wait()
-
-        e, ctx = event.context  # type: ignore
         self.storage[view_name].pop(key)
 
-        return e, ctx
+        if short_state.context is None:
+            msg = "Context is not defined."
+            raise RuntimeError(msg)
+
+        return short_state.context
 
     async def call_behaviour(
         self,
-        view: ABCDispenseView[dict, EventModel],
-        behaviour: Behaviour,
-        event: EventModel,
-        **context,
-    ) -> None:
+        view: ABCDispenseView[dict, Event],
+        behaviour: Behaviour[Event],
+        event: Event,
+        **context: typing.Any,
+    ) -> bool:
         if behaviour is None:
-            return
-        value = behaviour
-        if callable(behaviour):
-            value = value(event)  # type: ignore
-        if isinstance(value, types.CoroutineType):
-            value = await value
+            return False
 
-        if return_handler := view.handler_return_manager.get_handler(value):
-            await return_handler(
-                view.handler_return_manager,
-                value,
-                event,
-                context,
-            )
+        result = await behaviour.filter(event)
+        if result is not False:
+            result = result if isinstance(result, dict) else {}
+            context.update(result)
+            value = await behaviour.handle(event, **result)
+            if return_handler := view.handler_return_manager.get_handler(value):
+                await return_handler(
+                    view.handler_return_manager,
+                    value,
+                    event,
+                    context,
+                )
+            return True
+
+        return False

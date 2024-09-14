@@ -16,8 +16,11 @@ from typing import (
 if TYPE_CHECKING:
     from types import ModuleType
 
-
 T_CodeException = TypeVar("T_CodeException", bound="CodeException")
+
+
+def get_code_exception(cls: Type[T_CodeException], code: int) -> Type[T_CodeException]:
+    return CodeExceptionFactory(cls, code).get()
 
 
 class CodeException(Exception):
@@ -34,24 +37,23 @@ class CodeException(Exception):
 
     @overload
     def __class_getitem__(
-        cls: Type[T_CodeException], code_or_codes: int
+        cls: Type[T_CodeException],
+        code_or_codes: int,
     ) -> Type[T_CodeException]: ...
 
     @overload
     def __class_getitem__(
-        cls: Type[T_CodeException], code_or_codes: Tuple[int, ...]
+        cls: Type[T_CodeException],
+        code_or_codes: Tuple[int, ...],
     ) -> Tuple[Type[T_CodeException], ...]: ...
 
     def __class_getitem__(
-        cls: Type[T_CodeException], code_or_codes: Union[int, Tuple[int, ...]]
+        cls: Type[T_CodeException],
+        code_or_codes: Union[int, Tuple[int, ...]],
     ) -> Union[Type[T_CodeException], Tuple[Type[T_CodeException], ...]]:
         if isinstance(code_or_codes, int):
             return get_code_exception(cls, code_or_codes)
         return tuple(get_code_exception(cls, code) for code in code_or_codes)
-
-
-def get_code_exception(cls: Type[T_CodeException], code: int) -> Type[T_CodeException]:
-    return CodeExceptionFactory(cls, code).get()
 
 
 class CodeExceptionFactory(Generic[T_CodeException]):

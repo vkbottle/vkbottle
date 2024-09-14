@@ -58,6 +58,16 @@ class MentionRule(ABCRule[BaseMessageMin]):
         return event.is_mentioned
 
 
+class TextRule(ABCRule[BaseMessageMin]):
+    def __init__(self, texts: Union[str, List[str]], *, ignore_case: bool = False) -> None:
+        texts = texts if isinstance(texts, list) else [texts]
+        self.texts = texts if not ignore_case else list(map(str.lower, texts))
+        self.ignore_case = ignore_case
+
+    async def check(self, event: BaseMessageMin) -> bool:
+        return (event.text if not self.ignore_case else event.text.lower()) in self.texts
+
+
 class CommandRule(ABCRule[BaseMessageMin]):
     def __init__(
         self,
@@ -431,6 +441,7 @@ __all__ = (
     "FromPeerRule",
     "FromUserRule",
     "FuncRule",
+    "TextRule",
     "LevenshteinRule",
     "MacroRule",
     "MentionRule",

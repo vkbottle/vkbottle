@@ -24,7 +24,9 @@ class ABCUserMessageView(ABCMessageView[list, F_contra], Generic[F_contra]):
 
     @staticmethod
     async def get_message(
-        event: list, ctx_api: Union["API", "ABCAPI"], replace_mention: bool
+        event: list,
+        ctx_api: Union["API", "ABCAPI"],
+        replace_mention: bool,
     ) -> "MessageMin":
         return await message_min(event[1], ctx_api, replace_mention)
 

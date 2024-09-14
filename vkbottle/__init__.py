@@ -1,5 +1,4 @@
-from vkbottle_types import GroupTypes
-from vkbottle_types.events import GroupEventType, UserEventType
+from vkbottle_types.events import GroupEventType, GroupTypes, UserEventType
 
 from .api import (
     ABCAPI,

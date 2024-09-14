@@ -3,6 +3,8 @@ import os
 import random
 from typing import Optional
 
+from vkbottle_types.objects import MessagesForward
+
 from vkbottle import GroupEventType, GroupTypes, Keyboard, Text, VKAPIError
 from vkbottle.bot import Bot, Message
 from vkbottle.modules import logger
@@ -55,13 +57,29 @@ async def group_join_handler(event: GroupTypes.GroupJoin):
         # not accessible in case multibot is used, API can be accessed from
         # event.ctx_api
         await bot.api.messages.send(
-            peer_id=event.object.user_id, message="Спасибо за подписку!", random_id=0
+            peer_id=event.object.user_id,
+            message="Спасибо за подписку!",
+            random_id=0,
         )
 
     # Read more about exception handling in documentation
     # low-level/exception_handling/exception_handling
     except VKAPIError[901]:
         logger.error("Can't send message to user with id {}", event.object.user_id)
+
+
+@bot.on.raw_event(GroupEventType.MESSAGE_REACTION_EVENT, dataclass=GroupTypes.MessageReactionEvent)
+async def reaction_handler(event: GroupTypes.MessageReactionEvent):
+    await bot.api.messages.send(
+        peer_id=event.object.peer_id,
+        message=f"Вы {'поставили' if event.object.reaction_id else 'убрали'} реакцию на это сообщение!",
+        forward=MessagesForward(
+            conversation_message_ids=[event.object.cmid],  # type: ignore
+            peer_id=event.object.peer_id,
+            is_reply=True,
+        ).json(),
+        random_id=0,
+    )
 
 
 # Runs loop > loop.run_forever() > with tasks created in loop_wrapper before,

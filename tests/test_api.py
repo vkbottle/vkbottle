@@ -70,7 +70,7 @@ async def test_captcha_error_handling(api: API):
 @with_mocked_api(
     '{"error": {"error_code":5, '
     '"error_msg": "User authorization failed: user is blocked.", '
-    '"request_params": [{"key": "v", "value": "5.131"}, '
+    '"request_params": [{"key": "v", "value": "5.199"}, '
     '{"key": "method", "value": "wall.getById"}, '
     '{"key": "oauth", "value": "1"}, '
     '{"key": "posts", "value": "123_123"}], '
@@ -94,7 +94,7 @@ async def test_auth_blocked_user_error_handling(api: API):
 @with_mocked_api(
     '{"error": {"error_code":5, '
     '"error_msg": "User authorization failed: invalid access_token (4).", '
-    '"request_params": [{"key": "v", "value": "5.131"}, '
+    '"request_params": [{"key": "v", "value": "5.199"}, '
     '{"key": "method", "value": "wall.getById"},'
     ' {"key": "oauth", "value": "1"}, '
     '{"key": "posts", "value": "123_123"}]}}'

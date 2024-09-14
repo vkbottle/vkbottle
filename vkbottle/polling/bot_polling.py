@@ -2,6 +2,7 @@ import asyncio
 from typing import TYPE_CHECKING, AsyncGenerator, Optional
 
 from aiohttp.client_exceptions import ClientConnectionError
+from typing_extensions import Self
 
 from vkbottle.exception_factory import ErrorHandler, VKAPIError
 from vkbottle.modules import logger
@@ -25,7 +26,7 @@ class BotPolling(ABCPolling):
         wait: Optional[int] = None,
         rps_delay: Optional[int] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
-    ):
+    ) -> None:
         self._api = api
         self.error_handler = error_handler or ErrorHandler()
         self.group_id = group_id
@@ -50,7 +51,9 @@ class BotPolling(ABCPolling):
     async def get_server(self) -> dict:
         logger.debug("Getting polling server...")
         if self.group_id is None:
-            self.group_id = (await self.api.request("groups.getById", {}))["response"][0]["id"]
+            self.group_id = (await self.api.request("groups.getById", {}))["response"]["groups"][
+                0
+            ]["id"]
         return (
             await self.api.request(
                 "groups.getLongPollServer",
@@ -81,8 +84,10 @@ class BotPolling(ABCPolling):
                 await self.error_handler.handle(e)
 
     def construct(
-        self, api: "ABCAPI", error_handler: Optional["ABCErrorHandler"] = None
-    ) -> "BotPolling":
+        self,
+        api: "ABCAPI",
+        error_handler: Optional["ABCErrorHandler"] = None,
+    ) -> Self:
         self._api = api
         if error_handler is not None:
             self.error_handler = error_handler
@@ -98,5 +103,5 @@ class BotPolling(ABCPolling):
         return self._api
 
     @api.setter
-    def api(self, new_api: "ABCAPI"):
+    def api(self, new_api: "ABCAPI") -> None:
         self._api = new_api

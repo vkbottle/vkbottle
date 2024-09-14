@@ -32,10 +32,7 @@ class Bot(ABCFramework):
         state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
         task_each_event=None,
-    ):
-        if isinstance(token, API):
-            msg = "You passed API instance to token parameter, use api parameter instead"
-            raise ValueError(msg)
+    ) -> None:
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
@@ -67,19 +64,19 @@ class Bot(ABCFramework):
         )
 
     @router.setter
-    def router(self, new_router: "ABCRouter"):
+    def router(self, new_router: "ABCRouter") -> None:
         self._router = new_router
 
     @property
     def on(self) -> "ABCLabeler":
         return self.labeler
 
-    async def run_polling(self, custom_polling: Optional["ABCPolling"] = None):
+    async def run_polling(self, custom_polling: Optional["ABCPolling"] = None) -> NoReturn:  # type: ignore
         polling = custom_polling or self.polling
         logger.info("Starting polling for {!r}", polling.api)
 
         async for event in polling.listen():
-            logger.debug("New event was received: {}", event)
+            logger.debug("New event was received: {!r}", event)
             for update in event["updates"]:
                 self.loop_wrapper.add_task(self.router.route(update, polling.api))
 
@@ -89,9 +86,8 @@ class Bot(ABCFramework):
         self.loop_wrapper.run()
 
     async def setup_webhook(self) -> Tuple[str, str]:
-        """
-        :return: confirmation_code, secret_key
-        """
+        """:return: confirmation_code, secret_key"""
+
         await self.callback.setup_group_id()
 
         confirmation_code: str = await self.callback.get_callback_confirmation_code()
@@ -108,5 +104,5 @@ class Bot(ABCFramework):
 
         return confirmation_code, secret_key
 
-    async def process_event(self, event: dict):
+    async def process_event(self, event: dict) -> None:
         await self.router.route(event, self.api)

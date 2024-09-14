@@ -1,5 +1,5 @@
 import asyncio
-from typing import TYPE_CHECKING, NoReturn, Optional, Type
+from typing import TYPE_CHECKING, Any, NoReturn, Optional, Type
 
 from vkbottle.api import API
 from vkbottle.dispatch import BuiltinStateDispenser, Router
@@ -30,10 +30,7 @@ class User(ABCFramework):
         state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
         task_each_event=None,
-    ):
-        if isinstance(token, API):
-            msg = "You passed API instance to token parameter, use api parameter instead"
-            raise ValueError(msg)
+    ) -> None:
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
@@ -41,6 +38,7 @@ class User(ABCFramework):
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
         self._polling = polling or UserPolling(self.api)
         self._router = router or Router()
+
         if task_each_event:
             logger.warning("task_each_event is deprecated and will be removed in future versions")
 
@@ -71,7 +69,7 @@ class User(ABCFramework):
         password: str,
         client_id: Optional[int] = None,
         client_secret: Optional[str] = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         try:
             loop = asyncio.get_running_loop()
@@ -95,7 +93,7 @@ class User(ABCFramework):
         password: str,
         client_id: Optional[int] = None,
         client_secret: Optional[str] = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         token = await UserAuth(client_id, client_secret).get_token(login, password)
         return cls(token=token, **kwargs)

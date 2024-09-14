@@ -7,7 +7,6 @@ from .view import ABCView
 if typing.TYPE_CHECKING:
     from vkbottle.dispatch.handlers.abc import ABCHandler
 
-
 T_contra = TypeVar("T_contra", list, dict, contravariant=True)
 F_contra = TypeVar("F_contra", contravariant=True)
 

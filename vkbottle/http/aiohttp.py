@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional, Type
+from typing import TYPE_CHECKING, Optional, Type
 
 from aiohttp import ClientSession
 
 from vkbottle.modules import json as json_module
+from vkbottle.tools.singleton import ABCSingleton
 
 from .abc import ABCHTTPClient
 
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
     from types import TracebackType
 
     from aiohttp import ClientResponse
-    from typing_extensions import Self, Unpack
+    from typing_extensions import Unpack
 
     from vkbottle.modules import JSONModule
 
@@ -97,14 +98,7 @@ class AiohttpClient(ABCHTTPClient):
             self.session._connector = None
 
 
-class SingleAiohttpClient(AiohttpClient):
-    __instance__: Optional[Self] = None
-
-    def __new__(cls, *args: Any, **kwargs: Any) -> Self:  # noqa: ARG003
-        if cls.__instance__ is None:
-            cls.__instance__ = super().__new__(cls)
-        return cls.__instance__  # type: ignore[return-value]
-
+class SingleAiohttpClient(AiohttpClient, ABCSingleton):
     async def __aexit__(
         self,
         exc_type: Optional[Type[BaseException]],

@@ -25,7 +25,9 @@ class ABCBotMessageView(ABCMessageView[dict, F_contra], Generic[F_contra]):
 
     @staticmethod
     async def get_message(
-        event: dict, ctx_api: Union["API", "ABCAPI"], replace_mention: bool
+        event: dict,
+        ctx_api: Union["API", "ABCAPI"],
+        replace_mention: bool,
     ) -> "MessageMin":
         return message_min(event, ctx_api, replace_mention)
 

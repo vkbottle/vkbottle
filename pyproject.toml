@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vkbottle"
-version = "4.4.0-dev1"
+version = "4.4.1"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
 authors = ["timoniq"]
 maintainers = ["FeeeeK"]
@@ -28,6 +28,7 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Software Development :: Quality Assurance",
   "Typing :: Typed",
@@ -40,25 +41,24 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-aiohttp = "^3.8.1"
+aiohttp = "^3.10.0"
 choicelib = "^0.1.5"
-pydantic = ">=1.10.4,<3"
+pydantic = "<3 || <=1.10.8"
 vbml = "^1.1.post1"
-vkbottle-types = "^5.131.146.16"
-aiofiles = "23.2.1"
+aiofiles = "24.1.0"
 typing-extensions = "^4.4.0"
 colorama = "^0.4.6"
-
+vkbottle-types = "^5.199.63.1"
 
 [tool.poetry.group.dev.dependencies]
 # Lint
 black = ">=23.1,<25.0"
-mypy = "^1.0.0"
+mypy = "^1.10.0"
 mypy-extensions = "^1.0.0"
 # mypy stubs
-types-aiofiles = ">=22.1,<24.0"
+types-aiofiles = ">=22.1,<25.0"
 # flake8, isort and autoflake replacement
-ruff = ">=0.0.246,<0.4.5"
+ruff = ">=0.0.246,<0.5.8"
 # Tests
 pytest = ">=7.2.1,<9.0.0"
 pytest-asyncio = ">=0.20.3,<0.24.0"
@@ -83,7 +83,7 @@ asyncio_mode = "auto"
 
 
 [tool.mypy]
-python_version = 3.8
+python_version = "3.8"
 ignore_missing_imports = true
 warn_no_return = false
 warn_return_any = false
@@ -98,14 +98,14 @@ ignore_errors = true
 
 [tool.black]
 line-length = 99
-target-version = ['py38']
+target-version = ["py38"]
 
 
 [tool.ruff]
 line-length = 99
 respect-gitignore = true
 target-version = "py38"
-select = [
+lint.select = [
   "F",     # Pyflakes
   "E",     # pycodestyle errors
   "W",     # pycodestyle warnings
@@ -115,19 +115,19 @@ select = [
   "D",     # pydocstyle
   "UP",    # pyupgrade
   "YTT",   # flake8-2020
-  # "ANN",   # flake8-annotations
+  # "ANN", # flake8-annotations
   "ASYNC", # flake8-async
   "S",     # flake8-bandit
-  # "BLE",   # flake8-blind-except
-  # "FBT",   # flake8-boolean-trap
+  # "BLE", # flake8-blind-except
+  # "FBT", # flake8-boolean-trap
   "B",     # flake8-bugbear
   "A",     # flake8-builtins
-  # "COM",   # flake8-commas
-  # "CPY",   # Copyright-related rules
+  # "COM", # flake8-commas
+  # "CPY", # Copyright-related rules
   "C40",   # flake8-comprehensions
-  # "DTZ",   # flake8-datetimez
+  # "DTZ", # flake8-datetimez
   "T10",   # flake8-debugger
-  # "DJ",    # flake8-django
+  # "DJ",  # flake8-django
   "EM",    # flake8-errmsg
   "EXE",   # flake8-executable
   "FA",    # flake8-future-annotations
@@ -167,25 +167,26 @@ select = [
   "RUF",   # ruff
   "ALL",   # All not listed above
 ]
-ignore = [
-  "ANN",    # flake8-annotations
-  "BLE",    # flake8-blind-except
-  "FBT",    # flake8-boolean-trap
-  "COM",    # flake8-commas
-  "CPY",   # Copyright-related rules
-  "DTZ",    # flake8-datetimez
-  "DJ",     # flake8-Django
-  "INP",    # flake8-no-pep420
-  "PYI",    # flake8-pyi
-  "Q",      # flake8-quotes
-  "RET",    # flake8-return
-  "PTH",    # flake8-use-pathlib
-  "ERA",    # flake8-eradicate
-  "PD",     # pandas-vet
-  "D",      # pydocstyle
-  "TRY",    # tryceratops
-  "SLF",    # flake8-self
-  "AIR",    # Airflow
+lint.ignore = [
+  "ANN",     # flake8-annotations
+  "BLE",     # flake8-blind-except
+  "FBT",     # flake8-boolean-trap
+  "COM",     # flake8-commas
+  "CPY",     # Copyright-related rules
+  "DTZ",     # flake8-datetimez
+  "DJ",      # flake8-Django
+  "INP",     # flake8-no-pep420
+  "PYI",     # flake8-pyi
+  "Q",       # flake8-quotes
+  "RET",     # flake8-return
+  "PTH",     # flake8-use-pathlib
+  "ERA",     # flake8-eradicate
+  "PD",      # pandas-vet
+  "D",       # pydocstyle
+  "TRY",     # tryceratops
+  "SLF",     # flake8-self
+  "AIR",     # Airflow
+  "UP037",   # quoted-annotation
   # "E203",  # whitespace before ':' (black)
   "E501",    # line too long
   # "W503",  # line break before binary operator (black)
@@ -207,9 +208,10 @@ ignore = [
   "S311",    # Standard pseudo-random generators are not suitable for cryptographic purposes
   "S301",    # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue
   "FA100",   # `__future__` import "annotations" missing
+  "ISC001",  # single-line-implicit-string-concatenation
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/**.py" = [
   "S101",    # Use of assert detected
   "PLR2004", # Magic value used in comparison
@@ -223,7 +225,7 @@ ignore = [
   "TCH002"   # Move third-party import out of a type-checking block
 ]
 
-[tool.ruff.pep8-naming]
+[tool.ruff.lint.pep8-naming]
 # Allow Pydantic's `@validator` decorator to trigger class method treatment.
 classmethod-decorators = [
   "classmethod",
@@ -233,5 +235,5 @@ classmethod-decorators = [
   "vkbottle.modules.pydantic.root_validator",
 ]
 
-[tool.ruff.flake8-type-checking]
+[tool.ruff.lint.flake8-type-checking]
 exempt-modules = ["typing_extensions", "typing"]

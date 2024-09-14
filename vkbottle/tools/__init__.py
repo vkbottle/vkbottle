@@ -14,8 +14,10 @@ from .keyboard import (
     VKApps,
     VKPay,
 )
+from .limited_dict import LimitedDict
 from .loop_wrapper import LoopWrapper
 from .mini_types import BotTypes, UserTypes
+from .singleton import ABCSingleton
 from .storage import ABCStorage, CtxStorage
 from .template import TemplateElement, template_gen
 from .uploader import (
@@ -42,6 +44,7 @@ from .waiter_machine import WaiterMachine
 
 __all__ = (
     "ABCAction",
+    "ABCSingleton",
     "ABCStorage",
     "ABCValidator",
     "AudioUploader",
@@ -64,6 +67,7 @@ __all__ = (
     "KeyboardButtonColor",
     "Location",
     "LoopWrapper",
+    "LimitedDict",
     "OpenAppEvent",
     "OpenLink",
     "OpenLinkEvent",

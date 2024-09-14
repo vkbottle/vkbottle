@@ -26,7 +26,7 @@ repos:
 
       - id: ruff (isort)
         name: ruff-isort
-        entry: ruff --select I --select F401 --fix
+        entry: ruff check --select I --select F401 --fix
         language: system
         types: [python]
         stages: [commit]

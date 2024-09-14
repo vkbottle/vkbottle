@@ -59,11 +59,13 @@ EXAMPLE_EVENT = {
                     "lang_id": 0,
                 },
                 "message": {
+                    "conversation_message_id": 1234,
                     "id": 100,
                     "from_id": 1,
                     "peer_id": 1,
                     "date": 1,
                     "text": "test",
+                    "version": 1,
                     "out": 0,
                 },
             },
@@ -112,7 +114,7 @@ async def test_bot_polling():  # noqa: C901
 
     def callback(method: str, url: str, data: dict):
         if "groups.getById" in url:
-            return {"response": [{"id": 1}]}
+            return {"response": {"groups": [{"id": 1}]}}
         elif "groups.getLongPollServer" in url:
             return {"response": {"ts": 1, "server": "!SERVER!", "key": ""}}
         elif "!SERVER!" in url:
@@ -169,6 +171,8 @@ def fake_message(ctx_api: API, **data: Any) -> Message:
         "text": "test",
         "out": 0,
         "id": 1,
+        "conversation_message_id": 1,
+        "version": 1,
         "fwd_messages": [],
     }
     message.update(data)
@@ -207,7 +211,12 @@ async def test_rules(api: API):
         fake_message(api, payload=json.dumps({"a": 1, "b": {"c": "", "d": {}}}))
     )
     assert await base.StickerRule(sticker_ids=[1, 2]).check(
-        fake_message(api, attachments=[{"type": "sticker", "sticker": {"sticker_id": 2}}])
+        fake_message(
+            api,
+            attachments=[
+                {"type": "sticker", "sticker": {"inner_type": "base_sticker_new", "sticker_id": 2}}
+            ],
+        )
     )
 
     assert (
