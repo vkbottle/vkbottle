@@ -1,4 +1,3 @@
-import inspect
 import types
 import typing
 
@@ -13,8 +12,18 @@ def resolve_arg_names(func: Function, start_idx: int = 1) -> typing.Tuple[str, .
 
 
 def get_default_args(func: Function) -> typing.Dict[str, typing.Any]:
-    fspec = inspect.getfullargspec(func)
-    return dict(zip(fspec.args[::-1], (fspec.defaults or ())[::-1]))
+    kwdefaults = func.__kwdefaults__
+    if kwdefaults:
+        return kwdefaults
+
+    defaults = func.__defaults__
+    if not defaults:
+        return {}
+
+    return {
+        k: defaults[i]
+        for i, k in enumerate(resolve_arg_names(func, start_idx=0)[-len(defaults) :])
+    }
 
 
 def magic_bundle(
@@ -27,3 +36,6 @@ def magic_bundle(
     args = get_default_args(func)
     args.update({k: v for k, v in kwargs.items() if k in names})
     return args
+
+
+__all__ = ("resolve_arg_names", "get_default_args", "magic_bundle")
