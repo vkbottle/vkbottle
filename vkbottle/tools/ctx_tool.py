@@ -28,3 +28,6 @@ class BaseContext:
     @classmethod
     def set_instance(cls, value: Any) -> None:
         cls.ctx_instance.set(value)
+
+
+__all__ = ("BaseContext",)

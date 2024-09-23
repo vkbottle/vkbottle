@@ -16,3 +16,6 @@ class ABCSingletonMeta(ABCMeta, SingletonMeta):
 
 class ABCSingleton(metaclass=ABCSingletonMeta):
     pass
+
+
+__all__ = ("ABCSingleton", "ABCSingletonMeta", "SingletonMeta")

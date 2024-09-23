@@ -19,3 +19,6 @@ class DelayedTask:
             await self.handler(*args, **kwargs)
             if self.do_break:
                 break
+
+
+__all__ = ("DelayedTask",)
