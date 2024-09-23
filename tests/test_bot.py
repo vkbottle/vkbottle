@@ -211,7 +211,12 @@ async def test_rules(api: API):
         fake_message(api, payload=json.dumps({"a": 1, "b": {"c": "", "d": {}}}))
     )
     assert await base.StickerRule(sticker_ids=[1, 2]).check(
-        fake_message(api, attachments=[{"type": "sticker", "sticker": {"inner_type": "base_sticker_new", "sticker_id": 2}}])
+        fake_message(
+            api,
+            attachments=[
+                {"type": "sticker", "sticker": {"inner_type": "base_sticker_new", "sticker_id": 2}}
+            ],
+        )
     )
 
     assert (
