@@ -37,7 +37,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     fwd_messages: List["BaseForeignMessageMin"] = pydantic.Field(default_factory=list)
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
-    chat_members: List[MessagesConversationMember]
+    chat_members: List[MessagesConversationMember] = []
 
     __replace_mention = pydantic.root_validator(
         replace_mention_validator, allow_reuse=True, pre=False
