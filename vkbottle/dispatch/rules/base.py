@@ -435,8 +435,7 @@ class MacroRule(ABCRule[BaseMessageMin]):
 
 class IsAdminRule(ABCRule[BaseMessageMin]):
     async def check(self, event: BaseMessageMin) -> bool:
-        return event.peer_id != event.from_id and
-            await event.user_is_admin(event.from_id)
+        return event.peer_id != event.from_id and await event.user_is_admin(event.from_id)
 
 
 __all__ = (

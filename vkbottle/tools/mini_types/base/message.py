@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from io import StringIO
 from typing import TYPE_CHECKING, Any, Callable, List, Literal, Optional, Union, overload
@@ -37,7 +39,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     fwd_messages: List["BaseForeignMessageMin"] = pydantic.Field(default_factory=list)
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
-    chat_members: List[MessagesConversationMember] = []
+    _chat_members: List[MessagesConversationMember] = pydantic.Field(default_factory=list)
 
     __replace_mention = pydantic.root_validator(
         replace_mention_validator, allow_reuse=True, pre=False
@@ -63,6 +65,10 @@ class BaseMessageMin(MessagesMessage, ABC):
         return self._mention
 
     @property
+    def chat_members(self) -> List[MessagesConversationMember]:
+        return self._chat_members
+
+    @property
     @abstractmethod
     def is_mentioned(self) -> bool:
         """Returns True if current bot is mentioned in message"""
@@ -80,14 +86,15 @@ class BaseMessageMin(MessagesMessage, ABC):
         ][0]
         return raw_user if raw_mode else UsersUserFull(**raw_user)
 
-    async def get_chat_members(self, **kwargs) -> MessagesConversationMember:
-        if not self.chat_members:
-            self.chat_members = (
+    async def get_chat_members(self, **kwargs: Any) -> list[MessagesConversationMember]:
+        if not self._chat_members:
+            self._chat_members = (
                 await self.ctx_api.messages.get_conversation_members(
-                    peer_id=self.peer_id, **kwargs
+                    peer_id=self.peer_id,
+                    **kwargs,
                 )
             ).items
-        return self.chat_members
+        return self._chat_members
 
     async def user_is_admin(self, user_id: int) -> bool:
         members = await self.get_chat_members()
