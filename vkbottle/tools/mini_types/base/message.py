@@ -86,7 +86,7 @@ class BaseMessageMin(MessagesMessage, ABC):
         ][0]
         return raw_user if raw_mode else UsersUserFull(**raw_user)
 
-    async def get_chat_members(self, **kwargs: Any) -> list[MessagesConversationMember]:
+    async def get_chat_members(self, **kwargs: Any) -> List[MessagesConversationMember]:
         if not self._chat_members:
             self._chat_members = (
                 await self.ctx_api.messages.get_conversation_members(
