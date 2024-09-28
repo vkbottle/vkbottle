@@ -6,6 +6,7 @@ from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
     MessagesAudioMessage,
+    MessagesConversationMember,
     MessagesForward,
     MessagesMessage,
     PhotosPhoto,
@@ -36,6 +37,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     fwd_messages: List["BaseForeignMessageMin"] = pydantic.Field(default_factory=list)
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
+    chat_members: List[MessagesConversationMember] = []
 
     __replace_mention = pydantic.root_validator(
         replace_mention_validator, allow_reuse=True, pre=False
@@ -77,6 +79,19 @@ class BaseMessageMin(MessagesMessage, ABC):
             "response"
         ][0]
         return raw_user if raw_mode else UsersUserFull(**raw_user)
+
+    async def get_chat_members(self, **kwargs) -> MessagesConversationMember:
+        if not self.chat_members:
+            self.chat_members = (
+                await self.ctx_api.messages.get_conversation_members(
+                    peer_id=self.peer_id, **kwargs
+                )
+            ).items
+        return self.chat_members
+
+    async def user_is_admin(self, user_id: int) -> bool:
+        members = await self.get_chat_members()
+        return any(member.member_id == user_id and member.is_admin for member in members)
 
     @property
     def chat_id(self) -> int:
