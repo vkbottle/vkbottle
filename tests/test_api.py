@@ -64,7 +64,7 @@ async def test_captcha_error_handling(api: API):
         await api.request("some.method", {})
     assert isinstance(e.value, CaptchaError)
     assert e.value.code == 14
-    assert e.value.captcha_sid == 239633676097
+    assert e.value.captcha_sid == "239633676097"
 
 
 @with_mocked_api(
