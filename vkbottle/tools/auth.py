@@ -70,3 +70,6 @@ class UserAuth:
         if response["error_msg"] == "need_captcha":
             raise CaptchaError(**response, request_params=[])
         raise AuthError(**response, request_params=[])
+
+
+__all__ = ("AuthError", "UserAuth")

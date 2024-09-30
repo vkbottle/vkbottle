@@ -25,11 +25,12 @@ class LoopWrapper:
         on_startup: Optional[List["Task"]] = None,
         on_shutdown: Optional[List["Task"]] = None,
         tasks: Optional[List["Task"]] = None,
+        loop: Optional["AbstractEventLoop"] = None,
     ) -> None:
         self.on_startup = on_startup or []
         self.on_shutdown = on_shutdown or []
         self.tasks = tasks or []
-        self.loop: Optional["AbstractEventLoop"] = None
+        self.loop = loop
 
     @property
     @deprecated(
@@ -61,7 +62,7 @@ class LoopWrapper:
         if not self.tasks:
             logger.warning("You ran loop with 0 tasks. Is it ok?")
 
-        self.loop = new_event_loop()
+        self.loop = new_event_loop() if self.loop is None else self.loop
 
         for startup_task in self.on_startup:
             self.loop.run_until_complete(startup_task)
@@ -156,3 +157,6 @@ class LoopWrapper:
             return func
 
         return decorator
+
+
+__all__ = ("LoopWrapper",)

@@ -48,3 +48,6 @@ else:
             if key in self.queue:
                 self.queue.remove(key)
             return super().__delitem__(key)
+
+
+__all__ = ("LimitedDict",)
