@@ -1,7 +1,7 @@
 name: Сообщение об ошибке
 description: Сообщение о произошедшем баге во время работы с фреймворком
 labels: ["bug"]
-assignees: ["FeeeeK"]
+assignees: ["luwqz1"]
 body:
   - type: checkboxes
     attributes:
