@@ -51,7 +51,7 @@ except VKAPIError as e:
 Некоторые ошибки vk имеют дополнительные поля, которые могут понадобиться вам для их обработки:
 
 * `CaptchaError`:
-    * `captcha_sid` - идентификатор captcha, int
+    * `captcha_sid` - идентификатор captcha, str
     * `captcha_img` - ссылка на изображение, str
 
 ## ErrorHandler
