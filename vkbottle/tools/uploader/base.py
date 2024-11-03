@@ -26,7 +26,7 @@ class BaseUploader(ABC):
             warnings.warn(
                 "generate_attachment_strings in uploaders is deprecated"
                 " use .raw_upload() to get raw response or .upload() to get attachment string",
-                DeprecationWarning,
+                FutureWarning,
                 stacklevel=0,
             )
             kwargs.pop("generate_attachment_strings")

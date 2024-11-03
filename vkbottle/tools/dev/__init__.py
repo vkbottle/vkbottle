@@ -3,7 +3,7 @@ import warnings
 
 warnings.warn(
     "Imports from vkbottle.tools.dev is deprecated, use vkbottle.tools instead",
-    DeprecationWarning,
+    FutureWarning,
     stacklevel=0,
 )
 
