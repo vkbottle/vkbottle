@@ -1,13 +1,23 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Iterable, List, Mapping, Optional, Type, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Awaitable,
+    Callable,
+    Iterable,
+    List,
+    Mapping,
+    Optional,
+    Type,
+    Union,
+)
 
 from typing_extensions import TypedDict
 
 if TYPE_CHECKING:
     from asyncio import AbstractEventLoop
     from ssl import SSLContext
-    from types import SimpleNamespace
 
     from aiohttp import (
         BaseConnector,
@@ -24,6 +34,35 @@ if TYPE_CHECKING:
     from aiohttp.typedefs import LooseCookies, LooseHeaders, StrOrURL
 
     from vkbottle.modules import JSONModule
+
+
+class AiohttpRequestKwargs(TypedDict, total=False):
+    """https://github.com/aio-libs/aiohttp/blob/33953f110e97eecc707e1402daa8d543f38a189b/aiohttp/client.py#L369"""
+
+    params: Union[Mapping[str, Union[str, int]], str, None]
+    json: Any
+    cookies: Union[LooseCookies, None]
+    headers: Union[LooseHeaders, None]
+    skip_auto_headers: Union[Iterable[str], None]
+    auth: Union[BasicAuth, None]
+    allow_redirects: bool
+    max_redirects: int
+    compress: Union[str, None]
+    chunked: Union[bool, None]
+    expect100: bool
+    raise_for_status: Union[None, bool, Callable[[ClientResponse], Awaitable[None]]]
+    read_until_eof: bool
+    proxy: Union[StrOrURL, None]
+    proxy_auth: Union[BasicAuth, None]
+    timeout: "Union[ClientTimeout, None]"
+    ssl: Union[SSLContext, bool, Fingerprint]
+    server_hostname: Union[str, None]
+    proxy_headers: Union[LooseHeaders, None]
+    trace_request_ctx: Union[Mapping[str, str], None]
+    read_bufsize: Union[int, None]
+    auto_decompress: Union[bool, None]
+    max_line_size: Union[int, None]
+    max_field_size: Union[int, None]
 
 
 class AiohttpSessionKwargs(TypedDict, total=False):
@@ -57,33 +96,4 @@ class AiohttpSessionKwargs(TypedDict, total=False):
     read_bufsize: int
 
 
-class AiohttpRequestKwargs(TypedDict, total=False):
-    """https://github.com/aio-libs/aiohttp/blob/33953f110e97eecc707e1402daa8d543f38a189b/aiohttp/client.py#L369"""
-
-    params: Optional[Mapping[str, str]]
-
-    # Методы ABCHTTPClient уже принимают data
-    # data: Any
-
-    json: Any
-    cookies: Optional[LooseCookies]
-    headers: Optional[LooseHeaders]
-    skip_auto_headers: Optional[Iterable[str]]
-    auth: Optional[BasicAuth]
-    allow_redirects: bool
-    max_redirects: int
-    compress: Optional[str]
-    chunked: Optional[bool]
-    expect100: bool
-    raise_for_status: Optional[bool]
-    read_until_eof: bool
-    proxy: Optional[StrOrURL]
-    proxy_auth: Optional[BasicAuth]
-    timeout: Union[ClientTimeout, object]
-    verify_ssl: Optional[bool]
-    fingerprint: Optional[bytes]
-    ssl_context: Optional[SSLContext]
-    ssl: Optional[Union[SSLContext, bool, Fingerprint]]
-    proxy_headers: Optional[LooseHeaders]
-    trace_request_ctx: Optional[SimpleNamespace]
-    read_bufsize: Optional[int]
+__all__ = ("AiohttpRequestKwargs", "AiohttpSessionKwargs")
