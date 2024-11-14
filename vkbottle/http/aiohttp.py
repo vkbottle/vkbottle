@@ -36,7 +36,6 @@ class AiohttpClient(ABCHTTPClient):
             session_params["raise_for_status"] = True
 
         self.session = session
-
         self._session_params = session_params
 
     async def request_raw(  # type: ignore[override]
@@ -85,6 +84,7 @@ class AiohttpClient(ABCHTTPClient):
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> bytes:
         response = await self.request_raw(url, method, data, **kwargs)
+        assert response._body is not None  # noqa: S101
         return response._body
 
     async def close(self) -> None:
