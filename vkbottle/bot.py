@@ -15,6 +15,7 @@ MessageEvent = MessageEventMin
     "Blueprints was deprecated and will be removed in future releases, "
     "read about new code separation method in documentation: \n"
     "https://vkbottle.rtfd.io/ru/latest/tutorial/code-separation/",
+    category=FutureWarning,
     stacklevel=0,
 )
 class Blueprint(BotBlueprint): ...
