@@ -28,7 +28,6 @@ json: JSONModule = choice_in_order(
     default="json",
 )
 
-warnings.simplefilter("always", DeprecationWarning)
 showwarning_ = warnings.showwarning
 
 
