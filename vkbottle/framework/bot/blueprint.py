@@ -1,3 +1,4 @@
+import warnings
 from typing import TYPE_CHECKING, Optional, Union
 
 from typing_extensions import deprecated  # type: ignore
@@ -14,44 +15,47 @@ if TYPE_CHECKING:
     from vkbottle.polling import ABCPolling
 
 
-@deprecated(
-    "Blueprints was deprecated and will be removed in future releases, "
-    "read about new code separation method in documentation: \n"
-    "https://vkbottle.rtfd.io/ru/latest/tutorial/code-separation/",
-    category=FutureWarning,
-    stacklevel=0,
-)
-class BotBlueprint(ABCBlueprint):
-    def __init__(
-        self,
-        name: Optional[str] = None,
-        labeler: Optional[BotLabeler] = None,
-        router: Optional[Router] = None,
-    ):
-        if name is not None:
-            self.name = name
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=FutureWarning)
 
-        self.labeler = labeler or BotLabeler()
-        self.router: Router = router or Router()
-        self.constructed = False
+    @deprecated(
+        "Blueprints was deprecated and will be removed in future releases, "
+        "read about new code separation method in documentation: \n"
+        "https://vkbottle.rtfd.io/ru/latest/tutorial/code-separation/",
+        category=FutureWarning,
+        stacklevel=0,
+    )
+    class BotBlueprint(ABCBlueprint):
+        def __init__(
+            self,
+            name: Optional[str] = None,
+            labeler: Optional[BotLabeler] = None,
+            router: Optional[Router] = None,
+        ):
+            if name is not None:
+                self.name = name
 
-    def construct(
-        self,
-        api: Union["ABCAPI", "API"],
-        polling: "ABCPolling",
-        state_dispenser: "ABCStateDispenser",
-    ) -> "BotBlueprint":
-        self.api = api
-        self.polling = polling
-        self.state_dispenser = state_dispenser
-        self.constructed = True
-        return self
+            self.labeler = labeler or BotLabeler()
+            self.router: Router = router or Router()
+            self.constructed = False
 
-    def load(self, framework: "Bot") -> "BotBlueprint":
-        framework.labeler.load(self.labeler)  # type: ignore
-        logger.debug("Blueprint {!r} loaded", self.name)
-        return self.construct(framework.api, framework.polling, framework.state_dispenser)
+        def construct(
+            self,
+            api: Union["ABCAPI", "API"],
+            polling: "ABCPolling",
+            state_dispenser: "ABCStateDispenser",
+        ) -> "BotBlueprint":
+            self.api = api
+            self.polling = polling
+            self.state_dispenser = state_dispenser
+            self.constructed = True
+            return self
 
-    @property
-    def on(self) -> BotLabeler:
-        return self.labeler
+        def load(self, framework: "Bot") -> "BotBlueprint":
+            framework.labeler.load(self.labeler)  # type: ignore
+            logger.debug("Blueprint {!r} loaded", self.name)
+            return self.construct(framework.api, framework.polling, framework.state_dispenser)
+
+        @property
+        def on(self) -> BotLabeler:
+            return self.labeler
