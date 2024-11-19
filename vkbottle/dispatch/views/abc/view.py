@@ -42,7 +42,7 @@ class ABCView(ABC, Generic[T_contra]):
             mw_instance = middleware(event, view=self)
             await mw_instance.pre()
             if not mw_instance.can_forward:
-                logger.debug("{} pre returned error {}", mw_instance, mw_instance.error)
+                logger.error("{} pre returned error {}", mw_instance, mw_instance.error)
                 return None
 
             mw_instances.append(mw_instance)
