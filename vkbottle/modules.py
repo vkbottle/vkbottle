@@ -138,7 +138,6 @@ elif logging_module == "logging":
                 style="{",
             ).format(record)
 
-    logging.basicConfig(level=logging.DEBUG)
     logging.root.handlers[0].setFormatter(ColorFormatter())
 
     class LogMessage:
