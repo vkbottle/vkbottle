@@ -138,8 +138,6 @@ elif logging_module == "logging":
                 style="{",
             ).format(record)
 
-    logging.root.handlers[0].setFormatter(ColorFormatter())
-
     class LogMessage:
         def __init__(self, fmt, args, kwargs):
             self.fmt = fmt
@@ -173,7 +171,13 @@ elif logging_module == "logging":
 
     warnings.showwarning = showwarning
 
-    logger = StyleAdapter(logging.getLogger("vkbottle"))  # type: ignore
+    _logger = logging.getLogger("vkbottle")
+    if not _logger.handlers:
+        console_handler = logging.StreamHandler()
+        _logger.addHandler(console_handler)
+
+    _logger.handlers[0].setFormatter(ColorFormatter())
+    logger = StyleAdapter(_logger)  # type: ignore
 
 if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
     asyncio.get_event_loop_policy(),
