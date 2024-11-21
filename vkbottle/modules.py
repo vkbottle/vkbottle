@@ -175,7 +175,6 @@ elif logging_module == "logging":
     warnings.showwarning = showwarning
 
     logger = StyleAdapter(logging.getLogger("vkbottle"))  # type: ignore
-    logger.info("logging is used as the default logger, but we recommend using loguru instead")
 
 if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
     asyncio.get_event_loop_policy(),
