@@ -41,9 +41,11 @@ class BaseMessageMin(MessagesMessage, ABC):
     _mention: Optional[Mention] = None
     _chat_members: List[MessagesConversationMember] = pydantic.Field(default_factory=list)
 
-    __replace_mention = pydantic.root_validator(
-        replace_mention_validator, allow_reuse=True, pre=False
-    )  # type: ignore
+    __replace_mention = pydantic.root_validator(  # type: ignore
+        replace_mention_validator,
+        allow_reuse=True,
+        pre=False,
+    )
 
     class Config:
         frozen = False

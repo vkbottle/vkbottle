@@ -19,7 +19,7 @@ class MessageMin(BaseMessageMin):
     def is_mentioned(self) -> bool:
         return self.mention.id == self.user_id if self.mention else False
 
-    @pydantic.root_validator(pre=True)
+    @pydantic.root_validator(pre=True)  # type: ignore
     def __foreign_messages(cls, values):
         foreign_messages = []
         if values.get("fwd_messages"):
@@ -45,9 +45,8 @@ async def message_min(
     if not response.items:
         msg = f"Message with id {message_id} not found, perhaps it was deleted"
         raise ValueError(msg)
-    message_object = response.items[0].dict()
     return MessageMin(
-        **message_object,
+        **response.items[0].dict(),
         unprepared_ctx_api=ctx_api,
         replace_mention=replace_mention,
     )

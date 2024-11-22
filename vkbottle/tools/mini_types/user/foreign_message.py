@@ -9,7 +9,7 @@ class ForeignMessageMin(BaseForeignMessageMin):
     reply_message: Optional["ForeignMessageMin"] = None
     fwd_messages: Optional[List["ForeignMessageMin"]] = pydantic.Field(default_factory=list)
 
-    @pydantic.root_validator
+    @pydantic.root_validator  # type: ignore
     def __foreign_messages(cls, values):
         foreign_messages = []
         if values.get("fwd_messages"):
