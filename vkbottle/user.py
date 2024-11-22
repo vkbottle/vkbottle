@@ -5,7 +5,7 @@ from vkbottle.framework.labeler import UserLabeler
 from .dispatch.rules import base as rules
 from .dispatch.views import user as views
 from .framework.user import User, UserBlueprint, run_multibot
-from .tools.mini_types.bot import MessageMin
+from .tools.mini_types.user import MessageMin
 
 Message = MessageMin
 

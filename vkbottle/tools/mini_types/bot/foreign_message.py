@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from vkbottle_types.objects import ClientInfoForBots  # noqa: TCH002
+from vkbottle_types.objects import ClientInfoForBots  # noqa: TC002
 
 from vkbottle.modules import pydantic
 from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
@@ -12,7 +12,7 @@ class ForeignMessageMin(BaseForeignMessageMin):
     reply_message: Optional["ForeignMessageMin"] = None
     fwd_messages: Optional[List["ForeignMessageMin"]] = pydantic.Field(default_factory=list)
 
-    @pydantic.root_validator
+    @pydantic.root_validator  # type: ignore
     def __foreign_messages(cls, values):
         foreign_messages = []
         if values.get("fwd_messages"):

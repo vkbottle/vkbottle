@@ -32,10 +32,10 @@ def magic_bundle(
     *,
     start_idx: int = 1,
 ) -> typing.Dict[str, typing.Any]:
-    names = resolve_arg_names(func, start_idx)
-    args = get_default_args(func)
-    args.update({k: v for k, v in kwargs.items() if k in names})
-    return args
+    return {
+        **get_default_args(func),
+        **{k: v for k, v in kwargs.items() if k in resolve_arg_names(func, start_idx)},
+    }
 
 
 __all__ = ("resolve_arg_names", "get_default_args", "magic_bundle")

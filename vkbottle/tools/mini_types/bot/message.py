@@ -9,11 +9,11 @@ if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
 
 
-from vkbottle_types.objects import ClientInfoForBots  # noqa: TCH002
+from vkbottle_types.objects import ClientInfoForBots  # noqa: TC002
 
 from vkbottle.modules import logger
 
-from .foreign_message import ForeignMessageMin  # noqa: TCH001
+from .foreign_message import ForeignMessageMin  # noqa: TC001
 
 
 class MessageMin(BaseMessageMin):
@@ -23,7 +23,7 @@ class MessageMin(BaseMessageMin):
     fwd_messages: List["ForeignMessageMin"] = pydantic.Field(default_factory=list)
     _is_full: Optional[bool] = None
 
-    @pydantic.root_validator(pre=True)
+    @pydantic.root_validator(pre=True)  # type: ignore
     def __foreign_messages(cls, values):
         foreign_messages = []
         if values.get("fwd_messages"):
