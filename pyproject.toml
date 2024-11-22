@@ -146,7 +146,6 @@ lint.select = [
   "SLOT",  # flake8-slots
   "SIM",   # flake8-simplify
   "TID",   # flake8-tidy-imports
-  "TCH",   # flake8-type-checking
   "INT",   # flake8-gettext
   "ARG",   # flake8-unused-arguments
   "PTH",   # flake8-use-pathlib
@@ -205,6 +204,7 @@ lint.ignore = [
   "B030",    # Except handlers should only be exception classes or tuples of exception
   "UP006",   # Use `list` instead of `List` for type annotation
   "UP007",   # Use `X | Y` for type annotations
+  "RUF022",  # Apply an isort-style sorting to `__all__`
   "S311",    # Standard pseudo-random generators are not suitable for cryptographic purposes
   "S301",    # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue
   "FA100",   # `__future__` import "annotations" missing
@@ -221,8 +221,7 @@ lint.ignore = [
 ]
 "examples/**.py" = [
   "T201",    # print statement found
-  "TCH001",  # Move application import into a type-checking block
-  "TCH002"   # Move third-party import out of a type-checking block
+  "RUF101",  # Move application import into a type-checking block
 ]
 
 [tool.ruff.lint.pep8-naming]
