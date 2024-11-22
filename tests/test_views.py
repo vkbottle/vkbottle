@@ -16,7 +16,7 @@ class SomeView(ABCView):
         pass
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_pre_post_middleware_returns_exception(empty_event):
     expected_error = Exception()
 

@@ -11,16 +11,16 @@ class EmptyMiddleware(BaseMiddleware):
         pass
 
 
-@pytest.fixture
+@pytest.fixture()
 def empty_middleware_class():
     return EmptyMiddleware
 
 
-@pytest.fixture
+@pytest.fixture()
 def empty_event():
     return {}
 
 
-@pytest.fixture
+@pytest.fixture()
 def empty_middleware_instance(empty_middleware_class, empty_event):
     return empty_middleware_class(empty_event)

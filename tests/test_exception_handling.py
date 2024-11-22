@@ -17,7 +17,7 @@ def test_code_error():
         assert e.code == 1  # noqa: PT017
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_error_handler():
     class Base(Exception):
         pass
@@ -41,7 +41,7 @@ async def test_error_handler():
     assert await func() == 42
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_error_handler_with_code_exception():
     class CodeError(CodeException):
         pass

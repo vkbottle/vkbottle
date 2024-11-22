@@ -156,7 +156,7 @@ def test_template_generator():
     )
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_validators():
     assert await IsInstanceValidator((int, str)).check("foo")
     assert not await EqualsValidator("foo").check("bar")
@@ -188,7 +188,7 @@ def test_loop_wrapper():
     ]
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_utils(mocker: "MockerFixture"):
     async def task_to_run(s, y):
         ctx_storage.set("checked-test-lw-create-task", "task_to_run")

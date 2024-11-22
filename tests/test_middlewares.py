@@ -32,7 +32,7 @@ def test_middleware_constructs_without_pre_and_post(empty_event):
     IncompleteMiddleware(empty_event)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_raise_in_pre_sets_error(empty_middleware_class, empty_event):
     expected_exception = Exception("some_exception")
 
@@ -52,7 +52,7 @@ async def test_raise_in_pre_sets_error(empty_middleware_class, empty_event):
     assert middleware.error == expected_exception
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_cant_forward_on_error(empty_middleware_class, empty_event):
     class SomeMiddleware(empty_middleware_class):
         async def pre(self, *args, **kwargs):
@@ -64,7 +64,7 @@ async def test_cant_forward_on_error(empty_middleware_class, empty_event):
     assert middleware.can_forward is False
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_view_middleware_utils_run(empty_event):
     view = BotMessageView()
     mw_instances = await view.pre_middleware(empty_event, {})
