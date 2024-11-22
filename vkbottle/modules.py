@@ -28,8 +28,6 @@ json: JSONModule = choice_in_order(
     default="json",
 )
 
-showwarning_ = warnings.showwarning
-
 
 def showwarning(message, category, filename, lineno, file=None, line=None):  # noqa: ARG001
     new_message = f"{category.__name__}: {message}"
@@ -51,6 +49,7 @@ if logging_module == "loguru":
     if not os.environ.get("LOGURU_AUTOINIT"):
         os.environ["LOGURU_AUTOINIT"] = "0"
         os.environ["LOGURU_INFO_COLOR"] = "<bold><green>"
+
     from loguru import logger  # type: ignore
 
     if not logger._core.handlers:  # type: ignore
@@ -68,22 +67,6 @@ if logging_module == "loguru":
         logger.add(sys.stderr, format=log_format, enqueue=True, colorize=True, filter=log_filter)
         warnings.showwarning = showwarning
 
-        class InterceptHandler(logging.Handler):
-            def emit(self, record):
-                try:
-                    level = logger.level(record.levelname).name  # type: ignore
-                except ValueError:
-                    level = record.levelno
-                frame, depth = sys._getframe(6), 6
-                while frame and frame.f_code.co_filename == logging.__file__:
-                    frame = frame.f_back  # type: ignore
-                    depth += 1
-
-                logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())  # type: ignore
-
-        logging.basicConfig(handlers=[InterceptHandler()], level=0, force=True)
-
-
 elif logging_module == "logging":
     """
     This is workaround for lazy formating with {} in logging.
@@ -96,6 +79,7 @@ elif logging_module == "logging":
     import colorama
 
     colorama.just_fix_windows_console()
+
     LEVEL_COLORS = {
         "DEBUG": colorama.Style.BRIGHT + colorama.Fore.BLUE,
         "INFO": colorama.Style.BRIGHT + colorama.Fore.GREEN,
@@ -103,7 +87,6 @@ elif logging_module == "logging":
         "ERROR": colorama.Fore.RED,
         "CRITICAL": colorama.Style.BRIGHT + colorama.Fore.RED,
     }
-
     loguru_like_format = (
         "<level>{levelname: <8}</level> <bold><level>|</level></bold> "
         "{asctime} <bold><level>|</level></bold> "
@@ -119,8 +102,10 @@ elif logging_module == "logging":
                 .replace("<bold>", colorama.Style.BRIGHT)
                 .replace("</bold>", colorama.Style.RESET_ALL)
             )
+
             if not record.funcName or record.funcName == "<module>":
                 record.funcName = "\b"
+
             frame = next(
                 (
                     frame
@@ -132,6 +117,7 @@ elif logging_module == "logging":
             if frame:
                 module = inspect.getmodule(frame.frame)
                 record.module = module.__name__ if module else "<module>"
+
             return logging.Formatter(
                 log_format,
                 datefmt=self.datefmt,
@@ -170,8 +156,8 @@ elif logging_module == "logging":
             return msg, args, log_kwargs
 
     warnings.showwarning = showwarning
-
     _logger = logging.getLogger("vkbottle")
+
     if not _logger.handlers:
         console_handler = logging.StreamHandler()
         _logger.addHandler(console_handler)
