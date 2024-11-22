@@ -138,9 +138,6 @@ elif logging_module == "logging":
                 style="{",
             ).format(record)
 
-    logging.basicConfig(level=logging.DEBUG)
-    logging.root.handlers[0].setFormatter(ColorFormatter())
-
     class LogMessage:
         def __init__(self, fmt, args, kwargs):
             self.fmt = fmt
@@ -174,8 +171,13 @@ elif logging_module == "logging":
 
     warnings.showwarning = showwarning
 
-    logger = StyleAdapter(logging.getLogger("vkbottle"))  # type: ignore
-    logger.info("logging is used as the default logger, but we recommend using loguru instead")
+    _logger = logging.getLogger("vkbottle")
+    if not _logger.handlers:
+        console_handler = logging.StreamHandler()
+        _logger.addHandler(console_handler)
+
+    _logger.handlers[0].setFormatter(ColorFormatter())
+    logger = StyleAdapter(_logger)  # type: ignore
 
 if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
     asyncio.get_event_loop_policy(),
