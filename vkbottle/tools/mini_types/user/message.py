@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
 
 
-from .foreign_message import ForeignMessageMin  # noqa: TCH001
+from .foreign_message import ForeignMessageMin  # noqa: TC001
 
 
 class MessageMin(BaseMessageMin):

@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from vkbottle_types.objects import ClientInfoForBots  # noqa: TCH002
+from vkbottle_types.objects import ClientInfoForBots  # noqa: TC002
 
 from vkbottle.modules import pydantic
 from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
