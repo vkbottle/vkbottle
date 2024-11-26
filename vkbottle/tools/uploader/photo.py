@@ -98,11 +98,15 @@ class PhotoWallUploader(PhotoUploader):
         file = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], {"photo": file})
-        photos = (await self.api.request("photos.saveWallPhoto", {**uploader, **params}))[
-            "response"
-        ]
-
-        return photos[0]
+        response = await self.api.request(
+            "photos.saveWallPhoto",
+            {
+                "group_id": group_id,
+                **uploader,
+                **params,
+            }
+        )
+        return response["response"][0]
 
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("photos.getWallUploadServer", kwargs))["response"]
