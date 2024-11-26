@@ -104,7 +104,7 @@ class PhotoWallUploader(PhotoUploader):
                 "group_id": group_id,
                 **uploader,
                 **params,
-            }
+            },
         )
         return response["response"][0]
 
