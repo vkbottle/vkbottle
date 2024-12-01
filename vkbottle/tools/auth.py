@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List, Optional
 
-from vkbottle.exception_factory import CaptchaError, VKAPIError
+from vkbottle.exception_factory import APIAuthError, CaptchaError, VKAPIError
 
 if TYPE_CHECKING:
     from vkbottle.http import ABCHTTPClient
@@ -69,6 +69,8 @@ class UserAuth:
         response["error_msg"] = response.pop("error")
         if response["error_msg"] == "need_captcha":
             raise CaptchaError(**response, request_params=[])
+        if response["error_msg"] == "need_validation":
+            raise APIAuthError(**response, request_params=[])
         raise AuthError(**response, request_params=[])
 
 
