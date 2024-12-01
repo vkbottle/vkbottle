@@ -1,8 +1,12 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, List, Optional
 
 from vkbottle.exception_factory import APIAuthError, CaptchaError, VKAPIError
 
 if TYPE_CHECKING:
+    from typing import Any
+
     from vkbottle.http import ABCHTTPClient
 
 MOBILE_APP_ID = 2274003
@@ -17,9 +21,10 @@ class AuthError(VKAPIError[0]):  # type: ignore
         error_type: str,
         error_msg: str,
         request_params: Optional[List[dict]] = None,
+        **kwargs: Any,
     ):
         request_params = request_params or []
-        super().__init__(error_msg=error_msg, request_params=request_params)
+        super().__init__(error_msg=error_msg, request_params=request_params, kwargs=kwargs)
         self.error_msg = error_msg
         self.error_type = error_type
         self.error_description = error_description
