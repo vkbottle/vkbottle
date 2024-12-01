@@ -42,7 +42,9 @@ class BotMessagesPooling(UserPolling):
     async def get_server(self) -> dict:
         logger.debug("Getting polling server...")
         if self.group_id is None:
-            self.group_id = (await self.api.request("groups.getById", {}))["response"][0]["id"]
+            self.group_id = (await self.api.request("groups.getById", {}))["response"]["groups"][
+                0
+            ]["id"]
         return (await self.api.request("messages.getLongPollServer", {}))["response"]
 
 

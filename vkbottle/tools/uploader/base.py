@@ -64,7 +64,7 @@ class BaseUploader(ABC):
         if "owner_id" in upload_params:
             return upload_params["owner_id"]
         try:
-            return -(await self.api.request("groups.getById", {}))["response"][0]["id"]
+            return -(await self.api.request("groups.getById", {}))["response"]["groups"][0]["id"]
         except VKAPIError:
             return (await self.api.request("users.get", {}))["response"][0]["id"]
 
