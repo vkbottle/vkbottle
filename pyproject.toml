@@ -64,6 +64,7 @@ pytest = ">=7.2.1,<9.0.0"
 pytest-asyncio = ">=0.20.3,<0.25.0"
 pytest-cov = ">=4,<6"
 pytest-mock = "^3.10.0"
+aioresponses = "^0.7.7"
 # Pre-commit
 pre-commit = ">=2.19,<4.0"
 
