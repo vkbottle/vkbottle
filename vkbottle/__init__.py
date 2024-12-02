@@ -39,6 +39,7 @@ from .exception_factory import (
     CaptchaError,
     CodeException,
     ErrorHandler,
+    FloodControlError,
     VKAPIError,
 )
 from .framework import (
@@ -143,6 +144,7 @@ __all__ = (
     "CallableValidator",
     "Callback",
     "CaptchaError",
+    "FloodControlError",
     "APIAuthError",
     "CodeException",
     "ConsistentTokenGenerator",

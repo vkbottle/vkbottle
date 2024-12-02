@@ -50,6 +50,7 @@ class APIAuthError(VKAPIError, code=5):
         phone_mask: Optional[str] = None,
         redirect_uri: Optional[str] = None,
         ban_info: Optional[dict] = None,
+        error_description: Optional[str] = None,
         **kwargs: Any,
     ):
         super().__init__(**kwargs)
@@ -58,3 +59,19 @@ class APIAuthError(VKAPIError, code=5):
         self.phone_mask = phone_mask
         self.redirect_uri = redirect_uri
         self.ban_info = ban_info
+        self.error_description = error_description
+
+
+class FloodControlError(VKAPIError, code=9):
+    def __init__(
+        self,
+        *,
+        error_type: str,
+        error_description: Optional[str] = None,
+        view: Optional[str] = None,
+        **kwargs: Any,
+    ):
+        super().__init__(**kwargs)
+        self.error_type = error_type
+        self.error_description = error_description
+        self.view = view
