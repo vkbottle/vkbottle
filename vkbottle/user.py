@@ -1,5 +1,3 @@
-from typing_extensions import deprecated  # type: ignore
-
 from vkbottle.framework.labeler import UserLabeler
 
 from .dispatch.rules import base as rules
@@ -8,16 +6,7 @@ from .framework.user import User, UserBlueprint, run_multibot
 from .tools.mini_types.user import MessageMin
 
 Message = MessageMin
-
-
-@deprecated(
-    "Blueprints was deprecated and will be removed in future releases, "
-    "read about new code separation method in documentation: \n"
-    "https://vkbottle.rtfd.io/ru/latest/tutorial/code-separation/",
-    category=FutureWarning,
-    stacklevel=0,
-)
-class Blueprint(UserBlueprint): ...
+Blueprint = UserBlueprint
 
 
 __all__ = (
