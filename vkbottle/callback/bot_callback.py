@@ -41,7 +41,9 @@ class BotCallback(ABCCallback):
 
     async def setup_group_id(self):
         if self.group_id is None:
-            self.group_id = (await self.api.request("groups.getById", {}))["response"][0]["id"]
+            self.group_id = (await self.api.request("groups.getById", {}))["response"]["groups"][
+                0
+            ]["id"]
 
     async def find_server_id(self) -> Optional[int]:
         servers = await self.get_callback_servers()
