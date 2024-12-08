@@ -4,7 +4,9 @@ from enum import IntEnum
 from functools import reduce
 from typing import TYPE_CHECKING
 
-from vkbottle.exception_factory import APIAuthError, CaptchaError, FloodControlError, VKAPIError
+from vkbottle_types import API_URL, API_VERSION
+
+from vkbottle.exception_factory import APIAuthError, CaptchaError, VKAPIError
 
 if TYPE_CHECKING:
     from typing import Any, List, Optional, Union
@@ -20,17 +22,17 @@ class AuthError(VKAPIError[0]):  # type: ignore
         self,
         *,
         error_msg: str,
-        error_type: str,
         error_description: str,
+        error_type: Optional[str] = None,
         view: Optional[str] = None,
         request_params: Optional[List[dict]] = None,
         **kwargs: Any,
-    ):
+    ) -> None:
         request_params = request_params or []
-        super().__init__(error_msg=error_msg, request_params=request_params, kwargs=kwargs)
+        super().__init__(error_msg=error_msg, request_params=request_params, **kwargs)
         self.error_msg = error_msg
-        self.error_type = error_type
         self.error_description = error_description
+        self.error_type = error_type
         self.view = view
 
 
@@ -98,8 +100,9 @@ class UserAuth:
         self,
         client_id: Optional[int] = None,
         client_secret: Optional[str] = None,
+        language: str = "en",
         http_client: Optional["ABCHTTPClient"] = None,
-    ):
+    ) -> None:
         from vkbottle.http import SingleAiohttpClient
 
         if client_id is not None and client_secret is not None:
@@ -108,6 +111,8 @@ class UserAuth:
         else:
             self.client_id = MOBILE_APP_ID
             self.client_secret = MOBILE_APP_SECRET
+
+        self.language = language
 
         self.http_client = http_client or SingleAiohttpClient()
 
@@ -120,7 +125,7 @@ class UserAuth:
         captcha_sid: Optional[str] = None,
         captcha_key: Optional[str] = None,
         **kwargs: Any,
-    ) -> dict:
+    ) -> dict[str, Any]:
         params = {
             "grant_type": "password",
             "client_id": self.client_id,
@@ -128,6 +133,7 @@ class UserAuth:
             "username": login,
             "password": password,
             "scope": get_scope(scope or DEFAULT_USER_PERMISSIONS),
+            "lang": self.language,
         }
 
         if auth_code:
@@ -187,9 +193,20 @@ class UserAuth:
             raise CaptchaError(**response, request_params=[])
         if error_msg == "need_validation":
             raise APIAuthError(**response, request_params=[])
-        if error_msg == "9;Flood control":
-            raise FloodControlError(**response, request_params=[])
         raise AuthError(**response, request_params=[])
 
+    async def validate_phone(self, validation_sid: str, api_version: str = API_VERSION) -> None:
+        response = await self.http_client.request_json(
+            url=API_URL + "auth.validatePhone",
+            params={
+                "sid": validation_sid,
+                "lang": self.language,
+                "v": api_version,
+            },
+        )
+        response["error_msg"] = response.pop("error")
+        if response["error_msg"]:
+            raise AuthError(**response, request_params=[])
 
-__all__ = ("AuthError", "UserAuth")
+
+__all__ = ("AuthError", "UserAuth", "UserPermission")

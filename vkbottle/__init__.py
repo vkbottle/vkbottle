@@ -39,7 +39,6 @@ from .exception_factory import (
     CaptchaError,
     CodeException,
     ErrorHandler,
-    FloodControlError,
     VKAPIError,
 )
 from .framework import (
@@ -91,6 +90,7 @@ from .tools import (
     TemplateElement,
     Text,
     UserAuth,
+    UserPermission,
     UserTypes,
     VideoUploader,
     VKApps,
@@ -144,7 +144,6 @@ __all__ = (
     "CallableValidator",
     "Callback",
     "CaptchaError",
-    "FloodControlError",
     "APIAuthError",
     "CodeException",
     "ConsistentTokenGenerator",
@@ -191,6 +190,7 @@ __all__ = (
     "UserAuth",
     "UserBlueprint",
     "UserEventType",
+    "UserPermission",
     "UserPolling",
     "UserTypes",
     "VKAPIError",
