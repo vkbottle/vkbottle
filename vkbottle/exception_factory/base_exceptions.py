@@ -42,6 +42,21 @@ class CaptchaError(VKAPIError, code=14):
 
 
 class APIAuthError(VKAPIError, code=5):
-    def __init__(self, *, ban_info: Optional[dict] = None, **kwargs: Any):
+    def __init__(
+        self,
+        *,
+        validation_type: Optional[str] = None,
+        validation_sid: Optional[str] = None,
+        phone_mask: Optional[str] = None,
+        redirect_uri: Optional[str] = None,
+        ban_info: Optional[dict] = None,
+        error_description: Optional[str] = None,
+        **kwargs: Any,
+    ):
         super().__init__(**kwargs)
+        self.validation_type = validation_type
+        self.validation_sid = validation_sid
+        self.phone_mask = phone_mask
+        self.redirect_uri = redirect_uri
         self.ban_info = ban_info
+        self.error_description = error_description
