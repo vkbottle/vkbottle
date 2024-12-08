@@ -110,6 +110,9 @@ async def main():
                 parsed_url = urlparse(url=oauth_url)
                 token = parse_qs(parsed_url.fragment)["access_token"][0]
                 break
+
+            print(error.error_description)
+            return
         except AuthError as error:
             print(error.error_description)
             return

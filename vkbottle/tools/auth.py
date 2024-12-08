@@ -209,10 +209,14 @@ class UserAuth:
             },
         )
 
-        response["error_msg"] = response.pop("error", None)
-        if not response["error_msg"]:
+        error: str | dict[str, Any] | None = response.pop("error", None)
+        if not error:
             return response
 
+        if isinstance(error, dict) and "error_code" in error:
+            raise VKAPIError[error.pop("error_code")](**error)
+
+        response["error_msg"] = error
         raise AuthError(**response, request_params=[])
 
 
