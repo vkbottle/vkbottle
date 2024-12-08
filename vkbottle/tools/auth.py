@@ -195,7 +195,11 @@ class UserAuth:
             raise APIAuthError(**response, request_params=[])
         raise AuthError(**response, request_params=[])
 
-    async def validate_phone(self, validation_sid: str, api_version: str = API_VERSION) -> None:
+    async def validate_phone(
+        self,
+        validation_sid: str,
+        api_version: str = API_VERSION,
+    ) -> dict[str, Any]:
         response = await self.http_client.request_json(
             url=API_URL + "auth.validatePhone",
             params={
@@ -204,9 +208,12 @@ class UserAuth:
                 "v": api_version,
             },
         )
-        response["error_msg"] = response.pop("error")
-        if response["error_msg"]:
-            raise AuthError(**response, request_params=[])
+
+        response["error_msg"] = response.pop("error", None)
+        if not response["error_msg"]:
+            return response
+
+        raise AuthError(**response, request_params=[])
 
 
 __all__ = ("AuthError", "UserAuth", "UserPermission")
