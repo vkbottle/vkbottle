@@ -58,7 +58,7 @@ mypy-extensions = "^1.0.0"
 # mypy stubs
 types-aiofiles = ">=22.1,<25.0"
 # flake8, isort and autoflake replacement
-ruff = ">=0.0.246,<0.8.6"
+ruff = ">=0.0.246,<0.8.7"
 # Tests
 pytest = ">=7.2.1,<9.0.0"
 pytest-asyncio = ">=0.20.3,<0.25.0"
