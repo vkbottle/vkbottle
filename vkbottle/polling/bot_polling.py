@@ -1,27 +1,18 @@
-import asyncio
-import enum
-from typing import TYPE_CHECKING, AsyncGenerator, Optional
+from typing import TYPE_CHECKING, Optional
 
-from aiohttp.client_exceptions import ClientConnectionError
 from typing_extensions import Self
 
-from vkbottle.exception_factory import ErrorHandler, VKAPIError
+from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
 
-from .abc import ABCPolling
+from .base import BasePolling
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
     from vkbottle.exception_factory import ABCErrorHandler
 
 
-class PollingFailureCode(enum.IntEnum):
-    HISTORY_OUTDATED = 1
-    KEY_EXPIRED = 2
-    INFORMATION_LOST = 3
-
-
-class BotPolling(ABCPolling):
+class BotPolling(BasePolling):
     """Bot Polling class
     Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/polling
     """
@@ -68,55 +59,6 @@ class BotPolling(ABCPolling):
             )
         )["response"]
 
-    async def handle_failed_event(self, server: dict, event: dict) -> dict:
-        try:
-            failed = PollingFailureCode(event["failed"])
-        except ValueError:
-            logger.error("Unknown failure code {}, event: {!r}", event["failed"], event)
-            return {}
-
-        if failed == PollingFailureCode.HISTORY_OUTDATED:
-            server["ts"] = event["ts"]
-            return server
-
-        if failed in (PollingFailureCode.KEY_EXPIRED, PollingFailureCode.INFORMATION_LOST):
-            new_server = await self.get_server()
-            new_server["ts"] = (
-                server["ts"] if failed == PollingFailureCode.KEY_EXPIRED else new_server["ts"]
-            )
-            return new_server
-
-        return {}
-
-    async def listen(self) -> AsyncGenerator[dict, None]:
-        retry_count = 0
-        server = await self.get_server()
-        logger.debug("Starting listening to Longpoll")
-
-        while not self.stop:
-            try:
-                server = server if server else await self.get_server()
-                event = await self.get_event(server)
-
-                if "failed" in event:
-                    server = await self.handle_failed_event(server, event)
-                    continue
-
-                if "ts" not in event:
-                    server = await self.get_server()
-                    continue
-
-                server["ts"] = event["ts"]
-                retry_count = 0
-                yield event
-            except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
-                logger.error("Unable to make request to Longpoll, retrying...")
-                retry_count += 1
-                server = {}
-                await asyncio.sleep(0.1 * retry_count)
-            except Exception as e:
-                await self.error_handler.handle(e)
-
     def construct(
         self,
         api: "ABCAPI",
@@ -139,3 +81,6 @@ class BotPolling(ABCPolling):
     @api.setter
     def api(self, new_api: "ABCAPI") -> None:
         self._api = new_api
+
+
+__all__ = ("BotPolling",)

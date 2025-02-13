@@ -41,3 +41,6 @@ class ABCPolling(ABC):
         error_handler: Optional["ABCErrorHandler"] = None,
     ) -> Self:
         pass
+
+
+__all__ = ("ABCPolling",)

@@ -1,19 +1,16 @@
-import asyncio
-from typing import TYPE_CHECKING, AsyncGenerator, Optional
+from typing import TYPE_CHECKING, Optional
 
-from aiohttp.client_exceptions import ClientConnectionError
-
-from vkbottle.exception_factory import ErrorHandler, VKAPIError
+from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
 
-from .abc import ABCPolling
+from .base import BasePolling
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
     from vkbottle.exception_factory import ABCErrorHandler
 
 
-class UserPolling(ABCPolling):
+class UserPolling(BasePolling):
     """User Polling class
     Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/polling
     """
@@ -56,28 +53,6 @@ class UserPolling(ABCPolling):
             self.user_id = (await self.api.request("users.get", {}))["response"][0]["id"]
         return (await self.api.request("messages.getLongPollServer", {}))["response"]
 
-    async def listen(self) -> AsyncGenerator[dict, None]:
-        retry_count = 0
-        server = await self.get_server()
-        logger.debug("Starting listening to longpoll")
-        while not self.stop:
-            try:
-                if not server:
-                    server = await self.get_server()
-                event = await self.get_event(server)
-                if not event.get("ts"):
-                    server = await self.get_server()
-                    continue
-                server["ts"] = event["ts"]
-                retry_count = 0
-                yield event
-            except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
-                logger.error("Unable to make request to Longpoll, retrying...")
-                await asyncio.sleep(0.1 * retry_count)
-                server = {}
-            except Exception as e:
-                await self.error_handler.handle(e)
-
     def construct(
         self, api: "ABCAPI", error_handler: Optional["ABCErrorHandler"] = None
     ) -> "UserPolling":
@@ -98,3 +73,6 @@ class UserPolling(ABCPolling):
     @api.setter
     def api(self, new_api: "ABCAPI"):
         self._api = new_api
+
+
+__all__ = ("UserPolling",)
