@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Awaitable, Callable, Coroutine, Dict, Optional, Type, TypeVar
+from collections.abc import Awaitable, Coroutine
+from typing import Any, Callable, Dict, Optional, Type, TypeVar
 
 from typing_extensions import ParamSpec
 

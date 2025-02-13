@@ -1,7 +1,8 @@
 import asyncio
 import enum
 from abc import ABC
-from typing import TYPE_CHECKING, AsyncGenerator
+from collections.abc import AsyncGenerator
+from typing import TYPE_CHECKING
 
 from aiohttp.client_exceptions import ClientConnectionError
 

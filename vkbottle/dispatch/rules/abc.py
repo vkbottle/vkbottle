@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import ClassVar, Generic, Iterable, Type, TypeVar
+from collections.abc import Iterable
+from typing import ClassVar, Generic, Type, TypeVar
 
 T_contra = TypeVar("T_contra", contravariant=True)
 

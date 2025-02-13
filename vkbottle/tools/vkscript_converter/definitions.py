@@ -1,7 +1,8 @@
 import ast
 import random
 import string
-from typing import TYPE_CHECKING, Any, Callable, Iterable
+from collections.abc import Iterable
+from typing import TYPE_CHECKING, Any, Callable
 
 from typing_extensions import Concatenate, ParamSpec
 

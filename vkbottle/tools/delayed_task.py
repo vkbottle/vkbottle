@@ -1,5 +1,6 @@
 from asyncio import sleep
-from typing import Any, Callable, Coroutine
+from collections.abc import Coroutine
+from typing import Any, Callable
 
 
 class DelayedTask:

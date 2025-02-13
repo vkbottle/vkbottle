@@ -2,8 +2,9 @@ import asyncio
 import importlib
 import os
 import re
+from collections.abc import Coroutine, Iterator
 from concurrent.futures import ThreadPoolExecutor
-from typing import TYPE_CHECKING, Any, Coroutine, Iterator, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from vkbottle.modules import logger
 

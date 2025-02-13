@@ -117,19 +117,12 @@ lint.select = [
   "D",     # pydocstyle
   "UP",    # pyupgrade
   "YTT",   # flake8-2020
-  # "ANN", # flake8-annotations
   "ASYNC", # flake8-async
   "S",     # flake8-bandit
-  # "BLE", # flake8-blind-except
-  # "FBT", # flake8-boolean-trap
   "B",     # flake8-bugbear
   "A",     # flake8-builtins
-  # "COM", # flake8-commas
-  # "CPY", # Copyright-related rules
   "C40",   # flake8-comprehensions
-  # "DTZ", # flake8-datetimez
   "T10",   # flake8-debugger
-  # "DJ",  # flake8-django
   "EM",    # flake8-errmsg
   "EXE",   # flake8-executable
   "FA",    # flake8-future-annotations
@@ -184,14 +177,12 @@ lint.ignore = [
   "ERA",     # flake8-eradicate
   "PD",      # pandas-vet
   "D",       # pydocstyle
+  "TC003",   # typing-only-standard-library-import
   "TRY",     # tryceratops
   "SLF",     # flake8-self
   "AIR",     # Airflow
   "UP037",   # quoted-annotation
-  # "E203",  # whitespace before ':' (black)
   "E501",    # line too long
-  # "W503",  # line break before binary operator (black)
-  # "W504",  # line break after binary operator (black)
   "B905",    # `zip()` without an explicit `strict=` parameter (python3.10+ only)
   "PLR0913", # Too many arguments to function call
   "A003",    # Class attribute builtin name shadowing
@@ -211,6 +202,7 @@ lint.ignore = [
   "S301",    # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue
   "FA100",   # `__future__` import "annotations" missing
   "ISC001",  # single-line-implicit-string-concatenation
+  "UP035",   # deprecated-import
 ]
 
 [tool.ruff.lint.per-file-ignores]

@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Iterable, Type
+from collections.abc import Iterable
+from typing import TYPE_CHECKING, Type
 
 from vkbottle.http import SingleAiohttpClient
 from vkbottle.modules import logger

@@ -1,10 +1,9 @@
 import typing
+from collections.abc import AsyncIterator, Iterable
 from typing import (
     TYPE_CHECKING,
     Any,
-    AsyncIterator,
     Dict,
-    Iterable,
     List,
     NamedTuple,
     Optional,

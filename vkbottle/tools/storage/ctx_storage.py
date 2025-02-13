@@ -1,4 +1,5 @@
-from typing import Any, Hashable, Optional
+from collections.abc import Hashable
+from typing import Any, Optional
 
 from vkbottle.tools.ctx_tool import BaseContext
 

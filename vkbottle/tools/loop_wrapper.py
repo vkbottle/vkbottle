@@ -2,7 +2,8 @@ import asyncio
 import contextlib
 import warnings  # type: ignore
 from asyncio import new_event_loop
-from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
+from collections.abc import Coroutine
+from typing import TYPE_CHECKING, Any, Callable, List, Optional, Union
 
 from typing_extensions import deprecated  # type: ignore
 

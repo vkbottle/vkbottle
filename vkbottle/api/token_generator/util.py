@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Iterable
+from collections.abc import Iterable
+from typing import TYPE_CHECKING
 
 from .consistent import ConsistentTokenGenerator
 from .single import SingleTokenGenerator
