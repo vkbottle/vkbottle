@@ -1,5 +1,5 @@
 import itertools
-from typing import Iterable
+from collections.abc import Iterable
 
 from .abc import ABCTokenGenerator
 

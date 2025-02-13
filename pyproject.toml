@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "vkbottle"
-version = "4.4.3.post1"
+version = "4.4.4"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
 authors = ["timoniq"]
-maintainers = ["FeeeeK"]
+maintainers = ["luwqz1"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/vkbottle/vkbottle"
@@ -12,6 +12,7 @@ keywords = [
   "vk",
   "vk-api",
   "vkbottle",
+  "bot-longpoll",
   "user-longpoll",
   "async",
   "asyncio",
@@ -24,11 +25,11 @@ classifiers = [
   "Environment :: Console",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Software Development :: Quality Assurance",
   "Typing :: Typed",
@@ -40,30 +41,31 @@ classifiers = [
 
 
 [tool.poetry.dependencies]
-python = "^3.8"
-aiohttp = "^3.10.0"
+python = "^3.9"
+aiohttp = "^3.11.12"
 choicelib = "^0.1.5"
 pydantic = "<3 || <=1.10.8"
 vbml = "^1.1.post1"
 aiofiles = "24.1.0"
 typing-extensions = "^4.4.0"
 colorama = "^0.4.6"
-vkbottle-types = "^5.199.63.3"
+vkbottle-types = "^5.199.63.4"
 
 [tool.poetry.group.dev.dependencies]
 # Lint
-black = ">=23.1,<25.0"
-mypy = "^1.10.0"
+black = "^25.1.0"
+mypy = "^1.15.0"
 mypy-extensions = "^1.0.0"
 # mypy stubs
 types-aiofiles = ">=22.1,<25.0"
 # flake8, isort and autoflake replacement
-ruff = ">=0.0.246,<0.8.2"
+ruff = ">=0.0.246,<0.8.6"
 # Tests
 pytest = ">=7.2.1,<9.0.0"
 pytest-asyncio = ">=0.20.3,<0.25.0"
 pytest-cov = ">=4,<6"
 pytest-mock = "^3.10.0"
+aioresponses = "^0.7.7"
 # Pre-commit
 pre-commit = ">=2.19,<4.0"
 
@@ -83,7 +85,7 @@ asyncio_mode = "auto"
 
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 ignore_missing_imports = true
 warn_no_return = false
 warn_return_any = false
@@ -98,13 +100,13 @@ ignore_errors = true
 
 [tool.black]
 line-length = 99
-target-version = ["py38"]
+target-version = ["py39"]
 
 
 [tool.ruff]
 line-length = 99
 respect-gitignore = true
-target-version = "py38"
+target-version = "py39"
 lint.select = [
   "F",     # Pyflakes
   "E",     # pycodestyle errors
@@ -115,19 +117,12 @@ lint.select = [
   "D",     # pydocstyle
   "UP",    # pyupgrade
   "YTT",   # flake8-2020
-  # "ANN", # flake8-annotations
   "ASYNC", # flake8-async
   "S",     # flake8-bandit
-  # "BLE", # flake8-blind-except
-  # "FBT", # flake8-boolean-trap
   "B",     # flake8-bugbear
   "A",     # flake8-builtins
-  # "COM", # flake8-commas
-  # "CPY", # Copyright-related rules
   "C40",   # flake8-comprehensions
-  # "DTZ", # flake8-datetimez
   "T10",   # flake8-debugger
-  # "DJ",  # flake8-django
   "EM",    # flake8-errmsg
   "EXE",   # flake8-executable
   "FA",    # flake8-future-annotations
@@ -182,14 +177,12 @@ lint.ignore = [
   "ERA",     # flake8-eradicate
   "PD",      # pandas-vet
   "D",       # pydocstyle
+  "TC003",   # typing-only-standard-library-import
   "TRY",     # tryceratops
   "SLF",     # flake8-self
   "AIR",     # Airflow
   "UP037",   # quoted-annotation
-  # "E203",  # whitespace before ':' (black)
   "E501",    # line too long
-  # "W503",  # line break before binary operator (black)
-  # "W504",  # line break after binary operator (black)
   "B905",    # `zip()` without an explicit `strict=` parameter (python3.10+ only)
   "PLR0913", # Too many arguments to function call
   "A003",    # Class attribute builtin name shadowing
@@ -209,6 +202,7 @@ lint.ignore = [
   "S301",    # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue
   "FA100",   # `__future__` import "annotations" missing
   "ISC001",  # single-line-implicit-string-concatenation
+  "UP035",   # deprecated-import
 ]
 
 [tool.ruff.lint.per-file-ignores]

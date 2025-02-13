@@ -42,7 +42,7 @@ jobs:
         run: echo "SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)" >> $GITHUB_ENV
 
       - name: Upload wheel
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: vkbottle-${{ inputs.python-version }}-${{ runner.os }}-${{ env.SHORT_SHA }}
           path: dist/*.whl

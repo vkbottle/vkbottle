@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, AsyncIterator, Optional
+from collections.abc import AsyncIterator
+from typing import TYPE_CHECKING, Any, Optional
 
 from typing_extensions import Self
 
@@ -41,3 +42,6 @@ class ABCPolling(ABC):
         error_handler: Optional["ABCErrorHandler"] = None,
     ) -> Self:
         pass
+
+
+__all__ = ("ABCPolling",)

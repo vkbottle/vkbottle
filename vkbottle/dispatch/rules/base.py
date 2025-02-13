@@ -2,17 +2,15 @@ import difflib
 import inspect
 import re
 import types
+from collections.abc import Awaitable, Coroutine, Iterable
+from re import Pattern
 from typing import (
     TYPE_CHECKING,
     Any,
-    Awaitable,
     Callable,
-    Coroutine,
     Dict,
-    Iterable,
     List,
     Optional,
-    Pattern,
     Tuple,
     Type,
     Union,

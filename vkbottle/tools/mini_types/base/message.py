@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from io import StringIO
-from typing import TYPE_CHECKING, Any, Callable, List, Literal, Optional, Union, overload
+from typing import TYPE_CHECKING, Any, Callable, Final, List, Literal, Optional, Union, overload
 
 from vkbottle_types.objects import (
     AudioAudio,
@@ -31,6 +31,8 @@ from vkbottle.dispatch.dispenser.base import StatePeer  # noqa: TC001
 from .foreign_message import BaseForeignMessageMin  # noqa: TC001
 from .mention import Mention, replace_mention_validator
 
+PEER_ID_OFFSET: Final[int] = 2_000_000_000
+
 
 class BaseMessageMin(MessagesMessage, ABC):
     unprepared_ctx_api: Optional[Any] = None
@@ -39,7 +41,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     fwd_messages: List["BaseForeignMessageMin"] = pydantic.Field(default_factory=list)
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
-    _chat_members: List[MessagesConversationMember] = pydantic.Field(default_factory=list)
+    _chat_members: Optional[List[MessagesConversationMember]] = None
 
     __replace_mention = pydantic.root_validator(  # type: ignore
         replace_mention_validator,
@@ -67,7 +69,7 @@ class BaseMessageMin(MessagesMessage, ABC):
         return self._mention
 
     @property
-    def chat_members(self) -> List[MessagesConversationMember]:
+    def chat_members(self) -> Optional[List[MessagesConversationMember]]:
         return self._chat_members
 
     @property
@@ -89,7 +91,7 @@ class BaseMessageMin(MessagesMessage, ABC):
         return raw_user if raw_mode else UsersUserFull(**raw_user)
 
     async def get_chat_members(self, **kwargs: Any) -> List[MessagesConversationMember]:
-        if not self._chat_members:
+        if self._chat_members is None:
             self._chat_members = (
                 await self.ctx_api.messages.get_conversation_members(
                     peer_id=self.peer_id,
@@ -100,15 +102,17 @@ class BaseMessageMin(MessagesMessage, ABC):
 
     async def user_is_admin(self, user_id: int) -> bool:
         members = await self.get_chat_members()
+        if not members:
+            return False
         return any(member.member_id == user_id and member.is_admin for member in members)
 
     @property
     def chat_id(self) -> int:
-        return self.peer_id - 2_000_000_000
+        return self.peer_id - PEER_ID_OFFSET
 
     @property
     def message_id(self) -> int:
-        return self.conversation_message_id or self.id
+        return self.id or self.conversation_message_id
 
     def get_attachment_strings(self) -> Optional[List[str]]:
         if self.attachments is None:

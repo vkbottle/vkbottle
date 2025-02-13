@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import asyncio
 import os
+import re
 from io import StringIO
 from typing import TYPE_CHECKING
 
@@ -8,6 +11,7 @@ import pytest
 from vkbottle import API
 from vkbottle.bot import Bot, run_multibot
 from vkbottle.dispatch import ABCRule, AndRule, NotRule, OrRule
+from vkbottle.exception_factory.base_exceptions import APIAuthError, VKAPIError
 from vkbottle.modules import json
 from vkbottle.tools import (
     CallableValidator,
@@ -20,12 +24,14 @@ from vkbottle.tools import (
     LoopWrapper,
     TemplateElement,
     Text,
+    UserAuth,
     load_blueprints_from_package,
     run_in_task,
     template_gen,
 )
 
 if TYPE_CHECKING:
+    from aioresponses import aioresponses
     from pytest_mock import MockerFixture
 
 KEYBOARD_JSON = json.dumps(
@@ -228,3 +234,94 @@ def test_run_multibot(mocker: "MockerFixture"):
 
     run_multibot(Bot(), (API("1"), API("2"), API("3")))
     assert len(bot_apis) == 3  # type: ignore
+
+
+@pytest.mark.asyncio
+async def test_user_auth(mock_aioresponse: aioresponses):
+    mock_aioresponse.post(
+        "https://oauth.vk.com/token",
+        payload={"access_token": "token"},
+    )
+
+    token = await UserAuth(client_id=1234, client_secret="secret").get_token("login", "password")
+
+    assert token == "token"  # noqa: S105
+
+
+@pytest.mark.parametrize("validation_type", ["2fa_app", "2fa_sms"])
+@pytest.mark.asyncio
+async def test_user_auth_with_2fa(mock_aioresponse: aioresponses, validation_type: str):
+    mock_aioresponse.post(
+        "https://oauth.vk.com/token",
+        payload={
+            "error": "need_validation",
+            "error_description": "open redirect_uri in browser [5]. Also you can use 2fa_supported param",
+            "validation_type": validation_type,
+            "validation_sid": "2fa_123456789_1234567_4h45c0f3a79c8kb78e",
+            "phone_mask": "+7 *** *** ** 89",
+            "redirect_uri": "https://m.vk.com/login?act=authcheck&api_hash=someapihash",
+        },
+    )
+
+    with pytest.raises(APIAuthError) as exc_info:
+        await UserAuth(client_id=1234, client_secret="secret").get_token("login", "password")
+
+    assert exc_info.value.validation_type == validation_type
+    assert exc_info.value.validation_sid == "2fa_123456789_1234567_4h45c0f3a79c8kb78e"
+    assert exc_info.value.phone_mask == "+7 *** *** ** 89"
+    assert (
+        exc_info.value.redirect_uri == "https://m.vk.com/login?act=authcheck&api_hash=someapihash"
+    )
+
+
+@pytest.mark.asyncio
+async def test_validate_phone(mock_aioresponse: aioresponses):
+    expected_response = {
+        "response": {
+            "type": "general",
+            "sid": "2fa_123456789_1234567_4h45c0f3a32c8kb78e",
+            "delay": 60,
+            "libverify_support": False,
+            "validation_type": "sms",
+            "validation_resend": "sms",
+            "code_length": 6,
+        }
+    }
+    mock_aioresponse.get(
+        re.compile(r"^https://api\.vk\.com/method/auth\.validatePhone.*$"),
+        payload=expected_response,
+    )
+
+    response = await UserAuth().validate_phone(
+        validation_sid="2fa_123456789_1234567_4h45c0f3a32c8kb78e"
+    )
+
+    assert response == expected_response
+
+
+@pytest.mark.asyncio
+async def test_validate_phone_with_invalid_sid(mock_aioresponse: aioresponses):
+    mock_aioresponse.get(
+        re.compile(r"^https://api\.vk\.com/method/auth\.validatePhone.*$"),
+        payload={
+            "error": {
+                "error_code": 100,
+                "error_msg": "One of the parameters specified was missing or invalid: sid is wrong",
+                "request_params": [
+                    {"key": "sid", "value": "invalid_sid"},
+                    {"key": "lang", "value": "en"},
+                    {"key": "v", "value": "5.199"},
+                    {"key": "method", "value": "auth.validatePhone"},
+                    {"key": "oauth", "value": "1"},
+                ],
+            }
+        },
+    )
+
+    with pytest.raises(VKAPIError[100]) as exc_info:
+        await UserAuth().validate_phone(validation_sid="invalid_sid")
+
+    assert (
+        exc_info.value.error_msg
+        == "One of the parameters specified was missing or invalid: sid is wrong"
+    )

@@ -1,13 +1,11 @@
 from __future__ import annotations
 
+from collections.abc import Awaitable, Iterable, Mapping
 from typing import (
     TYPE_CHECKING,
     Any,
-    Awaitable,
     Callable,
-    Iterable,
     List,
-    Mapping,
     Optional,
     Type,
     Union,

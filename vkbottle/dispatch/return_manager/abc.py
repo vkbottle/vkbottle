@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod, abstractproperty
-from typing import Any, Awaitable, Callable, Dict, NamedTuple, Optional, Tuple, Union
+from collections.abc import Awaitable
+from typing import Any, Callable, Dict, NamedTuple, Optional, Tuple, Union
 
 HANDLER_PROPERTY_TYPES = Union[type, Tuple[type, ...]]
 

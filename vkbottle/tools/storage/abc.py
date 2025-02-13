@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Hashable
+from collections.abc import Hashable
+from typing import Any
 
 
 class ABCStorage(ABC):

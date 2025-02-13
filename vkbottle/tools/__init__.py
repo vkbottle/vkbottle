@@ -1,4 +1,4 @@
-from .auth import AuthError, UserAuth
+from .auth import AuthError, UserAuth, UserPermission
 from .ctx_tool import BaseContext
 from .delayed_task import DelayedTask
 from .event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
@@ -82,6 +82,7 @@ __all__ = (
     "TemplateElement",
     "Text",
     "UserAuth",
+    "UserPermission",
     "UserTypes",
     "VKApps",
     "VKPay",

@@ -51,7 +51,7 @@ from .framework import (
     run_multibot,
 )
 from .http import ABCHTTPClient, AiohttpClient, SingleAiohttpClient
-from .polling import ABCPolling, BotPolling, UserPolling
+from .polling import ABCPolling, BasePolling, BotPolling, UserPolling
 from .tools import (
     EMPTY_KEYBOARD,
     ABCAction,
@@ -90,6 +90,7 @@ from .tools import (
     TemplateElement,
     Text,
     UserAuth,
+    UserPermission,
     UserTypes,
     VideoUploader,
     VKApps,
@@ -132,6 +133,7 @@ __all__ = (
     "BaseContext",
     "BaseMiddleware",
     "BaseReturnManager",
+    "BasePolling",
     "BaseStateGroup",
     "BaseUploader",
     "BlockingRequestRescheduler",
@@ -189,6 +191,7 @@ __all__ = (
     "UserAuth",
     "UserBlueprint",
     "UserEventType",
+    "UserPermission",
     "UserPolling",
     "UserTypes",
     "VKAPIError",
