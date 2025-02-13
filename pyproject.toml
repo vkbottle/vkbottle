@@ -49,7 +49,7 @@ vbml = "^1.1.post1"
 aiofiles = "24.1.0"
 typing-extensions = "^4.4.0"
 colorama = "^0.4.6"
-vkbottle-types = "^5.199.63.3"
+vkbottle-types = "^5.199.63.4"
 
 [tool.poetry.group.dev.dependencies]
 # Lint
