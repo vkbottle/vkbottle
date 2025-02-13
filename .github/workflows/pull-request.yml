@@ -17,7 +17,7 @@ jobs:
         uses: ./.github/actions/install-dependencies
         with:
           os: ubuntu-latest
-          python-version: "3.11"
+          python-version: "3.13"
 
       - name: Load pre-commit cache
         id: cached-pre-commit
@@ -40,8 +40,8 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - "3.8"
-          - "3.11"
+          - "3.9"
+          - "3.13"
         os:
           - ubuntu-latest
           - windows-latest
