@@ -67,7 +67,7 @@ pytest-cov = ">=4,<7"
 pytest-mock = "^3.10.0"
 aioresponses = "^0.7.7"
 # Pre-commit
-pre-commit = ">=2.19,<4.0"
+pre-commit = ">=2.19,<5.0"
 
 [tool.poetry.group.docs.dependencies]
 # Docs
