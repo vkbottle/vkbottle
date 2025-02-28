@@ -1,10 +1,10 @@
-from typing import TYPE_CHECKING, NoReturn, Optional, Tuple
+from typing import TYPE_CHECKING, Optional, Tuple
 
 from vkbottle.api import API
 from vkbottle.callback import BotCallback
 from vkbottle.dispatch import BuiltinStateDispenser, Router
 from vkbottle.exception_factory import ErrorHandler
-from vkbottle.framework.abc import ABCFramework
+from vkbottle.framework.base import BaseFramework
 from vkbottle.framework.labeler import BotLabeler
 from vkbottle.modules import logger
 from vkbottle.polling import BotPolling
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from vkbottle.polling import ABCPolling
 
 
-class Bot(ABCFramework):
+class Bot(BaseFramework):
     def __init__(
         self,
         token: Optional["Token"] = None,
@@ -71,20 +71,6 @@ class Bot(ABCFramework):
     def on(self) -> "ABCLabeler":
         return self.labeler
 
-    async def run_polling(self, custom_polling: Optional["ABCPolling"] = None) -> NoReturn:  # type: ignore
-        polling = custom_polling or self.polling
-        logger.info("Starting polling for {!r}", polling.api)
-
-        async for event in polling.listen():
-            logger.debug("New event was received: {!r}", event)
-            for update in event["updates"]:
-                self.loop_wrapper.add_task(self.router.route(update, polling.api))
-
-    def run_forever(self) -> NoReturn:  # type: ignore
-        logger.info("Loop will be run forever")
-        self.loop_wrapper.add_task(self.run_polling())
-        self.loop_wrapper.run()
-
     async def setup_webhook(self) -> Tuple[str, str]:
         """:return: confirmation_code, secret_key"""
 
@@ -94,7 +80,6 @@ class Bot(ABCFramework):
         secret_key: str = self.callback.get_secret_key()
 
         server_id = await self.callback.find_server_id()
-
         if server_id is not None:
             await self.callback.set_callback_settings(server_id, {"message_new": True})
             await self.callback.edit_callback_server(server_id)
@@ -106,3 +91,6 @@ class Bot(ABCFramework):
 
     async def process_event(self, event: dict) -> None:
         await self.router.route(event, self.api)
+
+
+__all__ = ("Bot",)

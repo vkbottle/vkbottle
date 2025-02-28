@@ -11,13 +11,15 @@ class ABCFramework(ABC):
 
     @property
     @abstractmethod
-    def polling(self) -> "ABCPolling":
-        pass
+    def polling(self) -> "ABCPolling": ...
 
     @abstractmethod
-    async def run_polling(self) -> NoReturn:  # type: ignore
-        pass
+    async def run_polling(self) -> NoReturn:
+        raise NotImplementedError
 
     @abstractmethod
-    def run_forever(self) -> NoReturn:  # type: ignore
-        pass
+    def run_forever(self) -> NoReturn:
+        raise NotImplementedError
+
+
+__all__ = ("ABCFramework",)

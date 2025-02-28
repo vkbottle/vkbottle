@@ -1,11 +1,11 @@
 import asyncio
 import contextlib
-import warnings  # type: ignore
-from asyncio import new_event_loop
+import warnings
+from asyncio import get_event_loop
 from collections.abc import Coroutine
-from typing import TYPE_CHECKING, Any, Callable, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, List, NoReturn, Optional, Union
 
-from typing_extensions import deprecated  # type: ignore
+from typing_extensions import deprecated
 
 from vkbottle.modules import logger
 
@@ -32,10 +32,15 @@ class LoopWrapper:
         self.on_shutdown = on_shutdown or []
         self.tasks = tasks or []
         self.loop = loop
+        self._running = False
+
+    @property
+    def is_running(self) -> bool:
+        return self._running
 
     @property
     @deprecated(
-        "LoopWrapper.auto_reload is deprecated, instead, install watchfiles",
+        "auto_reload is deprecated, instead, install watchfiles",
         category=FutureWarning,
         stacklevel=0,
     )
@@ -45,7 +50,7 @@ class LoopWrapper:
     @auto_reload.setter
     def auto_reload(self, value: bool) -> None:
         warnings.warn(
-            "LoopWrapper.auto_reload is deprecated, instead, install watchfiles",
+            "auto_reload is deprecated, instead, install watchfiles",
             FutureWarning,
             stacklevel=0,
         )
@@ -56,16 +61,17 @@ class LoopWrapper:
         stacklevel=0,
     )
     def run_forever(self):
-        logger.warning("run_forever is deprecated. Use run() instead")
+        logger.warning("run_forever() is deprecated. Use run() instead")
         self.run()
 
-    def run(self) -> None:
+    def run(self) -> NoReturn:  # type: ignore
         """Runs startup tasks and makes the loop running until all tasks are done"""
 
         if not self.tasks:
             logger.warning("You ran loop with 0 tasks. Is it ok?")
 
-        self.loop = new_event_loop() if self.loop is None else self.loop
+        self._running = True
+        self.loop = get_event_loop() if self.loop is None else self.loop
 
         for startup_task in self.on_startup:
             self.loop.run_until_complete(startup_task)

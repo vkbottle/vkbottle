@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vkbottle"
-version = "4.4.4"
+version = "4.4.5"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
 authors = ["timoniq"]
 maintainers = ["luwqz1"]
@@ -59,15 +59,15 @@ mypy-extensions = "^1.0.0"
 # mypy stubs
 types-aiofiles = ">=22.1,<25.0"
 # flake8, isort and autoflake replacement
-ruff = ">=0.0.246,<0.8.6"
+ruff = ">=0.9.9"
 # Tests
-pytest = ">=7.2.1,<9.0.0"
-pytest-asyncio = ">=0.20.3,<0.25.0"
-pytest-cov = ">=4,<6"
+pytest = ">=8.3.4,<9.0.0"
+pytest-asyncio = ">=0.20.3,<0.26.0"
+pytest-cov = ">=4,<7"
 pytest-mock = "^3.10.0"
 aioresponses = "^0.7.7"
 # Pre-commit
-pre-commit = ">=2.19,<4.0"
+pre-commit = ">=2.19,<5.0"
 
 [tool.poetry.group.docs.dependencies]
 # Docs
@@ -162,6 +162,7 @@ lint.select = [
   "ALL",   # All not listed above
 ]
 lint.ignore = [
+  "A005",    # stdlib-module-shadowing
   "ANN",     # flake8-annotations
   "BLE",     # flake8-blind-except
   "FBT",     # flake8-boolean-trap

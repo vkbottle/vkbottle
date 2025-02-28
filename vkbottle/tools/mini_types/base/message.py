@@ -100,7 +100,7 @@ class BaseMessageMin(MessagesMessage, ABC):
             ).items
         return self._chat_members
 
-    async def user_is_admin(self, user_id: int) -> bool:
+    async def user_is_admin(self, user_id: int, /) -> bool:
         members = await self.get_chat_members()
         if not members:
             return False

@@ -4,16 +4,16 @@ repos:
     hooks:
       # Check for files that contain merge conflict strings.
       - id: check-merge-conflict
-        stages: [commit, push]
+        stages: [pre-commit, pre-push]
       # Simply check whether files parse as valid python.
       - id: check-ast
-        stages: [commit]
+        stages: [pre-commit]
       # Remove trailing whitespaces
       - id: trailing-whitespace
-        stages: [commit]
+        stages: [pre-commit]
       # Add newlines to the end of files
       - id: end-of-file-fixer
-        stages: [commit]
+        stages: [pre-commit]
 
   - repo: local
     hooks:
@@ -22,28 +22,28 @@ repos:
         entry: black
         language: system
         types: [python]
-        stages: [commit]
+        stages: [pre-commit]
 
       - id: ruff (isort)
         name: ruff-isort
         entry: ruff check --select I --select F401 --fix
         language: system
         types: [python]
-        stages: [commit]
+        stages: [pre-commit]
 
       - id: ruff
         name: ruff check
         entry: ruff check
         language: system
         types: [python]
-        stages: [push]
+        stages: [pre-push]
 
       - id: mypy
         name: mypy check
         entry: mypy --enable-incomplete-feature=Unpack vkbottle
         language: system
         pass_filenames: false
-        stages: [push]
+        stages: [pre-push]
 
       - id: pytest
         name: pytest
@@ -51,4 +51,4 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
-        stages: [push]
+        stages: [pre-push]

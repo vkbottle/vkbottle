@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
 
 
-from vkbottle_types.objects import ClientInfoForBots  # noqa: TC002
+from vkbottle_types.objects import ClientInfoForBots, MessagesConversationMember
 
 from vkbottle.modules import logger
 
@@ -22,6 +22,7 @@ class MessageMin(BaseMessageMin):
     reply_message: Optional["ForeignMessageMin"] = None
     fwd_messages: List["ForeignMessageMin"] = pydantic.Field(default_factory=list)
     _is_full: Optional[bool] = None
+    _chat_members: Optional[List[MessagesConversationMember]] = None
 
     @pydantic.root_validator(pre=True)  # type: ignore
     def __foreign_messages(cls, values):

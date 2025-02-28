@@ -18,7 +18,7 @@ bot = Bot(os.environ["TOKEN"])
 # ---
 # If you use loguru you need to remove default logger and add new with
 # level specified logging level, visit https://github.com/Delgan/loguru/issues/138
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, force=True)
 
 # Documentation for keyboard builder > tools/keyboard
 KEYBOARD = Keyboard(one_time=True).add(Text("Съесть еще", {"cmd": "eat"})).get_json()

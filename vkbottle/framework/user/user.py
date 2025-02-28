@@ -1,10 +1,10 @@
 import asyncio
-from typing import TYPE_CHECKING, Any, NoReturn, Optional, Type
+from typing import TYPE_CHECKING, Any, Optional, Type
 
 from vkbottle.api import API
 from vkbottle.dispatch import BuiltinStateDispenser, Router
 from vkbottle.exception_factory import ErrorHandler
-from vkbottle.framework.abc import ABCFramework
+from vkbottle.framework.base import BaseFramework
 from vkbottle.framework.labeler import UserLabeler
 from vkbottle.modules import logger
 from vkbottle.polling import UserPolling
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from vkbottle.polling import ABCPolling
 
 
-class User(ABCFramework):
+class User(BaseFramework):
     def __init__(
         self,
         token: Optional["Token"] = None,
@@ -98,16 +98,5 @@ class User(ABCFramework):
         token = await UserAuth(client_id, client_secret).get_token(login, password)
         return cls(token=token, **kwargs)
 
-    async def run_polling(self, custom_polling: Optional["ABCPolling"] = None) -> NoReturn:  # type: ignore
-        polling = custom_polling or self.polling
-        logger.info("Starting polling for {!r}", polling.api)
 
-        async for event in polling.listen():  # type: ignore
-            logger.debug("New event was received: {}", event)
-            for update in event.get("updates", []):
-                self.loop_wrapper.add_task(self.router.route(update, polling.api))
-
-    def run_forever(self) -> NoReturn:  # type: ignore
-        logger.info("Loop will be run forever")
-        self.loop_wrapper.add_task(self.run_polling())
-        self.loop_wrapper.run()
+__all__ = ("User",)
