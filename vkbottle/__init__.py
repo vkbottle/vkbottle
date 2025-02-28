@@ -44,6 +44,7 @@ from .exception_factory import (
 from .framework import (
     ABCBlueprint,
     ABCFramework,
+    BaseFramework,
     Bot,
     BotBlueprint,
     User,
@@ -103,7 +104,7 @@ from .tools import (
     vkscript,
 )
 
-event_types = GroupTypes
+event_types = GroupTypes  # type: ignore
 
 __all__ = (
     "ABCAPI",
@@ -136,6 +137,7 @@ __all__ = (
     "BasePolling",
     "BaseStateGroup",
     "BaseUploader",
+    "BaseFramework",
     "BlockingRequestRescheduler",
     "Bot",
     "BotBlueprint",

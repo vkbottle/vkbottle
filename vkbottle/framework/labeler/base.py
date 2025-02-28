@@ -42,6 +42,7 @@ DEFAULT_CUSTOM_RULES: CustomRuleType = {
     "macro": base.MacroRule,
     "text": base.VBMLRule,
     "fuzzy": base.FuzzyTextRule,
+    "is_admin": base.IsAdminRule,
 }
 
 

@@ -45,7 +45,7 @@ class ShortState(typing.Generic[Event]):
         init=False,
     )
 
-    def __post_init__(self, expiration: typing.Optional[datetime.timedelta] = None) -> None:
+    def __post_init__(self, expiration: typing.Optional[datetime.timedelta]) -> None:
         self.creation_date = datetime.datetime.now()
         self.expiration_date = (
             (self.creation_date + expiration) if expiration is not None else None

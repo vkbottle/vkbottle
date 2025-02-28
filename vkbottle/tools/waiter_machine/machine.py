@@ -42,7 +42,7 @@ class WaiterMachine:
         await self.call_behaviour(
             dispensable_view,  # type: ignore
             short_state.on_drop_behaviour,
-            short_state.event,
+            short_state.event,  # type: ignore
             **context,
         )
 

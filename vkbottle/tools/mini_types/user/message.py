@@ -1,6 +1,9 @@
+import asyncio
 from typing import TYPE_CHECKING, List, Optional
 
-from vkbottle.modules import pydantic
+from vkbottle_types.objects import MessagesConversationMember
+
+from vkbottle.modules import logger, pydantic
 from vkbottle.tools.mini_types.base import BaseMessageMin
 
 if TYPE_CHECKING:
@@ -14,6 +17,7 @@ class MessageMin(BaseMessageMin):
     user_id: Optional[int] = None
     reply_message: Optional["ForeignMessageMin"] = None
     fwd_messages: List["ForeignMessageMin"] = pydantic.Field(default_factory=list)
+    _chat_members: Optional[List[MessagesConversationMember]] = None
 
     @property
     def is_mentioned(self) -> bool:
@@ -43,8 +47,8 @@ async def message_min(
 ) -> "MessageMin":
     response = await ctx_api.messages.get_by_id(message_ids=[message_id])
     if not response.items:
-        msg = f"Message with id {message_id} not found, perhaps it was deleted"
-        raise ValueError(msg)
+        logger.warning(f"Message with id {message_id} not found, perhaps it was deleted.")
+        raise asyncio.CancelledError  # Cancel current task
     return MessageMin(
         **response.items[0].dict(),
         unprepared_ctx_api=ctx_api,
