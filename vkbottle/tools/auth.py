@@ -22,17 +22,20 @@ class AuthError(VKAPIError[0]):  # type: ignore
         self,
         *,
         error_msg: str,
-        error_description: str,
+        error_description: Optional[str] = None,
         error_type: Optional[str] = None,
         view: Optional[str] = None,
+        redirect_uri: Optional[str] = None,
+        confirmation_text: Optional[str] = None,
         request_params: Optional[List[dict]] = None,
         **kwargs: Any,
     ) -> None:
-        request_params = request_params or []
-        super().__init__(error_msg=error_msg, request_params=request_params, **kwargs)
+        super().__init__(error_msg=error_msg, request_params=request_params or [], **kwargs)
         self.error_msg = error_msg
         self.error_description = error_description
         self.error_type = error_type
+        self.redirect_uri = redirect_uri
+        self.confirmation_text = confirmation_text
         self.view = view
 
 
@@ -89,7 +92,6 @@ DEFAULT_USER_PERMISSIONS = [
 def get_scope(permissions: Union[int, List[UserPermission]]) -> int:
     if isinstance(permissions, int):
         return permissions
-
     return reduce(lambda x, y: x + 2**y, permissions, 0)
 
 

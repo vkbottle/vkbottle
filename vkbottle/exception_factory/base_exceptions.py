@@ -8,8 +8,13 @@ from .reducible_kwargs_exception import ReducibleKwargsException
 
 class VKAPIError(CodeException, ReducibleKwargsException):
     def __init__(
-        self, *, error_msg: str, request_params: Optional[List[dict]] = None, **kwargs: Any
+        self,
+        *,
+        error_msg: str,
+        request_params: Optional[List[dict]] = None,
+        **kwargs: Any,
     ):
+        super().__init__(error_msg)
         self.error_msg = error_msg
         # server maybe return error code without request_params key
         if request_params:
@@ -17,7 +22,7 @@ class VKAPIError(CodeException, ReducibleKwargsException):
         else:
             self.request_params = {}
         if kwargs:
-            logger.warning("VK API Error {} has extra kwargs: {}", self.code, kwargs)
+            logger.warning("VK API Error {} has extra kwargs: {!r}", self.code, kwargs)
         self.kwargs = kwargs
 
     def __str__(self) -> str:
