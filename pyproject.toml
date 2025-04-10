@@ -1,13 +1,7 @@
-[tool.poetry]
+[project]
 name = "vkbottle"
-version = "4.4.5"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
-authors = ["timoniq"]
-maintainers = ["luwqz1"]
 license = "MIT"
-readme = "README.md"
-homepage = "https://github.com/vkbottle/vkbottle"
-repository = "https://github.com/vkbottle/vkbottle"
 keywords = [
   "vk",
   "vk-api",
@@ -21,6 +15,20 @@ keywords = [
   "callback",
   "middleware",
 ]
+dynamic = ["version", "classifiers"]
+readme = "README.md"
+authors = [{name = "timoniq"}]
+maintainers = [{name = "luwqz1"}]
+requires-python = '>=3.9,<4.0'
+dependencies = ['aiohttp (>=3.11.12,<4.0.0)', 'choicelib (>=0.1.5,<0.2.0)', 'pydantic (<3)', 'vbml (>=1.1.post1,<2.0)', 'aiofiles (==24.1.0)', 'typing-extensions (>=4.4.0,<5.0.0)', 'colorama (>=0.4.6,<0.5.0)', 'vkbottle-types (>=5.199.63.4,<6.0.0.0)']
+
+[project.urls]
+homepage = "https://github.com/vkbottle/vkbottle"
+repository = "https://github.com/vkbottle/vkbottle"
+"Bug Tracker" = "https://github.com/vkbottle/vkbottle/issues"
+
+[tool.poetry]
+version = "4.4.6"
 classifiers = [
   "Environment :: Console",
   "Intended Audience :: Developers",
@@ -34,22 +42,7 @@ classifiers = [
   "Topic :: Software Development :: Quality Assurance",
   "Typing :: Typed",
 ]
-
-
-[tool.poetry.urls]
-"Bug Tracker" = "https://github.com/vkbottle/vkbottle/issues"
-
-
-[tool.poetry.dependencies]
-python = "^3.9"
-aiohttp = "^3.11.12"
-choicelib = "^0.1.5"
-pydantic = "<3 || <=1.10.8"
-vbml = "^1.1.post1"
-aiofiles = "24.1.0"
-typing-extensions = "^4.4.0"
-colorama = "^0.4.6"
-vkbottle-types = "^5.199.63.4"
+requires-poetry = '>=2.0.0,<3.0.0'
 
 [tool.poetry.group.dev.dependencies]
 # Lint
@@ -57,17 +50,17 @@ black = "^25.1.0"
 mypy = "^1.15.0"
 mypy-extensions = "^1.0.0"
 # mypy stubs
-types-aiofiles = ">=22.1,<25.0"
+types-aiofiles = ">=24.1.0.20250326,<25.0"
 # flake8, isort and autoflake replacement
-ruff = ">=0.9.9"
+ruff = ">=0.11.4"
 # Tests
 pytest = ">=8.3.4,<9.0.0"
-pytest-asyncio = ">=0.20.3,<0.27.0"
-pytest-cov = ">=4,<7"
+pytest-asyncio = ">=0.26.0,<0.27.0"
+pytest-cov = ">=6.1.1,<7"
 pytest-mock = "^3.10.0"
 aioresponses = "^0.7.7"
 # Pre-commit
-pre-commit = ">=2.19,<5.0"
+pre-commit = ">=4.2.0,<5.0"
 
 [tool.poetry.group.docs.dependencies]
 # Docs
@@ -79,11 +72,9 @@ mkdocs-redirects = "^1.2.0"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
-
 
 [tool.mypy]
 python_version = "3.9"
@@ -98,11 +89,9 @@ check_untyped_defs = true
 module = "tests.*"
 ignore_errors = true
 
-
 [tool.black]
 line-length = 99
 target-version = ["py39"]
-
 
 [tool.ruff]
 line-length = 99
