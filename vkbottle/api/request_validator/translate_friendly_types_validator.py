@@ -1,4 +1,6 @@
-from vkbottle.modules import json, pydantic
+import pydantic
+
+from vkbottle.modules import json
 
 from .abc import ABCRequestValidator
 

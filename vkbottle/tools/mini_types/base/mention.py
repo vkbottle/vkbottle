@@ -1,6 +1,6 @@
 import re
 
-from vkbottle.modules import pydantic
+import pydantic
 
 MENTION_PATTERN = re.compile(r"^\[(?P<type>club|public|id)(?P<id>\d*)\|(?P<text>.+)\],?\s?")
 

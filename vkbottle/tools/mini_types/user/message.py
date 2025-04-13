@@ -1,9 +1,10 @@
 import asyncio
 from typing import TYPE_CHECKING, List, Optional
 
+import pydantic
 from vkbottle_types.objects import MessagesConversationMember
 
-from vkbottle.modules import logger, pydantic
+from vkbottle.modules import logger
 from vkbottle.tools.mini_types.base import BaseMessageMin
 
 if TYPE_CHECKING:

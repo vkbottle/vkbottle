@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from io import StringIO
 from typing import TYPE_CHECKING, Any, Callable, Final, List, Literal, Optional, Union, overload
 
+import pydantic
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
@@ -18,7 +19,7 @@ from vkbottle_types.objects import (
     WallWallpostFull,
 )
 
-from vkbottle.modules import json, logger, pydantic
+from vkbottle.modules import json, logger
 
 if TYPE_CHECKING:
     from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem

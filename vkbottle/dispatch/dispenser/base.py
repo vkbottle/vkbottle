@@ -1,7 +1,7 @@
 from enum import Enum
-from typing import Any, Dict, cast
+from typing import Any, Dict
 
-from vkbottle.modules import pydantic
+import pydantic
 
 
 class BaseStateGroup(str, Enum):
@@ -27,7 +27,7 @@ class StateRepresentation(str):
 class StatePeer(pydantic.BaseModel):
     peer_id: int
     state: str
-    payload: Dict[str, Any] = cast("Dict[str, Any]", pydantic.Field(default_factory=dict))
+    payload: Dict[str, Any] = pydantic.Field(default_factory=Dict[str, Any])
 
     @pydantic.validator("state", pre=True)
     def validate_state(cls, v: Any) -> str:
