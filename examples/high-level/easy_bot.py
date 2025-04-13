@@ -5,7 +5,7 @@ from typing import Optional
 
 from vkbottle_types.objects import MessagesForward
 
-from vkbottle import GroupEventType, GroupTypes, Keyboard, Text, VKAPIError
+from vkbottle import Formatter, GroupEventType, GroupTypes, Keyboard, Text, VKAPIError
 from vkbottle.bot import Bot, Message
 from vkbottle.modules import logger
 
@@ -13,16 +13,21 @@ from vkbottle.modules import logger
 # https://12factor.net/config
 bot = Bot(os.environ["TOKEN"])
 
-# Logging level can be set through .basicConfig(level=LOGGING_LEVEL)
+# Logging level can be set through .getLogger("vkbottle").setLevel(<LOGGING_LEVEL>)
 # but if you use loguru the instruction is different.
 # ---
 # If you use loguru you need to remove default logger and add new with
 # level specified logging level, visit https://github.com/Delgan/loguru/issues/138
-logging.basicConfig(level=logging.INFO, force=True)
+logging.getLogger("vkbottle").setLevel("DEBUG")
 
 # Documentation for keyboard builder > tools/keyboard
 KEYBOARD = Keyboard(one_time=True).add(Text("Съесть еще", {"cmd": "eat"})).get_json()
 EATABLE = ["мороженое", "макароны", "суп"]
+
+
+@bot.on.message(text="привет мир")
+async def hello_handler(message: Message):
+    await message.answer(Formatter("Hello, {:bold+italic}!").format("World"))
 
 
 # If you need to make handler respond for 2 different rule set you can

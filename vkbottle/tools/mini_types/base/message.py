@@ -25,11 +25,13 @@ if TYPE_CHECKING:
 
     from vkbottle.api import ABCAPI, API
 
-
 from vkbottle.dispatch.dispenser.base import StatePeer  # noqa: TC001
+from vkbottle.tools.formatting import Format, Formatter
 
 from .foreign_message import BaseForeignMessageMin  # noqa: TC001
 from .mention import Mention, replace_mention_validator
+
+MessageText = Union[str, Formatter, Format]
 
 PEER_ID_OFFSET: Final[int] = 2_000_000_000
 
@@ -192,7 +194,7 @@ class BaseMessageMin(MessagesMessage, ABC):
 
     async def answer(
         self,
-        message: Optional[str] = None,
+        message: Optional[MessageText] = None,
         attachment: Optional[str] = None,
         random_id: Optional[int] = 0,
         lat: Optional[float] = None,
@@ -211,6 +213,13 @@ class BaseMessageMin(MessagesMessage, ABC):
         subscribe_id: Optional[int] = None,
         **kwargs,
     ) -> "MessagesSendUserIdsResponseItem":
+        if isinstance(message, (Formatter, Format)):
+            format_data = (
+                message.raw_format_data
+                if isinstance(message, Formatter)
+                else message.as_raw_data()
+            )
+
         locals().update(kwargs)
 
         data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
@@ -239,7 +248,7 @@ class BaseMessageMin(MessagesMessage, ABC):
 
     async def reply(
         self,
-        message: Optional[str] = None,
+        message: Optional[MessageText] = None,
         attachment: Optional[str] = None,
         **kwargs,
     ) -> "MessagesSendUserIdsResponseItem":
@@ -256,7 +265,7 @@ class BaseMessageMin(MessagesMessage, ABC):
 
     async def forward(
         self,
-        message: Optional[str] = None,
+        message: Optional[MessageText] = None,
         attachment: Optional[str] = None,
         **kwargs,
     ) -> "MessagesSendUserIdsResponseItem":

@@ -1,6 +1,7 @@
 # Дополнительные инструменты
 
 * [Auth Flows](auth.md)
+* [Formatting](formatting.md)
 * [Keyboard](keyboard.md)
 * [Loop Wrapper](loop-wrapper.md)
 * [Message Event](message-event.md)

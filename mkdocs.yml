@@ -48,6 +48,7 @@ nav:
           - Callback: low-level/callback.md
       - Дополнительные инструменты:
           - Auth Flows: tools/auth.md
+          - Formatting: tools/formatting.md
           - Keyboard: tools/keyboard.md
           - Loop Wrapper: tools/loop-wrapper.md
           - Message Event: tools/message-event.md
