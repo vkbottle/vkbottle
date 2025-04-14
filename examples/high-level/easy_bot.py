@@ -82,7 +82,7 @@ async def reaction_handler(event: GroupTypes.MessageReactionEvent):
             conversation_message_ids=[event.object.cmid],  # type: ignore
             peer_id=event.object.peer_id,
             is_reply=True,
-        ).json(),
+        ).model_dump_json(),
         random_id=0,
     )
 

@@ -46,14 +46,9 @@ class BaseMessageMin(MessagesMessage, ABC):
     _mention: Optional[Mention] = None
     _chat_members: Optional[List[MessagesConversationMember]] = None
 
-    __replace_mention = pydantic.root_validator(  # type: ignore
-        replace_mention_validator,
-        allow_reuse=True,
-        pre=False,
-    )
+    __replace_mention = pydantic.model_validator(mode="before")(replace_mention_validator)  # type: ignore
 
-    class Config:
-        frozen = False
+    model_config = pydantic.ConfigDict(frozen=False)
 
     @property
     def ctx_api(self) -> Union["ABCAPI", "API"]:
@@ -72,7 +67,7 @@ class BaseMessageMin(MessagesMessage, ABC):
         return self._mention
 
     @property
-    def chat_members(self) -> Optional[List[MessagesConversationMember]]:
+    def chat_members(self) -> Optional[List["MessagesConversationMember"]]:
         return self._chat_members
 
     @property
@@ -82,18 +77,18 @@ class BaseMessageMin(MessagesMessage, ABC):
         ...
 
     @overload
-    async def get_user(self, raw_mode: Literal[False] = ..., **kwargs) -> UsersUserFull: ...
+    async def get_user(self, raw_mode: Literal[False] = ..., **kwargs) -> "UsersUserFull": ...
 
     @overload
     async def get_user(self, raw_mode: Literal[True] = ..., **kwargs) -> dict: ...
 
-    async def get_user(self, raw_mode: bool = False, **kwargs) -> Union[UsersUserFull, dict]:
+    async def get_user(self, raw_mode: bool = False, **kwargs) -> Union["UsersUserFull", dict]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
         ][0]
         return raw_user if raw_mode else UsersUserFull(**raw_user)
 
-    async def get_chat_members(self, **kwargs: Any) -> List[MessagesConversationMember]:
+    async def get_chat_members(self, **kwargs: Any) -> List["MessagesConversationMember"]:
         if self._chat_members is None:
             self._chat_members = (
                 await self.ctx_api.messages.get_conversation_members(
@@ -120,6 +115,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     def get_attachment_strings(self) -> Optional[List[str]]:
         if self.attachments is None:
             return None
+
         attachments = []
         for attachment in self.attachments:
             attachment_type = attachment.type.value
@@ -127,12 +123,15 @@ class BaseMessageMin(MessagesMessage, ABC):
             if not hasattr(attachment_object, "id") or not hasattr(attachment_object, "owner_id"):
                 logger.debug("Got unsupported attachment type: {}", attachment_type)
                 continue
+
             attachment_string = (
                 f"{attachment_type}{attachment_object.owner_id}_{attachment_object.id}"
             )
             if hasattr(attachment_object, "access_key"):
                 attachment_string += f"_{attachment_object.access_key}"
+
             attachments.append(attachment_string)
+
         return attachments
 
     def get_wall_attachment(self) -> Optional[List["WallWallpostFull"]]:
@@ -186,11 +185,13 @@ class BaseMessageMin(MessagesMessage, ABC):
     ) -> Optional[Union[dict, str]]:
         if self.payload is None:
             return None
+
         try:
             return json.loads(self.payload)
         except (ValueError, TypeError) as e:
             if throw_error:
-                raise e from e
+                raise e from None
+
         return unpack_failure(self.payload)
 
     async def answer(
@@ -212,18 +213,16 @@ class BaseMessageMin(MessagesMessage, ABC):
         disable_mentions: Optional[bool] = None,
         intent: Optional[str] = None,
         subscribe_id: Optional[int] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> "MessagesSendUserIdsResponseItem":
         if isinstance(message, (Formatter, Format)):
-            format_data = (
+            kwargs["format_data"] = (
                 message.raw_format_data
                 if isinstance(message, Formatter)
                 else message.as_raw_data()
             )
 
-        locals().update(kwargs)
-
-        data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
+        data = self.ctx_api.messages.get_set_params(locals())
         deprecated_params = ("peer_id", "user_id", "domain", "chat_id", "user_ids")
         deprecated = [k for k in data if k in deprecated_params]
         if deprecated:
@@ -232,57 +231,51 @@ class BaseMessageMin(MessagesMessage, ABC):
                 "Use API.messages.send() instead"
             )
             for k in deprecated:
-                data.pop(k)
+                data.pop(k, None)
+
         if message is None:
             message = ""
         elif not isinstance(message, str):
             message = str(message)
+
         stream = StringIO(message)
         while True:
-            msg = stream.read(4096)
-            if msg:
+            if msg := stream.read(4096):
                 data["message"] = msg
+
             response = (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]  # type: ignore
             if stream.tell() == len(message or ""):
                 break
+
         return response
 
     async def reply(
         self,
         message: Optional[MessageText] = None,
         attachment: Optional[str] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> "MessagesSendUserIdsResponseItem":
-        locals().update(kwargs)
-
-        data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
+        data = self.ctx_api.messages.get_set_params(locals())
         data["forward"] = MessagesForward(
             conversation_message_ids=[self.conversation_message_id],  # type: ignore
             peer_id=self.peer_id,
             is_reply=True,
-        ).json()
-
+        ).model_dump_json()
         return await self.answer(**data)
 
     async def forward(
         self,
         message: Optional[MessageText] = None,
         attachment: Optional[str] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> "MessagesSendUserIdsResponseItem":
-        locals().update(kwargs)
-
-        data = {
-            k: v
-            for k, v in locals().items()
-            if k not in ("self", "kwargs", "forward_message_ids") and v is not None
-        }
+        data = self.ctx_api.messages.get_set_params(locals())
+        data.pop("forward_message_ids", None)
         data["forward"] = MessagesForward(
             conversation_message_ids=[self.conversation_message_id],
             peer_id=self.peer_id,  # type: ignore
-        ).json()
-
+        ).model_dump_json()
         return await self.answer(**data)
 
 
-BaseMessageMin.update_forward_refs()
+BaseMessageMin.model_rebuild(force=True)

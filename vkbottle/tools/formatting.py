@@ -20,7 +20,10 @@ FORMAT_PATTERN = re.compile(
 
 
 def _format(
-    string: str | Format, fmt_type: FormatType, data: dict[str, typing.Any] | None = None, /
+    string: str | Format,
+    fmt_type: FormatType,
+    data: dict[str, typing.Any] | None = None,
+    /,
 ) -> Format:
     data = data or {}
 

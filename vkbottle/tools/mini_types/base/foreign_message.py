@@ -27,14 +27,9 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
 
-    __replace_mention = pydantic.root_validator(
-        replace_mention_validator,
-        allow_reuse=True,
-        pre=False,
-    )  # type: ignore
+    __replace_mention = pydantic.model_validator(mode="before")(replace_mention_validator)  # type: ignore
 
-    class Config:
-        frozen = False
+    model_config = pydantic.ConfigDict(frozen=False)
 
     @property
     def ctx_api(self) -> Union["ABCAPI", "API"]:
@@ -74,18 +69,22 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     def get_attachment_strings(self) -> Optional[List[str]]:
         if self.attachments is None:
             return None
+
         attachments = []
         for attachment in self.attachments:
             attachment_type = attachment.type.value
             attachment_object = getattr(attachment, attachment_type)
             if not hasattr(attachment_object, "id") or not hasattr(attachment_object, "owner_id"):
                 continue
+
             attachment_string = (
                 f"{attachment_type}{attachment_object.owner_id}_{attachment_object.id}"
             )
             if attachment_object.access_key:
                 attachment_string += f"_{attachment_object.access_key}"
+
             attachments.append(attachment_string)
+
         return attachments
 
     def get_wall_attachment(self) -> Optional[List["WallWallpostFull"]]:
@@ -144,9 +143,9 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
             return json.loads(self.payload)
         except (ValueError, TypeError) as e:
             if throw_error:
-                raise e from e
+                raise e from None
 
         return unpack_failure(self.payload)
 
 
-BaseForeignMessageMin.update_forward_refs()
+BaseForeignMessageMin.model_rebuild(force=True)

@@ -1,7 +1,7 @@
 from enum import Enum
-from typing import Any, Dict
 
 import pydantic
+import typing_extensions as typing
 
 
 class BaseStateGroup(str, Enum):
@@ -24,13 +24,23 @@ class StateRepresentation(str):
         return super().__eq__(__x)
 
 
+if not typing.TYPE_CHECKING:
+
+    State = typing.Union[str, StateRepresentation]
+else:
+
+    State: typing.TypeAlias = str
+
+
 class StatePeer(pydantic.BaseModel):
     peer_id: int
-    state: str
-    payload: Dict[str, Any] = pydantic.Field(default_factory=Dict[str, Any])
+    state: State
+    payload: dict[str, typing.Any] = pydantic.Field(default_factory=dict[str, typing.Any])
 
-    @pydantic.validator("state", pre=True)
-    def validate_state(cls, v: Any) -> str:
+    model_config = pydantic.ConfigDict(frozen=True, arbitrary_types_allowed=True, strict=True)
+
+    @pydantic.field_validator("state", mode="before")
+    def validate_state(cls, v: typing.Any) -> str:
         if isinstance(v, BaseStateGroup):
             return StateRepresentation(v)
         elif isinstance(v, str):

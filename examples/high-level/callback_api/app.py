@@ -19,7 +19,7 @@ async def startup_event():
 @app.post("/whateveryouwant")
 async def vk_handler(req: Request, background_task: BackgroundTasks):
     try:
-        data = await req.json()
+        data = await req.model_dump_json()
     except Exception:
         logger.warning("Empty request")
         return Response("not today", status_code=403)

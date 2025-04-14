@@ -63,7 +63,9 @@ class AiohttpClient(ABCHTTPClient):
     ) -> dict:
         response = await self.request_raw(url, method, data, **kwargs)
         return await response.json(
-            encoding="utf-8", loads=self.json_processing_module.loads, content_type=None
+            encoding="UTF-8",
+            loads=self.json_processing_module.loads,
+            content_type=None,
         )
 
     async def request_text(  # type: ignore[override]
@@ -74,7 +76,7 @@ class AiohttpClient(ABCHTTPClient):
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> str:
         response = await self.request_raw(url, method, data, **kwargs)
-        return await response.text(encoding="utf-8")
+        return await response.text(encoding="UTF-8")
 
     async def request_content(  # type: ignore[override]
         self,
