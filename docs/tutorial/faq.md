@@ -132,7 +132,7 @@ async def send_httpbin_get() -> dict:
     async with aiohttp.ClientSession() as session:
         async with session.get('http://httpbin.org/get') as r:
             if r.status == 200:
-                js = await r.model_dump_json()
+                js = await r.json()
                 return js
 ```
 
