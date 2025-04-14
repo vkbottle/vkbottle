@@ -1,15 +1,18 @@
 from typing import List, Optional
 
-from vkbottle.modules import pydantic
+import pydantic
+
 from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
 
 
 class ForeignMessageMin(BaseForeignMessageMin):
     user_id: Optional[int] = None
     reply_message: Optional["ForeignMessageMin"] = None
-    fwd_messages: Optional[List["ForeignMessageMin"]] = pydantic.Field(default_factory=list)
+    fwd_messages: Optional[List["ForeignMessageMin"]] = pydantic.Field(
+        default_factory=list["ForeignMessageMin"],
+    )
 
-    @pydantic.root_validator  # type: ignore
+    @pydantic.model_validator(mode="before")  # type: ignore
     def __foreign_messages(cls, values):
         foreign_messages = []
         if values.get("fwd_messages"):
@@ -27,4 +30,4 @@ class ForeignMessageMin(BaseForeignMessageMin):
         return self.mention.id == self.user_id if (self.mention and self.user_id) else False
 
 
-ForeignMessageMin.update_forward_refs()
+ForeignMessageMin.model_rebuild(force=True)

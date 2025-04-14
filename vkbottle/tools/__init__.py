@@ -2,6 +2,7 @@ from .auth import AuthError, UserAuth, UserPermission
 from .ctx_tool import BaseContext
 from .delayed_task import DelayedTask
 from .event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
+from .formatting import Format, Formatter, bold, italic, underline, url
 from .keyboard import (
     EMPTY_KEYBOARD,
     ABCAction,
@@ -88,10 +89,16 @@ __all__ = (
     "VKPay",
     "VideoUploader",
     "VoiceMessageUploader",
+    "Formatter",
+    "Format",
     "load_blueprints_from_package",
     "run_in_task",
     "run_sync",
     "template_gen",
+    "bold",
+    "italic",
+    "underline",
+    "url",
     "vkscript",
     "WaiterMachine",
 )

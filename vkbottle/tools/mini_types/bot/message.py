@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING, List, Optional
 
+import pydantic
 from vkbottle_types.events.bot_events import MessageNew
 
-from vkbottle.modules import pydantic
 from vkbottle.tools.mini_types.base import BaseMessageMin
 
 if TYPE_CHECKING:
@@ -20,11 +20,13 @@ class MessageMin(BaseMessageMin):
     group_id: Optional[int] = None
     client_info: Optional["ClientInfoForBots"] = None
     reply_message: Optional["ForeignMessageMin"] = None
-    fwd_messages: List["ForeignMessageMin"] = pydantic.Field(default_factory=list)
+    fwd_messages: List["ForeignMessageMin"] = pydantic.Field(
+        default_factory=list["ForeignMessageMin"],
+    )
     _is_full: Optional[bool] = None
     _chat_members: Optional[List[MessagesConversationMember]] = None
 
-    @pydantic.root_validator(pre=True)  # type: ignore
+    @pydantic.model_validator(mode="before")  # type: ignore
     def __foreign_messages(cls, values):
         foreign_messages = []
         if values.get("fwd_messages"):
@@ -52,7 +54,7 @@ class MessageMin(BaseMessageMin):
             )
         ).items[0]
         self.__dict__.update(message.__dict__)
-        super().__init__(**self.dict())
+        super().__init__(**self.model_dump())
         self.__dict__["_is_full"] = True
         if self.is_cropped:
             self.__dict__["is_cropped"] = False
@@ -89,7 +91,7 @@ def message_min(event: dict, ctx_api: "ABCAPI", replace_mention: bool = True) ->
         raise RuntimeError(msg)
 
     return MessageMin(
-        **update.object.message.dict(),
+        **update.object.message.model_dump(),
         client_info=update.object.client_info,
         group_id=update.group_id,
         replace_mention=replace_mention,
@@ -97,4 +99,4 @@ def message_min(event: dict, ctx_api: "ABCAPI", replace_mention: bool = True) ->
     )
 
 
-MessageMin.update_forward_refs()
+MessageMin.model_rebuild(force=True)

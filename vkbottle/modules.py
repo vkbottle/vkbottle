@@ -6,11 +6,6 @@ from typing import Protocol
 
 from choicelib import choice_in_order
 
-try:
-    import pydantic.v1 as pydantic  # type: ignore
-except ImportError:
-    import pydantic  # type: ignore  # noqa: F401
-
 
 class JSONModule(Protocol):
     def loads(self, s: str) -> dict: ...
@@ -197,3 +192,6 @@ if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
     _ProactorBaseWritePipeTransport._loop_writing = silence_exception(  # type: ignore
         _ProactorBaseWritePipeTransport._loop_writing  # type: ignore
     )
+
+
+__all__ = ("json", "logger")

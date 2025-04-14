@@ -5,11 +5,13 @@ from vkbottle_types.events.bot_events import MessageEvent
 
 from vkbottle.modules import logger
 from vkbottle.tools.event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
+from vkbottle.tools.formatting import Format, Formatter
 
 if TYPE_CHECKING:
     from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
 
     EventDataType = Union[ShowSnackbarEvent, OpenAppEvent, OpenLinkEvent]
+    MessageText = Union[str, Format, Formatter]
 
 
 class MessageEventMin(MessageEvent):
@@ -46,7 +48,7 @@ class MessageEventMin(MessageEvent):
             "event_id": self.event_id,
             "user_id": self.user_id,
             "peer_id": self.peer_id,
-            "event_data": event_data.json(),
+            "event_data": event_data.model_dump_json(),
         }
         data.update(kwargs)
         return await self.ctx_api.messages.send_message_event_answer(**data)
@@ -73,7 +75,7 @@ class MessageEventMin(MessageEvent):
 
     async def edit_message(
         self,
-        message: Optional[str] = None,
+        message: Optional["MessageText"] = None,
         lat: Optional[float] = None,
         long: Optional[float] = None,
         attachment: Optional[str] = None,
@@ -84,16 +86,21 @@ class MessageEventMin(MessageEvent):
         keyboard: Optional[str] = None,
         **kwargs,
     ) -> int:
-        locals().update(kwargs)
+        if isinstance(message, (Formatter, Format)):
+            kwargs["format_data"] = (
+                message.raw_format_data
+                if isinstance(message, Formatter)
+                else message.as_raw_data()
+            )
 
-        data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
+        data = self.ctx_api.messages.get_set_params(locals())
         data["peer_id"] = self.peer_id
         data["conversation_message_id"] = self.conversation_message_id
         return await self.ctx_api.messages.edit(**data)
 
     async def send_message(
         self,
-        message: Optional[str] = None,
+        message: Optional["MessageText"] = None,
         attachment: Optional[str] = None,
         random_id: Optional[int] = 0,
         lat: Optional[float] = None,
@@ -112,9 +119,14 @@ class MessageEventMin(MessageEvent):
         subscribe_id: Optional[int] = None,
         **kwargs,
     ) -> "MessagesSendUserIdsResponseItem":
-        locals().update(kwargs)
+        if isinstance(message, (Formatter, Format)):
+            kwargs["format_data"] = (
+                message.raw_format_data
+                if isinstance(message, Formatter)
+                else message.as_raw_data()
+            )
 
-        data = {k: v for k, v in locals().items() if k not in ("self", "kwargs") and v is not None}
+        data = self.ctx_api.messages.get_set_params(locals())
         deprecated_params = ("peer_id", "user_id", "domain", "chat_id", "user_ids")
         deprecated = [k for k in data if k in deprecated_params]
         if deprecated:
@@ -123,23 +135,26 @@ class MessageEventMin(MessageEvent):
                 "Use API.messages.send() instead"
             )
             for k in deprecated:
-                data.pop(k)
+                data.pop(k, None)
+
         if message is None:
             message = ""
         elif not isinstance(message, str):
             message = str(message)
+
         stream = StringIO(message)
         while True:
-            msg = stream.read(4096)
-            if msg:
+            if msg := stream.read(4096):
                 data["message"] = msg
+
             response = (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]  # type: ignore
             if stream.tell() == len(message or ""):
                 break
+
         return response
 
     def get_payload_json(self, *args, **kwargs) -> Optional[dict]:
         return self.payload
 
 
-MessageEventMin.update_forward_refs()
+MessageEventMin.model_rebuild(force=True)

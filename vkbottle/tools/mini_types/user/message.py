@@ -1,9 +1,10 @@
 import asyncio
 from typing import TYPE_CHECKING, List, Optional
 
+import pydantic
 from vkbottle_types.objects import MessagesConversationMember
 
-from vkbottle.modules import logger, pydantic
+from vkbottle.modules import logger
 from vkbottle.tools.mini_types.base import BaseMessageMin
 
 if TYPE_CHECKING:
@@ -16,14 +17,16 @@ from .foreign_message import ForeignMessageMin  # noqa: TC001
 class MessageMin(BaseMessageMin):
     user_id: Optional[int] = None
     reply_message: Optional["ForeignMessageMin"] = None
-    fwd_messages: List["ForeignMessageMin"] = pydantic.Field(default_factory=list)
+    fwd_messages: List["ForeignMessageMin"] = pydantic.Field(
+        default_factory=list["ForeignMessageMin"]
+    )
     _chat_members: Optional[List[MessagesConversationMember]] = None
 
     @property
     def is_mentioned(self) -> bool:
         return self.mention.id == self.user_id if self.mention else False
 
-    @pydantic.root_validator(pre=True)  # type: ignore
+    @pydantic.model_validator(mode="before")  # type: ignore
     def __foreign_messages(cls, values):
         foreign_messages = []
         if values.get("fwd_messages"):
@@ -37,9 +40,6 @@ class MessageMin(BaseMessageMin):
         return values
 
 
-MessageMin.update_forward_refs()
-
-
 async def message_min(
     message_id: int,
     ctx_api: "ABCAPI",
@@ -50,7 +50,10 @@ async def message_min(
         logger.warning(f"Message with id {message_id} not found, perhaps it was deleted.")
         raise asyncio.CancelledError  # Cancel current task
     return MessageMin(
-        **response.items[0].dict(),
+        **response.items[0].model_dump(),
         unprepared_ctx_api=ctx_api,
         replace_mention=replace_mention,
     )
+
+
+MessageMin.model_rebuild(force=True)

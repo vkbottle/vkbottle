@@ -28,10 +28,12 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
                     error_msg=f"Unknown response from {method}: {response}",
                     request_params=request_params,
                 )
+
             if isinstance(response["response"], list) and any(
-                "error" in item for item in response["response"]
+                "error" in item for item in response["response"] if isinstance(item, dict)
             ):
-                logger.info("API error(s) in response wasn't handled: {}", response["response"])
+                logger.info("API error(s) in response wasn't handled: {!r}", response["response"])
+
             return response
 
         if ctx_api.ignore_errors:
@@ -39,10 +41,11 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         error = response["error"]
         code = error.pop("error_code")
 
-        if VKAPIError[code] is CaptchaError and ctx_api.captcha_handler:
+        if VKAPIError[code] is CaptchaError and ctx_api.captcha_handler is not None:
             key = await ctx_api.captcha_handler(CaptchaError(**error))  # type: ignore
             return await ctx_api.request(
-                method, {**data, "captcha_sid": error["captcha_sid"], "captcha_key": key}
+                method,
+                data={**data, "captcha_sid": error["captcha_sid"], "captcha_key": key},
             )
 
         raise VKAPIError[code](**error)

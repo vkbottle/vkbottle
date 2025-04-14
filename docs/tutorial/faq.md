@@ -108,7 +108,7 @@ await asyncio.sleep(10)
 async def send_httpbin_get() -> dict:
     r = requests.get('http://httpbin.org/get')
     if r.status_code == 200:
-        js = r.json()
+        js = r.model_dump_json()
         return js
 ```
 

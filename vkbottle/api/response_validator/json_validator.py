@@ -34,7 +34,7 @@ class JSONResponseValidator(ABCResponseValidator):
             return None
 
         logger.info(
-            "VK returned object of invalid type ({}). Request will be rescheduled with {}",
+            "VK returned object of invalid type ({!r}). Request will be rescheduled with {!r}.",
             type(response).__name__,
             ctx_api.request_rescheduler.__class__.__name__,
         )

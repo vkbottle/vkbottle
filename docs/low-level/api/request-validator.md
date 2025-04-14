@@ -11,7 +11,7 @@
 * `#!python list` -> `#!python ",".join(v)`
 * `#!python bool` -> `#!python int(v)`
 * `#!python dict` -> `#!python self.validate(v)`
-* `#!python BaseModel` -> `#!python v.json()`
+* `#!python BaseModel` -> `#!python v.model_dump_json()`
 
 ## Создание своего валидатора ответа
 
