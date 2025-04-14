@@ -7,10 +7,10 @@ from vkbottle.tools.formatting import Formatter
 ```
 
 Доступные типы форматирования:
-* `bold` — полужирный.
-* `italic` – курсив.
-* `url` — ссылка.
-* `underline` — подчеркнутый.
+- `bold` — полужирный.
+- `italic` – курсив.
+- `url` — ссылка.
+- `underline` — подчеркнутый.
 
 !!! info "Примечание"
     Для типов форматирования специально реализованы такие же по названию функции, которые импортируются из модуля `vkbottle.tools.formatting`.
@@ -24,9 +24,9 @@ Formatter("Hi, {name}.").format(name="Maria")  # Hi, Maria.
 ```
 
 Метод также поддерживает специальные идентификаторы:
-* `bold`
-* `italic`
-* `underline`
+- `bold`
+- `italic`
+- `underline`
 
 Пример использования:
 ```python
@@ -45,8 +45,8 @@ Formatter("My bestie is {bestie:underline}").format(bestie="telegrinder")  # My 
 ```
 
 Объект `Formatter` имеет 2 свойства для того, чтобы получить форматирование в виде `json`:
-* `format_data` — словарь `{"version": ..., "items": [...]}`.
-* `raw_format_data` — сырой объект `format_data`.
+- `format_data` — словарь `{"version": ..., "items": [...]}`.
+- `raw_format_data` — сырой объект `format_data`.
 
 !!! info "Примечание"
     `format_data` необходим для методов, которые могут работать с форматированным текстом, например, метод `messages.send`. Более подробно ознакомиться можно в [документации](https://dev.vk.com/ru/reference/objects/message#format_data) VK API.
@@ -67,8 +67,8 @@ bold("vkbottle documentation:") + " " + url(italic("click me"), href="vkbottle.r
 ```
 
 `Format` имеет 2 метода для того, чтобы получить форматирование в виде `json`:
-* `as_data` — словарь `{"version": ..., "items": [...]}`.
-* `as_raw_data` — сырой объект `as_data`.
+- `as_data` — словарь `{"version": ..., "items": [...]}`.
+- `as_raw_data` — сырой объект `as_data`.
 
 Пример использования с методом `asnwer` у класса `BaseMessageMin`:
 
