@@ -28,7 +28,7 @@ dependencies = [
     "aiofiles (==24.1.0)",
     "typing-extensions (>=4.4.0,<5.0.0)",
     "colorama (>=0.4.6,<0.5.0)",
-    "vkbottle-types (>=5.199.93.1)",
+    "vkbottle-types (>=5.199.93.2,<5.200.0.0)",
 ]
 
 [project.urls]
@@ -37,7 +37,7 @@ Homepage = "https://github.com/vkbottle/vkbottle"
 Documentation = "https://vkbottle.readthedocs.io/ru/latest"
 
 [tool.poetry]
-version = "4.4.6"
+version = "4.5.0"
 classifiers = [
   "Environment :: Console",
   "Intended Audience :: Developers",
