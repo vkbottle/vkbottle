@@ -1992,21 +1992,21 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 
 [[package]]
 name = "vkbottle-types"
-version = "5.199.93.1"
+version = "5.199.93.2"
 description = "VK API methods & types for vkbottle."
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "vkbottle_types-5.199.93.1-py3-none-any.whl", hash = "sha256:1b4ad2f2a8d8779cadf71863c6370bfad5dc1f4ecd42976d39b09e4fd14eded9"},
-    {file = "vkbottle_types-5.199.93.1.tar.gz", hash = "sha256:c08c5ef71fd5a5b2a96c1eb9af4672d387c0dc3054ad52e7c13e94a85f3fb100"},
+    {file = "vkbottle_types-5.199.93.2-py3-none-any.whl", hash = "sha256:9879d9033965cfd9dfb99e20849d8414332f896279c18e74727de9cf090baa48"},
+    {file = "vkbottle_types-5.199.93.2.tar.gz", hash = "sha256:82e8905dcb66b1b7d5913fde4dfeee3a3c52a87155051f306699866c5859b66b"},
 ]
 
 [package.dependencies]
 msgspec = ">=0.19.0,<0.20.0"
 pydantic = ">1,<3"
 typing-extensions = ">=4.4.0,<5.0.0"
-vkbottle = ">=4.4.6,<5.0.0"
+vkbottle = ">=4.5.0,<5.0.0"
 
 [[package]]
 name = "watchdog"
@@ -2194,4 +2194,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "20a53b3450698191ebaef22f439a823da751c970589c6e810b531dade4ac8439"
+content-hash = "fdedb44678aba580e6ac638e972bed9c7250c10e8d4dd3be27458ec67d8b3096"
