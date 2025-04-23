@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
 
 
-from .foreign_message import ForeignMessageMin  # noqa: TC001
+from .foreign_message import ForeignMessageMin, _foreign_messages
 
 
 class MessageMin(BaseMessageMin):
@@ -22,22 +22,11 @@ class MessageMin(BaseMessageMin):
     )
     _chat_members: Optional[List[MessagesConversationMember]] = None
 
+    __foreign_messages = pydantic.model_validator(mode="after")(_foreign_messages)
+
     @property
     def is_mentioned(self) -> bool:
         return self.mention.id == self.user_id if self.mention else False
-
-    @pydantic.model_validator(mode="before")  # type: ignore
-    def __foreign_messages(cls, values):
-        foreign_messages = []
-        if values.get("fwd_messages"):
-            foreign_messages.extend(values["fwd_messages"])
-        if values.get("reply_message"):
-            foreign_messages.append(values["reply_message"])
-        for foreign_message in foreign_messages:
-            foreign_message["unprepared_ctx_api"] = values["unprepared_ctx_api"]
-            foreign_message["replace_mention"] = values["replace_mention"]
-            foreign_message["user_id"] = values.get("user_id")
-        return values
 
 
 async def message_min(
@@ -46,9 +35,11 @@ async def message_min(
     replace_mention: bool = True,
 ) -> "MessageMin":
     response = await ctx_api.messages.get_by_id(message_ids=[message_id])
+
     if not response.items:
         logger.warning(f"Message with id {message_id} not found, perhaps it was deleted.")
         raise asyncio.CancelledError  # Cancel current task
+
     return MessageMin(
         **response.items[0].model_dump(),
         unprepared_ctx_api=ctx_api,

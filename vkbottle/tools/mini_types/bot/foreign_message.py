@@ -6,6 +6,24 @@ from vkbottle_types.objects import ClientInfoForBots  # noqa: TC002
 from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
 
 
+def _foreign_messages(cls, values):  # noqa: ARG001
+    foreign_messages = []
+
+    if values.fwd_messages:
+        foreign_messages.extend(values.fwd_messages)
+
+    if values.reply_message:
+        foreign_messages.append(values.reply_message)
+
+    for foreign_message in foreign_messages:
+        foreign_message.unprepared_ctx_api = values.unprepared_ctx_api
+        foreign_message.replace_mention = values.replace_mention
+        foreign_message.group_id = values.group_id
+        foreign_message.client_info = values.client_info
+
+    return values
+
+
 class ForeignMessageMin(BaseForeignMessageMin):
     group_id: Optional[int] = None
     client_info: Optional["ClientInfoForBots"] = None
@@ -14,19 +32,7 @@ class ForeignMessageMin(BaseForeignMessageMin):
         default_factory=list["ForeignMessageMin"],
     )
 
-    @pydantic.model_validator(mode="before")  # type: ignore
-    def __foreign_messages(cls, values):
-        foreign_messages = []
-        if values.get("fwd_messages"):
-            foreign_messages.extend(values["fwd_messages"])
-        if values.get("reply_message"):
-            foreign_messages.append(values["reply_message"])
-        for foreign_message in foreign_messages:
-            foreign_message.unprepared_ctx_api = values["unprepared_ctx_api"]
-            foreign_message.replace_mention = values["replace_mention"]
-            foreign_message.group_id = values["group_id"]
-            foreign_message.client_info = values["client_info"]
-        return values
+    __foreign_messages = pydantic.model_validator(mode="after")(_foreign_messages)
 
     @property
     def is_mentioned(self) -> bool:
