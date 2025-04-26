@@ -47,4 +47,4 @@ async def message_min(
     )
 
 
-MessageMin.model_rebuild(force=True)
+MessageMin.model_rebuild()

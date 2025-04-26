@@ -36,4 +36,4 @@ class ForeignMessageMin(BaseForeignMessageMin):
         return self.mention.id == self.user_id if (self.mention and self.user_id) else False
 
 
-ForeignMessageMin.model_rebuild(force=True)
+ForeignMessageMin.model_rebuild()

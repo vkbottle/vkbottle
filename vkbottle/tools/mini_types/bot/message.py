@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
 
 
-from vkbottle_types.objects import ClientInfoForBots, MessagesConversationMember
+from vkbottle_types.objects import MessagesConversationMember
 
 from vkbottle.modules import logger
 
@@ -18,7 +18,6 @@ from .foreign_message import ForeignMessageMin, _foreign_messages
 
 class MessageMin(BaseMessageMin):
     group_id: Optional[int] = None
-    client_info: Optional["ClientInfoForBots"] = None
     reply_message: Optional["ForeignMessageMin"] = None
     fwd_messages: List["ForeignMessageMin"] = pydantic.Field(
         default_factory=list["ForeignMessageMin"],
@@ -72,7 +71,7 @@ class MessageMin(BaseMessageMin):
 
 
 def message_min(event: dict, ctx_api: "ABCAPI", replace_mention: bool = True) -> "MessageMin":
-    update = MessageNew(**event)
+    update = MessageNew.from_dict(event)
 
     if update.object.message is None:
         msg = "Please set longpoll to latest version"
@@ -87,4 +86,4 @@ def message_min(event: dict, ctx_api: "ABCAPI", replace_mention: bool = True) ->
     )
 
 
-MessageMin.model_rebuild(force=True)
+MessageMin.model_rebuild()

@@ -157,4 +157,4 @@ class MessageEventMin(MessageEvent):
         return self.payload
 
 
-MessageEventMin.model_rebuild(force=True)
+MessageEventMin.model_rebuild()
