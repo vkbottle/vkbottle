@@ -278,4 +278,4 @@ class BaseMessageMin(MessagesMessage, ABC):
         return await self.answer(**data)
 
 
-BaseMessageMin.model_rebuild(force=True)
+BaseMessageMin.model_rebuild()

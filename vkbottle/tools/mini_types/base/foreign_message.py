@@ -148,4 +148,4 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
         return unpack_failure(self.payload)
 
 
-BaseForeignMessageMin.model_rebuild(force=True)
+BaseForeignMessageMin.model_rebuild()
