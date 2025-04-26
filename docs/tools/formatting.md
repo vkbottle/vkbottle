@@ -39,7 +39,7 @@ Formatter("{framefork:italic} has been around for over 5 years!").format(framewo
 Formatter("Very cool {:bold+italic} ^_^").format("bold-italic message")  # Very cool bold-italic message ^_^
 ```
 
-Метод `format_map` работает так же, как и `format`, но только он принимает один аргумент типа `Mapping`, который передается в метод `format`.
+Метод `format_map` работает так же, как и `format`, за исключением того, что метод принимает один аргумент типа `Mapping`, который передается в метод `format`.
 ```python
 Formatter("My bestie is {bestie:underline}").format(bestie="telegrinder")  # My bestie is telegrinder
 ```
@@ -49,7 +49,7 @@ Formatter("My bestie is {bestie:underline}").format(bestie="telegrinder")  # My 
 * `raw_format_data` — сырой объект `format_data`.
 
 !!! info "Примечание"
-    `format_data` необходим для методов, которые могут работать с форматированным текстом, например, метод `messages.send`. Более подробно ознакомиться можно в [документации](https://dev.vk.com/ru/reference/objects/message#format_data) VK API.
+    `format_data` необходим для методов, которые могут работать с форматированным текстом, например: `messages.send`. Более подробно ознакомиться можно в [документации](https://dev.vk.com/ru/reference/objects/message#format_data) VK API.
 
 
 Класс `Format` необходим для представления типа форматирования, таких как: `bold`, `italic` и т. д. Класс поддерживает оператор `+=`, конкатенацию строк и самих типов-форматов.
@@ -57,7 +57,7 @@ Formatter("My bestie is {bestie:underline}").format(bestie="telegrinder")  # My 
 from vkbottle.tools.formatting import Format
 ```
 
-Примеры использования функций-формативания:
+Пример использования функций-форматирования:
 
 ```python
 bold("Hello, ") + italic("World!")  # Hello, World! ('Hello, ' is bold, 'World!' is italic)
@@ -70,7 +70,7 @@ bold("vkbottle documentation:") + " " + url(italic("click me"), href="vkbottle.r
 * `as_data` — словарь `{"version": ..., "items": [...]}`.
 * `as_raw_data` — сырой объект `as_data`.
 
-Пример использования с методом `asnwer` у класса `BaseMessageMin`:
+Пример использования с методом `BaseMessageMin.answer()`:
 
 ```python
 await message.answer(Formatter("Hello, {:bold}!").format("World"))
