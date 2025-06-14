@@ -39,9 +39,9 @@ PEER_ID_OFFSET: Final[int] = 2_000_000_000
 
 class BaseMessageMin(MessagesMessage, ABC):
     unprepared_ctx_api: Optional[Any] = None
-    state_peer: Optional["StatePeer"] = None
-    reply_message: Optional["BaseForeignMessageMin"] = None
-    fwd_messages: List["BaseForeignMessageMin"] = pydantic.Field(default_factory=list)
+    state_peer: Optional[StatePeer] = None
+    reply_message: Optional[BaseForeignMessageMin] = None
+    fwd_messages: List[BaseForeignMessageMin] = pydantic.Field(default_factory=list)
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
     _chat_members: Optional[List[MessagesConversationMember]] = None
@@ -96,7 +96,7 @@ class BaseMessageMin(MessagesMessage, ABC):
                     **kwargs,
                 )
             ).items
-        return self._chat_members
+        return self._chat_members  # type: ignore
 
     async def user_is_admin(self, user_id: int, /) -> bool:
         members = await self.get_chat_members()

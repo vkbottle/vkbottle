@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Callable, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Final, List, Optional, Union
 
 import pydantic
 from vkbottle_types.objects import (
@@ -20,6 +20,8 @@ if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
 
 from .mention import Mention, replace_mention_validator
+
+PEER_ID_OFFSET: Final[int] = 2_000_000_000
 
 
 class BaseForeignMessageMin(MessagesForeignMessage, ABC):
@@ -60,7 +62,7 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
 
     @property
     def chat_id(self) -> Optional[int]:
-        return None if self.peer_id is None else self.peer_id - 2_000_000_000
+        return None if self.peer_id is None else self.peer_id - PEER_ID_OFFSET
 
     @property
     def message_id(self) -> Optional[int]:

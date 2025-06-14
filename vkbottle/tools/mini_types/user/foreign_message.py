@@ -1,11 +1,11 @@
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import pydantic
 
 from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
 
 
-def _foreign_messages(cls, values):  # noqa: ARG001
+def _foreign_messages(cls: Any, values: Any) -> Any:  # noqa: ARG001
     foreign_messages = []
 
     if values.fwd_messages:
