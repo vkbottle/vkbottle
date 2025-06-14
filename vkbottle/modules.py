@@ -106,7 +106,7 @@ elif logging_module == "logging":
                 if frame.f_code.co_filename == record.pathname and frame.f_lineno == record.lineno:
                     break
 
-                frame = frame.f_back
+                frame = frame.f_back  # type: ignore
 
             if frame is not None:
                 record.module = frame.f_globals.get("__name__", "<module>")
