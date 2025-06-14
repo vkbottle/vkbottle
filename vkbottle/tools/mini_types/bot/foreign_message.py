@@ -1,11 +1,12 @@
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import pydantic
+from vkbottle_types.objects import ClientInfoForBots
 
 from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
 
 
-def _foreign_messages(cls, values):  # noqa: ARG001
+def _foreign_messages(cls: Any, values: Any) -> Any:  # noqa: ARG001
     foreign_messages = []
 
     if values.fwd_messages:
@@ -25,6 +26,7 @@ def _foreign_messages(cls, values):  # noqa: ARG001
 
 class ForeignMessageMin(BaseForeignMessageMin):
     group_id: Optional[int] = None
+    client_info: Optional[ClientInfoForBots] = None
     reply_message: Optional["ForeignMessageMin"] = None
     fwd_messages: Optional[List["ForeignMessageMin"]] = pydantic.Field(
         default_factory=list["ForeignMessageMin"],
@@ -38,3 +40,6 @@ class ForeignMessageMin(BaseForeignMessageMin):
 
 
 ForeignMessageMin.model_rebuild()
+
+
+__all__ = ("ForeignMessageMin",)

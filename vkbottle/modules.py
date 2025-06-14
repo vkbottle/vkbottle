@@ -101,17 +101,15 @@ elif logging_module == "logging":
             if not record.funcName or record.funcName == "<module>":
                 record.funcName = "\b"
 
-            frame = next(
-                (
-                    frame
-                    for frame in inspect.stack()
-                    if frame.filename == record.pathname and frame.lineno == record.lineno
-                ),
-                None,
-            )
-            if frame:
-                module = inspect.getmodule(frame.frame)
-                record.module = module.__name__ if module else "<module>"
+            frame = sys._getframe(1)
+            while frame:
+                if frame.f_code.co_filename == record.pathname and frame.f_lineno == record.lineno:
+                    break
+
+                frame = frame.f_back  # type: ignore
+
+            if frame is not None:
+                record.module = frame.f_globals.get("__name__", "<module>")
 
             return logging.Formatter(
                 log_format,
@@ -131,24 +129,19 @@ elif logging_module == "logging":
     class StyleAdapter(logging.LoggerAdapter):
         def __init__(self, logger, extra=None):
             super().__init__(logger, extra or {})
+            self.log_arg_names = frozenset(inspect.getfullargspec(self.logger._log).args[1:])
 
         def log(self, level, msg, *args, **kwargs):
             if self.isEnabledFor(level):
-                if "stacklevel" not in kwargs:
-                    kwargs["stacklevel"] = 2
+                kwargs.setdefault("stacklevel", 2)
                 msg, args, kwargs = self.process(msg, args, kwargs)
                 self.logger._log(level, msg, args, **kwargs)
 
         def process(self, msg, args, kwargs):  # type: ignore
-            log_kwargs = {
-                key: kwargs[key]
-                for key in inspect.getfullargspec(self.logger._log).args[1:]
-                if key in kwargs
-            }
             if isinstance(msg, str):
                 msg = LogMessage(msg, args, kwargs)
                 args = ()
-            return msg, args, log_kwargs
+            return msg, args, {name: kwargs[name] for name in self.log_arg_names if name in kwargs}
 
     warnings.showwarning = showwarning
     _logger = logging.getLogger("vkbottle")

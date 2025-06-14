@@ -8,3 +8,6 @@ class BotTypes:
 
 class UserTypes:
     Message = user.MessageMin
+
+
+__all__ = ("BotTypes", "UserTypes")

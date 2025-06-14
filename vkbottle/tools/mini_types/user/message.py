@@ -48,3 +48,6 @@ async def message_min(
 
 
 MessageMin.model_rebuild()
+
+
+__all__ = ("MessageMin",)

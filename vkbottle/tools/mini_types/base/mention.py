@@ -1,4 +1,5 @@
 import re
+from typing import Any
 
 import pydantic
 
@@ -16,7 +17,7 @@ class Mention(pydantic.BaseModel):
     text: str
 
 
-def replace_mention_validator(cls, values):  # noqa: ARG001
+def replace_mention_validator(cls: Any, values: Any) -> Any:  # noqa: ARG001
     if not values.replace_mention:
         return values
 
@@ -35,3 +36,6 @@ def replace_mention_validator(cls, values):  # noqa: ARG001
 
     values._mention = Mention(id=mention_id, text=match.group("text"))
     return values
+
+
+__all__ = ("Mention", "replace_mention_validator")

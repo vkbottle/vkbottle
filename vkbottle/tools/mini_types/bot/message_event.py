@@ -158,3 +158,6 @@ class MessageEventMin(MessageEvent):
 
 
 MessageEventMin.model_rebuild()
+
+
+__all__ = ("MessageEventMin",)
