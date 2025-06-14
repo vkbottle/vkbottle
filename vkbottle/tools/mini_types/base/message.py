@@ -279,3 +279,6 @@ class BaseMessageMin(MessagesMessage, ABC):
 
 
 BaseMessageMin.model_rebuild()
+
+
+__all__ = ("BaseMessageMin",)

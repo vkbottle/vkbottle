@@ -151,3 +151,6 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
 
 
 BaseForeignMessageMin.model_rebuild()
+
+
+__all__ = ("BaseForeignMessageMin",)

@@ -18,10 +18,10 @@ from .foreign_message import ForeignMessageMin, _foreign_messages
 
 class MessageMin(BaseMessageMin):
     group_id: Optional[int] = None
-    client_info: Optional["ClientInfoForBots"] = None
-    reply_message: Optional["ForeignMessageMin"] = None
-    fwd_messages: List["ForeignMessageMin"] = pydantic.Field(
-        default_factory=list["ForeignMessageMin"],
+    client_info: Optional[ClientInfoForBots] = None
+    reply_message: Optional[ForeignMessageMin] = None
+    fwd_messages: List[ForeignMessageMin] = pydantic.Field(
+        default_factory=list[ForeignMessageMin],
     )
     _is_full: Optional[bool] = None
     _chat_members: Optional[List[MessagesConversationMember]] = None
@@ -79,7 +79,7 @@ def message_min(event: dict, ctx_api: "ABCAPI", replace_mention: bool = True) ->
         raise RuntimeError(msg)
 
     return MessageMin(
-        **update.object.message.model_dump(),
+        **update.object.message.to_dict(),
         client_info=update.object.client_info,
         group_id=update.group_id,
         replace_mention=replace_mention,
@@ -87,4 +87,4 @@ def message_min(event: dict, ctx_api: "ABCAPI", replace_mention: bool = True) ->
     )
 
 
-MessageMin.model_rebuild()
+__all__ = ("MessageMin",)

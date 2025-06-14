@@ -36,3 +36,6 @@ def replace_mention_validator(cls: Any, values: Any) -> Any:  # noqa: ARG001
 
     values._mention = Mention(id=mention_id, text=match.group("text"))
     return values
+
+
+__all__ = ("Mention", "replace_mention_validator")

@@ -79,10 +79,10 @@ async def reaction_handler(event: GroupTypes.MessageReactionEvent):
         peer_id=event.object.peer_id,
         message=f"Вы {'поставили' if event.object.reaction_id else 'убрали'} реакцию на это сообщение!",
         forward=MessagesForward(
-            conversation_message_ids=[event.object.cmid],  # type: ignore
+            conversation_message_ids=[event.object.cmid],
             peer_id=event.object.peer_id,
             is_reply=True,
-        ).model_dump_json(),
+        ).to_raw(),
         random_id=0,
     )
 
