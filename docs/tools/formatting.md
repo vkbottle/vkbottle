@@ -33,7 +33,7 @@ Formatter("Hi, {name}.").format(name="Maria")  # Hi, Maria.
 Пример использования:
 ```python
 Formatter("{:bold}, nice formatting!").format("Wow")  # Wow, nice formatting!
-Formatter("{framefork:italic} has been around for over 5 years!").format(framework="vkbottle")  # vkbottle has been around for over 5 years!
+Formatter("{framework:italic} has been around for over 5 years!").format(framework="vkbottle")  # vkbottle has been around for over 5 years!
 ```
 
 Для того, чтобы объединить типы форматов, используется синтаксис объединения через символ `+`.
@@ -43,7 +43,7 @@ Formatter("Very cool {:bold+italic} ^_^").format("bold-italic message")  # Very 
 
 Метод `format_map` работает так же, как и `format`, за исключением того, что метод принимает один аргумент типа `Mapping`, который передается в метод `format`.
 ```python
-Formatter("My bestie is {bestie:underline}").format(bestie="telegrinder")  # My bestie is telegrinder
+Formatter("My bestie is {bestie:underline}").format_map({"bestie": "telegrinder")  # My bestie is telegrinder
 ```
 
 Объект `Formatter` имеет 2 свойства для того, чтобы получить форматирование в виде `json`:

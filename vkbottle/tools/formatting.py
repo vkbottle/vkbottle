@@ -19,6 +19,11 @@ FORMAT_PATTERN = re.compile(
 )
 
 
+def _calculate_offset(string: str) -> int:
+    # https://dev.vk.com/en/reference/objects/message#format_data
+    return len(string.encode("utf-16-le")) // 2
+
+
 def _format(
     string: str | Format,
     fmt_type: FormatType,
@@ -41,7 +46,7 @@ def italic(string: str | Format, /) -> Format:
 
 
 def underline(string: str | Format, /) -> Format:
-    return _format(string, "italic")
+    return _format(string, "underline")
 
 
 def url(string: str | Format, /, *, href: str) -> Format:
@@ -68,7 +73,8 @@ class Format:
         if not isinstance(other, (str, self.__class__)):
             return NotImplemented
         if isinstance(other, str):
-            return self.__radd__(other)
+            self.string += other
+            return self
         return self.add_other(other)
 
     def __iadd__(self, other: object, /) -> typing.Self:
@@ -79,11 +85,23 @@ class Format:
     def __radd__(self, other: object, /) -> typing.Self:
         if not isinstance(other, str):
             return NotImplemented
+        if isinstance(other, str):
+            rhs_offset = _calculate_offset(other)
+            self.offset += rhs_offset
+            for other_format in self.other_formats:
+                other_format.offset += rhs_offset
+            self.string = other + self.string
+            return self
+
         self.string += other
         return self
 
     def add_other(self, other: typing.Self, /) -> typing.Self:
-        other.offset = len(self.string)
+        rhs_offset = _calculate_offset(self.string)
+        other.offset += rhs_offset
+        for other_format in other.other_formats:
+            other_format.offset += rhs_offset
+
         self.string += other.string
         self.other_formats.append(other)
         return self
@@ -146,7 +164,7 @@ class Formatter(str):
             start, end = match.span()
 
             output += self[last_end:start]
-            offset = len(output)
+            offset = _calculate_offset(output)
 
             if name is None:
                 value = args[arg_index]
