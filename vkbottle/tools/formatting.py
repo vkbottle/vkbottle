@@ -41,11 +41,11 @@ def italic(string: str | Format, /) -> Format:
 
 
 def underline(string: str | Format, /) -> Format:
-    return _format(string, "italic")
+    return _format(string, "underline")
 
 
 def url(string: str | Format, /, *, href: str) -> Format:
-    return _format(string, "italic", {"url": href})
+    return _format(string, "url", {"url": href})
 
 
 @dataclasses.dataclass
