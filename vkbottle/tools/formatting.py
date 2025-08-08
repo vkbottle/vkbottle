@@ -68,7 +68,8 @@ class Format:
         if not isinstance(other, (str, self.__class__)):
             return NotImplemented
         if isinstance(other, str):
-            return self.__radd__(other)
+            self.string = self.string + other 
+            return self
         return self.add_other(other)
 
     def __iadd__(self, other: object, /) -> typing.Self:
@@ -79,7 +80,10 @@ class Format:
     def __radd__(self, other: object, /) -> typing.Self:
         if not isinstance(other, str):
             return NotImplemented
-        self.string += other
+        self.string = other + self.string
+        self.offset += len(other)
+        for of in self.other_formats:
+            of.offset += len(other)
         return self
 
     def add_other(self, other: typing.Self, /) -> typing.Self:
