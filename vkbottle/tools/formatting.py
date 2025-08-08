@@ -68,7 +68,7 @@ class Format:
         if not isinstance(other, (str, self.__class__)):
             return NotImplemented
         if isinstance(other, str):
-            self.string = self.string + other 
+            self.string = self.string + other
             return self
         return self.add_other(other)
 
