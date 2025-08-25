@@ -2041,14 +2041,14 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 
 [[package]]
 name = "vkbottle-types"
-version = "5.199.99.6"
+version = "5.199.99.7"
 description = "VK API methods & types for vkbottle."
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "vkbottle_types-5.199.99.6-py3-none-any.whl", hash = "sha256:3a8f7d2fc972a1919cdad82e79d8604bd05a730fa34cb78093f781349d4f5751"},
-    {file = "vkbottle_types-5.199.99.6.tar.gz", hash = "sha256:cb5ffb3b01da2fa6dfe674f5dc0c969490366eeef999a66ff447c81fdce94fa4"},
+    {file = "vkbottle_types-5.199.99.7-py3-none-any.whl", hash = "sha256:d72b1ddbc587eb4b031744bb371dddcad2121f7bb2c32545cb2c013efbfa90c8"},
+    {file = "vkbottle_types-5.199.99.7.tar.gz", hash = "sha256:e1541074ba1663adfcb5dcf1ff93cf3a37184b6fa6b1eac6782d85acd5d875d1"},
 ]
 
 [package.dependencies]
@@ -2243,4 +2243,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<4.0"
-content-hash = "0561c305b65ce3ec267da10bf14dc60d37011c5625e58c97fb54832f434bda8b"
+content-hash = "180dc3d55b477f75261828f8ec2252c619a6f4c82e6b849bc18b4710128b791f"

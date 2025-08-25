@@ -56,7 +56,7 @@ class UserPolling(BasePolling):
         logger.debug("Getting polling server...")
 
         if self.user_id is None:
-            response = await self.api.request("users.get", {})["response"]
+            response = (await self.api.request("users.get", {}))["response"]
             if not response:
                 msg = "Unable to get user id for user polling. Perhaps you are using a group access token?"
                 raise RuntimeError(msg)

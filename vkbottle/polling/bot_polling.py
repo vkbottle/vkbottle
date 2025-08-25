@@ -52,12 +52,12 @@ class BotPolling(BasePolling):
     async def get_server(self) -> dict:
         logger.debug("Getting polling server...")
         if self.group_id is None:
-            response = await self.api.request("groups.getById", {})
-            if not response or not response["response"].get("groups", []):
+            response = (await self.api.request("groups.getById", {}))["response"]
+            if not response.get("groups", []):
                 msg = "Unable to get group id for bot polling. Perhaps you are using a user access token?"
                 raise RuntimeError(msg)
 
-            self.group_id = response["response"]["groups"][0]["id"]
+            self.group_id = response["groups"][0]["id"]
 
         return (
             await self.api.request(

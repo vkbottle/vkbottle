@@ -28,7 +28,7 @@ dependencies = [
     "aiofiles (==24.1.0)",
     "typing-extensions (>=4.14.1,<5.0.0)",
     "colorama (>=0.4.6,<0.5.0)",
-    "vkbottle-types (>=5.199.99.6,<5.200.0.0)",
+    "vkbottle-types (>=5.199.99.7,<5.200.0.0)",
 ]
 
 [project.urls]
@@ -195,6 +195,7 @@ lint.ignore = [
   "RUF001",  # String contains ambiguous unicode character
   "RUF002",  # Docstring contains ambiguous unicode character
   "RUF003",  # Comment contains ambiguous unicode character
+  "PLW1641", # Object does not implement `__hash__` method
   "PLW2901", # for loop variable overwritten by assignment target
   "PLE1205", # https://github.com/charliermarsh/ruff/issues/3351
   "B030",    # Except handlers should only be exception classes or tuples of exception
@@ -206,6 +207,7 @@ lint.ignore = [
   "FA100",   # `__future__` import "annotations" missing
   "ISC001",  # single-line-implicit-string-concatenation
   "UP035",   # deprecated-import
+  "UP045",   # Use `X | None` for type annotations
 ]
 
 [tool.ruff.lint.per-file-ignores]
