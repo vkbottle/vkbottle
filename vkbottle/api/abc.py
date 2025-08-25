@@ -29,7 +29,12 @@ class ABCAPI(APICategories, ABC):
     captcha_handler: Optional[Callable[["CaptchaError"], Awaitable[Any]]] = None
 
     @abstractmethod
-    async def request(self, method: str, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def request(
+        self,
+        method: str,
+        data: Dict[str, Any],
+        version: Optional[str] = None,
+    ) -> Dict[str, Any]:
         """Makes a single request opening a session"""
 
     @abstractmethod
