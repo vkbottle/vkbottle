@@ -187,6 +187,7 @@ lint.ignore = [
   "UP037",   # quoted-annotation
   "E501",    # line too long
   "B905",    # `zip()` without an explicit `strict=` parameter (python3.10+ only)
+  "PLC0415", # `import` should be at the top-level of a file
   "PLR0913", # Too many arguments to function call
   "A003",    # Class attribute builtin name shadowing
   "N818",    # Exception should be named with an Error suffix
