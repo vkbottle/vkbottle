@@ -63,7 +63,12 @@ class API(ABCAPI):
         self.request_validators: List["ABCRequestValidator"] = DEFAULT_REQUEST_VALIDATORS  # type: ignore
         self.captcha_handler: Optional["CaptchaHandler"] = None
 
-    async def request(self, method: str, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def request(
+        self,
+        method: str,
+        data: Dict[str, Any],
+        version: Optional[str] = None,
+    ) -> Dict[str, Any]:
         """Makes a single request opening a session"""
         data = await self.validate_request(data)
 
@@ -72,7 +77,7 @@ class API(ABCAPI):
                 self.API_URL + method,
                 method="POST",
                 data=data,  # type: ignore
-                params={"access_token": token, "v": self.API_VERSION},
+                params={"access_token": token, "v": version or self.API_VERSION},
             )
         logger.debug("Request {} with {} data returned {}", method, data, response)
         return await self.validate_response(method, data, response)  # type: ignore
@@ -95,7 +100,10 @@ class API(ABCAPI):
             yield await self.validate_response(method, data, response)  # type: ignore
 
     async def validate_response(
-        self, method: str, data: Dict[str, Any], response: Union[Dict[str, Any], str]
+        self,
+        method: str,
+        data: Dict[str, Any],
+        response: Union[Dict[str, Any], str],
     ) -> Any:
         """Validates response from VK,
         to change validations change API.response_validators (list of ResponseValidator's)"""
