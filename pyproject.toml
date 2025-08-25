@@ -21,14 +21,14 @@ authors = [{ name = "timoniq", email = "tesseradecades@mail.ru" }]
 maintainers = [{ name = "luwqz1", email = "howluwqz1@gmail.com" }]
 requires-python = '>=3.9,<4.0'
 dependencies = [
-    "aiohttp (>=3.12.13,<4.0.0)",
+    "aiohttp (>=3.12.15,<4.0.0)",
     "choicelib (>=0.1.5,<0.2.0)",
     "pydantic (>=2.11.7,<3.0.0)",
     "vbml (>=1.1.post1,<2.0)",
     "aiofiles (==24.1.0)",
-    "typing-extensions (>=4.14.0,<5.0.0)",
+    "typing-extensions (>=4.14.1,<5.0.0)",
     "colorama (>=0.4.6,<0.5.0)",
-    "vkbottle-types (>=5.199.99.1,<5.200.0.0)",
+    "vkbottle-types (>=5.199.99.6,<5.200.0.0)",
 ]
 
 [project.urls]
@@ -56,25 +56,25 @@ requires-poetry = ">=2.0.0,<3.0.0"
 [tool.poetry.group.dev.dependencies]
 # Lint
 black = "^25.1.0"
-mypy = "^1.16.0"
+mypy = "^1.17.1"
 mypy-extensions = "^1.1.0"
 # mypy stubs
-types-aiofiles = ">=24.1.0.20250606,<25.0"
+types-aiofiles = ">=24.1.0.20250822,<25.0"
 # flake8, isort and autoflake replacement
-ruff = ">=0.11.13"
+ruff = ">=0.12.10"
 # Tests
-pytest = ">=8.4.0,<9.0.0"
-pytest-asyncio = ">=1.0.0,<2.0.0"
+pytest = ">=8.4.1,<9.0.0"
+pytest-asyncio = ">=1.1.0,<2.0.0"
 pytest-cov = ">=6.2.1,<7"
 pytest-mock = "^3.14.1"
 aioresponses = "^0.7.8"
 # Pre-commit
-pre-commit = ">=4.2.0,<5.0"
+pre-commit = ">=4.3.0,<5.0"
 
 [tool.poetry.group.docs.dependencies]
 # Docs
 mkdocs = "^1.6.1"
-mkdocs-material = "^9.6.14"
+mkdocs-material = "^9.6.18"
 mkdocs-redirects = "^1.2.2"
 
 [build-system]

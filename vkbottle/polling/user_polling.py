@@ -19,42 +19,65 @@ class UserPolling(BasePolling):
         self,
         api: Optional["ABCAPI"] = None,
         user_id: Optional[int] = None,
+        group_id: Optional[int] = None,
         wait: Optional[int] = None,
         mode: Optional[int] = None,
         rps_delay: Optional[int] = None,
+        lp_version: Optional[int] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
     ):
         self._api = api
         self.error_handler = error_handler or ErrorHandler()
         self.user_id = user_id
-        self.wait = wait or 15
+        self.group_id = group_id
+        self.wait = min(wait or 25, 90)
         self.mode = mode or 234
         self.rps_delay = rps_delay or 0
+        self.lp_version = lp_version or 3
         self.stop = False
 
     async def get_event(self, server: dict) -> dict:
         # sourcery skip: use-fstring-for-formatting
         logger.debug("Making long request to get event with longpoll...")
         return await self.api.http_client.request_json(
-            "https://{}?act=a_check&key={}&ts={}&wait={}&mode={}&rps_delay={}".format(
+            url="https://{}?act=a_check&key={}&ts={}&wait={}&mode={}&rps_delay={}&version={}".format(
                 server["server"],
                 server["key"],
                 server["ts"],
                 self.wait,
                 self.mode,
                 self.rps_delay,
+                self.lp_version,
             ),
             method="POST",
         )
 
     async def get_server(self) -> dict:
         logger.debug("Getting polling server...")
+
         if self.user_id is None:
-            self.user_id = (await self.api.request("users.get", {}))["response"][0]["id"]
-        return (await self.api.request("messages.getLongPollServer", {}))["response"]
+            response = await self.api.request("users.get", {})["response"]
+            if not response:
+                msg = "Unable to get user id for user polling. Perhaps you are using a group access token?"
+                raise RuntimeError(msg)
+
+            self.user_id = response[0]["id"]
+
+        return (
+            await self.api.request(
+                "messages.getLongPollServer",
+                {
+                    "need_pts": True,
+                    "version": self.lp_version,
+                    "group_id": self.group_id,
+                },
+            )
+        )["response"]
 
     def construct(
-        self, api: "ABCAPI", error_handler: Optional["ABCErrorHandler"] = None
+        self,
+        api: "ABCAPI",
+        error_handler: Optional["ABCErrorHandler"] = None,
     ) -> "UserPolling":
         self._api = api
         if error_handler is not None:

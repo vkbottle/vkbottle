@@ -23,6 +23,7 @@ class BotPolling(BasePolling):
         group_id: Optional[int] = None,
         wait: Optional[int] = None,
         rps_delay: Optional[int] = None,
+        lp_version: Optional[int] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
     ) -> None:
         self._api = api
@@ -30,18 +31,20 @@ class BotPolling(BasePolling):
         self.group_id = group_id
         self.wait = wait or 15
         self.rps_delay = rps_delay or 0
+        self.lp_version = lp_version or 3
         self.stop = False
 
     async def get_event(self, server: dict) -> dict:
         # sourcery skip: use-fstring-for-formatting
         logger.debug("Making long request to get event with longpoll...")
         return await self.api.http_client.request_json(
-            "{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
+            url="{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}&version={}".format(
                 server["server"],
                 server["key"],
                 server["ts"],
                 self.wait,
                 self.rps_delay,
+                self.lp_version,
             ),
             method="POST",
         )
@@ -49,13 +52,21 @@ class BotPolling(BasePolling):
     async def get_server(self) -> dict:
         logger.debug("Getting polling server...")
         if self.group_id is None:
-            self.group_id = (await self.api.request("groups.getById", {}))["response"]["groups"][
-                0
-            ]["id"]
+            response = await self.api.request("groups.getById", {})
+            if not response or not response["response"].get("groups", []):
+                msg = "Unable to get group id for bot polling. Perhaps you are using a user access token?"
+                raise RuntimeError(msg)
+
+            self.group_id = response["response"]["groups"][0]["id"]
+
         return (
             await self.api.request(
                 "groups.getLongPollServer",
-                {"group_id": self.group_id},
+                {
+                    "need_pts": True,
+                    "version": self.lp_version,
+                    "group_id": self.group_id,
+                },
             )
         )["response"]
 
