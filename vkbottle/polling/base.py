@@ -2,7 +2,7 @@ import asyncio
 import enum
 from abc import ABC
 from collections.abc import AsyncGenerator
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from aiohttp.client_exceptions import ClientConnectionError
 
@@ -23,8 +23,8 @@ class FailureCode(enum.IntEnum):
 
 class BasePolling(ABCPolling, ABC):
     stop: bool
-    lp_version: int
     error_handler: "ABCErrorHandler"
+    lp_version: Optional[int] = None
 
     async def handle_failed_event(self, server: dict, event: dict) -> dict:
         try:
