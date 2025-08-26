@@ -66,12 +66,13 @@ class VoteView(ABCView):
         # `handlers` и `handle_responses` нужны для post мидлварей
         handlers = []
         handler_responses = []
+        context = dict()
 
         for handler in self.handlers:
-            if not await handler.filter(vote):
+            if not await handler.filter(vote, context):
                 continue
 
-            handler_responses.append(await handler.handle(vote))
+            handler_responses.append(await handler.handle(vote, **context))
             handlers.append(handler)
 
             if handler.blocking:

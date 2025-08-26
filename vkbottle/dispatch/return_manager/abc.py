@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 from collections.abc import Awaitable
 from typing import Any, Callable, Dict, NamedTuple, Optional, Tuple, Union
 
@@ -14,7 +14,8 @@ class ABCReturnManager(ABC):
     @abstractmethod
     def get_handler(self, value: Any) -> Any: ...
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def handlers(self) -> Any: ...
 
     @classmethod
@@ -41,9 +42,13 @@ class BaseReturnManager(ABCReturnManager):
 
     @classmethod
     def instance_of(
-        cls, types: Union[type, Tuple[type, ...]]
+        cls,
+        types: Union[type, Tuple[type, ...]],
     ) -> Callable[[Callable], HandlerProperty]:
         def decorator(func: Callable):
             return HandlerProperty(types, func)
 
         return decorator
+
+
+__all__ = ("ABCReturnManager", "BaseReturnManager")

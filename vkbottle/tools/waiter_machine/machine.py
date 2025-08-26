@@ -104,11 +104,11 @@ class WaiterMachine:
         if behaviour is None:
             return False
 
-        result = await behaviour.filter(event)
+        result = await behaviour.filter(event, context)
         if result is not False:
             result = result if isinstance(result, dict) else {}
             context.update(result)
-            value = await behaviour.handle(event, **result)
+            value = await behaviour.handle(event, **context)
             if return_handler := view.handler_return_manager.get_handler(value):
                 await return_handler(
                     view.handler_return_manager,
@@ -119,3 +119,6 @@ class WaiterMachine:
             return True
 
         return False
+
+
+__all__ = ("WaiterMachine",)

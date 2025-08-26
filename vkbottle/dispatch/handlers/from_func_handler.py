@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Callable, Union
+from typing import TYPE_CHECKING, Any, Callable, Optional, Union
 
 from vkbottle.tools.magic import magic_bundle
 
@@ -14,10 +14,15 @@ class FromFuncHandler(ABCHandler[Event]):
         self.rules = rules
         self.blocking = blocking
 
-    async def filter(self, event: Event) -> Union[dict, bool]:
-        rule_context = {}
+    async def filter(
+        self, event: Event, context: Optional[dict[str, Any]] = None
+    ) -> Union[dict, bool]:
+        rule_context = (context or {}).copy()
         for rule in self.rules:
-            result = await rule.check(event)
+            result = await rule.check(
+                event,
+                **magic_bundle(rule.check, rule_context),
+            )
             if result is False or result is None:
                 return False
             elif result is True:
@@ -42,5 +47,8 @@ class FromFuncHandler(ABCHandler[Event]):
             return self.handler == obj
         return super().__eq__(obj)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<FromFuncHandler {self.handler.__name__} blocking={self.blocking} rules={self.rules}>"
+
+
+__all__ = ("FromFuncHandler",)

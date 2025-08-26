@@ -39,7 +39,10 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
         pass
 
     async def handle_event(
-        self, event: T_contra, ctx_api: "ABCAPI", state_dispenser: "ABCStateDispenser"
+        self,
+        event: T_contra,
+        ctx_api: "ABCAPI",
+        state_dispenser: "ABCStateDispenser",
     ) -> None:
         # For user event mapping, consider checking out
         # https://dev.vk.com/api/user-long-poll/getting-started
@@ -60,7 +63,7 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
         handlers = []
 
         for handler in self.handlers:
-            result = await handler.filter(message)
+            result = await handler.filter(message, context_variables)
             logger.debug("Handler {} returned {}", handler, result)
 
             if result is False:
