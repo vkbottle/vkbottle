@@ -40,7 +40,7 @@ class AndRule(ABCRule[T_contra], Generic[T_contra]):
         self._rules = rules
 
     async def check(self, event: T_contra, context: dict[str, Any]):
-        rule_ctx = {}
+        rule_ctx = dict[str, Any]()
 
         for rule in self.rules:
             check_response = await rule.check(
