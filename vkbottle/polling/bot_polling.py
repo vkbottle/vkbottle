@@ -28,7 +28,7 @@ class BotPolling(BasePolling):
         self._api = api
         self.error_handler = error_handler or ErrorHandler()
         self.group_id = group_id
-        self.wait = wait or 15
+        self.wait = min(wait or 25, 90)
         self.rps_delay = rps_delay or 0
         self.stop = False
 

@@ -24,8 +24,9 @@ class UserPolling(BasePolling):
         mode: Optional[int] = None,
         rps_delay: Optional[int] = None,
         lp_version: Optional[int] = None,
+        need_pts: Optional[bool] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
-    ):
+    ) -> None:
         self._api = api
         self.error_handler = error_handler or ErrorHandler()
         self.user_id = user_id
@@ -34,6 +35,7 @@ class UserPolling(BasePolling):
         self.mode = mode or 234
         self.rps_delay = rps_delay or 0
         self.lp_version = lp_version or 3
+        self.need_pts = need_pts
         self.stop = False
 
     async def get_event(self, server: dict) -> dict:
@@ -67,7 +69,7 @@ class UserPolling(BasePolling):
             await self.api.request(
                 "messages.getLongPollServer",
                 {
-                    "need_pts": True,
+                    "need_pts": self.need_pts,
                     "version": self.lp_version,
                     "group_id": self.group_id,
                 },

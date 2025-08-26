@@ -27,7 +27,7 @@ EATABLE = ["мороженое", "макароны", "суп"]
 
 @bot.on.message(text="привет мир")
 async def hello_handler(message: Message):
-    await message.answer(Formatter("Hello, {:bold+italic}!").format("World"))
+    await message.answer(Formatter("Привет, {:bold+italic}!").format("Мир"))
 
 
 # If you need to make handler respond for 2 different rule set you can
