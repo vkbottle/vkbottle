@@ -221,17 +221,21 @@ async def test_rules(api: API):
 
     assert (
         await AndRule(base.FromPeerRule(123), base.FromPeerRule([1, 123])).check(
-            fake_message(api, peer_id=123)
+            fake_message(api, peer_id=123),
+            {},
         )
         is not False
     )
     assert (
         await OrRule(base.FromPeerRule(123), base.FromPeerRule([1, 123])).check(
-            fake_message(api, peer_id=1)
+            fake_message(api, peer_id=1),
+            {},
         )
         is not False
     )
-    assert await NotRule(base.FromPeerRule(123)).check(fake_message(api, peer_id=1)) is not False
+    assert (
+        await NotRule(base.FromPeerRule(123)).check(fake_message(api, peer_id=1), {}) is not False
+    )
     assert await base.RegexRule(r"Hi .*?").check(fake_message(api, text="Hi bro")) == {"match": ()}
     assert await base.RegexRule("Hi (.*?)$").check(fake_message(api, text="Hi bro")) == {
         "match": ("bro",)

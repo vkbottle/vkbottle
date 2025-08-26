@@ -137,7 +137,7 @@ def test_bp_importer(mocker: "MockerFixture"):
     )
 
     for bp in load_blueprints_from_package(main_package):
-        required_files.pop(required_files.index(f'{str(bp).split(".")[-1]}.py'))
+        required_files.pop(required_files.index(f"{str(bp).split('.')[-1]}.py"))
 
     assert not required_files
 
@@ -214,12 +214,12 @@ async def test_utils(mocker: "MockerFixture"):
     assert (c_rule(None) & c_rule(None)).__class__ == AndRule(c_rule(None)).__class__  # type: ignore
     assert (~c_rule(None)).__class__ == NotRule(c_rule(None)).__class__  # type: ignore
 
-    assert_rule(await (c_rule(1) | c_rule(2)).check(2))  # type: ignore
-    assert_rule(await (c_rule(1) | c_rule(2)).check(4), True)  # type: ignore
-    assert_rule(await (c_rule(4) & c_rule(4)).check(4))  # type: ignore
-    assert_rule(await (c_rule(2) & c_rule(4)).check(4), True)  # type: ignore
-    assert_rule(await (~c_rule(1)).check(2))  # type: ignore
-    assert_rule(await (~c_rule(2)).check(2), True)  # type: ignore
+    assert_rule(await (c_rule(1) | c_rule(2)).check(2, {}))  # type: ignore
+    assert_rule(await (c_rule(1) | c_rule(2)).check(4, {}), True)  # type: ignore
+    assert_rule(await (c_rule(4) & c_rule(4)).check(4, {}))  # type: ignore
+    assert_rule(await (c_rule(2) & c_rule(4)).check(4, {}), True)  # type: ignore
+    assert_rule(await (~c_rule(1)).check(2, {}))  # type: ignore
+    assert_rule(await (~c_rule(2)).check(2, {}), True)  # type: ignore
 
 
 def test_run_multibot(mocker: "MockerFixture"):

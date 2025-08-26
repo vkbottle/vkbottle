@@ -25,3 +25,6 @@ class MessageReplyHandler(FromFuncHandler["BaseMessageMin"]):
         params = {"message": self.text, "random_id": 0, **self.default_params}
         method = message.reply if self.as_reply else message.answer
         await method(**params)  # type: ignore
+
+
+__all__ = ("MessageReplyHandler",)

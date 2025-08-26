@@ -57,7 +57,7 @@ class PhotoToAlbumUploader(PhotoUploader):
 
         for i, file_source in enumerate(paths_like):
             data = await self.read(file_source)
-            files[f"file{i+1}"] = self.get_bytes_io(data)
+            files[f"file{i + 1}"] = self.get_bytes_io(data)
 
         uploader = await self.upload_files(server["upload_url"], files)
         return (

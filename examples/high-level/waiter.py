@@ -9,7 +9,7 @@ bot = Bot(os.environ["TOKEN"])
 wm = WaiterMachine()
 
 
-@bot.on.message(text="/wm")
+@bot.on.message(text="/greeting")
 async def greeting(message: Message):
     await message.answer("Как тебя зовут?")
     m, _ = await wm.wait(
@@ -27,7 +27,7 @@ async def expiring(message: Message):
         bot.on.message_view,
         message,
         FuncRule(lambda m: m.text == m.text[::-1]),
-        default=MessageReplyHandler("Это не палиндром, думай быстрее!", as_reply=True),
+        default=MessageReplyHandler("Это не палиндром!", as_reply=True),
         expiration=10,
     )
     await message.answer("Отличный палиндром!")

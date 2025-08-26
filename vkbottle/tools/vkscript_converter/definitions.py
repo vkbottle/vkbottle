@@ -318,16 +318,6 @@ def dict_type(d: ast.Dict):
     return "{" + dict_s + "}"
 
 
-@converter(ast.Num)
-def num_type(d: ast.Num):
-    return str(d.n)
-
-
-@converter(ast.Str)
-def str_type(d: ast.Str):
-    return repr(d.s)
-
-
 @converter(ast.JoinedStr)
 def joined_str(d: ast.JoinedStr):
     return "+".join(find(value) for value in d.values)
@@ -342,12 +332,6 @@ def formatted_value(d: ast.FormattedValue):
 @converter(ast.Tuple)
 def list_type(d: ast.List):
     return "[" + ",".join(find(a) for a in d.elts) + "]"
-
-
-@converter(ast.NameConstant)
-def name_constant_type(d: ast.NameConstant):
-    consts = {True: "true", False: "false", None: "null"}
-    return consts[d.value]
 
 
 # Just a few typing magic

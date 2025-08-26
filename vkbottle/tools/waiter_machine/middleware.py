@@ -53,13 +53,14 @@ class WaiterMiddleware(BaseMiddleware[dict]):
             return
 
         handler: FromFuncHandler = FromFuncHandler(self.pass_runtime, *short_state.rules)
-        result = await handler.filter(self.event)
+        result = await handler.filter(self.event, context)
 
         if result is not False:
             if isinstance(result, bool):
                 result = {}
             result.update(context)
-            await handler.handle(self.event, short_state=short_state, **result)
+            context.setdefault("short_state", short_state)
+            await handler.handle(self.event, **context)
 
         elif short_state.default_behaviour is not None:
             await self.machine.call_behaviour(
@@ -72,7 +73,13 @@ class WaiterMiddleware(BaseMiddleware[dict]):
         self.stop("Runtime was passed to waiter.")
 
     async def pass_runtime(
-        self, event: typing.Any, short_state: "ShortState[dict]", **context: typing.Any
+        self,
+        event: typing.Any,
+        short_state: "ShortState[dict]",
+        **context: typing.Any,
     ) -> None:
         short_state.context = (event, context)  # type: ignore
         short_state.event.set()
+
+
+__all__ = ("WaiterMiddleware",)

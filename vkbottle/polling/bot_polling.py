@@ -28,7 +28,7 @@ class BotPolling(BasePolling):
         self._api = api
         self.error_handler = error_handler or ErrorHandler()
         self.group_id = group_id
-        self.wait = wait or 15
+        self.wait = min(wait or 25, 90)
         self.rps_delay = rps_delay or 0
         self.stop = False
 
@@ -36,7 +36,7 @@ class BotPolling(BasePolling):
         # sourcery skip: use-fstring-for-formatting
         logger.debug("Making long request to get event with longpoll...")
         return await self.api.http_client.request_json(
-            "{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
+            url="{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
                 server["server"],
                 server["key"],
                 server["ts"],
@@ -49,9 +49,13 @@ class BotPolling(BasePolling):
     async def get_server(self) -> dict:
         logger.debug("Getting polling server...")
         if self.group_id is None:
-            self.group_id = (await self.api.request("groups.getById", {}))["response"]["groups"][
-                0
-            ]["id"]
+            response = (await self.api.request("groups.getById", {}))["response"]
+            if not response.get("groups", []):
+                msg = "Unable to get group id for bot polling. Perhaps you are using a user access token?"
+                raise RuntimeError(msg)
+
+            self.group_id = response["groups"][0]["id"]
+
         return (
             await self.api.request(
                 "groups.getLongPollServer",

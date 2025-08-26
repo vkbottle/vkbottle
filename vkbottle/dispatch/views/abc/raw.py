@@ -66,7 +66,7 @@ class ABCRawEventView(ABCView[Event_contra], Generic[Event_contra, HandlerBaseme
             else:
                 event_model.unprepared_ctx_api = ctx_api  # type: ignore
 
-            result = await handler_basement.handler.filter(event_model)
+            result = await handler_basement.handler.filter(event_model, context_variables)
             logger.debug("Handler {} returned {}", handler_basement.handler, result)
 
             if result is False:
@@ -76,7 +76,8 @@ class ABCRawEventView(ABCView[Event_contra], Generic[Event_contra, HandlerBaseme
                 context_variables.update(result)
 
             handler_response = await handler_basement.handler.handle(
-                event_model, **context_variables
+                event_model,
+                **context_variables,
             )
             handle_responses.append(handler_response)
             handlers.append(handler_basement.handler)

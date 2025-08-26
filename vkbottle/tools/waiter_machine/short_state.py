@@ -60,3 +60,6 @@ class ShortState(typing.Generic[Event]):
         )
         for future in waiters:
             future.cancel()
+
+
+__all__ = ("ShortState",)

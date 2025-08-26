@@ -51,9 +51,7 @@ class InfoMiddleware(BaseMiddleware[Message]):
             self.stop("Сообщение не было обработано")
 
         await self.event.answer(
-            "Сообщение было обработано:\n\n"
-            f"View - {self.view}\n\n"
-            f"Handlers - {self.handlers}"
+            f"Сообщение было обработано:\n\nView - {self.view}\n\nHandlers - {self.handlers}"
         )
 
 

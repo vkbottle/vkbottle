@@ -2,7 +2,7 @@ import asyncio
 import enum
 from abc import ABC
 from collections.abc import AsyncGenerator
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from aiohttp.client_exceptions import ClientConnectionError
 
@@ -18,11 +18,13 @@ class FailureCode(enum.IntEnum):
     HISTORY_OUTDATED = 1
     KEY_EXPIRED = 2
     INFORMATION_LOST = 3
+    INVALID_VERSION = 4
 
 
 class BasePolling(ABCPolling, ABC):
     stop: bool
     error_handler: "ABCErrorHandler"
+    lp_version: Optional[int] = None
 
     async def handle_failed_event(self, server: dict, event: dict) -> dict:
         try:
@@ -41,6 +43,15 @@ class BasePolling(ABCPolling, ABC):
                 server["ts"] if failed == FailureCode.KEY_EXPIRED else new_server["ts"]
             )
             return new_server
+
+        if failed == FailureCode.INVALID_VERSION:
+            logger.error(
+                "Invalid version of longpoll, min: {}, max: {}. Using version 3.",
+                event["min_version"],
+                event["max_version"],
+            )
+            self.lp_version = 3
+            return await self.get_server()
 
         return {}
 
@@ -68,7 +79,7 @@ class BasePolling(ABCPolling, ABC):
                     continue
                 yield event
             except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
-                logger.error("Unable to make request to Longpoll, retrying...")
+                logger.error("Unable to make request to {}, retrying...", self.__class__.__name__)
                 retry_count += 1
                 server = {}
                 await asyncio.sleep(0.1 * retry_count)

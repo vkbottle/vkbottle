@@ -4,6 +4,12 @@ import typing
 
 Function = typing.Callable[..., typing.Any]
 
+CONTEXT_NAMES: typing.Final = (
+    "context",
+    "ctx",
+    "context_variables",
+)
+
 
 def _resolve_arg_names(
     func: Function,
@@ -90,6 +96,12 @@ def magic_bundle(
     arg_names = resolve_arg_names(func, start_idx=start_idx, exclude=exclude)
     default_args = get_default_args(func)
     default_args.update({k: v for k, v in kwargs.items() if k in arg_names})
+
+    for name in CONTEXT_NAMES:
+        if name in arg_names:
+            default_args[name] = kwargs.copy()
+            break
+
     return default_args
 
 

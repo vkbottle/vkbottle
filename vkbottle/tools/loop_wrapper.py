@@ -12,8 +12,9 @@ from vkbottle.modules import logger
 from .delayed_task import DelayedTask
 
 if TYPE_CHECKING:
-    Task = Coroutine[Any, Any, Any]
     from asyncio import AbstractEventLoop
+
+    Task = Coroutine[Any, Any, Any]
 
 
 class LoopWrapper:
@@ -92,6 +93,7 @@ class LoopWrapper:
                         logger.exception(exc)
                 tasks = asyncio.all_tasks(self.loop)
         except KeyboardInterrupt:
+            print(flush=True)  # Blank print for ^C # noqa: T201
             logger.info("Caught keyboard interrupt. Shutting down...")
             task_to_cancel = asyncio.gather(*tasks)
             task_to_cancel.cancel()
