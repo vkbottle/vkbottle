@@ -20,7 +20,7 @@ FORMAT_PATTERN = re.compile(
 
 
 def _calculate_offset(string: str) -> int:
-    # https://dev.vk.com/en/reference/objects/message#format_data
+    # https://dev.vk.ru/en/reference/objects/message#format_data
     return len(string.encode("utf-16-le")) // 2
 
 

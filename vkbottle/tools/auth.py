@@ -96,7 +96,7 @@ def get_scope(permissions: Union[int, List[UserPermission]]) -> int:
 
 
 class UserAuth:
-    AUTH_URL = "https://oauth.vk.com/token"
+    AUTH_URL = "https://oauth.vk.ru/token"
 
     def __init__(
         self,

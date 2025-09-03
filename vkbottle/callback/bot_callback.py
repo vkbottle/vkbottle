@@ -115,7 +115,7 @@ class BotCallback(ABCCallback):
         server_id: int,
         params: Optional[Dict[str, bool]] = None,
     ) -> None:
-        """Search values in https://dev.vk.com/method/groups.getCallbackSettings"""
+        """Search values in https://dev.vk.ru/method/groups.getCallbackSettings"""
 
         logger.debug("Setting callback settings...")
 

@@ -147,7 +147,7 @@ assert rst == {"eggs": 11}
 
 `ChatActionRule(chat_action_types)`
 
-Используется для отлова событий в беседах (например: `chat_invite_user`). [Документация ВК по chat actions](https://dev.vk.com/reference/objects/message#action)
+Используется для отлова событий в беседах (например: `chat_invite_user`). [Документация ВК по chat actions](https://dev.vk.ru/reference/objects/message#action)
 
 ## PayloadRule
 

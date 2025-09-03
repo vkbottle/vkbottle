@@ -12,7 +12,7 @@ await api.messages.send(peer_id=1, message="Привет Павел Дуров!"
 
 !!! warning "Внимание"
     Все методы в vkbottle пишутся *снейк_кейсом*. <br/>
-    Это значит, например, что метод [`messages.getById`](https://dev.vk.com/method/messages.getById) в vkbottle пишется как `api.messages.get_by_id`.
+    Это значит, например, что метод [`messages.getById`](https://dev.vk.ru/method/messages.getById) в vkbottle пишется как `api.messages.get_by_id`.
 
 ## Параметры
 
