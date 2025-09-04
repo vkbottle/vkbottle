@@ -52,7 +52,7 @@ Formatter("My bestie is {bestie:underline}").format_map({"bestie": "telegrinder"
 - raw_format_data — сырой объект `format_data`.
 
 !!! info "Примечание"
-    `format_data` необходим для методов, которые могут работать с форматированным текстом, например: `messages.send`. Более подробно ознакомиться можно в [документации](https://dev.vk.com/ru/reference/objects/message#format_data) VK API.
+    `format_data` необходим для методов, которые могут работать с форматированным текстом, например: `messages.send`. Более подробно ознакомиться можно в [документации](https://dev.vk.ru/ru/reference/objects/message#format_data) VK API.
 
 
 Класс `Format` необходим для представления типа форматирования, таких как: `bold`, `italic` и т. д. Класс поддерживает оператор `+=`, конкатенацию строк и самих типов-форматов.

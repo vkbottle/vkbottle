@@ -150,7 +150,7 @@ async def send_httpbin_get() -> dict:
 
 ## Какие методы присутствуют во фреймворке
 
-Всё что есть в [официальной документации от vk.com](https://dev.vk.com/reference).
+Всё что есть в [официальной документации от vk.ru](https://dev.vk.ru/reference).
 
 Синтаксис методов, параметры и ошибки аналогичны документации выше,
 только методы пишутся в **snake_case**, а не **camelCase**.
@@ -160,11 +160,11 @@ from vkbottle.api import API
 
 api = API("token")
 
-# https://api.vk.com/method/account.ban
+# https://api.vk.ru/method/account.ban
 await api.account.ban(owner_id=1)
 
 
-# https://api.vk.com/method/account.getBanned
+# https://api.vk.ru/method/account.getBanned
 await api.account.get_banned(offset=0, count=1)
 ```
 
@@ -186,7 +186,7 @@ await api.account.get_banned(offset=0, count=1)
 У бота (токена от сообщества) не все методы доступны в отличие от получения токена через пользователя, учитывайте это.
 На картинке красным выделен один из методов, который будет работать в ботах.
 
-[Чат бот Быстрый старт](https://dev.vk.com/api/bots/getting-started)
+[Чат бот Быстрый старт](https://dev.vk.ru/api/bots/getting-started)
 
 ## Как отправить метод, которого нет во фреймворке
 
