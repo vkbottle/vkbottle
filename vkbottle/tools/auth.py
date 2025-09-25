@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from enum import IntEnum
 from functools import reduce
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from vkbottle_types import API_URL, API_VERSION
 
@@ -211,7 +211,7 @@ class UserAuth:
             },
         )
 
-        error: str | dict[str, Any] | None = response.pop("error", None)
+        error = cast("str | dict[str, Any] | None", response.pop("error", None))
         if not error:
             return response
 

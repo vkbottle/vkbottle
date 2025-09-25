@@ -1,6 +1,8 @@
 import ast
 from inspect import getsource
-from typing import Callable, Dict, Type
+from typing import Any, Callable, Dict, Type
+
+from vkbottle_types.categories import ExecutableCode
 
 
 class ConverterError(Exception):
@@ -26,14 +28,16 @@ class Converter:
             raise ConverterError(msg)
         return self.definitions[d.__class__](d)
 
-    def scriptify(self, func: Callable, *args_values, **kwargs_values) -> str:
+    def scriptify(self, func: Callable, *args_values: Any, **kwargs_values: Any) -> str:
         """Translate function to VKScript"""
         source = getsource(func)
         code: ast.FunctionDef = ast.parse(source).body[0]  # type: ignore
+
         # Check if function has *args or **kwargs
         if code.args.vararg or code.args.kwarg:
             msg = "VKScript converter doesn't support *args and **kwargs"
             raise ConverterError(msg)
+
         # Get list of function arguments names
         args = [a.arg for a in code.args.args]
         # Get list of function arguments default values
@@ -42,6 +46,7 @@ class Converter:
         if not args or args[0] != "api":
             msg = "First argument must be api"
             raise ConverterError(msg)
+
         # Remove api from args
         args = args[1:]
         # Cycle through function arguments and check if they values are passed
@@ -49,6 +54,7 @@ class Converter:
             if arg in kwargs_values:
                 continue
             kwargs_values[arg] = v
+
         # Default values are used if values are not passed
         # eg func(a, b=2, c=3) -> func(1, 3), args = [a=1, b=3, c=3], defaults = [2, 3]
         for arg in args[::-1]:
@@ -58,8 +64,10 @@ class Converter:
             if arg in kwargs_values:
                 continue
             kwargs_values[arg] = defaults.pop()
+
         # Create assignments for every argument as variable
         values_assignments = [f"var {k}={v};" for k, v in kwargs_values.items()]
-        return "".join(values_assignments) + "".join(
+        result = "".join(values_assignments) + "".join(
             self.find_definition(line) for line in code.body
         )
+        return ExecutableCode(code=result)
