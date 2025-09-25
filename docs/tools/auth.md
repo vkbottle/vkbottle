@@ -35,7 +35,7 @@ async def main():
 | `UserPermission.notes`         | Доступ к заметкам пользователя                                                                       | ✓            |
 | `UserPermission.messages`      | Доступ к расширенным методам работы с сообщениями                                                    | ✗            |
 | `UserPermission.wall`          | Доступ к обычным и расширенным методам работы со стеной                                              | ✓            |
-| `UserPermission.ads`           | Доступ к расширенным методам работы с [рекламным API](https://dev.vk.com/ru/api/ads/getting-started) | ✓            |
+| `UserPermission.ads`           | Доступ к расширенным методам работы с [рекламным API](https://dev.vk.ru/ru/api/ads/getting-started) | ✓            |
 | `UserPermission.offline`       | Доступ к API в любое время                                                                           | ✓            |
 | `UserPermission.docs`          | Доступ к документам                                                                                  | ✓            |
 | `UserPermission.groups`        | Доступ к группам пользователя                                                                        | ✓            |

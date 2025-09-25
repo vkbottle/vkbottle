@@ -239,7 +239,7 @@ def test_run_multibot(mocker: "MockerFixture"):
 @pytest.mark.asyncio
 async def test_user_auth(mock_aioresponse: aioresponses):
     mock_aioresponse.post(
-        "https://oauth.vk.com/token",
+        "https://oauth.vk.ru/token",
         payload={"access_token": "token"},
     )
 
@@ -252,14 +252,14 @@ async def test_user_auth(mock_aioresponse: aioresponses):
 @pytest.mark.asyncio
 async def test_user_auth_with_2fa(mock_aioresponse: aioresponses, validation_type: str):
     mock_aioresponse.post(
-        "https://oauth.vk.com/token",
+        "https://oauth.vk.ru/token",
         payload={
             "error": "need_validation",
             "error_description": "open redirect_uri in browser [5]. Also you can use 2fa_supported param",
             "validation_type": validation_type,
             "validation_sid": "2fa_123456789_1234567_4h45c0f3a79c8kb78e",
             "phone_mask": "+7 *** *** ** 89",
-            "redirect_uri": "https://m.vk.com/login?act=authcheck&api_hash=someapihash",
+            "redirect_uri": "https://m.vk.ru/login?act=authcheck&api_hash=someapihash",
         },
     )
 
@@ -270,7 +270,7 @@ async def test_user_auth_with_2fa(mock_aioresponse: aioresponses, validation_typ
     assert exc_info.value.validation_sid == "2fa_123456789_1234567_4h45c0f3a79c8kb78e"
     assert exc_info.value.phone_mask == "+7 *** *** ** 89"
     assert (
-        exc_info.value.redirect_uri == "https://m.vk.com/login?act=authcheck&api_hash=someapihash"
+        exc_info.value.redirect_uri == "https://m.vk.ru/login?act=authcheck&api_hash=someapihash"
     )
 
 
@@ -288,7 +288,7 @@ async def test_validate_phone(mock_aioresponse: aioresponses):
         }
     }
     mock_aioresponse.get(
-        re.compile(r"^https://api\.vk\.com/method/auth\.validatePhone.*$"),
+        re.compile(r"^https://api\.vk\.ru/method/auth\.validatePhone.*$"),
         payload=expected_response,
     )
 
@@ -302,7 +302,7 @@ async def test_validate_phone(mock_aioresponse: aioresponses):
 @pytest.mark.asyncio
 async def test_validate_phone_with_invalid_sid(mock_aioresponse: aioresponses):
     mock_aioresponse.get(
-        re.compile(r"^https://api\.vk\.com/method/auth\.validatePhone.*$"),
+        re.compile(r"^https://api\.vk\.ru/method/auth\.validatePhone.*$"),
         payload={
             "error": {
                 "error_code": 100,

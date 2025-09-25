@@ -1,7 +1,7 @@
 # Keyboard
 
 !!! warning "Внимание"
-    Подразумевается, что вы уже ознакомились с [документацией вк](https://dev.vk.com/api/bots/development/keyboard)
+    Подразумевается, что вы уже ознакомились с [документацией вк](https://dev.vk.ru/api/bots/development/keyboard)
 
 Создавать клавиатуры в vkbottle очень просто.
 

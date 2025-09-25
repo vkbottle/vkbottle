@@ -44,7 +44,7 @@ def types(api):
 
 
 def test_vkscript():
-    assert basic_cycle(a=10) == BASIC_CYCLE.replace("%A%", "10")
-    assert basic_cycle(a=94) == BASIC_CYCLE.replace("%A%", "94")
-    assert api_request(group_id=1) == API_REQUEST.replace("%A%", "1")
+    assert basic_cycle(a=10).code == BASIC_CYCLE.replace("%A%", "10")
+    assert basic_cycle(a=94).code == BASIC_CYCLE.replace("%A%", "94")
+    assert api_request(group_id=1).code == API_REQUEST.replace("%A%", "1")
     assert types()

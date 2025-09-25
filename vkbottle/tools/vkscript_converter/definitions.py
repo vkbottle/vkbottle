@@ -2,14 +2,18 @@ import ast
 import random
 import string
 from collections.abc import Iterable
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Callable, TypeVar
 
 from typing_extensions import Concatenate, ParamSpec
 
 from .base_converter import Converter, ConverterError
 
 if TYPE_CHECKING:
+    from vkbottle_types.categories import ExecutableCode
+
     from vkbottle import ABCAPI
+
+Return = TypeVar("Return")
 
 CALL_REPLACEMENTS = {
     "append": "push",
@@ -286,13 +290,18 @@ def unary_op(d: ast.UnaryOp):
 
 
 @converter(ast.Subscript)
-def subscript(d: ast.Subscript):
+def subscript(d: ast.Subscript) -> str:
     value = find(d.value)
-    if d.slice.__class__ == ast.Index:
-        if d.slice.value.__class__ == str:  # type: ignore  # noqa: E721
-            return f"{value}.{d.slice.value.s}"  # type: ignore
-        return f"{value}[{find(d.slice.value)}]"  # type: ignore
-    msg = f"Slice {d.slice} is not referenced"
+    if d.slice.__class__ is ast.Constant:
+        slice_value = d.slice.value  # type: ignore
+        if slice_value.__class__ is str:
+            return f"{value}.{slice_value.s}"
+        if slice_value.__class__ is int:
+            return f"{value}[{slice_value}]"
+        if slice_value.__class__ is ast.Constant:
+            return f"{value}[{find(slice_value)}]"
+
+    msg = f"Slice {d.slice!r} is not referenced"
     raise ConverterError(msg)
 
 
@@ -340,7 +349,9 @@ def list_type(d: ast.List):
 P = ParamSpec("P")
 
 
-def vkscript(func: Callable[Concatenate["ABCAPI", P], Any]) -> Callable[P, str]:
+def vkscript(
+    func: Callable[Concatenate["ABCAPI", P], Return],
+) -> Callable[P, "ExecutableCode[Return]"]:
     def decorator(*args: P.args, **context: P.kwargs) -> str:
         return converter.scriptify(func, *args, **context)
 
