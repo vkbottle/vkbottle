@@ -288,7 +288,7 @@ async def test_validate_phone(mock_aioresponse: aioresponses):
         }
     }
     mock_aioresponse.get(
-        re.compile(r"^https://api\.vk\.com/method/auth\.validatePhone.*$"),
+        re.compile(r"^https://api\.vk\.ru/method/auth\.validatePhone.*$"),
         payload=expected_response,
     )
 
@@ -302,7 +302,7 @@ async def test_validate_phone(mock_aioresponse: aioresponses):
 @pytest.mark.asyncio
 async def test_validate_phone_with_invalid_sid(mock_aioresponse: aioresponses):
     mock_aioresponse.get(
-        re.compile(r"^https://api\.vk\.com/method/auth\.validatePhone.*$"),
+        re.compile(r"^https://api\.vk\.ru/method/auth\.validatePhone.*$"),
         payload={
             "error": {
                 "error_code": 100,
