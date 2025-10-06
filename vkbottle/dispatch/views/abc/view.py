@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
     from vkbottle.dispatch.handlers import ABCHandler
     from vkbottle.dispatch.return_manager import BaseReturnManager
+    from vkbottle.exception_factory import ABCErrorHandler
 
     Handlers = Union[List["ABCHandler[Any]"], Dict[Any, List]]
 
@@ -25,6 +26,14 @@ class ABCView(ABC, Generic[T_contra]):
         self.handlers = []
         self.middlewares = []
         self.handler_return_manager = None  # type: ignore
+        self.error_handler: Optional["ABCErrorHandler"] = None  # type: ignore[assignment]
+
+    def _get_error_handler(self) -> "ABCErrorHandler":
+        if self.error_handler is None:
+            from vkbottle.exception_factory.error_handler import ErrorHandler
+
+            self.error_handler = ErrorHandler()
+        return self.error_handler
 
     @abstractmethod
     async def process_event(self, event: T_contra) -> bool:

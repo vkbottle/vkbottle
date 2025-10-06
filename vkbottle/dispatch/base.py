@@ -34,4 +34,6 @@ class Router(ABCRouter):
         self.views = views
         self.state_dispenser = state_dispenser
         self.error_handler = error_handler
+        for view in self.views.values():
+            view.error_handler = error_handler  # type: ignore[attr-defined]
         return self
