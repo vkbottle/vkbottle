@@ -77,12 +77,13 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
             attachment_type = attachment.type.value
             attachment_object = getattr(attachment, attachment_type)
             if not hasattr(attachment_object, "id") or not hasattr(attachment_object, "owner_id"):
+                logger.debug("Got unsupported attachment type: {}", attachment_type)
                 continue
 
             attachment_string = (
                 f"{attachment_type}{attachment_object.owner_id}_{attachment_object.id}"
             )
-            if attachment_object.access_key:
+            if hasattr(attachment_object, "access_key"):
                 attachment_string += f"_{attachment_object.access_key}"
 
             attachments.append(attachment_string)

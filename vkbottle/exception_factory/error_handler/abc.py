@@ -25,7 +25,7 @@ class ABCErrorHandler(ABC):
         pass
 
     @abstractmethod
-    async def handle(self, error: Exception) -> Any:
+    async def handle(self, error: Exception, *args: Any, **kwargs: Any) -> Any:
         pass
 
     @abstractmethod
