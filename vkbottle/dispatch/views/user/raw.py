@@ -1,5 +1,5 @@
 import dataclasses
-from typing import TYPE_CHECKING, Any, Dict, List, Type
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type
 
 from vkbottle_types.events import UserEventType
 
@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from vkbottle_types.events.user_events import BaseUserEvent
 
     from vkbottle.dispatch.handlers import ABCHandler
+    from vkbottle.exception_factory.error_handler import ABCErrorHandler
 
 
 @dataclasses.dataclass(frozen=True)
@@ -21,8 +22,8 @@ class UserHandlerBasement(BaseHandlerBasement):
 class RawUserEventView(ABCRawEventView[List[Any], UserHandlerBasement]):
     handlers: Dict[UserEventType, List[UserHandlerBasement]]
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, error_handler: Optional["ABCErrorHandler"] = None) -> None:
+        super().__init__(error_handler)
         self.handlers = {}
         self.handler_return_manager = UserMessageReturnHandler()
 
@@ -47,3 +48,6 @@ class RawUserEventView(ABCRawEventView[List[Any], UserHandlerBasement]):
             event_type = UserEventType.UNDEFINED_EVENT
 
         return event_type in self.handlers
+
+
+__all__ = ("RawUserEventView", "UserHandlerBasement")

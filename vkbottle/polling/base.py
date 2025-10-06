@@ -2,7 +2,7 @@ import asyncio
 import enum
 from abc import ABC
 from collections.abc import AsyncGenerator
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 from aiohttp.client_exceptions import ClientConnectionError
 
@@ -26,7 +26,9 @@ class BasePolling(ABCPolling, ABC):
     error_handler: "ABCErrorHandler"
     lp_version: Optional[int] = None
 
-    async def handle_failed_event(self, server: dict, event: dict) -> dict:
+    async def handle_failed_event(
+        self, server: dict[str, Any], event: dict[str, Any]
+    ) -> dict[str, Any]:
         try:
             failed = FailureCode(event["failed"])
         except ValueError:
@@ -55,7 +57,7 @@ class BasePolling(ABCPolling, ABC):
 
         return {}
 
-    async def listen(self) -> AsyncGenerator[dict, None]:
+    async def listen(self) -> AsyncGenerator[dict[str, Any], None]:
         retry_count = 0
         server = await self.get_server()
         logger.debug("Starting listening to {} longpoll", self.__class__.__name__)

@@ -20,7 +20,7 @@ class ABCRouter(ABC):
     state_dispenser: "ABCStateDispenser"
     error_handler: "ABCErrorHandler"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.views = {}
 
     @abstractmethod
@@ -45,3 +45,6 @@ class ABCRouter(ABC):
             return view
 
         return decorator
+
+
+__all__ = ("ABCRouter",)

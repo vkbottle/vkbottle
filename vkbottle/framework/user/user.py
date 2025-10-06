@@ -1,5 +1,7 @@
 import asyncio
-from typing import TYPE_CHECKING, Any, Optional, Type
+from typing import TYPE_CHECKING, Any, Optional
+
+from typing_extensions import Self
 
 from vkbottle.api import API
 from vkbottle.dispatch import BuiltinStateDispenser, Router
@@ -29,17 +31,17 @@ class User(BaseFramework):
         labeler: Optional["ABCLabeler"] = None,
         state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
-        task_each_event=None,
+        task_each_event: Any = None,
     ) -> None:
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
-        self.labeler = labeler or UserLabeler()
+        self.labeler = labeler or UserLabeler(error_handler=error_handler)
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
-        self._polling = polling or UserPolling(self.api)
+        self._polling = polling or UserPolling(self.api, error_handler=error_handler)
         self._router = router or Router()
 
-        if task_each_event:
+        if task_each_event is not None:
             logger.warning("task_each_event is deprecated and will be removed in future versions")
 
     @property
@@ -64,18 +66,19 @@ class User(BaseFramework):
 
     @classmethod
     def direct_auth_sync(
-        cls: Type["User"],  # type: ignore
+        cls,
         login: str,
         password: str,
         client_id: Optional[int] = None,
         client_secret: Optional[str] = None,
         **kwargs: Any,
-    ):
+    ) -> Self:
         try:
             loop = asyncio.get_running_loop()
             logger.warning("Event loop is already running, use direct_auth instead")
         except RuntimeError:
             loop = asyncio.new_event_loop()
+
         return loop.run_until_complete(
             cls.direct_auth(
                 login=login,
@@ -88,13 +91,13 @@ class User(BaseFramework):
 
     @classmethod
     async def direct_auth(
-        cls: Type["User"],  # type: ignore
+        cls,
         login: str,
         password: str,
         client_id: Optional[int] = None,
         client_secret: Optional[str] = None,
         **kwargs: Any,
-    ):
+    ) -> Self:
         token = await UserAuth(client_id, client_secret).get_token(login, password)
         return cls(token=token, **kwargs)
 

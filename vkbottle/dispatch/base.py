@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Any, Dict
 
 from typing_extensions import Self
 
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 class Router(ABCRouter):
-    async def route(self, event: dict, ctx_api: "ABCAPI") -> None:
+    async def route(self, event: dict[str, Any], ctx_api: "ABCAPI") -> None:
         logger.debug("Routing update {!r}", event)
 
         for view in self.views.values():
@@ -34,6 +34,11 @@ class Router(ABCRouter):
         self.views = views
         self.state_dispenser = state_dispenser
         self.error_handler = error_handler
+
         for view in self.views.values():
-            view.error_handler = error_handler  # type: ignore[attr-defined]
+            view.error_handler = error_handler
+
         return self
+
+
+__all__ = ("Router",)

@@ -36,7 +36,7 @@ CaptchaHandler = typing.Callable[[CaptchaError], typing.Awaitable]
 
 class APIRequest(NamedTuple):
     method: str
-    data: dict
+    data: dict[str, Any]
 
 
 class API(ABCAPI):

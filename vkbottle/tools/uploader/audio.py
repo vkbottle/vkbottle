@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Any, Union
 
 from .base import BaseUploader
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class AudioUploader(BaseUploader):
     NAME = "audio.mp3"
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("audio.getUploadServer", {}))["response"]
 
     async def upload(
@@ -17,7 +17,7 @@ class AudioUploader(BaseUploader):
         artist: str,
         title: str,
         file_source: Union[str, "Bytes"],
-        **params,
+        **params: Any,
     ) -> str:
         audio = await self.raw_upload(artist, title, file_source, **params)
         return self.generate_attachment_string(
@@ -32,8 +32,8 @@ class AudioUploader(BaseUploader):
         artist: str,
         title: str,
         file_source: Union[str, "Bytes"],
-        **params,
-    ) -> dict:
+        **params: Any,
+    ) -> dict[str, Any]:
         server = await self.get_server()
         data = await self.read(file_source)
         file = self.get_bytes_io(data)

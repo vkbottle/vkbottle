@@ -11,13 +11,13 @@ class CtxStorage(ABCStorage, BaseContext):
     Documentation: https://vkbottle.rtfd.io/ru/latest/tools/storage
     """
 
-    storage: dict
+    storage: dict[str, Any]
 
     def __init__(
         self,
-        default: Optional[dict] = None,
+        default: Optional[dict[str, Any]] = None,
         force_reset: bool = False,
-    ):
+    ) -> None:
         if not self.get_instance() or force_reset:
             default = default or {}
             self.storage = default
@@ -38,3 +38,6 @@ class CtxStorage(ABCStorage, BaseContext):
 
     def contains(self, key: Hashable) -> bool:
         return key in self.get_instance().storage
+
+
+__all__ = ("CtxStorage",)

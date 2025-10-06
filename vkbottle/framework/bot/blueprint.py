@@ -31,7 +31,7 @@ with warnings.catch_warnings():
             name: Optional[str] = None,
             labeler: Optional[BotLabeler] = None,
             router: Optional[Router] = None,
-        ):
+        ) -> None:
             if name is not None:
                 self.name = name
 
@@ -59,3 +59,6 @@ with warnings.catch_warnings():
         @property
         def on(self) -> BotLabeler:
             return self.labeler
+
+
+__all__ = ("BotBlueprint",)

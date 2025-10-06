@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Callable, Generic, List, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Generic, List, Optional, TypeVar
 
 from vkbottle.modules import logger
 
@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from vkbottle.api.abc import ABCAPI
     from vkbottle.dispatch.dispenser.abc import ABCStateDispenser
     from vkbottle.dispatch.handlers import ABCHandler
+    from vkbottle.exception_factory.error_handler import ABCErrorHandler
     from vkbottle.tools.mini_types.base import BaseMessageMin
 
 T_contra = TypeVar("T_contra", list, dict, contravariant=True)
@@ -23,8 +24,8 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
     default_text_approximators: List[Callable[["BaseMessageMin"], str]]
     replace_mention = False
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, error_handler: Optional["ABCErrorHandler"] = None) -> None:
+        super().__init__(error_handler)
         self.state_source_key = DEFAULT_STATE_KEY
         self.default_text_approximators = []
 
@@ -47,7 +48,7 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
         # For user event mapping, consider checking out
         # https://dev.vk.ru/api/user-long-poll/getting-started
         logger.debug("Handling event ({}) with message view", self.get_event_type(event))
-        context_variables: dict = {}
+        context_variables: dict[str, Any] = {}
         message = await self.get_message(event, ctx_api, self.replace_mention)
         message.state_peer = await state_dispenser.cast(self.get_state_key(message))
 
@@ -59,8 +60,8 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
             logger.debug("Handling stopped, pre_middleware returned error")
             return
 
-        handle_responses = []
-        handlers = []
+        handle_responses: List[Any] = []
+        handlers: List["ABCHandler[F_contra]"] = []
 
         for handler in self.handlers:
             result = await handler.filter(message, context_variables)
@@ -75,18 +76,25 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
             try:
                 handler_response = await handler.handle(message, **context_variables)
             except Exception as e:
-                await self._get_error_handler().handle(e, message, **context_variables)
+                await self.error_handler.handle(e, message, **context_variables)
                 continue
+
             handle_responses.append(handler_response)
             handlers.append(handler)
 
             return_handler = self.handler_return_manager.get_handler(handler_response)
             if return_handler is not None:
                 await return_handler(
-                    self.handler_return_manager, handler_response, message, context_variables
+                    self.handler_return_manager,
+                    handler_response,
+                    message,
+                    context_variables,
                 )
 
             if handler.blocking:
                 break
 
         await self.post_middleware(mw_instances, handle_responses, handlers)
+
+
+__all__ = ("ABCMessageView",)

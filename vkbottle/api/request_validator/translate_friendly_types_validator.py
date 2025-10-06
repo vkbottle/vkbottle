@@ -1,3 +1,5 @@
+from typing import Any
+
 import pydantic
 
 from vkbottle.modules import json
@@ -6,7 +8,7 @@ from .abc import ABCRequestValidator
 
 
 class TranslateFriendlyTypesRequestValidator(ABCRequestValidator):
-    async def validate(self, request: dict) -> dict:
+    async def validate(self, request: dict[str, Any]) -> dict[str, Any]:
         for k, v in request.copy().items():
             if isinstance(v, list):
                 request[k] = ",".join(str(e) for e in v)
@@ -19,3 +21,6 @@ class TranslateFriendlyTypesRequestValidator(ABCRequestValidator):
             elif v is None:
                 request.pop(k)
         return request
+
+
+__all__ = ("TranslateFriendlyTypesRequestValidator",)

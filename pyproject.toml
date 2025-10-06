@@ -23,7 +23,7 @@ requires-python = '>=3.9,<4.0'
 dependencies = [
     "aiohttp (>=3.12.15,<4.0.0)",
     "choicelib (>=0.1.5,<0.2.0)",
-    "pydantic (>=2.11.9,<3.0.0)",
+    "pydantic (>=2.11.10,<3.0.0)",
     "vbml (>=1.1.post1,<2.0)",
     "aiofiles (==24.1.0)",
     "typing-extensions (>=4.15.0,<5.0.0)",
@@ -37,7 +37,7 @@ Homepage = "https://github.com/vkbottle/vkbottle"
 Documentation = "https://vkbottle.readthedocs.io/ru/latest"
 
 [tool.poetry]
-version = "4.6.1"
+version = "4.6.2"
 classifiers = [
   "Environment :: Console",
   "Intended Audience :: Developers",
@@ -61,7 +61,7 @@ mypy-extensions = "^1.1.0"
 # mypy stubs
 types-aiofiles = ">=24.1.0.20250822,<25.0"
 # flake8, isort and autoflake replacement
-ruff = ">=0.13.1"
+ruff = ">=0.13.3"
 # Tests
 pytest = ">=8.4.2,<9.0.0"
 pytest-asyncio = ">=1.2.0,<2.0.0"
@@ -74,7 +74,7 @@ pre-commit = ">=4.3.0,<5.0"
 [tool.poetry.group.docs.dependencies]
 # Docs
 mkdocs = "^1.6.1"
-mkdocs-material = "^9.6.20"
+mkdocs-material = "^9.6.21"
 mkdocs-redirects = "^1.2.2"
 
 [build-system]

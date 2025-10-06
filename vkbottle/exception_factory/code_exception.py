@@ -3,7 +3,6 @@ from typing import (
     TYPE_CHECKING,
     Any,
     ClassVar,
-    Dict,
     Generic,
     Optional,
     Tuple,
@@ -26,7 +25,7 @@ def get_code_exception(cls: Type[T_CodeException], code: int) -> Type[T_CodeExce
 class CodeException(Exception):
     code: ClassVar[int]
 
-    def __init_subclass__(cls, code: Optional[int] = None, **kwargs: Dict[str, object]):
+    def __init_subclass__(cls, code: Optional[int] = None, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
         if code is not None:
             cls.code = code
@@ -86,7 +85,7 @@ class CodeExceptionFactory(Generic[T_CodeException]):
         return f"{self._class.__name__}_{self._code}"
 
     @property
-    def _base_class_namespace(self) -> Dict[str, Any]:
+    def _base_class_namespace(self) -> dict[str, Any]:
         return self._base_class_module.__dict__
 
     @property

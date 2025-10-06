@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
@@ -38,7 +38,7 @@ class UserPolling(BasePolling):
         self.need_pts = need_pts
         self.stop = False
 
-    async def get_event(self, server: dict) -> dict:
+    async def get_event(self, server: dict[str, Any]) -> dict[str, Any]:
         # sourcery skip: use-fstring-for-formatting
         logger.debug("Making long request to get event with longpoll...")
         return await self.api.http_client.request_json(
@@ -54,7 +54,7 @@ class UserPolling(BasePolling):
             method="POST",
         )
 
-    async def get_server(self) -> dict:
+    async def get_server(self) -> dict[str, Any]:
         logger.debug("Getting polling server...")
 
         if self.user_id is None:

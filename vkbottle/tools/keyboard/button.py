@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Type
+from typing import Any, Optional, Type
 
 from .action import ABCAction, Callback, Location, OpenLink, Text, VKApps, VKPay
 from .color import KeyboardButtonColor
@@ -33,7 +33,7 @@ class KeyboardButton:
         return cls(action, color)
 
     @classmethod
-    def from_dict(cls: Type["KeyboardButton"], data: dict) -> "KeyboardButton":
+    def from_dict(cls: Type["KeyboardButton"], data: dict[str, Any]) -> "KeyboardButton":
         action_type = KEYBOARD_ACTIONS.get(data.pop("type", None))
         color = data.pop("color", None)
         if color:
@@ -44,8 +44,11 @@ class KeyboardButton:
 
         return cls(action_type(**data), color)
 
-    def get_data(self) -> dict:
-        data: Dict[str, Any] = {"action": self.action.get_data()}
+    def get_data(self) -> dict[str, Any]:
+        data: dict[str, Any] = {"action": self.action.get_data()}
         if self.action.type in ("text", "callback") and self.color:
             data["color"] = self.color.value
         return data
+
+
+__all__ = ("KeyboardButton",)

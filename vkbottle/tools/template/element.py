@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import Any, List, Optional, Union
 
 from vkbottle.modules import json
 from vkbottle.tools.keyboard import Keyboard
@@ -13,9 +13,9 @@ class TemplateElement:
         title: Optional[str] = None,
         description: Optional[str] = None,
         photo_id: Optional[str] = None,
-        buttons: Union[List[KeyboardButton], List[dict], str, None] = None,
-        action: Optional[dict] = None,
-    ):
+        buttons: Union[List[KeyboardButton], List[dict[str, Any]], str, None] = None,
+        action: Optional[dict[str, Any]] = None,
+    ) -> None:
         if not buttons:
             msg = "Buttons are required"
             raise ValueError(msg)
@@ -34,4 +34,10 @@ class TemplateElement:
 
         if all(isinstance(button, KeyboardButton) for button in buttons):  # type: ignore
             buttons = [button.get_data() for button in buttons]  # type: ignore
-        self.raw: dict = {k: v for k, v in locals().items() if v is not None and k != "self"}
+
+        self.raw: dict[str, Any] = {
+            k: v for k, v in locals().items() if v is not None and k != "self"
+        }
+
+
+__all__ = ("TemplateElement",)

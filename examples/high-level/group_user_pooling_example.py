@@ -28,7 +28,7 @@ class BotMessagesPooling(UserPolling):
         rps_delay: Optional[int] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
         group_id: Optional[int] = None,
-    ):
+    ) -> None:
         super().__init__(
             api=api,
             user_id=user_id,
