@@ -35,7 +35,7 @@ from .abc import ABCRule
 DEFAULT_PREFIXES = ["!", "/"]
 PayloadMap = List[Tuple[str, Union[type, Callable[[Any], bool], ABCValidator, Any]]]
 PayloadMapStrict = List[Tuple[str, ABCValidator]]
-PayloadMapDict = Dict[str, Union[dict, type]]
+PayloadMapDict = Dict[str, Union[dict[str, Any], type]]
 
 
 class PeerRule(ABCRule[BaseMessageMin]):
@@ -271,7 +271,7 @@ class ChatActionRule(ABCRule[BaseMessageMin]):
 
 
 class PayloadRule(ABCRule[BaseMessageMin]):
-    def __init__(self, payload: Union[dict, List[dict]]):
+    def __init__(self, payload: Union[dict[str, Any], List[dict[str, Any]]]):
         if isinstance(payload, dict):
             payload = [payload]
         self.payload = payload
@@ -281,7 +281,7 @@ class PayloadRule(ABCRule[BaseMessageMin]):
 
 
 class PayloadContainsRule(ABCRule[BaseMessageMin]):
-    def __init__(self, payload_particular_part: dict):
+    def __init__(self, payload_particular_part: dict[str, Any]):
         self.payload_particular_part = payload_particular_part
 
     async def check(self, event: BaseMessageMin) -> bool:
@@ -327,7 +327,7 @@ class PayloadMapRule(ABCRule[BaseMessageMin]):
         return payload_map  # type: ignore
 
     @classmethod
-    async def match(cls, payload: dict, payload_map: PayloadMapStrict) -> bool:
+    async def match(cls, payload: dict[str, Any], payload_map: PayloadMapStrict) -> bool:
         """Matches payload with payload_map recursively"""
         for k, validator in payload_map:
             if k not in payload:
@@ -339,7 +339,7 @@ class PayloadMapRule(ABCRule[BaseMessageMin]):
                 return False
         return True
 
-    async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
+    async def check(self, event: BaseMessageMin) -> Union[dict[str, Any], bool]:
         payload = event.get_payload_json()
         if not isinstance(payload, dict):
             return False
@@ -358,7 +358,7 @@ class FuncRule(ABCRule[BaseMessageMin]):
     def __init__(self, func: Callable[[BaseMessageMin], Union[bool, Awaitable]]):
         self.func = func
 
-    async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
+    async def check(self, event: BaseMessageMin) -> Union[dict[str, Any], bool]:
         if inspect.iscoroutinefunction(self.func):
             return await self.func(event)  # type: ignore
         return self.func(event)  # type: ignore
@@ -368,7 +368,7 @@ class CoroutineRule(ABCRule[BaseMessageMin]):
     def __init__(self, coroutine: Coroutine):
         self.coro = coroutine
 
-    async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
+    async def check(self, event: BaseMessageMin) -> Union[dict[str, Any], bool]:
         return await self.coro
 
 
@@ -423,7 +423,7 @@ class MacroRule(ABCRule[BaseMessageMin]):
             pattern = [pattern]
         self.patterns = list(map(macro.Pattern, pattern))  # type: ignore
 
-    async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
+    async def check(self, event: BaseMessageMin) -> Union[dict[str, Any], bool]:
         for pattern in self.patterns:
             result = pattern.check(event.text)
             if result is not None:

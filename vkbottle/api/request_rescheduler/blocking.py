@@ -20,7 +20,7 @@ class BlockingRequestRescheduler(ABCRequestRescheduler):
         self,
         ctx_api: Union["ABCAPI", "API"],
         method: str,
-        data: dict,
+        data: dict[str, Any],
         recent_response: Any,
     ) -> dict:
         logger.debug(
@@ -38,3 +38,6 @@ class BlockingRequestRescheduler(ABCRequestRescheduler):
 
         logger.info("Finally succeed after {} seconds", self.delay * attempt_number)
         return recent_response
+
+
+__all__ = ("BlockingRequestRescheduler",)

@@ -17,7 +17,7 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
     async def validate(
         self,
         method: str,
-        data: dict,
+        data: dict[str, Any],
         response: Any,
         ctx_api: Union["ABCAPI", "API"],
     ) -> Any:
@@ -49,3 +49,6 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
             )
 
         raise VKAPIError[code](**error)
+
+
+__all__ = ("VKAPIErrorResponseValidator",)

@@ -14,13 +14,13 @@ class JSONResponseValidator(ABCResponseValidator):
     Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/api/response-validator
     """
 
-    def __init__(self, context: Optional[dict] = None):
+    def __init__(self, context: Optional[dict[str, Any]] = None):
         self.context = context or {}
 
     async def validate(
         self,
         method: str,
-        data: dict,
+        data: dict[str, Any],
         response: Any,
         ctx_api: Union["ABCAPI", "API"],
     ) -> Any:
@@ -47,3 +47,6 @@ class JSONResponseValidator(ABCResponseValidator):
         )
         self.context.pop("reschedule")
         return response
+
+
+__all__ = ("JSONResponseValidator",)

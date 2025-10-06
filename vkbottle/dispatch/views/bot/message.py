@@ -8,6 +8,7 @@ from vkbottle.tools.mini_types.bot import message_min
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
+    from vkbottle.exception_factory.error_handler import ABCErrorHandler
     from vkbottle.tools.mini_types.bot import MessageMin
 
 
@@ -15,8 +16,8 @@ F_contra = TypeVar("F_contra", contravariant=True)
 
 
 class ABCBotMessageView(ABCMessageView[dict, F_contra], Generic[F_contra]):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, error_handler: Optional["ABCErrorHandler"] = None) -> None:
+        super().__init__(error_handler)
         self.handler_return_manager = BotMessageReturnHandler()
 
     @staticmethod
@@ -41,3 +42,6 @@ class ABCBotMessageView(ABCMessageView[dict, F_contra], Generic[F_contra]):
 class BotMessageView(ABCBotMessageView["MessageMin"]):
     def get_state_key(self, message: "MessageMin") -> Optional[int]:
         return getattr(message, self.state_source_key, None)
+
+
+__all__ = ("BotMessageView",)

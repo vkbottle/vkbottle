@@ -65,3 +65,6 @@ class APIAuthError(VKAPIError, code=5):
         self.redirect_uri = redirect_uri
         self.ban_info = ban_info
         self.error_description = error_description
+
+
+__all__ = ("VKAPIError", "CaptchaError", "APIAuthError")

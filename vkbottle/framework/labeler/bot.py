@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from vkbottle_types.events import BaseGroupEvent
 
     from vkbottle.dispatch.views.bot import ABCBotMessageView
+    from vkbottle.exception_factory.error_handler import ABCErrorHandler
     from vkbottle.tools.mini_types.bot.message import MessageMin
 
     from .abc import LabeledHandler
@@ -21,14 +22,15 @@ if TYPE_CHECKING:
 
 
 class BotLabeler(BaseLabeler):
-    """BotLabeler - shortcut manager for router
-    Can be loaded to other BotLabeler
+    """`BotLabeler` - shortcut manager for router
+    Can be loaded to other `BotLabeler`.
     >>> bl = BotLabeler()
     >>> ...
     >>> bl.load(BotLabeler())
+
     Views are fixed. Custom rules can be set locally (they are
     not inherited to other labelers). Rule config is accessible from
-    all custom rules from ABCRule.config
+    all custom rules from `ABCRule.config`.
     """
 
     def __init__(
@@ -38,9 +40,10 @@ class BotLabeler(BaseLabeler):
         custom_rules: Optional[CustomRuleType] = None,
         auto_rules: Optional[List["ABCRule"]] = None,
         raw_event_auto_rules: Optional[List["ABCRule"]] = None,
+        error_handler: Optional["ABCErrorHandler"] = None,
     ) -> None:
-        message_view = message_view or BotMessageView()
-        raw_event_view = raw_event_view or RawBotEventView()
+        message_view = message_view or BotMessageView(error_handler)
+        raw_event_view = raw_event_view or RawBotEventView(error_handler)
         super().__init__(
             message_view=message_view,
             raw_event_view=raw_event_view,
@@ -50,17 +53,26 @@ class BotLabeler(BaseLabeler):
         )
 
     def message(
-        self, *rules: "ABCRule", blocking: bool = True, **custom_rules
+        self,
+        *rules: "ABCRule",
+        blocking: bool = True,
+        **custom_rules,
     ) -> "LabeledMessageHandler":
         return super().message(*rules, blocking=blocking, **custom_rules)
 
     def chat_message(
-        self, *rules: "ABCRule", blocking: bool = True, **custom_rules
+        self,
+        *rules: "ABCRule",
+        blocking: bool = True,
+        **custom_rules,
     ) -> "LabeledMessageHandler":
         return super().chat_message(*rules, blocking=blocking, **custom_rules)
 
     def private_message(
-        self, *rules: "ABCRule", blocking: bool = True, **custom_rules
+        self,
+        *rules: "ABCRule",
+        blocking: bool = True,
+        **custom_rules,
     ) -> "LabeledMessageHandler":
         return super().private_message(*rules, blocking=blocking, **custom_rules)
 
@@ -73,7 +85,10 @@ class BotLabeler(BaseLabeler):
         **custom_rules,
     ) -> "LabeledHandler":
         if any(not isinstance(rule, ABCRule) for rule in rules):
-            msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
+            msg = (
+                "All rules must be subclasses of ABCRule or rule shortcuts "
+                "(https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
+            )
             raise ValueError(msg)
 
         event_types = event if isinstance(event, list) else [event]
@@ -97,3 +112,6 @@ class BotLabeler(BaseLabeler):
             return func
 
         return decorator
+
+
+__all__ = ("BotLabeler",)

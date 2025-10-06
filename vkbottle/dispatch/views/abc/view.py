@@ -20,20 +20,27 @@ class ABCView(ABC, Generic[T_contra]):
     handlers: "Handlers"
     middlewares: List[Type["BaseMiddleware"]]
     handler_return_manager: "BaseReturnManager"
+    _error_handler: Optional["ABCErrorHandler"]
 
     @abstractmethod
-    def __init__(self):
+    def __init__(self, error_handler: Optional["ABCErrorHandler"] = None) -> None:
         self.handlers = []
         self.middlewares = []
         self.handler_return_manager = None  # type: ignore
-        self.error_handler: Optional["ABCErrorHandler"] = None  # type: ignore[assignment]
+        self._error_handler = error_handler
 
-    def _get_error_handler(self) -> "ABCErrorHandler":
-        if self.error_handler is None:
+    @property
+    def error_handler(self) -> "ABCErrorHandler":
+        if self._error_handler is None:
             from vkbottle.exception_factory.error_handler import ErrorHandler
 
-            self.error_handler = ErrorHandler()
-        return self.error_handler
+            self._error_handler = ErrorHandler()
+
+        return self._error_handler
+
+    @error_handler.setter
+    def error_handler(self, error_handler: "ABCErrorHandler") -> None:
+        self._error_handler = error_handler
 
     @abstractmethod
     async def process_event(self, event: T_contra) -> bool:
@@ -86,7 +93,7 @@ class ABCView(ABC, Generic[T_contra]):
     ) -> None:
         pass
 
-    def register_middleware(self, middleware: Type[BaseMiddleware]):
+    def register_middleware(self, middleware: Type[BaseMiddleware]) -> None:
         try:
             if not issubclass(middleware, BaseMiddleware):
                 msg = "Argument is not a subclass of BaseMiddleware"
@@ -94,6 +101,7 @@ class ABCView(ABC, Generic[T_contra]):
         except TypeError as e:
             msg = "Argument is not a class"
             raise ValueError(msg) from e
+
         self.middlewares.append(middleware)
 
     def __repr__(self) -> str:
@@ -103,3 +111,6 @@ class ABCView(ABC, Generic[T_contra]):
             f"middlewares={self.middlewares} "
             f"handler_return_manager={self.handler_return_manager}"
         )
+
+
+__all__ = ("ABCView",)

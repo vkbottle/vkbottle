@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, Any, List, Optional
 
 import pydantic
 from vkbottle_types.events.bot_events import MessageNew
@@ -71,7 +71,9 @@ class MessageMin(BaseMessageMin):
         return super().get_attachment_strings()
 
 
-def message_min(event: dict, ctx_api: "ABCAPI", replace_mention: bool = True) -> "MessageMin":
+def message_min(
+    event: dict[str, Any], ctx_api: "ABCAPI", replace_mention: bool = True
+) -> "MessageMin":
     update = MessageNew.from_dict(event)
 
     if update.object.message is None:

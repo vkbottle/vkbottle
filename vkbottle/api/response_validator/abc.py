@@ -14,8 +14,11 @@ class ABCResponseValidator(ABC):
     async def validate(
         self,
         method: str,
-        data: dict,
+        data: dict[str, Any],
         response: Any,
         ctx_api: Union["ABCAPI", "API"],
     ) -> Any:
         pass
+
+
+__all__ = ("ABCResponseValidator",)

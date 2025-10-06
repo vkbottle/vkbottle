@@ -1,7 +1,7 @@
 import warnings
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 import aiofiles
 
@@ -19,9 +19,10 @@ class BaseUploader(ABC):
         self,
         api: "ABCAPI",
         attachment_name: Optional[str] = None,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> None:
         self.api = api
+
         if "generate_attachment_strings" in kwargs:
             warnings.warn(
                 "generate_attachment_strings in uploaders is deprecated"
@@ -30,10 +31,11 @@ class BaseUploader(ABC):
                 stacklevel=0,
             )
             kwargs.pop("generate_attachment_strings")
+
         self._attachment_name = attachment_name
 
     @abstractmethod
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         pass
 
     @property
@@ -41,7 +43,7 @@ class BaseUploader(ABC):
     def attachment_name(self) -> str:
         pass
 
-    async def upload_files(self, upload_url: str, files: dict) -> dict:
+    async def upload_files(self, upload_url: str, files: dict[str, Any]) -> dict[str, Any]:
         raw_response = await self.api.http_client.request_text(
             upload_url, method="POST", data=files
         )
@@ -56,7 +58,7 @@ class BaseUploader(ABC):
             bytes_io.name = name or self.attachment_name
         return bytes_io
 
-    async def get_owner_id(self, **upload_params) -> int:
+    async def get_owner_id(self, **upload_params: Any) -> int:
         if "group_id" in upload_params:
             return upload_params["group_id"]
         if "user_id" in upload_params:
@@ -70,7 +72,10 @@ class BaseUploader(ABC):
 
     @staticmethod
     def generate_attachment_string(
-        attachment_type: str, owner_id: int, item_id: int, access_key: Optional[str] = None
+        attachment_type: str,
+        owner_id: int,
+        item_id: int,
+        access_key: Optional[str] = None,
     ) -> str:
         return f"{attachment_type}{owner_id}_{item_id}{f'_{access_key}' if access_key else ''}"
 
@@ -83,3 +88,6 @@ class BaseUploader(ABC):
 
     def __repr__(self) -> str:
         return f"<Uploader {self.__class__.__name__} with api {self.api!r}"
+
+
+__all__ = ("BaseUploader",)

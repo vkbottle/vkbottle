@@ -59,3 +59,6 @@ with warnings.catch_warnings():
         @property
         def on(self) -> UserLabeler:
             return self.labeler
+
+
+__all__ = ("UserBlueprint",)

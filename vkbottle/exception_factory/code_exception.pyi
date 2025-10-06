@@ -1,6 +1,6 @@
 from typing import (
+    Any,
     ClassVar,
-    Dict,
     Optional,
     Tuple,
     TypeVar,
@@ -24,4 +24,4 @@ class _CodeExceptionMeta(type):
 class CodeException(Exception, metaclass=_CodeExceptionMeta):
     code: ClassVar[int]
 
-    def __init_subclass__(cls, code: Optional[int] = None, **kwargs: Dict[str, object]): ...
+    def __init_subclass__(cls, code: Optional[int] = None, **kwargs: Any) -> None: ...

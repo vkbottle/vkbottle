@@ -18,7 +18,7 @@ class ABCMiddleware(ABC):
     def stop(self, error: Any) -> NoReturn: ...
 
     @abstractmethod
-    def send(self, context_update: Optional[dict] = None) -> None: ...
+    def send(self, context_update: Optional[dict[str, Any]] = None) -> None: ...
 
     @abstractmethod
     async def pre(self) -> None: ...
@@ -43,7 +43,7 @@ class BaseMiddleware(Generic[T]):
         self.handle_responses = []
         self.handlers = []
 
-        self._new_context: dict = {}
+        self._new_context: dict[str, Any] = {}
         self.error: Optional[Exception] = None
 
         self.pre = self.catch_all(self.pre)  # type: ignore
@@ -62,7 +62,7 @@ class BaseMiddleware(Generic[T]):
         return not self.error
 
     @property
-    def context_update(self) -> dict:
+    def context_update(self) -> dict[str, Any]:
         return self._new_context
 
     def catch_all(self, func):
@@ -83,7 +83,7 @@ class BaseMiddleware(Generic[T]):
             raise MiddlewareError(error or "")
         raise error
 
-    def send(self, context_update: Optional[dict] = None) -> None:
+    def send(self, context_update: Optional[dict[str, Any]] = None) -> None:
         """Validate new context update data if needed"""
 
         if context_update is not None:
@@ -95,3 +95,6 @@ class BaseMiddleware(Generic[T]):
     async def pre(self) -> None: ...
 
     async def post(self) -> None: ...
+
+
+__all__ = ("BaseMiddleware", "MiddlewareError", "ABCMiddleware")

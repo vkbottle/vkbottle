@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Generic, Optional, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Generic, Optional, TypeVar, Union
 
 from vkbottle_types.events import UserEventType
 
@@ -8,29 +8,30 @@ from vkbottle.tools.mini_types.user import message_min
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
+    from vkbottle.exception_factory.error_handler import ABCErrorHandler
     from vkbottle.tools.mini_types.user import MessageMin
 
 F_contra = TypeVar("F_contra", contravariant=True)
 
 
-class ABCUserMessageView(ABCMessageView[list, F_contra], Generic[F_contra]):
-    def __init__(self):
-        super().__init__()
+class ABCUserMessageView(ABCMessageView[list[Any], F_contra], Generic[F_contra]):
+    def __init__(self, error_handler: Optional["ABCErrorHandler"] = None) -> None:
+        super().__init__(error_handler)
         self.handler_return_manager = UserMessageReturnHandler()
 
     @staticmethod
-    def get_event_type(event: list) -> int:
+    def get_event_type(event: list[Any]) -> int:
         return event[0]
 
     @staticmethod
     async def get_message(
-        event: list,
+        event: list[Any],
         ctx_api: Union["API", "ABCAPI"],
         replace_mention: bool,
     ) -> "MessageMin":
         return await message_min(event[1], ctx_api, replace_mention)
 
-    async def process_event(self, event: list) -> bool:
+    async def process_event(self, event: list[Any]) -> bool:
         if not (self.handlers or self.middlewares):
             return False
         try:
@@ -43,3 +44,6 @@ class ABCUserMessageView(ABCMessageView[list, F_contra], Generic[F_contra]):
 class UserMessageView(ABCUserMessageView["MessageMin"]):
     def get_state_key(self, message: "MessageMin") -> Optional[int]:
         return getattr(message, self.state_source_key, None)
+
+
+__all__ = ("ABCUserMessageView", "UserMessageView")

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Optional, Tuple
 
 from vkbottle.api import API
 from vkbottle.callback import BotCallback
@@ -31,17 +31,18 @@ class Bot(BaseFramework):
         labeler: Optional["ABCLabeler"] = None,
         state_dispenser: Optional["ABCStateDispenser"] = None,
         error_handler: Optional["ABCErrorHandler"] = None,
-        task_each_event=None,
+        task_each_event: Any = None,
     ) -> None:
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
         self.loop_wrapper = loop_wrapper or LoopWrapper()
-        self.labeler = labeler or BotLabeler()
+        self.labeler = labeler or BotLabeler(error_handler=error_handler)
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
-        self._polling = polling or BotPolling(self.api)
-        self._callback = callback or BotCallback()
+        self._polling = polling or BotPolling(self.api, error_handler=error_handler)
+        self._callback = callback or BotCallback(error_handler=error_handler)
         self._router = router or Router()
-        if task_each_event:
+
+        if task_each_event is not None:
             logger.warning("task_each_event is deprecated and will be removed in future versions")
 
     @property
@@ -89,7 +90,7 @@ class Bot(BaseFramework):
 
         return confirmation_code, secret_key
 
-    async def process_event(self, event: dict) -> None:
+    async def process_event(self, event: dict[str, Any]) -> None:
         await self.router.route(event, self.api)
 
 

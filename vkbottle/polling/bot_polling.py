@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 from typing_extensions import Self
 
@@ -32,7 +32,7 @@ class BotPolling(BasePolling):
         self.rps_delay = rps_delay or 0
         self.stop = False
 
-    async def get_event(self, server: dict) -> dict:
+    async def get_event(self, server: dict[str, Any]) -> dict[str, Any]:
         # sourcery skip: use-fstring-for-formatting
         logger.debug("Making long request to get event with longpoll...")
         return await self.api.http_client.request_json(
@@ -46,7 +46,7 @@ class BotPolling(BasePolling):
             method="POST",
         )
 
-    async def get_server(self) -> dict:
+    async def get_server(self) -> dict[str, Any]:
         logger.debug("Getting polling server...")
         if self.group_id is None:
             response = (await self.api.request("groups.getById", {}))["response"]

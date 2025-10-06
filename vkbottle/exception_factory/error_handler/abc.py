@@ -5,7 +5,6 @@ from typing import Any, Callable, Dict, Optional, Type, TypeVar
 from typing_extensions import ParamSpec
 
 P = ParamSpec("P")
-
 T = TypeVar("T")
 T_AsyncFunc = TypeVar("T_AsyncFunc", bound=Callable[..., Awaitable[object]])
 
@@ -31,3 +30,6 @@ class ABCErrorHandler(ABC):
     @abstractmethod
     def catch(self, func: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]:
         pass
+
+
+__all__ = ("ABCErrorHandler",)
