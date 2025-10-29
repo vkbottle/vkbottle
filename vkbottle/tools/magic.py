@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import typing
+from inspect import signature
 
 Function = typing.Callable[..., typing.Any]
 
@@ -20,8 +21,12 @@ def _resolve_arg_names(
     exclude: set[str] | None = None,
 ) -> tuple[str, ...]:
     exclude = exclude or set()
-    varnames = func.__code__.co_varnames[start_idx:stop_idx]
-    return tuple(name for name in varnames if name not in exclude)
+
+    return tuple(
+        p.name
+        for p in signature(func).parameters.values()
+        if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD) and p.name not in exclude
+    )[start_idx:stop_idx]
 
 
 def resolve_arg_names(
