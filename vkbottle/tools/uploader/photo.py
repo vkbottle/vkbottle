@@ -187,9 +187,7 @@ class PhotoMessageUploader(PhotoUploader):
                 "photos.saveMessagesPhoto",
                 {**uploader, **params},
             )
-        )[
-            "response"
-        ][0]
+        )["response"][0]
 
     async def get_server(self, **kwargs) -> dict:
         return (await self.api.request("photos.getMessagesUploadServer", kwargs))["response"]

@@ -7,11 +7,11 @@ body:
     attributes:
       label: Checklist
       options:
-        - label: Я уверен, что это баг фреймворка
+        - label: Я уверен(а), что это баг фреймворка
           required: true
-        - label: Я искал похожие баги в issues
+        - label: Я искал(а) похожие баги в issues
           required: true
-        - label: Я установил последнюю версию (`pip3 install -U https://github.com/vkbottle/vkbottle/archive/dev.zip`) и проблема осталась
+        - label: Я установил(а) последнюю версию (`pip3 install -U https://github.com/vkbottle/vkbottle/archive/dev.zip`) и проблема осталась
           required: true
 
   - type: textarea
