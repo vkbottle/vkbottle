@@ -67,12 +67,24 @@ class LoopWrapper:
 
     def run(self) -> NoReturn:  # type: ignore
         """Runs startup tasks and makes the loop running until all tasks are done"""
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+
+        if loop and loop.is_running():
+            raise RuntimeError(
+                "LoopWrapper.run() cannot be called from a running event loop. "
+                "Use 'await bot.run_polling()' instead."
+            )
 
         if not self.tasks:
             logger.warning("You ran loop with 0 tasks. Is it ok?")
 
         self._running = True
-        self.loop = get_event_loop() if self.loop is None else self.loop
+        self.loop = asyncio.new_event_loop()
+
+        asyncio.set_event_loop(self.loop)
 
         for startup_task in self.on_startup:
             self.loop.run_until_complete(startup_task)
