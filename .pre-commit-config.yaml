@@ -17,9 +17,9 @@ repos:
 
   - repo: local
     hooks:
-      - id: black
-        name: black
-        entry: black
+      - id: ruff (format)
+        name: ruff-format
+        entry: ruff format
         language: system
         types: [python]
         stages: [pre-commit]
@@ -40,15 +40,14 @@ repos:
 
       - id: mypy
         name: mypy check
-        entry: mypy --enable-incomplete-feature=Unpack vkbottle
+        entry: mypy
         language: system
-        pass_filenames: false
-        stages: [pre-push]
+        types: [python]
+        stages: [pre-commit]
 
       - id: pytest
         name: pytest
         entry: pytest
         language: system
-        types: [python]
         pass_filenames: false
-        stages: [pre-push]
+        stages: [pre-commit]
