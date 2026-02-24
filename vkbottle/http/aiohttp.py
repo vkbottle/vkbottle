@@ -86,8 +86,9 @@ class AiohttpClient(ABCHTTPClient):
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> bytes:
         response = await self.request_raw(url, method, data, **kwargs)
-        assert response._body is not None  # noqa: S101
-        return response._body
+        if response.content is None:  # type: ignore
+            return b""
+        return await response.content.readany()
 
     async def close(self) -> None:
         if self.session and not self.session.closed:
