@@ -1,5 +1,6 @@
 import asyncio
 import contextlib
+import inspect
 import warnings
 from collections.abc import Coroutine
 from typing import TYPE_CHECKING, Any, Callable, List, NoReturn, Optional, Union
@@ -117,7 +118,7 @@ class LoopWrapper:
         """Adds tasks to be ran in run_forever or run it immediately if loop is already running
         :param task: coroutine / coroutine function with zero arguments
         """
-        if asyncio.iscoroutinefunction(task) or isinstance(task, DelayedTask):
+        if inspect.iscoroutinefunction(task) or isinstance(task, DelayedTask):
             task = task()  # type: ignore
         elif not asyncio.iscoroutine(task):
             msg = "Task should be coroutine or coroutine function"
