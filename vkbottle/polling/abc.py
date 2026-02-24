@@ -36,6 +36,10 @@ class ABCPolling(ABC):
         pass
 
     @abstractmethod
+    def stop(self) -> None:
+        pass
+
+    @abstractmethod
     def construct(
         self,
         api: "ABCAPI",

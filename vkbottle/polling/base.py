@@ -22,7 +22,7 @@ class FailureCode(enum.IntEnum):
 
 
 class BasePolling(ABCPolling, ABC):
-    stop: bool
+    _stop_event: Optional[asyncio.Event] = None
     error_handler: "ABCErrorHandler"
     lp_version: Optional[int] = None
 
@@ -57,14 +57,19 @@ class BasePolling(ABCPolling, ABC):
 
         return {}
 
+    def stop(self) -> None:
+        if self._stop_event is not None:
+            self._stop_event.set()
+
     async def listen(self) -> AsyncGenerator[dict[str, Any], None]:
+        self._stop_event = asyncio.Event()
         retry_count = 0
         server = await self.get_server()
         logger.debug("Starting listening to {} longpoll", self.__class__.__name__)
 
-        while not self.stop:
+        while not self._stop_event.is_set():
             try:
-                server = server if server else await self.get_server()
+                server = server or await self.get_server()
                 event = await self.get_event(server)
 
                 if "failed" in event:
