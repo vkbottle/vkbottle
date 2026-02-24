@@ -36,7 +36,6 @@ class UserPolling(BasePolling):
         self.rps_delay = rps_delay or 0
         self.lp_version = lp_version or 3
         self.need_pts = need_pts
-        self.stop = False
 
     async def get_event(self, server: dict[str, Any]) -> dict[str, Any]:
         # sourcery skip: use-fstring-for-formatting

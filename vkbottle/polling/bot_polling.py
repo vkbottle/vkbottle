@@ -30,7 +30,6 @@ class BotPolling(BasePolling):
         self.group_id = group_id
         self.wait = min(wait or 25, 90)
         self.rps_delay = rps_delay or 0
-        self.stop = False
 
     async def get_event(self, server: dict[str, Any]) -> dict[str, Any]:
         # sourcery skip: use-fstring-for-formatting
