@@ -10,6 +10,8 @@ defaults:
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - uses: asottile/workflows/.github/actions/fast-checkout@v1.4.1
 
