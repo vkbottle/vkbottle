@@ -92,7 +92,7 @@ class BasePolling(ABCPolling, ABC):
                 yield event
             except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
                 logger.error("Unable to make request to {}, retrying...", self.__class__.__name__)
-                retry_count += 1
+                retry_count = min(retry_count + 1, 60)
                 server = {}
                 await asyncio.sleep(0.1 * retry_count)
             except Exception as e:
