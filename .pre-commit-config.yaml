@@ -40,15 +40,14 @@ repos:
 
       - id: mypy
         name: mypy check
-        entry: mypy vkbottle
+        entry: mypy
         language: system
-        pass_filenames: false
-        stages: [pre-push]
+        types: [python]
+        stages: [pre-commit]
 
       - id: pytest
         name: pytest
         entry: pytest
         language: system
-        types: [python]
         pass_filenames: false
-        stages: [pre-push]
+        stages: [pre-commit]
