@@ -28,6 +28,7 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     unprepared_ctx_api: Optional[Any] = None
     replace_mention: Optional[bool] = None
     _mention: Optional[Mention] = None
+    _is_full: Optional[bool] = None
 
     __replace_mention = pydantic.model_validator(mode="after")(replace_mention_validator)  # type: ignore
 
@@ -59,6 +60,23 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
             "response"
         ][0]
         return raw_user if raw_mode else UsersUserFull(**raw_user)
+
+    async def get_full_message(self, peer_id: Optional[int] = None) -> "BaseForeignMessageMin":
+        if self._is_full:
+            return self
+
+        message = (
+            await self.ctx_api.messages.get_by_conversation_message_id(
+                peer_id=peer_id or self.peer_id,
+                conversation_message_ids=[self.conversation_message_id],
+            )
+        ).items[0]
+
+        self.__dict__.update(message.__dict__)
+        super().__init__(**self.model_dump())
+        self.__dict__["_is_full"] = True
+
+        return self
 
     @property
     def chat_id(self) -> Optional[int]:

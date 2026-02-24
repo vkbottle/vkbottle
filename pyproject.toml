@@ -19,7 +19,7 @@ dynamic = ["version", "classifiers"]
 readme = "README.md"
 authors = [{ name = "timoniq", email = "tesseradecades@mail.ru" }]
 maintainers = [{ name = "luwqz1", email = "howluwqz1@gmail.com" }]
-requires-python = '>=3.10,<4.0'
+requires-python = ">=3.10,<4.0"
 dependencies = [
     "aiohttp (>=3.13.3,<4.0.0)",
     "choicelib (>=0.1.5,<0.2.0)",
@@ -37,7 +37,7 @@ Homepage = "https://github.com/vkbottle/vkbottle"
 Documentation = "https://vkbottle.readthedocs.io/ru/latest"
 
 [tool.poetry]
-version = "4.6.2"
+version = "4.7.0"
 classifiers = [
   "Environment :: Console",
   "Intended Audience :: Developers",
@@ -85,7 +85,7 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.10"
 plugins = [
     "pydantic.mypy",
 ]
@@ -100,14 +100,10 @@ check_untyped_defs = true
 module = "tests.*"
 ignore_errors = true
 
-[tool.black]
-line-length = 99
-target-version = ["py39"]
-
 [tool.ruff]
 line-length = 99
 respect-gitignore = true
-target-version = "py39"
+target-version = "py310"
 lint.select = [
   "F",     # Pyflakes
   "E",     # pycodestyle errors

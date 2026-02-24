@@ -13,6 +13,8 @@ from vkbottle.polling.abc import ABCPolling
 if TYPE_CHECKING:
     from vkbottle.exception_factory import ABCErrorHandler
 
+DEFAULT_LONGPOLL_VERSION = 3
+
 
 class FailureCode(enum.IntEnum):
     HISTORY_OUTDATED = 1
@@ -22,12 +24,14 @@ class FailureCode(enum.IntEnum):
 
 
 class BasePolling(ABCPolling, ABC):
-    stop: bool
+    _stop_event: Optional[asyncio.Event] = None
     error_handler: "ABCErrorHandler"
     lp_version: Optional[int] = None
 
     async def handle_failed_event(
-        self, server: dict[str, Any], event: dict[str, Any]
+        self,
+        server: dict[str, Any],
+        event: dict[str, Any],
     ) -> dict[str, Any]:
         try:
             failed = FailureCode(event["failed"])
@@ -48,23 +52,29 @@ class BasePolling(ABCPolling, ABC):
 
         if failed == FailureCode.INVALID_VERSION:
             logger.error(
-                "Invalid version of longpoll, min: {}, max: {}. Using version 3.",
+                "Invalid version of longpoll, min: {}, max: {}. Using version {}.",
                 event["min_version"],
                 event["max_version"],
+                DEFAULT_LONGPOLL_VERSION,
             )
-            self.lp_version = 3
+            self.lp_version = DEFAULT_LONGPOLL_VERSION
             return await self.get_server()
 
         return {}
 
+    def stop(self) -> None:
+        if self._stop_event is not None:
+            self._stop_event.set()
+
     async def listen(self) -> AsyncGenerator[dict[str, Any], None]:
+        self._stop_event = asyncio.Event()
         retry_count = 0
         server = await self.get_server()
         logger.debug("Starting listening to {} longpoll", self.__class__.__name__)
 
-        while not self.stop:
+        while not self._stop_event.is_set():
             try:
-                server = server if server else await self.get_server()
+                server = server or await self.get_server()
                 event = await self.get_event(server)
 
                 if "failed" in event:
@@ -82,7 +92,7 @@ class BasePolling(ABCPolling, ABC):
                 yield event
             except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
                 logger.error("Unable to make request to {}, retrying...", self.__class__.__name__)
-                retry_count += 1
+                retry_count = min(retry_count + 1, 60)
                 server = {}
                 await asyncio.sleep(0.1 * retry_count)
             except Exception as e:

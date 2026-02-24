@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import typing
+from inspect import unwrap
 
 Function = typing.Callable[..., typing.Any]
 
@@ -20,7 +21,8 @@ def _resolve_arg_names(
     exclude: set[str] | None = None,
 ) -> tuple[str, ...]:
     exclude = exclude or set()
-    varnames = func.__code__.co_varnames[start_idx:stop_idx]
+    varnames = unwrap(func).__code__.co_varnames[start_idx:stop_idx]
+
     return tuple(name for name in varnames if name not in exclude)
 
 
@@ -31,10 +33,11 @@ def resolve_arg_names(
     start_idx: int = 1,
     exclude: set[str] | None = None,
 ) -> tuple[str, ...]:
+    unwrapped_func = unwrap(func)
     return _resolve_arg_names(
         func,
         start_idx=start_idx,
-        stop_idx=func.__code__.co_argcount + func.__code__.co_kwonlyargcount,
+        stop_idx=unwrapped_func.__code__.co_argcount + unwrapped_func.__code__.co_kwonlyargcount,
         exclude=exclude,
     )
 
@@ -46,10 +49,11 @@ def resolve_kwonly_arg_names(
     start_idx: int = 1,
     exclude: set[str] | None = None,
 ) -> tuple[str, ...]:
+    unwrapped_func = unwrap(func)
     return _resolve_arg_names(
         func,
-        start_idx=func.__code__.co_argcount + start_idx,
-        stop_idx=func.__code__.co_argcount + func.__code__.co_kwonlyargcount,
+        start_idx=unwrapped_func.__code__.co_argcount + start_idx,
+        stop_idx=unwrapped_func.__code__.co_argcount + unwrapped_func.__code__.co_kwonlyargcount,
         exclude=exclude,
     )
 
@@ -61,23 +65,25 @@ def resolve_posonly_arg_names(
     start_idx: int = 1,
     exclude: set[str] | None = None,
 ) -> tuple[str, ...]:
+    unwrapped_func = unwrap(func)
     return _resolve_arg_names(
         func,
         start_idx=start_idx,
-        stop_idx=func.__code__.co_posonlyargcount,
+        stop_idx=unwrapped_func.__code__.co_posonlyargcount,
         exclude=exclude,
     )
 
 
 def get_default_args(func: Function, /) -> typing.Dict[str, typing.Any]:
-    defaults = func.__defaults__
-    kwdefaults = {} if not func.__kwdefaults__ else func.__kwdefaults__.copy()
+    unwrapped_func = unwrap(func)
+    defaults = unwrapped_func.__defaults__
+    kwdefaults = {} if not unwrapped_func.__kwdefaults__ else unwrapped_func.__kwdefaults__.copy()
     if not defaults:
         return kwdefaults
 
     default_args = {
         k: defaults[i]
-        for i, k in enumerate(resolve_arg_names(func, start_idx=0)[-len(defaults) :])
+        for i, k in enumerate(resolve_arg_names(unwrapped_func, start_idx=0)[-len(defaults) :])
     }
     default_args.update(kwdefaults)
     return default_args

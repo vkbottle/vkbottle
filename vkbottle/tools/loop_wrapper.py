@@ -1,7 +1,7 @@
 import asyncio
 import contextlib
+import inspect
 import warnings
-from asyncio import get_event_loop
 from collections.abc import Coroutine
 from typing import TYPE_CHECKING, Any, Callable, List, NoReturn, Optional, Union
 
@@ -34,6 +34,10 @@ class LoopWrapper:
         self.tasks = tasks or []
         self.loop = loop
         self._running = False
+
+        if self.loop is None:
+            with contextlib.suppress(RuntimeError):
+                self.loop = asyncio.get_event_loop()
 
     @property
     def is_running(self) -> bool:
@@ -68,11 +72,16 @@ class LoopWrapper:
     def run(self) -> NoReturn:  # type: ignore
         """Runs startup tasks and makes the loop running until all tasks are done"""
 
-        if not self.tasks:
-            logger.warning("You ran loop with 0 tasks. Is it ok?")
+        self.loop = asyncio.new_event_loop() if self.loop is None else self.loop
+
+        if self.loop.is_running():
+            msg = (
+                "LoopWrapper.run() cannot be called from a running event loop. "
+                "Use 'await bot.run_polling()' instead."
+            )
+            raise RuntimeError(msg)
 
         self._running = True
-        self.loop = get_event_loop() if self.loop is None else self.loop
 
         for startup_task in self.on_startup:
             self.loop.run_until_complete(startup_task)
@@ -84,13 +93,13 @@ class LoopWrapper:
         try:
             while tasks:
                 tasks_results, _ = self.loop.run_until_complete(
-                    asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION)
+                    asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION),
                 )
                 for task_result in tasks_results:
                     try:
                         task_result.result()
-                    except Exception as exc:  # noqa: PERF203
-                        logger.exception(exc)
+                    except Exception:  # noqa: PERF203
+                        logger.exception("Traceback message below:")
                 tasks = asyncio.all_tasks(self.loop)
         except KeyboardInterrupt:
             print(flush=True)  # Blank print for ^C # noqa: T201
@@ -109,7 +118,7 @@ class LoopWrapper:
         """Adds tasks to be ran in run_forever or run it immediately if loop is already running
         :param task: coroutine / coroutine function with zero arguments
         """
-        if asyncio.iscoroutinefunction(task) or isinstance(task, DelayedTask):
+        if inspect.iscoroutinefunction(task) or isinstance(task, DelayedTask):
             task = task()  # type: ignore
         elif not asyncio.iscoroutine(task):
             msg = "Task should be coroutine or coroutine function"

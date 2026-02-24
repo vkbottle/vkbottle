@@ -44,6 +44,7 @@ repos:
         language: system
         types: [python]
         stages: [pre-commit]
+        verbose: true
 
       - id: pytest
         name: pytest
