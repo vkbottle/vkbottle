@@ -1,7 +1,6 @@
 import asyncio
 import contextlib
 import warnings
-from asyncio import get_event_loop
 from collections.abc import Coroutine
 from typing import TYPE_CHECKING, Any, Callable, List, NoReturn, Optional, Union
 
@@ -35,6 +34,10 @@ class LoopWrapper:
         self.loop = loop
         self._running = False
 
+        if self.loop is None:
+            with contextlib.suppress(RuntimeError):
+                self.loop = asyncio.get_event_loop()
+
     @property
     def is_running(self) -> bool:
         return self._running
@@ -67,24 +70,17 @@ class LoopWrapper:
 
     def run(self) -> NoReturn:  # type: ignore
         """Runs startup tasks and makes the loop running until all tasks are done"""
-        try:
-            loop = asyncio.get_running_loop()
-        except RuntimeError:
-            loop = None
 
-        if loop and loop.is_running():
-            raise RuntimeError(
+        self.loop = asyncio.new_event_loop() if self.loop is None else self.loop
+
+        if self.loop.is_running():
+            msg = (
                 "LoopWrapper.run() cannot be called from a running event loop. "
                 "Use 'await bot.run_polling()' instead."
             )
-
-        if not self.tasks:
-            logger.warning("You ran loop with 0 tasks. Is it ok?")
+            raise RuntimeError(msg)
 
         self._running = True
-        self.loop = asyncio.new_event_loop()
-
-        asyncio.set_event_loop(self.loop)
 
         for startup_task in self.on_startup:
             self.loop.run_until_complete(startup_task)
@@ -96,13 +92,13 @@ class LoopWrapper:
         try:
             while tasks:
                 tasks_results, _ = self.loop.run_until_complete(
-                    asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION)
+                    asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION),
                 )
                 for task_result in tasks_results:
                     try:
                         task_result.result()
-                    except Exception as exc:  # noqa: PERF203
-                        logger.exception(exc)
+                    except Exception:  # noqa: PERF203
+                        logger.exception("Traceback message below:")
                 tasks = asyncio.all_tasks(self.loop)
         except KeyboardInterrupt:
             print(flush=True)  # Blank print for ^C # noqa: T201

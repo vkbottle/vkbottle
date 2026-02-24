@@ -13,6 +13,8 @@ from vkbottle.polling.abc import ABCPolling
 if TYPE_CHECKING:
     from vkbottle.exception_factory import ABCErrorHandler
 
+DEFAULT_LONGPOLL_VERSION = 3
+
 
 class FailureCode(enum.IntEnum):
     HISTORY_OUTDATED = 1
@@ -27,7 +29,9 @@ class BasePolling(ABCPolling, ABC):
     lp_version: Optional[int] = None
 
     async def handle_failed_event(
-        self, server: dict[str, Any], event: dict[str, Any]
+        self,
+        server: dict[str, Any],
+        event: dict[str, Any],
     ) -> dict[str, Any]:
         try:
             failed = FailureCode(event["failed"])
@@ -48,11 +52,12 @@ class BasePolling(ABCPolling, ABC):
 
         if failed == FailureCode.INVALID_VERSION:
             logger.error(
-                "Invalid version of longpoll, min: {}, max: {}. Using version 3.",
+                "Invalid version of longpoll, min: {}, max: {}. Using version {}.",
                 event["min_version"],
                 event["max_version"],
+                DEFAULT_LONGPOLL_VERSION,
             )
-            self.lp_version = 3
+            self.lp_version = DEFAULT_LONGPOLL_VERSION
             return await self.get_server()
 
         return {}
