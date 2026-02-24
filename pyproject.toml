@@ -85,7 +85,7 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.10"
 plugins = [
     "pydantic.mypy",
 ]

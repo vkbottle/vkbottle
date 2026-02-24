@@ -40,7 +40,7 @@ repos:
 
       - id: mypy
         name: mypy check
-        entry: mypy --namespace-packages
+        entry: mypy
         language: system
         types: [python]
         stages: [pre-commit]
