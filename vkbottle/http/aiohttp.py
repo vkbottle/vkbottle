@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional, Type
+import atexit
+from contextlib import asynccontextmanager, suppress
+from typing import TYPE_CHECKING, Any, AsyncGenerator, Optional, Type
 
 from aiohttp import ClientSession
 
@@ -38,6 +40,25 @@ class AiohttpClient(ABCHTTPClient):
         self.session = session
         self._session_params = session_params
 
+        atexit.register(self.close_connector)
+
+    @asynccontextmanager
+    async def request(
+        self,
+        url: str,
+        method: str = "GET",
+        data: Optional[dict] = None,
+        **kwargs: Unpack[AiohttpRequestKwargs],
+    ) -> AsyncGenerator[ClientResponse, None]:
+        if not self.session:
+            self.session = ClientSession(  # type: ignore[misc]
+                json_serialize=self.json_processing_module.dumps,
+                **self._session_params,  # type: ignore[arg-type]
+            )
+
+        async with self.session.request(url=url, method=method, data=data, **kwargs) as response:
+            yield response
+
     async def request_raw(  # type: ignore[override]
         self,
         url: str,
@@ -45,12 +66,7 @@ class AiohttpClient(ABCHTTPClient):
         data: Optional[dict] = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> ClientResponse:
-        if not self.session:
-            self.session = ClientSession(  # type: ignore[misc]
-                json_serialize=self.json_processing_module.dumps,
-                **self._session_params,  # type: ignore[arg-type]
-            )
-        async with self.session.request(url=url, method=method, data=data, **kwargs) as response:
+        async with self.request(url, method, data, **kwargs) as response:
             await response.read()
             return response
 
@@ -60,13 +76,13 @@ class AiohttpClient(ABCHTTPClient):
         method: str = "GET",
         data: Optional[dict] = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
-    ) -> dict:
-        response = await self.request_raw(url, method, data, **kwargs)
-        return await response.json(
-            encoding="UTF-8",
-            loads=self.json_processing_module.loads,
-            content_type=None,
-        )
+    ) -> dict[str, Any]:
+        async with self.request(url, method, data, **kwargs) as response:
+            return await response.json(
+                encoding="UTF-8",
+                loads=self.json_processing_module.loads,
+                content_type=None,
+            )
 
     async def request_text(  # type: ignore[override]
         self,
@@ -75,8 +91,8 @@ class AiohttpClient(ABCHTTPClient):
         data: Optional[dict] = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> str:
-        response = await self.request_raw(url, method, data, **kwargs)
-        return await response.text(encoding="UTF-8")
+        async with self.request(url, method, data, **kwargs) as response:
+            return await response.text(encoding="UTF-8")
 
     async def request_content(  # type: ignore[override]
         self,
@@ -85,20 +101,24 @@ class AiohttpClient(ABCHTTPClient):
         data: Optional[dict] = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> bytes:
-        response = await self.request_raw(url, method, data, **kwargs)
-        if response.content is None:  # type: ignore
-            return b""
-        return await response.content.readany()
+        async with self.request(url, method, data, **kwargs) as response:
+            return await response.read()
 
     async def close(self) -> None:
         if self.session and not self.session.closed:
             await self.session.close()
 
-    def __del__(self) -> None:
-        if self.session and not self.session.closed:
-            if self.session._connector is not None and self.session._connector_owner:
-                self.session._connector._close()
-            self.session._connector = None
+    def close_connector(self) -> None:
+        if (
+            self.session is not None
+            and not self.session.closed
+            and self.session.connector_owner is True
+            and self.session.connector is not None
+            and not self.session.connector.closed
+        ):
+            with suppress(Exception):
+                self.session.connector.close().__await__().send(None)
+            self.session.detach()
 
 
 class SingleAiohttpClient(AiohttpClient, ABCSingleton):
