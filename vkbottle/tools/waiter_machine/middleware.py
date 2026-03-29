@@ -28,7 +28,7 @@ class WaiterMiddleware(BaseMiddleware[dict]):
             return
 
         key = self.view.get_state_key(self.event)
-        short_state: typing.Optional["ShortState"] = self.machine.storage[view_name].get(key)
+        short_state: "ShortState | None" = self.machine.storage[view_name].get(key)
         if not short_state:
             return
 

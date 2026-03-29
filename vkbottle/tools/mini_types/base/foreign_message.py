@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Callable, Final, List, Optional, Union
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, Final
 
 import pydantic
 from vkbottle_types.objects import (
@@ -25,21 +26,21 @@ PEER_ID_OFFSET: Final[int] = 2_000_000_000
 
 
 class BaseForeignMessageMin(MessagesForeignMessage, ABC):
-    unprepared_ctx_api: Optional[Any] = None
-    replace_mention: Optional[bool] = None
-    _mention: Optional[Mention] = None
-    _is_full: Optional[bool] = None
+    unprepared_ctx_api: Any | None = None
+    replace_mention: bool | None = None
+    _mention: Mention | None = None
+    _is_full: bool | None = None
 
     __replace_mention = pydantic.model_validator(mode="after")(replace_mention_validator)  # type: ignore
 
     model_config = pydantic.ConfigDict(frozen=False)
 
     @property
-    def ctx_api(self) -> Union["ABCAPI", "API"]:
+    def ctx_api(self) -> "ABCAPI | API":
         return self.unprepared_ctx_api  # type: ignore
 
     @property
-    def mention(self) -> Optional[Mention]:
+    def mention(self) -> Mention | None:
         """Returns `Mention` object if message contains mention,
         eg if message is `@username text` returns `Mention(id=123, text="text")`,
         also mention is automatically removes from message text"""
@@ -55,13 +56,13 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     def is_mentioned(self) -> bool:
         """Returns True if current bot is mentioned in message"""
 
-    async def get_user(self, raw_mode: bool = False, **kwargs) -> Union[UsersUserFull, dict]:
+    async def get_user(self, raw_mode: bool = False, **kwargs) -> UsersUserFull | dict:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
         ][0]
         return raw_user if raw_mode else UsersUserFull(**raw_user)
 
-    async def get_full_message(self, peer_id: Optional[int] = None) -> "BaseForeignMessageMin":
+    async def get_full_message(self, peer_id: int | None = None) -> "BaseForeignMessageMin":
         if self._is_full:
             return self
 
@@ -79,14 +80,14 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
         return self
 
     @property
-    def chat_id(self) -> Optional[int]:
+    def chat_id(self) -> int | None:
         return None if self.peer_id is None else self.peer_id - PEER_ID_OFFSET
 
     @property
-    def message_id(self) -> Optional[int]:
+    def message_id(self) -> int | None:
         return self.conversation_message_id or self.id
 
-    def get_attachment_strings(self) -> Optional[List[str]]:
+    def get_attachment_strings(self) -> list[str] | None:
         if self.attachments is None:
             return None
 
@@ -108,13 +109,13 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
 
         return attachments
 
-    def get_wall_attachment(self) -> Optional[List["WallWallpostFull"]]:
+    def get_wall_attachment(self) -> list["WallWallpostFull"] | None:
         if self.attachments is None:
             return None
         result = [attachment.wall for attachment in self.attachments if attachment.wall]
         return result or None
 
-    def get_wall_reply_attachment(self) -> Optional[List["WallWallComment"]]:
+    def get_wall_reply_attachment(self) -> list["WallWallComment"] | None:
         if self.attachments is None:
             return None
         result = [
@@ -122,41 +123,41 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
         ]
         return result or None
 
-    def get_photo_attachments(self) -> Optional[List["PhotosPhoto"]]:
+    def get_photo_attachments(self) -> list["PhotosPhoto"] | None:
         if self.attachments is None:
             return None
         return [attachment.photo for attachment in self.attachments if attachment.photo]
 
-    def get_video_attachments(self) -> Optional[List["VideoVideoFull"]]:
+    def get_video_attachments(self) -> list["VideoVideoFull"] | None:
         if self.attachments is None:
             return None
         return [attachment.video for attachment in self.attachments if attachment.video]
 
-    def get_doc_attachments(self) -> Optional[List["DocsDoc"]]:
+    def get_doc_attachments(self) -> list["DocsDoc"] | None:
         if self.attachments is None:
             return None
         return [attachment.doc for attachment in self.attachments if attachment.doc]
 
-    def get_audio_attachments(self) -> Optional[List["AudioAudio"]]:
+    def get_audio_attachments(self) -> list["AudioAudio"] | None:
         if self.attachments is None:
             return None
         return [attachment.audio for attachment in self.attachments if attachment.audio]
 
-    def get_audio_message_attachments(self) -> Optional[List["MessagesAudioMessage"]]:
+    def get_audio_message_attachments(self) -> list["MessagesAudioMessage"] | None:
         if self.attachments is None:
             return None
         return [
             attachment.audio_message for attachment in self.attachments if attachment.audio_message
         ]
 
-    def get_message_id(self) -> Optional[int]:
+    def get_message_id(self) -> int | None:
         return self.id or self.conversation_message_id
 
     def get_payload_json(
         self,
         throw_error: bool = False,
-        unpack_failure: Callable[[str], Union[dict, str]] = lambda payload: payload,
-    ) -> Optional[Union[dict, str]]:
+        unpack_failure: Callable[[str], dict | str] = lambda payload: payload,
+    ) -> dict | str | None:
         if self.payload is None:
             return None
 

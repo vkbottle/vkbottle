@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 from .base import BaseUploader
 
@@ -15,20 +15,20 @@ class VideoUploader(BaseUploader):
 
     async def upload(
         self,
-        file_source: Optional[Union[str, "Bytes"]] = None,
-        link: Optional[str] = None,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        is_private: Optional[bool] = None,
-        wallpost: Optional[bool] = None,
-        group_id: Optional[int] = None,
-        album_id: Optional[int] = None,
-        privacy_view: Optional[list] = None,
-        privacy_comment: Optional[list] = None,
-        no_comments: Optional[bool] = None,
-        repeat: Optional[bool] = None,
-        compression: Optional[bool] = None,
-        **params,
+        file_source: "str | Bytes | None" = None,
+        link: str | None = None,
+        name: str | None = None,
+        description: str | None = None,
+        is_private: bool | None = None,
+        wallpost: bool | None = None,
+        group_id: int | None = None,
+        album_id: int | None = None,
+        privacy_view: list[Any] | None = None,
+        privacy_comment: list[Any] | None = None,
+        no_comments: bool | None = None,
+        repeat: bool | None = None,
+        compression: bool | None = None,
+        **params: Any,
     ) -> str:
         server = await self.raw_upload(
             file_source=file_source,
@@ -54,21 +54,21 @@ class VideoUploader(BaseUploader):
 
     async def raw_upload(
         self,
-        file_source: Optional[Union[str, "Bytes"]] = None,
-        link: Optional[str] = None,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        is_private: Optional[bool] = None,
-        wallpost: Optional[bool] = None,
-        group_id: Optional[int] = None,
-        album_id: Optional[int] = None,
-        privacy_view: Optional[list] = None,
-        privacy_comment: Optional[list] = None,
-        no_comments: Optional[bool] = None,
-        repeat: Optional[bool] = None,
-        compression: Optional[bool] = None,
-        **params,
-    ) -> dict:
+        file_source: "str | Bytes | None" = None,
+        link: str | None = None,
+        name: str | None = None,
+        description: str | None = None,
+        is_private: bool | None = None,
+        wallpost: bool | None = None,
+        group_id: int | None = None,
+        album_id: int | None = None,
+        privacy_view: list[Any] | None = None,
+        privacy_comment: list[Any] | None = None,
+        no_comments: bool | None = None,
+        repeat: bool | None = None,
+        compression: bool | None = None,
+        **params: Any,
+    ) -> dict[str, Any]:
         server = await self.get_server(
             group_id=group_id,
             album_id=album_id,
@@ -96,7 +96,7 @@ class VideoUploader(BaseUploader):
 
         return server
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("video.save", kwargs))["response"]
 
 

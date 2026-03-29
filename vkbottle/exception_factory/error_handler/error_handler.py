@@ -1,6 +1,6 @@
-from collections.abc import Awaitable, Coroutine
+from collections.abc import Awaitable, Callable, Coroutine
 from functools import wraps
-from typing import Any, Callable, Optional, Type, TypeVar
+from typing import Any, TypeVar
 
 from typing_extensions import ParamSpec
 
@@ -23,7 +23,7 @@ class ErrorHandler(ABCErrorHandler):
 
     def register_error_handler(
         self,
-        *error_types: Type[Exception],
+        *error_types: type[Exception],
     ) -> Callable[[T_AsyncFunc], T_AsyncFunc]:
         def decorator(handler: T_AsyncFunc) -> T_AsyncFunc:
             for error_type in error_types:
@@ -36,7 +36,7 @@ class ErrorHandler(ABCErrorHandler):
         self.undefined_error_handler = handler
         return handler
 
-    def lookup_handler(self, for_type: Type[Exception]) -> Optional[Callable[..., Awaitable[Any]]]:
+    def lookup_handler(self, for_type: type[Exception]) -> Callable[..., Awaitable[Any]] | None:
         for error_type in self.error_handlers:
             if issubclass(for_type, error_type):
                 return self.error_handlers[error_type]

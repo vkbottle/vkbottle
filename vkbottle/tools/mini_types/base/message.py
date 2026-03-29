@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from io import StringIO
-from typing import TYPE_CHECKING, Any, Callable, Final, List, Literal, Optional, Union, overload
+from typing import TYPE_CHECKING, Any, Final, Literal, overload
 
 import pydantic
 from vkbottle_types.objects import (
@@ -32,30 +33,30 @@ from vkbottle.tools.formatting import Format, Formatter
 from .foreign_message import BaseForeignMessageMin  # noqa: TC001
 from .mention import Mention, replace_mention_validator
 
-MessageText = Union[str, Formatter, Format]
+MessageText = str | Formatter | Format
 
 PEER_ID_OFFSET: Final[int] = 2_000_000_000
 
 
 class BaseMessageMin(MessagesMessage, ABC):
-    unprepared_ctx_api: Optional[Any] = None
-    state_peer: Optional[StatePeer] = None
-    reply_message: Optional[BaseForeignMessageMin] = None
-    fwd_messages: List[BaseForeignMessageMin] = pydantic.Field(default_factory=list)
-    replace_mention: Optional[bool] = None
-    _mention: Optional[Mention] = None
-    _chat_members: Optional[List[MessagesConversationMember]] = None
+    unprepared_ctx_api: Any | None = None
+    state_peer: StatePeer | None = None
+    reply_message: BaseForeignMessageMin | None = None
+    fwd_messages: list[BaseForeignMessageMin] = pydantic.Field(default_factory=list)
+    replace_mention: bool | None = None
+    _mention: Mention | None = None
+    _chat_members: list[MessagesConversationMember] | None = None
 
     __replace_mention = pydantic.model_validator(mode="after")(replace_mention_validator)  # type: ignore
 
     model_config = pydantic.ConfigDict(frozen=False)
 
     @property
-    def ctx_api(self) -> Union["ABCAPI", "API"]:
+    def ctx_api(self) -> ABCAPI | API:
         return self.unprepared_ctx_api  # type: ignore
 
     @property
-    def mention(self) -> Optional[Mention]:
+    def mention(self) -> Mention | None:
         """Returns `Mention` object if message contains mention,
         eg if message is `@username text` returns `Mention(id=123, text="text")`,
         also mention is automatically removes from message text"""
@@ -67,7 +68,7 @@ class BaseMessageMin(MessagesMessage, ABC):
         return self._mention
 
     @property
-    def chat_members(self) -> Optional[List["MessagesConversationMember"]]:
+    def chat_members(self) -> list[MessagesConversationMember] | None:
         return self._chat_members
 
     @property
@@ -77,18 +78,18 @@ class BaseMessageMin(MessagesMessage, ABC):
         ...
 
     @overload
-    async def get_user(self, raw_mode: Literal[False] = ..., **kwargs) -> "UsersUserFull": ...
+    async def get_user(self, raw_mode: Literal[False] = ..., **kwargs) -> UsersUserFull: ...
 
     @overload
     async def get_user(self, raw_mode: Literal[True] = ..., **kwargs) -> dict: ...
 
-    async def get_user(self, raw_mode: bool = False, **kwargs) -> Union["UsersUserFull", dict]:
+    async def get_user(self, raw_mode: bool = False, **kwargs) -> UsersUserFull | dict:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
         ][0]
         return raw_user if raw_mode else UsersUserFull(**raw_user)
 
-    async def get_chat_members(self, **kwargs: Any) -> List["MessagesConversationMember"]:
+    async def get_chat_members(self, **kwargs: Any) -> list[MessagesConversationMember]:
         if self._chat_members is None:
             self._chat_members = (
                 await self.ctx_api.messages.get_conversation_members(
@@ -112,7 +113,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     def message_id(self) -> int:
         return self.id or self.conversation_message_id
 
-    def get_attachment_strings(self) -> Optional[List[str]]:
+    def get_attachment_strings(self) -> list[str] | None:
         if self.attachments is None:
             return None
 
@@ -134,13 +135,13 @@ class BaseMessageMin(MessagesMessage, ABC):
 
         return attachments
 
-    def get_wall_attachment(self) -> Optional[List["WallWallpostFull"]]:
+    def get_wall_attachment(self) -> list[WallWallpostFull] | None:
         if self.attachments is None:
             return None
         result = [attachment.wall for attachment in self.attachments if attachment.wall]
         return result or None
 
-    def get_wall_reply_attachment(self) -> Optional[List["WallWallComment"]]:
+    def get_wall_reply_attachment(self) -> list[WallWallComment] | None:
         if self.attachments is None:
             return None
         result = [
@@ -148,41 +149,41 @@ class BaseMessageMin(MessagesMessage, ABC):
         ]
         return result or None
 
-    def get_photo_attachments(self) -> Optional[List["PhotosPhoto"]]:
+    def get_photo_attachments(self) -> list[PhotosPhoto] | None:
         if self.attachments is None:
             return None
         return [attachment.photo for attachment in self.attachments if attachment.photo]
 
-    def get_video_attachments(self) -> Optional[List["VideoVideoFull"]]:
+    def get_video_attachments(self) -> list[VideoVideoFull] | None:
         if self.attachments is None:
             return None
         return [attachment.video for attachment in self.attachments if attachment.video]
 
-    def get_doc_attachments(self) -> Optional[List["DocsDoc"]]:
+    def get_doc_attachments(self) -> list[DocsDoc] | None:
         if self.attachments is None:
             return None
         return [attachment.doc for attachment in self.attachments if attachment.doc]
 
-    def get_audio_attachments(self) -> Optional[List["AudioAudio"]]:
+    def get_audio_attachments(self) -> list[AudioAudio] | None:
         if self.attachments is None:
             return None
         return [attachment.audio for attachment in self.attachments if attachment.audio]
 
-    def get_audio_message_attachments(self) -> Optional[List["MessagesAudioMessage"]]:
+    def get_audio_message_attachments(self) -> list[MessagesAudioMessage] | None:
         if self.attachments is None:
             return None
         return [
             attachment.audio_message for attachment in self.attachments if attachment.audio_message
         ]
 
-    def get_message_id(self) -> Optional[int]:
+    def get_message_id(self) -> int | None:
         return self.id or self.conversation_message_id
 
     def get_payload_json(
         self,
         throw_error: bool = False,
-        unpack_failure: Callable[[str], Union[dict, str]] = lambda payload: payload,
-    ) -> Optional[Union[dict, str]]:
+        unpack_failure: Callable[[str], dict | str] = lambda payload: payload,
+    ) -> dict | str | None:
         if self.payload is None:
             return None
 
@@ -196,25 +197,25 @@ class BaseMessageMin(MessagesMessage, ABC):
 
     async def answer(
         self,
-        message: Optional[MessageText] = None,
-        attachment: Optional[str] = None,
-        random_id: Optional[int] = 0,
-        lat: Optional[float] = None,
-        long: Optional[float] = None,
-        reply_to: Optional[int] = None,
-        forward_messages: Optional[List[int]] = None,
-        forward: Optional[str] = None,
-        sticker_id: Optional[int] = None,
-        keyboard: Optional[str] = None,
-        template: Optional[str] = None,
-        payload: Optional[str] = None,
-        content_source: Optional[str] = None,
-        dont_parse_links: Optional[bool] = None,
-        disable_mentions: Optional[bool] = None,
-        intent: Optional[str] = None,
-        subscribe_id: Optional[int] = None,
+        message: MessageText | None = None,
+        attachment: str | None = None,
+        random_id: int | None = 0,
+        lat: float | None = None,
+        long: float | None = None,
+        reply_to: int | None = None,
+        forward_messages: list[int] | None = None,
+        forward: str | None = None,
+        sticker_id: int | None = None,
+        keyboard: str | None = None,
+        template: str | None = None,
+        payload: str | None = None,
+        content_source: str | None = None,
+        dont_parse_links: bool | None = None,
+        disable_mentions: bool | None = None,
+        intent: str | None = None,
+        subscribe_id: int | None = None,
         **kwargs: Any,
-    ) -> "MessagesSendUserIdsResponseItem":
+    ) -> MessagesSendUserIdsResponseItem:
         if isinstance(message, (Formatter, Format)):
             kwargs["format_data"] = (
                 message.raw_format_data
@@ -251,10 +252,10 @@ class BaseMessageMin(MessagesMessage, ABC):
 
     async def reply(
         self,
-        message: Optional[MessageText] = None,
-        attachment: Optional[str] = None,
+        message: MessageText | None = None,
+        attachment: str | None = None,
         **kwargs: Any,
-    ) -> "MessagesSendUserIdsResponseItem":
+    ) -> MessagesSendUserIdsResponseItem:
         data = self.ctx_api.messages.get_set_params(locals())
         data["forward"] = MessagesForward(
             conversation_message_ids=[self.conversation_message_id],  # type: ignore
@@ -265,10 +266,10 @@ class BaseMessageMin(MessagesMessage, ABC):
 
     async def forward(
         self,
-        message: Optional[MessageText] = None,
-        attachment: Optional[str] = None,
+        message: MessageText | None = None,
+        attachment: str | None = None,
         **kwargs: Any,
-    ) -> "MessagesSendUserIdsResponseItem":
+    ) -> MessagesSendUserIdsResponseItem:
         data = self.ctx_api.messages.get_set_params(locals())
         data.pop("forward_message_ids", None)
         data["forward"] = MessagesForward(

@@ -28,7 +28,7 @@ class SomeRequestRescheduler(ABCRequestRescheduler):
 
     async def reschedule(
         self,
-        ctx_api: Union["ABCAPI", "API"],
+        ctx_api: "ABCAPI | API",
         method: str,
         data: dict,
         recent_response: Any,

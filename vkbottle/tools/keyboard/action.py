@@ -1,6 +1,4 @@
-from typing import Optional, Union
-
-Payload = Union[str, dict]
+Payload = str | dict
 
 
 class ABCAction:
@@ -15,7 +13,7 @@ class ABCAction:
 class Text(ABCAction):
     type = "text"
 
-    def __init__(self, label: str, payload: Optional[Payload] = None):
+    def __init__(self, label: str, payload: Payload | None = None):
         self.label = label
         self.payload = payload
 
@@ -23,7 +21,7 @@ class Text(ABCAction):
 class OpenLink(ABCAction):
     type = "open_link"
 
-    def __init__(self, link: str, label: str, payload: Optional[Payload] = None):
+    def __init__(self, link: str, label: str, payload: Payload | None = None):
         self.link = link
         self.label = label
         self.payload = payload
@@ -32,7 +30,7 @@ class OpenLink(ABCAction):
 class Location(ABCAction):
     type = "location"
 
-    def __init__(self, payload: Optional[Payload] = None):
+    def __init__(self, payload: Payload | None = None):
         self.payload = payload
 
 
@@ -41,8 +39,8 @@ class VKPay(ABCAction):
 
     def __init__(
         self,
-        payload: Optional[Payload] = None,
-        hash: Optional[str] = None,  # noqa: A002
+        payload: Payload | None = None,
+        hash: str | None = None,  # noqa: A002
     ):
         self.payload = payload
         self.hash = hash
@@ -55,9 +53,9 @@ class VKApps(ABCAction):
         self,
         app_id: int,
         owner_id: int,
-        payload: Optional[Payload] = None,
-        label: Optional[str] = None,
-        hash: Optional[str] = None,  # noqa: A002
+        payload: Payload | None = None,
+        label: str | None = None,
+        hash: str | None = None,  # noqa: A002
     ):
         self.app_id = app_id
         self.owner_id = owner_id

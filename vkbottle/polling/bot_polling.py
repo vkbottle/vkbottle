@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from typing_extensions import Self
 
@@ -19,11 +19,11 @@ class BotPolling(BasePolling):
 
     def __init__(
         self,
-        api: Optional["ABCAPI"] = None,
-        group_id: Optional[int] = None,
-        wait: Optional[int] = None,
-        rps_delay: Optional[int] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
+        api: "ABCAPI | None" = None,
+        group_id: int | None = None,
+        wait: int | None = None,
+        rps_delay: int | None = None,
+        error_handler: "ABCErrorHandler | None" = None,
     ) -> None:
         self._api = api
         self.error_handler = error_handler or ErrorHandler()
@@ -65,7 +65,7 @@ class BotPolling(BasePolling):
     def construct(
         self,
         api: "ABCAPI",
-        error_handler: Optional["ABCErrorHandler"] = None,
+        error_handler: "ABCErrorHandler | None" = None,
     ) -> Self:
         self._api = api
         if error_handler is not None:

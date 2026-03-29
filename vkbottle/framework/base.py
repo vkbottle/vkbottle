@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import TYPE_CHECKING, NoReturn, Optional
+from typing import TYPE_CHECKING, NoReturn
 
 from vkbottle.framework.abc import ABCFramework
 from vkbottle.modules import logger
@@ -14,7 +14,7 @@ class BaseFramework(ABCFramework, ABC):
     router: "ABCRouter"
     loop_wrapper: "LoopWrapper"
 
-    async def run_polling(self, custom_polling: Optional["ABCPolling"] = None) -> NoReturn:
+    async def run_polling(self, custom_polling: "ABCPolling | None" = None) -> NoReturn:
         async def polling() -> NoReturn:  # type: ignore
             _polling = custom_polling or self.polling
             logger.info("Starting {} for {!r}", type(_polling).__name__, _polling.api)

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, List, Optional
+from typing import TYPE_CHECKING, Any
 
 import pydantic
 from vkbottle_types.events.bot_events import MessageNew
@@ -17,14 +17,14 @@ from .foreign_message import ForeignMessageMin, _foreign_messages
 
 
 class MessageMin(BaseMessageMin):
-    group_id: Optional[int] = None
-    client_info: Optional[ClientInfoForBots] = None
-    reply_message: Optional[ForeignMessageMin] = None
-    fwd_messages: List[ForeignMessageMin] = pydantic.Field(
+    group_id: int | None = None
+    client_info: ClientInfoForBots | None = None
+    reply_message: ForeignMessageMin | None = None
+    fwd_messages: list[ForeignMessageMin] = pydantic.Field(
         default_factory=list[ForeignMessageMin],
     )
-    _is_full: Optional[bool] = None
-    _chat_members: Optional[List[MessagesConversationMember]] = None
+    _is_full: bool | None = None
+    _chat_members: list[MessagesConversationMember] | None = None
 
     __foreign_messages = pydantic.model_validator(mode="after")(_foreign_messages)
 
@@ -48,7 +48,7 @@ class MessageMin(BaseMessageMin):
             self.__dict__["is_cropped"] = False
         return self
 
-    def get_attachment_strings(self) -> Optional[List[str]]:
+    def get_attachment_strings(self) -> list[str] | None:
         if self.attachments is None:
             return None
         if (

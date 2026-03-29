@@ -14,7 +14,7 @@ if typing.TYPE_CHECKING:
 
     from .abc import LabeledMessageHandler
 
-CustomRuleType = typing.Dict[str, typing.Type["ABCRule"]]
+CustomRuleType = dict[str, type["ABCRule[typing.Any]"]]
 
 DEFAULT_CUSTOM_RULES: CustomRuleType = {
     "from_chat": base.PeerRule,
@@ -49,11 +49,11 @@ DEFAULT_CUSTOM_RULES: CustomRuleType = {
 class BaseLabeler(ABCLabeler):
     def __init__(
         self,
-        message_view: "ABCMessageView",
-        raw_event_view: "ABCRawEventView",
-        custom_rules: typing.Optional[CustomRuleType] = None,
-        auto_rules: typing.Optional[typing.List["ABCRule"]] = None,
-        raw_event_auto_rules: typing.Optional[typing.List["ABCRule"]] = None,
+        message_view: "ABCMessageView[typing.Any, typing.Any]",
+        raw_event_view: "ABCRawEventView[typing.Any, typing.Any]",
+        custom_rules: CustomRuleType | None = None,
+        auto_rules: list["ABCRule[typing.Any]"] | None = None,
+        raw_event_auto_rules: list["ABCRule[typing.Any]"] | None = None,
     ) -> None:
         self.message_view = message_view
         self.raw_event_view = raw_event_view
@@ -63,7 +63,7 @@ class BaseLabeler(ABCLabeler):
         self.raw_event_auto_rules = raw_event_auto_rules or []
 
         # Rule config is accessible from every single custom rule
-        self.rule_config: typing.Dict[str, typing.Any] = {
+        self.rule_config: dict[str, typing.Any] = {
             "vbml_flags": re.DOTALL,  # Flags for VBMLRule
             "vbml_patcher": vbml.Patcher(),  # Patcher for VBMLRule
         }
@@ -75,7 +75,7 @@ class BaseLabeler(ABCLabeler):
         return re.IGNORECASE in self.rule_config["flags"]
 
     @vbml_ignore_case.setter
-    def vbml_ignore_case(self, ignore_case: bool):
+    def vbml_ignore_case(self, ignore_case: bool) -> None:
         """Adds ignore case flag to rule config flags or removes it"""
 
         if not ignore_case:
@@ -101,15 +101,15 @@ class BaseLabeler(ABCLabeler):
 
     def message(
         self,
-        *rules: "ABCRule",
+        *rules: "ABCRule[typing.Any]",
         blocking: bool = True,
-        **custom_rules,
+        **custom_rules: typing.Any,
     ) -> "LabeledMessageHandler":
         if any(not isinstance(rule, ABCRule) for rule in rules):
             msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
             raise ValueError(msg)
 
-        def decorator(func):
+        def decorator(func: typing.Any) -> typing.Any:
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
@@ -125,15 +125,15 @@ class BaseLabeler(ABCLabeler):
 
     def chat_message(
         self,
-        *rules: "ABCRule",
+        *rules: "ABCRule[typing.Any]",
         blocking: bool = True,
-        **custom_rules,
+        **custom_rules: typing.Any,
     ) -> "LabeledMessageHandler":
         if any(not isinstance(rule, ABCRule) for rule in rules):
             msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
             raise ValueError(msg)
 
-        def decorator(func):
+        def decorator(func: typing.Any) -> typing.Any:
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
@@ -150,15 +150,15 @@ class BaseLabeler(ABCLabeler):
 
     def private_message(
         self,
-        *rules: "ABCRule",
+        *rules: "ABCRule[typing.Any]",
         blocking: bool = True,
-        **custom_rules,
+        **custom_rules: typing.Any,
     ) -> "LabeledMessageHandler":
         if any(not isinstance(rule, ABCRule) for rule in rules):
             msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
             raise ValueError(msg)
 
-        def decorator(func):
+        def decorator(func: typing.Any) -> typing.Any:
             self.message_view.handlers.append(
                 FromFuncHandler(
                     func,
@@ -183,12 +183,12 @@ class BaseLabeler(ABCLabeler):
 
     def get_custom_rules(
         self,
-        custom_rules: typing.Dict[str, typing.Any],
-    ) -> typing.List["ABCRule"]:
+        custom_rules: dict[str, typing.Any],
+    ) -> list["ABCRule[typing.Any]"]:
         return [
             self.custom_rules[k].with_config(self.rule_config)(v)  # type: ignore
             for k, v in custom_rules.items()  # type: ignore
         ]
 
-    def views(self) -> typing.Dict[str, "ABCView"]:
+    def views(self) -> dict[str, "ABCView[typing.Any]"]:
         return {"message": self.message_view, "raw": self.raw_event_view}

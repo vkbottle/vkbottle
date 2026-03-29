@@ -2,18 +2,11 @@ import difflib
 import inspect
 import re
 import types
-from collections.abc import Awaitable, Coroutine, Iterable
+from collections.abc import Awaitable, Callable, Coroutine, Iterable
 from re import Pattern
 from typing import (
     TYPE_CHECKING,
     Any,
-    Callable,
-    Dict,
-    List,
-    Optional,
-    Tuple,
-    Type,
-    Union,
 )
 
 import vbml
@@ -33,9 +26,9 @@ if TYPE_CHECKING:
 from .abc import ABCRule
 
 DEFAULT_PREFIXES = ["!", "/"]
-PayloadMap = List[Tuple[str, Union[type, Callable[[Any], bool], ABCValidator, Any]]]
-PayloadMapStrict = List[Tuple[str, ABCValidator]]
-PayloadMapDict = Dict[str, Union[dict[str, Any], type]]
+PayloadMap = list[tuple[str, type | Callable[[Any], bool] | ABCValidator | Any]]
+PayloadMapStrict = list[tuple[str, ABCValidator]]
+PayloadMapDict = dict[str, dict[str, Any] | type]
 
 
 class PeerRule(ABCRule[BaseMessageMin]):
@@ -57,7 +50,7 @@ class MentionRule(ABCRule[BaseMessageMin]):
 
 
 class TextRule(ABCRule[BaseMessageMin]):
-    def __init__(self, texts: Union[str, List[str]], *, ignore_case: bool = False) -> None:
+    def __init__(self, texts: str | list[str], *, ignore_case: bool = False) -> None:
         texts = texts if isinstance(texts, list) else [texts]
         self.texts = texts if not ignore_case else list(map(str.lower, texts))
         self.ignore_case = ignore_case
@@ -69,8 +62,8 @@ class TextRule(ABCRule[BaseMessageMin]):
 class CommandRule(ABCRule[BaseMessageMin]):
     def __init__(
         self,
-        command_text: Union[str, Tuple[str, int]],
-        prefixes: Optional[List[str]] = None,
+        command_text: str | tuple[str, int],
+        prefixes: list[str] | None = None,
         args_count: int = 0,
         sep: str = " ",
     ):
@@ -82,7 +75,7 @@ class CommandRule(ABCRule[BaseMessageMin]):
             self.command_text, self.args_count = command_text
         self.sep = sep
 
-    async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
+    async def check(self, event: BaseMessageMin) -> dict | bool:
         for prefix in self.prefixes:
             text_length = len(prefix + self.command_text)
             text_length_with_sep = text_length + len(self.sep)
@@ -98,9 +91,9 @@ class CommandRule(ABCRule[BaseMessageMin]):
 class VBMLRule(ABCRule[BaseMessageMin]):
     def __init__(
         self,
-        pattern: Union[str, "vbml.Pattern", Iterable[str], Iterable["vbml.Pattern"]],
-        patcher: Optional["vbml.Patcher"] = None,
-        flags: Optional[re.RegexFlag] = None,
+        pattern: 'str | vbml.Pattern | Iterable[str] | Iterable["vbml.Pattern"]',
+        patcher: "vbml.Patcher | None" = None,
+        flags: re.RegexFlag | None = None,
     ):
         flags = flags or self.config.get("vbml_flags") or re.DOTALL
 
@@ -116,7 +109,7 @@ class VBMLRule(ABCRule[BaseMessageMin]):
         self.patterns = pattern
         self.patcher = patcher or self.config.get("vbml_patcher") or vbml.Patcher()
 
-    async def check(self, event: BaseMessageMin) -> Union[Optional[dict], bool]:
+    async def check(self, event: BaseMessageMin) -> dict | None | bool:
         for pattern in self.patterns:
             result = self.patcher.check(pattern, event.text)
             if result not in (None, False):
@@ -125,7 +118,7 @@ class VBMLRule(ABCRule[BaseMessageMin]):
 
 
 class RegexRule(ABCRule[BaseMessageMin]):
-    def __init__(self, regexp: Union[str, List[str], Pattern, List[Pattern]]):
+    def __init__(self, regexp: str | list[str] | Pattern | list[Pattern]):
         if isinstance(regexp, Pattern):
             regexp = [regexp]
         elif isinstance(regexp, str):
@@ -135,7 +128,7 @@ class RegexRule(ABCRule[BaseMessageMin]):
 
         self.regexp = regexp
 
-    async def check(self, event: BaseMessageMin) -> Union[dict, bool]:
+    async def check(self, event: BaseMessageMin) -> dict | bool:
         for regexp in self.regexp:
             match = re.match(regexp, event.text)
             if match:
@@ -144,7 +137,7 @@ class RegexRule(ABCRule[BaseMessageMin]):
 
 
 class StickerRule(ABCRule[BaseMessageMin]):
-    def __init__(self, sticker_ids: Union[List[int], int, None] = None):
+    def __init__(self, sticker_ids: list[int] | int | None = None):
         if isinstance(sticker_ids, int):
             sticker_ids = [sticker_ids]
         self.sticker_ids = sticker_ids
@@ -161,7 +154,7 @@ class StickerRule(ABCRule[BaseMessageMin]):
 
 
 class FromPeerRule(ABCRule[BaseMessageMin]):
-    def __init__(self, peer_ids: Union[List[int], int]):
+    def __init__(self, peer_ids: list[int] | int):
         if isinstance(peer_ids, int):
             peer_ids = [peer_ids]
         self.peer_ids = peer_ids
@@ -171,7 +164,7 @@ class FromPeerRule(ABCRule[BaseMessageMin]):
 
 
 class AttachmentTypeRule(ABCRule[BaseMessageMin]):
-    def __init__(self, attachment_types: Union[List[str], str]):
+    def __init__(self, attachment_types: list[str] | str):
         if not isinstance(attachment_types, list):
             attachment_types = [attachment_types]
         self.attachment_types = attachment_types
@@ -203,7 +196,7 @@ class GeoRule(ABCRule[BaseMessageMin]):
 
 
 class LevenshteinRule(ABCRule[BaseMessageMin]):
-    def __init__(self, levenshtein_texts: Union[List[str], str], max_distance: int = 1):
+    def __init__(self, levenshtein_texts: list[str] | str, max_distance: int = 1):
         if isinstance(levenshtein_texts, str):
             levenshtein_texts = [levenshtein_texts]
         self.levenshtein_texts = levenshtein_texts
@@ -239,7 +232,7 @@ class LevenshteinRule(ABCRule[BaseMessageMin]):
 
 
 class FuzzyTextRule(ABCRule[BaseMessageMin]):
-    def __init__(self, texts: Union[List[str], str], min_ratio: float = 0.7) -> None:
+    def __init__(self, texts: list[str] | str, min_ratio: float = 0.7) -> None:
         if isinstance(texts, str):
             texts = [texts]
         self.texts = texts
@@ -261,7 +254,7 @@ class MessageLengthRule(ABCRule[BaseMessageMin]):
 
 
 class ChatActionRule(ABCRule[BaseMessageMin]):
-    def __init__(self, chat_action_types: Union[List[str], str]):
+    def __init__(self, chat_action_types: list[str] | str):
         if isinstance(chat_action_types, str):
             chat_action_types = [chat_action_types]
         self.chat_action_types = chat_action_types
@@ -271,7 +264,7 @@ class ChatActionRule(ABCRule[BaseMessageMin]):
 
 
 class PayloadRule(ABCRule[BaseMessageMin]):
-    def __init__(self, payload: Union[dict[str, Any], List[dict[str, Any]]]):
+    def __init__(self, payload: dict[str, Any] | list[dict[str, Any]]):
         if isinstance(payload, dict):
             payload = [payload]
         self.payload = payload
@@ -296,7 +289,7 @@ class PayloadContainsRule(ABCRule[BaseMessageMin]):
 
 
 class PayloadMapRule(ABCRule[BaseMessageMin]):
-    def __init__(self, payload_map: Union[PayloadMap, PayloadMapDict]):
+    def __init__(self, payload_map: PayloadMap | PayloadMapDict):
         if isinstance(payload_map, dict):
             payload_map = self.transform_to_map(payload_map)
         self.payload_map = self.transform_to_callbacks(payload_map)
@@ -339,7 +332,7 @@ class PayloadMapRule(ABCRule[BaseMessageMin]):
                 return False
         return True
 
-    async def check(self, event: BaseMessageMin) -> Union[dict[str, Any], bool]:
+    async def check(self, event: BaseMessageMin) -> dict[str, Any] | bool:
         payload = event.get_payload_json()
         if not isinstance(payload, dict):
             return False
@@ -355,10 +348,10 @@ class FromUserRule(ABCRule[BaseMessageMin]):
 
 
 class FuncRule(ABCRule[BaseMessageMin]):
-    def __init__(self, func: Callable[[BaseMessageMin], Union[bool, Awaitable]]):
+    def __init__(self, func: Callable[[BaseMessageMin], bool | Awaitable]):
         self.func = func
 
-    async def check(self, event: BaseMessageMin) -> Union[dict[str, Any], bool]:
+    async def check(self, event: BaseMessageMin) -> dict[str, Any] | bool:
         if inspect.iscoroutinefunction(self.func):
             return await self.func(event)  # type: ignore
         return self.func(event)  # type: ignore
@@ -368,14 +361,14 @@ class CoroutineRule(ABCRule[BaseMessageMin]):
     def __init__(self, coroutine: Coroutine):
         self.coro = coroutine
 
-    async def check(self, event: BaseMessageMin) -> Union[dict[str, Any], bool]:
+    async def check(self, event: BaseMessageMin) -> dict[str, Any] | bool:
         return await self.coro
 
 
 class StateRule(ABCRule[BaseMessageMin]):
     def __init__(
         self,
-        state: Union[List["BaseStateGroup"], "BaseStateGroup", None] = None,
+        state: 'list["BaseStateGroup"] | BaseStateGroup | None' = None,
     ):
         if not isinstance(state, list):
             state = [] if state is None else [state]
@@ -387,14 +380,14 @@ class StateRule(ABCRule[BaseMessageMin]):
         return event.state_peer.state in self.state
 
 
-BASESTATEGROUP_TYPE = Type["BaseStateGroup"]
-STATEGROUPRULE_ARG = Union[BASESTATEGROUP_TYPE, List[BASESTATEGROUP_TYPE]]
+BASESTATEGROUP_TYPE = type["BaseStateGroup"]
+STATEGROUPRULE_ARG = BASESTATEGROUP_TYPE | list[BASESTATEGROUP_TYPE]
 
 
 class StateGroupRule(ABCRule[BaseMessageMin]):
     def __init__(
         self,
-        state_group: Optional[STATEGROUPRULE_ARG] = None,
+        state_group: STATEGROUPRULE_ARG | None = None,
     ):
         if not isinstance(state_group, list):
             state_group = [] if state_group is None else [state_group]
@@ -414,7 +407,7 @@ except ImportError:
 
 
 class MacroRule(ABCRule[BaseMessageMin]):
-    def __init__(self, pattern: Union[str, List[str]]):
+    def __init__(self, pattern: str | list[str]):
         if macro is None:  # type: ignore
             msg = "macro must be installed to use MacroRule"
             raise RuntimeError(msg)
@@ -423,7 +416,7 @@ class MacroRule(ABCRule[BaseMessageMin]):
             pattern = [pattern]
         self.patterns = list(map(macro.Pattern, pattern))  # type: ignore
 
-    async def check(self, event: BaseMessageMin) -> Union[dict[str, Any], bool]:
+    async def check(self, event: BaseMessageMin) -> dict[str, Any] | bool:
         for pattern in self.patterns:
             result = pattern.check(event.text)
             if result is not None:
@@ -444,8 +437,8 @@ __all__ = (
     "FromPeerRule",
     "FromUserRule",
     "FuncRule",
+    "FuzzyTextRule",
     "IsAdminRule",
-    "TextRule",
     "LevenshteinRule",
     "MacroRule",
     "MentionRule",
@@ -458,6 +451,6 @@ __all__ = (
     "StateGroupRule",
     "StateRule",
     "StickerRule",
+    "TextRule",
     "VBMLRule",
-    "FuzzyTextRule",
 )

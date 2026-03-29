@@ -1,32 +1,33 @@
-from typing import Any, Callable, Optional, Union
+from collections.abc import Callable
+from typing import Any
 
 from vkbottle import API, ABCHTTPClient
 
 
 class MockedClient(ABCHTTPClient):
-    def __init__(self, return_value: Optional[Any] = None, callback: Optional[Callable] = None):
+    def __init__(self, return_value: Any | None = None, callback: Callable | None = None):
         super().__init__()
         self.return_value = return_value
         self.callback = callback or (lambda method, url, data: None)
 
     async def request_raw(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
-    ) -> Union[str, Any]:
+        self, url: str, method: str = "GET", data: dict | None = None, **kwargs
+    ) -> str | Any:
         return self.return_value or self.callback(method, url, data)
 
     async def request_text(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
-    ) -> Union[str, Any]:
+        self, url: str, method: str = "GET", data: dict | None = None, **kwargs
+    ) -> str | Any:
         return self.return_value or self.callback(method, url, data)
 
     async def request_json(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
-    ) -> Union[dict, Any]:
+        self, url: str, method: str = "GET", data: dict | None = None, **kwargs
+    ) -> dict | Any:
         return self.return_value or self.callback(method, url, data)
 
     async def request_content(
-        self, url: str, method: str = "GET", data: Optional[dict] = None, **kwargs
-    ) -> Union[bytes, Any]:
+        self, url: str, method: str = "GET", data: dict | None = None, **kwargs
+    ) -> bytes | Any:
         return self.return_value or self.callback(method, url, data)
 
     async def close(self) -> None:

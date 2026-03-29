@@ -1,5 +1,5 @@
 import asyncio
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING
 
 import pydantic
 from vkbottle_types.objects import MessagesConversationMember
@@ -15,12 +15,12 @@ from .foreign_message import ForeignMessageMin, _foreign_messages
 
 
 class MessageMin(BaseMessageMin):
-    user_id: Optional[int] = None
-    reply_message: Optional["ForeignMessageMin"] = None
-    fwd_messages: List["ForeignMessageMin"] = pydantic.Field(
+    user_id: int | None = None
+    reply_message: "ForeignMessageMin | None" = None
+    fwd_messages: list["ForeignMessageMin"] = pydantic.Field(
         default_factory=list["ForeignMessageMin"]
     )
-    _chat_members: Optional[List[MessagesConversationMember]] = None
+    _chat_members: list[MessagesConversationMember] | None = None
 
     __foreign_messages = pydantic.model_validator(mode="after")(_foreign_messages)
 

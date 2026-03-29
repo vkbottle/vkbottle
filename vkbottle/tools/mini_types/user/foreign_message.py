@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any
 
 import pydantic
 
@@ -23,9 +23,9 @@ def _foreign_messages(cls: Any, values: Any) -> Any:  # noqa: ARG001
 
 
 class ForeignMessageMin(BaseForeignMessageMin):
-    user_id: Optional[int] = None
-    reply_message: Optional["ForeignMessageMin"] = None
-    fwd_messages: Optional[List["ForeignMessageMin"]] = pydantic.Field(
+    user_id: int | None = None
+    reply_message: "ForeignMessageMin | None" = None
+    fwd_messages: list["ForeignMessageMin"] | None = pydantic.Field(
         default_factory=list["ForeignMessageMin"],
     )
 

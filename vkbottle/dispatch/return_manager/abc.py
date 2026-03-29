@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from collections.abc import Awaitable
-from typing import Any, Callable, Dict, NamedTuple, Optional, Tuple, Union
+from collections.abc import Awaitable, Callable
+from typing import Any, NamedTuple
 
-HANDLER_PROPERTY_TYPES = Union[type, Tuple[type, ...]]
+HANDLER_PROPERTY_TYPES = type | tuple[type, ...]
 
 
 class HandlerProperty(NamedTuple):
@@ -27,13 +27,13 @@ class ABCReturnManager(ABC):
 
 
 class BaseReturnManager(ABCReturnManager):
-    def get_handler(self, value: Any) -> Optional[Callable]:
+    def get_handler(self, value: Any) -> Callable | None:
         for types, handler in self.handlers.items():
             if isinstance(value, types):
                 return handler
 
     @property
-    def handlers(self) -> Dict[HANDLER_PROPERTY_TYPES, Callable[[Any], Awaitable]]:
+    def handlers(self) -> dict[HANDLER_PROPERTY_TYPES, Callable[[Any], Awaitable]]:
         return {
             v.types: v.handler
             for k, v in vars(self.__class__).items()
@@ -43,7 +43,7 @@ class BaseReturnManager(ABCReturnManager):
     @classmethod
     def instance_of(
         cls,
-        types: Union[type, Tuple[type, ...]],
+        types: type | tuple[type, ...],
     ) -> Callable[[Callable], HandlerProperty]:
         def decorator(func: Callable):
             return HandlerProperty(types, func)

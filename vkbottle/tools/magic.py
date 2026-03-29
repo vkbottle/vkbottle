@@ -112,8 +112,8 @@ def magic_bundle(
 
 
 __all__ = (
-    "magic_bundle",
     "get_default_args",
+    "magic_bundle",
     "resolve_arg_names",
     "resolve_kwonly_arg_names",
     "resolve_posonly_arg_names",

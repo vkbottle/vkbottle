@@ -30,8 +30,8 @@ class SomeResponseValidator(ABCResponseValidator):
         method: str,
         data: dict,
         response: Any,
-        ctx_api: Union["ABCAPI", "API"],
-    ) -> Union[Any, NoReturn]:
+        ctx_api: "ABCAPI | API",
+    ) -> Any | NoReturn:
         if "error" not in response:
             return response
         if ctx_api.ignore_errors:

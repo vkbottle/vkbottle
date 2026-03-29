@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Tuple, Type, Union
+from collections.abc import Callable
+from typing import Any
 
 
 class ABCValidator(ABC):
@@ -9,7 +10,7 @@ class ABCValidator(ABC):
 
 
 class IsInstanceValidator(ABCValidator):
-    def __init__(self, t: Union[Type[Any], Tuple[Type[Any], ...]]):
+    def __init__(self, t: type[Any] | tuple[type[Any], ...]):
         self.t = t
 
     async def check(self, value: Any) -> bool:
@@ -32,4 +33,4 @@ class CallableValidator(ABCValidator):
         return self.call(value)
 
 
-__all__ = ("ABCValidator", "IsInstanceValidator", "EqualsValidator", "CallableValidator")
+__all__ = ("ABCValidator", "CallableValidator", "EqualsValidator", "IsInstanceValidator")

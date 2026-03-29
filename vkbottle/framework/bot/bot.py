@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Optional, Tuple
+from typing import TYPE_CHECKING, Any
 
 from vkbottle.api import API
 from vkbottle.callback import BotCallback
@@ -22,15 +22,15 @@ if TYPE_CHECKING:
 class Bot(BaseFramework):
     def __init__(
         self,
-        token: Optional["Token"] = None,
-        api: Optional["ABCAPI"] = None,
-        polling: Optional["ABCPolling"] = None,
-        callback: Optional["ABCCallback"] = None,
-        loop_wrapper: Optional[LoopWrapper] = None,
-        router: Optional["ABCRouter"] = None,
-        labeler: Optional["ABCLabeler"] = None,
-        state_dispenser: Optional["ABCStateDispenser"] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
+        token: "Token | None" = None,
+        api: "ABCAPI | None" = None,
+        polling: "ABCPolling | None" = None,
+        callback: "ABCCallback | None" = None,
+        loop_wrapper: LoopWrapper | None = None,
+        router: "ABCRouter | None" = None,
+        labeler: "ABCLabeler | None" = None,
+        state_dispenser: "ABCStateDispenser | None" = None,
+        error_handler: "ABCErrorHandler | None" = None,
         task_each_event: Any = None,
     ) -> None:
         self.api: API = api or API(token)  # type: ignore
@@ -72,7 +72,7 @@ class Bot(BaseFramework):
     def on(self) -> "ABCLabeler":
         return self.labeler
 
-    async def setup_webhook(self) -> Tuple[str, str]:
+    async def setup_webhook(self) -> tuple[str, str]:
         """:return: confirmation_code, secret_key"""
 
         await self.callback.setup_group_id()

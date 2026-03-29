@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any
 
 from typing_extensions import Self
 
@@ -20,7 +20,7 @@ class ABCCallback(ABC):
         pass
 
     @abstractmethod
-    async def find_server_id(self) -> Optional[int]:
+    async def find_server_id(self) -> int | None:
         pass
 
     @abstractmethod
@@ -32,7 +32,7 @@ class ABCCallback(ABC):
         pass
 
     @abstractmethod
-    async def edit_callback_server(self, server_id: int, secret_key: Optional[str] = None) -> Any:
+    async def edit_callback_server(self, server_id: int, secret_key: str | None = None) -> Any:
         pass
 
     @abstractmethod
@@ -40,7 +40,7 @@ class ABCCallback(ABC):
         pass
 
     @abstractmethod
-    async def get_callback_servers(self, server_ids: Optional[List[int]] = None) -> Any:
+    async def get_callback_servers(self, server_ids: list[int] | None = None) -> Any:
         pass
 
     @abstractmethod
@@ -51,7 +51,7 @@ class ABCCallback(ABC):
     async def set_callback_settings(
         self,
         server_id: int,
-        params: Optional[Dict[str, bool]] = None,
+        params: dict[str, bool] | None = None,
     ) -> Any:
         pass
 
@@ -68,6 +68,6 @@ class ABCCallback(ABC):
     def construct(
         self,
         api: "ABCAPI",
-        error_handler: Optional["ABCErrorHandler"] = None,
+        error_handler: "ABCErrorHandler | None" = None,
     ) -> Self:
         pass

@@ -97,7 +97,7 @@ bot = Bot("token")
 
 
 @bot.error_handler.register_error_handler(TypeError, ValueError)
-async def type_or_value_error_handler(e: Union[TypeError, ValueError]):
+async def type_or_value_error_handler(e: TypeError | ValueError):
     print("возникла ошибка type или value", e)
 
 

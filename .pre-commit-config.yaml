@@ -17,38 +17,45 @@ repos:
 
   - repo: local
     hooks:
-      - id: ruff (format)
-        name: ruff-format
-        entry: ruff format
+      - id: ruff (isort)
+        name: ruff-isort
+        entry: poetry run ruff check --select I --select F401 --fix
         language: system
         types: [python]
         stages: [pre-commit]
 
-      - id: ruff (isort)
-        name: ruff-isort
-        entry: ruff check --select I --select F401 --fix
+      - id: ruff (sortall)
+        name: ruff-sortall
+        description: poetry run ruff check --select RUF022 --fix
+        entry: poetry run ruff check --select RUF022 --fix
+        language: system
+        types: [python]
+        stages: [pre-commit]
+
+      - id: ruff (format)
+        name: ruff-format
+        entry: poetry run ruff format
         language: system
         types: [python]
         stages: [pre-commit]
 
       - id: ruff
         name: ruff check
-        entry: ruff check
+        entry: poetry run ruff check
         language: system
         types: [python]
         stages: [pre-push]
 
       - id: mypy
         name: mypy check
-        entry: mypy
+        entry: poetry run mypy
         language: system
         types: [python]
         stages: [pre-commit]
-        verbose: true
 
       - id: pytest
         name: pytest
-        entry: pytest
+        entry: poetry run pytest
         language: system
         pass_filenames: false
         stages: [pre-commit]

@@ -1,5 +1,5 @@
 from time import sleep as blocking_sleep
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any
 
 from vkbottle.modules import logger
 
@@ -18,7 +18,7 @@ class BlockingRequestRescheduler(ABCRequestRescheduler):
 
     async def reschedule(
         self,
-        ctx_api: Union["ABCAPI", "API"],
+        ctx_api: "ABCAPI | API",
         method: str,
         data: dict[str, Any],
         recent_response: Any,

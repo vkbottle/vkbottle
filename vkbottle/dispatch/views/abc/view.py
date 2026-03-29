@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Type, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 from vkbottle.dispatch.middlewares import BaseMiddleware
 from vkbottle.modules import logger
@@ -11,19 +11,19 @@ if TYPE_CHECKING:
     from vkbottle.dispatch.return_manager import BaseReturnManager
     from vkbottle.exception_factory import ABCErrorHandler
 
-    Handlers = Union[List["ABCHandler[Any]"], Dict[Any, List]]
+    Handlers = list["ABCHandler[Any]"] | dict[Any, list]
 
 T_contra = TypeVar("T_contra", list, dict, contravariant=True)
 
 
 class ABCView(ABC, Generic[T_contra]):
     handlers: "Handlers"
-    middlewares: List[Type["BaseMiddleware"]]
+    middlewares: list[type["BaseMiddleware"]]
     handler_return_manager: "BaseReturnManager"
-    _error_handler: Optional["ABCErrorHandler"]
+    _error_handler: "ABCErrorHandler | None"
 
     @abstractmethod
-    def __init__(self, error_handler: Optional["ABCErrorHandler"] = None) -> None:
+    def __init__(self, error_handler: "ABCErrorHandler | None" = None) -> None:
         self.handlers = []
         self.middlewares = []
         self.handler_return_manager = None  # type: ignore
@@ -49,8 +49,8 @@ class ABCView(ABC, Generic[T_contra]):
     async def pre_middleware(
         self,
         event: T_contra,
-        context_variables: Optional[dict] = None,
-    ) -> Optional[List[BaseMiddleware]]:
+        context_variables: dict | None = None,
+    ) -> list[BaseMiddleware] | None:
         """Run all of the pre middleware methods and return an exception if any error occurs"""
         mw_instances = []
 
@@ -70,9 +70,9 @@ class ABCView(ABC, Generic[T_contra]):
 
     async def post_middleware(
         self,
-        mw_instances: List[BaseMiddleware],
-        handle_responses: Optional[List] = None,
-        handlers: Optional[List["ABCHandler"]] = None,
+        mw_instances: list[BaseMiddleware],
+        handle_responses: list | None = None,
+        handlers: list["ABCHandler"] | None = None,
     ):
         for middleware in mw_instances:
             # Update or leave value
@@ -93,7 +93,7 @@ class ABCView(ABC, Generic[T_contra]):
     ) -> None:
         pass
 
-    def register_middleware(self, middleware: Type[BaseMiddleware]) -> None:
+    def register_middleware(self, middleware: type[BaseMiddleware]) -> None:
         try:
             if not issubclass(middleware, BaseMiddleware):
                 msg = "Argument is not a subclass of BaseMiddleware"

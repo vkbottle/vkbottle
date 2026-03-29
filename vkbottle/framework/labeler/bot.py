@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Callable, List, Optional, Type, Union
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, TypeAlias
 
 from vkbottle_types.events import GroupEventType
 
@@ -9,16 +10,16 @@ from vkbottle.dispatch.views.bot import BotHandlerBasement, BotMessageView, RawB
 from .base import BaseLabeler, CustomRuleType
 
 if TYPE_CHECKING:
-    from vkbottle_types.events import BaseGroupEvent
+    from vkbottle_types.events.bot_events import BaseGroupEvent
 
     from vkbottle.dispatch.views.bot import ABCBotMessageView
     from vkbottle.exception_factory.error_handler import ABCErrorHandler
-    from vkbottle.tools.mini_types.bot.message import MessageMin
+    from vkbottle.tools.mini_types.bot import MessageMin
 
     from .abc import LabeledHandler
 
-    LabeledMessageHandler = Callable[..., Callable[["MessageMin"], Any]]
-    EventName = Union[GroupEventType, str]
+    LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]
+    EventName: TypeAlias = str | GroupEventType
 
 
 class BotLabeler(BaseLabeler):
@@ -35,12 +36,12 @@ class BotLabeler(BaseLabeler):
 
     def __init__(
         self,
-        message_view: Optional["ABCBotMessageView"] = None,
-        raw_event_view: Optional[RawBotEventView] = None,
-        custom_rules: Optional[CustomRuleType] = None,
-        auto_rules: Optional[List["ABCRule"]] = None,
-        raw_event_auto_rules: Optional[List["ABCRule"]] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
+        message_view: "ABCBotMessageView | None" = None,
+        raw_event_view: RawBotEventView | None = None,
+        custom_rules: CustomRuleType | None = None,
+        auto_rules: list["ABCRule"] | None = None,
+        raw_event_auto_rules: list["ABCRule"] | None = None,
+        error_handler: "ABCErrorHandler | None" = None,
     ) -> None:
         message_view = message_view or BotMessageView(error_handler)
         raw_event_view = raw_event_view or RawBotEventView(error_handler)
@@ -54,35 +55,35 @@ class BotLabeler(BaseLabeler):
 
     def message(
         self,
-        *rules: "ABCRule",
+        *rules: "ABCRule[Any]",
         blocking: bool = True,
-        **custom_rules,
+        **custom_rules: Any,
     ) -> "LabeledMessageHandler":
         return super().message(*rules, blocking=blocking, **custom_rules)
 
     def chat_message(
         self,
-        *rules: "ABCRule",
+        *rules: "ABCRule[Any]",
         blocking: bool = True,
-        **custom_rules,
+        **custom_rules: Any,
     ) -> "LabeledMessageHandler":
         return super().chat_message(*rules, blocking=blocking, **custom_rules)
 
     def private_message(
         self,
-        *rules: "ABCRule",
+        *rules: "ABCRule[Any]",
         blocking: bool = True,
-        **custom_rules,
+        **custom_rules: Any,
     ) -> "LabeledMessageHandler":
         return super().private_message(*rules, blocking=blocking, **custom_rules)
 
     def raw_event(
         self,
-        event: Union["EventName", List["EventName"]],
-        dataclass: Union[Type[dict], Type["BaseGroupEvent"]] = dict,
-        *rules: "ABCRule",
+        event: "EventName | list[EventName]",
+        dataclass: type[dict[str, Any]] | type["BaseGroupEvent"] = dict,
+        *rules: "ABCRule[Any]",
         blocking: bool = True,
-        **custom_rules,
+        **custom_rules: Any,
     ) -> "LabeledHandler":
         if any(not isinstance(rule, ABCRule) for rule in rules):
             msg = (
@@ -93,10 +94,11 @@ class BotLabeler(BaseLabeler):
 
         event_types = event if isinstance(event, list) else [event]
 
-        def decorator(func):
+        def decorator(func: Any) -> Any:
             for e in event_types:
                 if isinstance(e, str):
                     e = GroupEventType(e)
+
                 handler_basement = BotHandlerBasement(
                     dataclass,
                     FromFuncHandler(
@@ -109,6 +111,7 @@ class BotLabeler(BaseLabeler):
                 )
                 event_handlers = self.raw_event_view.handlers.setdefault(e, [])
                 event_handlers.append(handler_basement)
+
             return func
 
         return decorator

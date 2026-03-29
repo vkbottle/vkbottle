@@ -1,6 +1,6 @@
 import typing
 from abc import abstractmethod
-from typing import Generic, Optional, TypeVar
+from typing import Generic, TypeVar
 
 from .view import ABCView
 
@@ -12,8 +12,8 @@ F_contra = TypeVar("F_contra", contravariant=True)
 
 
 class ABCDispenseView(ABCView[T_contra], Generic[T_contra, F_contra]):
-    handlers: typing.List["ABCHandler[F_contra]"]
+    handlers: list["ABCHandler[F_contra]"]
 
     @abstractmethod
-    def get_state_key(self, event: F_contra) -> Optional[int]:
+    def get_state_key(self, event: F_contra) -> int | None:
         pass

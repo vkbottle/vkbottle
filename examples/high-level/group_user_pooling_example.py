@@ -1,5 +1,5 @@
 import os
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from vkbottle_types.events.enums import UserEventType
 from vkbottle_types.events.user_events import RawUserEvent
@@ -21,13 +21,13 @@ class BotMessagesPooling(UserPolling):
 
     def __init__(
         self,
-        api: Optional["ABCAPI"] = None,
-        user_id: Optional[int] = None,
-        wait: Optional[int] = None,
-        mode: Optional[int] = None,
-        rps_delay: Optional[int] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
-        group_id: Optional[int] = None,
+        api: "ABCAPI | None" = None,
+        user_id: int | None = None,
+        wait: int | None = None,
+        mode: int | None = None,
+        rps_delay: int | None = None,
+        error_handler: "ABCErrorHandler | None" = None,
+        group_id: int | None = None,
     ) -> None:
         super().__init__(
             api=api,

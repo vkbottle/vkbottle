@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List, Union
 
 
 class ABCTokenGenerator(ABC):
@@ -18,4 +17,4 @@ class ABCTokenGenerator(ABC):
         return f"<{self.__class__}>"
 
 
-Token = Union[str, List[str], ABCTokenGenerator]
+Token = str | list[str] | ABCTokenGenerator

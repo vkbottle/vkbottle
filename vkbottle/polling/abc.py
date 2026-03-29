@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from typing_extensions import Self
 
@@ -43,7 +43,7 @@ class ABCPolling(ABC):
     def construct(
         self,
         api: "ABCAPI",
-        error_handler: Optional["ABCErrorHandler"] = None,
+        error_handler: "ABCErrorHandler | None" = None,
     ) -> Self:
         pass
 

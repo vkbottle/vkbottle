@@ -1,14 +1,12 @@
-from typing import Dict, Optional
-
 from .abc import ABCStateDispenser
 from .base import BaseStateGroup, StatePeer
 
 
 class BuiltinStateDispenser(ABCStateDispenser):
     def __init__(self):
-        self.dictionary: Dict[int, StatePeer] = {}
+        self.dictionary: dict[int, StatePeer] = {}
 
-    async def get(self, peer_id: int) -> Optional[StatePeer]:
+    async def get(self, peer_id: int) -> StatePeer | None:
         return self.dictionary.get(peer_id)
 
     async def set(self, peer_id: int, state: BaseStateGroup, **payload):

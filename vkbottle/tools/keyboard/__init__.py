@@ -5,9 +5,9 @@ from .keyboard import Keyboard
 EMPTY_KEYBOARD = Keyboard().get_json()
 
 __all__ = (
+    "EMPTY_KEYBOARD",
     "ABCAction",
     "Callback",
-    "EMPTY_KEYBOARD",
     "Keyboard",
     "KeyboardButtonColor",
     "Location",

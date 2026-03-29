@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Callable, Generic, List, Optional, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 from vkbottle.modules import logger
 
@@ -19,12 +20,12 @@ DEFAULT_STATE_KEY = "peer_id"
 
 
 class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra, F_contra]):
-    handlers: List["ABCHandler[F_contra]"]
+    handlers: list["ABCHandler[F_contra]"]
     state_source_key: str
-    default_text_approximators: List[Callable[["BaseMessageMin"], str]]
+    default_text_approximators: list[Callable[["BaseMessageMin"], str]]
     replace_mention = False
 
-    def __init__(self, error_handler: Optional["ABCErrorHandler"] = None) -> None:
+    def __init__(self, error_handler: "ABCErrorHandler | None" = None) -> None:
         super().__init__(error_handler)
         self.state_source_key = DEFAULT_STATE_KEY
         self.default_text_approximators = []
@@ -60,8 +61,8 @@ class ABCMessageView(ABCDispenseView[T_contra, F_contra], ABC, Generic[T_contra,
             logger.debug("Handling stopped, pre_middleware returned error")
             return
 
-        handle_responses: List[Any] = []
-        handlers: List["ABCHandler[F_contra]"] = []
+        handle_responses: list[Any] = []
+        handlers: list["ABCHandler[F_contra]"] = []
 
         for handler in self.handlers:
             result = await handler.filter(message, context_variables)
