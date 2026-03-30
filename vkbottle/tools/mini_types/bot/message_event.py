@@ -1,6 +1,7 @@
 from io import StringIO
 from typing import TYPE_CHECKING, Any
 
+import vkbottle_types.events.bot_events
 from vkbottle_types.events.bot_events import MessageEvent
 
 from vkbottle.modules import logger
@@ -157,7 +158,7 @@ class MessageEventMin(MessageEvent):
         return self.payload
 
 
-MessageEventMin.model_rebuild()
+MessageEventMin.model_rebuild(_types_namespace=vars(vkbottle_types.events.bot_events) | locals())
 
 
 __all__ = ("MessageEventMin",)

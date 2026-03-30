@@ -6,6 +6,7 @@ from io import StringIO
 from typing import TYPE_CHECKING, Any, Final, Literal, overload
 
 import pydantic
+import vkbottle_types.objects
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
@@ -53,7 +54,9 @@ class BaseMessageMin(MessagesMessage, ABC):
 
     @property
     def ctx_api(self) -> ABCAPI | API:
-        return self.unprepared_ctx_api  # type: ignore
+        if self.unprepared_ctx_api is None:
+            raise AssertionError
+        return self.unprepared_ctx_api
 
     @property
     def mention(self) -> Mention | None:
@@ -78,12 +81,14 @@ class BaseMessageMin(MessagesMessage, ABC):
         ...
 
     @overload
-    async def get_user(self, raw_mode: Literal[False] = ..., **kwargs) -> UsersUserFull: ...
+    async def get_user(self, raw_mode: Literal[False] = ..., **kwargs: Any) -> UsersUserFull: ...
 
     @overload
-    async def get_user(self, raw_mode: Literal[True] = ..., **kwargs) -> dict: ...
+    async def get_user(self, raw_mode: Literal[True] = ..., **kwargs: Any) -> dict[str, Any]: ...
 
-    async def get_user(self, raw_mode: bool = False, **kwargs) -> UsersUserFull | dict:
+    async def get_user(
+        self, raw_mode: bool = False, **kwargs: Any
+    ) -> UsersUserFull | dict[str, Any]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
         ][0]
@@ -279,7 +284,7 @@ class BaseMessageMin(MessagesMessage, ABC):
         return await self.answer(**data)
 
 
-BaseMessageMin.model_rebuild()
+BaseMessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
 
 
 __all__ = ("BaseMessageMin",)
