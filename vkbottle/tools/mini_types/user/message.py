@@ -17,7 +17,7 @@ from .foreign_message import ForeignMessageMin, _foreign_messages
 class MessageMin(BaseMessageMin):
     user_id: int | None = None
     reply_message: "ForeignMessageMin | None" = None
-    fwd_messages: list["ForeignMessageMin"] = pydantic.Field(
+    fwd_messages: list["ForeignMessageMin"] = pydantic.Field(  # type: ignore
         default_factory=list["ForeignMessageMin"]
     )
     _chat_members: list[MessagesConversationMember] | None = None

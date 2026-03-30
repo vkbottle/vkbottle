@@ -53,7 +53,7 @@ class BotLabeler(BaseLabeler):
             raw_event_auto_rules=raw_event_auto_rules,
         )
 
-    def message(
+    def message(  # type: ignore
         self,
         *rules: "ABCRule[Any]",
         blocking: bool = True,
@@ -61,7 +61,7 @@ class BotLabeler(BaseLabeler):
     ) -> "LabeledMessageHandler":
         return super().message(*rules, blocking=blocking, **custom_rules)
 
-    def chat_message(
+    def chat_message(  # type: ignore
         self,
         *rules: "ABCRule[Any]",
         blocking: bool = True,
@@ -69,7 +69,7 @@ class BotLabeler(BaseLabeler):
     ) -> "LabeledMessageHandler":
         return super().chat_message(*rules, blocking=blocking, **custom_rules)
 
-    def private_message(
+    def private_message(  # type: ignore
         self,
         *rules: "ABCRule[Any]",
         blocking: bool = True,
@@ -77,7 +77,7 @@ class BotLabeler(BaseLabeler):
     ) -> "LabeledMessageHandler":
         return super().private_message(*rules, blocking=blocking, **custom_rules)
 
-    def raw_event(
+    def raw_event(  # type: ignore
         self,
         event: "EventName | list[EventName]",
         dataclass: type[dict[str, Any]] | type["BaseGroupEvent"] = dict,

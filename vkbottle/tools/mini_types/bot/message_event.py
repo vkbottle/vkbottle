@@ -1,5 +1,5 @@
 from io import StringIO
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from vkbottle_types.events.bot_events import MessageEvent
 
@@ -39,12 +39,12 @@ class MessageEventMin(MessageEvent):
 
         return self.object.conversation_message_id
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any):
         super().__init__(**kwargs)
         self.event_id = self.object.event_id
 
-    async def send_message_event_answer(self, event_data: "EventDataType", **kwargs) -> int:
-        data = {
+    async def send_message_event_answer(self, event_data: "EventDataType", **kwargs: Any) -> int:
+        data: dict[str, Any] = {
             "event_id": self.event_id,
             "user_id": self.user_id,
             "peer_id": self.peer_id,
@@ -53,8 +53,8 @@ class MessageEventMin(MessageEvent):
         data.update(kwargs)
         return await self.ctx_api.messages.send_message_event_answer(**data)
 
-    async def send_empty_answer(self, **kwargs) -> int:
-        data = {
+    async def send_empty_answer(self, **kwargs: Any) -> int:
+        data: dict[str, Any] = {
             "event_id": self.event_id,
             "user_id": self.user_id,
             "peer_id": self.peer_id,
@@ -84,7 +84,7 @@ class MessageEventMin(MessageEvent):
         dont_parse_links: bool | None = None,
         template: str | None = None,
         keyboard: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> int:
         if isinstance(message, (Formatter, Format)):
             kwargs["format_data"] = (
@@ -117,7 +117,7 @@ class MessageEventMin(MessageEvent):
         disable_mentions: bool | None = None,
         intent: str | None = None,
         subscribe_id: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> "MessagesSendUserIdsResponseItem":
         if isinstance(message, (Formatter, Format)):
             kwargs["format_data"] = (
@@ -153,7 +153,7 @@ class MessageEventMin(MessageEvent):
 
         return response
 
-    def get_payload_json(self, *args, **kwargs) -> dict | None:
+    def get_payload_json(self, *args: Any, **kwargs: Any) -> dict[str, Any] | None:
         return self.payload
 
 

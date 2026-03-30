@@ -355,4 +355,4 @@ def vkscript(
     def decorator(*args: P.args, **context: P.kwargs) -> str:
         return converter.scriptify(func, *args, **context)
 
-    return decorator
+    return decorator  # type: ignore

@@ -20,7 +20,7 @@ class MessageMin(BaseMessageMin):
     group_id: int | None = None
     client_info: ClientInfoForBots | None = None
     reply_message: ForeignMessageMin | None = None
-    fwd_messages: list[ForeignMessageMin] = pydantic.Field(
+    fwd_messages: list[ForeignMessageMin] = pydantic.Field(  # type: ignore
         default_factory=list[ForeignMessageMin],
     )
     _is_full: bool | None = None

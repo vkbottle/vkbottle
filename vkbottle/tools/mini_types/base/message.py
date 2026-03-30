@@ -42,7 +42,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     unprepared_ctx_api: Any | None = None
     state_peer: StatePeer | None = None
     reply_message: BaseForeignMessageMin | None = None
-    fwd_messages: list[BaseForeignMessageMin] = pydantic.Field(default_factory=list)
+    fwd_messages: list[BaseForeignMessageMin] = pydantic.Field(default_factory=list)  # type: ignore
     replace_mention: bool | None = None
     _mention: Mention | None = None
     _chat_members: list[MessagesConversationMember] | None = None
@@ -138,7 +138,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     def get_wall_attachment(self) -> list[WallWallpostFull] | None:
         if self.attachments is None:
             return None
-        result = [attachment.wall for attachment in self.attachments if attachment.wall]
+        result = [attachment.wall for attachment in self.attachments if attachment.wall]  # type: ignore
         return result or None
 
     def get_wall_reply_attachment(self) -> list[WallWallComment] | None:
@@ -157,7 +157,7 @@ class BaseMessageMin(MessagesMessage, ABC):
     def get_video_attachments(self) -> list[VideoVideoFull] | None:
         if self.attachments is None:
             return None
-        return [attachment.video for attachment in self.attachments if attachment.video]
+        return [attachment.video for attachment in self.attachments if attachment.video]  # type: ignore
 
     def get_doc_attachments(self) -> list[DocsDoc] | None:
         if self.attachments is None:

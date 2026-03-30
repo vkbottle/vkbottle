@@ -25,7 +25,7 @@ def _foreign_messages(cls: Any, values: Any) -> Any:  # noqa: ARG001
 class ForeignMessageMin(BaseForeignMessageMin):
     user_id: int | None = None
     reply_message: "ForeignMessageMin | None" = None
-    fwd_messages: list["ForeignMessageMin"] | None = pydantic.Field(
+    fwd_messages: list["ForeignMessageMin"] | None = pydantic.Field(  # type: ignore
         default_factory=list["ForeignMessageMin"],
     )
 

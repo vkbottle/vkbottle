@@ -63,12 +63,14 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
         return raw_user if raw_mode else UsersUserFull(**raw_user)
 
     async def get_full_message(self, peer_id: int | None = None) -> "BaseForeignMessageMin":
-        if self._is_full:
+        peer_id = peer_id or self.peer_id
+
+        if self._is_full or peer_id is None:
             return self
 
         message = (
             await self.ctx_api.messages.get_by_conversation_message_id(
-                peer_id=peer_id or self.peer_id,
+                peer_id=peer_id,
                 conversation_message_ids=[self.conversation_message_id],
             )
         ).items[0]
@@ -112,7 +114,7 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     def get_wall_attachment(self) -> list["WallWallpostFull"] | None:
         if self.attachments is None:
             return None
-        result = [attachment.wall for attachment in self.attachments if attachment.wall]
+        result = [attachment.wall for attachment in self.attachments if attachment.wall]  # type: ignore
         return result or None
 
     def get_wall_reply_attachment(self) -> list["WallWallComment"] | None:
@@ -131,7 +133,7 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     def get_video_attachments(self) -> list["VideoVideoFull"] | None:
         if self.attachments is None:
             return None
-        return [attachment.video for attachment in self.attachments if attachment.video]
+        return [attachment.video for attachment in self.attachments if attachment.video]  # type: ignore
 
     def get_doc_attachments(self) -> list["DocsDoc"] | None:
         if self.attachments is None:
