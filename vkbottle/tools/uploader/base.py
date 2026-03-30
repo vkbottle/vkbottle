@@ -1,7 +1,7 @@
 import warnings
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 import aiofiles
 
@@ -11,14 +11,14 @@ from vkbottle.modules import json
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
 
-    Bytes = Union[bytes, BytesIO]
+    Bytes = bytes | BytesIO
 
 
 class BaseUploader(ABC):
     def __init__(
         self,
         api: "ABCAPI",
-        attachment_name: Optional[str] = None,
+        attachment_name: str | None = None,
         **kwargs: Any,
     ) -> None:
         self.api = api
@@ -49,7 +49,7 @@ class BaseUploader(ABC):
         )
         return json.loads(raw_response)
 
-    def get_bytes_io(self, data: "Bytes", name: Optional[str] = None) -> BytesIO:
+    def get_bytes_io(self, data: "Bytes", name: str | None = None) -> BytesIO:
         bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)
         # To avoid errors with image generators (such as pillow)
         bytes_io.seek(0)
@@ -75,12 +75,12 @@ class BaseUploader(ABC):
         attachment_type: str,
         owner_id: int,
         item_id: int,
-        access_key: Optional[str] = None,
+        access_key: str | None = None,
     ) -> str:
         return f"{attachment_type}{owner_id}_{item_id}{f'_{access_key}' if access_key else ''}"
 
     @staticmethod
-    async def read(file_source: Union[str, "Bytes"]) -> "Bytes":
+    async def read(file_source: "str | Bytes") -> "Bytes":
         if isinstance(file_source, str):
             async with aiofiles.open(file_source, "rb") as file:
                 return await file.read()

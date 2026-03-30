@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Callable, Optional, Union
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
 
 from vkbottle.tools.magic import magic_bundle
 
@@ -9,15 +10,20 @@ if TYPE_CHECKING:
 
 
 class FromFuncHandler(ABCHandler[Event]):
-    def __init__(self, handler: Callable, *rules: "ABCRule", blocking: bool = True):
+    def __init__(
+        self, handler: Callable[..., Any], *rules: "ABCRule[Any]", blocking: bool = True
+    ) -> None:
         self.handler = handler
         self.rules = rules
         self.blocking = blocking
 
     async def filter(
-        self, event: Event, context: Optional[dict[str, Any]] = None
-    ) -> Union[dict, bool]:
+        self,
+        event: Event,
+        context: dict[str, Any] | None = None,
+    ) -> dict[str, Any] | bool:
         rule_context = (context or {}).copy()
+
         for rule in self.rules:
             result = await rule.check(
                 event,
@@ -25,15 +31,18 @@ class FromFuncHandler(ABCHandler[Event]):
             )
             if result is False or result is None:
                 return False
+
             elif result is True:
                 continue
+
             rule_context.update(result)
+
         return rule_context
 
     async def handle(self, event: Event, **context: Any) -> Any:
         return await self.handler(event, **magic_bundle(self.handler, context))
 
-    def __eq__(self, obj: object) -> bool:
+    def __eq__(self, obj: object, /) -> bool:
         """
         Sugar to easily check if the function is actual handler.
 

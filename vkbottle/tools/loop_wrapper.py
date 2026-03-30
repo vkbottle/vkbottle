@@ -2,8 +2,8 @@ import asyncio
 import contextlib
 import inspect
 import warnings
-from collections.abc import Coroutine
-from typing import TYPE_CHECKING, Any, Callable, List, NoReturn, Optional, Union
+from collections.abc import Callable, Coroutine
+from typing import TYPE_CHECKING, Any, NoReturn
 
 from typing_extensions import deprecated
 
@@ -24,10 +24,10 @@ class LoopWrapper:
     def __init__(
         self,
         *,
-        on_startup: Optional[List["Task"]] = None,
-        on_shutdown: Optional[List["Task"]] = None,
-        tasks: Optional[List["Task"]] = None,
-        loop: Optional["AbstractEventLoop"] = None,
+        on_startup: list["Task"] | None = None,
+        on_shutdown: list["Task"] | None = None,
+        tasks: list["Task"] | None = None,
+        loop: "AbstractEventLoop | None" = None,
     ) -> None:
         self.on_startup = on_startup or []
         self.on_shutdown = on_shutdown or []
@@ -114,7 +114,7 @@ class LoopWrapper:
             if self.loop.is_running():
                 self.loop.close()
 
-    def add_task(self, task: Union["Task", Callable[..., "Task"]]):
+    def add_task(self, task: 'Task | Callable[..., "Task"]'):
         """Adds tasks to be ran in run_forever or run it immediately if loop is already running
         :param task: coroutine / coroutine function with zero arguments
         """

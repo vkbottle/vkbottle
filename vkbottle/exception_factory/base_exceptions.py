@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any
 
 from vkbottle.modules import logger
 
@@ -11,9 +11,9 @@ class VKAPIError(CodeException, ReducibleKwargsException):
         self,
         *,
         error_msg: str,
-        request_params: Optional[List[dict]] = None,
+        request_params: list[dict[str, Any]] | None = None,
         **kwargs: Any,
-    ):
+    ) -> None:
         super().__init__(error_msg)
         self.error_msg = error_msg
         # server maybe return error code without request_params key
@@ -21,8 +21,10 @@ class VKAPIError(CodeException, ReducibleKwargsException):
             self.request_params = {item["key"]: item["value"] for item in request_params}
         else:
             self.request_params = {}
+
         if kwargs:
             logger.warning("VK API Error {} has extra kwargs: {!r}", self.code, kwargs)
+
         self.kwargs = kwargs
 
     def __str__(self) -> str:
@@ -35,10 +37,10 @@ class CaptchaError(VKAPIError, code=14):
         *,
         captcha_sid: str,
         captcha_img: str,
-        captcha_ts: Optional[str] = None,
-        captcha_attempt: Optional[int] = None,
+        captcha_ts: str | None = None,
+        captcha_attempt: int | None = None,
         **kwargs: Any,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
         self.captcha_sid = captcha_sid
         self.captcha_img = captcha_img
@@ -50,14 +52,14 @@ class APIAuthError(VKAPIError, code=5):
     def __init__(
         self,
         *,
-        validation_type: Optional[str] = None,
-        validation_sid: Optional[str] = None,
-        phone_mask: Optional[str] = None,
-        redirect_uri: Optional[str] = None,
-        ban_info: Optional[dict] = None,
-        error_description: Optional[str] = None,
+        validation_type: str | None = None,
+        validation_sid: str | None = None,
+        phone_mask: str | None = None,
+        redirect_uri: str | None = None,
+        ban_info: dict[str, Any] | None = None,
+        error_description: str | None = None,
         **kwargs: Any,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
         self.validation_type = validation_type
         self.validation_sid = validation_sid
@@ -67,4 +69,4 @@ class APIAuthError(VKAPIError, code=5):
         self.error_description = error_description
 
 
-__all__ = ("VKAPIError", "CaptchaError", "APIAuthError")
+__all__ = ("APIAuthError", "CaptchaError", "VKAPIError")

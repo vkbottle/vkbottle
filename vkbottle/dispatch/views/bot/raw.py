@@ -1,5 +1,5 @@
 import dataclasses
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union
+from typing import TYPE_CHECKING, Any
 
 from vkbottle_types.events import GroupEventType
 
@@ -15,26 +15,26 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass(frozen=True)
 class BotHandlerBasement(BaseHandlerBasement):
-    dataclass: Union[Type[dict[str, Any]], Type["BaseGroupEvent"]]
+    dataclass: type[dict[str, Any]] | type["BaseGroupEvent"]
     handler: "ABCHandler"
 
 
 class RawBotEventView(ABCRawEventView[dict, BotHandlerBasement]):
-    handlers: Dict[GroupEventType, List[BotHandlerBasement]]
+    handlers: dict[GroupEventType, list[BotHandlerBasement]]
 
-    def __init__(self, error_handler: Optional["ABCErrorHandler"] = None) -> None:
+    def __init__(self, error_handler: "ABCErrorHandler | None" = None) -> None:
         super().__init__(error_handler)
         self.handlers = {}
         self.handler_return_manager = BotMessageReturnHandler()
 
-    def get_handler_basements(self, event: dict[str, Any]) -> List[BotHandlerBasement]:
+    def get_handler_basements(self, event: dict[str, Any]) -> list[BotHandlerBasement]:
         return self.handlers[GroupEventType(self.get_event_type(event))]
 
     def get_event_model(
         self,
         handler_basement: BotHandlerBasement,
         event: dict[str, Any],
-    ) -> Union[dict[str, Any], "BaseGroupEvent"]:
+    ) -> "dict[str, Any] | BaseGroupEvent":
         return handler_basement.dataclass(**event)
 
     @staticmethod

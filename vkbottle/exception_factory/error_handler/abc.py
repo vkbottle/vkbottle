@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from collections.abc import Awaitable, Coroutine
-from typing import Any, Callable, Dict, Optional, Type, TypeVar
+from collections.abc import Awaitable, Callable, Coroutine
+from typing import Any, TypeVar
 
 from typing_extensions import ParamSpec
 
@@ -10,12 +10,12 @@ T_AsyncFunc = TypeVar("T_AsyncFunc", bound=Callable[..., Awaitable[object]])
 
 
 class ABCErrorHandler(ABC):
-    error_handlers: Dict[Type[Exception], Callable[..., Awaitable[Any]]]
-    undefined_error_handler: Optional[Callable[..., Awaitable[Any]]]
+    error_handlers: dict[type[Exception], Callable[..., Awaitable[Any]]]
+    undefined_error_handler: Callable[..., Awaitable[Any]] | None
 
     @abstractmethod
     def register_error_handler(
-        self, *error_types: Type[Exception]
+        self, *error_types: type[Exception]
     ) -> Callable[[T_AsyncFunc], T_AsyncFunc]:
         pass
 

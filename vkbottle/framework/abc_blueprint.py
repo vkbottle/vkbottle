@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, NoReturn, Optional, Union
+from typing import TYPE_CHECKING, Any, NoReturn
 
 from typing_extensions import deprecated  # type: ignore
 
@@ -59,7 +59,7 @@ class ABCBlueprint(ABCFramework):
         self._state_dispenser = new_state_dispenser
 
     @property  # type: ignore
-    def api(self) -> Union["ABCAPI", "API"]:  # type: ignore
+    def api(self) -> "ABCAPI | API":  # type: ignore
         if not self._api:
             raise RuntimeError(
                 CONSTRUCT_BLUEPRINT
@@ -79,7 +79,7 @@ class ABCBlueprint(ABCFramework):
         msg = "You are not allowed to run polling with blueprint"
         raise RuntimeError(msg)
 
-    def assert_constructed(self) -> Optional[NoReturn]:
+    def assert_constructed(self) -> None:
         if not self.constructed:
             raise RuntimeError(CONSTRUCT_BLUEPRINT)
 

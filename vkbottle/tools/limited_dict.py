@@ -14,7 +14,7 @@ if typing.TYPE_CHECKING:
 
         def __init__(self, *, maxlimit: int = 1000) -> None: ...
 
-        def set(self, key: KT, value: VT, /) -> typing.Optional[VT]:
+        def set(self, key: KT, value: VT, /) -> VT | None:
             """Set item in the dictionary.
             Returns a value that was deleted when the limit in the dictionary
             was reached, otherwise None.

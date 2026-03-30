@@ -1,14 +1,9 @@
 from __future__ import annotations
 
-from collections.abc import Awaitable, Iterable, Mapping
+from collections.abc import Awaitable, Callable, Iterable, Mapping
 from typing import (
     TYPE_CHECKING,
     Any,
-    Callable,
-    List,
-    Optional,
-    Type,
-    Union,
 )
 
 from typing_extensions import TypedDict
@@ -37,60 +32,60 @@ if TYPE_CHECKING:
 class AiohttpRequestKwargs(TypedDict, total=False):
     """https://github.com/aio-libs/aiohttp/blob/33953f110e97eecc707e1402daa8d543f38a189b/aiohttp/client.py#L369"""
 
-    params: Union[Mapping[str, Union[str, int]], str, None]
+    params: Mapping[str, str | int] | str | None
     json: Any
-    cookies: Union[LooseCookies, None]
-    headers: Union[LooseHeaders, None]
-    skip_auto_headers: Union[Iterable[str], None]
-    auth: Union[BasicAuth, None]
+    cookies: LooseCookies | None
+    headers: LooseHeaders | None
+    skip_auto_headers: Iterable[str] | None
+    auth: BasicAuth | None
     allow_redirects: bool
     max_redirects: int
-    compress: Union[str, None]
-    chunked: Union[bool, None]
+    compress: str | None
+    chunked: bool | None
     expect100: bool
-    raise_for_status: Union[None, bool, Callable[[ClientResponse], Awaitable[None]]]
+    raise_for_status: None | bool | Callable[[ClientResponse], Awaitable[None]]
     read_until_eof: bool
-    proxy: Union[StrOrURL, None]
-    proxy_auth: Union[BasicAuth, None]
-    timeout: "Union[ClientTimeout, None]"
-    ssl: Union[SSLContext, bool, Fingerprint]
-    server_hostname: Union[str, None]
-    proxy_headers: Union[LooseHeaders, None]
-    trace_request_ctx: Union[Mapping[str, str], None]
-    read_bufsize: Union[int, None]
-    auto_decompress: Union[bool, None]
-    max_line_size: Union[int, None]
-    max_field_size: Union[int, None]
+    proxy: StrOrURL | None
+    proxy_auth: BasicAuth | None
+    timeout: ClientTimeout | None
+    ssl: SSLContext | bool | Fingerprint
+    server_hostname: str | None
+    proxy_headers: LooseHeaders | None
+    trace_request_ctx: Mapping[str, str] | None
+    read_bufsize: int | None
+    auto_decompress: bool | None
+    max_line_size: int | None
+    max_field_size: int | None
 
 
 class AiohttpSessionKwargs(TypedDict, total=False):
     """https://github.com/aio-libs/aiohttp/blob/33953f110e97eecc707e1402daa8d543f38a189b/aiohttp/client.py#L199"""
 
-    base_url: Optional[StrOrURL]
-    connector: Optional[BaseConnector]
-    loop: Optional[AbstractEventLoop]
-    cookies: Optional[LooseCookies]
-    headers: Optional[LooseHeaders]
-    skip_auto_headers: Optional[Iterable[str]]
-    auth: Optional[BasicAuth]
+    base_url: StrOrURL | None
+    connector: BaseConnector | None
+    loop: AbstractEventLoop | None
+    cookies: LooseCookies | None
+    headers: LooseHeaders | None
+    skip_auto_headers: Iterable[str] | None
+    auth: BasicAuth | None
 
     # Пришлось изменить из-за реализации AiohttpClient
     json_serialize: JSONModule
 
-    request_class: Type[ClientRequest]
-    response_class: Type[ClientResponse]
-    ws_response_class: Type[ClientWebSocketResponse]
+    request_class: type[ClientRequest]
+    response_class: type[ClientResponse]
+    ws_response_class: type[ClientWebSocketResponse]
     version: HttpVersion
-    cookie_jar: Optional[AbstractCookieJar]
+    cookie_jar: AbstractCookieJar | None
     connector_owner: bool
     raise_for_status: bool
-    read_timeout: Union[float, object]
-    conn_timeout: Optional[float]
-    timeout: Union[object, ClientTimeout]
+    read_timeout: float | object
+    conn_timeout: float | None
+    timeout: object | ClientTimeout
     auto_decompress: bool
     trust_env: bool
     requote_redirect_url: bool
-    trace_configs: Optional[List[TraceConfig]]
+    trace_configs: list[TraceConfig] | None
     read_bufsize: int
 
 

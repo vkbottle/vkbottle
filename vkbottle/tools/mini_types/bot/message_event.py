@@ -1,6 +1,7 @@
 from io import StringIO
-from typing import TYPE_CHECKING, List, Optional, Union
+from typing import TYPE_CHECKING, Any
 
+import vkbottle_types.events.bot_events
 from vkbottle_types.events.bot_events import MessageEvent
 
 from vkbottle.modules import logger
@@ -10,8 +11,8 @@ from vkbottle.tools.formatting import Format, Formatter
 if TYPE_CHECKING:
     from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
 
-    EventDataType = Union[ShowSnackbarEvent, OpenAppEvent, OpenLinkEvent]
-    MessageText = Union[str, Format, Formatter]
+    EventDataType = ShowSnackbarEvent | OpenAppEvent | OpenLinkEvent
+    MessageText = str | Format | Formatter
 
 
 class MessageEventMin(MessageEvent):
@@ -28,23 +29,23 @@ class MessageEventMin(MessageEvent):
         return self.object.peer_id
 
     @property
-    def payload(self) -> Optional[dict]:
+    def payload(self) -> dict | None:
         """alias to event.object.payload"""
 
         return self.object.payload
 
     @property
-    def conversation_message_id(self) -> Optional[int]:
+    def conversation_message_id(self) -> int | None:
         """alias to event.object.conversation_message_id"""
 
         return self.object.conversation_message_id
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any):
         super().__init__(**kwargs)
         self.event_id = self.object.event_id
 
-    async def send_message_event_answer(self, event_data: "EventDataType", **kwargs) -> int:
-        data = {
+    async def send_message_event_answer(self, event_data: "EventDataType", **kwargs: Any) -> int:
+        data: dict[str, Any] = {
             "event_id": self.event_id,
             "user_id": self.user_id,
             "peer_id": self.peer_id,
@@ -53,8 +54,8 @@ class MessageEventMin(MessageEvent):
         data.update(kwargs)
         return await self.ctx_api.messages.send_message_event_answer(**data)
 
-    async def send_empty_answer(self, **kwargs) -> int:
-        data = {
+    async def send_empty_answer(self, **kwargs: Any) -> int:
+        data: dict[str, Any] = {
             "event_id": self.event_id,
             "user_id": self.user_id,
             "peer_id": self.peer_id,
@@ -68,23 +69,23 @@ class MessageEventMin(MessageEvent):
     async def open_link(self, link: str) -> int:
         return await self.send_message_event_answer(OpenLinkEvent(link=link))
 
-    async def open_app(self, app_id: int, app_hash: str, owner_id: Optional[int] = None) -> int:
+    async def open_app(self, app_id: int, app_hash: str, owner_id: int | None = None) -> int:
         return await self.send_message_event_answer(
             OpenAppEvent(app_id=app_id, hash=app_hash, owner_id=owner_id)
         )
 
     async def edit_message(
         self,
-        message: Optional["MessageText"] = None,
-        lat: Optional[float] = None,
-        long: Optional[float] = None,
-        attachment: Optional[str] = None,
-        keep_forward_messages: Optional[bool] = None,
-        keep_snippets: Optional[bool] = None,
-        dont_parse_links: Optional[bool] = None,
-        template: Optional[str] = None,
-        keyboard: Optional[str] = None,
-        **kwargs,
+        message: "MessageText | None" = None,
+        lat: float | None = None,
+        long: float | None = None,
+        attachment: str | None = None,
+        keep_forward_messages: bool | None = None,
+        keep_snippets: bool | None = None,
+        dont_parse_links: bool | None = None,
+        template: str | None = None,
+        keyboard: str | None = None,
+        **kwargs: Any,
     ) -> int:
         if isinstance(message, (Formatter, Format)):
             kwargs["format_data"] = (
@@ -100,24 +101,24 @@ class MessageEventMin(MessageEvent):
 
     async def send_message(
         self,
-        message: Optional["MessageText"] = None,
-        attachment: Optional[str] = None,
-        random_id: Optional[int] = 0,
-        lat: Optional[float] = None,
-        long: Optional[float] = None,
-        reply_to: Optional[int] = None,
-        forward_messages: Optional[List[int]] = None,
-        forward: Optional[str] = None,
-        sticker_id: Optional[int] = None,
-        keyboard: Optional[str] = None,
-        template: Optional[str] = None,
-        payload: Optional[str] = None,
-        content_source: Optional[str] = None,
-        dont_parse_links: Optional[bool] = None,
-        disable_mentions: Optional[bool] = None,
-        intent: Optional[str] = None,
-        subscribe_id: Optional[int] = None,
-        **kwargs,
+        message: "MessageText | None" = None,
+        attachment: str | None = None,
+        random_id: int | None = 0,
+        lat: float | None = None,
+        long: float | None = None,
+        reply_to: int | None = None,
+        forward_messages: list[int] | None = None,
+        forward: str | None = None,
+        sticker_id: int | None = None,
+        keyboard: str | None = None,
+        template: str | None = None,
+        payload: str | None = None,
+        content_source: str | None = None,
+        dont_parse_links: bool | None = None,
+        disable_mentions: bool | None = None,
+        intent: str | None = None,
+        subscribe_id: int | None = None,
+        **kwargs: Any,
     ) -> "MessagesSendUserIdsResponseItem":
         if isinstance(message, (Formatter, Format)):
             kwargs["format_data"] = (
@@ -153,11 +154,11 @@ class MessageEventMin(MessageEvent):
 
         return response
 
-    def get_payload_json(self, *args, **kwargs) -> Optional[dict]:
+    def get_payload_json(self, *args: Any, **kwargs: Any) -> dict[str, Any] | None:
         return self.payload
 
 
-MessageEventMin.model_rebuild()
+MessageEventMin.model_rebuild(_types_namespace=vars(vkbottle_types.events.bot_events) | locals())
 
 
 __all__ = ("MessageEventMin",)

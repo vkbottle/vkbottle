@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import dataclasses
 import re
-from typing import Optional
 
 import typing_extensions as typing
 
@@ -28,7 +27,7 @@ def _calculate_offset(string: str) -> int:
 def _format(
     string: str | Format,
     fmt_type: FormatType,
-    data: Optional[dict[str, typing.Any]] = None,
+    data: dict[str, typing.Any] | None = None,
     /,
 ) -> Format:
     data = data or {}
@@ -208,4 +207,4 @@ class Formatter(str):
         return json.dumps(self.format_data)
 
 
-__all__ = ("Formatter", "Format", "bold", "italic", "underline", "url")
+__all__ = ("Format", "Formatter", "bold", "italic", "underline", "url")

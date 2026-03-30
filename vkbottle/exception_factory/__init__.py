@@ -5,10 +5,10 @@ from .reducible_kwargs_exception import ReducibleKwargsException
 
 __all__ = (
     "ABCErrorHandler",
-    "CaptchaError",
     "APIAuthError",
+    "CaptchaError",
     "CodeException",
     "ErrorHandler",
-    "VKAPIError",
     "ReducibleKwargsException",
+    "VKAPIError",
 )

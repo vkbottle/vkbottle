@@ -1,5 +1,5 @@
 import contextlib
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 from vkbottle.modules import json, logger
 
@@ -14,7 +14,7 @@ class JSONResponseValidator(ABCResponseValidator):
     Documentation: https://vkbottle.rtfd.io/ru/latest/low-level/api/response-validator
     """
 
-    def __init__(self, context: Optional[dict[str, Any]] = None):
+    def __init__(self, context: dict[str, Any] | None = None):
         self.context = context or {}
 
     async def validate(
@@ -22,7 +22,7 @@ class JSONResponseValidator(ABCResponseValidator):
         method: str,
         data: dict[str, Any],
         response: Any,
-        ctx_api: Union["ABCAPI", "API"],
+        ctx_api: "ABCAPI | API",
     ) -> Any:
         if isinstance(response, dict):
             return response

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
-from typing import Any, ClassVar, Generic, Type, TypeVar, Union
+from typing import Any, ClassVar, Generic, TypeVar
 
 from vkbottle.tools.magic import magic_bundle
 
@@ -13,7 +13,7 @@ class ABCRule(ABC, Generic[T_contra]):
     config: ClassVar[dict[str, Any]] = {}
 
     @classmethod
-    def with_config(cls, config: dict[str, Any]) -> Type[ABCRule]:
+    def with_config(cls, config: dict[str, Any]) -> type[ABCRule]:
         cls.config = config
         return cls
 
@@ -24,7 +24,7 @@ class ABCRule(ABC, Generic[T_contra]):
         /,
         *args: Any,
         **kwargs: Any,
-    ) -> Union[bool, dict[str, Any], None]: ...
+    ) -> bool | dict[str, Any] | None: ...
 
     def __and__(self, other: ABCRule[T_contra]) -> AndRule[T_contra]:
         return AndRule(self, other)
@@ -45,7 +45,7 @@ class AndRule(ABCRule[T_contra], Generic[T_contra]):
 
     async def check(
         self, event: T_contra, context: dict[str, Any]
-    ) -> Union[bool, dict[str, Any], None]:
+    ) -> bool | dict[str, Any] | None:
         rule_ctx = dict[str, Any]()
 
         for rule in self.rules:
@@ -71,7 +71,7 @@ class NotRule(ABCRule[T_contra]):
 
     async def check(
         self, event: T_contra, context: dict[str, Any]
-    ) -> Union[bool, dict[str, Any], None]:
+    ) -> bool | dict[str, Any] | None:
         for rule in self.rules:
             check_response = await rule.check(
                 event,
@@ -92,7 +92,7 @@ class OrRule(ABCRule[T_contra]):
 
     async def check(
         self, event: T_contra, context: dict[str, Any]
-    ) -> Union[bool, dict[str, Any], None]:
+    ) -> bool | dict[str, Any] | None:
         for rule in self.rules:
             check_response = await rule.check(
                 event,

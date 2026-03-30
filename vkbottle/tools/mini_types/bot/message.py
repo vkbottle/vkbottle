@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, List, Optional
+from typing import TYPE_CHECKING, Any
 
 import pydantic
 from vkbottle_types.events.bot_events import MessageNew
@@ -8,7 +8,7 @@ from vkbottle.tools.mini_types.base import BaseMessageMin
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
 
-
+import vkbottle_types.objects
 from vkbottle_types.objects import ClientInfoForBots, MessagesConversationMember
 
 from vkbottle.modules import logger
@@ -17,14 +17,14 @@ from .foreign_message import ForeignMessageMin, _foreign_messages
 
 
 class MessageMin(BaseMessageMin):
-    group_id: Optional[int] = None
-    client_info: Optional[ClientInfoForBots] = None
-    reply_message: Optional[ForeignMessageMin] = None
-    fwd_messages: List[ForeignMessageMin] = pydantic.Field(
+    group_id: int | None = None
+    client_info: ClientInfoForBots | None = None
+    reply_message: ForeignMessageMin | None = None  # type: ignore
+    fwd_messages: list[ForeignMessageMin] = pydantic.Field(  # type: ignore
         default_factory=list[ForeignMessageMin],
     )
-    _is_full: Optional[bool] = None
-    _chat_members: Optional[List[MessagesConversationMember]] = None
+    _is_full: bool | None = None
+    _chat_members: list[MessagesConversationMember] | None = None
 
     __foreign_messages = pydantic.model_validator(mode="after")(_foreign_messages)
 
@@ -48,9 +48,10 @@ class MessageMin(BaseMessageMin):
             self.__dict__["is_cropped"] = False
         return self
 
-    def get_attachment_strings(self) -> Optional[List[str]]:
+    def get_attachment_strings(self) -> list[str] | None:
         if self.attachments is None:
             return None
+
         if (
             not self.id
             and not self._is_full
@@ -61,19 +62,26 @@ class MessageMin(BaseMessageMin):
         ):
             logger.warning(
                 "Some attachments may does't work because of wrong access_key. "
-                "Use .get_full_message() to update message and fix this issue."
+                "Use .get_full_message() to update message and fix this issue.",
             )
+
         if self.is_cropped:
             logger.warning(
                 "Some attachments may doesn't included because message is cropped. "
-                "Use .get_full_message() to update message and fix this issue."
+                "Use .get_full_message() to update message and fix this issue.",
             )
+
         return super().get_attachment_strings()
 
 
+MessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
+
+
 def message_min(
-    event: dict[str, Any], ctx_api: "ABCAPI", replace_mention: bool = True
-) -> "MessageMin":
+    event: dict[str, Any],
+    ctx_api: "ABCAPI",
+    replace_mention: bool = True,
+) -> MessageMin:
     update = MessageNew.from_dict(event)
 
     if update.object.message is None:

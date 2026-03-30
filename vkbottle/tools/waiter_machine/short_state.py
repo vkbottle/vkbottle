@@ -12,12 +12,12 @@ if typing.TYPE_CHECKING:
     from .machine import Identificator
 
 Event = typing.TypeVar("Event")
-Behaviour = typing.Union[ABCHandler[Event], None]
+Behaviour = ABCHandler[Event] | None
 
 
 class _ShortStateContext(typing.Generic[Event], typing.NamedTuple):
     event: Event
-    context: typing.Dict[str, typing.Any]
+    context: dict[str, typing.Any]
 
 
 if typing.TYPE_CHECKING:
@@ -32,20 +32,20 @@ class ShortState(typing.Generic[Event]):
     key: "Identificator"
     ctx_api: ABCAPI
     event: asyncio.Event
-    rules: typing.Tuple[ABCRule[Event], ...]
-    expiration: dataclasses.InitVar[typing.Optional[datetime.timedelta]] = dataclasses.field(
+    rules: tuple[ABCRule[Event], ...]
+    expiration: dataclasses.InitVar[datetime.timedelta | None] = dataclasses.field(
         default=None,
     )
-    default_behaviour: typing.Optional[Behaviour[Event]] = dataclasses.field(default=None)
-    on_drop_behaviour: typing.Optional[Behaviour[Event]] = dataclasses.field(default=None)
-    exit_behaviour: typing.Optional[Behaviour[Event]] = dataclasses.field(default=None)
-    expiration_date: typing.Optional[datetime.datetime] = dataclasses.field(init=False)
-    context: typing.Optional[ShortStateContext[Event]] = dataclasses.field(
+    default_behaviour: Behaviour[Event] | None = dataclasses.field(default=None)
+    on_drop_behaviour: Behaviour[Event] | None = dataclasses.field(default=None)
+    exit_behaviour: Behaviour[Event] | None = dataclasses.field(default=None)
+    expiration_date: datetime.datetime | None = dataclasses.field(init=False)
+    context: ShortStateContext[Event] | None = dataclasses.field(
         default=None,
         init=False,
     )
 
-    def __post_init__(self, expiration: typing.Optional[datetime.timedelta]) -> None:
+    def __post_init__(self, expiration: datetime.timedelta | None) -> None:
         self.creation_date = datetime.datetime.now()
         self.expiration_date = (
             (self.creation_date + expiration) if expiration is not None else None

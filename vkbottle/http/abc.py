@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Optional, Type
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from types import TracebackType
@@ -19,7 +19,7 @@ class ABCHTTPClient(ABC):
         self,
         url: str,
         method: str = "GET",
-        data: Optional[dict] = None,
+        data: dict | None = None,
         **kwargs: Any,
     ) -> Any:
         pass
@@ -29,7 +29,7 @@ class ABCHTTPClient(ABC):
         self,
         url: str,
         method: str = "GET",
-        data: Optional[dict] = None,
+        data: dict | None = None,
         **kwargs: Any,
     ) -> str:
         pass
@@ -39,7 +39,7 @@ class ABCHTTPClient(ABC):
         self,
         url: str,
         method: str = "GET",
-        data: Optional[dict] = None,
+        data: dict | None = None,
         **kwargs: Any,
     ) -> dict:
         pass
@@ -49,7 +49,7 @@ class ABCHTTPClient(ABC):
         self,
         url: str,
         method: str = "GET",
-        data: Optional[dict] = None,
+        data: dict | None = None,
         **kwargs: Any,
     ) -> bytes:
         pass
@@ -63,8 +63,8 @@ class ABCHTTPClient(ABC):
 
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_value: Optional[BaseException],
-        traceback: Optional["TracebackType"],
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: "TracebackType | None",
     ) -> None:
         await self.close()

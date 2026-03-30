@@ -1,5 +1,3 @@
-from typing import Optional
-
 import pydantic
 
 
@@ -15,7 +13,7 @@ class OpenLinkEvent(pydantic.BaseModel):
 
 class OpenAppEvent(pydantic.BaseModel):
     type: str = pydantic.Field(default="open_app", frozen=True)
-    owner_id: Optional[int] = None
+    owner_id: int | None = None
     app_id: int
     hash: str
 

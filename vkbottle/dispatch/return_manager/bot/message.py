@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any
 
 from vkbottle.dispatch.return_manager.abc import BaseReturnManager
 
@@ -13,7 +13,7 @@ class BotMessageReturnHandler(BaseReturnManager):
 
     @BaseReturnManager.instance_of((tuple, list))
     async def iter_handler(
-        self, value: Union[tuple, list], message: "MessageMin", _: dict[str, Any]
+        self, value: tuple | list, message: "MessageMin", _: dict[str, Any]
     ) -> None:
         [await message.answer(str(e)) for e in value]
 

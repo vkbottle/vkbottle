@@ -27,7 +27,7 @@ class RegistrationMiddleware(BaseMiddleware[Message]):
     async def pre(self):
         user = dummy_db.get(self.event.from_id)
         if user is None:
-            user = (await bot.api.users.get(self.event.from_id))[0]
+            user = (await bot.api.users.get(user_ids=[self.event.from_id]))[0]
             dummy_db.set(self.event.from_id, user)
             self.cached = False
         else:

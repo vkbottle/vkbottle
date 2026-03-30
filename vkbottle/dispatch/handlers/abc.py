@@ -1,6 +1,6 @@
 import typing
 from abc import ABC, abstractmethod
-from typing import Any, Optional, Union
+from typing import Any
 
 Event = typing.TypeVar("Event")
 
@@ -12,8 +12,8 @@ class ABCHandler(ABC, typing.Generic[Event]):
     async def filter(
         self,
         event: Event,
-        context: Optional[dict[str, Any]] = None,
-    ) -> Union[dict, bool]:
+        context: dict[str, Any] | None = None,
+    ) -> dict | bool:
         pass
 
     @abstractmethod

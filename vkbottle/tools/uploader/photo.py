@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Optional, Union
+from typing import TYPE_CHECKING
 
 from .base import BaseUploader
 
@@ -20,10 +20,10 @@ class PhotoToAlbumUploader(PhotoUploader):
     async def upload(
         self,
         album_id: int,
-        paths_like: Union[List[Union[str, "Bytes"]], str, "Bytes"],
-        group_id: Optional[int] = None,
+        paths_like: 'list["str | Bytes"] | str | Bytes',
+        group_id: int | None = None,
         **params,
-    ) -> List[str]:
+    ) -> list[str]:
         photos = await self.raw_upload(
             album_id=album_id,
             paths_like=paths_like,
@@ -43,10 +43,10 @@ class PhotoToAlbumUploader(PhotoUploader):
     async def raw_upload(
         self,
         album_id: int,
-        paths_like: Union[List[Union[str, "Bytes"]], str, "Bytes"],
-        group_id: Optional[int] = None,
+        paths_like: 'list["str | Bytes"] | str | Bytes',
+        group_id: int | None = None,
         **params,
-    ) -> List[dict]:
+    ) -> list[dict]:
         if not isinstance(paths_like, list):
             paths_like = [paths_like]
         if len(paths_like) > self.MAX_PHOTOS_PER_UPLOAD:
@@ -71,8 +71,8 @@ class PhotoToAlbumUploader(PhotoUploader):
 class PhotoWallUploader(PhotoUploader):
     async def upload(
         self,
-        file_source: Union[str, "Bytes"],
-        group_id: Optional[int] = None,
+        file_source: "str | Bytes",
+        group_id: int | None = None,
         **params,
     ) -> str:
         photo = await self.raw_upload(
@@ -89,8 +89,8 @@ class PhotoWallUploader(PhotoUploader):
 
     async def raw_upload(
         self,
-        file_source: Union[str, "Bytes"],
-        group_id: Optional[int] = None,
+        file_source: "str | Bytes",
+        group_id: int | None = None,
         **params,
     ) -> dict:
         server = await self.get_server(group_id=group_id, **params)
@@ -115,8 +115,8 @@ class PhotoWallUploader(PhotoUploader):
 class PhotoFaviconUploader(PhotoUploader):
     async def upload(
         self,
-        file_source: Union[str, "Bytes"],
-        owner_id: Optional[int] = None,
+        file_source: "str | Bytes",
+        owner_id: int | None = None,
         **params,
     ) -> str:
         owner_id = owner_id or await self.get_owner_id(**params)
@@ -134,8 +134,8 @@ class PhotoFaviconUploader(PhotoUploader):
 
     async def raw_upload(
         self,
-        file_source: Union[str, "Bytes"],
-        owner_id: Optional[int] = None,
+        file_source: "str | Bytes",
+        owner_id: int | None = None,
         **params,
     ) -> dict:
         owner_id = owner_id or await self.get_owner_id(**params)
@@ -155,8 +155,8 @@ class PhotoFaviconUploader(PhotoUploader):
 class PhotoMessageUploader(PhotoUploader):
     async def upload(
         self,
-        file_source: Union[str, "Bytes"],
-        peer_id: Optional[int] = None,
+        file_source: "str | Bytes",
+        peer_id: int | None = None,
         **params,
     ) -> str:
         photo = await self.raw_upload(
@@ -173,8 +173,8 @@ class PhotoMessageUploader(PhotoUploader):
 
     async def raw_upload(
         self,
-        file_source: Union[str, "Bytes"],
-        peer_id: Optional[int] = None,
+        file_source: "str | Bytes",
+        peer_id: int | None = None,
         **params,
     ) -> dict:
         server = await self.get_server(peer_id=peer_id, **params)
@@ -204,10 +204,10 @@ class PhotoChatFaviconUploader(PhotoUploader):
     async def raw_upload(
         self,
         chat_id: int,
-        file_source: Union[str, "Bytes"],
-        crop_x: Optional[int] = None,
-        crop_y: Optional[int] = None,
-        crop_width: Optional[int] = None,
+        file_source: "str | Bytes",
+        crop_x: int | None = None,
+        crop_y: int | None = None,
+        crop_width: int | None = None,
         **params,
     ) -> dict:
         server = await self.get_server(
@@ -232,7 +232,7 @@ class PhotoChatFaviconUploader(PhotoUploader):
 class PhotoMarketUploader(PhotoUploader):
     async def upload(
         self,
-        file_source: Union[str, "Bytes"],
+        file_source: "str | Bytes",
         group_id: int,
         **params,
     ) -> str:
@@ -250,7 +250,7 @@ class PhotoMarketUploader(PhotoUploader):
 
     async def raw_upload(
         self,
-        file_source: Union[str, "Bytes"],
+        file_source: "str | Bytes",
         group_id: int,
         **params,
     ) -> dict:

@@ -80,9 +80,9 @@ password = "qwerty123"
 async def main():
     user_auth = UserAuth()
 
-    auth_code: Union[bool, str] = True
-    captcha_sid: Optional[str] = None
-    captcha_key: Optional[str] = None
+    auth_code: bool | str = True
+    captcha_sid: str | None = None
+    captcha_key: str | None = None
 
     while True:
         try:

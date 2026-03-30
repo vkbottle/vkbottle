@@ -1,5 +1,5 @@
 import warnings
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING
 
 from typing_extensions import deprecated  # type: ignore
 
@@ -28,9 +28,9 @@ with warnings.catch_warnings():
     class UserBlueprint(ABCBlueprint):
         def __init__(
             self,
-            name: Optional[str] = None,
-            labeler: Optional[UserLabeler] = None,
-            router: Optional[Router] = None,
+            name: str | None = None,
+            labeler: UserLabeler | None = None,
+            router: Router | None = None,
         ):
             if name is not None:
                 self.name = name
@@ -41,7 +41,7 @@ with warnings.catch_warnings():
 
         def construct(
             self,
-            api: Union["ABCAPI", "API"],
+            api: "ABCAPI | API",
             polling: "ABCPolling",
             state_dispenser: "ABCStateDispenser",
         ) -> "UserBlueprint":

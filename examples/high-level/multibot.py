@@ -13,8 +13,9 @@ logging.basicConfig(level=logging.DEBUG)
 
 @bot.on.message(lev="/инфо")  # lev > custom_rule from LevenshteinRule
 async def info(message: Message):
-    current_group = (await message.ctx_api.groups.get_by_id())[0]
-    await message.answer(f"Название моей группы: {current_group.name}")
+    groups = (await message.ctx_api.groups.get_by_id()).groups
+    if groups:
+        await message.answer(f"Название моей группы: {groups[0].name}")
 
 
 # Read more about multibot in documentation

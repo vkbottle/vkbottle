@@ -25,7 +25,7 @@ class StateRepresentation(str):
 
 
 if not typing.TYPE_CHECKING:
-    State = typing.Union[str, StateRepresentation]
+    State = str | StateRepresentation
 else:
     State: typing.TypeAlias = str
 

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import atexit
+import warnings
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager, suppress
-from typing import TYPE_CHECKING, Any, AsyncGenerator, Optional, Type
+from typing import TYPE_CHECKING, Any
 
 from aiohttp import ClientSession
 
@@ -25,8 +27,8 @@ if TYPE_CHECKING:
 class AiohttpClient(ABCHTTPClient):
     def __init__(
         self,
-        session: Optional[ClientSession] = None,
-        json_processing_module: Optional[JSONModule] = None,
+        session: ClientSession | None = None,
+        json_processing_module: JSONModule | None = None,
         optimize: bool = False,
         **session_params: Unpack[AiohttpSessionKwargs],
     ) -> None:
@@ -47,9 +49,9 @@ class AiohttpClient(ABCHTTPClient):
         self,
         url: str,
         method: str = "GET",
-        data: Optional[dict] = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
-    ) -> AsyncGenerator[ClientResponse, None]:
+    ) -> AsyncGenerator[ClientResponse]:
         if not self.session:
             self.session = ClientSession(  # type: ignore[misc]
                 json_serialize=self.json_processing_module.dumps,
@@ -63,7 +65,7 @@ class AiohttpClient(ABCHTTPClient):
         self,
         url: str,
         method: str = "GET",
-        data: Optional[dict] = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> ClientResponse:
         async with self.request(url, method, data, **kwargs) as response:
@@ -74,7 +76,7 @@ class AiohttpClient(ABCHTTPClient):
         self,
         url: str,
         method: str = "GET",
-        data: Optional[dict] = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> dict[str, Any]:
         async with self.request(url, method, data, **kwargs) as response:
@@ -88,7 +90,7 @@ class AiohttpClient(ABCHTTPClient):
         self,
         url: str,
         method: str = "GET",
-        data: Optional[dict] = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> str:
         async with self.request(url, method, data, **kwargs) as response:
@@ -98,7 +100,7 @@ class AiohttpClient(ABCHTTPClient):
         self,
         url: str,
         method: str = "GET",
-        data: Optional[dict] = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> bytes:
         async with self.request(url, method, data, **kwargs) as response:
@@ -116,7 +118,8 @@ class AiohttpClient(ABCHTTPClient):
             and self.session.connector is not None
             and not self.session.connector.closed
         ):
-            with suppress(Exception):
+            with warnings.catch_warnings(), suppress(Exception):
+                warnings.simplefilter(action="ignore", category=RuntimeWarning)
                 self.session.connector.close().__await__().send(None)
             self.session.detach()
 
@@ -124,8 +127,8 @@ class AiohttpClient(ABCHTTPClient):
 class SingleAiohttpClient(AiohttpClient, ABCSingleton):
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_value: Optional[BaseException],
-        traceback: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
     ) -> None:
         pass  # no need to close session in this case

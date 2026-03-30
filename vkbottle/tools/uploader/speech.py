@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Literal, Union
+from typing import TYPE_CHECKING, Literal
 
 from .base import BaseUploader
 
@@ -14,7 +14,7 @@ class SpeechUploader(BaseUploader):
 
     async def raw_upload(
         self,
-        file_source: Union[str, "Bytes"],
+        file_source: "str | Bytes",
         model: Literal["neutral", "spontaneous"] = "neutral",
         **params,
     ) -> dict:

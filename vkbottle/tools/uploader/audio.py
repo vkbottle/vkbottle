@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any
 
 from .base import BaseUploader
 
@@ -16,7 +16,7 @@ class AudioUploader(BaseUploader):
         self,
         artist: str,
         title: str,
-        file_source: Union[str, "Bytes"],
+        file_source: "str | Bytes",
         **params: Any,
     ) -> str:
         audio = await self.raw_upload(artist, title, file_source, **params)
@@ -31,7 +31,7 @@ class AudioUploader(BaseUploader):
         self,
         artist: str,
         title: str,
-        file_source: Union[str, "Bytes"],
+        file_source: "str | Bytes",
         **params: Any,
     ) -> dict[str, Any]:
         server = await self.get_server()

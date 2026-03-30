@@ -1,5 +1,5 @@
 import asyncio
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from typing_extensions import Self
 
@@ -23,14 +23,14 @@ if TYPE_CHECKING:
 class User(BaseFramework):
     def __init__(
         self,
-        token: Optional["Token"] = None,
-        api: Optional["ABCAPI"] = None,
-        polling: Optional["ABCPolling"] = None,
-        loop_wrapper: Optional[LoopWrapper] = None,
-        router: Optional["ABCRouter"] = None,
-        labeler: Optional["ABCLabeler"] = None,
-        state_dispenser: Optional["ABCStateDispenser"] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
+        token: "Token | None" = None,
+        api: "ABCAPI | None" = None,
+        polling: "ABCPolling | None" = None,
+        loop_wrapper: LoopWrapper | None = None,
+        router: "ABCRouter | None" = None,
+        labeler: "ABCLabeler | None" = None,
+        state_dispenser: "ABCStateDispenser | None" = None,
+        error_handler: "ABCErrorHandler | None" = None,
         task_each_event: Any = None,
     ) -> None:
         self.api: API = api or API(token)  # type: ignore
@@ -69,8 +69,8 @@ class User(BaseFramework):
         cls,
         login: str,
         password: str,
-        client_id: Optional[int] = None,
-        client_secret: Optional[str] = None,
+        client_id: int | None = None,
+        client_secret: str | None = None,
         **kwargs: Any,
     ) -> Self:
         try:
@@ -94,8 +94,8 @@ class User(BaseFramework):
         cls,
         login: str,
         password: str,
-        client_id: Optional[int] = None,
-        client_secret: Optional[str] = None,
+        client_id: int | None = None,
+        client_secret: str | None = None,
         **kwargs: Any,
     ) -> Self:
         token = await UserAuth(client_id, client_secret).get_token(login, password)

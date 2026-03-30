@@ -1,6 +1,6 @@
 import ast
 from inspect import getsource
-from typing import Any, Callable, Dict, Type
+from typing import Any, Callable
 
 from vkbottle_types.categories import ExecutableCode
 
@@ -13,9 +13,9 @@ class Converter:
     """Translate Python into the VKScript with AST"""
 
     def __init__(self):
-        self.definitions: Dict[Type[ast.AST], Callable] = {}
+        self.definitions: dict[type[ast.AST], Callable[..., Any]] = {}
 
-    def __call__(self, for_definition: Type[ast.AST]):
+    def __call__(self, for_definition: type[ast.AST]):
         def decorator(func):
             self.definitions[for_definition] = func
             return func
@@ -28,7 +28,7 @@ class Converter:
             raise ConverterError(msg)
         return self.definitions[d.__class__](d)
 
-    def scriptify(self, func: Callable, *args_values: Any, **kwargs_values: Any) -> str:
+    def scriptify(self, func: Callable[..., Any], *args_values: Any, **kwargs_values: Any) -> str:
         """Translate function to VKScript"""
         source = getsource(func)
         code: ast.FunctionDef = ast.parse(source).body[0]  # type: ignore
@@ -70,4 +70,4 @@ class Converter:
         result = "".join(values_assignments) + "".join(
             self.find_definition(line) for line in code.body
         )
-        return ExecutableCode(code=result)
+        return ExecutableCode(code=result)  # type: ignore

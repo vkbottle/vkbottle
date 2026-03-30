@@ -1,5 +1,5 @@
 from collections.abc import Hashable
-from typing import Any, Optional
+from typing import Any
 
 from vkbottle.tools.ctx_tool import BaseContext
 
@@ -15,7 +15,7 @@ class CtxStorage(ABCStorage, BaseContext):
 
     def __init__(
         self,
-        default: Optional[dict[str, Any]] = None,
+        default: dict[str, Any] | None = None,
         force_reset: bool = False,
     ) -> None:
         if not self.get_instance() or force_reset:

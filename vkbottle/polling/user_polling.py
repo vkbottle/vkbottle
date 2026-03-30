@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.modules import logger
@@ -17,15 +17,15 @@ class UserPolling(BasePolling):
 
     def __init__(
         self,
-        api: Optional["ABCAPI"] = None,
-        user_id: Optional[int] = None,
-        group_id: Optional[int] = None,
-        wait: Optional[int] = None,
-        mode: Optional[int] = None,
-        rps_delay: Optional[int] = None,
-        lp_version: Optional[int] = None,
-        need_pts: Optional[bool] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
+        api: "ABCAPI | None" = None,
+        user_id: int | None = None,
+        group_id: int | None = None,
+        wait: int | None = None,
+        mode: int | None = None,
+        rps_delay: int | None = None,
+        lp_version: int | None = None,
+        need_pts: bool | None = None,
+        error_handler: "ABCErrorHandler | None" = None,
     ) -> None:
         self._api = api
         self.error_handler = error_handler or ErrorHandler()
@@ -78,7 +78,7 @@ class UserPolling(BasePolling):
     def construct(
         self,
         api: "ABCAPI",
-        error_handler: Optional["ABCErrorHandler"] = None,
+        error_handler: "ABCErrorHandler | None" = None,
     ) -> "UserPolling":
         self._api = api
         if error_handler is not None:

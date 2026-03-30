@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from vkbottle.modules import logger
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 class ABCStateDispenser(ABC):
     @abstractmethod
-    async def get(self, peer_id: int) -> Optional["StatePeer"]:
+    async def get(self, peer_id: int) -> "StatePeer | None":
         pass
 
     @abstractmethod
@@ -20,7 +20,7 @@ class ABCStateDispenser(ABC):
     async def delete(self, peer_id: int):
         pass
 
-    async def cast(self, peer_id: Optional[int]) -> Optional["StatePeer"]:
+    async def cast(self, peer_id: int | None) -> "StatePeer | None":
         if peer_id is None:
             return None
 

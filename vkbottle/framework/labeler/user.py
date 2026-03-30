@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any, Callable, List, Optional, Type, Union
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
 
 from vkbottle_types.events.enums import UserEventType
 from vkbottle_types.events.user_events import RawUserEvent
@@ -10,16 +11,16 @@ from vkbottle.dispatch.views.user import RawUserEventView, UserHandlerBasement, 
 from .base import BaseLabeler, CustomRuleType
 
 if TYPE_CHECKING:
-    from vkbottle_types.events import BaseUserEvent
+    from vkbottle_types.events.user_events import BaseUserEvent
 
     from vkbottle.dispatch.views.user import ABCUserMessageView
     from vkbottle.exception_factory.error_handler import ABCErrorHandler
-    from vkbottle.tools.mini_types.user import MessageMin
+    from vkbottle.tools.mini_types.user.message import MessageMin
 
     from .abc import LabeledHandler
 
-    LabeledMessageHandler = Callable[..., Callable[["MessageMin"], Any]]
-    EventName = Union[UserEventType, str]
+    LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]
+    EventName = UserEventType | str
 
 
 class UserLabeler(BaseLabeler):
@@ -36,12 +37,12 @@ class UserLabeler(BaseLabeler):
 
     def __init__(
         self,
-        message_view: Optional["ABCUserMessageView"] = None,
-        raw_event_view: Optional[RawUserEventView] = None,
-        custom_rules: Optional[CustomRuleType] = None,
-        auto_rules: Optional[List["ABCRule"]] = None,
-        raw_event_auto_rules: Optional[List["ABCRule"]] = None,
-        error_handler: Optional["ABCErrorHandler"] = None,
+        message_view: "ABCUserMessageView[Any] | None" = None,
+        raw_event_view: RawUserEventView | None = None,
+        custom_rules: CustomRuleType | None = None,
+        auto_rules: list["ABCRule[Any]"] | None = None,
+        raw_event_auto_rules: list["ABCRule[Any]"] | None = None,
+        error_handler: "ABCErrorHandler | None" = None,
     ) -> None:
         message_view = message_view or UserMessageView(error_handler)
         raw_event_view = raw_event_view or RawUserEventView(error_handler)
@@ -53,23 +54,23 @@ class UserLabeler(BaseLabeler):
             raw_event_auto_rules=raw_event_auto_rules,
         )
 
-    def message(
+    def message(  # type: ignore
         self,
-        *rules: "ABCRule",
+        *rules: "ABCRule[Any]",
         blocking: bool = True,
         **custom_rules: Any,
     ) -> "LabeledMessageHandler":
         return super().message(*rules, blocking=blocking, **custom_rules)
 
-    def chat_message(
+    def chat_message(  # type: ignore
         self,
-        *rules: "ABCRule",
+        *rules: "ABCRule[Any]",
         blocking: bool = True,
         **custom_rules: Any,
     ) -> "LabeledMessageHandler":
         return super().chat_message(*rules, blocking=blocking, **custom_rules)
 
-    def private_message(
+    def private_message(  # type: ignore
         self,
         *rules: "ABCRule",
         blocking: bool = True,
@@ -77,11 +78,11 @@ class UserLabeler(BaseLabeler):
     ) -> "LabeledMessageHandler":
         return super().private_message(*rules, blocking=blocking, **custom_rules)
 
-    def raw_event(
+    def raw_event(  # type: ignore
         self,
-        event: Union[int, List[int], UserEventType, List[UserEventType]],
-        dataclass: Type["BaseUserEvent"] = RawUserEvent,
-        *rules: "ABCRule",
+        event: int | list[int] | UserEventType | list[UserEventType],
+        dataclass: type["BaseUserEvent"] = RawUserEvent,
+        *rules: "ABCRule[Any]",
         blocking: bool = True,
         **custom_rules: Any,
     ) -> "LabeledHandler":
@@ -94,10 +95,11 @@ class UserLabeler(BaseLabeler):
 
         event_types = [event] if isinstance(event, (int, UserEventType)) else event
 
-        def decorator(func):
+        def decorator(func: Any) -> Any:
             for e in event_types:
                 if isinstance(e, int):
                     e = UserEventType(e)
+
                 handler_basement = UserHandlerBasement(
                     dataclass,
                     FromFuncHandler(
@@ -110,6 +112,7 @@ class UserLabeler(BaseLabeler):
                 )
                 event_handlers = self.raw_event_view.handlers.setdefault(e, [])
                 event_handlers.append(handler_basement)
+
             return func
 
         return decorator

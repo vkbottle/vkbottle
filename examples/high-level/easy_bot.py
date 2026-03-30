@@ -1,7 +1,8 @@
+# type: ignore
+
 import logging
 import os
 import random
-from typing import Optional
 
 from vkbottle_types.objects import MessagesForward
 
@@ -34,7 +35,7 @@ async def hello_handler(message: Message):
 # use double decorator like here it is or use filters (OrRule here)
 @bot.on.message(text=["/съесть <item>", "/съесть"])
 @bot.on.message(payload={"cmd": "eat"})
-async def eat_handler(message: Message, item: Optional[str] = None):
+async def eat_handler(message: Message, item: str | None = None):
     if item is None:
         item = random.choice(EATABLE)
     await message.answer(f"Ты съел <<{item}>>!", keyboard=KEYBOARD)

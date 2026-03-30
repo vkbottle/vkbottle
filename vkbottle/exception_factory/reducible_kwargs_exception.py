@@ -1,9 +1,9 @@
-from typing import Dict, Type, TypeVar
+from typing import Any, TypeVar
 
 T = TypeVar("T")
 
 
-def cls_kwargs(cls: Type[T], kwargs: Dict[str, object]) -> T:
+def cls_kwargs(cls: type[T], kwargs: dict[str, Any]) -> T:
     return cls(**kwargs)
 
 

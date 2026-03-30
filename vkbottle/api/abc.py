@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from collections.abc import Awaitable
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
+from collections.abc import Awaitable, Callable
+from typing import TYPE_CHECKING, Any
 
 from typing_extensions import Self
 from vkbottle_types.categories import APICategories
@@ -24,21 +24,21 @@ class ABCAPI(APICategories, ABC):
     ignore_errors: bool
     http_client: "ABCHTTPClient"
     request_rescheduler: "ABCRequestRescheduler"
-    response_validators: List["ABCResponseValidator"]
-    request_validators: List["ABCRequestValidator"]
-    captcha_handler: Optional[Callable[["CaptchaError"], Awaitable[Any]]] = None
+    response_validators: list["ABCResponseValidator"]
+    request_validators: list["ABCRequestValidator"]
+    captcha_handler: Callable[["CaptchaError"], Awaitable[Any]] | None = None
 
     @abstractmethod
     async def request(
         self,
         method: str,
-        data: Dict[str, Any],
-        version: Optional[str] = None,
-    ) -> Dict[str, Any]:
+        data: dict[str, Any],
+        version: str | None = None,
+    ) -> dict[str, Any]:
         """Makes a single request opening a session"""
 
     @abstractmethod
-    async def validate_response(self, method: str, data: Dict[str, Any], response: Any) -> Any:
+    async def validate_response(self, method: str, data: dict[str, Any], response: Any) -> Any:
         pass
 
     @abstractmethod

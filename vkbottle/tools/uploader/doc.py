@@ -1,5 +1,5 @@
 import os.path
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING
 
 from .base import BaseUploader
 
@@ -15,8 +15,8 @@ class DocUploader(BaseUploader):
 
     async def upload(
         self,
-        file_source: Union[str, "Bytes"],
-        group_id: Optional[int] = None,
+        file_source: "str | Bytes",
+        group_id: int | None = None,
         **params,
     ) -> str:
         doc = await self.raw_upload(file_source, group_id, **params)
@@ -30,8 +30,8 @@ class DocUploader(BaseUploader):
 
     async def raw_upload(
         self,
-        file_source: Union[str, "Bytes"],
-        group_id: Optional[int] = None,
+        file_source: "str | Bytes",
+        group_id: int | None = None,
         **params,
     ) -> dict:
         title = params.pop("title", None)
@@ -64,9 +64,9 @@ class DocWallUploader(DocUploader):
 class DocMessagesUploader(DocUploader):
     async def upload(
         self,
-        file_source: Union[str, "Bytes"],
-        group_id: Optional[int] = None,
-        peer_id: Optional[int] = None,
+        file_source: "str | Bytes",
+        group_id: int | None = None,
+        peer_id: int | None = None,
         **params,
     ) -> str:
         return await super().upload(
@@ -78,9 +78,9 @@ class DocMessagesUploader(DocUploader):
 
     async def raw_upload(
         self,
-        file_source: Union[str, "Bytes"],
-        group_id: Optional[int] = None,
-        peer_id: Optional[int] = None,
+        file_source: "str | Bytes",
+        group_id: int | None = None,
+        peer_id: int | None = None,
         **params,
     ) -> dict:
         return await super().raw_upload(

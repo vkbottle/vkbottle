@@ -1,4 +1,4 @@
-from typing import Any, Optional, Type
+from typing import Any
 
 from .action import ABCAction, Callback, Location, OpenLink, Text, VKApps, VKPay
 from .color import KeyboardButtonColor
@@ -14,7 +14,7 @@ KEYBOARD_ACTIONS = {
 
 
 class KeyboardButton:
-    def __init__(self, action: "ABCAction", color: Optional["KeyboardButtonColor"] = None):
+    def __init__(self, action: "ABCAction", color: "KeyboardButtonColor | None" = None):
         if not isinstance(action, ABCAction):
             msg = "action must be instance of ABCAction"
             raise TypeError(msg)
@@ -26,14 +26,14 @@ class KeyboardButton:
 
     @classmethod
     def from_typed(
-        cls: Type["KeyboardButton"],
+        cls: type["KeyboardButton"],
         action: "ABCAction",
-        color: Optional["KeyboardButtonColor"] = None,
+        color: "KeyboardButtonColor | None" = None,
     ) -> "KeyboardButton":
         return cls(action, color)
 
     @classmethod
-    def from_dict(cls: Type["KeyboardButton"], data: dict[str, Any]) -> "KeyboardButton":
+    def from_dict(cls: type["KeyboardButton"], data: dict[str, Any]) -> "KeyboardButton":
         action_type = KEYBOARD_ACTIONS.get(data.pop("type", None))
         color = data.pop("color", None)
         if color:

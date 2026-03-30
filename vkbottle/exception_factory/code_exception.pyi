@@ -1,8 +1,6 @@
 from typing import (
     Any,
     ClassVar,
-    Optional,
-    Tuple,
     TypeVar,
     overload,
 )
@@ -18,10 +16,10 @@ class _CodeExceptionMeta(type):
     def __getitem__(cls: T_CodeExceptionMeta, code_or_codes: int) -> T_CodeExceptionMeta: ...
     @overload
     def __getitem__(
-        cls: T_CodeExceptionMeta, code_or_codes: Tuple[int, ...]
-    ) -> Tuple[T_CodeExceptionMeta, ...]: ...
+        cls: T_CodeExceptionMeta, code_or_codes: tuple[int, ...]
+    ) -> tuple[T_CodeExceptionMeta, ...]: ...
 
 class CodeException(Exception, metaclass=_CodeExceptionMeta):
     code: ClassVar[int]
 
-    def __init_subclass__(cls, code: Optional[int] = None, **kwargs: Any) -> None: ...
+    def __init_subclass__(cls, code: int | None = None, **kwargs: Any) -> None: ...

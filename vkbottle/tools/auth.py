@@ -9,7 +9,7 @@ from vkbottle_types import API_URL, API_VERSION
 from vkbottle.exception_factory import APIAuthError, CaptchaError, VKAPIError
 
 if TYPE_CHECKING:
-    from typing import Any, List, Optional, Union
+    from typing import Any
 
     from vkbottle.http import ABCHTTPClient
 
@@ -22,12 +22,12 @@ class AuthError(VKAPIError[0]):  # type: ignore
         self,
         *,
         error_msg: str,
-        error_description: Optional[str] = None,
-        error_type: Optional[str] = None,
-        view: Optional[str] = None,
-        redirect_uri: Optional[str] = None,
-        confirmation_text: Optional[str] = None,
-        request_params: Optional[List[dict]] = None,
+        error_description: str | None = None,
+        error_type: str | None = None,
+        view: str | None = None,
+        redirect_uri: str | None = None,
+        confirmation_text: str | None = None,
+        request_params: list[dict[str, Any]] | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(error_msg=error_msg, request_params=request_params or [], **kwargs)
@@ -89,7 +89,7 @@ DEFAULT_USER_PERMISSIONS = [
 ]
 
 
-def get_scope(permissions: Union[int, List[UserPermission]]) -> int:
+def get_scope(permissions: int | list[UserPermission]) -> int:
     if isinstance(permissions, int):
         return permissions
     return reduce(lambda x, y: x + 2**y, permissions, 0)
@@ -100,10 +100,10 @@ class UserAuth:
 
     def __init__(
         self,
-        client_id: Optional[int] = None,
-        client_secret: Optional[str] = None,
+        client_id: int | None = None,
+        client_secret: str | None = None,
         language: str = "en",
-        http_client: Optional["ABCHTTPClient"] = None,
+        http_client: ABCHTTPClient | None = None,
     ) -> None:
         from vkbottle.http import SingleAiohttpClient
 
@@ -122,10 +122,10 @@ class UserAuth:
         self,
         login: str,
         password: str,
-        scope: Optional[Union[int, List[UserPermission]]] = None,
-        auth_code: Union[bool, str] = False,
-        captcha_sid: Optional[str] = None,
-        captcha_key: Optional[str] = None,
+        scope: int | list[UserPermission] | None = None,
+        auth_code: bool | str = False,
+        captcha_sid: str | None = None,
+        captcha_key: str | None = None,
         **kwargs: Any,
     ) -> dict[str, Any]:
         params = {
@@ -164,10 +164,10 @@ class UserAuth:
         self,
         login: str,
         password: str,
-        scope: Optional[Union[int, List[UserPermission]]] = None,
-        auth_code: Union[bool, str] = False,
-        captcha_sid: Optional[str] = None,
-        captcha_key: Optional[str] = None,
+        scope: int | list[UserPermission] | None = None,
+        auth_code: bool | str = False,
+        captcha_sid: str | None = None,
+        captcha_key: str | None = None,
         **kwargs: Any,
     ) -> str:
         params = self._get_params(

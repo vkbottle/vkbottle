@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Union
+from typing import Any
 
 from vkbottle.modules import json
 from vkbottle.tools.keyboard import Keyboard
@@ -10,11 +10,11 @@ class TemplateElement:
 
     def __init__(
         self,
-        title: Optional[str] = None,
-        description: Optional[str] = None,
-        photo_id: Optional[str] = None,
-        buttons: Union[List[KeyboardButton], List[dict[str, Any]], str, None] = None,
-        action: Optional[dict[str, Any]] = None,
+        title: str | None = None,
+        description: str | None = None,
+        photo_id: str | None = None,
+        buttons: list[KeyboardButton] | list[dict[str, Any]] | str | None = None,
+        action: dict[str, Any] | None = None,
     ) -> None:
         if not buttons:
             msg = "Buttons are required"
