@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import atexit
+import warnings
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager, suppress
 from typing import TYPE_CHECKING, Any
@@ -48,7 +49,7 @@ class AiohttpClient(ABCHTTPClient):
         self,
         url: str,
         method: str = "GET",
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> AsyncGenerator[ClientResponse]:
         if not self.session:
@@ -64,7 +65,7 @@ class AiohttpClient(ABCHTTPClient):
         self,
         url: str,
         method: str = "GET",
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> ClientResponse:
         async with self.request(url, method, data, **kwargs) as response:
@@ -75,7 +76,7 @@ class AiohttpClient(ABCHTTPClient):
         self,
         url: str,
         method: str = "GET",
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> dict[str, Any]:
         async with self.request(url, method, data, **kwargs) as response:
@@ -89,7 +90,7 @@ class AiohttpClient(ABCHTTPClient):
         self,
         url: str,
         method: str = "GET",
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> str:
         async with self.request(url, method, data, **kwargs) as response:
@@ -99,7 +100,7 @@ class AiohttpClient(ABCHTTPClient):
         self,
         url: str,
         method: str = "GET",
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> bytes:
         async with self.request(url, method, data, **kwargs) as response:
@@ -117,7 +118,8 @@ class AiohttpClient(ABCHTTPClient):
             and self.session.connector is not None
             and not self.session.connector.closed
         ):
-            with suppress(Exception):
+            with warnings.catch_warnings(), suppress(Exception):
+                warnings.simplefilter(action="ignore", category=RuntimeWarning)
                 self.session.connector.close().__await__().send(None)
             self.session.detach()
 

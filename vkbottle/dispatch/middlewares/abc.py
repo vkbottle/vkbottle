@@ -1,3 +1,4 @@
+import traceback
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Generic, NoReturn, TypeVar
 
@@ -54,6 +55,13 @@ class BaseMiddleware(Generic[T]):
         for handler_, response in zip(self.handlers, self.handle_responses):
             if handler_ == handler:
                 return response
+
+    def format_error(self) -> str | None:
+        if self.error is None:
+            return None
+
+        tb = "".join(traceback.format_tb(self.error.__traceback__, limit=15))
+        return "\n\n" + tb
 
     @property
     def can_forward(self) -> bool:

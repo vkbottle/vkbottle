@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
     from .short_state import ShortState
 
 
-class WaiterMiddleware(BaseMiddleware[dict]):
+class WaiterMiddleware(BaseMiddleware[dict[str, typing.Any]]):
     def __init__(self, machine: "WaiterMachine") -> None:
         self.machine = machine
 
@@ -75,7 +75,7 @@ class WaiterMiddleware(BaseMiddleware[dict]):
     async def pass_runtime(
         self,
         event: typing.Any,
-        short_state: "ShortState[dict]",
+        short_state: "ShortState[dict[str, typing.Any]]",
         **context: typing.Any,
     ) -> None:
         short_state.context = (event, context)  # type: ignore
