@@ -1,5 +1,5 @@
 import os.path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from .base import BaseUploader
 
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 class DocUploader(BaseUploader):
     NAME = "doc.txt"
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("docs.getUploadServer", kwargs))["response"]
 
     async def upload(
@@ -33,7 +33,7 @@ class DocUploader(BaseUploader):
         file_source: "str | Bytes",
         group_id: int | None = None,
         **params,
-    ) -> dict:
+    ) -> dict[str, Any]:
         title = params.pop("title", None)
         if title is None:
             title = os.path.split(file_source)[1] if isinstance(file_source, str) else self.NAME
@@ -57,7 +57,7 @@ class DocUploader(BaseUploader):
 
 
 class DocWallUploader(DocUploader):
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("docs.getWallUploadServer", kwargs))["response"]
 
 
@@ -82,7 +82,7 @@ class DocMessagesUploader(DocUploader):
         group_id: int | None = None,
         peer_id: int | None = None,
         **params,
-    ) -> dict:
+    ) -> dict[str, Any]:
         return await super().raw_upload(
             file_source=file_source,
             group_id=group_id,
@@ -90,12 +90,12 @@ class DocMessagesUploader(DocUploader):
             **params,
         )
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("docs.getMessagesUploadServer", kwargs))["response"]
 
 
 class VoiceMessageUploader(DocUploader):
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (
             await self.api.request(
                 "docs.getMessagesUploadServer", {"type": "audio_message", **kwargs}
@@ -104,7 +104,7 @@ class VoiceMessageUploader(DocUploader):
 
 
 class GraffitiUploader(DocUploader):
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (
             await self.api.request("docs.getMessagesUploadServer", {"type": "graffiti", **kwargs})
         )["response"]

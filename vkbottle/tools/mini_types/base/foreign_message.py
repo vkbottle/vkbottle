@@ -59,7 +59,9 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     def is_mentioned(self) -> bool:
         """Returns True if current bot is mentioned in message"""
 
-    async def get_user(self, raw_mode: bool = False, **kwargs: Any) -> UsersUserFull | dict:
+    async def get_user(
+        self, raw_mode: bool = False, **kwargs: Any
+    ) -> UsersUserFull | dict[str, Any]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
         ][0]
@@ -161,8 +163,8 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     def get_payload_json(
         self,
         throw_error: bool = False,
-        unpack_failure: Callable[[str], dict | str] = lambda payload: payload,
-    ) -> dict | str | None:
+        unpack_failure: Callable[[str], dict[str, Any] | str] = lambda payload: payload,
+    ) -> dict[str, Any] | str | None:
         if self.payload is None:
             return None
 

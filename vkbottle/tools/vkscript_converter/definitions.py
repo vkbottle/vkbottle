@@ -295,7 +295,7 @@ def subscript(d: ast.Subscript) -> str:
     if d.slice.__class__ is ast.Constant:
         slice_value = d.slice.value  # type: ignore
         if slice_value.__class__ is str:
-            return f"{value}.{slice_value.s}"
+            return f"{value}.{slice_value.s}"  # type: ignore
         if slice_value.__class__ is int:
             return f"{value}[{slice_value}]"
         if slice_value.__class__ is ast.Constant:

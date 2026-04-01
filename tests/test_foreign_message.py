@@ -36,7 +36,7 @@ def _make_api_with_callback(callback):
 async def test_get_full_message():
     call_count = 0
 
-    def callback(method: str, url: str, data: dict):
+    def callback(method: str, url: str, data: dict[str, Any]):
         nonlocal call_count
         if "messages.getByConversationMessageId" in url:
             call_count += 1
@@ -80,7 +80,7 @@ async def test_get_full_message():
 async def test_get_full_message_with_explicit_peer_id():
     captured_data = {}
 
-    def callback(method: str, url: str, data: dict):
+    def callback(method: str, url: str, data: dict[str, Any]):
         if "messages.getByConversationMessageId" in url:
             captured_data.update(data)
             return {

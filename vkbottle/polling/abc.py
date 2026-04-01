@@ -19,7 +19,7 @@ class ABCPolling(ABC):
         pass
 
     @abstractmethod
-    async def get_event(self, server: Any) -> dict:
+    async def get_event(self, server: Any) -> dict[str, Any]:
         pass
 
     @abstractmethod

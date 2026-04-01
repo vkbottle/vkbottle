@@ -20,15 +20,15 @@ from typing import Union
 
 class BotMessageReturnHandler(BaseReturnManager):
     @BaseReturnManager.instance_of(str)
-    async def str_handler(self, value: str, message: Message, _: dict):
+    async def str_handler(self, value: str, message: Message, _: dict[str, Any]):
         await message.answer(value)
 
     @BaseReturnManager.instance_of((tuple, list))
-    async def iter_handler(self, value: tuple | list, message: Message, _: dict):
+    async def iter_handler(self, value: tuple | list, message: Message, _: dict[str, Any]):
         [await message.answer(str(e)) for e in value]
 
     @BaseReturnManager.instance_of(dict)
-    async def dict_handler(self, value: dict, message: Message, _: dict):
+    async def dict_handler(self, value: dict, message: Message, _: dict[str, Any]):
         await message.answer(**value)
 ```
 

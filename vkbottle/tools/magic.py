@@ -22,7 +22,6 @@ def _resolve_arg_names(
 ) -> tuple[str, ...]:
     exclude = exclude or set()
     varnames = unwrap(func).__code__.co_varnames[start_idx:stop_idx]
-
     return tuple(name for name in varnames if name not in exclude)
 
 
@@ -74,7 +73,7 @@ def resolve_posonly_arg_names(
     )
 
 
-def get_default_args(func: Function, /) -> typing.Dict[str, typing.Any]:
+def get_default_args(func: Function, /) -> dict[str, typing.Any]:
     unwrapped_func = unwrap(func)
     defaults = unwrapped_func.__defaults__
     kwdefaults = {} if not unwrapped_func.__kwdefaults__ else unwrapped_func.__kwdefaults__.copy()
@@ -91,11 +90,11 @@ def get_default_args(func: Function, /) -> typing.Dict[str, typing.Any]:
 
 def magic_bundle(
     func: Function,
-    kwargs: typing.Dict[str, typing.Any],
+    kwargs: dict[str, typing.Any],
     *,
     start_idx: int = 1,
     exclude: set[str] | None = None,
-) -> typing.Dict[str, typing.Any]:
+) -> dict[str, typing.Any]:
     """This function returns a dictionary containing all default arguments of the function,
     merged with the provided keyword arguments.
     """

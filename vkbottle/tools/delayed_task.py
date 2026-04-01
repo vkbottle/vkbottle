@@ -14,7 +14,7 @@ class DelayedTask:
         self.handler = handler
         self.do_break = do_break
 
-    async def __call__(self, *args, **kwargs):
+    async def __call__(self, *args: Any, **kwargs: Any):
         while True:
             await sleep(self.seconds)
             await self.handler(*args, **kwargs)

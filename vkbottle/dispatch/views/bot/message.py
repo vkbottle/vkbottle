@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 from vkbottle_types.events import GroupEventType
 
@@ -15,26 +15,27 @@ if TYPE_CHECKING:
 F_contra = TypeVar("F_contra", contravariant=True)
 
 
-class ABCBotMessageView(ABCMessageView[dict, F_contra], Generic[F_contra]):
+class ABCBotMessageView(ABCMessageView[dict[str, Any], F_contra], Generic[F_contra]):  # type: ignore
     def __init__(self, error_handler: "ABCErrorHandler | None" = None) -> None:
         super().__init__(error_handler)
         self.handler_return_manager = BotMessageReturnHandler()
 
     @staticmethod
-    def get_event_type(event: dict) -> str:
+    def get_event_type(event: dict[str, Any]) -> str:
         return event["type"]
 
     @staticmethod
     async def get_message(
-        event: dict,
+        event: dict[str, Any],
         ctx_api: "API | ABCAPI",
         replace_mention: bool,
     ) -> "MessageMin":
         return message_min(event, ctx_api, replace_mention)
 
-    async def process_event(self, event: dict) -> bool:
+    async def process_event(self, event: dict[str, Any]) -> bool:
         if not (self.handlers or self.middlewares):
             return False
+
         typed_event = GroupEventType(self.get_event_type(event))
         return typed_event == GroupEventType.MESSAGE_NEW
 

@@ -29,7 +29,7 @@ class MessageEventMin(MessageEvent):
         return self.object.peer_id
 
     @property
-    def payload(self) -> dict | None:
+    def payload(self) -> dict[str, Any] | None:
         """alias to event.object.payload"""
 
         return self.object.payload

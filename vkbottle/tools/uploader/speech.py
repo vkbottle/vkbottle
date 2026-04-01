@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 from .base import BaseUploader
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class SpeechUploader(BaseUploader):
     NAME = "voice.ogg"
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("asr.getUploadUrl", kwargs))["response"]
 
     async def raw_upload(
@@ -17,7 +17,7 @@ class SpeechUploader(BaseUploader):
         file_source: "str | Bytes",
         model: Literal["neutral", "spontaneous"] = "neutral",
         **params,
-    ) -> dict:
+    ) -> dict[str, Any]:
         server = await self.get_server(**params)
         data = await self.read(file_source)
 

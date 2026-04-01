@@ -19,7 +19,7 @@ class ABCHTTPClient(ABC):
         self,
         url: str,
         method: str = "GET",
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Any,
     ) -> Any:
         pass
@@ -29,7 +29,7 @@ class ABCHTTPClient(ABC):
         self,
         url: str,
         method: str = "GET",
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Any,
     ) -> str:
         pass
@@ -39,9 +39,9 @@ class ABCHTTPClient(ABC):
         self,
         url: str,
         method: str = "GET",
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Any,
-    ) -> dict:
+    ) -> dict[str, Any]:
         pass
 
     @abstractmethod
@@ -49,7 +49,7 @@ class ABCHTTPClient(ABC):
         self,
         url: str,
         method: str = "GET",
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         **kwargs: Any,
     ) -> bytes:
         pass

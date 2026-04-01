@@ -13,7 +13,7 @@ class ABCHandler(ABC, typing.Generic[Event]):
         self,
         event: Event,
         context: dict[str, Any] | None = None,
-    ) -> dict | bool:
+    ) -> dict[str, Any] | bool:
         pass
 
     @abstractmethod

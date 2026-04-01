@@ -87,7 +87,9 @@ class BaseMessageMin(MessagesMessage, ABC):
     async def get_user(self, raw_mode: Literal[True] = ..., **kwargs: Any) -> dict[str, Any]: ...
 
     async def get_user(
-        self, raw_mode: bool = False, **kwargs: Any
+        self,
+        raw_mode: bool = False,
+        **kwargs: Any,
     ) -> UsersUserFull | dict[str, Any]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
@@ -187,8 +189,8 @@ class BaseMessageMin(MessagesMessage, ABC):
     def get_payload_json(
         self,
         throw_error: bool = False,
-        unpack_failure: Callable[[str], dict | str] = lambda payload: payload,
-    ) -> dict | str | None:
+        unpack_failure: Callable[[str], dict[str, Any] | str] = lambda payload: payload,
+    ) -> dict[str, Any] | str | None:
         if self.payload is None:
             return None
 

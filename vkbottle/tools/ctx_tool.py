@@ -11,13 +11,12 @@ class BaseContext:
 
     ctx_instance: Any
 
-    def __init_subclass__(cls, **kwargs):
+    def __init_subclass__(cls, **kwargs: Any) -> None:
         if not contextvars:
             msg = f"To use {cls.__name__} you have to install contextvars"
             raise LookupError(msg)
 
         cls.ctx_instance = contextvars.ContextVar(kwargs.get("ctx_name") or cls.__name__)
-        return cls
 
     @classmethod
     def get_instance(cls, no_error: bool = True) -> Any:

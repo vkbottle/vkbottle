@@ -1,13 +1,15 @@
+from typing import Any
+
 import pytest
 
 from vkbottle.dispatch.middlewares.abc import BaseMiddleware
 
 
 class EmptyMiddleware(BaseMiddleware):
-    async def pre(self, *args, **kwargs):
+    async def pre(self, *args: Any, **kwargs: Any):
         pass
 
-    async def post(self, *args, **kwargs):
+    async def post(self, *args, **kwargs: Any):
         pass
 
 

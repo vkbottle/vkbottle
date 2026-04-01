@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from .base import BaseUploader
 
@@ -64,7 +64,7 @@ class PhotoToAlbumUploader(PhotoUploader):
             await self.api.request("photos.save", {"album_id": album_id, **uploader, **params})
         )["response"]
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("photos.getUploadServer", kwargs))["response"]
 
 
@@ -92,7 +92,7 @@ class PhotoWallUploader(PhotoUploader):
         file_source: "str | Bytes",
         group_id: int | None = None,
         **params,
-    ) -> dict:
+    ) -> dict[str, Any]:
         server = await self.get_server(group_id=group_id, **params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
@@ -108,7 +108,7 @@ class PhotoWallUploader(PhotoUploader):
         )
         return response["response"][0]
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("photos.getWallUploadServer", kwargs))["response"]
 
 
@@ -137,7 +137,7 @@ class PhotoFaviconUploader(PhotoUploader):
         file_source: "str | Bytes",
         owner_id: int | None = None,
         **params,
-    ) -> dict:
+    ) -> dict[str, Any]:
         owner_id = owner_id or await self.get_owner_id(**params)
         server = await self.get_server(owner_id=owner_id)
         data = await self.read(file_source)
@@ -148,7 +148,7 @@ class PhotoFaviconUploader(PhotoUploader):
             "response"
         ]
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("photos.getOwnerPhotoUploadServer", kwargs))["response"]
 
 
@@ -176,7 +176,7 @@ class PhotoMessageUploader(PhotoUploader):
         file_source: "str | Bytes",
         peer_id: int | None = None,
         **params,
-    ) -> dict:
+    ) -> dict[str, Any]:
         server = await self.get_server(peer_id=peer_id, **params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
@@ -189,7 +189,7 @@ class PhotoMessageUploader(PhotoUploader):
             )
         )["response"][0]
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("photos.getMessagesUploadServer", kwargs))["response"]
 
 
@@ -209,7 +209,7 @@ class PhotoChatFaviconUploader(PhotoUploader):
         crop_y: int | None = None,
         crop_width: int | None = None,
         **params,
-    ) -> dict:
+    ) -> dict[str, Any]:
         server = await self.get_server(
             chat_id=chat_id,
             crop_x=crop_x,
@@ -225,7 +225,7 @@ class PhotoChatFaviconUploader(PhotoUploader):
             "photos.setChatPhoto", {"file": uploader["response"], **params}
         )
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("photos.getChatUploadServer", kwargs))["response"]
 
 
@@ -253,7 +253,7 @@ class PhotoMarketUploader(PhotoUploader):
         file_source: "str | Bytes",
         group_id: int,
         **params,
-    ) -> dict:
+    ) -> dict[str, Any]:
         server = await self.get_server(group_id=group_id, **params)
         data = await self.read(file_source)
         file = self.get_bytes_io(data)
@@ -264,7 +264,7 @@ class PhotoMarketUploader(PhotoUploader):
             {**uploader, **params},
         )
 
-    async def get_server(self, **kwargs) -> dict:
+    async def get_server(self, **kwargs: Any) -> dict[str, Any]:
         return (await self.api.request("photos.getMarketUploadServer", kwargs))["response"]
 
 

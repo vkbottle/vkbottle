@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 
 from tests.test_utils import MockedClient
@@ -18,7 +20,7 @@ EXAMPLE_EVENT = {
 def make_bot_polling() -> tuple[BotPolling, API]:
     call_count = 0
 
-    def callback(method: str, url: str, data: dict):
+    def callback(method: str, url: str, data: dict[str, Any]):
         nonlocal call_count
 
         if "groups.getById" in url:

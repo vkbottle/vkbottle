@@ -28,7 +28,7 @@ class SomeResponseValidator(ABCResponseValidator):
     async def validate(
         self,
         method: str,
-        data: dict,
+        data: dict[str, Any]:
         response: Any,
         ctx_api: "ABCAPI | API",
     ) -> Any | NoReturn:

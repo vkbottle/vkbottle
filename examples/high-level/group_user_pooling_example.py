@@ -1,5 +1,5 @@
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from vkbottle_types.events.enums import UserEventType
 from vkbottle_types.events.user_events import RawUserEvent
@@ -39,7 +39,7 @@ class BotMessagesPooling(UserPolling):
         )
         self.group_id = group_id
 
-    async def get_server(self) -> dict:
+    async def get_server(self) -> dict[str, Any]:
         logger.debug("Getting polling server...")
         if self.group_id is None:
             self.group_id = (await self.api.request("groups.getById", {}))["response"]["groups"][

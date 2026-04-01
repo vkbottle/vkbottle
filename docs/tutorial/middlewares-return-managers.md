@@ -47,7 +47,6 @@ class NoBotMiddleware(BaseMiddleware[Message]):
 ```python
 from vkbottle.bot import Message
 from vkbottle import BaseMiddleware
-from typing import List, Any
 
 class LogMiddleware(BaseMiddleware[Message]):
     async def post(self):

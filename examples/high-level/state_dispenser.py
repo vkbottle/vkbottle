@@ -1,4 +1,5 @@
 import os
+from typing import Any
 
 from vkbottle import BaseStateGroup, Keyboard, Text
 from vkbottle.bot import Bot, Message
@@ -58,7 +59,7 @@ async def info_handler(message: Message):
 
 @bot.on.private_message(state=MenuState.INFO, payload_map=[("item", str)])
 async def info_item_handler(message: Message):
-    payload: dict = message.get_payload_json()  # type: ignore
+    payload: dict[str, Any] = message.get_payload_json()  # type: ignore
     await message.answer(f"Cool! I am too interested in {payload['item']}!")
     await start_handler(message)
 

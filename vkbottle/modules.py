@@ -131,7 +131,7 @@ elif logging_module == "logging":
             super().__init__(logger, extra or {})
             self.log_arg_names = frozenset(inspect.getfullargspec(self.logger._log).args[1:])
 
-        def log(self, level, msg, *args, **kwargs):
+        def log(self, level, msg, *args: Any, **kwargs: Any):
             if self.isEnabledFor(level):
                 kwargs.setdefault("stacklevel", 2)
                 msg, args, kwargs = self.process(msg, args, kwargs)
@@ -169,7 +169,7 @@ if hasattr(asyncio, "WindowsProactorEventLoopPolicy") and isinstance(
 
     def silence_exception(func):
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any):
             try:
                 return func(*args, **kwargs)
             except (AttributeError, RuntimeError) as e:

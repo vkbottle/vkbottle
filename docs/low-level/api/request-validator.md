@@ -21,7 +21,7 @@
 from vkbottle import API, ABCRequestValidator
 
 class SomeRequestValidator(ABCRequestValidator):
-    async def validate(self, request: dict) -> dict:
+    async def validate(self, request: dict[str, Any]): -> dict[str, Any]:
         # some stuff with request data
         return request
 

@@ -55,7 +55,7 @@ async def regular_handler(message: Message):
     await message.answer("Этот хендлер не принимает аргумент 'some_key', поэтому он и не был передан")
 
 @bot.on.message(MyRule())
-async def kwargs_handler(message: Message, **kwargs):
+async def kwargs_handler(message: Message, **kwargs: Any):
     await message.answer(f"В хендлере переданы аргументы: {kwargs}")
     # В хендлере переданы аргументы: {"some_key": "some_value"}
 ```
