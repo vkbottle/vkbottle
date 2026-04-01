@@ -2402,14 +2402,14 @@ typing-extensions = {version = ">=4.13.2", markers = "python_version < \"3.11\""
 
 [[package]]
 name = "vkbottle-types"
-version = "5.199.99.16"
+version = "5.199.99.17"
 description = "VK API methods & types for vkbottle."
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "vkbottle_types-5.199.99.16-py3-none-any.whl", hash = "sha256:2eec9dd00beabfb823ca9aa4821acc6297d628f8f098e2ca8c306b3db1ae204d"},
-    {file = "vkbottle_types-5.199.99.16.tar.gz", hash = "sha256:861f5e9ff5a35b85b8d980366cc0f6ec1f48b51f2560c6df8feaf98d8e1d2736"},
+    {file = "vkbottle_types-5.199.99.17-py3-none-any.whl", hash = "sha256:3d91a2b5106127221943de01f8ac7d39f5048bf6269a2179f99360121aa84721"},
+    {file = "vkbottle_types-5.199.99.17.tar.gz", hash = "sha256:be3dce4ef290a759fe52eefbfeac17e52911c37a7d6418c4589144572e4bd487"},
 ]
 
 [package.dependencies]
@@ -2607,4 +2607,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "f9485cf7a3964aa8cdd92e3d6efd40cd07b42f5896b509e68fdc52190cb2938e"
+content-hash = "97e72e91dba6ef54d26ec58524117dee756c7a5676d1b340f50c79f4051ecb3c"
