@@ -3,7 +3,6 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, Final
 
 import pydantic
-import vkbottle_types.objects
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
@@ -60,7 +59,9 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
         """Returns True if current bot is mentioned in message"""
 
     async def get_user(
-        self, raw_mode: bool = False, **kwargs: Any
+        self,
+        raw_mode: bool = False,
+        **kwargs: Any,
     ) -> UsersUserFull | dict[str, Any]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
@@ -177,7 +178,7 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
         return unpack_failure(self.payload)
 
 
-BaseForeignMessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
+BaseForeignMessageMin.object_build(locals())
 
 
 __all__ = ("BaseForeignMessageMin",)

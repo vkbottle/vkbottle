@@ -2,7 +2,6 @@ import asyncio
 from typing import TYPE_CHECKING
 
 import pydantic
-import vkbottle_types.objects
 from vkbottle_types.objects import MessagesConversationMember
 
 from vkbottle.modules import logger
@@ -29,7 +28,7 @@ class MessageMin(BaseMessageMin):
         return self.mention.id == self.user_id if self.mention else False
 
 
-MessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
+MessageMin.object_build(locals())
 
 
 async def message_min(

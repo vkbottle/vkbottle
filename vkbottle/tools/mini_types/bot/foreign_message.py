@@ -1,7 +1,6 @@
 from typing import Any
 
 import pydantic
-import vkbottle_types.objects
 from vkbottle_types.objects import ClientInfoForBots
 
 from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
@@ -40,7 +39,7 @@ class ForeignMessageMin(BaseForeignMessageMin):
         return self.mention.id == -self.group_id if (self.mention and self.group_id) else False
 
 
-ForeignMessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
+ForeignMessageMin.object_build(locals())
 
 
 __all__ = ("ForeignMessageMin",)

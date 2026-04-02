@@ -6,7 +6,6 @@ from io import StringIO
 from typing import TYPE_CHECKING, Any, Final, Literal, overload
 
 import pydantic
-import vkbottle_types.objects
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
@@ -286,7 +285,7 @@ class BaseMessageMin(MessagesMessage, ABC):
         return await self.answer(**data)
 
 
-BaseMessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
+BaseMessageMin.object_build(locals())
 
 
 __all__ = ("BaseMessageMin",)

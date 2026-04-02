@@ -8,7 +8,6 @@ from vkbottle.tools.mini_types.base import BaseMessageMin
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI
 
-import vkbottle_types.objects
 from vkbottle_types.objects import ClientInfoForBots, MessagesConversationMember
 
 from vkbottle.modules import logger
@@ -74,7 +73,7 @@ class MessageMin(BaseMessageMin):
         return super().get_attachment_strings()
 
 
-MessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
+MessageMin.object_build(locals())
 
 
 def message_min(
