@@ -203,7 +203,8 @@ lint.ignore = [
   "FA100",   # `__future__` import "annotations" missing
   "ISC001",  # single-line-implicit-string-concatenation
   "UP035",   # deprecated-import
-  "UP045",   # Use `X | None` for type annotations
+  "UP045",   # Use `X | None` for type annotations,
+  "N804",    # Checks for class methods that use a name other than `cls` for their first argument.
 ]
 
 [tool.ruff.lint.per-file-ignores]

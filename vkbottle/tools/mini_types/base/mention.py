@@ -17,7 +17,7 @@ class Mention(pydantic.BaseModel):
     text: str
 
 
-def replace_mention_validator(cls: Any, values: Any) -> Any:  # noqa: ARG001
+def replace_mention_validator(values: Any) -> Any:
     if not values.replace_mention:
         return values
 

@@ -21,7 +21,9 @@ class MessageMin(BaseMessageMin):
     )
     _chat_members: list[MessagesConversationMember] | None = None
 
-    __foreign_messages = pydantic.model_validator(mode="after")(_foreign_messages)
+    @pydantic.model_validator(mode="after")
+    def foreign_messages_model(self) -> "MessageMin":
+        return _foreign_messages(self)
 
     @property
     def is_mentioned(self) -> bool:

@@ -31,9 +31,11 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     _mention: Mention | None = None
     _is_full: bool | None = None
 
-    __replace_mention = pydantic.model_validator(mode="after")(replace_mention_validator)  # type: ignore
-
     model_config = pydantic.ConfigDict(frozen=False)
+
+    @pydantic.model_validator(mode="after")
+    def replace_mention_model(self) -> "BaseForeignMessageMin":
+        return replace_mention_validator(self)
 
     @property
     def ctx_api(self) -> "ABCAPI | API":

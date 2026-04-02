@@ -47,9 +47,11 @@ class BaseMessageMin(MessagesMessage, ABC):
     _mention: Mention | None = None
     _chat_members: list[MessagesConversationMember] | None = None
 
-    __replace_mention = pydantic.model_validator(mode="after")(replace_mention_validator)  # type: ignore
-
     model_config = pydantic.ConfigDict(frozen=False)
+
+    @pydantic.model_validator(mode="after")
+    def replace_mention_model(self) -> "BaseMessageMin":
+        return replace_mention_validator(self)
 
     @property
     def ctx_api(self) -> ABCAPI | API:
