@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ParamSpec, TypeVar
 
 from vkbottle_types.events.enums import UserEventType
 from vkbottle_types.events.user_events import RawUserEvent
@@ -11,19 +11,19 @@ from vkbottle.dispatch.views.user import RawUserEventView, UserHandlerBasement, 
 from .base import BaseLabeler, CustomRuleType
 
 if TYPE_CHECKING:
+    from typing_extensions import TypeAlias
     from vkbottle_types.events.user_events import BaseUserEvent
 
     from vkbottle.dispatch.views.user import ABCUserMessageView
     from vkbottle.exception_factory.error_handler import ABCErrorHandler
-    from vkbottle.tools.mini_types.user.message import MessageMin
 
-    from .abc import LabeledHandler
+    EventName: TypeAlias = UserEventType | str
 
-    LabeledMessageHandler = Callable[..., Callable[[MessageMin], Any]]
-    EventName = UserEventType | str
+P = ParamSpec("P")
+R = TypeVar("R")
 
 
-class UserLabeler(BaseLabeler):
+class UserLabeler(BaseLabeler["MessageMin"]):
     """`UserLabeler` - shortcut manager for router
     Can be loaded to other `UserLabeler`.
     >>> bl = UserLabeler()
@@ -59,7 +59,7 @@ class UserLabeler(BaseLabeler):
         *rules: "ABCRule[Any]",
         blocking: bool = True,
         **custom_rules: Any,
-    ) -> "LabeledMessageHandler":
+    ) -> Callable[[Callable[P, R]], Callable[P, R]]:
         return super().message(*rules, blocking=blocking, **custom_rules)
 
     def chat_message(  # type: ignore
@@ -67,7 +67,7 @@ class UserLabeler(BaseLabeler):
         *rules: "ABCRule[Any]",
         blocking: bool = True,
         **custom_rules: Any,
-    ) -> "LabeledMessageHandler":
+    ) -> Callable[[Callable[P, R]], Callable[P, R]]:
         return super().chat_message(*rules, blocking=blocking, **custom_rules)
 
     def private_message(  # type: ignore
@@ -75,7 +75,7 @@ class UserLabeler(BaseLabeler):
         *rules: "ABCRule",
         blocking: bool = True,
         **custom_rules: Any,
-    ) -> "LabeledMessageHandler":
+    ) -> Callable[[Callable[P, R]], Callable[P, R]]:
         return super().private_message(*rules, blocking=blocking, **custom_rules)
 
     def raw_event(  # type: ignore
@@ -85,7 +85,7 @@ class UserLabeler(BaseLabeler):
         *rules: "ABCRule[Any]",
         blocking: bool = True,
         **custom_rules: Any,
-    ) -> "LabeledHandler":
+    ) -> Callable[[Callable[P, R]], Callable[P, R]]:
         if any(not isinstance(rule, ABCRule) for rule in rules):
             msg = (
                 "All rules must be subclasses of ABCRule or rule shortcuts "
@@ -115,7 +115,7 @@ class UserLabeler(BaseLabeler):
 
             return func
 
-        return decorator
+        return decorator  # type: ignore
 
 
 __all__ = ("UserLabeler",)

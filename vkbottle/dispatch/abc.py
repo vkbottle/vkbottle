@@ -16,7 +16,7 @@ class ABCRouter(ABC):
     Documentation: https://vkbottle.rtfd.io/ru/latest/high-level/handling/router/
     """
 
-    views: dict[str, "ABCView"]
+    views: dict[str, "ABCView[Any]"]
     state_dispenser: "ABCStateDispenser"
     error_handler: "ABCErrorHandler"
 
@@ -30,17 +30,17 @@ class ABCRouter(ABC):
     @abstractmethod
     def construct(
         self,
-        views: dict[str, "ABCView"],
+        views: dict[str, "ABCView[Any]"],
         state_dispenser: "ABCStateDispenser",
         error_handler: "ABCErrorHandler",
     ) -> Self:
         pass
 
-    def add_view(self, name: str, view: "ABCView") -> None:
+    def add_view(self, name: str, view: "ABCView[Any]") -> None:
         self.views[name] = view
 
-    def view(self, name: str) -> Callable[..., type["ABCView"]]:
-        def decorator(view: type["ABCView"]):
+    def view(self, name: str) -> Callable[..., type["ABCView[Any]"]]:
+        def decorator(view: type["ABCView[Any]"]):
             self.add_view(name, view())
             return view
 

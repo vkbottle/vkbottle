@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from vkbottle.exception_factory import ABCErrorHandler
     from vkbottle.framework.labeler import ABCLabeler
     from vkbottle.polling import ABCPolling
+    from vkbottle.tools.mini_types.user import MessageMin
 
 
 class User(BaseFramework):
@@ -28,7 +29,7 @@ class User(BaseFramework):
         polling: "ABCPolling | None" = None,
         loop_wrapper: LoopWrapper | None = None,
         router: "ABCRouter | None" = None,
-        labeler: "ABCLabeler | None" = None,
+        labeler: "ABCLabeler[MessageMin] | None" = None,
         state_dispenser: "ABCStateDispenser | None" = None,
         error_handler: "ABCErrorHandler | None" = None,
         task_each_event: Any = None,
@@ -61,7 +62,7 @@ class User(BaseFramework):
         self._router = new_router
 
     @property
-    def on(self) -> "ABCLabeler":
+    def on(self) -> "ABCLabeler[MessageMin]":
         return self.labeler
 
     @classmethod

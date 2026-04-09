@@ -11,7 +11,10 @@ if TYPE_CHECKING:
 
 class FromFuncHandler(ABCHandler[Event]):
     def __init__(
-        self, handler: Callable[..., Any], *rules: "ABCRule[Any]", blocking: bool = True
+        self,
+        handler: Callable[..., Any],
+        *rules: "ABCRule[Any]",
+        blocking: bool = True,
     ) -> None:
         self.handler = handler
         self.rules = rules

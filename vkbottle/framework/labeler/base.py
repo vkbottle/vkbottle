@@ -1,3 +1,4 @@
+import abc
 import re
 
 import typing_extensions as typing
@@ -11,8 +12,11 @@ from .abc import ABCLabeler
 if typing.TYPE_CHECKING:
     from vkbottle.dispatch.views import ABCView
     from vkbottle.dispatch.views.abc import ABCMessageView, ABCRawEventView
+    from vkbottle.tools.mini_types.base import BaseMessageMin
 
-    from .abc import LabeledMessageHandler
+P = typing.ParamSpec("P")
+R = typing.TypeVar("R")
+E = typing.TypeVar("E", bound="BaseMessageMin")
 
 CustomRuleType = dict[str, type["ABCRule[typing.Any]"]]
 
@@ -46,7 +50,7 @@ DEFAULT_CUSTOM_RULES: CustomRuleType = {
 }
 
 
-class BaseLabeler(ABCLabeler):
+class BaseLabeler(ABCLabeler[E], abc.ABC, typing.Generic[E]):
     def __init__(
         self,
         message_view: "ABCMessageView[typing.Any, typing.Any]",
@@ -104,7 +108,7 @@ class BaseLabeler(ABCLabeler):
         *rules: "ABCRule[typing.Any]",
         blocking: bool = True,
         **custom_rules: typing.Any,
-    ) -> "LabeledMessageHandler":
+    ) -> typing.Callable[[typing.Callable[P, R]], typing.Callable[P, R]]:
         if any(not isinstance(rule, ABCRule) for rule in rules):
             msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
             raise ValueError(msg)
@@ -121,14 +125,14 @@ class BaseLabeler(ABCLabeler):
             )
             return func
 
-        return decorator
+        return decorator  # type: ignore
 
     def chat_message(
         self,
         *rules: "ABCRule[typing.Any]",
         blocking: bool = True,
         **custom_rules: typing.Any,
-    ) -> "LabeledMessageHandler":
+    ) -> typing.Callable[[typing.Callable[P, R]], typing.Callable[P, R]]:
         if any(not isinstance(rule, ABCRule) for rule in rules):
             msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
             raise ValueError(msg)
@@ -146,14 +150,14 @@ class BaseLabeler(ABCLabeler):
             )
             return func
 
-        return decorator
+        return decorator  # type: ignore
 
     def private_message(
         self,
         *rules: "ABCRule[typing.Any]",
         blocking: bool = True,
         **custom_rules: typing.Any,
-    ) -> "LabeledMessageHandler":
+    ) -> typing.Callable[[typing.Callable[P, R]], typing.Callable[P, R]]:
         if any(not isinstance(rule, ABCRule) for rule in rules):
             msg = "All rules must be subclasses of ABCRule or rule shortcuts (https://vkbottle.rtfd.io/ru/latest/high-level/handling/rules/)"
             raise ValueError(msg)
@@ -171,12 +175,13 @@ class BaseLabeler(ABCLabeler):
             )
             return func
 
-        return decorator
+        return decorator  # type: ignore
 
-    def load(self, labeler: "BaseLabeler"):
+    def load(self, labeler: "BaseLabeler[E]"):
         self.message_view.handlers.extend(labeler.message_view.handlers)
         self.message_view.middlewares.extend(labeler.message_view.middlewares)
         self.raw_event_view.middlewares.extend(labeler.raw_event_view.middlewares)
+
         for event, handler_basements in labeler.raw_event_view.handlers.items():
             event_handlers = self.raw_event_view.handlers.setdefault(event, [])
             event_handlers.extend(handler_basements)

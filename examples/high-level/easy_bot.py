@@ -1,5 +1,3 @@
-# type: ignore
-
 import logging
 import os
 import random

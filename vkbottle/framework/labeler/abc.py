@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Generic, ParamSpec, TypeVar
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.rules import ABCRule
@@ -8,11 +8,12 @@ if TYPE_CHECKING:
     from vkbottle.dispatch.views.abc import ABCMessageView, ABCRawEventView
     from vkbottle.tools.mini_types.base import BaseMessageMin
 
-    LabeledMessageHandler = Callable[..., Callable[[BaseMessageMin], Any]]
-    LabeledHandler = Callable[..., Callable[[Any], Any]]
+E = TypeVar("E", bound="BaseMessageMin")
+P = ParamSpec("P")
+R = TypeVar("R")
 
 
-class ABCLabeler(ABC):
+class ABCLabeler(ABC, Generic[E]):
     message_view: "ABCMessageView[Any, Any]"
     raw_event_view: "ABCRawEventView[Any, Any]"
     custom_rules: dict[str, type["ABCRule[Any]"]]
@@ -21,17 +22,23 @@ class ABCLabeler(ABC):
     rule_config: dict[str, Any]
 
     @abstractmethod
-    def message(self, *rules: "ABCRule[Any]", **custom_rules: Any) -> "LabeledMessageHandler":
+    def message(
+        self, *rules: "ABCRule[Any]", **custom_rules: Any
+    ) -> Callable[[Callable[P, R]], Callable[P, R]]:
         pass
 
     @abstractmethod
-    def chat_message(self, *rules: "ABCRule[Any]", **custom_rules: Any) -> "LabeledMessageHandler":
+    def chat_message(
+        self, *rules: "ABCRule[Any]", **custom_rules: Any
+    ) -> Callable[[Callable[P, R]], Callable[P, R]]:
         pass
 
     @abstractmethod
     def private_message(
-        self, *rules: "ABCRule[Any]", **custom_rules: Any
-    ) -> "LabeledMessageHandler":
+        self,
+        *rules: "ABCRule[Any]",
+        **custom_rules: Any,
+    ) -> Callable[[Callable[P, R]], Callable[P, R]]:
         pass
 
     @abstractmethod
@@ -41,7 +48,7 @@ class ABCLabeler(ABC):
         dataclass: Any,
         *rules: "ABCRule[Any]",
         **custom_rules: Any,
-    ) -> "LabeledHandler":
+    ) -> Callable[[Callable[P, R]], Callable[P, R]]:
         pass
 
     @abstractmethod
