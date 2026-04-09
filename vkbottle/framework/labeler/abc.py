@@ -1,19 +1,17 @@
 from abc import ABC, abstractmethod
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Any, Generic, ParamSpec, TypeVar
+from typing import TYPE_CHECKING, Any, ParamSpec, TypeVar
 
 if TYPE_CHECKING:
     from vkbottle.dispatch.rules import ABCRule
     from vkbottle.dispatch.views import ABCView
     from vkbottle.dispatch.views.abc import ABCMessageView, ABCRawEventView
-    from vkbottle.tools.mini_types.base import BaseMessageMin
 
-E = TypeVar("E", bound="BaseMessageMin")
 P = ParamSpec("P")
 R = TypeVar("R")
 
 
-class ABCLabeler(ABC, Generic[E]):
+class ABCLabeler(ABC):
     message_view: "ABCMessageView[Any, Any]"
     raw_event_view: "ABCRawEventView[Any, Any]"
     custom_rules: dict[str, type["ABCRule[Any]"]]
@@ -23,13 +21,17 @@ class ABCLabeler(ABC, Generic[E]):
 
     @abstractmethod
     def message(
-        self, *rules: "ABCRule[Any]", **custom_rules: Any
+        self,
+        *rules: "ABCRule[Any]",
+        **custom_rules: Any,
     ) -> Callable[[Callable[P, R]], Callable[P, R]]:
         pass
 
     @abstractmethod
     def chat_message(
-        self, *rules: "ABCRule[Any]", **custom_rules: Any
+        self,
+        *rules: "ABCRule[Any]",
+        **custom_rules: Any,
     ) -> Callable[[Callable[P, R]], Callable[P, R]]:
         pass
 

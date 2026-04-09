@@ -12,11 +12,9 @@ from .abc import ABCLabeler
 if typing.TYPE_CHECKING:
     from vkbottle.dispatch.views import ABCView
     from vkbottle.dispatch.views.abc import ABCMessageView, ABCRawEventView
-    from vkbottle.tools.mini_types.base import BaseMessageMin
 
 P = typing.ParamSpec("P")
 R = typing.TypeVar("R")
-E = typing.TypeVar("E", bound="BaseMessageMin")
 
 CustomRuleType = dict[str, type["ABCRule[typing.Any]"]]
 
@@ -50,7 +48,7 @@ DEFAULT_CUSTOM_RULES: CustomRuleType = {
 }
 
 
-class BaseLabeler(ABCLabeler[E], abc.ABC, typing.Generic[E]):
+class BaseLabeler(ABCLabeler, abc.ABC):
     def __init__(
         self,
         message_view: "ABCMessageView[typing.Any, typing.Any]",
@@ -177,7 +175,7 @@ class BaseLabeler(ABCLabeler[E], abc.ABC, typing.Generic[E]):
 
         return decorator  # type: ignore
 
-    def load(self, labeler: "BaseLabeler[E]"):
+    def load(self, labeler: "BaseLabeler"):
         self.message_view.handlers.extend(labeler.message_view.handlers)
         self.message_view.middlewares.extend(labeler.message_view.middlewares)
         self.raw_event_view.middlewares.extend(labeler.raw_event_view.middlewares)

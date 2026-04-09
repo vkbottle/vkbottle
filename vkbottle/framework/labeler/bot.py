@@ -21,7 +21,7 @@ P = ParamSpec("P")
 R = TypeVar("R")
 
 
-class BotLabeler(BaseLabeler["MessageMin"]):
+class BotLabeler(BaseLabeler):
     """`BotLabeler` - shortcut manager for router
     Can be loaded to other `BotLabeler`.
     >>> bl = BotLabeler()

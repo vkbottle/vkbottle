@@ -23,7 +23,7 @@ P = ParamSpec("P")
 R = TypeVar("R")
 
 
-class UserLabeler(BaseLabeler["MessageMin"]):
+class UserLabeler(BaseLabeler):
     """`UserLabeler` - shortcut manager for router
     Can be loaded to other `UserLabeler`.
     >>> bl = UserLabeler()

@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from vkbottle.exception_factory import ABCErrorHandler
 
 
-class BotMessagesPooling(UserPolling):
+class BotMessagesPolling(UserPolling):
     """The bot uses the User Long Poll to get its events.
     For example, such events can be exiting or entering a conversation.
     """
@@ -51,7 +51,7 @@ class BotMessagesPooling(UserPolling):
 # Load token from system environment variable
 # https://12factor.net/config
 token = os.environ["TOKEN"]
-bot = Bot(token, labeler=UserLabeler(), polling=BotMessagesPooling())
+bot = Bot(token, labeler=UserLabeler(), polling=BotMessagesPolling())
 
 CHAT_LEFT = 7
 CHAT_JOIN = 6

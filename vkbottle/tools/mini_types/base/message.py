@@ -23,7 +23,7 @@ from vkbottle_types.objects import (
 from vkbottle.modules import json, logger
 
 if TYPE_CHECKING:
-    from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
+    from vkbottle_types.objects import MessagesSendUserIdsResponseItem
 
     from vkbottle.api import ABCAPI, API
 
