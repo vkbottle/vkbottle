@@ -67,7 +67,7 @@ def test_docs_funcs():
         "items": [
             {"type": "bold", "offset": 0, "length": 23},
             {
-                "type": "italic",
+                "type": "url",
                 "offset": 24,
                 "length": 8,
                 "url": "vkbottle.readthedocs.io/ru/latest",
