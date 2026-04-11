@@ -50,7 +50,7 @@ def underline(string: str | Format, /) -> Format:
 
 
 def url(string: str | Format, /, *, href: str) -> Format:
-    return _format(string, "italic", {"url": href})
+    return _format(string, "url", {"url": href})
 
 
 @dataclasses.dataclass
