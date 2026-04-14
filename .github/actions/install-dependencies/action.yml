@@ -12,7 +12,7 @@ inputs:
   poetry_home:
     description: "Path to poetry installation"
     required: false
-    default: "$HOME/poetry"
+    default: ".poetry"
   poetry_virtualenvs_in_project:
     description: "Whether to create virtualenvs in the project directory"
     required: false
@@ -26,6 +26,10 @@ runs:
       run: |
         poetry_home="${{ inputs.poetry_home }}"
         poetry_home="${poetry_home/#\~/$HOME}"
+
+        if [[ "$poetry_home" != /* ]] && [[ ! "$poetry_home" =~ ^[A-Za-z]:[\\/] ]]; then
+          poetry_home="$GITHUB_WORKSPACE/$poetry_home"
+        fi
 
         echo "poetry-home=$poetry_home" >> "$GITHUB_OUTPUT"
         echo "POETRY_HOME=$poetry_home" >> "$GITHUB_ENV"
@@ -43,16 +47,20 @@ runs:
 
     - name: Load cached venv
       id: cached-venv
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v5
       with:
         key: venv-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+        restore-keys: |
+          venv-${{ inputs.python-version }}-${{ runner.os }}-
         path: .venv
 
     - name: Load cached poetry installation
       id: cached-poetry
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v5
       with:
         key: poetry-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+        restore-keys: |
+          poetry-${{ inputs.python-version }}-${{ runner.os }}-
         path: ${{ steps.poetry-config.outputs.poetry-home }}
 
     - name: Install poetry
@@ -68,3 +76,17 @@ runs:
       if: steps.cached-venv.outputs.cache-hit != 'true'
       run: poetry install
       shell: bash
+
+    - name: Save poetry cache
+      if: steps.cached-poetry.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        key: ${{ steps.cached-poetry.outputs.cache-primary-key }}
+        path: ${{ steps.poetry-config.outputs.poetry-home }}
+
+    - name: Save venv cache
+      if: steps.cached-venv.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        key: ${{ steps.cached-venv.outputs.cache-primary-key }}
+        path: .venv

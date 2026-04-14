@@ -21,7 +21,7 @@ jobs:
     name: Lint with ruff (py${{ inputs.python-version }} on ${{ inputs.os }})
     runs-on: ${{ inputs.os }}
     steps:
-      - uses: asottile/workflows/.github/actions/fast-checkout@v1.10.0
+      - uses: asottile/workflows/.github/actions/fast-checkout@v1.11.0
 
       - name: Install poetry and dependencies
         uses: ./.github/actions/install-dependencies
@@ -34,7 +34,7 @@ jobs:
 
       - name: Load ruff cache
         id: cached-flakeheaven
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v5
         with:
           key: ruff-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
           restore-keys: |
@@ -44,11 +44,18 @@ jobs:
       - name: Run ruff
         run: poetry run ruff check .
 
+      - name: Save ruff cache
+        if: always() && steps.cached-flakeheaven.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          key: ${{ steps.cached-flakeheaven.outputs.cache-primary-key }}
+          path: .ruff_cache
+
   lint-mypy:
     name: Lint with mypy (py${{ inputs.python-version }} on ${{ inputs.os }})
     runs-on: ${{ inputs.os }}
     steps:
-      - uses: asottile/workflows/.github/actions/fast-checkout@v1.10.0
+      - uses: asottile/workflows/.github/actions/fast-checkout@v1.11.0
 
       - name: Install poetry and dependencies
         uses: ./.github/actions/install-dependencies
@@ -61,7 +68,7 @@ jobs:
 
       - name: Load .mypy_cache
         id: cached-mypy
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v5
         with:
           key: mypy-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
           restore-keys: |
@@ -71,11 +78,18 @@ jobs:
       - name: Run mypy
         run: poetry run mypy --enable-incomplete-feature=Unpack vkbottle
 
+      - name: Save .mypy_cache
+        if: always() && steps.cached-mypy.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          key: ${{ steps.cached-mypy.outputs.cache-primary-key }}
+          path: .mypy_cache
+
   test:
     name: Run tests (py${{ inputs.python-version }} on ${{ inputs.os }})
     runs-on: ${{ inputs.os }}
     steps:
-      - uses: asottile/workflows/.github/actions/fast-checkout@v1.10.0
+      - uses: asottile/workflows/.github/actions/fast-checkout@v1.11.0
 
       - name: Install poetry and dependencies
         uses: ./.github/actions/install-dependencies
@@ -88,7 +102,7 @@ jobs:
 
       - name: Load .pytest_cache
         id: cached-pytest
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v5
         with:
           key: pytest-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
           restore-keys: |
@@ -97,3 +111,10 @@ jobs:
 
       - name: Run tests
         run: poetry run pytest
+
+      - name: Save .pytest_cache
+        if: always() && steps.cached-pytest.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          key: ${{ steps.cached-pytest.outputs.cache-primary-key }}
+          path: .pytest_cache
