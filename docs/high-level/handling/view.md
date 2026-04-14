@@ -38,7 +38,7 @@ class VoteView(ABCView):
     def __init__(self):
         super().__init__()
 
-    async def process_event(self, event: dict) -> bool:
+    async def process_event(self, event: dict[str, Any]): -> bool:
         # Эта функция принимает ивент в форме словаря,
         # она должна определить подходит ли ивент под
         # текущий view или нет и вернуть соответствующее
@@ -88,7 +88,6 @@ class VoteView(ABCView):
 from vkbottle.bot import Bot, rules, BotLabeler
 from vkbottle.dispatch.handlers import FromFuncHandler
 from vkbottle_types.events.bot_events import PollVoteNew
-from typing import Dict
 
 
 async def vote_up(vote: PollVoteNew):
@@ -111,7 +110,7 @@ my_view.handlers = [
 ]
 
 class MyLabeler(BotLabeler):
-    def views(self) -> Dict[str, "ABCView"]:
+    def views(self) -> dict[str, "ABCView"]:
         # Из views должны быть возвращены все view которые
         # будут позже обрабатываться роутером
         return {"vote_view": my_view}

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Callable, Dict, Type
+from typing import TYPE_CHECKING, Any, Callable
 
 from typing_extensions import Self
 
@@ -16,7 +16,7 @@ class ABCRouter(ABC):
     Documentation: https://vkbottle.rtfd.io/ru/latest/high-level/handling/router/
     """
 
-    views: Dict[str, "ABCView"]
+    views: dict[str, "ABCView[Any]"]
     state_dispenser: "ABCStateDispenser"
     error_handler: "ABCErrorHandler"
 
@@ -24,23 +24,23 @@ class ABCRouter(ABC):
         self.views = {}
 
     @abstractmethod
-    async def route(self, event: dict, ctx_api: "ABCAPI") -> None:
+    async def route(self, event: dict[str, Any], ctx_api: "ABCAPI") -> None:
         pass
 
     @abstractmethod
     def construct(
         self,
-        views: Dict[str, "ABCView"],
+        views: dict[str, "ABCView[Any]"],
         state_dispenser: "ABCStateDispenser",
         error_handler: "ABCErrorHandler",
     ) -> Self:
         pass
 
-    def add_view(self, name: str, view: "ABCView") -> None:
+    def add_view(self, name: str, view: "ABCView[Any]") -> None:
         self.views[name] = view
 
-    def view(self, name: str) -> Callable[..., Type["ABCView"]]:
-        def decorator(view: Type["ABCView"]):
+    def view(self, name: str) -> Callable[..., type["ABCView[Any]"]]:
+        def decorator(view: type["ABCView[Any]"]):
             self.add_view(name, view())
             return view
 

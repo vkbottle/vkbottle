@@ -76,7 +76,7 @@ class BaseMiddleware(Generic[T]):
     def catch_all(self, func):
         """Catch any exception and save error value"""
 
-        async def wrapper(*args, **kwargs):
+        async def wrapper(*args: Any, **kwargs: Any):
             try:
                 return await func(*args, **kwargs)
             except Exception as e:

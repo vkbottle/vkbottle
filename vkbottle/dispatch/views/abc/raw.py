@@ -1,6 +1,6 @@
 import dataclasses
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, Generic, List, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 if TYPE_CHECKING:
     from vkbottle.api.abc import ABCAPI
@@ -17,15 +17,15 @@ HandlerBasement = TypeVar("HandlerBasement", bound="BaseHandlerBasement")
 
 @dataclasses.dataclass(frozen=True)
 class BaseHandlerBasement:
-    dataclass: Type[Any]
+    dataclass: type[Any]
     handler: "ABCHandler"
 
 
 class ABCRawEventView(ABCView[Event_contra], Generic[Event_contra, HandlerBasement]):
-    handlers: Dict[Any, List[HandlerBasement]]
+    handlers: dict[Any, list[HandlerBasement]]
 
     @abstractmethod
-    def get_handler_basements(self, event: Event_contra) -> List[HandlerBasement]:
+    def get_handler_basements(self, event: Event_contra) -> list[HandlerBasement]:
         pass
 
     @abstractmethod
@@ -50,8 +50,8 @@ class ABCRawEventView(ABCView[Event_contra], Generic[Event_contra, HandlerBaseme
         logger.debug("Handling event ({}) with message view", self.get_event_type(event))
 
         context_variables: dict[str, Any] = {}
-        handle_responses: List[Any] = []
-        handlers: List["ABCHandler"] = []
+        handle_responses: list[Any] = []
+        handlers: list["ABCHandler"] = []
 
         mw_instances = await self.pre_middleware(event, context_variables)
         if mw_instances is None:

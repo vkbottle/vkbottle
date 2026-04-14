@@ -13,5 +13,5 @@ class ABCRequestRescheduler(ABC):
         method: str,
         data: dict[str, Any],
         recent_response: Any,
-    ) -> dict:
+    ) -> dict[str, Any]:
         pass

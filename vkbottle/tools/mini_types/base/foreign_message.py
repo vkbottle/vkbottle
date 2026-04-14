@@ -3,7 +3,6 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, Final
 
 import pydantic
-import vkbottle_types.objects
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
@@ -32,9 +31,11 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     _mention: Mention | None = None
     _is_full: bool | None = None
 
-    __replace_mention = pydantic.model_validator(mode="after")(replace_mention_validator)  # type: ignore
-
     model_config = pydantic.ConfigDict(frozen=False)
+
+    @pydantic.model_validator(mode="after")
+    def replace_mention_model(self) -> "BaseForeignMessageMin":
+        return replace_mention_validator(self)
 
     @property
     def ctx_api(self) -> "ABCAPI | API":
@@ -59,7 +60,11 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     def is_mentioned(self) -> bool:
         """Returns True if current bot is mentioned in message"""
 
-    async def get_user(self, raw_mode: bool = False, **kwargs: Any) -> UsersUserFull | dict:
+    async def get_user(
+        self,
+        raw_mode: bool = False,
+        **kwargs: Any,
+    ) -> UsersUserFull | dict[str, Any]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
         ][0]
@@ -161,8 +166,8 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
     def get_payload_json(
         self,
         throw_error: bool = False,
-        unpack_failure: Callable[[str], dict | str] = lambda payload: payload,
-    ) -> dict | str | None:
+        unpack_failure: Callable[[str], dict[str, Any] | str] = lambda payload: payload,
+    ) -> dict[str, Any] | str | None:
         if self.payload is None:
             return None
 
@@ -175,7 +180,7 @@ class BaseForeignMessageMin(MessagesForeignMessage, ABC):
         return unpack_failure(self.payload)
 
 
-BaseForeignMessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
+BaseForeignMessageMin.object_build(locals())
 
 
 __all__ = ("BaseForeignMessageMin",)

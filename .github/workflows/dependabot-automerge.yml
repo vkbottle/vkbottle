@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]' && github.event.workflow_run.conclusion == 'success'
     steps:
-      - uses: asottile/workflows/.github/actions/fast-checkout@v1.4.1
+      - uses: asottile/workflows/.github/actions/fast-checkout@v1.11.0
 
       - name: Merge pull request
         env:

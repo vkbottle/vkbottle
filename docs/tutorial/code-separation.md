@@ -72,7 +72,7 @@ from vkbottle.bot import BotLabeler, Message, rules
 from vkbottle_types.objects import MessagesConversation
 
 class ChatInfoRule(rules.ABCRule[Message]):
-    async def check(self, message: Message) -> dict:
+    async def check(self, message: Message) -> dict[str, Any]:
         chats_info = await message.ctx_api.messages.get_conversations_by_id(message.peer_id)
         return {"chat": chats_info.items[0]}
 

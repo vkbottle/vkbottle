@@ -6,7 +6,6 @@ from io import StringIO
 from typing import TYPE_CHECKING, Any, Final, Literal, overload
 
 import pydantic
-import vkbottle_types.objects
 from vkbottle_types.objects import (
     AudioAudio,
     DocsDoc,
@@ -24,7 +23,7 @@ from vkbottle_types.objects import (
 from vkbottle.modules import json, logger
 
 if TYPE_CHECKING:
-    from vkbottle_types.responses.messages import MessagesSendUserIdsResponseItem
+    from vkbottle_types.objects import MessagesSendUserIdsResponseItem
 
     from vkbottle.api import ABCAPI, API
 
@@ -48,9 +47,11 @@ class BaseMessageMin(MessagesMessage, ABC):
     _mention: Mention | None = None
     _chat_members: list[MessagesConversationMember] | None = None
 
-    __replace_mention = pydantic.model_validator(mode="after")(replace_mention_validator)  # type: ignore
-
     model_config = pydantic.ConfigDict(frozen=False)
+
+    @pydantic.model_validator(mode="after")
+    def replace_mention_model(self) -> "BaseMessageMin":
+        return replace_mention_validator(self)
 
     @property
     def ctx_api(self) -> ABCAPI | API:
@@ -87,7 +88,9 @@ class BaseMessageMin(MessagesMessage, ABC):
     async def get_user(self, raw_mode: Literal[True] = ..., **kwargs: Any) -> dict[str, Any]: ...
 
     async def get_user(
-        self, raw_mode: bool = False, **kwargs: Any
+        self,
+        raw_mode: bool = False,
+        **kwargs: Any,
     ) -> UsersUserFull | dict[str, Any]:
         raw_user = (await self.ctx_api.request("users.get", {"user_ids": self.from_id, **kwargs}))[
             "response"
@@ -187,8 +190,8 @@ class BaseMessageMin(MessagesMessage, ABC):
     def get_payload_json(
         self,
         throw_error: bool = False,
-        unpack_failure: Callable[[str], dict | str] = lambda payload: payload,
-    ) -> dict | str | None:
+        unpack_failure: Callable[[str], dict[str, Any] | str] = lambda payload: payload,
+    ) -> dict[str, Any] | str | None:
         if self.payload is None:
             return None
 
@@ -284,7 +287,7 @@ class BaseMessageMin(MessagesMessage, ABC):
         return await self.answer(**data)
 
 
-BaseMessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
+BaseMessageMin.object_build(locals())
 
 
 __all__ = ("BaseMessageMin",)

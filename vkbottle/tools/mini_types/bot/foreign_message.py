@@ -1,13 +1,12 @@
 from typing import Any
 
 import pydantic
-import vkbottle_types.objects
 from vkbottle_types.objects import ClientInfoForBots
 
 from vkbottle.tools.mini_types.base.foreign_message import BaseForeignMessageMin
 
 
-def _foreign_messages(cls: Any, values: Any) -> Any:  # noqa: ARG001
+def _foreign_messages(values: Any) -> Any:
     foreign_messages = []
 
     if values.fwd_messages:
@@ -33,14 +32,16 @@ class ForeignMessageMin(BaseForeignMessageMin):
         default_factory=list["ForeignMessageMin"],
     )
 
-    __foreign_messages = pydantic.model_validator(mode="after")(_foreign_messages)
+    @pydantic.model_validator(mode="after")
+    def foreign_messages_model(self) -> "ForeignMessageMin":
+        return _foreign_messages(self)
 
     @property
     def is_mentioned(self) -> bool:
         return self.mention.id == -self.group_id if (self.mention and self.group_id) else False
 
 
-ForeignMessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
+ForeignMessageMin.object_build(locals())
 
 
 __all__ = ("ForeignMessageMin",)

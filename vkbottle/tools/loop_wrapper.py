@@ -36,7 +36,8 @@ class LoopWrapper:
         self._running = False
 
         if self.loop is None:
-            with contextlib.suppress(RuntimeError):
+            with contextlib.suppress(RuntimeError), warnings.catch_warnings():
+                warnings.simplefilter(action="ignore", category=DeprecationWarning)
                 self.loop = asyncio.get_event_loop()
 
     @property
@@ -65,7 +66,7 @@ class LoopWrapper:
         category=FutureWarning,
         stacklevel=0,
     )
-    def run_forever(self):
+    def run_forever(self) -> NoReturn:
         logger.warning("run_forever() is deprecated. Use run() instead")
         self.run()
 
@@ -114,7 +115,7 @@ class LoopWrapper:
             if self.loop.is_running():
                 self.loop.close()
 
-    def add_task(self, task: 'Task | Callable[..., "Task"]'):
+    def add_task(self, task: "Task | Callable[..., Task]") -> None:
         """Adds tasks to be ran in run_forever or run it immediately if loop is already running
         :param task: coroutine / coroutine function with zero arguments
         """
@@ -135,7 +136,7 @@ class LoopWrapper:
         minutes: int = 0,
         hours: int = 0,
         days: int = 0,
-    ) -> Callable[[Callable], Callable]:
+    ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         """A tiny template to wrap repeated tasks with decorator
         >>> lw = LoopWrapper()
         >>> @lw.interval(seconds=5)
@@ -148,7 +149,7 @@ class LoopWrapper:
         seconds += hours * 60 * 60
         seconds += days * 24 * 60 * 60
 
-        def decorator(func: Callable):
+        def decorator(func: Callable[..., Any]):
             self.add_task(DelayedTask(seconds, func))
             return func
 
@@ -160,7 +161,7 @@ class LoopWrapper:
         minutes: int = 0,
         hours: int = 0,
         days: int = 0,
-    ) -> Callable[[Callable], Callable]:
+    ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         """A tiny template to wrap tasks with timer
         >>> lw = LoopWrapper()
         >>> @lw.timer(seconds=5)
@@ -172,7 +173,7 @@ class LoopWrapper:
         seconds += hours * 60 * 60
         seconds += days * 24 * 60 * 60
 
-        def decorator(func: Callable):
+        def decorator(func: Callable[..., Any]):
             self.add_task(DelayedTask(seconds, func, do_break=True))
             return func
 

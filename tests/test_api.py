@@ -13,11 +13,11 @@ ctx_storage = CtxStorage()
 
 
 class MockedRescheduler(ABCRequestRescheduler):
-    def __init__(self, recent_response: Any, final_response: dict):
+    def __init__(self, recent_response: Any, final_response: dict[str, Any]):
         self.recent_response = recent_response
         self.final_response = final_response
 
-    async def reschedule(self, *args) -> dict:
+    async def reschedule(self, *args: Any) -> dict[str, Any]:
         assert args[3] == self.recent_response
         return self.final_response
 

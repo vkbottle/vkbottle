@@ -30,9 +30,9 @@ class SomeRequestRescheduler(ABCRequestRescheduler):
         self,
         ctx_api: "ABCAPI | API",
         method: str,
-        data: dict,
+        data: dict[str, Any]:
         recent_response: Any,
-    ) -> dict:
+    ) -> dict[str, Any]:
         await asyncio.sleep(self.delay)
         return await ctx_api.request(method, data)
 ```

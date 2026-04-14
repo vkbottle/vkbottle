@@ -1,10 +1,12 @@
-Payload = str | dict
+from typing import Any
+
+Payload = str | dict[str, Any]
 
 
 class ABCAction:
     type: str
 
-    def get_data(self) -> dict:
+    def get_data(self) -> dict[str, Any]:
         data = {k: v for k, v in vars(self).items() if v is not None}
         data["type"] = self.type
         return data

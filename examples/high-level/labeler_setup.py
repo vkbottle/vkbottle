@@ -1,5 +1,4 @@
 import os
-from typing import List
 
 from vkbottle import ABCRule, BaseStateGroup, VKAPIError
 from vkbottle.bot import Bot, BotLabeler, Message
@@ -8,7 +7,7 @@ from vkbottle.bot import Bot, BotLabeler, Message
 # A simple rule to demonstrate labeler
 # setup for custom rules later
 class SpamRule(ABCRule[Message]):
-    def __init__(self, chars: List[str]):
+    def __init__(self, chars: list[str]):
         self.chars = "".join(chars)
 
     async def check(self, event: Message):

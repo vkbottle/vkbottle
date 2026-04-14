@@ -1,10 +1,13 @@
+import warnings
 from typing import Any
 
 import pytest
+from pydantic.warnings import PydanticDeprecatedSince212
 
 from tests.test_utils import MockedClient
 from vkbottle import API
 from vkbottle.tools.mini_types.bot.foreign_message import ForeignMessageMin
+from vkbottle.tools.mini_types.bot.message import message_min
 
 
 def fake_foreign_message(ctx_api: API, **data: Any) -> ForeignMessageMin:
@@ -36,7 +39,7 @@ def _make_api_with_callback(callback):
 async def test_get_full_message():
     call_count = 0
 
-    def callback(method: str, url: str, data: dict):
+    def callback(method: str, url: str, data: dict[str, Any]):
         nonlocal call_count
         if "messages.getByConversationMessageId" in url:
             call_count += 1
@@ -80,7 +83,7 @@ async def test_get_full_message():
 async def test_get_full_message_with_explicit_peer_id():
     captured_data = {}
 
-    def callback(method: str, url: str, data: dict):
+    def callback(method: str, url: str, data: dict[str, Any]):
         if "messages.getByConversationMessageId" in url:
             captured_data.update(data)
             return {
@@ -108,3 +111,32 @@ async def test_get_full_message_with_explicit_peer_id():
     await msg.get_full_message(peer_id=999)
 
     assert captured_data["peer_id"] == 999
+
+
+def test_after_model_validators_do_not_warn():
+    api = _make_api_with_callback(lambda *_: {"response": {}})
+
+    with warnings.catch_warnings(record=True) as record:
+        warnings.simplefilter("always")
+        fake_foreign_message(api, text="[id1|durov], hello")
+        message_min(
+            {
+                "object": {
+                    "message": {
+                        "peer_id": 1,
+                        "date": 1,
+                        "from_id": 1,
+                        "text": "[id1|durov], hello",
+                        "out": 0,
+                        "id": 1,
+                        "conversation_message_id": 1,
+                        "version": 1,
+                        "fwd_messages": [],
+                    },
+                    "client_info": {},
+                }
+            },
+            api,
+        )
+
+    assert all(not issubclass(w.category, PydanticDeprecatedSince212) for w in record)

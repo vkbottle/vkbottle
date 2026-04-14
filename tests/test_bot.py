@@ -101,7 +101,7 @@ def set_http_callback(api: API, callback: Callable[[str, str, dict], Any]):
 
 async def test_bot_polling():  # noqa: C901
     class TestApi(API):
-        def __init__(self, *args, **kwargs):
+        def __init__(self, *args: Any, **kwargs: Any):
             super().__init__(*args, **kwargs)
 
         @property
@@ -112,7 +112,7 @@ async def test_bot_polling():  # noqa: C901
         def messages(self):
             return MessagesCategory(self)
 
-    def callback(method: str, url: str, data: dict):
+    def callback(method: str, url: str, data: dict[str, Any]):
         if "groups.getById" in url:
             return {"response": {"groups": [{"id": 1}]}}
         elif "groups.getLongPollServer" in url:

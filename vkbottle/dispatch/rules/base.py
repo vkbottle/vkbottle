@@ -75,7 +75,7 @@ class CommandRule(ABCRule[BaseMessageMin]):
             self.command_text, self.args_count = command_text
         self.sep = sep
 
-    async def check(self, event: BaseMessageMin) -> dict | bool:
+    async def check(self, event: BaseMessageMin) -> dict[str, Any] | bool:
         for prefix in self.prefixes:
             text_length = len(prefix + self.command_text)
             text_length_with_sep = text_length + len(self.sep)
@@ -109,7 +109,7 @@ class VBMLRule(ABCRule[BaseMessageMin]):
         self.patterns = pattern
         self.patcher = patcher or self.config.get("vbml_patcher") or vbml.Patcher()
 
-    async def check(self, event: BaseMessageMin) -> dict | None | bool:
+    async def check(self, event: BaseMessageMin) -> dict[str, Any] | None | bool:
         for pattern in self.patterns:
             result = self.patcher.check(pattern, event.text)
             if result not in (None, False):
@@ -128,7 +128,7 @@ class RegexRule(ABCRule[BaseMessageMin]):
 
         self.regexp = regexp
 
-    async def check(self, event: BaseMessageMin) -> dict | bool:
+    async def check(self, event: BaseMessageMin) -> dict[str, Any] | bool:
         for regexp in self.regexp:
             match = re.match(regexp, event.text)
             if match:

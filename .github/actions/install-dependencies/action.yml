@@ -12,9 +12,13 @@ inputs:
   poetry_home:
     description: "Path to poetry installation"
     required: false
-    default: "~/poetry"
+    default: ".poetry"
   poetry_virtualenvs_in_project:
     description: "Whether to create virtualenvs in the project directory"
+    required: false
+    default: "true"
+  save_cache:
+    description: "Whether to save poetry and venv caches"
     required: false
     default: "true"
 
@@ -22,27 +26,46 @@ runs:
   using: "composite"
   steps:
     - name: Export poetry config
+      id: poetry-config
       run: |
-        echo POETRY_HOME="${{ inputs.poetry_home }}" >> $GITHUB_ENV
+        poetry_home="${{ inputs.poetry_home }}"
+        poetry_home="${poetry_home/#\~/$HOME}"
+
+        if [[ "$poetry_home" != /* ]] && [[ ! "$poetry_home" =~ ^[A-Za-z]:[\\/] ]]; then
+          poetry_home="$GITHUB_WORKSPACE/$poetry_home"
+        fi
+
+        echo "poetry-home=$poetry_home" >> "$GITHUB_OUTPUT"
+        echo "POETRY_HOME=$poetry_home" >> "$GITHUB_ENV"
         echo POETRY_VIRTUALENVS_IN_PROJECT="${{ inputs.poetry_virtualenvs_in_project }}" >> $GITHUB_ENV
       shell: bash
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ inputs.python-version }}
 
+    - name: Ensure dependency cache directories exist
+      run: |
+        mkdir -p .venv
+        mkdir -p "${{ steps.poetry-config.outputs.poetry-home }}"
+      shell: bash
+
     - name: Load cached venv
       id: cached-venv
-      uses: actions/cache@v3
+      uses: actions/cache/restore@v5
       with:
         key: venv-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+        restore-keys: |
+          venv-${{ inputs.python-version }}-${{ runner.os }}-
         path: .venv
 
     - name: Load cached poetry installation
       id: cached-poetry
-      uses: actions/cache@v3
+      uses: actions/cache/restore@v5
       with:
         key: poetry-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
-        path: ${{ inputs.poetry_home }}
+        restore-keys: |
+          poetry-${{ inputs.python-version }}-${{ runner.os }}-
+        path: ${{ steps.poetry-config.outputs.poetry-home }}
 
     - name: Install poetry
       if: steps.cached-poetry.outputs.cache-hit != 'true'
@@ -50,10 +73,24 @@ runs:
       shell: bash
 
     - name: Add poetry binary to PATH
-      run: echo "${{ inputs.poetry_home }}/bin" >> $GITHUB_PATH
+      run: echo "${{ steps.poetry-config.outputs.poetry-home }}/bin" >> $GITHUB_PATH
       shell: bash
 
     - name: Install dependencies
       if: steps.cached-venv.outputs.cache-hit != 'true'
       run: poetry install
       shell: bash
+
+    - name: Save poetry cache
+      if: inputs.save_cache == 'true' && steps.cached-poetry.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        key: ${{ steps.cached-poetry.outputs.cache-primary-key }}
+        path: ${{ steps.poetry-config.outputs.poetry-home }}
+
+    - name: Save venv cache
+      if: inputs.save_cache == 'true' && steps.cached-venv.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        key: ${{ steps.cached-venv.outputs.cache-primary-key }}
+        path: .venv

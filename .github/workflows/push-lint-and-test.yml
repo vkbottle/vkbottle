@@ -1,16 +1,16 @@
-name: Build
+name: Lint and test
 
 on:
   push:
     branches:
-      - master
+      - dev
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  build:
+  lint-and-test:
     if: github.repository == 'vkbottle/vkbottle'
     strategy:
       matrix:
@@ -21,7 +21,7 @@ jobs:
           - ubuntu-latest
           - windows-latest
 
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/lint-and-test.yml
     with:
       os: ${{ matrix.os }}
       python-version: ${{ matrix.python-version }}

@@ -105,7 +105,7 @@ await asyncio.sleep(10)
 
 ```python
 # bad
-async def send_httpbin_get() -> dict:
+async def send_httpbin_get() -> dict[str, Any]:
     r = requests.get('http://httpbin.org/get')
     if r.status_code == 200:
         js = r.model_dump_json()
@@ -118,7 +118,7 @@ async def send_httpbin_get() -> dict:
 from vkbottle.http import AiohttpClient
 
 
-async def send_httpbin_get() -> dict:
+async def send_httpbin_get() -> dict[str, Any]:
     http_client = AiohttpClient()
     return await http_client.request_json('http://httpbin.org/get')
 ```
@@ -128,7 +128,7 @@ async def send_httpbin_get() -> dict:
 import aiohttp
 
 
-async def send_httpbin_get() -> dict:
+async def send_httpbin_get() -> dict[str, Any]:
     async with aiohttp.ClientSession() as session:
         async with session.get('http://httpbin.org/get') as r:
             if r.status == 200:

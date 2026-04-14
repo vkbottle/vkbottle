@@ -2,7 +2,6 @@ import asyncio
 from typing import TYPE_CHECKING
 
 import pydantic
-import vkbottle_types.objects
 from vkbottle_types.objects import MessagesConversationMember
 
 from vkbottle.modules import logger
@@ -22,14 +21,16 @@ class MessageMin(BaseMessageMin):
     )
     _chat_members: list[MessagesConversationMember] | None = None
 
-    __foreign_messages = pydantic.model_validator(mode="after")(_foreign_messages)
+    @pydantic.model_validator(mode="after")
+    def foreign_messages_model(self) -> "MessageMin":
+        return _foreign_messages(self)
 
     @property
     def is_mentioned(self) -> bool:
         return self.mention.id == self.user_id if self.mention else False
 
 
-MessageMin.model_rebuild(_types_namespace=vars(vkbottle_types.objects) | locals())
+MessageMin.object_build(locals())
 
 
 async def message_min(

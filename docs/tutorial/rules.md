@@ -11,10 +11,9 @@
 
     ```python
     from vkbottle.dispatch.rules.base import CommandRule
-    from typing import Tuple
 
     @bot.on.message(CommandRule("say", ["!", "/"], 1))
-    async def say_handler(message: Message, args: Tuple[str]):
+    async def say_handler(message: Message, args: tuple[str]):
         await message.answer(f"<<{args[0]}>>")
     ```
 
@@ -22,7 +21,7 @@
 
     ```python
     @bot.on.message(command=("say", 1))
-    async def say_handler(message: Message, args: Tuple[str]):
+    async def say_handler(message: Message, args: tuple[str]):
         await message.answer(f"<<{args[0]}>>")
     ```
 
@@ -46,7 +45,7 @@ from vkbottle.bot import Message
 from vkbottle.dispatch.rules import ABCRule
 
 class MyRule(ABCRule[Message]):
-    async def check(self, event: Message) -> dict | bool:
+    async def check(self, event: Message) -> dict[str, Any] | bool:
         ...
 ```
 

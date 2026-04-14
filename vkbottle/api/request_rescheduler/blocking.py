@@ -22,7 +22,7 @@ class BlockingRequestRescheduler(ABCRequestRescheduler):
         method: str,
         data: dict[str, Any],
         recent_response: Any,
-    ) -> dict:
+    ) -> dict[str, Any]:
         logger.debug(
             "Usage of blocking rescheduler is assumed when VK doesn't respond to "
             "all requests for an amount of time. Starting..."

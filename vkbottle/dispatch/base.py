@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict
+from typing import TYPE_CHECKING, Any
 
 from typing_extensions import Self
 
@@ -27,7 +27,7 @@ class Router(ABCRouter):
 
     def construct(
         self,
-        views: Dict[str, "ABCView"],
+        views: dict[str, "ABCView"],
         state_dispenser: "ABCStateDispenser",
         error_handler: "ABCErrorHandler",
     ) -> Self:

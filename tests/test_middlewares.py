@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 
 from vkbottle.dispatch.middlewares.abc import BaseMiddleware, MiddlewareError
@@ -55,7 +57,7 @@ async def test_raise_in_pre_sets_error(empty_middleware_class, empty_event):
 @pytest.mark.asyncio
 async def test_cant_forward_on_error(empty_middleware_class, empty_event):
     class SomeMiddleware(empty_middleware_class):
-        async def pre(self, *args, **kwargs):
+        async def pre(self, *args: Any, **kwargs: Any):
             self.error("some_error")
 
     middleware = SomeMiddleware(empty_event)

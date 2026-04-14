@@ -1,5 +1,5 @@
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from vkbottle_types.events.enums import UserEventType
 from vkbottle_types.events.user_events import RawUserEvent
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from vkbottle.exception_factory import ABCErrorHandler
 
 
-class BotMessagesPooling(UserPolling):
+class BotMessagesPolling(UserPolling):
     """The bot uses the User Long Poll to get its events.
     For example, such events can be exiting or entering a conversation.
     """
@@ -39,7 +39,7 @@ class BotMessagesPooling(UserPolling):
         )
         self.group_id = group_id
 
-    async def get_server(self) -> dict:
+    async def get_server(self) -> dict[str, Any]:
         logger.debug("Getting polling server...")
         if self.group_id is None:
             self.group_id = (await self.api.request("groups.getById", {}))["response"]["groups"][
@@ -51,7 +51,7 @@ class BotMessagesPooling(UserPolling):
 # Load token from system environment variable
 # https://12factor.net/config
 token = os.environ["TOKEN"]
-bot = Bot(token, labeler=UserLabeler(), polling=BotMessagesPooling())
+bot = Bot(token, labeler=UserLabeler(), polling=BotMessagesPolling())
 
 CHAT_LEFT = 7
 CHAT_JOIN = 6
