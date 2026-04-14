@@ -2,16 +2,12 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-      # Check for files that contain merge conflict strings.
       - id: check-merge-conflict
         stages: [pre-commit, pre-push]
-      # Simply check whether files parse as valid python.
       - id: check-ast
         stages: [pre-commit]
-      # Remove trailing whitespaces
       - id: trailing-whitespace
         stages: [pre-commit]
-      # Add newlines to the end of files
       - id: end-of-file-fixer
         stages: [pre-commit]
 
@@ -44,7 +40,7 @@ repos:
         entry: poetry run ruff check
         language: system
         types: [python]
-        stages: [pre-push]
+        stages: [pre-commit]
 
       - id: mypy
         name: mypy check

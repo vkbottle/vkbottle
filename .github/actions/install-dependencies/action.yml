@@ -12,7 +12,7 @@ inputs:
   poetry_home:
     description: "Path to poetry installation"
     required: false
-    default: "~/poetry"
+    default: "$HOME/poetry"
   poetry_virtualenvs_in_project:
     description: "Whether to create virtualenvs in the project directory"
     required: false
@@ -22,8 +22,13 @@ runs:
   using: "composite"
   steps:
     - name: Export poetry config
+      id: poetry-config
       run: |
-        echo POETRY_HOME="${{ inputs.poetry_home }}" >> $GITHUB_ENV
+        poetry_home="${{ inputs.poetry_home }}"
+        poetry_home="${poetry_home/#\~/$HOME}"
+
+        echo "poetry-home=$poetry_home" >> "$GITHUB_OUTPUT"
+        echo "POETRY_HOME=$poetry_home" >> "$GITHUB_ENV"
         echo POETRY_VIRTUALENVS_IN_PROJECT="${{ inputs.poetry_virtualenvs_in_project }}" >> $GITHUB_ENV
       shell: bash
     - uses: actions/setup-python@v5
@@ -32,17 +37,17 @@ runs:
 
     - name: Load cached venv
       id: cached-venv
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         key: venv-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
         path: .venv
 
     - name: Load cached poetry installation
       id: cached-poetry
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         key: poetry-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
-        path: ${{ inputs.poetry_home }}
+        path: ${{ steps.poetry-config.outputs.poetry-home }}
 
     - name: Install poetry
       if: steps.cached-poetry.outputs.cache-hit != 'true'
@@ -50,7 +55,7 @@ runs:
       shell: bash
 
     - name: Add poetry binary to PATH
-      run: echo "${{ inputs.poetry_home }}/bin" >> $GITHUB_PATH
+      run: echo "${{ steps.poetry-config.outputs.poetry-home }}/bin" >> $GITHUB_PATH
       shell: bash
 
     - name: Install dependencies

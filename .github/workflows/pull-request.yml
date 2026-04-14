@@ -1,7 +1,10 @@
 name: Pull-request
 
-on:
-  - pull_request
+'on':
+  pull_request:
+    branches:
+      - master
+      - dev
 
 defaults:
   run:
@@ -9,10 +12,18 @@ defaults:
 
 jobs:
   pre-commit:
+    if: github.repository == 'vkbottle/vkbottle'
     runs-on: ubuntu-latest
     permissions:
       actions: write
     steps:
+      - name: Load pre-commit cache
+        id: cached-pre-commit
+        uses: actions/cache@v4
+        with:
+          key: pre-commit-${{ env.pythonLocation }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          path: ~/.cache/pre-commit
+
       - name: Checkout code
         uses: asottile/workflows/.github/actions/fast-checkout@v1.10.0
         with:
@@ -22,14 +33,7 @@ jobs:
         uses: ./.github/actions/install-dependencies
         with:
           os: ubuntu-latest
-          python-version: "3.14"
-
-      - name: Load pre-commit cache
-        id: cached-pre-commit
-        uses: actions/cache@v3
-        with:
-          key: pre-commit-${{ env.pythonLocation }}-${{ hashFiles('.pre-commit-config.yaml') }}
-          path: ~/.cache/pre-commit
+          python-version: "3.10"
 
       - name: Run pre-commit
         run: |
@@ -40,18 +44,3 @@ jobs:
 
       - uses: pre-commit-ci/lite-action@v1.1.0
         if: always()
-
-  lint-and-test:
-    strategy:
-      matrix:
-        python-version:
-          - "3.10"
-          - "3.14"
-        os:
-          - ubuntu-latest
-          - windows-latest
-
-    uses: ./.github/workflows/lint-and-test.yml
-    with:
-      os: ${{ matrix.os }}
-      python-version: ${{ matrix.python-version }}

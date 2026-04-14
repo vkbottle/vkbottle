@@ -31,7 +31,7 @@ jobs:
 
       - name: Load ruff cache
         id: cached-flakeheaven
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ruff-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
           path: .ruff_cache
@@ -53,7 +53,7 @@ jobs:
 
       - name: Load .mypy_cache
         id: cached-mypy
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: mypy-${{ inputs.python-version }}-${{ runner.os }}
           path: .mypy_cache
@@ -75,7 +75,7 @@ jobs:
 
       - name: Load .pytest_cache
         id: cached-pytest
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: pytest-${{ inputs.python-version }}-${{ runner.os }}
           path: .pytest_cache
