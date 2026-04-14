@@ -33,7 +33,9 @@ jobs:
         id: cached-flakeheaven
         uses: actions/cache@v4
         with:
-          key: ruff-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          key: ruff-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
+          restore-keys: |
+            ruff-${{ inputs.python-version }}-${{ runner.os }}-
           path: .ruff_cache
 
       - name: Run ruff
@@ -55,7 +57,9 @@ jobs:
         id: cached-mypy
         uses: actions/cache@v4
         with:
-          key: mypy-${{ inputs.python-version }}-${{ runner.os }}
+          key: mypy-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
+          restore-keys: |
+            mypy-${{ inputs.python-version }}-${{ runner.os }}-
           path: .mypy_cache
 
       - name: Run mypy
@@ -77,7 +81,9 @@ jobs:
         id: cached-pytest
         uses: actions/cache@v4
         with:
-          key: pytest-${{ inputs.python-version }}-${{ runner.os }}
+          key: pytest-${{ inputs.python-version }}-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'poetry.lock') }}
+          restore-keys: |
+            pytest-${{ inputs.python-version }}-${{ runner.os }}-
           path: .pytest_cache
 
       - name: Run tests

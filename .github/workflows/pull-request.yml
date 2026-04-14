@@ -21,7 +21,9 @@ jobs:
         id: cached-pre-commit
         uses: actions/cache@v4
         with:
-          key: pre-commit-${{ env.pythonLocation }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          key: pre-commit-3.10-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml', 'pyproject.toml', 'poetry.lock') }}
+          restore-keys: |
+            pre-commit-3.10-${{ runner.os }}-
           path: ~/.cache/pre-commit
 
       - name: Checkout code
