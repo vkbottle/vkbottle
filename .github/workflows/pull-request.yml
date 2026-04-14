@@ -14,9 +14,14 @@ jobs:
   pre-commit:
     if: github.repository == 'vkbottle/vkbottle'
     runs-on: ubuntu-latest
+    env:
+      PRE_COMMIT_CACHE_DIR: ${{ github.workspace }}/.pre-commit-cache
     permissions:
       actions: write
     steps:
+      - name: Ensure pre-commit cache directory exists
+        run: mkdir -p "$PRE_COMMIT_CACHE_DIR"
+
       - name: Load pre-commit cache
         id: cached-pre-commit
         uses: actions/cache@v4
@@ -24,7 +29,7 @@ jobs:
           key: pre-commit-3.10-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml', 'pyproject.toml', 'poetry.lock') }}
           restore-keys: |
             pre-commit-3.10-${{ runner.os }}-
-          path: ~/.cache/pre-commit
+          path: ${{ env.PRE_COMMIT_CACHE_DIR }}
 
       - name: Checkout code
         uses: asottile/workflows/.github/actions/fast-checkout@v1.10.0
@@ -39,6 +44,7 @@ jobs:
 
       - name: Run pre-commit
         run: |
+          export PRE_COMMIT_HOME="$PRE_COMMIT_CACHE_DIR"
           poetry run pre-commit run \
             --from-ref ${{ github.event.pull_request.base.sha }} \
             --to-ref   ${{ github.event.pull_request.head.sha }} \

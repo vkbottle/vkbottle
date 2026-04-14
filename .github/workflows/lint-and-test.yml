@@ -29,6 +29,9 @@ jobs:
           os: ${{ inputs.os }}
           python-version: ${{ inputs.python-version }}
 
+      - name: Ensure ruff cache directory exists
+        run: mkdir -p .ruff_cache
+
       - name: Load ruff cache
         id: cached-flakeheaven
         uses: actions/cache@v4
@@ -53,6 +56,9 @@ jobs:
           os: ${{ inputs.os }}
           python-version: ${{ inputs.python-version }}
 
+      - name: Ensure mypy cache directory exists
+        run: mkdir -p .mypy_cache
+
       - name: Load .mypy_cache
         id: cached-mypy
         uses: actions/cache@v4
@@ -76,6 +82,9 @@ jobs:
         with:
           os: ${{ inputs.os }}
           python-version: ${{ inputs.python-version }}
+
+      - name: Ensure pytest cache directory exists
+        run: mkdir -p .pytest_cache
 
       - name: Load .pytest_cache
         id: cached-pytest

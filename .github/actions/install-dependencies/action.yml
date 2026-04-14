@@ -35,6 +35,12 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
 
+    - name: Ensure dependency cache directories exist
+      run: |
+        mkdir -p .venv
+        mkdir -p "${{ steps.poetry-config.outputs.poetry-home }}"
+      shell: bash
+
     - name: Load cached venv
       id: cached-venv
       uses: actions/cache@v4
