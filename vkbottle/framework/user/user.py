@@ -1,4 +1,5 @@
 import asyncio
+import warnings
 from typing import TYPE_CHECKING, Any
 
 from typing_extensions import Self
@@ -10,7 +11,7 @@ from vkbottle.framework.base import BaseFramework
 from vkbottle.framework.labeler import UserLabeler
 from vkbottle.modules import logger
 from vkbottle.polling import UserPolling
-from vkbottle.tools import LoopWrapper, UserAuth
+from vkbottle.tools import UserAuth
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, Token
@@ -18,6 +19,7 @@ if TYPE_CHECKING:
     from vkbottle.exception_factory import ABCErrorHandler
     from vkbottle.framework.labeler import ABCLabeler
     from vkbottle.polling import ABCPolling
+    from vkbottle.tools import LoopWrapper
 
 
 class User(BaseFramework):
@@ -26,7 +28,7 @@ class User(BaseFramework):
         token: "Token | None" = None,
         api: "ABCAPI | None" = None,
         polling: "ABCPolling | None" = None,
-        loop_wrapper: LoopWrapper | None = None,
+        loop_wrapper: "LoopWrapper | None" = None,
         router: "ABCRouter | None" = None,
         labeler: "ABCLabeler | None" = None,
         state_dispenser: "ABCStateDispenser | None" = None,
@@ -35,7 +37,10 @@ class User(BaseFramework):
     ) -> None:
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
-        self.loop_wrapper = loop_wrapper or LoopWrapper()
+        self._loop_wrapper: "LoopWrapper | None" = loop_wrapper
+        self.on_startup: list = []
+        self.on_shutdown: list = []
+        self.startup_tasks: list = []
         self.labeler = labeler or UserLabeler(error_handler=error_handler)
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
         self._polling = polling or UserPolling(self.api, error_handler=error_handler)
@@ -43,6 +48,23 @@ class User(BaseFramework):
 
         if task_each_event is not None:
             logger.warning("task_each_event is deprecated and will be removed in future versions")
+
+    @property
+    def loop_wrapper(self) -> "LoopWrapper":
+        from vkbottle.tools.loop_wrapper import _DEPRECATION_MESSAGE, LoopWrapper
+
+        if self._loop_wrapper is None:
+            warnings.warn(_DEPRECATION_MESSAGE, DeprecationWarning, stacklevel=2)
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", DeprecationWarning)
+                self._loop_wrapper = LoopWrapper()
+
+        return self._loop_wrapper
+
+    @loop_wrapper.setter
+    def loop_wrapper(self, value: "LoopWrapper") -> None:
+        self._loop_wrapper = value
 
     @property
     def polling(self) -> "ABCPolling":

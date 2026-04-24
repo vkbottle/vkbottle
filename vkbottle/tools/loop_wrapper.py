@@ -1,5 +1,4 @@
 import asyncio
-import contextlib
 import inspect
 import warnings
 from collections.abc import Callable, Coroutine
@@ -9,17 +8,28 @@ from typing_extensions import deprecated
 
 from vkbottle.modules import logger
 
+from ._runner import run as _run
 from .delayed_task import DelayedTask
+from .scheduling import interval as _interval
+from .scheduling import timer as _timer
 
 if TYPE_CHECKING:
     from asyncio import AbstractEventLoop
 
     Task = Coroutine[Any, Any, Any]
 
+_DEPRECATION_MESSAGE = (
+    "LoopWrapper is deprecated. Use bot.run() / await bot.run_polling() directly, "
+    "and register tasks via bot.on_startup, bot.on_shutdown, bot.startup_tasks. "
+    "For scheduled coroutines use vkbottle.interval / vkbottle.timer."
+)
+
 
 class LoopWrapper:
-    """Loop Wrapper for vkbottle manages startup, shutdown and main tasks,
-    creates loop and runs it forever"""
+    """Backward-compatibility facade over :func:`vkbottle.framework.runner.run`.
+
+    Kept to avoid breaking existing user code; new code should not rely on this class.
+    """
 
     def __init__(
         self,
@@ -29,16 +39,14 @@ class LoopWrapper:
         tasks: list["Task"] | None = None,
         loop: "AbstractEventLoop | None" = None,
     ) -> None:
-        self.on_startup = on_startup or []
-        self.on_shutdown = on_shutdown or []
-        self.tasks = tasks or []
+        warnings.warn(_DEPRECATION_MESSAGE, DeprecationWarning, stacklevel=2)
+
+        self.on_startup: list[Task] = on_startup or []
+        self.on_shutdown: list[Task] = on_shutdown or []
+
+        self.tasks: list[Task] = tasks or []
         self.loop = loop
         self._running = False
-
-        if self.loop is None:
-            with contextlib.suppress(RuntimeError), warnings.catch_warnings():
-                warnings.simplefilter(action="ignore", category=DeprecationWarning)
-                self.loop = asyncio.get_event_loop()
 
     @property
     def is_running(self) -> bool:
@@ -70,63 +78,42 @@ class LoopWrapper:
         logger.warning("run_forever() is deprecated. Use run() instead")
         self.run()
 
-    def run(self) -> NoReturn:  # type: ignore
-        """Runs startup tasks and makes the loop running until all tasks are done"""
-
-        self.loop = asyncio.new_event_loop() if self.loop is None else self.loop
-
-        if self.loop.is_running():
-            msg = (
-                "LoopWrapper.run() cannot be called from a running event loop. "
-                "Use 'await bot.run_polling()' instead."
-            )
-            raise RuntimeError(msg)
-
+    def run(self) -> NoReturn:  # type: ignore[misc]
+        """Drain registered startup/main/shutdown tasks and block until completion."""
         self._running = True
 
-        for startup_task in self.on_startup:
-            self.loop.run_until_complete(startup_task)
-
-        while self.tasks:
-            self.loop.create_task(self.tasks.pop(0))
-
-        tasks = asyncio.all_tasks(self.loop)
         try:
-            while tasks:
-                tasks_results, _ = self.loop.run_until_complete(
-                    asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION),
-                )
-                for task_result in tasks_results:
-                    try:
-                        task_result.result()
-                    except Exception:  # noqa: PERF203
-                        logger.exception("Traceback message below:")
-                tasks = asyncio.all_tasks(self.loop)
-        except KeyboardInterrupt:
-            print(flush=True)  # Blank print for ^C # noqa: T201
-            logger.info("Caught keyboard interrupt. Shutting down...")
-            task_to_cancel = asyncio.gather(*tasks)
-            task_to_cancel.cancel()
-            with contextlib.suppress(asyncio.CancelledError):
-                self.loop.run_until_complete(task_to_cancel)
+            _run(
+                *self.tasks,
+                on_startup=self.on_startup,
+                on_shutdown=self.on_shutdown,
+            )
         finally:
-            for shutdown_task in self.on_shutdown:
-                self.loop.run_until_complete(shutdown_task)
-            if self.loop.is_running():
-                self.loop.close()
+            self._running = False
+            self.tasks = []
+
+            self.on_startup = []
+            self.on_shutdown = []
 
     def add_task(self, task: "Task | Callable[..., Task]") -> None:
-        """Adds tasks to be ran in run_forever or run it immediately if loop is already running
-        :param task: coroutine / coroutine function with zero arguments
+        """Schedule a coroutine to run in the loop.
+
+        If called while the wrapper is already running the task is submitted to
+        the current loop; otherwise it is buffered until :meth:`run` is called.
         """
         if inspect.iscoroutinefunction(task) or isinstance(task, DelayedTask):
-            task = task()  # type: ignore
+            task = task()  # type: ignore[operator]
         elif not asyncio.iscoroutine(task):
             msg = "Task should be coroutine or coroutine function"
             raise TypeError(msg)
 
-        if self.loop and self.loop.is_running():
-            self.loop.create_task(task)
+        try:
+            running_loop = asyncio.get_running_loop()
+        except RuntimeError:
+            running_loop = None
+
+        if running_loop is not None:
+            running_loop.create_task(task)
         else:
             self.tasks.append(task)
 
@@ -137,20 +124,11 @@ class LoopWrapper:
         hours: int = 0,
         days: int = 0,
     ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
-        """A tiny template to wrap repeated tasks with decorator
-        >>> lw = LoopWrapper()
-        >>> @lw.interval(seconds=5)
-        >>> async def repeated_function():
-        >>>     print("This will be logged every five seconds")
-        >>> lw.run()
-        """
+        """Deprecated: use :func:`vkbottle.interval`."""
+        decorator_impl = _interval(seconds=seconds, minutes=minutes, hours=hours, days=days)
 
-        seconds += minutes * 60
-        seconds += hours * 60 * 60
-        seconds += days * 24 * 60 * 60
-
-        def decorator(func: Callable[..., Any]):
-            self.add_task(DelayedTask(seconds, func))
+        def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
+            self.add_task(decorator_impl(func))
             return func
 
         return decorator
@@ -162,19 +140,11 @@ class LoopWrapper:
         hours: int = 0,
         days: int = 0,
     ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
-        """A tiny template to wrap tasks with timer
-        >>> lw = LoopWrapper()
-        >>> @lw.timer(seconds=5)
-        >>> async def delayed_function():
-        >>>     print("This will after 5 seconds")
-        >>> lw.run()
-        """
-        seconds += minutes * 60
-        seconds += hours * 60 * 60
-        seconds += days * 24 * 60 * 60
+        """Deprecated: use :func:`vkbottle.timer`."""
+        decorator_impl = _timer(seconds=seconds, minutes=minutes, hours=hours, days=days)
 
-        def decorator(func: Callable[..., Any]):
-            self.add_task(DelayedTask(seconds, func, do_break=True))
+        def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
+            self.add_task(decorator_impl(func))
             return func
 
         return decorator
