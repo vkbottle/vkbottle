@@ -24,7 +24,7 @@ class BaseFramework(ABCFramework, ABC):
     startup_tasks: list[_Task]
     _loop_wrapper: "LoopWrapper | None"
 
-    async def run_polling(self, custom_polling: "ABCPolling | None" = None) -> NoReturn:  # type: ignore[misc]
+    async def run_polling(self, custom_polling: "ABCPolling | None" = None) -> NoReturn:  # type: ignore[misc,return-value]
         _polling = custom_polling or self.polling
         logger.info("Starting {} for {!r}", type(_polling).__name__, _polling.api)
 
@@ -38,7 +38,7 @@ class BaseFramework(ABCFramework, ABC):
                 pending.add(task)
                 task.add_done_callback(pending.discard)
 
-    def run(self) -> NoReturn:
+    def run(self) -> NoReturn:  # type: ignore[return-value]
         logger.info("Loop will be run forever")
 
         startup = list(self.on_startup)

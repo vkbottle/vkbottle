@@ -78,7 +78,7 @@ class LoopWrapper:
         logger.warning("run_forever() is deprecated. Use run() instead")
         self.run()
 
-    def run(self) -> NoReturn:  # type: ignore[misc]
+    def run(self) -> NoReturn:  # type: ignore[misc,return-value]
         """Drain registered startup/main/shutdown tasks and block until completion."""
         self._running = True
 

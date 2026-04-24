@@ -26,11 +26,11 @@ async def _drain(initial_tasks: Iterable[_Task]) -> None:
 
         done, _ = await asyncio.wait(pending, return_when=asyncio.FIRST_EXCEPTION)
 
-        for task in done:
-            if task.cancelled():
+        for done_task in done:
+            if done_task.cancelled():
                 continue
 
-            exc = task.exception()
+            exc = done_task.exception()
 
             if exc is not None:
                 logger.opt(exception=exc).error("Unhandled exception in task")
