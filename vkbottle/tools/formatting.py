@@ -18,33 +18,6 @@ FORMAT_PATTERN = re.compile(
     r"\{\}|\{(?:(?P<name>\w+)(?::(?P<formats1>\w+(?:\+\w+)*))?|:(?P<formats2>\w+(?:\+\w+)*))\}"
 )
 
-# Precompiled pattern for Markdown parsing (module-level, MVP).
-_MARKDOWN_PATTERN = re.compile(
-    # Priority: URL inline first, so [text](url) matches reliably inside markdown
-    r"(?<!\\)\[(?P<text>[^]]+)\]\((?P<href>[^)]+)\)|"
-    r"(?<!\\)<u>(?P<underline_tag>.+?)</u>|"
-    r"(?<!\\)\*\*(?P<bold>.+?)\*\*|(?<!\\)__(?P<bold2>.+?)__|"
-    r"(?<!\\)\*(?P<italic>.+?)\*(?!\*)|(?<!\\)_(?P<italic2>.+?)_(?!_)"
-)
-
-
-def _unescape_text(text: str) -> str:
-    """Unescape common Markdown escapes in plain text parts.
-
-    We remove the escaping backslashes that were used to escape Markdown
-    characters so that the final output shows the literal characters.
-    This affects only plain text segments, not Format objects.
-    """
-    t = text
-    # Normalize backslashes first, then unescape common Markdown chars
-    t = t.replace("\\\\", "\\")
-    t = t.replace("\\*", "*")
-    t = t.replace("\\[", "[")
-    t = t.replace("\\]", "]")
-    t = t.replace("\\`", "`")
-    t = t.replace("\\_", "_")
-    return t
-
 
 def _calculate_offset(string: str) -> int:
     # https://dev.vk.ru/en/reference/objects/message#format_data
@@ -74,70 +47,6 @@ def italic(string: str | Format, /) -> Format:
 
 def underline(string: str | Format, /) -> Format:
     return _format(string, "underline")
-
-
-def markdown(string: str) -> str | Format:
-    """Regex-based Markdown parsing (MVP, one level, no nesting).
-
-    Supported: bold (**text** / __text__), italic (*text* / _text_),
-    underline via <u>text</u> (HTML tag), and links [text](url).
-
-    Escaping:
-    - Backslashes before formatting markers are respected by the parser.
-    - After final assembly, we unescape certain plain text portions so the
-        final output looks correct to users.
-
-        VK specifics:
-        - Leading asterisk tokens like *vkbottle at word start may be
-            interpreted by VK as a link to
-            https://vk.com/vkbottle. This is VK's behavior, not our parser.
-        - If the text after the star is not a nickname, VK may still interpret
-            differently (for example, leading to user or community pages).
-
-    Returns: either a string or a Format object.
-    """
-    s = string
-
-    # Build token stream using module-level precompiled pattern
-    pattern = _MARKDOWN_PATTERN
-
-    parts: list[str | Format] = []
-    last = 0
-
-    for m in pattern.finditer(s):
-        start, end = m.span()
-        if start > last:
-            parts.append(_unescape_text(s[last:start]))
-
-        if m.group("underline_tag") is not None:
-            inner = m.group("underline_tag")
-            parts.append(underline(inner))
-        elif m.group("bold") is not None or m.group("bold2") is not None:
-            inner = m.group("bold") if m.group("bold") is not None else m.group("bold2")
-            parts.append(bold(inner))
-        elif m.group("italic") is not None or m.group("italic2") is not None:
-            inner = m.group("italic") if m.group("italic") is not None else m.group("italic2")
-            parts.append(italic(inner))
-        elif m.group("text") is not None:
-            inner = m.group("text")
-            href = m.group("href")
-            parts.append(url(inner, href=href))
-        else:
-            parts.append(s[start:end])
-
-        last = end
-
-    if last < len(s):
-        parts.append(_unescape_text(s[last:]))
-
-    if not parts:
-        return s
-
-    result = parts[0]
-    for part in parts[1:]:
-        result = result + part  # type: ignore[assignment]
-
-    return result
 
 
 def url(string: str | Format, /, *, href: str) -> Format:

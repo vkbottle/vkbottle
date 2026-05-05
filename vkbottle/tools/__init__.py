@@ -2,7 +2,7 @@ from .auth import AuthError, UserAuth, UserPermission
 from .ctx_tool import BaseContext
 from .delayed_task import DelayedTask
 from .event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
-from .formatting import Format, Formatter, bold, italic, markdown, underline, url
+from .formatting import Format, Formatter, bold, italic, underline, url
 from .keyboard import (
     EMPTY_KEYBOARD,
     ABCAction,
@@ -17,6 +17,7 @@ from .keyboard import (
 )
 from .limited_dict import LimitedDict
 from .loop_wrapper import LoopWrapper
+from .markdown_parser import markdown
 from .mini_types import BotTypes, UserTypes
 from .singleton import ABCSingleton
 from .storage import ABCStorage, CtxStorage
