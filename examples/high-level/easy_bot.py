@@ -86,7 +86,7 @@ async def reaction_handler(event: GroupTypes.MessageReactionEvent):
     )
 
 
-# Runs loop > loop.run_forever() > with tasks created in loop_wrapper before,
-# read the loop wrapper documentation to comprehend this > tools/loop-wrapper.
-# The main polling task for bot is bot.run_polling()
-bot.run_forever()
+# Runs the bot's main polling task and any startup/startup_tasks/shutdown
+# coroutines registered on the bot. If you already have your own event loop,
+# call `await bot.run_polling()` from within it instead.
+bot.run()

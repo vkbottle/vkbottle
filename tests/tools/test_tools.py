@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import os
 import re
+import warnings
 from io import StringIO
 from typing import TYPE_CHECKING
 
@@ -181,11 +182,14 @@ def test_loop_wrapper():
         c = ctx_storage.get("checked-test-lw-run-until-complete") or []
         ctx_storage.set("checked-test-lw-run-until-complete", [*c, "task3"])
 
-    lw = LoopWrapper(tasks=[task1()])
-    lw.on_startup.append(task2())
-    lw.on_shutdown.append(task3())
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", DeprecationWarning)
 
-    lw.run()  # type: ignore
+        lw = LoopWrapper(tasks=[task1()])
+        lw.on_startup.append(task2())
+        lw.on_shutdown.append(task3())
+
+        lw.run()  # type: ignore
 
     assert ctx_storage.get("checked-test-lw-create-task") == task1.__name__
     assert ctx_storage.get("checked-test-lw-run-until-complete") == [
@@ -226,10 +230,9 @@ def test_run_multibot(mocker: "MockerFixture"):
     bot_apis = []
 
     mocker.patch("vkbottle.bot.Bot.run_polling", lambda s, custom_polling: s.api)
-    mocker.patch("asyncio.iscoroutine", return_value=True)
     mocker.patch(
-        "vkbottle.tools.loop_wrapper.LoopWrapper.run",
-        lambda s: bot_apis.extend(s.tasks),
+        "vkbottle.framework.bot.multibot._run",
+        lambda *tasks, on_startup, on_shutdown: bot_apis.extend(tasks),
     )
 
     run_multibot(Bot(), (API("1"), API("2"), API("3")))

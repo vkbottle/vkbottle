@@ -18,7 +18,7 @@ class ABCFramework(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def run_forever(self) -> NoReturn:
+    def run(self) -> NoReturn:
         raise NotImplementedError
 
 
