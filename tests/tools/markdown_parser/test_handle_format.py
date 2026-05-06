@@ -1,4 +1,4 @@
-from vkbottle.tools.markdown_parser import StackFrame, Token, _handle_format, _handle_triple
+from vkbottle.tools.markdown_parser import StackFrame, Token, _handle_format
 
 
 class TestHandleFormat:
@@ -27,12 +27,3 @@ class TestHandleFormat:
         token = Token(type="italic", value="*")
         _handle_format(token, stack)
         assert len(stack) == 1
-
-    def test_triple_as_closing(self):
-        """If bold is open, *** should close it."""
-        stack = [StackFrame(None), StackFrame("bold", open_marker="**")]
-        _handle_triple(stack)
-        # After triple, first frame should close, remaining bold/italic interaction
-        # Logic: it pops the frame, and if inner is not empty, adds format to parent.
-        # Let's just check that stack size changed or content is consistent
-        assert len(stack) <= 2  # Either closed or changed state

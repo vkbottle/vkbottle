@@ -5,8 +5,6 @@ Supports **bold**, *italic*, <u>underline</u>, and [url](link) as limited by VK 
 Escapes are honored; nested formatting is supported.
 """
 
-from __future__ import annotations
-
 import dataclasses
 import re
 from typing import NamedTuple, cast
@@ -79,39 +77,38 @@ def _close_frame(stack: list[StackFrame], closing_marker: str) -> None:
         stack[-1].parts.append(frame.open_marker + closing_marker)
 
 
-def _handle_triple(stack: list[StackFrame]) -> None:
-    """Handle triple markers (*** or ___): manage bold and italic contexts."""
+def _resolve_triple(token: Token, stack: list[StackFrame]) -> None:
+    """Resolve a pending triple marker on top of the stack.
+
+    Called when the next marker (* or **) arrives after ***.
+    Handles both full closure (*** matches ***) and partial closure.
+    """
     ctx = stack[-1]
+    parts = ctx.parts
+    marker = token.value
+    fmt_type = token.type
 
-    if ctx.ctx_type in ("bold", "italic"):
-        inner = _join(ctx.parts)
-        popped = stack.pop()  # Save the closed frame
-        if inner:
-            # Add format to the parent frame
-            stack[-1].parts.append(_FMT_MAP[cast("str", popped.ctx_type)](inner))
-        else:
-            closer = "**" if popped.ctx_type == "bold" else "*"
-            stack[-1].parts.append(popped.open_marker + closer)
-        rem_type = "italic" if popped.ctx_type == "bold" else "bold"
-    else:
-        # No open context -> open bold first
-        stack.append(StackFrame("bold", open_marker="**"))
-        rem_type = "italic"
+    # Full closure: *** matches ***
+    if marker == ctx.open_marker:
+        inner = _join(parts)
+        stack.pop()
+        # If empty -> literals, otherwise -> nested formatting
+        stack[-1].parts.append(bold(italic(inner)) if inner else ctx.open_marker + marker)
+        return
 
-    # Process the remaining part of the triple marker
-    top = stack[-1]
-    if top.ctx_type == rem_type:
-        inner2 = _join(top.parts)
-        popped2 = stack.pop()
-        if inner2:
-            stack[-1].parts.append(_FMT_MAP[rem_type](inner2))
-        else:
-            closer2 = "*" if rem_type == "italic" else "**"
-            stack[-1].parts.append(popped2.open_marker + closer2)
+    # Partial closure
+    rem_type = "italic" if fmt_type == "bold" else "bold"
+    remainder = ctx.open_marker[len(marker) :]
+    inner = _join(parts)
+
+    if inner:
+        # Nest formatted content into remainder (preserve LIFO nesting)
+        closed_content = _FMT_MAP[fmt_type](inner)
+        stack[-1] = StackFrame(rem_type, parts=[closed_content], open_marker=remainder)
     else:
-        # Open new context for the remaining part
-        marker = "*" if rem_type == "italic" else "**"
-        stack.append(StackFrame(rem_type, open_marker=marker))
+        # Empty content -> emit literals and remove frame
+        stack.pop()
+        stack[-1].parts.append(ctx.open_marker + marker)
 
 
 def _handle_literal(token: Token, stack: list[StackFrame]) -> None:
@@ -126,14 +123,35 @@ def _handle_literal(token: Token, stack: list[StackFrame]) -> None:
 
 
 def _handle_format(token: Token, stack: list[StackFrame]) -> None:
-    """Handle bold/italic with strict marker matching."""
-    ctx = stack[-1]
-    fmt_type = token.type  # "bold" or "italic"
+    """Handle bold, italic, and triple markers with lazy resolution.
 
-    if ctx.ctx_type == fmt_type and ctx.open_marker == token.value:
+    1. Resolve pending triple if present on stack top
+    2. Handle incoming triple (may close existing context)
+    3. Standard open/close for remaining marker (fall-through)
+    """
+
+    # Try to resolve pending triple on stack top
+    if stack[-1].ctx_type == "triple" and token.value[0] == stack[-1].open_marker[0]:
+        _resolve_triple(token, stack)
+        return
+
+    # Incoming triple
+    if token.type == "triple":
+        ctx = stack[-1]
+
+        # Try to close current context if compatible and marker matches
+        if ctx.ctx_type in ("bold", "italic") and token.value.startswith(ctx.open_marker):
+            _close_frame(stack, ctx.open_marker)
+            # Triple remainder always becomes opposite type marker
+            marker = token.value[len(ctx.open_marker) :]
+            token = Token("italic" if ctx.ctx_type == "bold" else "bold", marker)
+
+    # Standard open/close (handles triple remainder or regular markers)
+    ctx = stack[-1]
+    if ctx.ctx_type == token.type and ctx.open_marker == token.value:
         _close_frame(stack, token.value)
     else:
-        stack.append(StackFrame(fmt_type, open_marker=token.value))
+        stack.append(StackFrame(token.type, open_marker=token.value))
 
 
 def _handle_underline(token: Token, stack: list[StackFrame]) -> None:
@@ -172,14 +190,12 @@ def _handle_url(token: Token, stack: list[StackFrame]) -> None:
 
 
 def _process_token(token: Token, stack: list[StackFrame]) -> None:
-    """Dispatch token to the appropriate handler."""
+    """Dispatch token to the appropriate handler based on token type."""
     match token.type:
         case "esc" | "bs" | "text":
             _handle_literal(token, stack)
-        case "bold" | "italic":
+        case "bold" | "italic" | "triple":
             _handle_format(token, stack)
-        case "triple":
-            _handle_triple(stack)
         case "u_open" | "u_close":
             _handle_underline(token, stack)
         case "url_open" | "url_mid" | "url_close":
@@ -187,7 +203,10 @@ def _process_token(token: Token, stack: list[StackFrame]) -> None:
 
 
 def _apply_fallback(stack: list[StackFrame]) -> None:
-    """Convert unclosed frames into literal text."""
+    """Convert unclosed frames into literal text.
+
+    Handles special cases: url_text/url_href, triple markers, and regular formats.
+    """
     while len(stack) > 1:
         frame = stack.pop()
         if frame.ctx_type in ("url_text", "url_href"):
@@ -199,6 +218,12 @@ def _apply_fallback(stack: list[StackFrame]) -> None:
             else:
                 stack[-1].parts.append(")")
             continue
+
+        if frame.ctx_type == "triple":
+            stack[-1].parts.append(frame.open_marker)
+            stack[-1].parts.extend(frame.parts)
+            continue
+
         if frame.ctx_type not in _FMT_MAP:
             continue
 
