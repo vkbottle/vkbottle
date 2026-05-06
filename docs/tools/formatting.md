@@ -80,3 +80,34 @@ bold("vkbottle documentation:") + " " + url(italic("click me"), href="vkbottle.r
 await message.answer(Formatter("Hello, {:bold}!").format("World"))
 await message.answer(underline(bold("Hello") + ", " + italic("World!")))
 ```
+
+## Парсинг Markdown
+
+Для преобразования Markdown-разметки в объекты форматирования VK API используется функция `markdown()`.
+
+```python
+from vkbottle.tools import markdown
+```
+
+Поддерживаемая разметка (в рамках спецификации VK API):
+
+-    \*\*text\*\* или \_\_text\_\_ — полужирный
+-    \*text\* или \_text\_ — курсив
+-    \<u>text\</u> — подчёркнутый
+-    \[text\](url) — ссылка
+-    \\ — экранирование специальных символов
+
+Примеры:
+```python
+# Простое форматирование
+markdown("**Hello** world")  # → bold("Hello") + " world"
+
+# Вложенное форматирование
+markdown("**bold *italic***")  # → bold("bold " + italic("italic"))
+
+# Ссылка с экранированием
+markdown("[Click](https://example.com)")  # → url("Click", href="https://example.com")
+```
+
+!!! info "Примечание"
+    Для последующей передачи в `messages.send` функция возвращает объект `Format` или `str` если текст не содержит маркеров или все маркеры были экранированы

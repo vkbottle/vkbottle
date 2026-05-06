@@ -80,8 +80,8 @@ def _close_frame(stack: list[StackFrame], closing_marker: str) -> None:
 def _resolve_triple(token: Token, stack: list[StackFrame]) -> None:
     """Resolve a pending triple marker on top of the stack.
 
-    Called when the next marker (* or **) arrives after ***.
-    Handles both full closure (*** matches ***) and partial closure.
+    Called when the next marker (\\* or \\*\\*) arrives after \\***.
+    Handles both full closure (\\*\\*\\* matches \\*\\*\\*) and partial closure.
     """
     ctx = stack[-1]
     parts = ctx.parts
@@ -239,10 +239,10 @@ def markdown(string: str) -> str | Format:
 
     Examples:
         Single-level formatting:
-        >>> markdown("**Hello** world")
+            markdown("\\*\\*Hello\\*\\* world")
 
         Nested formatting:
-        >>> markdown("**bold *italic*** text")
+            markdown("\\*\\*bold \\*italic\\*\\*\\* text")
     """
     tokens = _tokenize(string)
     stack: list[StackFrame] = [StackFrame(ctx_type=None)]
