@@ -17,6 +17,7 @@ from .keyboard import (
 )
 from .limited_dict import LimitedDict
 from .loop_wrapper import LoopWrapper
+from .markdown_parser import markdown
 from .mini_types import BotTypes, UserTypes
 from .scheduling import interval, timer
 from .singleton import ABCSingleton
@@ -97,6 +98,7 @@ __all__ = (
     "interval",
     "italic",
     "load_blueprints_from_package",
+    "markdown",
     "run_in_task",
     "run_sync",
     "template_gen",
