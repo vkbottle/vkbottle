@@ -243,3 +243,26 @@ def test_functional_equivalence():
     funcs_8 = "こんにちは (" + italic(japanize) + ") 🌸"
     formatter_8 = Formatter("こんにちは ({japanize:italic}) 🌸").format_map({"japanize": japanize})
     assert funcs_8.as_data() == formatter_8.format_data
+
+
+def test_nested_format_offset_propagation():
+    sample = "Плоский текст " + url(underline(bold("жирная ссылка")), href="https://example.com")
+
+    data = sample.as_data()
+    items = {item["type"]: item for item in data["items"]}
+
+    assert items["bold"]["offset"] == 14
+    assert items["underline"]["offset"] == 14
+    assert items["url"]["offset"] == 14
+    assert items["bold"]["length"] == 13
+    assert items["underline"]["length"] == 13
+
+
+def test_two_level_nesting_works():
+    sample = "Плоский текст " + url(bold("жирная ссылка"), href="https://example.com")
+
+    data = sample.as_data()
+    items = {item["type"]: item for item in data["items"]}
+
+    assert items["bold"]["offset"] == 14
+    assert items["url"]["offset"] == 14
