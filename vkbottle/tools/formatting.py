@@ -82,14 +82,18 @@ class Format:
             return NotImplemented
         return self.add_other(other)
 
+    def _add_offset_recursive(self, formats: list[typing.Self], offset: int) -> None:
+        for fmt in formats:
+            fmt.offset += offset
+            self._add_offset_recursive(fmt.other_formats, offset)
+
     def __radd__(self, other: object, /) -> typing.Self:
         if not isinstance(other, str):
             return NotImplemented
         if isinstance(other, str):
             rhs_offset = _calculate_offset(other)
             self.offset += rhs_offset
-            for other_format in self.other_formats:
-                other_format.offset += rhs_offset
+            self._add_offset_recursive(self.other_formats, rhs_offset)
             self.string = other + self.string
             return self
 
@@ -99,8 +103,7 @@ class Format:
     def add_other(self, other: typing.Self, /) -> typing.Self:
         rhs_offset = _calculate_offset(self.string)
         other.offset += rhs_offset
-        for other_format in other.other_formats:
-            other_format.offset += rhs_offset
+        self._add_offset_recursive(other.other_formats, rhs_offset)
 
         self.string += other.string
         self.other_formats.append(other)
@@ -128,7 +131,7 @@ class Format:
             return result
 
         for fmt in self.other_formats:
-            result["items"].extend(fmt.as_data(offset=offset)["items"])  # type: ignore
+            result["items"].extend(fmt.as_data(offset=0)["items"])  # type: ignore
 
         return result
 
