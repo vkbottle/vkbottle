@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Any
 
+from aiohttp import ClientTimeout
 from typing_extensions import Self
 
 from vkbottle.exception_factory import ErrorHandler
@@ -35,14 +36,16 @@ class BotPolling(BasePolling):
         # sourcery skip: use-fstring-for-formatting
         logger.debug("Making long request to get event with longpoll...")
         return await self.api.http_client.request_json(
-            url="{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
-                server["server"],
-                server["key"],
-                server["ts"],
-                self.wait,
-                self.rps_delay,
-            ),
+            url=server["server"],
             method="POST",
+            params={
+                "act": "a_check",
+                "key": server["key"],
+                "ts": server["ts"],
+                "wait": self.wait,
+                "rps_delay": self.rps_delay,
+            },
+            timeout=ClientTimeout(total=self.wait + 10),
         )
 
     async def get_server(self) -> dict[str, Any]:
