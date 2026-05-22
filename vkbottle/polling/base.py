@@ -87,7 +87,7 @@ class BasePolling(ABCPolling, ABC):
 
                 server["ts"] = event["ts"]
                 retry_count = 0
-                if "updates" not in event:
+                if not event.get("updates"):
                     continue
                 yield event
             except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
