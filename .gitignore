@@ -137,5 +137,8 @@ dmypy.json
 # pytest
 .pytest_cache
 
+# vkbottle local state
+.vkbottle/
+
 .vscode
 .vim
