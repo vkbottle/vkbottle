@@ -28,6 +28,12 @@ class BasePolling(ABCPolling, ABC):
     error_handler: "ABCErrorHandler"
     lp_version: int | None = None
 
+    def restore_server_ts(self, server: dict[str, Any]) -> dict[str, Any]:
+        return server
+
+    def save_server_ts(self, server: dict[str, Any]) -> None:
+        pass
+
     async def handle_failed_event(
         self,
         server: dict[str, Any],
@@ -69,7 +75,7 @@ class BasePolling(ABCPolling, ABC):
     async def listen(self) -> AsyncGenerator[dict[str, Any], None]:
         self._stop_event = asyncio.Event()
         retry_count = 0
-        server = await self.get_server()
+        server = self.restore_server_ts(await self.get_server())
         logger.debug("Starting listening to {} longpoll", self.__class__.__name__)
 
         while not self._stop_event.is_set():
@@ -86,6 +92,7 @@ class BasePolling(ABCPolling, ABC):
                     continue
 
                 server["ts"] = event["ts"]
+                self.save_server_ts(server)
                 retry_count = 0
                 if not event.get("updates"):
                     continue

@@ -33,6 +33,7 @@ class Bot(BaseFramework):
         state_dispenser: "ABCStateDispenser | None" = None,
         error_handler: "ABCErrorHandler | None" = None,
         task_each_event: Any = None,
+        skip_old_events: bool = True,
     ) -> None:
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
@@ -42,7 +43,16 @@ class Bot(BaseFramework):
         self.startup_tasks: list = []
         self.labeler = labeler or BotLabeler(error_handler=error_handler)
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
-        self._polling = polling or BotPolling(self.api, error_handler=error_handler)
+        self.skip_old_events = skip_old_events
+
+        if polling is not None and isinstance(polling, BotPolling):
+            polling.skip_old_events = skip_old_events
+
+        self._polling = polling or BotPolling(
+            self.api,
+            error_handler=error_handler,
+            skip_old_events=skip_old_events,
+        )
         self._callback = callback or BotCallback(error_handler=error_handler)
         self._router = router or Router()
 
@@ -75,7 +85,10 @@ class Bot(BaseFramework):
 
     @property
     def polling(self) -> "ABCPolling":
-        return self._polling.construct(self.api, self.error_handler)
+        polling = self._polling.construct(self.api, self.error_handler)
+        if isinstance(polling, BotPolling):
+            polling.skip_old_events = self.skip_old_events
+        return polling
 
     @property
     def router(self) -> "ABCRouter":
