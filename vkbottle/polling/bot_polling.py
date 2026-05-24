@@ -47,8 +47,7 @@ class BotPolling(BasePolling):
             return server
 
         try:
-            with self.ts_state_path.open(encoding="utf-8") as f:
-                state = json.load(f)
+            state = json.loads(self.ts_state_path.read_text(encoding="utf-8"))
         except FileNotFoundError:
             return server
         except (OSError, TypeError, ValueError) as e:
@@ -70,8 +69,11 @@ class BotPolling(BasePolling):
         state = {"ts": server["ts"]}
 
         try:
-            with temp_path.open("w", encoding="utf-8") as f:
-                json.dump(state, f)
+            payload: str | bytes = json.dumps(state)
+            if isinstance(payload, bytes):
+                temp_path.write_bytes(payload)
+            else:
+                temp_path.write_text(payload, encoding="utf-8")
             temp_path.replace(path)
         except OSError as e:
             logger.warning("Unable to save bot polling state to {}: {}", path, e)
