@@ -55,7 +55,8 @@ pip install vkbottle
 ПР поддерживаются! Перед созданием пулл реквеста ознакомьтесь с [CONTRIBUTION_GUIDE](CONTRIBUTION_GUIDE.md). Нам приятно видеть ваш вклад в развитие фреймворка.\
 Задавайте вопросы в блоке Issues или на нашем [**форуме в Telegram**](https://t.me/botoforum)!
 
-Мейнтейнеры: [click](https://github.com/vkbottle/vkbottle/graphs/contributors)
+[Контрибьютеры](https://github.com/vkbottle/vkbottle/graphs/contributors)\
+[Мейнтейнеры](https://github.com/orgs/vkbottle/people)
 
 ## Лицензия
 
