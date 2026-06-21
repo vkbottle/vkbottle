@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import atexit
 import warnings
 from collections.abc import AsyncGenerator
@@ -40,6 +41,9 @@ class AiohttpClient(ABCHTTPClient):
             session_params["raise_for_status"] = True
 
         self.session = session
+        # Loop the auto-created session is bound to; None when the caller supplied
+        # the session (its lifecycle is then the caller's responsibility).
+        self._session_loop: asyncio.AbstractEventLoop | None = None
         self._session_params = session_params
 
         atexit.register(self.close_connector)
@@ -52,11 +56,15 @@ class AiohttpClient(ABCHTTPClient):
         data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> AsyncGenerator[ClientResponse]:
-        if not self.session:
+        if self.session is None or (
+            self._session_loop is not None
+            and self._session_loop is not asyncio.get_running_loop()
+        ):
             self.session = ClientSession(  # type: ignore[misc]
                 json_serialize=self.json_processing_module.dumps,
                 **self._session_params,  # type: ignore[arg-type]
             )
+            self._session_loop = asyncio.get_running_loop()
 
         async with self.session.request(url=url, method=method, data=data, **kwargs) as response:
             yield response
