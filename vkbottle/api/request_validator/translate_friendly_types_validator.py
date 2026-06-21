@@ -15,7 +15,7 @@ class TranslateFriendlyTypesRequestValidator(ABCRequestValidator):
             elif isinstance(v, bool):
                 request[k] = int(v)
             elif isinstance(v, pydantic.BaseModel):
-                request[k] = v.model_dump(exclude_none=True)
+                request[k] = json.dumps(v.model_dump(exclude_none=True))
             elif isinstance(v, dict):
                 request[k] = json.dumps(await self.validate(v))
             elif v is None:

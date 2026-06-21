@@ -1,5 +1,7 @@
+import json
 from typing import Any
 
+import pydantic
 import pytest
 
 from tests.test_utils import with_mocked_api
@@ -168,3 +170,18 @@ def test_unexpected_kwargs_in_api_error():
     assert e.value.code == 5
     assert isinstance(e.value, APIAuthError)
     assert e.value.kwargs == {"unexpected_kwarg": 123}
+
+
+@pytest.mark.asyncio
+async def test_request_validator_serializes_pydantic_model():
+    class _Model(pydantic.BaseModel):
+        a: int
+        items: list[int]
+
+    api = API("token")
+    result = await api.validate_request({"m": _Model(a=1, items=[1, 2, 3])})
+
+    # A pydantic model must be serialized to a JSON *string*, like a dict — not
+    # left as a raw dict that aiohttp's form encoder would mangle.
+    assert isinstance(result["m"], str)
+    assert json.loads(result["m"]) == {"a": 1, "items": [1, 2, 3]}
