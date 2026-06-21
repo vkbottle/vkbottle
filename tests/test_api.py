@@ -226,3 +226,25 @@ async def test_json_validator_reschedule_guard_is_per_request():
 
     assert result_b == {"response": "B"}
     assert result_a == {"response": "A"}
+
+
+@pytest.mark.asyncio
+async def test_blocking_rescheduler_uses_async_sleep(mocker):
+    from unittest.mock import AsyncMock
+
+    from vkbottle.api.request_rescheduler.blocking import BlockingRequestRescheduler
+
+    # A blocking time.sleep in an async rescheduler stalls the whole event loop;
+    # it must await asyncio.sleep instead.
+    async_sleep = mocker.patch("asyncio.sleep", new=AsyncMock())
+
+    class _Api:
+        async def request(self, method, data):
+            return {"response": 1}
+
+    result = await BlockingRequestRescheduler(delay=0).reschedule(
+        _Api(), "m", {}, recent_response=None
+    )
+
+    assert result == {"response": 1}
+    async_sleep.assert_awaited()
