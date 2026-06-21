@@ -112,3 +112,23 @@ async def test_polling_saves_ts_after_event_processed():
     # The ts for an event must be persisted only after the event was handed off, so a
     # crash mid-processing re-fetches the event instead of silently skipping it.
     assert order.index(("process", "5")) < order.index(("save", "5"))
+
+
+class _SingleEventPolling(_Polling):
+    async def get_event(self, server):
+        self.event_calls += 1
+        self.stop()
+        return {"ts": "1", "updates": [{"x": 1}]}
+
+
+@pytest.mark.asyncio
+async def test_polling_saves_ts_off_the_event_loop(mocker):
+    to_thread = mocker.patch("asyncio.to_thread")
+
+    polling = _SingleEventPolling()
+    _events = [event async for event in polling.listen()]
+
+    # The (potentially blocking) ts save must be offloaded to a thread so it doesn't
+    # block the event loop on every longpoll batch.
+    to_thread.assert_awaited()
+    assert to_thread.await_args.args[0] == polling.save_server_ts

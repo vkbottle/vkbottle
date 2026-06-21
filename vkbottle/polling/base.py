@@ -101,8 +101,9 @@ class BasePolling(ABCPolling, ABC):
                 if event.get("updates"):
                     yield event
                 # Persist ts only after the event was handed off for processing, so a
-                # crash mid-processing re-fetches it instead of skipping it.
-                self.save_server_ts(server)
+                # crash mid-processing re-fetches it instead of skipping it. Offload the
+                # (possibly blocking) write to a thread so the event loop isn't stalled.
+                await asyncio.to_thread(self.save_server_ts, server)
             except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
                 logger.error("Unable to make request to {}, retrying...", self.__class__.__name__)
                 retry_count = min(retry_count + 1, 60)
