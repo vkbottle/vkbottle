@@ -49,3 +49,17 @@ async def test_answer_varies_random_id_per_chunk():
     # A non-zero random_id must differ per chunk, or VK deduplicates and drops every
     # chunk after the first.
     assert sent[0]["random_id"] != sent[1]["random_id"]
+
+
+@pytest.mark.asyncio
+async def test_reply_marks_only_the_first_chunk():
+    sent: list[dict] = []
+    message = _make_message(sent)
+
+    await message.reply("a" * 5000)
+
+    assert len(sent) == 2
+    # The reply/forward applies to the message as a whole — only the first chunk should
+    # carry it, otherwise every fragment becomes a separate reply.
+    assert "forward" in sent[0]
+    assert "forward" not in sent[1]
