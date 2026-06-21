@@ -36,3 +36,16 @@ async def test_answer_returns_first_chunk_response():
     assert len(sent) == 2
     # The primary (first) message id must be returned, not the last chunk's.
     assert result.message_id == 101
+
+
+@pytest.mark.asyncio
+async def test_answer_varies_random_id_per_chunk():
+    sent: list[dict] = []
+    message = _make_message(sent)
+
+    await message.answer("a" * 5000, random_id=555)
+
+    assert len(sent) == 2
+    # A non-zero random_id must differ per chunk, or VK deduplicates and drops every
+    # chunk after the first.
+    assert sent[0]["random_id"] != sent[1]["random_id"]

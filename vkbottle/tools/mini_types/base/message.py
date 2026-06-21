@@ -249,13 +249,21 @@ class BaseMessageMin(MessagesMessage, ABC):
 
         stream = StringIO(message)
         responses = []
+        base_random_id = data.get("random_id")
+        chunk_index = 0
         while True:
             if msg := stream.read(4096):
                 data["message"] = msg
 
+            # A non-zero random_id must be unique per chunk, otherwise VK deduplicates
+            # and silently drops every chunk after the first.
+            if base_random_id:
+                data["random_id"] = base_random_id + chunk_index
+
             responses.append(
                 (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]  # type: ignore
             )
+            chunk_index += 1
             if stream.tell() == len(message or ""):
                 break
 
