@@ -163,7 +163,9 @@ def _handle_underline(token: Token, stack: list[StackFrame]) -> None:
     elif ctx.ctx_type == "u":
         _close_frame(stack, token.value)
     else:
-        ctx.parts.append("<u>")
+        # Orphan tag (only reachable for </u> with no open <u>): keep it verbatim
+        # instead of collapsing </u> into <u>.
+        ctx.parts.append(token.value)
 
 
 def _handle_url(token: Token, stack: list[StackFrame]) -> None:
