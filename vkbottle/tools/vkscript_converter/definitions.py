@@ -317,7 +317,7 @@ def attribute(d: ast.Attribute):
 
 @converter(ast.Return)
 def return_statement(d: ast.Return):
-    value = "null" if d is None else find(d.value)
+    value = "null" if d.value is None else find(d.value)
     return f"return {value};"
 
 

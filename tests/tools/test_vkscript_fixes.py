@@ -10,9 +10,20 @@ def _for_loop(api, items):
     return result
 
 
+@vkscript
+def _bare_return(api):
+    return
+
+
 def test_vkscript_for_loop_is_forward_and_nondestructive():
     code = _for_loop(items=[1, 2, 3]).code
 
     # The previous implementation iterated with .pop(), which reverses the order and
     # destroys the source array. A correct loop must not pop.
     assert ".pop()" not in code
+
+
+def test_vkscript_bare_return():
+    # A bare `return` must convert to `return null;`, not raise (emptiness must be
+    # checked on the value, not the node).
+    assert "return null;" in _bare_return().code
