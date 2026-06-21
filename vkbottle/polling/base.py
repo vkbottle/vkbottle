@@ -85,6 +85,11 @@ class BasePolling(ABCPolling, ABC):
 
                 if "failed" in event:
                     server = await self.handle_failed_event(server, event)
+                    if not server:
+                        # Failure could not be resolved (e.g. unknown code); back off
+                        # before refetching so we don't spin a tight reconnect loop.
+                        retry_count = min(retry_count + 1, 60)
+                        await asyncio.sleep(0.1 * retry_count)
                     continue
 
                 if "ts" not in event:

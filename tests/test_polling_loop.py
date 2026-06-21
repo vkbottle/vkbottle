@@ -65,3 +65,24 @@ async def test_polling_backs_off_on_generic_error(mocker):
     # An unexpected exception must trigger a back-off, not spin tightly re-handling
     # the same error and flooding logs.
     sleep.assert_awaited()
+
+
+class _UnknownFailurePolling(_Polling):
+    async def get_event(self, server):
+        self.event_calls += 1
+        if self.event_calls == 1:
+            return {"failed": 999}  # unknown failure code -> handle_failed_event returns {}
+        self.stop()
+        return {"ts": "1", "updates": [{"x": 1}]}
+
+
+@pytest.mark.asyncio
+async def test_polling_backs_off_on_unhandled_failure(mocker):
+    sleep = mocker.patch("asyncio.sleep")
+
+    polling = _UnknownFailurePolling()
+    _events = [event async for event in polling.listen()]
+
+    # An unhandled failure code yields an empty server; the loop must back off before
+    # refetching instead of spinning a tight reconnect loop.
+    sleep.assert_awaited()
