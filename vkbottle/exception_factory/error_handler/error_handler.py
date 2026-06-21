@@ -37,9 +37,13 @@ class ErrorHandler(ABCErrorHandler):
         return handler
 
     def lookup_handler(self, for_type: type[Exception]) -> Callable[..., Awaitable[Any]] | None:
+        best_type: type[Exception] | None = None
         for error_type in self.error_handlers:
-            if issubclass(for_type, error_type):
-                return self.error_handlers[error_type]
+            if issubclass(for_type, error_type) and (
+                best_type is None or issubclass(error_type, best_type)
+            ):
+                best_type = error_type
+        return self.error_handlers[best_type] if best_type is not None else None
 
     async def handle(self, error: Exception, *args: Any, **kwargs: Any) -> Any:
         handler = self.lookup_handler(type(error)) or self.undefined_error_handler
