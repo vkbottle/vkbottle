@@ -221,8 +221,7 @@ def _apply_fallback(stack: list[StackFrame]) -> None:
             stack[-1].parts.extend(frame.parts)
             if frame.ctx_type == "url_text":
                 stack[-1].parts.append("](")
-            else:
-                stack[-1].parts.append(")")
+            # url_href is left as-is: don't fabricate a closing ')' the user never typed.
             continue
 
         if frame.ctx_type == "triple":

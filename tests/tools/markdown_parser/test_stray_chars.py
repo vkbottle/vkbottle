@@ -11,3 +11,8 @@ def test_markdown_preserves_stray_punctuation():
 def test_markdown_orphan_close_underline_is_literal():
     # An orphan </u> must render as </u>, not collapse to <u> (slash dropped).
     assert markdown("hello </u> world") == "hello </u> world"
+
+
+def test_markdown_unclosed_link_does_not_fabricate_paren():
+    # An unclosed [text](href must not gain a trailing ) the user never typed.
+    assert markdown("see [text](http://x") == "see [text](http://x"
