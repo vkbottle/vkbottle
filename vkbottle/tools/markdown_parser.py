@@ -24,7 +24,8 @@ _TOKEN_RE = re.compile(
     r"(?P<url_open>\[)|"
     r"(?P<url_mid>\]\()|"
     r"(?P<url_close>\))|"
-    r"(?P<text>[^\*__\[\]()<>\\]+)"
+    r"(?P<text>[^\*__\[\]()<>\\]+)|"
+    r"(?P<other>.)"
 )
 
 
@@ -187,12 +188,15 @@ def _handle_url(token: Token, stack: list[StackFrame]) -> None:
 
         stack.pop()
         stack[-1].parts.append(url(close_link_text, href=href_str))
+    else:
+        # Stray ']( ' / ')' outside a link: keep them as literal text, don't drop them.
+        ctx.parts.append(token.value)
 
 
 def _process_token(token: Token, stack: list[StackFrame]) -> None:
     """Dispatch token to the appropriate handler based on token type."""
     match token.type:
-        case "esc" | "bs" | "text":
+        case "esc" | "bs" | "text" | "other":
             _handle_literal(token, stack)
         case "bold" | "italic" | "triple":
             _handle_format(token, stack)
