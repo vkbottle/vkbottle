@@ -13,4 +13,4 @@ class BuiltinStateDispenser(ABCStateDispenser):
         self.dictionary[peer_id] = StatePeer(peer_id=peer_id, state=state, payload=payload)
 
     async def delete(self, peer_id: int):
-        self.dictionary.pop(peer_id)
+        self.dictionary.pop(peer_id, None)
