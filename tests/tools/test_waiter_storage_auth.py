@@ -3,6 +3,7 @@ import asyncio
 import pytest
 
 from vkbottle.tools import CtxStorage
+from vkbottle.tools.auth import UserAuth
 from vkbottle.tools.waiter_machine.machine import WaiterMachine
 
 
@@ -43,3 +44,23 @@ def test_ctx_storage_delete_missing_key_is_noop():
     storage = CtxStorage(force_reset=True)
     # Deleting a key that isn't there must not raise KeyError.
     storage.delete("nonexistent")
+
+
+@pytest.mark.asyncio
+async def test_get_token_spreads_extra_kwargs():
+    sent: dict = {}
+
+    class _HTTP:
+        async def request_json(self, url, method="GET", data=None, **kw):
+            sent.update(data or {})
+            return {"access_token": "tok"}
+
+    auth = UserAuth(client_id=1, client_secret="s")
+    auth.http_client = _HTTP()
+
+    result = await auth.get_token("login", "secret-pass", device_id="abc")
+
+    assert result == "tok"
+    # Extra kwargs must be spread as top-level POST fields, not nested under "kwargs".
+    assert sent.get("device_id") == "abc"
+    assert "kwargs" not in sent
