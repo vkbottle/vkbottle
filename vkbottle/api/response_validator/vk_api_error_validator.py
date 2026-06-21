@@ -21,6 +21,13 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         response: Any,
         ctx_api: "ABCAPI | API",
     ) -> Any:
+        if not isinstance(response, dict):
+            request_params = [{"key": key, "value": value} for key, value in data.items()]
+            raise VKAPIError[1](
+                error_msg=f"Unknown response from {method}: {response}",
+                request_params=request_params,
+            )
+
         if "error" not in response:
             if "response" not in response:
                 request_params = [{"key": key, "value": value} for key, value in data.items()]

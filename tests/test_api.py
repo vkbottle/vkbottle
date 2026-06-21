@@ -248,3 +248,16 @@ async def test_blocking_rescheduler_uses_async_sleep(mocker):
 
     assert result == {"response": 1}
     async_sleep.assert_awaited()
+
+
+@pytest.mark.asyncio
+async def test_error_validator_rejects_non_dict_response():
+    from vkbottle.api.response_validator import VKAPIErrorResponseValidator
+
+    class _Api:
+        ignore_errors = False
+
+    # A bare non-dict response (e.g. VK returns `1`) must surface as a clean
+    # VKAPIError, not a TypeError from `"error" not in 1`.
+    with pytest.raises(VKAPIError):
+        await VKAPIErrorResponseValidator().validate("m", {}, 1, _Api())
