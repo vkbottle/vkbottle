@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from vkbottle.tools.uploader import DocUploader
+from vkbottle.tools.uploader import DocMessagesUploader, DocUploader
 
 
 class _FakeHTTP:
@@ -70,3 +70,22 @@ async def test_get_owner_id_raises_clearly_when_unresolvable():
 
     with pytest.raises(RuntimeError):
         await uploader.get_owner_id()
+
+
+@pytest.mark.asyncio
+async def test_doc_messages_upload_does_not_send_peer_id_to_save():
+    api = _FakeAPI(
+        {
+            "docs.getMessagesUploadServer": {"response": {"upload_url": "http://u"}},
+            "docs.save": {"response": {"type": "doc", "doc": {"owner_id": 1, "id": 2}}},
+        }
+    )
+    uploader = DocMessagesUploader(api)
+
+    await uploader.raw_upload(b"filedata", peer_id=123)
+
+    save_call = next(d for m, d in api.calls if m == "docs.save")
+    server_call = next(d for m, d in api.calls if m == "docs.getMessagesUploadServer")
+    # peer_id is needed to get the messages upload server but is rejected by docs.save.
+    assert "peer_id" not in save_call
+    assert server_call.get("peer_id") == 123
