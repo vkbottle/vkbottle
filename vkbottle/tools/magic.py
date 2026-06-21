@@ -12,6 +12,28 @@ CONTEXT_NAMES: typing.Final = (
 )
 
 
+def _unwrap_callable(func: Function, /) -> Function | None:
+    """Return the underlying __code__-bearing function.
+
+    Handles plain/wrapped functions and callable instances (via their __call__).
+    Returns None when the callable cannot be introspected this way (e.g. a
+    functools.partial), so callers can degrade gracefully instead of crashing.
+    """
+    f = unwrap(func)
+    try:
+        if f.__code__:
+            return f
+    except AttributeError:
+        pass
+    try:
+        call = type(f).__call__
+        if call.__code__:
+            return call
+    except AttributeError:
+        pass
+    return None
+
+
 def _resolve_arg_names(
     func: Function,
     /,
@@ -21,7 +43,10 @@ def _resolve_arg_names(
     exclude: set[str] | None = None,
 ) -> tuple[str, ...]:
     exclude = exclude or set()
-    varnames = unwrap(func).__code__.co_varnames[start_idx:stop_idx]
+    resolved = _unwrap_callable(func)
+    if resolved is None:
+        return ()
+    varnames = resolved.__code__.co_varnames[start_idx:stop_idx]
     return tuple(name for name in varnames if name not in exclude)
 
 
@@ -32,11 +57,14 @@ def resolve_arg_names(
     start_idx: int = 1,
     exclude: set[str] | None = None,
 ) -> tuple[str, ...]:
-    unwrapped_func = unwrap(func)
+    resolved = _unwrap_callable(func)
+    if resolved is None:
+        return ()
+    code = resolved.__code__
     return _resolve_arg_names(
-        func,
+        resolved,
         start_idx=start_idx,
-        stop_idx=unwrapped_func.__code__.co_argcount + unwrapped_func.__code__.co_kwonlyargcount,
+        stop_idx=code.co_argcount + code.co_kwonlyargcount,
         exclude=exclude,
     )
 
@@ -48,11 +76,14 @@ def resolve_kwonly_arg_names(
     start_idx: int = 1,
     exclude: set[str] | None = None,
 ) -> tuple[str, ...]:
-    unwrapped_func = unwrap(func)
+    resolved = _unwrap_callable(func)
+    if resolved is None:
+        return ()
+    code = resolved.__code__
     return _resolve_arg_names(
-        func,
-        start_idx=unwrapped_func.__code__.co_argcount + start_idx,
-        stop_idx=unwrapped_func.__code__.co_argcount + unwrapped_func.__code__.co_kwonlyargcount,
+        resolved,
+        start_idx=code.co_argcount + start_idx,
+        stop_idx=code.co_argcount + code.co_kwonlyargcount,
         exclude=exclude,
     )
 
@@ -64,26 +95,30 @@ def resolve_posonly_arg_names(
     start_idx: int = 1,
     exclude: set[str] | None = None,
 ) -> tuple[str, ...]:
-    unwrapped_func = unwrap(func)
+    resolved = _unwrap_callable(func)
+    if resolved is None:
+        return ()
     return _resolve_arg_names(
-        func,
+        resolved,
         start_idx=start_idx,
-        stop_idx=unwrapped_func.__code__.co_posonlyargcount,
+        stop_idx=resolved.__code__.co_posonlyargcount,
         exclude=exclude,
     )
 
 
 def get_default_args(func: Function, /) -> dict[str, typing.Any]:
-    unwrapped_func = unwrap(func)
-    defaults = unwrapped_func.__defaults__
-    kwdefaults = {} if not unwrapped_func.__kwdefaults__ else unwrapped_func.__kwdefaults__.copy()
+    resolved = _unwrap_callable(func)
+    if resolved is None:
+        return {}
+    defaults = resolved.__defaults__
+    kwdefaults = {} if not resolved.__kwdefaults__ else resolved.__kwdefaults__.copy()
     if not defaults:
         return kwdefaults
 
     # __defaults__ map to the trailing *positional* params only; including keyword-only
     # names here would shift the defaults onto the wrong parameters.
     positional_names = _resolve_arg_names(
-        unwrapped_func, start_idx=0, stop_idx=unwrapped_func.__code__.co_argcount
+        resolved, start_idx=0, stop_idx=resolved.__code__.co_argcount
     )
     default_args = {k: defaults[i] for i, k in enumerate(positional_names[-len(defaults) :])}
     default_args.update(kwdefaults)
