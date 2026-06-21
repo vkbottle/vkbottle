@@ -84,7 +84,7 @@ class CommandRule(ABCRule[BaseMessageMin]):
                     return True
                 elif self.args_count and event.text[text_length:text_length_with_sep] == self.sep:
                     args = event.text[text_length_with_sep:].split(self.sep)
-                    return {"args": args} if len(args) == self.args_count and all(args) else False
+                    return {"args": args} if len(args) == self.args_count else False
         return False
 
 

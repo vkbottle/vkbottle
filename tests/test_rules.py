@@ -32,3 +32,11 @@ async def test_command_rule_respects_word_boundary():
     assert await rule.check(_msg("/hello world")) is False
     # A real "/he a b" still matches with its two args.
     assert await rule.check(_msg("/he a b")) == {"args": ["a", "b"]}
+
+
+@pytest.mark.asyncio
+async def test_command_rule_allows_empty_string_args():
+    rule = CommandRule(("set", 2))
+    # A trailing empty argument is still a valid argument; it must not be dropped
+    # by an all(args) truthiness check.
+    assert await rule.check(_msg("/set a ")) == {"args": ["a", ""]}
