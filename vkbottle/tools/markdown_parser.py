@@ -197,6 +197,11 @@ def _handle_url(token: Token, stack: list[StackFrame]) -> None:
 
 def _process_token(token: Token, stack: list[StackFrame]) -> None:
     """Dispatch token to the appropriate handler based on token type."""
+    if stack[-1].ctx_type == "url_href" and token.type != "url_close":
+        # A link target is literal: URLs may contain *, _, [, ( etc., so don't parse
+        # markup inside (...). Escapes are unescaped when the link is closed.
+        stack[-1].parts.append(token.value)
+        return
     match token.type:
         case "esc" | "bs" | "text" | "other":
             _handle_literal(token, stack)
