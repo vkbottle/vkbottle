@@ -4,7 +4,12 @@ from typing import Any
 
 import pytest
 
-from vkbottle.tools.uploader import DocMessagesUploader, DocUploader
+from vkbottle.tools.uploader import (
+    AudioUploader,
+    DocMessagesUploader,
+    DocUploader,
+    VideoUploader,
+)
 
 
 class _FakeHTTP:
@@ -89,3 +94,33 @@ async def test_doc_messages_upload_does_not_send_peer_id_to_save():
     # peer_id is needed to get the messages upload server but is rejected by docs.save.
     assert "peer_id" not in save_call
     assert server_call.get("peer_id") == 123
+
+
+@pytest.mark.asyncio
+async def test_video_raw_upload_ignores_extra_params():
+    api = _FakeAPI(
+        {"video.save": {"response": {"owner_id": 1, "video_id": 2, "upload_url": "http://u"}}}
+    )
+    uploader = VideoUploader(api)
+
+    # Extra params must not be forwarded to upload_files, which takes no **kwargs.
+    result = await uploader.raw_upload(file_source=b"data", some_extra=1)
+
+    assert result["video_id"] == 2
+
+
+@pytest.mark.asyncio
+async def test_audio_upload_handles_owner_id_in_save_response():
+    api = _FakeAPI(
+        {
+            "audio.getUploadServer": {"response": {"upload_url": "http://u"}},
+            "audio.save": {"response": {"id": 5, "owner_id": -10}},
+        }
+    )
+    uploader = AudioUploader(api)
+
+    # owner_id present in both the user params and the save response must not raise a
+    # duplicate-keyword TypeError.
+    result = await uploader.upload("artist", "title", b"data", owner_id=-10)
+
+    assert result == "audio-10_5"

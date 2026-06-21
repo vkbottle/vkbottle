@@ -92,7 +92,7 @@ class VideoUploader(BaseUploader):
         else:
             data = await self.read(file_source)  # type: ignore
             file = self.get_bytes_io(data)
-            await self.upload_files(server["upload_url"], {"video_file": file}, **params)
+            await self.upload_files(server["upload_url"], {"video_file": file})
 
         return server
 
