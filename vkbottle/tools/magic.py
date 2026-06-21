@@ -80,10 +80,12 @@ def get_default_args(func: Function, /) -> dict[str, typing.Any]:
     if not defaults:
         return kwdefaults
 
-    default_args = {
-        k: defaults[i]
-        for i, k in enumerate(resolve_arg_names(unwrapped_func, start_idx=0)[-len(defaults) :])
-    }
+    # __defaults__ map to the trailing *positional* params only; including keyword-only
+    # names here would shift the defaults onto the wrong parameters.
+    positional_names = _resolve_arg_names(
+        unwrapped_func, start_idx=0, stop_idx=unwrapped_func.__code__.co_argcount
+    )
+    default_args = {k: defaults[i] for i, k in enumerate(positional_names[-len(defaults) :])}
     default_args.update(kwdefaults)
     return default_args
 
