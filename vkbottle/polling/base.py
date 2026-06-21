@@ -100,7 +100,8 @@ class BasePolling(ABCPolling, ABC):
             except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
                 logger.error("Unable to make request to {}, retrying...", self.__class__.__name__)
                 retry_count = min(retry_count + 1, 60)
-                server = {}
+                # Keep the current server/ts: a transient network error must not drop
+                # the ts and refetch a fresh server, which would skip queued events.
                 await asyncio.sleep(0.1 * retry_count)
             except Exception as e:
                 await self.error_handler.handle(e)
