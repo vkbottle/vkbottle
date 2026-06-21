@@ -1,3 +1,4 @@
+import contextvars
 from typing import TYPE_CHECKING, Any
 
 from vkbottle.exception_factory import CaptchaError, VKAPIError
@@ -7,6 +8,14 @@ from .abc import ABCResponseValidator
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, API
+
+
+MAX_CAPTCHA_ATTEMPTS = 5
+# Per-request captcha retry counter (isolated per task/async-context) so a VK that
+# keeps returning captcha cannot drive unbounded recursion.
+_captcha_attempts: contextvars.ContextVar[int] = contextvars.ContextVar(
+    "vkbottle_captcha_attempts", default=0
+)
 
 
 class VKAPIErrorResponseValidator(ABCResponseValidator):
@@ -49,11 +58,18 @@ class VKAPIErrorResponseValidator(ABCResponseValidator):
         code = error.pop("error_code")
 
         if VKAPIError[code] is CaptchaError and ctx_api.captcha_handler is not None:
-            key = await ctx_api.captcha_handler(CaptchaError(**error))  # type: ignore
-            return await ctx_api.request(
-                method,
-                data={**data, "captcha_sid": error["captcha_sid"], "captcha_key": key},
-            )
+            attempts = _captcha_attempts.get()
+            if attempts >= MAX_CAPTCHA_ATTEMPTS:
+                raise VKAPIError[code](**error)
+            token = _captcha_attempts.set(attempts + 1)
+            try:
+                key = await ctx_api.captcha_handler(CaptchaError(**error))  # type: ignore
+                return await ctx_api.request(
+                    method,
+                    data={**data, "captcha_sid": error["captcha_sid"], "captcha_key": key},
+                )
+            finally:
+                _captcha_attempts.reset(token)
 
         raise VKAPIError[code](**error)
 

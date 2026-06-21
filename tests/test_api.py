@@ -261,3 +261,42 @@ async def test_error_validator_rejects_non_dict_response():
     # VKAPIError, not a TypeError from `"error" not in 1`.
     with pytest.raises(VKAPIError):
         await VKAPIErrorResponseValidator().validate("m", {}, 1, _Api())
+
+
+@pytest.mark.asyncio
+async def test_captcha_retry_is_bounded():
+    from vkbottle.api.response_validator import VKAPIErrorResponseValidator
+
+    validator = VKAPIErrorResponseValidator()
+
+    def make_captcha():
+        return {
+            "error": {
+                "error_code": 14,
+                "error_msg": "Captcha needed",
+                "captcha_sid": "1",
+                "captcha_img": "http://x",
+            }
+        }
+
+    calls = {"n": 0}
+
+    class _Api:
+        ignore_errors = False
+
+        async def captcha_handler(self, err):
+            return "wrong-key"
+
+        async def request(self, method, data):
+            calls["n"] += 1
+            if calls["n"] > 50:
+                msg = "unbounded captcha retry"
+                raise RuntimeError(msg)
+            return await validator.validate(method, data, make_captcha(), self)
+
+    # VK keeps demanding captcha; retries must be bounded and finally surface the error
+    # instead of recursing forever.
+    with pytest.raises(VKAPIError):
+        await validator.validate("m", {}, make_captcha(), _Api())
+
+    assert calls["n"] <= 10
