@@ -43,3 +43,25 @@ async def test_polling_keeps_ts_on_transient_error(mocker):
     # (which would skip every event queued between the old ts and "now").
     assert polling.server_calls == 1
     assert events == [{"ts": "101", "updates": [{"x": 1}]}]
+
+
+class _GenericErrorPolling(_Polling):
+    async def get_event(self, server):
+        self.event_calls += 1
+        if self.event_calls == 1:
+            msg = "boom"
+            raise RuntimeError(msg)
+        self.stop()
+        return {"ts": "1", "updates": [{"x": 1}]}
+
+
+@pytest.mark.asyncio
+async def test_polling_backs_off_on_generic_error(mocker):
+    sleep = mocker.patch("asyncio.sleep")
+
+    polling = _GenericErrorPolling()
+    _events = [event async for event in polling.listen()]
+
+    # An unexpected exception must trigger a back-off, not spin tightly re-handling
+    # the same error and flooding logs.
+    sleep.assert_awaited()

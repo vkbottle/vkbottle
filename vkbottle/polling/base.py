@@ -105,6 +105,10 @@ class BasePolling(ABCPolling, ABC):
                 await asyncio.sleep(0.1 * retry_count)
             except Exception as e:
                 await self.error_handler.handle(e)
+                retry_count = min(retry_count + 1, 60)
+                # Back off so a persistent unexpected error doesn't spin the loop
+                # and flood the error handler / logs.
+                await asyncio.sleep(0.1 * retry_count)
 
 
 __all__ = ("BasePolling", "FailureCode")
