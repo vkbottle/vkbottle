@@ -28,6 +28,8 @@ def run_multibot(
     for i, api_instance in enumerate(apis):
         logger.debug("Connecting API (index: {})", i)
         polling = polling_type().construct(api_instance, bot.error_handler)
+        if isinstance(polling, BotPolling):
+            polling.skip_old_events = bot.skip_old_events
         api_instance.http_client = SingleAiohttpClient()
         tasks.append(bot.run_polling(custom_polling=polling))
 

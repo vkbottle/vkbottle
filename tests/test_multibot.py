@@ -37,3 +37,9 @@ def test_run_multibot_propagates_error_handler(mocker):
     bot, polling = _run_multibot(mocker)
     # Each per-API polling must use the bot's error handler, not its own default.
     assert polling.error_handler is bot.error_handler
+
+
+def test_run_multibot_propagates_skip_old_events(mocker):
+    _bot, polling = _run_multibot(mocker, skip_old_events=False)
+    # The bot's skip_old_events must propagate to each per-API BotPolling.
+    assert polling.skip_old_events is False
