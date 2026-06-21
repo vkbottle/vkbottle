@@ -1,3 +1,4 @@
+import asyncio
 import json
 from typing import Any
 
@@ -185,3 +186,43 @@ async def test_request_validator_serializes_pydantic_model():
     # left as a raw dict that aiohttp's form encoder would mangle.
     assert isinstance(result["m"], str)
     assert json.loads(result["m"]) == {"a": 1, "items": [1, 2, 3]}
+
+
+@pytest.mark.asyncio
+async def test_json_validator_reschedule_guard_is_per_request():
+    # The default JSONResponseValidator is a single instance shared by every API,
+    # so its reschedule re-entrancy guard must be per-request, not process-global.
+    from vkbottle.api.response_validator import JSONResponseValidator
+
+    validator = JSONResponseValidator()
+
+    a_inside = asyncio.Event()
+    release_a = asyncio.Event()
+
+    class _ReschedA:
+        async def reschedule(self, ctx_api, method, data, recent):
+            a_inside.set()
+            await release_a.wait()
+            return {"response": "A"}
+
+    class _ReschedB:
+        async def reschedule(self, ctx_api, method, data, recent):
+            return {"response": "B"}
+
+    class _Api:
+        def __init__(self, rescheduler):
+            self.request_rescheduler = rescheduler
+
+    # Request A gets an invalid (non-dict/str) response and parks inside its reschedule.
+    task_a = asyncio.create_task(validator.validate("m", {}, object(), _Api(_ReschedA())))
+    await a_inside.wait()
+
+    # Request B also gets an invalid response: it must reschedule itself, not observe
+    # A's in-flight reschedule flag and silently return None.
+    result_b = await validator.validate("m", {}, object(), _Api(_ReschedB()))
+
+    release_a.set()
+    result_a = await task_a
+
+    assert result_b == {"response": "B"}
+    assert result_a == {"response": "A"}
