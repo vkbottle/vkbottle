@@ -86,3 +86,29 @@ async def test_polling_backs_off_on_unhandled_failure(mocker):
     # An unhandled failure code yields an empty server; the loop must back off before
     # refetching instead of spinning a tight reconnect loop.
     sleep.assert_awaited()
+
+
+@pytest.mark.asyncio
+async def test_polling_saves_ts_after_event_processed():
+    order = []
+
+    class _OrderedPolling(_Polling):
+        def save_server_ts(self, server):
+            order.append(("save", server["ts"]))
+
+        async def get_event(self, server):
+            self.event_calls += 1
+            if self.event_calls == 1:
+                return {"ts": "5", "updates": [{"x": 1}]}
+            self.stop()
+            return {"ts": "6", "updates": []}
+
+    polling = _OrderedPolling()
+    async for event in polling.listen():
+        ts = event["ts"]
+        order.append(("process", ts))
+        order.append(("processed", ts))
+
+    # The ts for an event must be persisted only after the event was handed off, so a
+    # crash mid-processing re-fetches the event instead of silently skipping it.
+    assert order.index(("process", "5")) < order.index(("save", "5"))
