@@ -72,3 +72,14 @@ async def test_request_recreates_closed_session(mocker):
 
     assert client.session is not first
     assert len(sessions) == 2
+
+
+def test_json_serialize_returns_str_under_orjson(mocker):
+    client = AiohttpClient()
+    # orjson.dumps returns bytes, but aiohttp's json_serialize must yield str.
+    mocker.patch.object(client.json_processing_module, "dumps", return_value=b'{"a":1}')
+
+    result = client._json_serialize({"a": 1})
+
+    assert result == '{"a":1}'
+    assert isinstance(result, str)

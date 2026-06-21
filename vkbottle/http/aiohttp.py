@@ -65,7 +65,7 @@ class AiohttpClient(ABCHTTPClient):
             )
         ):
             self.session = ClientSession(  # type: ignore[misc]
-                json_serialize=self.json_processing_module.dumps,
+                json_serialize=self._json_serialize,
                 **self._session_params,  # type: ignore[arg-type]
             )
             self._session_loop = asyncio.get_running_loop()
@@ -117,6 +117,12 @@ class AiohttpClient(ABCHTTPClient):
     ) -> bytes:
         async with self.request(url, method, data, **kwargs) as response:
             return await response.read()
+
+    def _json_serialize(self, obj: Any) -> str:
+        # aiohttp's json_serialize must return str, but some json modules (orjson)
+        # return bytes from dumps(); normalise to str.
+        result = self.json_processing_module.dumps(obj)
+        return result.decode() if isinstance(result, bytes) else result
 
     async def close(self) -> None:
         if self.session and not self.session.closed:
