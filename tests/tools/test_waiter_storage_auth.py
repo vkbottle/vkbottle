@@ -2,6 +2,7 @@ import asyncio
 
 import pytest
 
+from vkbottle.tools import CtxStorage
 from vkbottle.tools.waiter_machine.machine import WaiterMachine
 
 
@@ -36,3 +37,9 @@ async def test_waiter_wait_tolerates_key_removed_during_wait():
     # wait() must not KeyError on the already-removed key.
     result = await wait_task
     assert result is short_state.context
+
+
+def test_ctx_storage_delete_missing_key_is_noop():
+    storage = CtxStorage(force_reset=True)
+    # Deleting a key that isn't there must not raise KeyError.
+    storage.delete("nonexistent")

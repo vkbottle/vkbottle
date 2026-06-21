@@ -33,7 +33,7 @@ class CtxStorage(ABCStorage, BaseContext):
 
     def delete(self, key: Hashable) -> None:
         new_storage = self.get_instance().storage
-        new_storage.pop(key)
+        new_storage.pop(key, None)
         self.set_instance(CtxStorage(new_storage, True))
 
     def contains(self, key: Hashable) -> bool:
