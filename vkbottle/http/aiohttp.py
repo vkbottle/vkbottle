@@ -56,9 +56,13 @@ class AiohttpClient(ABCHTTPClient):
         data: dict[str, Any] | None = None,
         **kwargs: Unpack[AiohttpRequestKwargs],
     ) -> AsyncGenerator[ClientResponse]:
-        if self.session is None or (
-            self._session_loop is not None
-            and self._session_loop is not asyncio.get_running_loop()
+        if (
+            self.session is None
+            or self.session.closed
+            or (
+                self._session_loop is not None
+                and self._session_loop is not asyncio.get_running_loop()
+            )
         ):
             self.session = ClientSession(  # type: ignore[misc]
                 json_serialize=self.json_processing_module.dumps,

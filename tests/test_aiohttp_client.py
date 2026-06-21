@@ -52,3 +52,23 @@ async def test_request_recreates_session_on_new_event_loop(mocker):
 
     assert client.session is not first
     assert len(sessions) == 2
+
+
+@pytest.mark.asyncio
+async def test_request_recreates_closed_session(mocker):
+    sessions = _patch_session(mocker)
+    client = AiohttpClient()
+
+    async with client.request("http://x/") as response:
+        assert response.status == 200
+    first = client.session
+
+    await client.close()
+    assert first.closed
+
+    # A closed session must not be reused — a fresh one is created instead.
+    async with client.request("http://x/") as response:
+        assert response.status == 200
+
+    assert client.session is not first
+    assert len(sessions) == 2
