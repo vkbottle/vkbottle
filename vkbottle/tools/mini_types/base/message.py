@@ -248,15 +248,18 @@ class BaseMessageMin(MessagesMessage, ABC):
             message = str(message)
 
         stream = StringIO(message)
+        responses = []
         while True:
             if msg := stream.read(4096):
                 data["message"] = msg
 
-            response = (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]  # type: ignore
+            responses.append(
+                (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]  # type: ignore
+            )
             if stream.tell() == len(message or ""):
                 break
 
-        return response
+        return responses[0]
 
     async def reply(
         self,
