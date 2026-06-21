@@ -1,12 +1,12 @@
 from typing import Any, TypeVar
 
-T = TypeVar("T")
+T = TypeVar("T", bound=BaseException)
 
 
 def restore_exception(cls: type[T], args: tuple[Any, ...], state: dict[str, Any]) -> T:
     exc = cls.__new__(cls)
-    exc.args = args
-    exc.__dict__.update(state)
+    BaseException.__init__(exc, *args)
+    vars(exc).update(state)
     return exc
 
 
