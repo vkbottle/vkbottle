@@ -47,6 +47,10 @@ repos:
         entry: poetry run mypy
         language: system
         types: [python]
+        # mypy must run as a single process: pre-commit otherwise splits the files
+        # into parallel chunks that share one .mypy_cache, and the concurrent cache
+        # writes intermittently corrupt it -> tracebackless "INTERNAL ERROR".
+        require_serial: true
         stages: [pre-commit]
 
       - id: pytest

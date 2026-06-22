@@ -82,9 +82,9 @@ class CommandRule(ABCRule[BaseMessageMin]):
             if event.text.startswith(prefix + self.command_text):
                 if not self.args_count and len(event.text) == text_length:
                     return True
-                elif self.args_count and self.sep in event.text:
+                elif self.args_count and event.text[text_length:text_length_with_sep] == self.sep:
                     args = event.text[text_length_with_sep:].split(self.sep)
-                    return {"args": args} if len(args) == self.args_count and all(args) else False
+                    return {"args": args} if len(args) == self.args_count else False
         return False
 
 
@@ -358,11 +358,15 @@ class FuncRule(ABCRule[BaseMessageMin]):
 
 
 class CoroutineRule(ABCRule[BaseMessageMin]):
-    def __init__(self, coroutine: Coroutine):
+    def __init__(self, coroutine: "Coroutine | Callable[..., Coroutine]"):
         self.coro = coroutine
 
     async def check(self, event: BaseMessageMin) -> dict[str, Any] | bool:
-        return await self.coro
+        # A rule instance is reused for every event, but a coroutine object can be
+        # awaited only once. Accept a coroutine *function* and call it for a fresh
+        # coroutine each time; fall back to awaiting a bare coroutine (single use).
+        coro = self.coro() if callable(self.coro) else self.coro
+        return await coro
 
 
 class StateRule(ABCRule[BaseMessageMin]):

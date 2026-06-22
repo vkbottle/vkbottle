@@ -74,7 +74,7 @@ class BaseLabeler(ABCLabeler, abc.ABC):
     def vbml_ignore_case(self) -> bool:
         """Gets ignore case flag from rule config flags"""
 
-        return re.IGNORECASE in self.rule_config["flags"]
+        return re.IGNORECASE in self.rule_config["vbml_flags"]
 
     @vbml_ignore_case.setter
     def vbml_ignore_case(self, ignore_case: bool) -> None:

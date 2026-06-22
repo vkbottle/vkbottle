@@ -24,7 +24,8 @@ _TOKEN_RE = re.compile(
     r"(?P<url_open>\[)|"
     r"(?P<url_mid>\]\()|"
     r"(?P<url_close>\))|"
-    r"(?P<text>[^\*__\[\]()<>\\]+)"
+    r"(?P<text>[^\*__\[\]()<>\\]+)|"
+    r"(?P<other>.)"
 )
 
 
@@ -162,7 +163,9 @@ def _handle_underline(token: Token, stack: list[StackFrame]) -> None:
     elif ctx.ctx_type == "u":
         _close_frame(stack, token.value)
     else:
-        ctx.parts.append("<u>")
+        # Orphan tag (only reachable for </u> with no open <u>): keep it verbatim
+        # instead of collapsing </u> into <u>.
+        ctx.parts.append(token.value)
 
 
 def _handle_url(token: Token, stack: list[StackFrame]) -> None:
@@ -187,12 +190,20 @@ def _handle_url(token: Token, stack: list[StackFrame]) -> None:
 
         stack.pop()
         stack[-1].parts.append(url(close_link_text, href=href_str))
+    else:
+        # Stray ']( ' / ')' outside a link: keep them as literal text, don't drop them.
+        ctx.parts.append(token.value)
 
 
 def _process_token(token: Token, stack: list[StackFrame]) -> None:
     """Dispatch token to the appropriate handler based on token type."""
+    if stack[-1].ctx_type == "url_href" and token.type != "url_close":
+        # A link target is literal: URLs may contain *, _, [, ( etc., so don't parse
+        # markup inside (...). Escapes are unescaped when the link is closed.
+        stack[-1].parts.append(token.value)
+        return
     match token.type:
-        case "esc" | "bs" | "text":
+        case "esc" | "bs" | "text" | "other":
             _handle_literal(token, stack)
         case "bold" | "italic" | "triple":
             _handle_format(token, stack)
@@ -215,8 +226,7 @@ def _apply_fallback(stack: list[StackFrame]) -> None:
             stack[-1].parts.extend(frame.parts)
             if frame.ctx_type == "url_text":
                 stack[-1].parts.append("](")
-            else:
-                stack[-1].parts.append(")")
+            # url_href is left as-is: don't fabricate a closing ')' the user never typed.
             continue
 
         if frame.ctx_type == "triple":

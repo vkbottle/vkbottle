@@ -131,7 +131,7 @@ class Format:
             return result
 
         for fmt in self.other_formats:
-            result["items"].extend(fmt.as_data(offset=0)["items"])  # type: ignore
+            result["items"].extend(fmt.as_data(offset=offset)["items"])  # type: ignore
 
         return result
 

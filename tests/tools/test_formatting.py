@@ -266,3 +266,13 @@ def test_two_level_nesting_works():
 
     assert items["bold"]["offset"] == 14
     assert items["url"]["offset"] == 14
+
+
+def test_as_data_propagates_offset_to_nested_formats():
+    combined = bold("a") + italic("b")
+
+    items = {item["type"]: item for item in combined.as_data(offset=10)["items"]}
+
+    # The outer offset must shift nested formats too, not just the top-level item.
+    assert items["bold"]["offset"] == 10
+    assert items["italic"]["offset"] == 11

@@ -1,5 +1,5 @@
-from random import choice
-from string import ascii_lowercase
+from secrets import choice
+from string import ascii_letters, digits
 from typing import TYPE_CHECKING, Any
 
 from typing_extensions import Self
@@ -37,7 +37,8 @@ class BotCallback(ABCCallback):
         return self.secret_key
 
     def _generate_secret_key(self) -> str:
-        return "".join(choice(ascii_lowercase) for _ in range(32))
+        alphabet = ascii_letters + digits
+        return "".join(choice(alphabet) for _ in range(32))
 
     async def setup_group_id(self):
         if self.group_id is None:

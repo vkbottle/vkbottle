@@ -22,7 +22,9 @@ class AudioUploader(BaseUploader):
         audio = await self.raw_upload(artist, title, file_source, **params)
         return self.generate_attachment_string(
             "audio",
-            await self.get_owner_id(**params, **audio),
+            # Merge first (save response wins) so a key present in both does not raise a
+            # duplicate-keyword TypeError.
+            await self.get_owner_id(**{**params, **audio}),
             audio["id"],
             audio.get("access_key"),
         )
