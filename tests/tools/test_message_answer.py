@@ -1,17 +1,24 @@
+from types import SimpleNamespace
+
 import pytest
 
-from tests.test_utils import MockedClient
 from vkbottle import API
 from vkbottle.tools.mini_types.user.message import MessageMin
 
 
-def _make_message(sent: list[dict]) -> MessageMin:
-    def callback(method, url, data):
-        sent.append(dict(data))
-        return f'{{"response":[{{"peer_id":1,"message_id":{100 + len(sent)}}}]}}'
-
+def _make_message(sent: list[dict], monkeypatch: pytest.MonkeyPatch) -> MessageMin:
     api = API("token")
-    api.http_client = MockedClient(callback=callback)
+
+    async def fake_send(self, **kwargs):
+        # Capture exactly what Message.answer() forwards to messages.send per chunk.
+        sent.append(dict(kwargs))
+        return [SimpleNamespace(message_id=100 + len(sent))]
+
+    # Patch at the messages.send level: it keeps answer()/_send_chunked real while
+    # avoiding the vkbottle_types response-model deserialization, whose forward-ref
+    # auto-rebuild is Python-version sensitive and unrelated to what we assert here.
+    monkeypatch.setattr(type(api.messages), "send", fake_send)
+
     return MessageMin(
         peer_id=1,
         date=1,
@@ -27,9 +34,9 @@ def _make_message(sent: list[dict]) -> MessageMin:
 
 
 @pytest.mark.asyncio
-async def test_answer_returns_first_chunk_response():
+async def test_answer_returns_first_chunk_response(monkeypatch):
     sent: list[dict] = []
-    message = _make_message(sent)
+    message = _make_message(sent, monkeypatch)
 
     result = await message.answer("a" * 5000)  # > 4096 -> two chunks
 
@@ -39,9 +46,9 @@ async def test_answer_returns_first_chunk_response():
 
 
 @pytest.mark.asyncio
-async def test_answer_varies_random_id_per_chunk():
+async def test_answer_varies_random_id_per_chunk(monkeypatch):
     sent: list[dict] = []
-    message = _make_message(sent)
+    message = _make_message(sent, monkeypatch)
 
     await message.answer("a" * 5000, random_id=555)
 
@@ -52,9 +59,9 @@ async def test_answer_varies_random_id_per_chunk():
 
 
 @pytest.mark.asyncio
-async def test_reply_marks_only_the_first_chunk():
+async def test_reply_marks_only_the_first_chunk(monkeypatch):
     sent: list[dict] = []
-    message = _make_message(sent)
+    message = _make_message(sent, monkeypatch)
 
     await message.reply("a" * 5000)
 
