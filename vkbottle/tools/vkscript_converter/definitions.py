@@ -194,11 +194,16 @@ def while_cycle(d: ast.While):
 
 @converter(ast.For)
 def for_cycle(d: ast.For):
-    random_iter_name = f"__iter_{random_string(5)}__"
+    suffix = random_string(5)
+    iter_name = f"__iter_{suffix}__"
+    index_name = f"__i_{suffix}__"
     body = "".join(find(line) for line in d.body)
+    # Iterate forward by index: .pop() would reverse the order and destroy the array.
     return (
-        f"var {random_iter_name} = {find(d.iter)};"
-        f"while({random_iter_name}.length > 0){{var {find(d.target)}={random_iter_name}.pop();{body}}};"
+        f"var {iter_name} = {find(d.iter)};"
+        f"var {index_name} = 0;"
+        f"while({index_name} < {iter_name}.length)"
+        f"{{var {find(d.target)}={iter_name}[{index_name}];{body}{index_name} = {index_name} + 1;}};"
     )
 
 
@@ -295,7 +300,7 @@ def subscript(d: ast.Subscript) -> str:
     if d.slice.__class__ is ast.Constant:
         slice_value = d.slice.value  # type: ignore
         if slice_value.__class__ is str:
-            return f"{value}.{slice_value.s}"  # type: ignore
+            return f"{value}.{slice_value}"
         if slice_value.__class__ is int:
             return f"{value}[{slice_value}]"
         if slice_value.__class__ is ast.Constant:
@@ -312,7 +317,7 @@ def attribute(d: ast.Attribute):
 
 @converter(ast.Return)
 def return_statement(d: ast.Return):
-    value = "null" if d is None else find(d.value)
+    value = "null" if d.value is None else find(d.value)
     return f"return {value};"
 
 

@@ -74,7 +74,7 @@ class BaseLabeler(ABCLabeler, abc.ABC):
     def vbml_ignore_case(self) -> bool:
         """Gets ignore case flag from rule config flags"""
 
-        return re.IGNORECASE in self.rule_config["flags"]
+        return re.IGNORECASE in self.rule_config["vbml_flags"]
 
     @vbml_ignore_case.setter
     def vbml_ignore_case(self, ignore_case: bool) -> None:
@@ -176,13 +176,16 @@ class BaseLabeler(ABCLabeler, abc.ABC):
         return decorator  # type: ignore
 
     def load(self, labeler: "BaseLabeler"):
-        self.message_view.handlers.extend(labeler.message_view.handlers)
-        self.message_view.middlewares.extend(labeler.message_view.middlewares)
-        self.raw_event_view.middlewares.extend(labeler.raw_event_view.middlewares)
+        self.message_view.handlers.extend(list(labeler.message_view.handlers))
+        self.message_view.middlewares.extend(list(labeler.message_view.middlewares))
+        self.raw_event_view.middlewares.extend(list(labeler.raw_event_view.middlewares))
 
         for event, handler_basements in labeler.raw_event_view.handlers.items():
             event_handlers = self.raw_event_view.handlers.setdefault(event, [])
-            event_handlers.extend(handler_basements)
+            event_handlers.extend(list(handler_basements))
+
+        labeler.message_view = self.message_view
+        labeler.raw_event_view = self.raw_event_view
 
     def get_custom_rules(
         self,

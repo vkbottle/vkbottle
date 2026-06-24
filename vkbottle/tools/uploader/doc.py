@@ -44,6 +44,8 @@ class DocUploader(BaseUploader):
 
         uploader = await self.upload_files(server["upload_url"], {"file": file})
 
+        # peer_id is an upload-server param (DocMessagesUploader), not a docs.save param.
+        params.pop("peer_id", None)
         return (
             await self.api.request(
                 "docs.save",

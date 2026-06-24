@@ -17,7 +17,9 @@ from .keyboard import (
 )
 from .limited_dict import LimitedDict
 from .loop_wrapper import LoopWrapper
+from .markdown_parser import markdown
 from .mini_types import BotTypes, UserTypes
+from .scheduling import interval, timer
 from .singleton import ABCSingleton
 from .storage import ABCStorage, CtxStorage
 from .template import TemplateElement, template_gen
@@ -93,11 +95,14 @@ __all__ = (
     "VoiceMessageUploader",
     "WaiterMachine",
     "bold",
+    "interval",
     "italic",
     "load_blueprints_from_package",
+    "markdown",
     "run_in_task",
     "run_sync",
     "template_gen",
+    "timer",
     "underline",
     "url",
     "vkscript",

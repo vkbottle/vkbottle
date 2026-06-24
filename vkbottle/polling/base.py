@@ -28,6 +28,12 @@ class BasePolling(ABCPolling, ABC):
     error_handler: "ABCErrorHandler"
     lp_version: int | None = None
 
+    def restore_server_ts(self, server: dict[str, Any]) -> dict[str, Any]:
+        return server
+
+    def save_server_ts(self, server: dict[str, Any]) -> None:
+        pass
+
     async def handle_failed_event(
         self,
         server: dict[str, Any],
@@ -69,7 +75,7 @@ class BasePolling(ABCPolling, ABC):
     async def listen(self) -> AsyncGenerator[dict[str, Any], None]:
         self._stop_event = asyncio.Event()
         retry_count = 0
-        server = await self.get_server()
+        server = self.restore_server_ts(await self.get_server())
         logger.debug("Starting listening to {} longpoll", self.__class__.__name__)
 
         while not self._stop_event.is_set():
@@ -79,6 +85,11 @@ class BasePolling(ABCPolling, ABC):
 
                 if "failed" in event:
                     server = await self.handle_failed_event(server, event)
+                    if not server:
+                        # Failure could not be resolved (e.g. unknown code); back off
+                        # before refetching so we don't spin a tight reconnect loop.
+                        retry_count = min(retry_count + 1, 60)
+                        await asyncio.sleep(0.1 * retry_count)
                     continue
 
                 if "ts" not in event:
@@ -87,16 +98,24 @@ class BasePolling(ABCPolling, ABC):
 
                 server["ts"] = event["ts"]
                 retry_count = 0
-                if "updates" not in event:
-                    continue
-                yield event
+                if event.get("updates"):
+                    yield event
+                # Persist ts only after the event was handed off for processing, so a
+                # crash mid-processing re-fetches it instead of skipping it. Offload the
+                # (possibly blocking) write to a thread so the event loop isn't stalled.
+                await asyncio.to_thread(self.save_server_ts, server)
             except (ClientConnectionError, asyncio.TimeoutError, VKAPIError[10]):
                 logger.error("Unable to make request to {}, retrying...", self.__class__.__name__)
                 retry_count = min(retry_count + 1, 60)
-                server = {}
+                # Keep the current server/ts: a transient network error must not drop
+                # the ts and refetch a fresh server, which would skip queued events.
                 await asyncio.sleep(0.1 * retry_count)
             except Exception as e:
                 await self.error_handler.handle(e)
+                retry_count = min(retry_count + 1, 60)
+                # Back off so a persistent unexpected error doesn't spin the loop
+                # and flood the error handler / logs.
+                await asyncio.sleep(0.1 * retry_count)
 
 
 __all__ = ("BasePolling", "FailureCode")

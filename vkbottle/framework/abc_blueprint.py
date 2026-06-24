@@ -75,9 +75,17 @@ class ABCBlueprint(ABCFramework):
         msg = "You are not allowed to run polling with blueprint"
         raise RuntimeError(msg)
 
-    def run_forever(self) -> NoReturn:
+    def run(self) -> NoReturn:
         msg = "You are not allowed to run polling with blueprint"
         raise RuntimeError(msg)
+
+    @deprecated(
+        "Deprecated. Use run() instead",
+        category=FutureWarning,
+        stacklevel=0,
+    )
+    def run_forever(self) -> NoReturn:
+        self.run()
 
     def assert_constructed(self) -> None:
         if not self.constructed:

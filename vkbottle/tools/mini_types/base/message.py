@@ -247,16 +247,40 @@ class BaseMessageMin(MessagesMessage, ABC):
         elif not isinstance(message, str):
             message = str(message)
 
+        return await self._send_chunked(message, data)
+
+    async def _send_chunked(
+        self,
+        message: str,
+        data: dict[str, Any],
+    ) -> MessagesSendUserIdsResponseItem:
         stream = StringIO(message)
+        responses = []
+        base_random_id = data.get("random_id")
+        chunk_index = 0
         while True:
             if msg := stream.read(4096):
                 data["message"] = msg
 
-            response = (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]  # type: ignore
-            if stream.tell() == len(message or ""):
+            # A non-zero random_id must be unique per chunk, otherwise VK deduplicates
+            # and silently drops every chunk after the first.
+            if base_random_id:
+                data["random_id"] = base_random_id + chunk_index
+
+            responses.append(
+                (await self.ctx_api.messages.send(peer_ids=[self.peer_id], **data))[0]  # type: ignore
+            )
+
+            if chunk_index == 0:
+                # Reply/forward references the whole message: keep it on the first chunk
+                # only, otherwise every fragment becomes its own reply.
+                data.pop("forward", None)
+
+            chunk_index += 1
+            if stream.tell() == len(message):
                 break
 
-        return response
+        return responses[0]
 
     async def reply(
         self,

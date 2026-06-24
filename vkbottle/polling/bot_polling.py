@@ -1,9 +1,11 @@
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from aiohttp import ClientTimeout
 from typing_extensions import Self
 
 from vkbottle.exception_factory import ErrorHandler
-from vkbottle.modules import logger
+from vkbottle.modules import json, logger
 
 from .base import BasePolling
 
@@ -23,6 +25,7 @@ class BotPolling(BasePolling):
         group_id: int | None = None,
         wait: int | None = None,
         rps_delay: int | None = None,
+        skip_old_events: bool = True,
         error_handler: "ABCErrorHandler | None" = None,
     ) -> None:
         self._api = api
@@ -30,19 +33,65 @@ class BotPolling(BasePolling):
         self.group_id = group_id
         self.wait = min(wait or 25, 90)
         self.rps_delay = rps_delay or 0
+        self.skip_old_events = skip_old_events
+
+    @property
+    def ts_state_path(self) -> Path:
+        if self.group_id is None:
+            msg = "Bot polling state path is unavailable before group_id is resolved"
+            raise RuntimeError(msg)
+        return Path.cwd() / ".vkbottle" / "bot-polling" / f"{self.group_id}.json"
+
+    def restore_server_ts(self, server: dict[str, Any]) -> dict[str, Any]:
+        if self.skip_old_events:
+            return server
+
+        try:
+            state = json.loads(self.ts_state_path.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            return server
+        except (OSError, TypeError, ValueError) as e:
+            logger.warning("Unable to load bot polling state from {}: {}", self.ts_state_path, e)
+            return server
+
+        ts = state.get("ts")
+        if ts is None:
+            return server
+
+        logger.info("Restoring bot polling ts {} from {}", ts, self.ts_state_path)
+        server["ts"] = ts
+        return server
+
+    def save_server_ts(self, server: dict[str, Any]) -> None:
+        path = self.ts_state_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temp_path = path.with_suffix(".tmp")
+        state = {"ts": server["ts"]}
+
+        try:
+            payload: str | bytes = json.dumps(state)
+            if isinstance(payload, bytes):
+                temp_path.write_bytes(payload)
+            else:
+                temp_path.write_text(payload, encoding="utf-8")
+            temp_path.replace(path)
+        except OSError as e:
+            logger.warning("Unable to save bot polling state to {}: {}", path, e)
 
     async def get_event(self, server: dict[str, Any]) -> dict[str, Any]:
         # sourcery skip: use-fstring-for-formatting
         logger.debug("Making long request to get event with longpoll...")
         return await self.api.http_client.request_json(
-            url="{}?act=a_check&key={}&ts={}&wait={}&rps_delay={}".format(
-                server["server"],
-                server["key"],
-                server["ts"],
-                self.wait,
-                self.rps_delay,
-            ),
+            url=server["server"],
             method="POST",
+            params={
+                "act": "a_check",
+                "key": server["key"],
+                "ts": server["ts"],
+                "wait": self.wait,
+                "rps_delay": self.rps_delay,
+            },
+            timeout=ClientTimeout(total=self.wait + 10),
         )
 
     async def get_server(self) -> dict[str, Any]:

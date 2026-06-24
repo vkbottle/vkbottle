@@ -18,6 +18,10 @@ def get_state_repr(state: BaseStateGroup) -> str:
 class StateRepresentation(str):
     __slots__ = ()
 
+    # Defining __eq__ drops the inherited __hash__ (sets it to None), making the
+    # type unhashable. Keep str's hash, which is consistent with str equality.
+    __hash__ = str.__hash__
+
     def __eq__(self, __x: object) -> bool:
         if isinstance(__x, BaseStateGroup):
             return self == get_state_repr(__x)

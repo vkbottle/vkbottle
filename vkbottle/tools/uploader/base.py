@@ -28,7 +28,7 @@ class BaseUploader(ABC):
                 "generate_attachment_strings in uploaders is deprecated"
                 " use .raw_upload() to get raw response or .upload() to get attachment string",
                 FutureWarning,
-                stacklevel=0,
+                stacklevel=2,
             )
             kwargs.pop("generate_attachment_strings")
 
@@ -53,9 +53,12 @@ class BaseUploader(ABC):
         bytes_io = data if isinstance(data, BytesIO) else BytesIO(data)
         # To avoid errors with image generators (such as pillow)
         bytes_io.seek(0)
-        # To guarantee VK API file extension recognition
-        if not hasattr(bytes_io, "name"):
-            bytes_io.name = name or self.attachment_name
+        # To guarantee VK API file extension recognition. An explicitly requested name
+        # wins; otherwise keep an existing name, else fall back to the default.
+        if name is not None:
+            bytes_io.name = name
+        elif "name" not in vars(bytes_io):
+            bytes_io.name = self.attachment_name
         return bytes_io
 
     async def get_owner_id(self, **upload_params: Any) -> int:
@@ -66,9 +69,16 @@ class BaseUploader(ABC):
         if "owner_id" in upload_params:
             return upload_params["owner_id"]
         try:
-            return -(await self.api.request("groups.getById", {}))["response"]["groups"][0]["id"]
+            groups = (await self.api.request("groups.getById", {}))["response"]["groups"]
         except VKAPIError:
-            return (await self.api.request("users.get", {}))["response"][0]["id"]
+            groups = []
+        if groups:
+            return -groups[0]["id"]
+        users = (await self.api.request("users.get", {}))["response"]
+        if not users:
+            msg = "Unable to resolve owner id: groups.getById and users.get both returned empty"
+            raise RuntimeError(msg)
+        return users[0]["id"]
 
     @staticmethod
     def generate_attachment_string(

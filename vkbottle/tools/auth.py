@@ -177,7 +177,7 @@ class UserAuth:
             auth_code=auth_code,
             captcha_sid=captcha_sid,
             captcha_key=captcha_key,
-            kwargs=kwargs,
+            **kwargs,
         )
 
         response = await self.http_client.request_json(

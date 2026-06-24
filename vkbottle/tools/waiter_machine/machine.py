@@ -86,7 +86,8 @@ class WaiterMachine:
 
         self.storage[view_name][key] = short_state
         await event.wait()
-        self.storage[view_name].pop(key)
+        # The key may already be gone (concurrent drop/eviction/replace), so tolerate it.
+        self.storage[view_name].pop(key, None)
 
         if short_state.context is None:
             msg = "Context is not defined."
