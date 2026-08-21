@@ -6,6 +6,7 @@ from vkbottle.callback import BotCallback
 from vkbottle.dispatch import BuiltinStateDispenser, Router
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.framework.base import BaseFramework
+from vkbottle.framework.event_deduplicator import EventDeduplicator
 from vkbottle.framework.labeler import BotLabeler
 from vkbottle.modules import logger
 from vkbottle.polling import BotPolling
@@ -34,6 +35,9 @@ class Bot(BaseFramework):
         error_handler: "ABCErrorHandler | None" = None,
         task_each_event: Any = None,
         skip_old_events: bool = True,
+        dual_mode: bool = False,
+        event_deduplication_ttl: float = 300.0,
+        event_deduplication_cache_size: int = 10_000,
     ) -> None:
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
@@ -44,6 +48,12 @@ class Bot(BaseFramework):
         self.labeler = labeler or BotLabeler(error_handler=error_handler)
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
         self.skip_old_events = skip_old_events
+        self.dual_mode = dual_mode
+        self.event_deduplicator = (
+            EventDeduplicator(event_deduplication_ttl, event_deduplication_cache_size)
+            if dual_mode
+            else None
+        )
 
         if polling is not None and isinstance(polling, BotPolling):
             polling.skip_old_events = skip_old_events
@@ -124,8 +134,11 @@ class Bot(BaseFramework):
 
         return confirmation_code, secret_key
 
-    async def process_event(self, event: dict[str, Any]) -> None:
-        await self.router.route(event, self.api)
+    async def process_event(self, event: dict[str, Any], api: "ABCAPI | None" = None) -> None:
+        if self.event_deduplicator is not None and not await self.event_deduplicator.claim(event):
+            logger.debug("Skipping duplicate event: {!r}", event)
+            return
+        await super().process_event(event, api)
 
 
 __all__ = ("Bot",)

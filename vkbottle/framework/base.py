@@ -24,6 +24,9 @@ class BaseFramework(ABCFramework, ABC):
     startup_tasks: list[_Task]
     _loop_wrapper: "LoopWrapper | None"
 
+    async def process_event(self, event: Any, api: Any | None = None) -> None:
+        await self.router.route(event, api or self.api)
+
     async def run_polling(self, custom_polling: "ABCPolling | None" = None) -> NoReturn:  # type: ignore[misc,return-value]
         _polling = custom_polling or self.polling
         logger.info("Starting {} for {!r}", type(_polling).__name__, _polling.api)
@@ -34,7 +37,7 @@ class BaseFramework(ABCFramework, ABC):
             logger.debug("New event was received: {!r}", event)
 
             for update in event.get("updates", []):
-                task = asyncio.create_task(self.router.route(update, _polling.api))
+                task = asyncio.create_task(self.process_event(update, _polling.api))
                 pending.add(task)
                 task.add_done_callback(pending.discard)
 
