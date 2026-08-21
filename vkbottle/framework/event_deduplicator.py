@@ -5,13 +5,13 @@ import time
 from collections import OrderedDict
 from typing import Any
 
-
 # EventDeduplicator
 # ttl 300, max_size 10_000
 # Event received -> call claim(event) -> generate _keys (first key - payload, second - event_id:{group_id}:{event_id})
 # -> block (async with _lock) -> Clear old ttl -> if have key -> return False (it's duplicate)
 # -> if not have key -> add keys to cache with current time -> check cache size -> if size > max_size -> remove oldest (FIFO)
-# -> return True (new event) 
+# -> return True (new event)
+
 
 class EventDeduplicator:
     def __init__(self, ttl: float = 300.0, max_size: int = 10_000) -> None:
@@ -29,11 +29,7 @@ class EventDeduplicator:
 
     @staticmethod
     def _keys(event: dict[str, Any]) -> tuple[str, ...]:
-        payload = {
-            key: event[key]
-            for key in ("type", "object", "group_id")
-            if key in event
-        }
+        payload = {key: event[key] for key in ("type", "object", "group_id") if key in event}
         serialized = json.dumps(
             payload,
             ensure_ascii=False,
