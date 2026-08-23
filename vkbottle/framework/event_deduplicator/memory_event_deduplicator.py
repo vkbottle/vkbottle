@@ -5,7 +5,9 @@ import time
 from collections import OrderedDict
 from typing import Any
 
-# EventDeduplicator
+from .abc import ABCEventDeduplicator
+
+# MemoryEventDeduplicator
 # ttl 300, max_size 10_000
 # Event received -> call claim(event) -> generate _keys (first key - payload, second - event_id:{group_id}:{event_id})
 # -> block (async with _lock) -> Clear old ttl -> if have key -> return False (it's duplicate)
@@ -13,7 +15,7 @@ from typing import Any
 # -> return True (new event)
 
 
-class EventDeduplicator:
+class MemoryEventDeduplicator(ABCEventDeduplicator):
     def __init__(self, ttl: float = 300.0, max_size: int = 10_000) -> None:
         if ttl <= 0:
             msg = "Event deduplication TTL must be greater than zero"
@@ -64,4 +66,4 @@ class EventDeduplicator:
             return True
 
 
-__all__ = ("EventDeduplicator",)
+__all__ = ("MemoryEventDeduplicator",)

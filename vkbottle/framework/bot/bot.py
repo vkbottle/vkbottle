@@ -6,7 +6,6 @@ from vkbottle.callback import BotCallback
 from vkbottle.dispatch import BuiltinStateDispenser, Router
 from vkbottle.exception_factory import ErrorHandler
 from vkbottle.framework.base import BaseFramework
-from vkbottle.framework.event_deduplicator import EventDeduplicator
 from vkbottle.framework.labeler import BotLabeler
 from vkbottle.modules import logger
 from vkbottle.polling import BotPolling
@@ -16,6 +15,7 @@ if TYPE_CHECKING:
     from vkbottle.callback import ABCCallback
     from vkbottle.dispatch import ABCRouter, ABCStateDispenser
     from vkbottle.exception_factory import ABCErrorHandler
+    from vkbottle.framework.event_deduplicator import ABCEventDeduplicator
     from vkbottle.framework.labeler import ABCLabeler
     from vkbottle.polling import ABCPolling
     from vkbottle.tools import LoopWrapper
@@ -36,8 +36,7 @@ class Bot(BaseFramework):
         task_each_event: Any = None,
         skip_old_events: bool = True,
         dual_mode: bool = False,
-        event_deduplication_ttl: float = 300.0,
-        event_deduplication_cache_size: int = 10_000,
+        event_deduplicator: "ABCEventDeduplicator | None" = None,
     ) -> None:
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
@@ -49,11 +48,7 @@ class Bot(BaseFramework):
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
         self.skip_old_events = skip_old_events
         self.dual_mode = dual_mode
-        self.event_deduplicator = (
-            EventDeduplicator(event_deduplication_ttl, event_deduplication_cache_size)
-            if dual_mode
-            else None
-        )
+        self.event_deduplicator = event_deduplicator
 
         if polling is not None and isinstance(polling, BotPolling):
             polling.skip_old_events = skip_old_events

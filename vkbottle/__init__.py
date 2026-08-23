@@ -43,10 +43,12 @@ from .exception_factory import (
 )
 from .framework import (
     ABCBlueprint,
+    ABCEventDeduplicator,
     ABCFramework,
     BaseFramework,
     Bot,
     BotBlueprint,
+    MemoryEventDeduplicator,
     User,
     UserBlueprint,
     run_multibot,
@@ -124,6 +126,7 @@ __all__ = (
     "ABCBlueprint",
     "ABCDispenseView",
     "ABCErrorHandler",
+    "ABCEventDeduplicator",
     "ABCFramework",
     "ABCHTTPClient",
     "ABCHandler",
@@ -178,6 +181,7 @@ __all__ = (
     "KeyboardButtonColor",
     "Location",
     "LoopWrapper",
+    "MemoryEventDeduplicator",
     "MiddlewareError",
     "NotRule",
     "OpenAppEvent",

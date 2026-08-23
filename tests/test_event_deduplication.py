@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from vkbottle import Bot
+from vkbottle import ABCEventDeduplicator, Bot, MemoryEventDeduplicator
 
 EVENT = {
     "type": "message_new",
@@ -13,7 +13,7 @@ EVENT = {
 
 @pytest.mark.asyncio
 async def test_dual_mode_claims_same_event_once_from_both_transports():
-    bot = Bot(token="token", dual_mode=True)
+    bot = Bot(token="token", dual_mode=True, event_deduplicator=MemoryEventDeduplicator())
     processed: list[dict] = []
 
     async def route(event, api):
@@ -33,7 +33,7 @@ async def test_dual_mode_claims_same_event_once_from_both_transports():
 
 @pytest.mark.asyncio
 async def test_dual_mode_allows_distinct_events():
-    bot = Bot(token="token", dual_mode=True)
+    bot = Bot(token="token", dual_mode=True, event_deduplicator=MemoryEventDeduplicator())
     processed: list[dict] = []
 
     async def route(event, api):
@@ -59,3 +59,21 @@ async def test_deduplication_is_disabled_by_default():
     await bot.process_event(EVENT)
 
     assert len(processed) == 2
+
+
+@pytest.mark.asyncio
+async def test_uses_custom_event_deduplicator():
+    class EventDeduplicator(ABCEventDeduplicator):
+        async def claim(self, event: dict) -> bool:
+            return False
+
+    bot = Bot(token="token", event_deduplicator=EventDeduplicator())
+    processed: list[dict] = []
+
+    async def route(event, api):
+        processed.append(event)
+
+    bot.router.route = route
+    await bot.process_event(EVENT)
+
+    assert processed == []
