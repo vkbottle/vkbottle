@@ -65,4 +65,4 @@ async def process_event(event):
     logger.info("User {} {} conversation {}.", event.object[3], type_action, event.object[2])
 
 
-bot.run_forever()
+bot.run()

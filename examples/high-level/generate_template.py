@@ -29,4 +29,4 @@ async def template_handler(message: Message):
     await message.answer("держи", template=template)
 
 
-bot.run_forever()
+bot.run()

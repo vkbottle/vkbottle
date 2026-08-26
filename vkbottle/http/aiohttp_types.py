@@ -43,7 +43,7 @@ class AiohttpRequestKwargs(TypedDict, total=False):
     compress: str | None
     chunked: bool | None
     expect100: bool
-    raise_for_status: None | bool | Callable[[ClientResponse], Awaitable[None]]
+    raise_for_status: bool | Callable[[ClientResponse], Awaitable[None]] | None
     read_until_eof: bool
     proxy: StrOrURL | None
     proxy_auth: BasicAuth | None

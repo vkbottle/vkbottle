@@ -17,7 +17,7 @@ T = TypeVar("T")
 # This feature is not used in production
 # but can be useful for customization
 # purposes
-def run_in_task(coroutine: Coroutine[Any, Any, Any]) -> asyncio.Task:
+def run_in_task(coroutine: Coroutine[Any, Any, T]) -> asyncio.Task[T]:
     """Gets loop and runs add makes task from the given coroutine"""
 
     loop = asyncio.get_running_loop()

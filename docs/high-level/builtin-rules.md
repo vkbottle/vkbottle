@@ -21,12 +21,7 @@
 ## CommandRule
 
 ```python
-CommandRule(
-    command_text,
-    prefixes,
-    args_count = 0,
-    sep = " "
-)
+CommandRule(command_text, prefixes, args_count=0, sep=" ")
 ```
 
 Используется для того чтобы реагировать на команды
@@ -48,11 +43,7 @@ CommandRule(
 ## VBMLRule
 
 ```python
-VBMLRule(
-    pattern,
-    patcher = None,
-    flags = None
-)
+VBMLRule(pattern, patcher=None, flags=None)
 ```
 
 Используется в качестве парсера текстов сообщений. Разметка vbml исторически была сделана специально для фреймворка, чтобы легко писать паттерны с валидируемыми аргументами.
@@ -192,7 +183,7 @@ PayloadMapRule(
         "data": {
             "action": lambda x: x in ("do", "undo"),
             "number": int,
-        }
+        },
     }
 )
 ```

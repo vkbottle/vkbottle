@@ -11,6 +11,7 @@
 
 ```python
 from vkbottle import Keyboard, KeyboardButtonColor, Text
+
 keyboard = Keyboard(one_time=True, inline=False)
 # О параметрах one_time и inline вы можете прочитать в документации к апи вконтакте
 keyboard.add(Text("Кнопка 1"), color=KeyboardButtonColor.POSITIVE)
@@ -42,10 +43,7 @@ keyboard = (
     .add(Text("Кнопка 3", payload={"command": 3}))
 ).get_json()
 
-await message.answer(
-    message="Смотри сколько кнопок!!",
-    keyboard=keyboard
-)
+await message.answer(message="Смотри сколько кнопок!!", keyboard=keyboard)
 ```
 
 !!! info "Примечание"

@@ -12,6 +12,7 @@
     ```python
     from vkbottle.dispatch.rules.base import CommandRule
 
+
     @bot.on.message(CommandRule("say", ["!", "/"], 1))
     async def say_handler(message: Message, args: tuple[str]):
         await message.answer(f"<<{args[0]}>>")
@@ -44,9 +45,9 @@ from typing import Union
 from vkbottle.bot import Message
 from vkbottle.dispatch.rules import ABCRule
 
+
 class MyRule(ABCRule[Message]):
-    async def check(self, event: Message) -> dict[str, Any] | bool:
-        ...
+    async def check(self, event: Message) -> dict[str, Any] | bool: ...
 ```
 
 Теперь стоит имплементировать логику правила `MyRule`, пусть оно будет просто проверять что длина сообщения меньше ста символов:
@@ -64,6 +65,7 @@ return len(message.text) < 100
 from typing import Union
 from vkbottle.bot import Message
 from vkbottle.dispatch.rules import ABCRule
+
 
 class MyRule(ABCRule[Message]):
     async def check(self, event: Message) -> bool:

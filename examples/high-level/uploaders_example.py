@@ -35,4 +35,4 @@ async def logo_handler(m: Message):
     await m.answer(attachment=photo)
 
 
-bot.run_forever()
+bot.run()

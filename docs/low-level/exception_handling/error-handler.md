@@ -11,9 +11,11 @@ error_handler = ErrorHandler(redirect_arguments=False, raise_exceptions=False)
 # Если redirect_arguments = True, то все аргументы обернутой функции будут поступать и в хендлер исключения
 # Если raise_exceptions = True, то все необработанные исключения будут выброшены (игнорируется, если есть обработчик для ненайденных ошибок)
 
+
 @error_handler.register_error_handler(RuntimeError)
 async def exc_handler_runtime(e: RuntimeError):
     print("Oh no runtime error occurred:", e)
+
 
 @error_handler.register_error_handler(LookupError)
 async def exc_handler_lookup(e: LookupError):

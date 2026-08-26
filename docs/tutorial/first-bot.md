@@ -29,8 +29,9 @@ from vkbottle import API
 ```python
 import asyncio
 
-async def main():
-    ...
+
+async def main(): ...
+
 
 asyncio.run(main())
 ```
@@ -50,9 +51,11 @@ await api.wall.post(message="#vkbottle прекрасен!")
 import asyncio
 from vkbottle import API
 
+
 async def main():
     api = API("token")
     await api.wall.post(message="#vkbottle прекрасен!")
+
 
 asyncio.run(main())
 ```
@@ -89,12 +92,14 @@ from vkbottle.bot import Bot, Message
 
 bot = Bot(token="token")
 
+
 @bot.on.message(text="Привет")
 async def hi_handler(message: Message):
     users_info = await bot.api.users.get(message.from_id)
     await message.answer("Привет, {}".format(users_info[0].first_name))
 
-bot.run_forever()
+
+bot.run()
 ```
 
 Разберем новый код построчно:
@@ -115,9 +120,9 @@ bot.run_forever()
 
 `#!python await message.answer("Привет, {}".format(users_info[0].first_name))` - отправка сообщения в чат с пользователем, `answer` - удобный шорткат для ответа на сообщения, аргументы идентичны методу `messages.send`, но шорткат не требует id чата и `random_id`
 
-`#!python bot.run_forever()` - помогает асинхронно запустить бота из синхронной среды, если бы была создана асинхронная, вы бы могли использовать `#!python await run_polling()`
+`#!python bot.run()` - помогает асинхронно запустить бота из синхронной среды, если бы была создана асинхронная, вы бы могли использовать `#!python await run_polling()`
 
-Если представленный код не работает, проверьте поставили ли вы галочки в настройках лонгпола на нужные события (в данном случае на новые сообщения) и сам лонгпол (стабильна версия `5.131`)
+Если представленный код не работает, проверьте поставили ли вы галочки в настройках лонгпола на нужные события (в данном случае на новые сообщения) и сам лонгпол (стабильна версия `5.131`). При работе с версией выше, у ключа должен быть доступ к 'управлением сообщества'.
 
 ## Экзамплы по этой части туториала
 

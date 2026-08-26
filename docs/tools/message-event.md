@@ -6,6 +6,7 @@
 from vkbottle import GroupEventType
 from vkbottle.bot import MessageEvent
 
+
 @bot.on.raw_event(GroupEventType.MESSAGE_EVENT, dataclass=MessageEvent)
 async def handle_message_event(event: MessageEvent):
     await event.show_snackbar("Сейчас я исчезну")
@@ -20,6 +21,7 @@ async def handle_message_event(event: MessageEvent):
 
 ```python
 from vkbottle import GroupEventType, GroupTypes, ShowSnackbarEvent
+
 
 @bot.on.raw_event(GroupEventType.MESSAGE_EVENT, dataclass=GroupTypes.MessageEvent)
 async def handle_message_event(event: GroupTypes.MessageEvent):

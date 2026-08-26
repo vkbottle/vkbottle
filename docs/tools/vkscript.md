@@ -5,13 +5,21 @@
 ```python
 from vkbottle import vkscript
 
+
 @vkscript
 def my_execute(api, user_ids=()):
     message_ids = []
     for user_id in user_ids:
         user = api.users.get(user_ids=user_id)[0]
-        message_ids.append(api.messages.send(message=f"{user.first_name}, спасибо что зашел на чай", random_id=0, peer_id=user_id))
+        message_ids.append(
+            api.messages.send(
+                message=f"{user.first_name}, спасибо что зашел на чай",
+                random_id=0,
+                peer_id=user_id,
+            )
+        )
     return message_ids
+
 
 # далее вызывая эту функцию вы можете использовать ее ответ в качестве кода для execute
 

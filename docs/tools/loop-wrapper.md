@@ -1,3 +1,5 @@
+# Depreceted
+
 # Loop Wrapper
 
 `LoopWrapper` нужен чтобы контролировать ивент луп для работы с `asyncio` и хранить основные таски, `startup` и `shutdown`, которые будут исполнены только при запуске ивент лупа через `run_forever`
@@ -9,8 +11,9 @@
 ```python
 from vkbottle import LoopWrapper
 
-async def my_task():
-    ...
+
+async def my_task(): ...
+
 
 lw = LoopWrapper()
 lw.add_task(my_task())
@@ -24,11 +27,14 @@ lw.run()
 ```python
 from vkbottle import LoopWrapper
 
+
 async def startup_task():
     print("This is startup")
 
+
 async def shutdown_task():
     print("This is shutdown")
+
 
 lw = LoopWrapper()
 lw.on_startup.append(startup_task())
@@ -45,9 +51,11 @@ from vkbottle import LoopWrapper
 
 lw = LoopWrapper()
 
+
 @lw.interval(seconds=10)
 async def repeated_task():
     print("I'll print this every 10 seconds!")
+
 
 lw.run()
 ```
@@ -61,9 +69,11 @@ from vkbottle import LoopWrapper
 
 lw = LoopWrapper()
 
+
 @lw.timer(seconds=10)
 async def delayed_task():
     print("I'll print this after 10 seconds!")
+
 
 lw.run()
 ```

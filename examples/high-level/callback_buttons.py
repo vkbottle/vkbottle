@@ -44,4 +44,4 @@ async def handle_message_event(event: GroupTypes.MessageEvent):
     )
 
 
-bot.run_forever()
+bot.run()

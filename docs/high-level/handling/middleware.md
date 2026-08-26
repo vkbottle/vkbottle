@@ -26,8 +26,8 @@
 from vkbottle import BaseMiddleware
 from vkbottle.bot import Message
 
-class MyMiddleware(BaseMiddleware[Message]):
-    ...
+
+class MyMiddleware(BaseMiddleware[Message]): ...
 ```
 
 Для message_view это Message, а для raw_event_view словарь.

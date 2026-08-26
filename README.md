@@ -23,11 +23,13 @@ from vkbottle.bot import Bot
 
 bot = Bot("GroupToken")
 
+
 @bot.on.message()
 async def handler(_) -> str:
     return "Hello, World!"
 
-bot.run_forever()
+
+bot.run()
 ```
 
 [Смотреть больше примеров!](https://github.com/vkbottle/vkbottle/tree/master/examples)
@@ -61,6 +63,6 @@ pip install vkbottle
 ## Лицензия
 
 Copyright © 2019 [timoniq](https://github.com/timoniq).\
-Copyright © 2022-2024 [FeeeeK](https://github.com/FeeeeK).\
+Copyright © 2022-2024 [axd1x8a](https://github.com/axd1x8a).\
 Copyright © 2024 [luwqz1](https://github.com/luwqz1).\
 Этот проект имеет [MIT](https://github.com/vkbottle/vkbottle/blob/master/LICENSE) лицензию.

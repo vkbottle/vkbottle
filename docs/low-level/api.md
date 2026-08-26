@@ -30,9 +30,11 @@ from vkbottle import CaptchaError
 
 bot = ...
 
+
 async def captcha_handler(e: CaptchaError):
     ...
     return code
+
 
 bot.api.add_captcha_handler(captcha_handler)
 ```

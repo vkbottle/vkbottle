@@ -11,4 +11,4 @@ bot = Bot(os.environ["TOKEN"])
 for labeler in labelers:
     bot.labeler.load(labeler)
 
-bot.run_forever()
+bot.run()

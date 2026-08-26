@@ -9,6 +9,7 @@ from vkbottle.framework.base import BaseFramework
 from vkbottle.framework.labeler import BotLabeler
 from vkbottle.modules import logger
 from vkbottle.polling import BotPolling
+from vkbottle.tools.event_deduplicator.memory import MemoryEventDeduplicator
 
 if TYPE_CHECKING:
     from vkbottle.api import ABCAPI, Token
@@ -17,10 +18,19 @@ if TYPE_CHECKING:
     from vkbottle.exception_factory import ABCErrorHandler
     from vkbottle.framework.labeler import ABCLabeler
     from vkbottle.polling import ABCPolling
-    from vkbottle.tools import LoopWrapper
+    from vkbottle.tools import ABCEventDeduplicator, LoopWrapper
 
 
 class Bot(BaseFramework):
+    labeler: "ABCLabeler"
+    error_handler: "ABCErrorHandler"
+    state_dispenser: "ABCStateDispenser"
+    event_deduplicator: "ABCEventDeduplicator | None"
+    on_startup: list[Any]
+    on_shutdown: list[Any]
+    startup_tasks: list[Any]
+    _loop_wrapper: "LoopWrapper | None"
+
     def __init__(
         self,
         token: "Token | None" = None,
@@ -34,16 +44,27 @@ class Bot(BaseFramework):
         error_handler: "ABCErrorHandler | None" = None,
         task_each_event: Any = None,
         skip_old_events: bool = True,
+        *,
+        dual_mode: bool = False,
+        event_deduplicator: "ABCEventDeduplicator | None" = None,
     ) -> None:
         self.api: API = api or API(token)  # type: ignore
         self.error_handler = error_handler or ErrorHandler()
-        self._loop_wrapper: "LoopWrapper | None" = loop_wrapper
-        self.on_startup: list = []
-        self.on_shutdown: list = []
-        self.startup_tasks: list = []
+        self._loop_wrapper = loop_wrapper
+        self.on_startup = []
+        self.on_shutdown = []
+        self.startup_tasks = []
         self.labeler = labeler or BotLabeler(error_handler=error_handler)
         self.state_dispenser = state_dispenser or BuiltinStateDispenser()
         self.skip_old_events = skip_old_events
+        self.dual_mode = dual_mode
+        self.event_deduplicator = (
+            event_deduplicator
+            if event_deduplicator is not None
+            else MemoryEventDeduplicator()
+            if dual_mode is True
+            else None
+        )
 
         if polling is not None and isinstance(polling, BotPolling):
             polling.skip_old_events = skip_old_events
@@ -61,9 +82,9 @@ class Bot(BaseFramework):
 
     @property
     def loop_wrapper(self) -> "LoopWrapper":
-        from vkbottle.tools.loop_wrapper import _DEPRECATION_MESSAGE, LoopWrapper
-
         if self._loop_wrapper is None:
+            from vkbottle.tools.loop_wrapper import _DEPRECATION_MESSAGE, LoopWrapper
+
             warnings.warn(_DEPRECATION_MESSAGE, DeprecationWarning, stacklevel=2)
 
             with warnings.catch_warnings():
@@ -124,8 +145,16 @@ class Bot(BaseFramework):
 
         return confirmation_code, secret_key
 
-    async def process_event(self, event: dict[str, Any]) -> None:
-        await self.router.route(event, self.api)
+    async def process_event(self, event: dict[str, Any], api: "ABCAPI | None" = None) -> None:
+        if self.dual_mode is False or self.event_deduplicator is None:
+            await super().process_event(event, api)
+            return
+
+        if await self.event_deduplicator.claim(event) is False:
+            logger.debug("Skipping duplicate event: {!r}", event)
+            return
+
+        await super().process_event(event, api)
 
 
 __all__ = ("Bot",)

@@ -81,4 +81,4 @@ async def forgive_handler(message: Message):
     return "Ладно, извинения приняты"
 
 
-bot.run_forever()
+bot.run()

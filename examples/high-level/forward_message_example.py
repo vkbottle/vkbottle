@@ -44,4 +44,4 @@ async def handler(message: Message):
     await message.answer(f"Forwarded messages:\n{result}")
 
 
-bot.run_forever()
+bot.run()

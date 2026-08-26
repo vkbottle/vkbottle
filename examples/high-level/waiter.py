@@ -33,4 +33,4 @@ async def expiring(message: Message):
     await message.answer("Отличный палиндром!")
 
 
-bot.run_forever()
+bot.run()

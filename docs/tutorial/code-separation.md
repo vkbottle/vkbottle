@@ -37,7 +37,6 @@ from vkbottle.bot import BotLabeler
 api = API("token")
 labeler = BotLabeler()
 state_dispenser = BuiltinStateDispenser()
-
 ```
 
 !!! info "Примечание"
@@ -52,10 +51,10 @@ state_dispenser = BuiltinStateDispenser()
 ```python
 from config import labeler
 
+
 @labeler.message(text="ping")
 async def ping_handler(message):
     await message.answer("pong")
-
 ```
 
 ### `chat.py`
@@ -71,6 +70,7 @@ async def ping_handler(message):
 from vkbottle.bot import BotLabeler, Message, rules
 from vkbottle_types.objects import MessagesConversation
 
+
 class ChatInfoRule(rules.ABCRule[Message]):
     async def check(self, message: Message) -> dict[str, Any]:
         chats_info = await message.ctx_api.messages.get_conversations_by_id(message.peer_id)
@@ -81,10 +81,14 @@ chat_labeler = BotLabeler()
 chat_labeler.vbml_ignore_case = True
 chat_labeler.auto_rules = [rules.PeerRule(from_chat=True), ChatInfoRule()]
 
+
 @chat_labeler.message(command="самобан")
 async def kick(message: Message, chat: MessagesConversation):
     await message.ctx_api.messages.remove_chat_user(message.chat_id, message.from_id)
-    await message.answer(f"Участник самоустранился из {chat.chat_settings.title} по собственному желанию")
+    await message.answer(
+        f"Участник самоустранился из {chat.chat_settings.title} по собственному желанию"
+    )
+
 
 @chat_labeler.message(text="где я")
 async def where_am_i(message: Message, chat: MessagesConversation):
@@ -104,7 +108,8 @@ async def where_am_i(message: Message, chat: MessagesConversation):
 from vkbottle.bot import BotLabeler, Message, rules
 
 admin_labeler = BotLabeler()
-admin_labeler.auto_rules = [rules.FromPeerRule(1)] # Допустим, вы являетесь Павлом Дуровым
+admin_labeler.auto_rules = [rules.FromPeerRule(1)]  # Допустим, вы являетесь Павлом Дуровым
+
 
 @admin_labeler.message(command="halt")
 async def halt(_):
@@ -156,7 +161,7 @@ bot = Bot(
 Осталось только запустить бота:
 
 ```python
-bot.run_forever()
+bot.run()
 ```
 
 ## Экзамплы по этой части туториала

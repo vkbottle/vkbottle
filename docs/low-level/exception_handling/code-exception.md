@@ -14,6 +14,7 @@
 class MyCodeError(CodeException):
     pass
 
+
 try:
     raise MyCodeError[1]("Error description")
 except MyCodeError[1]:

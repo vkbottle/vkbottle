@@ -16,4 +16,4 @@
     - [Middleware](handling/middleware.md)
     - [Rules](handling/rules.md)
 
-- [Builtin Rules](builtin_rules.md)
+- [Builtin Rules](builtin-rules.md)

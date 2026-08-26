@@ -27,7 +27,7 @@ async def greeting(message: Message):
     await message.answer(f"Привет, {m.text.capitalize()}! Будем знакомы.")
 
 
-bot.run_forever()
+bot.run()
 ```
 
 Из `.wait` возвращается tuple с двумя элементами:
@@ -41,7 +41,12 @@ bot.run_forever()
 
 ```python
 await message.answer("Напиши мне твой номер телефона")
-m, ctx = await wm.wait(bot.on.message_view, message, RegexRule(PHONE_NUMBER_REGEX), default_behaviour="Неверный формат, напиши еще раз в правильном формате")
+m, ctx = await wm.wait(
+    bot.on.message_view,
+    message,
+    RegexRule(PHONE_NUMBER_REGEX),
+    default_behaviour="Неверный формат, напиши еще раз в правильном формате",
+)
 ```
 
 `default_behaviour` может принимать Callable, куда придет событие, либо любой другой объект который будет передан в return manager привязаный к активному view и обработан, в примере выше это строка, которая будет отправлена как сообщение, в соответствии с имплементацией в return manager для view сообщений ботов.

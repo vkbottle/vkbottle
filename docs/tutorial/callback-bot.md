@@ -12,26 +12,26 @@
 
     ```python
     import os
-    TOKEN = os.getenv("VK_TOKEN") # ключ сообщества
-    url = os.getenv("VK_URL") # url = "http://example.com/whateveryouwnant"
-    title = os.getenv("VK_TITLE") # title = "server"
-    secret_key = os.getenv("VK_SECRET_KEY") # опционально
+
+    TOKEN = os.getenv("VK_TOKEN")  # ключ сообщества
+    url = os.getenv("VK_URL")  # url = "http://example.com/whateveryouwnant"
+    title = os.getenv("VK_TITLE")  # title = "server"
+    secret_key = os.getenv("VK_SECRET_KEY")  # опционально
     ```
 
 2. Импортировать `BotCallback` из `vkbottle.callback` и указать параметры для настройки:
 
     ```python
     from vkbottle.callback import BotCallback
-    callback = BotCallback(
-        url = url,
-        title = title
-    )
+
+    callback = BotCallback(url=url, title=title)
     ```
 
 3. Инициализировать бота:
 
     ```python
     from vkbottle import Bot
+
     bot = Bot(token=TOKEN, callback=callback)
     ```
 

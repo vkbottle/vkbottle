@@ -32,4 +32,4 @@ async def greeting(message: Message):
     await message.answer("Привет!")
 
 
-bot.run_forever()
+bot.run()

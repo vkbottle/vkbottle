@@ -69,4 +69,4 @@ async def buy_handler(_):
     return "Ok buy it here: https://example.com"
 
 
-bot.run_forever()
+bot.run()

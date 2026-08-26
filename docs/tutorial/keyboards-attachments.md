@@ -23,6 +23,7 @@ from vkbottle import Keyboard
 ```python
 keyboard = ...  # see examples above
 
+
 @bot.on.message()
 async def send_keyboard(message):
     await message.answer("Here is your keyboard!", keyboard=keyboard)
@@ -35,7 +36,8 @@ async def send_keyboard(message):
 Если у вас уже есть ссылка на вложение вида `#!python "type{OWNER_ID}_{ITEM_ID}"` (например `#!python "photo-41629685_457239401"`), то вы можете отправить её так:
 
 ```python
-attachment = ... # see example above
+attachment = ...  # see example above
+
 
 @bot.on.message
 async def send_attachment(message):
@@ -50,6 +52,7 @@ async def send_attachment(message):
 
 ```python
 uploader = AnyUploader(bot.api)  # see uploaders types in "Uploaders documentation" above
+
 
 @bot.on.message()
 async def send_attachment(message):
@@ -76,6 +79,7 @@ my_template = template_gen(TemplateElement(...), TemplateElement(...), TemplateE
 
 ```python
 my_template = ...  # see example above
+
 
 @bot.on.message()
 async def send_template(message):

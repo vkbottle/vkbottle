@@ -24,6 +24,7 @@ VKBottle автоматически выбирает лучшую альтерн
 
         ```python
         import logging
+
         logging.getLogger("vkbottle").setLevel(logging.INFO)
         ```
 
@@ -34,6 +35,7 @@ VKBottle автоматически выбирает лучшую альтерн
             ```python
             import sys
             from loguru import logger
+
             logger.remove()
             logger.add(sys.stderr, level="INFO")
             ```
@@ -44,5 +46,6 @@ VKBottle автоматически выбирает лучшую альтерн
 
             ```python
             from loguru import logger
+
             logger.disable("vkbottle")
             ```

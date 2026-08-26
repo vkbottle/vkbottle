@@ -11,6 +11,7 @@ from vkbottle import UserAuth
 login = "89012345678"
 password = "qwerty123"
 
+
 async def main():
     token = await UserAuth().get_token(login, password)
 ```
@@ -56,8 +57,11 @@ from vkbottle import UserAuth, UserPermission
 login = "89012345678"
 password = "qwerty123"
 
+
 async def main():
-    token = await UserAuth().get_token(login, password, scope=[UserPermission.photos, UserPermission.video])
+    token = await UserAuth().get_token(
+        login, password, scope=[UserPermission.photos, UserPermission.video]
+    )
 ```
 
 При получении токена может потребоваться ввод капчи, либо дополнительное подтверждение через SMS или приложение для двухфакторной аутентификации (2FA). Ниже приведен пример с обработкой ошибок при получении токена:
@@ -77,6 +81,7 @@ if TYPE_CHECKING:
 login = "89012345678"
 password = "qwerty123"
 
+
 async def main():
     user_auth = UserAuth()
 
@@ -91,12 +96,14 @@ async def main():
                 password,
                 auth_code=auth_code,
                 captcha_sid=captcha_sid,
-                captcha_key=captcha_key
+                captcha_key=captcha_key,
             )
             break
         except CaptchaError as error:
             captcha_sid = error.captcha_sid
-            captcha_key = input(f"Open url '{error.captcha_img}' in browser and enter captcha code: ")
+            captcha_key = input(
+                f"Open url '{error.captcha_img}' in browser and enter captcha code: "
+            )
         except APIAuthError as error:
             if error.validation_type == "2fa_sms":
                 validation_sid = cast(str, error.validation_sid)
@@ -119,7 +126,7 @@ async def main():
 
     print(f"Your token: {token}")
 
+
 if __name__ == "__main__":
     asyncio.run(main())
-
 ```

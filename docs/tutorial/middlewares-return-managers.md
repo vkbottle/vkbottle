@@ -34,6 +34,7 @@ Middleware без методов `pre` или/и `post` бесполезен, н
 from vkbottle.bot import Message
 from vkbottle import BaseMiddleware, MiddlewareResponse
 
+
 class NoBotMiddleware(BaseMiddleware[Message]):
     async def pre(self):
         if self.event.from_id < 0:
@@ -48,14 +49,17 @@ class NoBotMiddleware(BaseMiddleware[Message]):
 from vkbottle.bot import Message
 from vkbottle import BaseMiddleware
 
+
 class LogMiddleware(BaseMiddleware[Message]):
     async def post(self):
         if not self.handlers:
             return
 
-        print(f"{len(self.handlers)} хендлеров сработало на сообщение. "
-              f"Они вернули {self.handle_responses}, "
-              f"все они принадлежали к view {self.view}")
+        print(
+            f"{len(self.handlers)} хендлеров сработало на сообщение. "
+            f"Они вернули {self.handle_responses}, "
+            f"все они принадлежали к view {self.view}"
+        )
 ```
 
 ---

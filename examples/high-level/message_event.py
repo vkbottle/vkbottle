@@ -65,4 +65,4 @@ async def edit_message(event: MessageEvent):
     await event.edit_message("Окей")
 
 
-bot.run_forever()
+bot.run()

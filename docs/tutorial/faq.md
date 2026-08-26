@@ -20,7 +20,8 @@ Coroutine это функция (сопрограмма), которая дол�
 import asyncio
 
 
-async def get_banana() -> str: return "banana"
+async def get_banana() -> str:
+    return "banana"
 
 
 async def main():
@@ -37,11 +38,12 @@ asyncio.run(main())
 
 ```python
 # bad
-async def foo() -> str: return "foo"
+async def foo() -> str:
+    return "foo"
 
 
 def main():
-    print(await foo()) # SyntaxError: 'await' outside async function
+    print(await foo())  # SyntaxError: 'await' outside async function
 
 
 main()
@@ -60,7 +62,9 @@ await main()  # SyntaxError: 'await' outside function
 # good
 import asyncio
 
-async def foo() -> str: return "foo"
+
+async def foo() -> str:
+    return "foo"
 
 
 async def main():
@@ -106,7 +110,7 @@ await asyncio.sleep(10)
 ```python
 # bad
 async def send_httpbin_get() -> dict[str, Any]:
-    r = requests.get('http://httpbin.org/get')
+    r = requests.get("http://httpbin.org/get")
     if r.status_code == 200:
         js = r.model_dump_json()
         return js
@@ -120,7 +124,7 @@ from vkbottle.http import AiohttpClient
 
 async def send_httpbin_get() -> dict[str, Any]:
     http_client = AiohttpClient()
-    return await http_client.request_json('http://httpbin.org/get')
+    return await http_client.request_json("http://httpbin.org/get")
 ```
 
 ```python
@@ -130,7 +134,7 @@ import aiohttp
 
 async def send_httpbin_get() -> dict[str, Any]:
     async with aiohttp.ClientSession() as session:
-        async with session.get('http://httpbin.org/get') as r:
+        async with session.get("http://httpbin.org/get") as r:
             if r.status == 200:
                 js = await r.json()
                 return js
@@ -227,6 +231,7 @@ from vkbottle.bot import Bot
 
 bot = Bot("token")
 
+
 async def main():
     print(await bot.api.request("users.get", {}))  # Single request
     # Multiple request for one session
@@ -250,12 +255,14 @@ admin_ids = [1, 100]
 
 @bot.on.message(text="админы")
 async def who_admins(message: Message):
-    admins = [f"{adm.first_name} {adm.last_name}" for adm in (await message.ctx_api.users.get(admin_ids))]
+    admins = [
+        f"{adm.first_name} {adm.last_name}" for adm in (await message.ctx_api.users.get(admin_ids))
+    ]
     print((await message.ctx_api.request("users.get", {"user_ids": admin_ids})))
     await message.answer(f"Администраторы этого бота: {' '.join(admins)}")
 
 
-bot.run_forever()
+bot.run()
 ```
 
 ## Pydantic.error_wrappers.ValidationError

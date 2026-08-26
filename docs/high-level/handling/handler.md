@@ -9,11 +9,13 @@ from vkbottle.bot import Bot, Message
 
 bot = Bot("token")
 
+
 @bot.on.message()
 async def any_message(message: Message):
     await message.answer("Привет я бот")
 
-bot.run_forever()
+
+bot.run()
 ```
 
 ## Хендлеры ботов
@@ -50,9 +52,13 @@ bot.run_forever()
 async def some_key_handler(message: Message, some_key: str):
     await message.answer(f"some_key={some_value}")
 
+
 @bot.on.message(MyRule())
 async def regular_handler(message: Message):
-    await message.answer("Этот хендлер не принимает аргумент 'some_key', поэтому он и не был передан")
+    await message.answer(
+        "Этот хендлер не принимает аргумент 'some_key', поэтому он и не был передан"
+    )
+
 
 @bot.on.message(MyRule())
 async def kwargs_handler(message: Message, **kwargs: Any):

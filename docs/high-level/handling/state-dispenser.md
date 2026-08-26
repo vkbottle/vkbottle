@@ -33,21 +33,25 @@ from vkbottle.bot import Message, Bot
 
 bot = Bot("t")
 
+
 class SuperStates(BaseStateGroup):
     AWKWARD_STATE = "awkward"
     CONFIDENT_STATE = "confident"
     TERRIFYING_STATE = "terrifying"
 
+
 @bot.on.message(state=SuperStates.AWKWARD_STATE)  # StateRule(SuperStates.AWKWARD_STATE)
 async def awkward_handler(message: Message):
     await message.answer("oi awkward")
+
 
 @bot.on.message(lev="/die")
 async def die_handler(message: Message):
     await bot.state_dispenser.set(message.peer_id, SuperStates.AWKWARD_STATE)
     return "ok"
 
-bot.run_forever()
+
+bot.run()
 ```
 
 !!! info "Примечание"

@@ -2,6 +2,7 @@ from .auth import AuthError, UserAuth, UserPermission
 from .ctx_tool import BaseContext
 from .delayed_task import DelayedTask
 from .event_data import OpenAppEvent, OpenLinkEvent, ShowSnackbarEvent
+from .event_deduplicator import ABCEventDeduplicator, MemoryEventDeduplicator
 from .formatting import Format, Formatter, bold, italic, underline, url
 from .keyboard import (
     EMPTY_KEYBOARD,
@@ -48,6 +49,7 @@ from .waiter_machine import WaiterMachine
 __all__ = (
     "EMPTY_KEYBOARD",
     "ABCAction",
+    "ABCEventDeduplicator",
     "ABCSingleton",
     "ABCStorage",
     "ABCValidator",
@@ -73,6 +75,7 @@ __all__ = (
     "LimitedDict",
     "Location",
     "LoopWrapper",
+    "MemoryEventDeduplicator",
     "OpenAppEvent",
     "OpenLink",
     "OpenLinkEvent",

@@ -97,8 +97,10 @@ async def vote_up(vote: PollVoteNew):
         )
     )
 
+
 async def vote_up_admin(vote: PollVoteNew):
     print("Админ проголосовал за {}", vote.object.option_id)
+
 
 my_view = VoteView()
 my_view.handlers = [
@@ -109,11 +111,13 @@ my_view.handlers = [
     FromFuncHandler(vote_up),
 ]
 
+
 class MyLabeler(BotLabeler):
     def views(self) -> dict[str, "ABCView"]:
         # Из views должны быть возвращены все view которые
         # будут позже обрабатываться роутером
         return {"vote_view": my_view}
+
 
 bot = Bot()
 bot.labeler = MyLabeler()

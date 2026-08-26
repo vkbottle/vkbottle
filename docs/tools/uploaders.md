@@ -28,7 +28,8 @@ async def handler(message):
     )
     await message.answer(attachment=photo)
 
-bot.run_forever()
+
+bot.run()
 ```
 
 ## Интерфейс аплоадера

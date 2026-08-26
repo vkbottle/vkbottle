@@ -21,14 +21,14 @@ authors = [{ name = "timoniq", email = "tesseradecades@mail.ru" }]
 maintainers = [{ name = "luwqz1", email = "howluwqz1@gmail.com" }]
 requires-python = ">=3.10,<4.0"
 dependencies = [
-    "aiohttp (>=3.14.0,<4.0.0)",
+    "aiohttp (>=3.14.3,<4.0.0)",
     "choicelib (>=0.1.5,<0.2.0)",
     "pydantic (>=2.13.4,<3.0.0)",
     "vbml (>=1.1.post1,<2.0)",
     "aiofiles (==24.1.0)",
-    "typing-extensions (>=4.15.0,<5.0.0)",
+    "typing-extensions (>=4.16.0,<5.0.0)",
     "colorama (>=0.4.6,<0.5.0)",
-    "vkbottle-types (>=5.199.99.21,<5.200.0.0)",
+    "vkbottle-types (>=5.199.99.22,<6.0.0.0)",
 ]
 
 [project.urls]
@@ -55,25 +55,25 @@ requires-poetry = ">=2.0.0,<3.0.0"
 
 [tool.poetry.group.dev.dependencies]
 # Lint
-mypy = "^2.1.0"
+mypy = "^2.3.1"
 mypy-extensions = "^1.1.0"
 # mypy stubs
 types-aiofiles = ">=25.1.0.20260518,<26.0"
 # flake8, isort and autoflake replacement
-ruff = ">=0.15.15"
+ruff = ">=0.16.4"
 # Tests
-pytest = ">=9.0.3,<10.0.0"
+pytest = ">=9.1.1,<10.0.0"
 pytest-asyncio = ">=1.4.0,<2.0.0"
 pytest-cov = ">=7.1.0,<8"
 pytest-mock = "^3.15.1"
-aioresponses = "^0.7.8"
+aioresponses = "^0.7.9"
 # Pre-commit
-pre-commit = ">=4.6.0,<5.0"
+pre-commit = ">=4.6.2,<5.0"
 
 [tool.poetry.group.docs.dependencies]
 # Docs
 mkdocs = "^1.6.1"
-mkdocs-material = "^9.7.6"
+mkdocs-material = "^9.7.7"
 mkdocs-redirects = "^1.2.3"
 
 [build-system]
@@ -205,6 +205,7 @@ lint.ignore = [
   "UP035",   # deprecated-import
   "UP045",   # Use `X | None` for type annotations,
   "N804",    # Checks for class methods that use a name other than `cls` for their first argument.
+  "PLR0917", # too-many-positional-arguments
 ]
 
 [tool.ruff.lint.per-file-ignores]

@@ -33,12 +33,16 @@ Formatter("Hi, {name}.").format(name="Maria")  # Hi, Maria.
 Пример использования:
 ```python
 Formatter("{:bold}, nice formatting!").format("Wow")  # Wow, nice formatting!
-Formatter("{framework:italic} has been around for over 5 years!").format(framework="vkbottle")  # vkbottle has been around for over 5 years!
+Formatter("{framework:italic} has been around for over 5 years!").format(
+    framework="vkbottle"
+)  # vkbottle has been around for over 5 years!
 ```
 
 Для того, чтобы объединить типы форматов, используется синтаксис объединения через символ `+`.
 ```python
-Formatter("Very cool {:bold+italic} ^_^").format("bold-italic message")  # Very cool bold-italic message ^_^
+Formatter("Very cool {:bold+italic} ^_^").format(
+    "bold-italic message"
+)  # Very cool bold-italic message ^_^
 ```
 
 Метод `format_map` работает так же, как и `format`, за исключением того, что метод принимает один аргумент типа `Mapping`, который передается в метод `format`.
@@ -66,7 +70,11 @@ from vkbottle.tools.formatting import Format
 bold("Hello, ") + italic("World!")  # Hello, World! ('Hello, ' is bold, 'World!' is italic)
 "Hello, " + italic("World!")  # Hello, World! ('World!' is italic)
 bold("Hello") + ", " + italic("World!")  # Hello, World! ('Hello' is bold, 'World!' is italic)
-bold("vkbottle documentation:") + " " + url(italic("click me"), href="vkbottle.readthedocs.io/ru/latest")  # vkbottle documentation: click me ('click me' has an url)
+(
+    bold("vkbottle documentation:")
+    + " "
+    + url(italic("click me"), href="vkbottle.readthedocs.io/ru/latest")
+)  # vkbottle documentation: click me ('click me' has an url)
 ```
 
 `Format` имеет 2 метода для того, чтобы получить форматирование в виде `json`:

@@ -63,4 +63,4 @@ async def who_i_am_handler(message: Message, info: UsersUserFull):
 bot.labeler.message_view.register_middleware(NoBotMiddleware)
 bot.labeler.message_view.register_middleware(RegistrationMiddleware)
 bot.labeler.message_view.register_middleware(InfoMiddleware)
-bot.run_forever()
+bot.run()

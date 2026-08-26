@@ -1,3 +1,5 @@
+from typing import Any
+
 from .abc import ABCStateDispenser
 from .base import BaseStateGroup, StatePeer
 
@@ -9,7 +11,7 @@ class BuiltinStateDispenser(ABCStateDispenser):
     async def get(self, peer_id: int) -> StatePeer | None:
         return self.dictionary.get(peer_id)
 
-    async def set(self, peer_id: int, state: BaseStateGroup, **payload):
+    async def set(self, peer_id: int, state: BaseStateGroup, **payload: Any):
         self.dictionary[peer_id] = StatePeer(peer_id=peer_id, state=state, payload=payload)
 
     async def delete(self, peer_id: int):
