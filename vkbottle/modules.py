@@ -1,10 +1,18 @@
 import asyncio
 import inspect
+import os
 import sys
 import warnings
 from typing import Any, Protocol
 
 from choicelib import choice_in_order
+
+# Default preset is convenient for standalone bots and newcomers, but it gets in the way
+# when vkbottle is embedded into a larger system that already configures logging itself
+# (e.g. remote log shipping, structured logging, custom handlers/formatters). In that
+# case, set VKBOTTLE_SKIP_LOGGING_PRESET=1 and vkbottle will only obtain a logger/adapter
+# without touching global logging configuration, so your own setup stays in control.
+VKBOTTLE_SKIP_LOGGING_PRESET = bool(os.environ.get("VKBOTTLE_SKIP_LOGGING_PRESET"))
 
 
 class JSONModule(Protocol):
@@ -37,9 +45,19 @@ def showwarning(message, category, filename, lineno, file=None, line=None):  # n
 
 
 logging_module = choice_in_order(["loguru"], default="logging")
-if logging_module == "loguru":
+
+logger: Any
+
+if VKBOTTLE_SKIP_LOGGING_PRESET and logging_module == "logging":
     import logging
-    import os
+
+    logger = logging.getLogger("vkbottle")
+
+elif VKBOTTLE_SKIP_LOGGING_PRESET and logging_module == "loguru":
+    from loguru import logger  # type: ignore
+
+elif logging_module == "loguru":
+    import logging
 
     if not os.environ.get("LOGURU_AUTOINIT"):
         os.environ["LOGURU_AUTOINIT"] = "0"

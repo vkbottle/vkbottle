@@ -33,7 +33,10 @@ async def _drain(initial_tasks: Iterable[_Task]) -> None:
             exc = done_task.exception()
 
             if exc is not None:
-                logger.opt(exception=exc).error("Unhandled exception in task")
+                if hasattr(logger, "opt"):
+                    logger.opt(exception=exc).error("Unhandled exception in task")
+                else:
+                    logger.error("Unhandled exception in task", exc_info=exc)
 
 
 def run(
